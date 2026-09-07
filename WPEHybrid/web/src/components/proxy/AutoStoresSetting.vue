@@ -52,14 +52,27 @@ function nameOf(wid: string): string {
 
 const enable = ref(false)
 
+/*
+  仓库上限。总开关是纯运行期的，上限则<b>要落库</b> ——
+  前者决定「每个经过的封包多跑一遍规则比对」，默认关着是刻意的；
+  后者是一条配置，用户改完当然要记住。
+
+  满了<b>丢最旧的</b>（保留最近 N 条），不是像封包列表那样整表清空 ——
+  仓库是拿来「留东西」的，隔一阵全没了不像话。
+*/
+const limit = ref(true)
+const limitValue = ref(5000)
+
 watch(() => props.open, async (on) => {
   if (!on) return
 
   error.value = ''
 
   try {
-    const r = await call<{ enable: boolean }>('getAutoStoresMeta')
+    const r = await call<{ enable: boolean; limit: boolean; limitValue: number }>('getAutoStoresMeta')
     enable.value = !!r?.enable
+    limit.value = !!r?.limit
+    limitValue.value = Number(r?.limitValue) || 5000
   } catch (e) {
     console.error('[as] 读取总开关失败', e)
   }
@@ -71,7 +84,11 @@ async function save(): Promise<void> {
   error.value = ''
 
   try {
-    await call('setAutoStoresSwitch', { enable: enable.value })
+    await call('setAutoStoresSwitch', {
+      enable: enable.value,
+      limit: limit.value,
+      limitValue: Number(limitValue.value),
+    })
     pushToast('success', t('as.saved'))
     emit('update:open', false)
   } catch (e) {
@@ -186,6 +203,28 @@ function onMenuPick(id: string): void {
         </button>
         <!-- 琥珀色：这是个会让人以为「设了怎么没用」的坑，不能读成普通旁注 -->
         <span class="notice">{{ t('as.enableNotice') }}</span>
+      </div>
+    </div>
+
+    <!--
+      仓库上限。放在自动入库这一屏，是因为无界增长只有自动入库这条路走得出来
+      （右键「添加到仓库」是人一条条点的）—— 但上限本身<b>管所有入库路径</b>。
+    -->
+    <div class="row">
+      <div class="k">{{ t('as.limit') }}</div>
+      <div class="v">
+        <button class="chk" :class="{ on: limit }" @click="limit = !limit">
+          <i />{{ t('as.limitOn') }}
+        </button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="k">{{ t('set.keepRows') }}</div>
+      <div class="v">
+        <input v-model.number="limitValue" class="inp num" type="number"
+               min="1" max="1000000" :disabled="!limit">
+        <span class="tip">{{ t('as.limitHint') }}</span>
       </div>
     </div>
 

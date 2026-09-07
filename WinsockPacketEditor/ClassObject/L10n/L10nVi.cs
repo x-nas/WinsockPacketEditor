@@ -264,6 +264,7 @@ namespace WinsockPacketEditor
             d["StartForm.MultipleOpen"] = "Đa phiên";
             d["StartForm.MultipleOpen.Text"] = "Đặt cơ sở dữ liệu để chạy nhiều phiên";
             d["StartForm.Database.Loaded"] = "Cơ sở dữ liệu đã nạp: ";
+            d["WareHouse.Trimmed"] = "Kho vượt giới hạn {0}, đã bỏ {1} gói cũ nhất";
             d["StartForm.LearnMore"] = "Tìm hiểu thêm";
             d["StartForm.Tutorials"] = "Hướng dẫn";
             d["StartForm.OfficialWebsite"] = "Trang chính thức";

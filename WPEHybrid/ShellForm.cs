@@ -3978,12 +3978,40 @@ namespace WPEHybrid
             this.bridge.Register("getAutoStoresMeta", args => new
             {
                 enable = Operate.WareHouseConfig.WareHouse.Enable_AutoStores,
+                limit = Operate.WareHouseConfig.WareHouse.StoresLimit,
+                limitValue = Operate.WareHouseConfig.WareHouse.StoresLimit_Value,
             });
 
+            /*
+                总开关是<b>纯运行期</b>的（重启回到关），上限则要落库 ——
+                前者决定「每个经过的封包多跑一遍规则比对」，默认关着是刻意的；
+                后者是一条配置，用户改完当然要记住。所以这里存了一次库。
+            */
             this.bridge.Register("setAutoStoresSwitch", args =>
             {
                 Operate.WareHouseConfig.WareHouse.Enable_AutoStores = args["enable"] != null && (bool)args["enable"];
-                return new { ok = true, enable = Operate.WareHouseConfig.WareHouse.Enable_AutoStores };
+
+                if (args["limit"] != null)
+                {
+                    Operate.WareHouseConfig.WareHouse.StoresLimit = (bool)args["limit"];
+                }
+
+                if (args["limitValue"] != null)
+                {
+                    //1 条以下没有意义；上界照封包列表自动清理那个数量级来
+                    int v = (int)args["limitValue"];
+                    Operate.WareHouseConfig.WareHouse.StoresLimit_Value = Math.Max(1, Math.Min(1000000, v));
+                }
+
+                Operate.SystemConfig.SaveSystemConfig_ToDB();
+
+                return new
+                {
+                    ok = true,
+                    enable = Operate.WareHouseConfig.WareHouse.Enable_AutoStores,
+                    limit = Operate.WareHouseConfig.WareHouse.StoresLimit,
+                    limitValue = Operate.WareHouseConfig.WareHouse.StoresLimit_Value,
+                };
             });
 
             //新增 / 改一条。id 为空 = 新增。校验（非空 / 十六进制 / 仓库存在 / 包头不重复）在 C# 侧

@@ -1350,6 +1350,9 @@ export const DICT = {
   'as.noWareHouse': { zh: '还没有仓库，先在仓库列表里新增一个', en: 'No warehouses yet — add one in the WareHouse List first' },
   'as.gone': { zh: '仓库已不存在', en: 'warehouse no longer exists' },
   'as.saved': { zh: '自动入库保存成功', en: 'Auto stores saved' },
+  'as.limit': { zh: '仓库上限', en: 'Warehouse cap' },
+  'as.limitOn': { zh: '超过上限丢弃最旧的', en: 'Drop the oldest when full' },
+  'as.limitHint': { zh: '1 ~ 1000000。每个仓库最多留这么多条，满了丢最旧的；所有入库路径都受它管', en: '1–1000000. Per warehouse; when full the oldest rows are dropped. Applies to every path that adds packets' },
 
   'list.paused': { zh: '已暂停跟随 · 点此回到底部', en: 'Auto-scroll paused · click to jump to the end' },
 

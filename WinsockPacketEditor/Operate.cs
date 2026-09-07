@@ -3114,6 +3114,8 @@ namespace WinsockPacketEditor
                         new XElement("LogList_AutoRoll", LogConfig.List.AutoRoll),
                         new XElement("LogList_AutoClear", LogConfig.List.AutoClear),
                         new XElement("LogList_AutoClear_Value", LogConfig.List.AutoClear_Value),
+                        new XElement("StoresLimit", WareHouseConfig.WareHouse.StoresLimit),
+                        new XElement("StoresLimit_Value", WareHouseConfig.WareHouse.StoresLimit_Value),
                         new XElement("CheckNotShow", SystemConfig.CheckNotShow),
                         new XElement("CheckSocket", SystemConfig.CheckSocket),
                         new XElement("CheckSocket_Value", SystemConfig.CheckSocket_Value),
@@ -3208,6 +3210,17 @@ namespace WinsockPacketEditor
                         LogConfig.List.AutoRoll = Convert.ToBoolean(dtSystemConfig.Rows[0]["LogList_AutoRoll"]);
                         LogConfig.List.AutoClear = Convert.ToBoolean(dtSystemConfig.Rows[0]["LogList_AutoClear"]);
                         LogConfig.List.AutoClear_Value = Convert.ToInt32(dtSystemConfig.Rows[0]["LogList_AutoClear_Value"]);
+
+                        //新列：老库经 EnsureColumn 补过，但备份导入那条路可能塞进来一张没有这两列的表
+                        if (dtSystemConfig.Columns.Contains("StoresLimit"))
+                        {
+                            WareHouseConfig.WareHouse.StoresLimit = Convert.ToBoolean(dtSystemConfig.Rows[0]["StoresLimit"]);
+                        }
+
+                        if (dtSystemConfig.Columns.Contains("StoresLimit_Value"))
+                        {
+                            WareHouseConfig.WareHouse.StoresLimit_Value = Convert.ToInt32(dtSystemConfig.Rows[0]["StoresLimit_Value"]);
+                        }
                         SystemConfig.CheckNotShow = Convert.ToBoolean(dtSystemConfig.Rows[0]["CheckNotShow"]);
                         SystemConfig.CheckSocket = Convert.ToBoolean(dtSystemConfig.Rows[0]["CheckSocket"]);
                         SystemConfig.CheckSocket_Value = dtSystemConfig.Rows[0]["CheckSocket_Value"].ToString();
@@ -3268,6 +3281,10 @@ namespace WinsockPacketEditor
                         UI.Prefs.IsTextRenderingHighQuality = false;
                         UI.Prefs.IsDark = true;
                         UI.Prefs.FollowSystemTheme = false;
+
+                        //仓库上限：与字段初值逐个对上（见 UiPrefs 那条同样的告诫）
+                        WareHouseConfig.WareHouse.StoresLimit = true;
+                        WareHouseConfig.WareHouse.StoresLimit_Value = 5000;
                     }
 
                     UI.Prefs.Language = Lang;
@@ -3389,6 +3406,18 @@ namespace WinsockPacketEditor
                     if (LogList_AutoRoll != null)
                     {
                         LogConfig.List.AutoRoll = Convert.ToBoolean(LogList_AutoRoll.Value);
+                    }
+
+                    XElement StoresLimit = xeSystemConfig.Element("StoresLimit");
+                    if (StoresLimit != null)
+                    {
+                        WareHouseConfig.WareHouse.StoresLimit = Convert.ToBoolean(StoresLimit.Value);
+                    }
+
+                    XElement StoresLimit_Value = xeSystemConfig.Element("StoresLimit_Value");
+                    if (StoresLimit_Value != null)
+                    {
+                        WareHouseConfig.WareHouse.StoresLimit_Value = int.Parse(StoresLimit_Value.Value);
                     }
 
                     XElement LogList_AutoClear = xeSystemConfig.Element("LogList_AutoClear");
@@ -18532,6 +18561,67 @@ namespace WinsockPacketEditor
 
                 #region//检查是否匹配指定包头
 
+                /*
+                    包头字符串 → 字节 的缓存。
+
+                    ⚠️ <b>这个方法在两条「每条封包都要走」的路上</b>：
+                      · 滤镜：DoFilterList 里对每条封包 × 每条带「指定包头」的滤镜跑一次
+                        —— 那是<b>钩子线程</b>，抓包的真热路径；
+                      · 自动入库：搬运拍里对每条出队封包 × 每条启用规则跑一次。
+
+                    而 headerContent 是<b>常量</b>（规则里填好就不动了），原来每次调用都把它
+                    重新解析成字节 —— 实测约 <b>4µs/次</b>（含反射开销，真实值更低）。
+                    3000 包/秒 × 几条规则就是每秒上万次重复解析。
+
+                    <b>键就是那个字符串本身，所以不需要任何失效逻辑</b> —— 改了包头就是另一个键，
+                    旧键留着也只是一条几十字节的死条目。这一点比「把解析结果挂在
+                    AutoStoresInfo / FilterInfo 上」省事得多：那样每个 setter 都要记得作废，
+                    漏一处就是「改了包头还按旧的匹配」，而且不报错。
+
+                    上限只是防呆（正常就几条规则）；撑爆了整个清掉重来，下次调用重新填。
+
+                    ConcurrentDictionary：钩子线程与 UI 线程会同时进来。
+                */
+                private static readonly ConcurrentDictionary<string, byte[]> headerBytesCache =
+                    new ConcurrentDictionary<string, byte[]>(StringComparer.Ordinal);
+
+                private const int HeaderCacheMax = 512;
+
+                private static readonly byte[] emptyHeader = new byte[0];
+
+                /// <summary>
+                /// 取包头的字节形式，解析过一次就记住。
+                ///
+                /// 解析失败也<b>照样记住（记成空）</b>：包头填错时原来是每条封包记一条日志，
+                /// 抓包时那是每秒上千条 —— 现在只有第一次会记。
+                /// </summary>
+                private static byte[] HeaderBytes(string HeaderContent)
+                {
+                    byte[] cached;
+
+                    if (headerBytesCache.TryGetValue(HeaderContent, out cached)) { return cached; }
+
+                    byte[] parsed;
+
+                    try
+                    {
+                        parsed = SystemConfig.StringToBytes(
+                            PacketConfig.Packet.EncodingFormat.Hex,
+                            HeaderContent) ?? emptyHeader;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(HeaderBytes), ex);
+                        parsed = emptyHeader;
+                    }
+
+                    if (headerBytesCache.Count >= HeaderCacheMax) { headerBytesCache.Clear(); }
+
+                    headerBytesCache[HeaderContent] = parsed;
+
+                    return parsed;
+                }
+
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
 
                 public static bool CheckPacket_IsMatch_AppointHeader(ReadOnlySpan<byte> bufferSpan, string headerContent)
@@ -18539,20 +18629,11 @@ namespace WinsockPacketEditor
                     if (string.IsNullOrEmpty(headerContent))
                         return false;
 
-                    try
-                    {
-                        byte[] headerBytes = SystemConfig.StringToBytes(
-                            PacketConfig.Packet.EncodingFormat.Hex,
-                            headerContent);
+                    byte[] headerBytes = HeaderBytes(headerContent);
 
-                        if (headerBytes.Length > 0 && headerBytes.Length <= bufferSpan.Length)
-                        {
-                            return bufferSpan.Slice(0, headerBytes.Length).SequenceEqual(headerBytes);
-                        }
-                    }
-                    catch (Exception ex)
+                    if (headerBytes.Length > 0 && headerBytes.Length <= bufferSpan.Length)
                     {
-                        Operate.DoLog(nameof(CheckPacket_IsMatch_AppointHeader), ex);
+                        return bufferSpan.Slice(0, headerBytes.Length).SequenceEqual(headerBytes);
                     }
 
                     return false;
@@ -25357,6 +25438,24 @@ namespace WinsockPacketEditor
             {
                 public static bool Enable_AutoStores = false;
 
+                /*
+                    ── 仓库上限 ───────────────────────────────────────────
+
+                    仓库原来<b>没有上限也没有清理</b>：自动入库开着、命中率高，就只涨不消。
+                    两个后果叠在一起：内存无界（存的还是与封包列表<b>同一个 byte[] 引用</b>，
+                    列表整表清空也放不掉），以及落库越来越慢（那是整表删 + 全量插）。
+
+                    满了<b>丢最旧的</b>，保留最近 N 条 —— 环形缓冲的语义，
+                    与封包列表的自动清理同一个方向（那边是整表清空，这边不能那么干：
+                    仓库是拿来「留东西」的，隔一阵全没了不像话）。
+
+                    ⚠️ <b>加载时不裁</b>（AddStores 的 Trim 参数）。老库里可能已经攒了几万条，
+                    读进来就砍等于在升级那一刻替用户做主删数据；等他<b>真的又往里加</b>时才收到上限。
+                */
+                public static bool StoresLimit = true;
+
+                public static int StoresLimit_Value = 5000;
+
                 #region//新增仓库
 
                 public static void AddWareHouse_New()
@@ -25493,16 +25592,71 @@ namespace WinsockPacketEditor
 
                 #region//新增仓储数据                
 
-                public static void AddStores(BindingList<DataInfo> Stores, byte[] PacketBuffer)
+                /// <summary>
+                /// 把一条封包放进某个仓库的仓储列表。
+                ///
+                /// <b>全项目所有入库路径的唯一咽喉</b>：自动入库、封包列表右键「添加到仓库」、
+                /// 导入数据、从库里加载 —— 都走这里，所以上限也只在这里收。
+                /// </summary>
+                /// <param name="Trim">
+                /// 要不要执行上限。<b>从数据库加载时传 false</b>：老库里可能已经超了，
+                /// 读进来就砍等于在升级那一刻替用户删数据。
+                /// </param>
+                public static void AddStores(BindingList<DataInfo> Stores, byte[] PacketBuffer, bool Trim = true)
                 {
                     try
                     {
                         DataInfo di = new DataInfo(false, PacketBuffer, PacketBuffer.Length);
                         Stores.Add(di);
+
+                        if (Trim) { TrimStores(Stores); }
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(AddStores), ex);
+                    }
+                }
+
+                /// <summary>
+                /// 收上限：超了就从<b>最旧的那头</b>删，直到不超为止。
+                ///
+                /// 稳态下（仓库已满）每加一条删一条，`RemoveAt(0)` 是一次 O(N) 的元素搬移 ——
+                /// 5000 条约 1µs，3000 包/秒也就 3ms/秒，可以接受。
+                /// 真要更省得换环形结构，但那会动 BindingList 的身份（脏标记与将来的绑定都挂在它上面）。
+                /// </summary>
+                public static void TrimStores(BindingList<DataInfo> Stores)
+                {
+                    try
+                    {
+                        if (!WareHouseConfig.WareHouse.StoresLimit) { return; }
+
+                        int max = WareHouseConfig.WareHouse.StoresLimit_Value;
+
+                        if (max <= 0 || Stores == null) { return; }
+
+                        int dropped = 0;
+
+                        while (Stores.Count > max)
+                        {
+                            Stores.RemoveAt(0);
+                            dropped++;
+                        }
+
+                        /*
+                            只在「一次丢掉一批」时记一条 —— 稳态下每条封包丢一条，
+                            逐条记会把日志刷爆（那是自动清理那边踩过的坑）。
+                            批量丢通常意味着刚改小了上限、或者右键一次加了很多条。
+                        */
+                        if (dropped > 1)
+                        {
+                            Operate.DoLog(nameof(TrimStores), string.Format(
+                                UI.T("WareHouse.Trimmed", "仓库超过上限 {0} 条，已丢弃最旧的 {1} 条"),
+                                max, dropped));
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(TrimStores), ex);
                     }
                 }
 
@@ -27116,7 +27270,8 @@ namespace WinsockPacketEditor
                                 {
                                     byte[] PacketBuffer = (byte[])row["Buffer"];
 
-                                    WareHouseConfig.WareHouse.AddStores(Stores, PacketBuffer);
+                                    //从库里读回来的不收上限，理由见 AddStores 的 Trim 参数
+                                    WareHouseConfig.WareHouse.AddStores(Stores, PacketBuffer, false);
                                 }
                             }
 
@@ -29612,6 +29767,8 @@ namespace WinsockPacketEditor
                         sql += "LogList_AutoRoll BOOLEAN DEFAULT 0,";//日志列表自动滚动
                         sql += "LogList_AutoClear BOOLEAN DEFAULT 1,";//日志列表自动清理
                         sql += "LogList_AutoClear_Value INTEGER DEFAULT 5000,";//日志列表自动清理数值
+                        sql += "StoresLimit BOOLEAN DEFAULT 1,";//仓库上限
+                        sql += "StoresLimit_Value INTEGER DEFAULT 5000,";//仓库上限条数
                         sql += "CheckNotShow BOOLEAN DEFAULT 1,";//过滤设置不显示
                         sql += "CheckSocket BOOLEAN DEFAULT 0,";//过滤套接字
                         sql += "CheckSocket_Value TEXT,";//过滤套接字内容
@@ -29665,6 +29822,8 @@ namespace WinsockPacketEditor
                                 所以每加一列都要在这里补一句 EnsureColumn。
                             */
                             EnsureColumn(conn, "SystemConfig", "ThemeFollowSystem", "BOOLEAN DEFAULT 0");
+                            EnsureColumn(conn, "SystemConfig", "StoresLimit", "BOOLEAN DEFAULT 1");
+                            EnsureColumn(conn, "SystemConfig", "StoresLimit_Value", "INTEGER DEFAULT 5000");
                         }
                     }
 
@@ -29800,6 +29959,8 @@ namespace WinsockPacketEditor
                         sql += "LogList_AutoRoll,";
                         sql += "LogList_AutoClear,";
                         sql += "LogList_AutoClear_Value,";
+                        sql += "StoresLimit,";
+                        sql += "StoresLimit_Value,";
                         sql += "CheckNotShow,";
                         sql += "CheckSocket,";
                         sql += "CheckSocket_Value,";
@@ -29859,6 +30020,8 @@ namespace WinsockPacketEditor
                         sql += "@LogList_AutoRoll,";
                         sql += "@LogList_AutoClear,";
                         sql += "@LogList_AutoClear_Value,";
+                        sql += "@StoresLimit,";
+                        sql += "@StoresLimit_Value,";
                         sql += "@CheckNotShow,";
                         sql += "@CheckSocket,";
                         sql += "@CheckSocket_Value,";
@@ -29928,6 +30091,8 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@LogList_AutoRoll", LogConfig.List.AutoRoll);
                             cmd.Parameters.AddWithValue("@LogList_AutoClear", LogConfig.List.AutoClear);
                             cmd.Parameters.AddWithValue("@LogList_AutoClear_Value", LogConfig.List.AutoClear_Value);
+                            cmd.Parameters.AddWithValue("@StoresLimit", WareHouseConfig.WareHouse.StoresLimit);
+                            cmd.Parameters.AddWithValue("@StoresLimit_Value", WareHouseConfig.WareHouse.StoresLimit_Value);
                             cmd.Parameters.AddWithValue("@CheckNotShow", SystemConfig.CheckNotShow);
                             cmd.Parameters.AddWithValue("@CheckSocket", SystemConfig.CheckSocket);
                             cmd.Parameters.AddWithValue("@CheckSocket_Value", SystemConfig.CheckSocket_Value);

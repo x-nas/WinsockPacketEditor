@@ -264,6 +264,7 @@ namespace WinsockPacketEditor
             d["StartForm.MultipleOpen"] = "多重起動";
             d["StartForm.MultipleOpen.Text"] = "データベースを指定して多重起動します";
             d["StartForm.Database.Loaded"] = "読み込んだデータベース: ";
+            d["WareHouse.Trimmed"] = "倉庫が上限 {0} 件に達したため、古い {1} 件を破棄しました";
             d["StartForm.LearnMore"] = "詳しく見る";
             d["StartForm.Tutorials"] = "使い方";
             d["StartForm.OfficialWebsite"] = "公式サイト";

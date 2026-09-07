@@ -264,6 +264,7 @@ namespace WinsockPacketEditor
             d["StartForm.MultipleOpen"] = "Несколько копий";
             d["StartForm.MultipleOpen.Text"] = "Указать базу данных для запуска нескольких копий";
             d["StartForm.Database.Loaded"] = "База данных загружена: ";
+            d["WareHouse.Trimmed"] = "Хранилище превысило лимит {0}, отброшено самых старых: {1}";
             d["StartForm.LearnMore"] = "Подробнее";
             d["StartForm.Tutorials"] = "Руководство";
             d["StartForm.OfficialWebsite"] = "Официальный сайт";
