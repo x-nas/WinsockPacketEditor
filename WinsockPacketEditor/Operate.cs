@@ -25636,6 +25636,87 @@ namespace WinsockPacketEditor
                 public static BindingList<WareHouseInfo> lstWareHouseInfo = new BindingList<WareHouseInfo>();
                 public static BindingList<AutoStoresInfo> lstAutoStoresInfo = new BindingList<AutoStoresInfo>();
 
+                #region//落库脏标记
+
+                /*
+                    ⚠️ <b>仓库落库是「整表删 + 全量插」</b>（DataBase.SaveTable_WareHouse），
+                    而 ShellForm.SaveProxyState 在<b>关窗</b>与<b>每 10 分钟</b>各调一次 ——
+                    原来不管仓库有没有变过都整个重写一遍。
+
+                    实测（合成仓库、每条 512 字节）：1000 条 45ms、10000 条 80ms、
+                    50000 条 <b>402ms</b>，真实封包 4KB 时写入量还要再乘 8。
+                    自动入库开着抓一会儿，就是每 10 分钟在 UI 线程上冻一下。
+
+                    所以加个脏标记：没变过就整段跳过。
+
+                    【为什么订阅 ListChanged 而不是逐点插桩】
+                    仓库的结构性改动散在十几处（新增 / 删除 / 清空 / 四个移动 /
+                    仓储数据的增删移动清空 / 导入），逐点插桩<b>漏一处就是静默丢数据</b> ——
+                    用户改了、以为存了，重启没了。ListChanged 一处覆盖全部，
+                    Add / Remove / Insert / Clear 谁调的都一样。
+                    而 WareHouseInfo 继承 NotifyProperty，<b>改名</b>与整份 Stores 换引用
+                    也会以 ItemChanged 的形式冒上来，同样收得到。
+                */
+
+                private static int changeSeq;
+
+                //-1 表示「本次运行还没存过」——第一次保存无论如何都真做
+                private static int savedSeq = -1;
+
+                //缓存成字段：-= 要匹配同一个委托实例，重复挂载才是幂等的
+                private static readonly ListChangedEventHandler onStoresChanged =
+                    (s, e) => Interlocked.Increment(ref changeSeq);
+
+                static List()
+                {
+                    lstWareHouseInfo.ListChanged += (s, e) =>
+                    {
+                        Interlocked.Increment(ref changeSeq);
+
+                        //仓库进出列表时把每个仓库的 Stores 重挂一遍
+                        HookStores();
+                    };
+                }
+
+                /// <summary>给每个仓库的仓储列表挂上变动监听。幂等，重复调用无害。</summary>
+                public static void HookStores()
+                {
+                    try
+                    {
+                        foreach (WareHouseInfo whi in lstWareHouseInfo)
+                        {
+                            if (whi == null || whi.Stores == null) { continue; }
+
+                            whi.Stores.ListChanged -= onStoresChanged;
+                            whi.Stores.ListChanged += onStoresChanged;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(HookStores), ex);
+                    }
+                }
+
+                /// <summary>当前的变动序号。保存前先取一份，成功后用它标已存。</summary>
+                public static int CurrentSeq
+                {
+                    get { return Volatile.Read(ref changeSeq); }
+                }
+
+                /// <summary>内存里的仓库与库里那一份是不是已经不一致了。</summary>
+                public static bool HasUnsavedChanges
+                {
+                    get { return CurrentSeq != savedSeq; }
+                }
+
+                /// <summary>标成「与库一致」。<b>只在整批都写成功时调</b>，写漏了就该留着脏、下一拍重试。</summary>
+                public static void MarkSaved(int Seq)
+                {
+                    savedSeq = Seq;
+                }
+
+                #endregion
+
                 #region//仓库入列表
 
                 public static void WareHouseToList(WareHouseInfo whi)
@@ -26528,6 +26609,48 @@ namespace WinsockPacketEditor
                 }
 
                 /// <summary>仓储数据的行（按需取，不进推送流）。仓库不存在返回空数组。</summary>
+                /// <summary>
+                /// 取某一段仓储数据的<b>预览串</b>（十六进制，截到 PacketData_MaxLen）。
+                ///
+                /// 只出字符串数组、按位置对应 [From, From + Count) —— 不再包一层对象，
+                /// 因为调用方（仓库编辑器）已经有整份行了，只缺这一列。
+                ///
+                /// 越界自己夹住：前端是按滚动位置算的窗口，翻到表尾时 From + Count 会超。
+                /// </summary>
+                public static string[] GetStorePreviews_ById(string WID, int From, int Count)
+                {
+                    try
+                    {
+                        WareHouseInfo whi = WareHouseConfig.List.FindWareHouse_ById(WID);
+
+                        if (whi == null || whi.Stores == null) { return new string[0]; }
+
+                        int n = whi.Stores.Count;
+                        int from = From < 0 ? 0 : From;
+                        int to = Count <= 0 ? from : from + Count;
+
+                        if (to > n) { to = n; }
+                        if (from >= to) { return new string[0]; }
+
+                        var items = new string[to - from];
+
+                        for (int i = from; i < to; i++)
+                        {
+                            byte[] buf = whi.Stores[i].PacketBuffer ?? new byte[0];
+
+                            items[i - from] = Operate.PacketConfig.Packet.GetPacketData_Hex(
+                                buf, Operate.PacketConfig.Packet.PacketData_MaxLen);
+                        }
+
+                        return items;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetStorePreviews_ById), ex);
+                        return new string[0];
+                    }
+                }
+
                 public static StoreRow[] GetStoreRows_ById(string WID)
                 {
                     try
@@ -26539,11 +26662,21 @@ namespace WinsockPacketEditor
                             return new StoreRow[0];
                         }
 
+                        /*
+                            ⚠️ <b>整表出行，但不带预览</b>（WithPreview: false）。
+
+                            行本身要全给：前端那张表的虚拟滚动、多选（usePick 的 Shift 连选
+                            与全选）、按 Id 发给 C# 的批量动作，都要有完整的 Id 序列。
+                            但<b>预览是大头</b> —— 每行 60 字节十六进制约 180 个字符，
+                            占整条报文的四分之三。实测 50000 条：带预览 12.6 MB，不带 3.4 MB。
+
+                            预览改成按可见窗口取，见 GetStorePreviews_ById。
+                        */
                         var rows = new StoreRow[whi.Stores.Count];
 
                         for (int i = 0; i < whi.Stores.Count; i++)
                         {
-                            rows[i] = StoreRow.From_(whi.Stores[i]);
+                            rows[i] = StoreRow.From_(whi.Stores[i], false);
                         }
 
                         return rows;
@@ -26925,6 +27058,17 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
+                        /*
+                            没变过就别重写 —— 这一步是「整表删 + 全量插」，
+                            而关窗与每 10 分钟各调一次。理由与实测数字见 List 那段脏标记的说明。
+
+                            seq 要<b>先取</b>：保存过程中如果又有新数据进来（自动入库跑在
+                            搬运拍上），那笔改动的序号比 seq 大，下一拍照样是脏的、不会被吃掉。
+                        */
+                        int seq = WareHouseConfig.List.CurrentSeq;
+
+                        if (!WareHouseConfig.List.HasUnsavedChanges) { return; }
+
                         int want = WareHouseConfig.List.lstWareHouseInfo.Count;
                         int saved = DataBase.SaveTable_WareHouse(WareHouseConfig.List.lstWareHouseInfo);
 
@@ -26933,6 +27077,11 @@ namespace WinsockPacketEditor
                         {
                             Operate.DoLog(nameof(SaveWareHouseList_ToDB),
                                 string.Format("仓库列表落库不完整：内存 {0} 个，写入 {1} 个", want, saved));
+                        }
+                        else
+                        {
+                            //只有整批都写成功才算干净；写漏了留着脏，下一次自动保存重试
+                            WareHouseConfig.List.MarkSaved(seq);
                         }
                     }
                     catch (Exception ex)
@@ -26973,6 +27122,14 @@ namespace WinsockPacketEditor
 
                             WareHouseConfig.WareHouse.AddWareHouse(WID, WName, Stores);
                         }
+
+                        /*
+                            刚从库里读出来 —— 内存与库此刻是一致的，把脏标记清掉。
+                            上面每次 AddWareHouse 都会触发 ListChanged 把 changeSeq 顶上去，
+                            不清的话第一次自动保存又会白重写一遍整个仓库。
+                        */
+                        WareHouseConfig.List.HookStores();
+                        WareHouseConfig.List.MarkSaved(WareHouseConfig.List.CurrentSeq);
                     }
                     catch (Exception ex)
                     {

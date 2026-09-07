@@ -85,6 +85,13 @@ async function reload(): Promise<void> {
     const r = await call<{ rows: StoreRow[] }>('getStoreRows', { wid: props.id })
     rows.value = r?.rows ?? []
 
+    /*
+      整表换掉了（重排 / 删除 / 导入之后都会走这里）——
+      预览是按下标缓存的，必须一起作废，否则会把上一份的预览贴到新顺序上。
+    */
+    gotPreview.clear()
+    void fillPreviews()
+
     //整表换掉后对一次选中集，理由与各列表一屏相同
     const alive = new Set(rows.value.map((x) => x.Id))
     const next = new Set<string>()
@@ -92,6 +99,52 @@ async function reload(): Promise<void> {
     picked.value = next
   } catch (e) {
     console.error('[wh.e] 取仓储数据失败', e)
+  }
+}
+
+/*
+  ── 预览按可见窗口取 ─────────────────────────────────────────
+
+  getStoreRows 出的行<b>不带预览</b>：那一列是 60 字节的十六进制、约 180 个字符，
+  占整条报文的四分之三（50000 条实测：带预览 12.6 MB、不带 3.4 MB）。
+  行本身还是要全给 —— 虚拟滚动、Shift 连选、全选、按 Id 发给 C# 的批量动作都要完整 Id 序列。
+
+  按<b>定长块</b>取而不是按精确窗口：滚动时窗口每帧都在变，按块取才有得缓存，
+  也不会一屏发出几十个请求。块比一屏大，正常滚动一次最多取两块。
+*/
+const BLOCK = 200
+const gotPreview = new Set<number>()
+
+async function fillPreviews(): Promise<void> {
+  if (props.id === null) return
+
+  const first = Math.floor(start.value / BLOCK)
+  const last = Math.floor(Math.max(start.value, end.value - 1) / BLOCK)
+
+  for (let b = first; b <= last; b++) {
+    if (gotPreview.has(b)) continue
+
+    //先占位再取：同一块的第二次滚动不要重复发
+    gotPreview.add(b)
+
+    try {
+      const r = await call<{ items: string[] }>('getStorePreviews',
+        { wid: props.id, from: b * BLOCK, count: BLOCK })
+
+      const items = r?.items ?? []
+      const base = b * BLOCK
+
+      for (let i = 0; i < items.length; i++) {
+        const row = rows.value[base + i]
+
+        //rows 是 ref（深响应），就地改这一格就会触发重渲染
+        if (row) row.Preview = items[i]
+      }
+    } catch (e) {
+      //取失败就把占位撤掉，滚回来还有机会重试
+      gotPreview.delete(b)
+      console.error('[wh.e] 取预览失败', e)
+    }
   }
 }
 
@@ -120,6 +173,9 @@ const windowRows = computed(() => rows.value.slice(start.value, end.value))
 function onScroll(): void {
   const el = scroller.value
   if (el) scrollTop.value = el.scrollTop
+
+  //滚到哪儿补哪儿的预览。已取过的块直接跳过，不产生往返
+  void fillPreviews()
 }
 
 let ro: ResizeObserver | null = null

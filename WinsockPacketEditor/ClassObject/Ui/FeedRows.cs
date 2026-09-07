@@ -834,7 +834,12 @@ namespace WinsockPacketEditor
         public int Len;
         public string Preview = string.Empty;
 
-        public static StoreRow From_(DataInfo Src)
+        /// <param name="WithPreview">
+        /// 要不要带预览串。<b>整表出行时传 false</b> —— 60 字节十六进制约 180 个字符，
+        /// 占整条报文的四分之三（50000 条实测：带 12.6 MB、不带 3.4 MB）。
+        /// 预览按可见窗口另取，见 <c>GetStorePreviews_ById</c>。
+        /// </param>
+        public static StoreRow From_(DataInfo Src, bool WithPreview = true)
         {
             if (Src == null) { return null; }
 
@@ -844,7 +849,9 @@ namespace WinsockPacketEditor
             {
                 Id = Src.DID.ToString().ToUpper(),
                 Len = buf.Length,
-                Preview = Operate.PacketConfig.Packet.GetPacketData_Hex(buf, Operate.PacketConfig.Packet.PacketData_MaxLen),
+                Preview = WithPreview
+                    ? Operate.PacketConfig.Packet.GetPacketData_Hex(buf, Operate.PacketConfig.Packet.PacketData_MaxLen)
+                    : string.Empty,
             };
         }
     }

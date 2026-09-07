@@ -4048,6 +4048,18 @@ namespace WPEHybrid
                     args["wid"] == null ? null : (string)args["wid"]),
             });
 
+            /*
+                预览按可见窗口取。getStoreRows 出的行不带预览（见 StoreRow.From_ 的说明）——
+                仓库大起来时那一列就是整条报文的大头。
+            */
+            this.bridge.Register("getStorePreviews", args => new
+            {
+                items = Operate.WareHouseConfig.List.GetStorePreviews_ById(
+                    args["wid"] == null ? null : (string)args["wid"],
+                    args["from"] == null ? 0 : (int)args["from"],
+                    args["count"] == null ? 0 : (int)args["count"]),
+            });
+
             //复制的十六进制由 C# 拼好整段再交给前端写剪贴板，格式与封包列表那份一致
             this.bridge.Register("copyStoresHex", args => new
             {
