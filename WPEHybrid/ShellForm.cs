@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Net;
@@ -581,6 +582,13 @@ namespace WPEHybrid
                 }));
             }
 
+            /*
+                诊断：模态移动循环的进出。拖标题栏 / 拉边框都会走这一对消息，
+                中间那段时间里 WM_TIMER 照常派发 —— 定时器的耗时就是拖动的顿挫。
+            */
+            if (m.Msg == WM_ENTERSIZEMOVE) { this.BeginMoveProbe(); }
+            else if (m.Msg == WM_EXITSIZEMOVE && this.inMoveLoop) { this.EndMoveProbe(); }
+
             base.WndProc(ref m);
 
             if (m.Msg != WM_NCHITTEST || (int)m.Result != HTCLIENT)
@@ -791,12 +799,85 @@ namespace WPEHybrid
         private bool sendWasRunning;
         private bool robotWasRunning;
 
+        #region//拍耗时实测（临时诊断，发布前删；见 CLAUDE.md「拖窗口时的 1 Hz 顿挫」）
+
+        /*
+            要回答的问题：拖标题栏时那个「每秒卡一下」是不是统计拍造成的。
+
+            为什么会是它：Forms.Timer 是挂在 <b>UI 线程</b>上的 WM_TIMER，而拖标题栏会让
+            窗口进入 Windows 的<b>模态移动循环</b> —— 那个循环照常派发 WM_TIMER，
+            于是这一拍是在拖动过程中执行的，它花多久拖动就停多久。
+
+            量法：拖动期间把两条定时器的每一拍都记下来，松手时（WM_EXITSIZEMOVE）
+            汇总成<b>一行</b>日志。一拍一条会把系统日志刷爆，而且拖动本身就那么几秒。
+        */
+
+        private const int WM_ENTERSIZEMOVE = 0x0231;
+        private const int WM_EXITSIZEMOVE = 0x0232;
+
+        /// <summary>正在拖动 / 缩放窗口（在模态移动循环里）。</summary>
+        private bool inMoveLoop;
+
+        private readonly Stopwatch swTick = new Stopwatch();
+        private DateTime moveBeganAt;
+
+        //拖动期间的统计拍：次数 / 最慢一拍的总耗时 / 那一拍的分段明细
+        private int mvStatN;
+        private double mvStatMax;
+        private string mvStatWorst = string.Empty;
+
+        //拖动期间的搬运拍（10ms 那条）：次数 / 最慢一拍 / 累计
+        private int mvFlushN;
+        private double mvFlushMax;
+        private double mvFlushSum;
+
+        /// <summary>单拍超过它就单独记一条，拖不拖动都记 —— 用来看平时的基线。</summary>
+        private const double SlowStatMs = 5;
+
+        private void BeginMoveProbe()
+        {
+            this.inMoveLoop = true;
+            this.moveBeganAt = DateTime.Now;
+            this.mvStatN = 0;
+            this.mvStatMax = 0;
+            this.mvStatWorst = string.Empty;
+            this.mvFlushN = 0;
+            this.mvFlushMax = 0;
+            this.mvFlushSum = 0;
+        }
+
+        private void EndMoveProbe()
+        {
+            this.inMoveLoop = false;
+
+            double secs = (DateTime.Now - this.moveBeganAt).TotalSeconds;
+
+            Operate.DoLog("拖动实测", string.Format(
+                "拖了 {0:0.0}s ｜ 统计拍 {1} 次，最慢 {2:0.0}ms（{3}）｜ 搬运拍 {4} 次，最慢 {5:0.0}ms，合计 {6:0}ms",
+                secs,
+                this.mvStatN,
+                this.mvStatMax,
+                string.IsNullOrEmpty(this.mvStatWorst) ? "-" : this.mvStatWorst,
+                this.mvFlushN,
+                this.mvFlushMax,
+                this.mvFlushSum));
+        }
+
+        #endregion
+
         private async void OnStatTick(object sender, EventArgs e)
         {
+            //诊断：这一拍每段花了多久。tSync 是「await 之前」，也就是真正堵住消息循环的那一截
+            var sw = Stopwatch.StartNew();
+            double tStat = 0, tUdp = 0, tSync = 0;
+
             try
             {
                 Operate.ProxyConfig.Proxy.RefreshStatInfo();
+                tStat = sw.Elapsed.TotalMilliseconds;
+
                 Operate.ProxyConfig.Proxy.CloseUDPTimeOut();
+                tUdp = sw.Elapsed.TotalMilliseconds - tStat;
 
                 /*
                     发送列表在跑时，三个计数是在后台线程上就地累加的 ——
@@ -839,6 +920,8 @@ namespace WPEHybrid
 
                 this.robotWasRunning = robotRunning;
 
+                tSync = sw.Elapsed.TotalMilliseconds;
+
                 //里面要查 IP 归属地，是异步的；这一拍慢一点不影响上面两个
                 await Operate.ProxyConfig.Account.RefreshAuthList();
             }
@@ -847,10 +930,39 @@ namespace WPEHybrid
                 //async void：await 之后抛的异常不会被 WinForms 兜住，必须自己捕获
                 Operate.DoLog(nameof(OnStatTick), ex);
             }
+            finally
+            {
+                /*
+                    ⚠️ total 跨过了 await，里面含<b>等 IP 归属地的时间</b>，不全是占着 UI 线程；
+                    真正堵住消息循环的是 sync 那一截，加上 await 回来之后重建 lstAuthInfo 的部分
+                    （那部分也在 UI 线程上，落在 total − sync 里，与等待混在一起分不开）。
+                */
+                double total = sw.Elapsed.TotalMilliseconds;
+
+                string detail = string.Format(
+                    "stat {0:0.0} / udp {1:0.0} / sync {2:0.0} / total {3:0.0}ms",
+                    tStat, tUdp, tSync, total);
+
+                if (this.inMoveLoop)
+                {
+                    this.mvStatN++;
+
+                    if (total > this.mvStatMax)
+                    {
+                        this.mvStatMax = total;
+                        this.mvStatWorst = detail;
+                    }
+                }
+
+                if (total > SlowStatMs) { Operate.DoLog("统计拍慢", detail); }
+            }
         }
 
         private void OnFlushTick(object sender, EventArgs e)
         {
+            //诊断：只在拖动期间量，100 Hz 的拍平时记日志会把列表刷爆
+            if (this.inMoveLoop) { this.swTick.Restart(); }
+
             try
             {
                 this.timerFlush.Stop();
@@ -869,6 +981,16 @@ namespace WPEHybrid
             finally
             {
                 this.timerFlush.Start();
+
+                if (this.inMoveLoop)
+                {
+                    double ms = this.swTick.Elapsed.TotalMilliseconds;
+
+                    this.mvFlushN++;
+                    this.mvFlushSum += ms;
+
+                    if (ms > this.mvFlushMax) { this.mvFlushMax = ms; }
+                }
             }
         }
 
