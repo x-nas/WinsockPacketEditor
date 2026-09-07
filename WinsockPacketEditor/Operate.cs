@@ -3249,10 +3249,25 @@ namespace WinsockPacketEditor
                     }
                     else
                     {
+                        /*
+                            空库 —— 第一次启动，或者多开设置切到了一个新目录。
+
+                            ⚠️ <b>这里的值必须与 UiPrefs 的字段初值逐个对上。</b>
+                            那边是「默认长什么样」的唯一真源，这一段是「切库时把内存里
+                            上一个库的值抹掉」—— 少写一个字段，表现就是「换到新库了，
+                            某个偏好还留着上一个库的」，而且不报任何错。
+
+                            主题这两个曾经漏在这里：IsDark 没写初值（bool 默认 false），
+                            这一段又没管它，于是新装的机器第一眼是浅色 —— 与「这套皮肤
+                            照深色设计」对不上。语言不在这里，它由方法开头的 Lang 局部
+                            变量兜住、末尾统一赋值。
+                        */
                         UI.Prefs.IsAnimation = false;
                         UI.Prefs.IsShadowEnabled = false;
                         UI.Prefs.IsShowInWindow = true;
                         UI.Prefs.IsTextRenderingHighQuality = false;
+                        UI.Prefs.IsDark = true;
+                        UI.Prefs.FollowSystemTheme = false;
                     }
 
                     UI.Prefs.Language = Lang;

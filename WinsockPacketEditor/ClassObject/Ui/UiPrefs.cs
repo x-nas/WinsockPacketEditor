@@ -26,8 +26,13 @@
         /// 跟随系统时这里存的是「那一刻系统给出来的值」，不是用户选的三态之一 ——
         /// WinForms 那半边（AntdUI 只认深浅两态）读的就是它，得始终是个能直接用的值。
         /// 用户到底选了哪一档由 <see cref="FollowSystemTheme"/> 补充说明。
+        ///
+        /// ⚠️ <b>默认 true（深色）。</b>整套皮肤是照深色设计的，浅色那份是后加的令牌覆盖。
+        /// 这个初值决定<b>第一次启动</b>（库还是空的、没有任何配置行）看到的是哪种 ——
+        /// 早先没写初值，bool 默认 false，于是新装的机器第一眼是浅色。
+        /// 改这里要连 <c>LoadSystemConfig_FromDB</c> 里「空库」那条分支一起改。
         /// </summary>
-        public bool IsDark;
+        public bool IsDark = true;
 
         /// <summary>
         /// 主题是不是「跟随系统」。
