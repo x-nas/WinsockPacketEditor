@@ -12462,27 +12462,9 @@ namespace WinsockPacketEditor
                             2026-09-07 实测：1019 个账号、<b>那张表还是空的</b>，
                             光开连接就花掉 <b>1183ms</b>，占了「进代理模式」那一秒多的绝大部分。
 
-                            分桶用 OrdinalIgnoreCase：库里存的是大写无括号的 GUID
-                            （SelectTable_ProxyAccountIPInfo 那个重载查的时候也 ToUpper 了），
-                            但别的写入路径未必都守得住，比大小写更安全。
+                            分桶细节（行序、键的比法）见 DataBase.GroupRowsBy。
                         */
-                        DataTable dtAllIPInfo = DataBase.SelectTable_ProxyAccountIPInfo();
-
-                        var ipByAccount = new Dictionary<string, List<DataRow>>(StringComparer.OrdinalIgnoreCase);
-
-                        foreach (DataRow drIP in dtAllIPInfo.Rows)
-                        {
-                            string key = (drIP["GUID"] ?? string.Empty).ToString();
-
-                            List<DataRow> bucket;
-                            if (!ipByAccount.TryGetValue(key, out bucket))
-                            {
-                                bucket = new List<DataRow>();
-                                ipByAccount[key] = bucket;
-                            }
-
-                            bucket.Add(drIP);
-                        }
+                        var ipByAccount = DataBase.GroupRowsBy(DataBase.SelectTable_ProxyAccountIPInfo(), "GUID");
 
                         foreach (DataRow drProxyAccount in dtProxyAccount.Rows)
                         {
@@ -22948,6 +22930,14 @@ namespace WinsockPacketEditor
                     try
                     {
                         DataTable dtSend = DataBase.SelectTable_Send();
+
+                        /*
+                            发送集整表读一次，按发送分桶 —— 原来是每条发送一次查询、每次一个新连接。
+                            ⚠️ 发送集的<b>顺序就是数据</b>（Send_DoWork 按下标走），
+                            分桶保持原始行序，见 DataBase.GroupRowsBy。
+                        */
+                        var packetsBySend = DataBase.GroupRowsBy(DataBase.SelectTable_SendCollection(), "GUID");
+
                         foreach (DataRow dataRow in dtSend.Rows)
                         {
                             Guid SID = Guid.Parse(dataRow["GUID"].ToString());
@@ -22959,16 +22949,19 @@ namespace WinsockPacketEditor
                             string SNotes = dataRow["Notes"].ToString();
                             BindingList<PacketInfo> SCollection = new BindingList<PacketInfo>();
 
-                            DataTable dtSCollection = DataBase.SelectTable_SendCollection(SID);
-                            foreach (DataRow row in dtSCollection.Rows)
+                            List<DataRow> myPackets;
+                            if (packetsBySend.TryGetValue(SID.ToString().ToUpper(), out myPackets))
                             {
-                                int Socket = Convert.ToInt32(row["Socket"]);
-                                PacketConfig.Packet.PacketType ptType = PacketConfig.Packet.GetPacketType_ByString(row["Type"].ToString());
-                                string IPFrom = row["IPFrom"].ToString();
-                                string IPTo = row["IPTo"].ToString();
-                                byte[] Buffer = (byte[])row["Buffer"];
+                                foreach (DataRow row in myPackets)
+                                {
+                                    int Socket = Convert.ToInt32(row["Socket"]);
+                                    PacketConfig.Packet.PacketType ptType = PacketConfig.Packet.GetPacketType_ByString(row["Type"].ToString());
+                                    string IPFrom = row["IPFrom"].ToString();
+                                    string IPTo = row["IPTo"].ToString();
+                                    byte[] Buffer = (byte[])row["Buffer"];
 
-                                Send.AddSendCollection(SCollection, Socket, ptType, IPFrom, IPTo, Buffer);
+                                    Send.AddSendCollection(SCollection, Socket, ptType, IPFrom, IPTo, Buffer);
+                                }
                             }
 
                             Send.AddSend(IsEnable, SID, SName, SSystemSocket, SLoopCNT, SLoopINT, SCollection, SNotes);
@@ -25051,6 +25044,13 @@ namespace WinsockPacketEditor
                     {
                         DataTable dtRobot = DataBase.SelectTable_Robot();
 
+                        /*
+                            指令整表读一次，按机器人分桶 —— 原来是每个机器人一次查询、每次一个新连接。
+                            ⚠️ 指令的<b>顺序就是数据</b>（RobotList_DoWork 按下标走），
+                            分桶保持原始行序，见 DataBase.GroupRowsBy。
+                        */
+                        var instByRobot = DataBase.GroupRowsBy(DataBase.SelectTable_RobotInstruction(), "GUID");
+
                         foreach (DataRow dataRow in dtRobot.Rows)
                         {
                             Guid RID = Guid.Parse(dataRow["GUID"].ToString());
@@ -25058,13 +25058,16 @@ namespace WinsockPacketEditor
                             string RName = dataRow["Name"].ToString();
                             BindingList<InstructionInfo> RInstruction = new BindingList<InstructionInfo>();
 
-                            DataTable dtRInstruction = DataBase.SelectTable_RobotInstruction(RID);
-                            foreach (DataRow row in dtRInstruction.Rows)
+                            List<DataRow> myInst;
+                            if (instByRobot.TryGetValue(RID.ToString().ToUpper(), out myInst))
                             {
-                                RobotConfig.Robot.InstructionType instructionType = RobotConfig.Robot.GetInstructionType_ByString(row["Type"].ToString());
-                                string instructionContent = row["Content"].ToString();
+                                foreach (DataRow row in myInst)
+                                {
+                                    RobotConfig.Robot.InstructionType instructionType = RobotConfig.Robot.GetInstructionType_ByString(row["Type"].ToString());
+                                    string instructionContent = row["Content"].ToString();
 
-                                RobotConfig.Robot.AddRobotInstruction(RInstruction, instructionType, instructionContent);
+                                    RobotConfig.Robot.AddRobotInstruction(RInstruction, instructionType, instructionContent);
+                                }
                             }
 
                             RobotConfig.Robot.AddRobot(IsEnable, RID, RName, RInstruction);
@@ -26947,18 +26950,25 @@ namespace WinsockPacketEditor
                     try
                     {
                         DataTable dtWareHouse = DataBase.SelectTable_WareHouse();
+
+                        //仓储数据整表读一次，按仓库分桶 —— 原来是每个仓库一次查询、每次一个新连接
+                        var storesByHouse = DataBase.GroupRowsBy(DataBase.SelectTable_WareHouseData(), "GUID");
+
                         foreach (DataRow dataRow in dtWareHouse.Rows)
                         {
                             Guid WID = Guid.Parse(dataRow["GUID"].ToString());
                             string WName = dataRow["Name"].ToString();
                             BindingList<DataInfo> Stores = new BindingList<DataInfo>();
 
-                            DataTable dtStores = DataBase.SelectTable_WareHouseData(WID);
-                            foreach (DataRow row in dtStores.Rows)
+                            List<DataRow> myStores;
+                            if (storesByHouse.TryGetValue(WID.ToString().ToUpper(), out myStores))
                             {
-                                byte[] PacketBuffer = (byte[])row["Buffer"];
+                                foreach (DataRow row in myStores)
+                                {
+                                    byte[] PacketBuffer = (byte[])row["Buffer"];
 
-                                WareHouseConfig.WareHouse.AddStores(Stores, PacketBuffer);
+                                    WareHouseConfig.WareHouse.AddStores(Stores, PacketBuffer);
+                                }
                             }
 
                             WareHouseConfig.WareHouse.AddWareHouse(WID, WName, Stores);
@@ -28286,6 +28296,9 @@ namespace WinsockPacketEditor
                     {
                         DataTable dtServer = DataBase.SelectTable_ServerInfo();
 
+                        //规则整表读一次，按服务器分桶。⚠️ 这张子表的外键列是 SID 不是 GUID
+                        var rulesByServer = DataBase.GroupRowsBy(DataBase.SelectTable_ServerRuleInfo(), "SID");
+
                         foreach (DataRow drServer in dtServer.Rows)
                         {
                             Guid SID = Guid.Parse(drServer["SID"].ToString());
@@ -28298,17 +28311,20 @@ namespace WinsockPacketEditor
                             string VerifyURL = drServer["VerifyURL"].ToString();
 
                             BindingList<RuleInfo> Rules = new BindingList<RuleInfo>();
-                            DataTable dtRules = DataBase.SelectTable_ServerRuleInfo(SID);
 
-                            foreach (DataRow drRule in dtRules.Rows)
+                            List<DataRow> myRules;
+                            if (rulesByServer.TryGetValue(SID.ToString().ToUpper(), out myRules))
                             {
-                                Guid RID = Guid.Parse(drRule["RID"].ToString());
-                                bool RuleIsEnable = Convert.ToBoolean(drRule["IsEnable"]);
-                                RuleType RType = (RuleType)Convert.ToInt32(drRule["RuleType"]);
-                                string RuleArgument = drRule["RuleArgument"].ToString();
-                                RuleAction RAction = (RuleAction)Convert.ToInt32(drRule["RuleAction"]);
+                                foreach (DataRow drRule in myRules)
+                                {
+                                    Guid RID = Guid.Parse(drRule["RID"].ToString());
+                                    bool RuleIsEnable = Convert.ToBoolean(drRule["IsEnable"]);
+                                    RuleType RType = (RuleType)Convert.ToInt32(drRule["RuleType"]);
+                                    string RuleArgument = drRule["RuleArgument"].ToString();
+                                    RuleAction RAction = (RuleAction)Convert.ToInt32(drRule["RuleAction"]);
 
-                                Rules.Add(new RuleInfo(RuleIsEnable, RID, RType, RuleArgument, RAction));
+                                    Rules.Add(new RuleInfo(RuleIsEnable, RID, RType, RuleArgument, RAction));
+                                }
                             }
 
                             WPCConfig.ServerList.AddServer(
@@ -30599,6 +30615,39 @@ namespace WinsockPacketEditor
                 return dtReturn;
             }
 
+            /// <summary>
+            /// 整张 SendCollection 表一次读完，配合 <see cref="GroupRowsBy"/> 用。
+            ///
+            /// ⚠️ <b>加载列表时必须用这个，别按发送一条条查。</b>
+            /// 下面那个按主键的重载每调一次就新开一个 SQLiteConnection，
+            /// <b>开连接就是全部代价</b>（账号那份实测：1019 条、子表还是空的，
+            /// 逐条查 1183ms → 整表读一次 46ms）。
+            ///
+            /// 按主键的重载留着：按需取某一条的子表时，一次一个连接完全合理。
+            /// </summary>
+            public static DataTable SelectTable_SendCollection()
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        using (SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM SendCollection;", conn))
+                        {
+                            SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                            adapter.Fill(dtReturn);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(SelectTable_SendCollection), ex);
+                }
+
+                return dtReturn;
+            }
+
             public static DataTable SelectTable_SendCollection(Guid guid)
             {
                 DataTable dtReturn = new DataTable();
@@ -30818,6 +30867,39 @@ namespace WinsockPacketEditor
                 catch (Exception ex)
                 {
                     Operate.DoLog(nameof(SelectTable_Robot), ex);
+                }
+
+                return dtReturn;
+            }
+
+            /// <summary>
+            /// 整张 RobotInstruction 表一次读完，配合 <see cref="GroupRowsBy"/> 用。
+            ///
+            /// ⚠️ <b>加载列表时必须用这个，别按机器人一条条查。</b>
+            /// 下面那个按主键的重载每调一次就新开一个 SQLiteConnection，
+            /// <b>开连接就是全部代价</b>（账号那份实测：1019 条、子表还是空的，
+            /// 逐条查 1183ms → 整表读一次 46ms）。
+            ///
+            /// 按主键的重载留着：按需取某一条的子表时，一次一个连接完全合理。
+            /// </summary>
+            public static DataTable SelectTable_RobotInstruction()
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        using (SQLiteCommand cmd = new SQLiteCommand("SELECT GUID, Type, Content FROM RobotInstruction;", conn))
+                        {
+                            SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                            adapter.Fill(dtReturn);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(SelectTable_RobotInstruction), ex);
                 }
 
                 return dtReturn;
@@ -31052,6 +31134,39 @@ namespace WinsockPacketEditor
                 catch (Exception ex)
                 {
                     Operate.DoLog(nameof(SelectTable_WareHouse), ex);
+                }
+
+                return dtReturn;
+            }
+
+            /// <summary>
+            /// 整张 WareHouseData 表一次读完，配合 <see cref="GroupRowsBy"/> 用。
+            ///
+            /// ⚠️ <b>加载列表时必须用这个，别按仓库一条条查。</b>
+            /// 下面那个按主键的重载每调一次就新开一个 SQLiteConnection，
+            /// <b>开连接就是全部代价</b>（账号那份实测：1019 条、子表还是空的，
+            /// 逐条查 1183ms → 整表读一次 46ms）。
+            ///
+            /// 按主键的重载留着：按需取某一条的子表时，一次一个连接完全合理。
+            /// </summary>
+            public static DataTable SelectTable_WareHouseData()
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        using (SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM WareHouseData;", conn))
+                        {
+                            SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                            adapter.Fill(dtReturn);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(SelectTable_WareHouseData), ex);
                 }
 
                 return dtReturn;
@@ -31734,6 +31849,40 @@ namespace WinsockPacketEditor
                 }
 
                 return dtReturn;
+            }
+
+            /// <summary>
+            /// 把一张子表按外键列分桶，给「整表读一次」那套加载法用。
+            ///
+            /// ⚠️ <b>桶内保持原始行序。</b>发送集、机器人指令这些<b>顺序就是数据</b>，
+            /// 而 DataTable 的行序就是 SQLite 的 rowid 序 —— 与原来按外键逐条查
+            /// 拿到的顺序一致，分桶只是把它们摘出来，没有重排。
+            ///
+            /// 键按 OrdinalIgnoreCase 比：库里存的是大写无括号的 GUID
+            /// （各 SelectTable_X(Guid) 查的时候也 ToUpper 了），但写入路径不止一条，
+            /// 比大小写更稳。
+            /// </summary>
+            public static Dictionary<string, List<DataRow>> GroupRowsBy(DataTable Table, string KeyColumn)
+            {
+                var groups = new Dictionary<string, List<DataRow>>(StringComparer.OrdinalIgnoreCase);
+
+                if (Table == null) { return groups; }
+
+                foreach (DataRow row in Table.Rows)
+                {
+                    string key = (row[KeyColumn] ?? string.Empty).ToString();
+
+                    List<DataRow> bucket;
+                    if (!groups.TryGetValue(key, out bucket))
+                    {
+                        bucket = new List<DataRow>();
+                        groups[key] = bucket;
+                    }
+
+                    bucket.Add(row);
+                }
+
+                return groups;
             }
 
             /// <summary>
@@ -32995,6 +33144,39 @@ namespace WinsockPacketEditor
                 catch (Exception ex)
                 {
                     Operate.DoLog(nameof(SelectTable_ServerInfoBySID), ex);
+                }
+
+                return dtReturn;
+            }
+
+            /// <summary>
+            /// 整张 ServerRuleInfo 表一次读完，配合 <see cref="GroupRowsBy"/> 用。
+            ///
+            /// ⚠️ <b>加载列表时必须用这个，别按服务器一条条查。</b>
+            /// 下面那个按主键的重载每调一次就新开一个 SQLiteConnection，
+            /// <b>开连接就是全部代价</b>（账号那份实测：1019 条、子表还是空的，
+            /// 逐条查 1183ms → 整表读一次 46ms）。
+            ///
+            /// 按主键的重载留着：按需取某一条的子表时，一次一个连接完全合理。
+            /// </summary>
+            public static DataTable SelectTable_ServerRuleInfo()
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        using (SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM ServerRuleInfo;", conn))
+                        {
+                            SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                            adapter.Fill(dtReturn);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(SelectTable_ServerRuleInfo), ex);
                 }
 
                 return dtReturn;
