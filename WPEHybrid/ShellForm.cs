@@ -834,6 +834,17 @@ namespace WPEHybrid
         /// <summary>单拍超过它就单独记一条，拖不拖动都记 —— 用来看平时的基线。</summary>
         private const double SlowStatMs = 5;
 
+        /*
+            进代理 / 注入模式那一下的耗时。
+
+            那一刻做的事：EnsureProxyConfigLoaded（8 份列表从库里读 + 取本机 IP +
+            挂执行器 + 注册快捷键 + 起远程管理）→ FeedPump.MarkAllDirty() →
+            紧接着的搬运拍要把<b>14 份列表整表</b>推过桥。
+            哪一段占大头得量出来，别猜。
+        */
+        private DateTime probeEnterAt = DateTime.MinValue;
+        private DateTime probeEnterUntil = DateTime.MinValue;
+
         private void BeginMoveProbe()
         {
             this.inMoveLoop = true;
@@ -960,8 +971,8 @@ namespace WPEHybrid
 
         private void OnFlushTick(object sender, EventArgs e)
         {
-            //诊断：只在拖动期间量，100 Hz 的拍平时记日志会把列表刷爆
-            if (this.inMoveLoop) { this.swTick.Restart(); }
+            //诊断：Restart 是几十纳秒，无条件量；记不记日志才是有条件的
+            this.swTick.Restart();
 
             try
             {
@@ -982,14 +993,26 @@ namespace WPEHybrid
             {
                 this.timerFlush.Start();
 
+                double ms = this.swTick.Elapsed.TotalMilliseconds;
+
                 if (this.inMoveLoop)
                 {
-                    double ms = this.swTick.Elapsed.TotalMilliseconds;
-
                     this.mvFlushN++;
                     this.mvFlushSum += ms;
 
                     if (ms > this.mvFlushMax) { this.mvFlushMax = ms; }
+                }
+
+                /*
+                    进模式之后的三秒：慢拍逐条记。
+                    MarkAllDirty 之后的第一拍要把 14 份列表整表序列化推过桥，
+                    如果「进代理模式卡一秒」是它，这里会看得一清二楚。
+                */
+                if (ms > 5 && DateTime.Now < this.probeEnterUntil)
+                {
+                    Operate.DoLog("进模式·搬运拍", string.Format(
+                        "进模式后 +{0:0}ms，这一拍 {1:0.0}ms",
+                        (DateTime.Now - this.probeEnterAt).TotalMilliseconds, ms));
                 }
             }
         }
@@ -1313,8 +1336,22 @@ namespace WPEHybrid
                 */
                 Operate.SystemConfig.SelectMode = Operate.SystemConfig.SystemMode.Proxy;
 
+                //诊断：整段有多久，以及后面三秒里搬运拍慢在哪
+                var swEnter = Stopwatch.StartNew();
+
                 EnsureProxyConfigLoaded();
+                double tCfg = swEnter.Elapsed.TotalMilliseconds;
+
                 FeedPump.MarkAllDirty();
+
+                this.probeEnterAt = DateTime.Now;
+                this.probeEnterUntil = this.probeEnterAt.AddSeconds(3);
+
+                Operate.DoLog("进模式·桥", string.Format(
+                    "enterProxyMode 配置 {0:0.0} / 标脏 {1:0.0} / 合计 {2:0.0}ms",
+                    tCfg,
+                    swEnter.Elapsed.TotalMilliseconds - tCfg,
+                    swEnter.Elapsed.TotalMilliseconds));
 
                 return new { ok = true };
             });
@@ -5428,6 +5465,10 @@ namespace WPEHybrid
 
             this.proxyLoaded = true;
 
+            //诊断：这一路每段花了多久（见「进模式那一秒」）
+            var swLoad = Stopwatch.StartNew();
+            double tLoad = 0, tNic = 0, tExec = 0, tHotkey = 0, tRemote = 0;
+
             try
             {
                 /*
@@ -5454,8 +5495,12 @@ namespace WPEHybrid
                 Operate.ProxyConfig.Proxy.LoadWhiteList_FromDB();
                 Operate.ProxyConfig.Proxy.LoadBlackList_FromDB();
 
+                tLoad = swLoad.Elapsed.TotalMilliseconds;
+
                 //监听地址要有可选的本机 IP，InitProxyServer 会取 ProxyServerIP[0]
                 Operate.ProxyConfig.Proxy.ProxyServerIP = Operate.SystemConfig.GetLocalIPAddress();
+
+                tNic = swLoad.Elapsed.TotalMilliseconds - tLoad;
 
                 /*
                     ⚠️ 发送列表 / 机器人列表的执行器要在这里挂上 DoWork。
@@ -5466,8 +5511,12 @@ namespace WPEHybrid
                 */
                 Operate.SystemConfig.InitListExecute();
 
+                tExec = swLoad.Elapsed.TotalMilliseconds - tLoad - tNic;
+
                 //全局快捷键要挂在一个窗口句柄上，WinForms 是 ProxyModeForm_Load 里做的；派发在 WndProc 的 WM_HOTKEY 分支
                 Operate.SystemConfig.InitHotKeys(this.Handle);
+
+                tHotkey = swLoad.Elapsed.TotalMilliseconds - tLoad - tNic - tExec;
 
                 /*
                     远程管理要跟着进代理模式一起起来。
@@ -5478,16 +5527,27 @@ namespace WPEHybrid
                 */
                 Operate.SystemConfig.StartRemoteMGT();
 
+                tRemote = swLoad.Elapsed.TotalMilliseconds - tLoad - tNic - tExec - tHotkey;
+
                 /*
                     远程管理台首页的 CPU / 内存来自这个性能计数器（SystemInfo_Controller
                     .GetCPUAndMemory 读 SystemConfig.cpuCounter）。不 new 出来那一栏永远是空的。
                     同样是 ProxyModeForm_Load 里顺手做的一件事。
+
+                    它自己就是 async void + Task.Run（Operate.cs:367），所以这里是立刻返回的 ——
+                    PerformanceCounter 的构造（几百毫秒起）本来就不在 UI 线程上。
                 */
                 Operate.SystemConfig.InitCPUAndMemoryCounter();
             }
             catch (Exception ex)
             {
                 Operate.DoLog(nameof(EnsureProxyConfigLoaded), ex);
+            }
+            finally
+            {
+                Operate.DoLog("进模式·加载", string.Format(
+                    "读库 {0:0.0} / 取本机IP {1:0.0} / 挂执行器 {2:0.0} / 快捷键 {3:0.0} / 远程管理 {4:0.0} / 合计 {5:0.0}ms",
+                    tLoad, tNic, tExec, tHotkey, tRemote, swLoad.Elapsed.TotalMilliseconds));
             }
         }
 
