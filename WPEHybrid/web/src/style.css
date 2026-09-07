@@ -801,7 +801,21 @@ body.col-resizing * {
 .gtool > .chk,
 .gtool > .num,
 .gtool > .lbl,
+.gtool > .pair,
 .gtool > .plegend { flex: none; white-space: nowrap; }
+
+/*
+  ⚠️ <b>勾选框与它后面那个条数框要一起换行。</b>
+  工具条是 flex-wrap 的，两者各自是一个 flex 项 ——
+  正好卡在换行点上时，条数框会被甩到第二行、挨着不相干的东西
+  （实测 799px 宽时它落到了 Dev 那一排旁边），看着像个孤零零的输入框。
+  包一层 .pair 就把它们变成同一个换行单位。
+*/
+.gtool .pair {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
 
 /*
   搜索框吃掉工具条的剩余空间 —— 它后面的勾选框因此自动靠右，
@@ -893,28 +907,31 @@ body.col-resizing * {
   2026-09-07 之前它是个<b>只读按钮</b>，点了跳去「列表设置」弹窗；
   现在设置就在这儿，它成了真的 <input>。
 
-  宽度按最大值 500000（6 位）定死 —— 跟着内容伸缩的话，
-  从 5000 改成 20000 时它右边的东西会整体挪一下。
+  ⚠️ <b>上下箭头（spin button）保留，别去 appearance: none 它。</b>
+  这一条写错过一次，理由是「系统画的浅色控件，与自绘件对不上」——
+  不成立：本文件顶上设了 color-scheme（深色 dark / 浅色 light），
+  Chromium 的原生箭头会<b>跟着主题走</b>。而且全项目 43 个 type="number"
+  里，原先<b>一个都没关</b>过箭头（「列表设置」里那个前身也有），
+  关掉反而成了唯一的异类 —— 用户一眼就看出少了东西。
 
-  ⚠️ 数字输入框的上下小箭头（spin button）在这套皮肤里是系统画的浅色控件，
-  与旁边的自绘件对不上，所以两种前缀都关掉。
+  宽度按「6 位数字 + 箭头」定死 —— 跟着内容伸缩的话，
+  从 5000 改成 20000 时它右边的东西会整体挪一下。
+  居中对齐照 .setf .inp.num 那个前身：右对齐会让数字紧贴着箭头。
 */
 .gtool .num {
-  width: 64px;
-  padding: 3px 6px;
+  width: 80px;
+  padding: 3px 2px 3px 6px;
   background: rgb(var(--inset-rgb) / 30%);
   border: 1px solid var(--border);
   color: var(--gray);
   font-family: var(--mono);
   font-size: 11px;
-  text-align: right;
+  text-align: center;
 }
 
 .gtool .num:focus { outline: none; border-color: var(--cyan); }
 .gtool .num:disabled { opacity: .45; cursor: not-allowed; }
 .gtool .num.bad { border-color: var(--danger); color: var(--danger); }
-.gtool .num::-webkit-outer-spin-button,
-.gtool .num::-webkit-inner-spin-button { appearance: none; margin: 0; }
 
 .gtool .tb {
   padding: 8px 10px 6px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */

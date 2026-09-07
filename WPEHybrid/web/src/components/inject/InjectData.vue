@@ -578,21 +578,23 @@ defineExpose({ onCleared })
           与日志页工具条上那个是<b>两份配置</b>，所以文案也分开：
           这儿是「自动清理」，那儿是「日志自动清理」。
         -->
-        <button class="chk" :class="{ on: autoClear }" @click="toggleAutoClear">
-          <i />{{ t('proxy.autoClear') }}
-        </button>
-        <input
-          v-model="keepInput"
-          class="num"
-          :class="{ bad: keepBad }"
-          type="number"
-          min="100"
-          max="500000"
-          :disabled="!autoClear"
-          :title="t('set.keepRowsHint')"
-          @blur="commitKeep"
-          @keydown.enter="commitKeep"
-        >
+        <span class="pair">
+          <button class="chk" :class="{ on: autoClear }" @click="toggleAutoClear">
+            <i />{{ t('proxy.autoClear') }}
+          </button>
+          <input
+            v-model="keepInput"
+            class="num"
+            :class="{ bad: keepBad }"
+            type="number"
+            min="100"
+            max="500000"
+            :disabled="!autoClear"
+            :title="t('set.keepRowsHint')"
+            @blur="commitKeep"
+            @keydown.enter="commitKeep"
+          >
+        </span>
       </div>
 
       <PacketList

@@ -228,19 +228,21 @@ async function doExport(): Promise<void> {
 
         自动滚动没有开关 —— 在底部就跟随，往上翻就停住（tail -f 那一套）。
       -->
-      <button class="chk" :class="{ on: autoClear }" @click="toggleAutoClear"><i />{{ t('log.autoClear') }}</button>
-      <input
-        v-model="keepInput"
-        class="keep"
-        :class="{ bad: keepBad }"
-        type="number"
-        min="100"
-        max="500000"
-        :disabled="!autoClear"
-        :title="t('log.keepHint')"
-        @blur="commitKeep"
-        @keydown.enter="commitKeep"
-      >
+      <span class="pair">
+        <button class="chk" :class="{ on: autoClear }" @click="toggleAutoClear"><i />{{ t('log.autoClear') }}</button>
+        <input
+          v-model="keepInput"
+          class="keep"
+          :class="{ bad: keepBad }"
+          type="number"
+          min="100"
+          max="500000"
+          :disabled="!autoClear"
+          :title="t('log.keepHint')"
+          @blur="commitKeep"
+          @keydown.enter="commitKeep"
+        >
+      </span>
       <!-- 导出的是<b>整张表</b>，不分选中 —— WinForms 那三个 Save*LogList_Dialog 收的也是整个列表 -->
       <button class="btn" :disabled="!hasRows || busy" @click="doExport">{{ t('pm.toExcel') }}</button>
       <button class="btn" :disabled="!hasRows || busy" @click="doClear">{{ t('proxy.clear') }}</button>
@@ -371,29 +373,30 @@ async function doExport(): Promise<void> {
 .chk.on i::after { content: ""; position: absolute; inset: 2px; background: var(--green); }
 
 /*
-  自动清理的条数框。宽度按最大值 500000（6 位）定死 —— 跟着内容伸缩的话，
+  自动清理的条数框。宽度按「6 位数字 + 箭头」定死 —— 跟着内容伸缩的话，
   从 5000 改成 20000 时整条工具条会往右挪一下。
 
-  ⚠️ 数字输入框的上下小箭头（spin button）在这套皮肤里是系统画的浅色控件，
-  与旁边的自绘件对不上，所以两种前缀都关掉。
+  ⚠️ <b>上下箭头保留</b>，理由见 style.css 里 .gtool .num 那一段：
+  设了 color-scheme，原生箭头跟着主题走；全项目别处的数字框也都有。
 */
 .keep {
-  width: 72px;
-  padding: 6px 8px 4px;
+  width: 86px;
+  padding: 6px 2px 4px 8px;
   background: var(--panel);
   border: 1px solid var(--border);
   color: var(--gray);
   font-family: var(--mono);
   font-size: var(--btn-size);
   line-height: 1;
-  text-align: right;
+  text-align: center;
 }
+
+/* 与数据页同一条：勾选框和它的条数框要一起换行，别被拆到两行去 */
+.pair { display: inline-flex; align-items: center; gap: 8px; }
 
 .keep:focus { outline: none; border-color: var(--cyan); }
 .keep:disabled { opacity: .45; cursor: not-allowed; }
 .keep.bad { border-color: var(--danger); color: var(--danger); }
-.keep::-webkit-outer-spin-button,
-.keep::-webkit-inner-spin-button { appearance: none; margin: 0; }
 
 .btn {
   padding: 9px 13px 7px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
