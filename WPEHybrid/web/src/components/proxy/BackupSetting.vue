@@ -2,7 +2,7 @@
 /*
   备份设置 —— 对应 WinForms 的 Controls/BackUpSetting。
 
-  导出：勾选要带的十样东西，C# 弹保存框（可加密）。导入：C# 弹打开框，整份配置与各份列表换掉，
+  导出：勾选要带的十四样东西，C# 弹保存框（可加密）。导入：C# 弹打开框，整份配置与各份列表换掉，
   外壳那边随即应用偏好、整表重推、落库（见 ShellForm 的 importBackup）；备份里可能带着语言，页面字典要跟着切。
   这个弹窗没有「保存」——两个动作各自就是终点。
 */
@@ -17,13 +17,24 @@ const props = defineProps<{ open: boolean }>()
 const emit = defineEmits<{ (e: 'update:open', v: boolean): void }>()
 
 const busy = ref(false)
-const f = ref({ systemConfig: true, proxySet: true, proxyAccount: true, whiteList: true, blackList: true, proxyMapping: true, injectSet: true, filterList: true, sendList: true, robotList: true })
+/*
+  ⚠️ <b>仓库默认不勾。</b>仓储封包是原始字节，自动入库开着抓一阵就是几万条 ——
+  实测 50000 条 × 512 字节已经是十几 MB 的 XML，真实封包 4KB 时还要再乘几倍。
+  其余十三项都是「配置与规则」量级，默认勾上无妨。
+*/
+const f = ref({
+  systemConfig: true, proxySet: true, proxyAccount: true, whiteList: true, blackList: true, proxyMapping: true,
+  injectSet: true,
+  filterList: true, sendList: true, robotList: true, autoStores: true,
+  wareHouse: false,
+  wpcServer: true, wpcNotice: true,
+})
 
 const GROUPS = [
-  { key: 'bk.grp.system', items: [['systemConfig', 'bk.systemConfig']] },
+  { key: 'bk.grp.system', items: [['systemConfig', 'bk.systemConfig'], ['injectSet', 'bk.injectSet']] },
   { key: 'bk.grp.proxy', items: [['proxySet', 'bk.proxySet'], ['proxyAccount', 'bk.proxyAccount'], ['whiteList', 'bk.whiteList'], ['blackList', 'bk.blackList'], ['proxyMapping', 'bk.proxyMapping']] },
-  { key: 'bk.grp.inject', items: [['injectSet', 'bk.injectSet']] },
-  { key: 'bk.grp.lists', items: [['filterList', 'bk.filterList'], ['sendList', 'bk.sendList'], ['robotList', 'bk.robotList']] },
+  { key: 'bk.grp.lists', items: [['filterList', 'bk.filterList'], ['sendList', 'bk.sendList'], ['robotList', 'bk.robotList'], ['autoStores', 'bk.autoStores'], ['wareHouse', 'bk.wareHouse']] },
+  { key: 'bk.grp.wpc', items: [['wpcServer', 'bk.wpcServer'], ['wpcNotice', 'bk.wpcNotice']] },
 ] as const
 
 type FKey = keyof typeof f.value

@@ -3741,12 +3741,35 @@ namespace WPEHybrid
 
             //── 备份 ──
 
+            /*
+                ⚠️ <b>走具名的 BackupParts，别用那个按位置收 11 个 bool 的重载</b>
+                —— 那个只为 WinForms 那条线留着。加一项时这里多一行赋值即可，
+                位置错了也不会静默出错（原来那种写法会）。
+            */
             this.bridge.Register("exportBackup", async args =>
             {
                 Func<string, bool> f = k => args[k] != null && (bool)args[k];
-                await Operate.SystemConfig.ExportSystemBackUp_Dialog(Operate.SystemConfig.AssemblyVersion,
-                    f("systemConfig"), f("proxySet"), f("proxyAccount"), f("whiteList"), f("blackList"),
-                    f("proxyMapping"), f("injectSet"), f("filterList"), f("sendList"), f("robotList"));
+
+                await Operate.SystemConfig.ExportSystemBackUp_Dialog(
+                    Operate.SystemConfig.AssemblyVersion,
+                    new Operate.SystemConfig.BackupParts
+                    {
+                        SystemConfig = f("systemConfig"),
+                        ProxySet = f("proxySet"),
+                        ProxyAccount = f("proxyAccount"),
+                        WhiteList = f("whiteList"),
+                        BlackList = f("blackList"),
+                        ProxyMapping = f("proxyMapping"),
+                        InjectSet = f("injectSet"),
+                        FilterList = f("filterList"),
+                        SendList = f("sendList"),
+                        RobotList = f("robotList"),
+                        WareHouse = f("wareHouse"),
+                        AutoStores = f("autoStores"),
+                        WpcServer = f("wpcServer"),
+                        WpcNotice = f("wpcNotice"),
+                    });
+
                 return new { ok = true };
             });
 

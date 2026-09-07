@@ -4340,7 +4340,55 @@ namespace WinsockPacketEditor
 
             #region//导出系统备份到文件（对话框）
 
-            public static async Task ExportSystemBackUp_Dialog(
+            /// <summary>
+            /// 备份要带哪几样。
+            ///
+            /// ⚠️ <b>刻意做成具名属性，不再是一串位置 bool。</b>
+            /// 原来是 11 个 bool 顺着排，调用点靠位置对齐 —— 加一项要同时改
+            /// 「Operate 的签名 / Dialog 的签名 / 桥里那一串 f("…") / Vue 的 GROUPS」
+            /// 四处，<b>顺序错位了编译器一声不吭</b>。换成属性之后位置不再有意义，
+            /// 加一项也只是多一个赋值。
+            ///
+            /// 新增一项要过四处：这个类、导出里的一段、导入里的一段、桥 + 前端各一行。
+            /// </summary>
+            public class BackupParts
+            {
+                public bool SystemConfig { get; set; }
+                public bool ProxySet { get; set; }
+                public bool ProxyAccount { get; set; }
+                public bool WhiteList { get; set; }
+                public bool BlackList { get; set; }
+                public bool ProxyMapping { get; set; }
+                public bool InjectSet { get; set; }
+                public bool FilterList { get; set; }
+                public bool SendList { get; set; }
+                public bool RobotList { get; set; }
+                public bool WareHouse { get; set; }
+                public bool AutoStores { get; set; }
+                public bool WpcServer { get; set; }
+                public bool WpcNotice { get; set; }
+
+                /// <summary>一个都没勾。导出前拦一下，别产出一个只有根节点的空备份。</summary>
+                public bool IsEmpty
+                {
+                    get
+                    {
+                        return !SystemConfig && !ProxySet && !ProxyAccount && !WhiteList && !BlackList
+                            && !ProxyMapping && !InjectSet && !FilterList && !SendList && !RobotList
+                            && !WareHouse && !AutoStores && !WpcServer && !WpcNotice;
+                    }
+                }
+            }
+
+            /// <summary>
+            /// <b>WinForms 那条线用的兼容重载</b>（`Controls/BackUpSetting.cs`）。
+            ///
+            /// ⚠️ <b>新代码不要用它。</b>它按位置收那 11 个 bool，正是要被淘汰的写法；
+            /// 留着只是因为「原有的 WinForms 项目不动」——那边的界面上也没有
+            /// 仓库 / 自动入库 / WPC 那四个新分组，所以这个重载永远只勾得到前十项。
+            /// 哪天 WinForms 那条线要删或要跟上，连这个重载一起处理。
+            /// </summary>
+            public static Task ExportSystemBackUp_Dialog(
                 string FileName,
                 bool bSystemConfig,
                 bool bProxySet,
@@ -4353,8 +4401,35 @@ namespace WinsockPacketEditor
                 bool bSendList,
                 bool bRobotList)
             {
+                return ExportSystemBackUp_Dialog(FileName, new BackupParts
+                {
+                    SystemConfig = bSystemConfig,
+                    ProxySet = bProxySet,
+                    ProxyAccount = bProxyAccount,
+                    WhiteList = bWhiteList,
+                    BlackList = bBlackList,
+                    ProxyMapping = bProxyMapping,
+                    InjectSet = bInjectionSet,
+                    FilterList = bFilterList,
+                    SendList = bSendList,
+                    RobotList = bRobotList,
+                });
+            }
+
+            public static async Task ExportSystemBackUp_Dialog(string FileName, BackupParts Parts)
+            {
                 try
                 {
+                    /*
+                        一个都没勾就别往下走。前端那颗按钮有 disabled，但这一层原来没拦 ——
+                        真走到底会产出一个只有根节点的 .sb，导入时静默什么都不做。
+                    */
+                    if (Parts == null || Parts.IsEmpty)
+                    {
+                        UI.Toast(UiIcon.Warn, UI.T("BackUpSettingsForm.NothingSelected", "请先勾选要备份的内容"));
+                        return;
+                    }
+
                     FilePick sfdSaveFile = new FilePick();
                     sfdSaveFile.Filter = "WPE x64（*.sb）|*.sb";
 
@@ -4373,16 +4448,7 @@ namespace WinsockPacketEditor
 
                             bool bOK = SystemConfig.ExportSystemBackUp(
                                 FilePath,
-                                bSystemConfig,
-                                bProxySet,
-                                bProxyAccount,
-                                bWhiteList,
-                                bBlackList,
-                                bProxyMapping,
-                                bInjectionSet,
-                                bFilterList,
-                                bSendList,
-                                bRobotList,
+                                Parts,
                                 EncryptPassword.DoEncrypt,
                                 EncryptPassword.Password);
 
@@ -4409,16 +4475,7 @@ namespace WinsockPacketEditor
 
             private static bool ExportSystemBackUp(
                 string FilePath,
-                bool bSystemConfig,
-                bool bProxySet,
-                bool bProxyAccount,
-                bool bWhiteList,
-                bool bBlackList,
-                bool bProxyMapping,
-                bool bInjectionSet,
-                bool bFilterList,
-                bool bSendList,
-                bool bRobotList,
+                BackupParts Parts,
                 bool DoEncrypt,
                 string Password)
             {
@@ -4432,7 +4489,7 @@ namespace WinsockPacketEditor
                     XElement xeBackUp = new XElement("WPE64_BackUp");
 
                     //系统设置
-                    if (bSystemConfig)
+                    if (Parts.SystemConfig)
                     {
                         XElement xeSystemConfig = SystemConfig.GetSystemConfig_XML();
                         if (xeSystemConfig != null)
@@ -4442,7 +4499,7 @@ namespace WinsockPacketEditor
                     }
 
                     //代理设置
-                    if (bProxySet)
+                    if (Parts.ProxySet)
                     {
                         XElement xeProxyConfig = SystemConfig.GetProxyMode_XML();
                         if (xeProxyConfig != null)
@@ -4452,7 +4509,7 @@ namespace WinsockPacketEditor
                     }
 
                     //代理账号
-                    if (bProxyAccount)
+                    if (Parts.ProxyAccount)
                     {
                         if (ProxyConfig.Account.lstAccountInfo.Count > 0)
                         {
@@ -4465,7 +4522,7 @@ namespace WinsockPacketEditor
                     }
 
                     //白名单
-                    if (bWhiteList)
+                    if (Parts.WhiteList)
                     {
                         if (ProxyConfig.Proxy.lstWhiteList.Count > 0)
                         {
@@ -4478,7 +4535,7 @@ namespace WinsockPacketEditor
                     }
 
                     //黑名单
-                    if (bBlackList)
+                    if (Parts.BlackList)
                     {
                         if (ProxyConfig.Proxy.lstBlackList.Count > 0)
                         {
@@ -4497,7 +4554,7 @@ namespace WinsockPacketEditor
                         `MapRemote` 这一节，只有导出漏了它。界面上那个勾选框写的是「代理映射」，
                         用户勾了它，<b>远程映射被静默丢掉</b> —— 换台机器才发现少了一半。
                     */
-                    if (bProxyMapping)
+                    if (Parts.ProxyMapping)
                     {
                         //本地映射
                         if (ProxyConfig.Mapping.lstMapLocal.Count > 0)
@@ -4521,7 +4578,7 @@ namespace WinsockPacketEditor
                     }
 
                     //注入设置
-                    if (bInjectionSet)
+                    if (Parts.InjectSet)
                     {
                         XElement xeInjectionConfig = SystemConfig.GetInjectMode_XML();
                         if (xeInjectionConfig != null)
@@ -4531,7 +4588,7 @@ namespace WinsockPacketEditor
                     }
 
                     //滤镜列表
-                    if (bFilterList)
+                    if (Parts.FilterList)
                     {
                         if (FilterConfig.List.lstFilterInfo.Count > 0)
                         {
@@ -4544,7 +4601,7 @@ namespace WinsockPacketEditor
                     }
 
                     //发送列表
-                    if (bSendList)
+                    if (Parts.SendList)
                     {
                         if (SendConfig.List.lstSendInfo.Count > 0)
                         {
@@ -4557,7 +4614,7 @@ namespace WinsockPacketEditor
                     }
 
                     //机器人列表
-                    if (bRobotList)
+                    if (Parts.RobotList)
                     {
                         if (RobotConfig.List.lstRobotInfo.Count > 0)
                         {
@@ -4565,6 +4622,66 @@ namespace WinsockPacketEditor
                             if (xeRobotList != null)
                             {
                                 xeBackUp.Add(xeRobotList);
+                            }
+                        }
+                    }
+
+                    /*
+                        ⚠️ <b>仓库可能很大。</b>仓储封包是 base64 的原始字节，自动入库开着抓一阵
+                        就能到几万条 —— 50000 条 × 512 字节实测已经是十几 MB 的 XML。
+                        所以它是<b>单独一个勾选项</b>，默认不勾；用户要带就带，别混在「列表清单」里
+                        让人不知不觉导出一个几百 MB 的文件。
+                    */
+                    if (Parts.WareHouse)
+                    {
+                        if (WareHouseConfig.List.lstWareHouseInfo.Count > 0)
+                        {
+                            XElement xeWareHouse = WareHouseConfig.List.GetWareHouseList_XML(WareHouseConfig.List.lstWareHouseInfo.ToList());
+                            if (xeWareHouse != null)
+                            {
+                                xeBackUp.Add(xeWareHouse);
+                            }
+                        }
+                    }
+
+                    //自动入库规则（包头 → 仓库），与仓库分开勾：规则很小，仓库很大
+                    if (Parts.AutoStores)
+                    {
+                        if (WareHouseConfig.List.lstAutoStoresInfo.Count > 0)
+                        {
+                            XElement xeAutoStores = WareHouseConfig.List.GetAutoStores_XML(WareHouseConfig.List.lstAutoStoresInfo);
+                            if (xeAutoStores != null)
+                            {
+                                xeBackUp.Add(xeAutoStores);
+                            }
+                        }
+                    }
+
+                    /*
+                        WPC 节点与公告 —— 这两份是<b>对外发布给客户端</b>的东西
+                        （/ProxyCap/GetServerList 与 /GetNoticeList 下发的就是它们），
+                        重配代价最大，却一直不在备份里。
+                    */
+                    if (Parts.WpcServer)
+                    {
+                        if (WPCConfig.ServerList.lstServerInfo.Count > 0)
+                        {
+                            XElement xeServerList = WPCConfig.ServerList.GetServerList_XML(WPCConfig.ServerList.lstServerInfo);
+                            if (xeServerList != null)
+                            {
+                                xeBackUp.Add(xeServerList);
+                            }
+                        }
+                    }
+
+                    if (Parts.WpcNotice)
+                    {
+                        if (WPCConfig.NoticeList.lstNoticeInfo.Count > 0)
+                        {
+                            XElement xeNoticeList = WPCConfig.NoticeList.GetNoticeList_XML(WPCConfig.NoticeList.lstNoticeInfo);
+                            if (xeNoticeList != null)
+                            {
+                                xeBackUp.Add(xeNoticeList);
                             }
                         }
                     }
@@ -4956,6 +5073,102 @@ namespace WinsockPacketEditor
                 catch (Exception ex)
                 {
                     Operate.DoLog("Import RobotList", ex);
+                }
+
+                #endregion
+
+                #region//仓库
+
+                try
+                {
+                    XElement xeWareHouse = xdoc.Root.Element("WareHouseList");   //⚠️ 根名是 WareHouseList，不是 WareHouse —— 跑测抓到过一次
+                    if (xeWareHouse != null)
+                    {
+                        XDocument xdWareHouse = new XDocument
+                        {
+                            Declaration = new XDeclaration("1.0", "utf-8", "yes")
+                        };
+                        xdWareHouse.Add(xeWareHouse);
+
+                        WareHouseConfig.List.WareHouseListClear();
+                        WareHouseConfig.List.LoadWareHouseList_FromXDocument(xdWareHouse);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog("Import WareHouse", ex);
+                }
+
+                #endregion
+
+                #region//自动入库
+
+                try
+                {
+                    XElement xeAutoStores = xdoc.Root.Element("AutoStores");
+                    if (xeAutoStores != null)
+                    {
+                        XDocument xdAutoStores = new XDocument
+                        {
+                            Declaration = new XDeclaration("1.0", "utf-8", "yes")
+                        };
+                        xdAutoStores.Add(xeAutoStores);
+
+                        WareHouseConfig.List.AutoStoresClear();
+                        WareHouseConfig.List.LoadAutoStores_FromXDocument(xdAutoStores);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog("Import AutoStores", ex);
+                }
+
+                #endregion
+
+                #region//WPC 节点
+
+                try
+                {
+                    XElement xeServerList = xdoc.Root.Element("ServerList");
+                    if (xeServerList != null)
+                    {
+                        XDocument xdServerList = new XDocument
+                        {
+                            Declaration = new XDeclaration("1.0", "utf-8", "yes")
+                        };
+                        xdServerList.Add(xeServerList);
+
+                        WPCConfig.ServerList.ServerListClear();
+                        WPCConfig.ServerList.LoadServerList_FromXDocument(xdServerList);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog("Import ServerList", ex);
+                }
+
+                #endregion
+
+                #region//WPC 公告
+
+                try
+                {
+                    XElement xeNoticeList = xdoc.Root.Element("NoticeList");
+                    if (xeNoticeList != null)
+                    {
+                        XDocument xdNoticeList = new XDocument
+                        {
+                            Declaration = new XDeclaration("1.0", "utf-8", "yes")
+                        };
+                        xdNoticeList.Add(xeNoticeList);
+
+                        WPCConfig.NoticeList.NoticeListClear();
+                        WPCConfig.NoticeList.LoadNoticeList_FromXDocument(xdNoticeList);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog("Import NoticeList", ex);
                 }
 
                 #endregion
@@ -28084,6 +28297,124 @@ namespace WinsockPacketEditor
 
                 #region//新增服务器
 
+                #region//节点列表的 XML 往返（备份用）
+
+                /*
+                    ⚠️ <b>规则是节点的子表</b>（ServerRuleInfo 的外键是 SID），所以嵌在 Server 里，
+                    与机器人带指令、发送带发送集是同一个形状 —— 不要拆成两个平级的节。
+
+                    枚举一律写<b>数值</b>：与 DTO 那条规矩同一个理由，改了枚举名不至于让老备份读不回来。
+                */
+                public static XElement GetServerList_XML(BindingList<ServerInfo> siList)
+                {
+                    try
+                    {
+                        XElement xeServerList = new XElement("ServerList");
+
+                        foreach (ServerInfo si in siList)
+                        {
+                            XElement xeRules = new XElement("Rules");
+
+                            if (si.ServerRInfo != null)
+                            {
+                                foreach (RuleInfo ri in si.ServerRInfo)
+                                {
+                                    xeRules.Add(
+                                        new XElement("Rule",
+                                        new XElement("IsEnable", ri.IsEnable),
+                                        new XElement("RType", (int)ri.RType),
+                                        new XElement("RArgument", ri.RArgument),
+                                        new XElement("RAction", (int)ri.RAction)
+                                        ));
+                                }
+                            }
+
+                            xeServerList.Add(
+                                new XElement("Server",
+                                new XElement("IsEnable", si.IsEnable),
+                                new XElement("ServerName", si.ServerName),
+                                new XElement("ServerIP", si.ServerIP),
+                                new XElement("ServerPort", si.ServerPort),
+                                new XElement("ForgotURL", si.ForgotURL),
+                                new XElement("RegisterURL", si.RegisterURL),
+                                new XElement("VerifyURL", si.VerifyURL),
+                                xeRules
+                                ));
+                        }
+
+                        return xeServerList;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetServerList_XML), ex);
+                    }
+
+                    return null;
+                }
+
+                /*
+                    ⚠️ <b>SID / RID 一律重新发</b>，不从备份里读。
+                    它们是主键，跨库导入时沿用旧值会和现有行撞号；而节点与规则之间的关联
+                    在 XML 里是靠<b>嵌套</b>表达的，不需要那个 Guid 去牵线。
+                */
+                public static void LoadServerList_FromXDocument(XDocument xdoc)
+                {
+                    try
+                    {
+                        foreach (XElement xeServer in xdoc.Root.Elements())
+                        {
+                            bool IsEnable = xeServer.Element("IsEnable") != null && bool.Parse(xeServer.Element("IsEnable").Value);
+                            string ServerName = xeServer.Element("ServerName") == null ? string.Empty : xeServer.Element("ServerName").Value;
+                            string ServerIP = xeServer.Element("ServerIP") == null ? string.Empty : xeServer.Element("ServerIP").Value;
+
+                            int ServerPort = 0;
+                            if (xeServer.Element("ServerPort") != null)
+                            {
+                                int.TryParse(xeServer.Element("ServerPort").Value, out ServerPort);
+                            }
+
+                            string ForgotURL = xeServer.Element("ForgotURL") == null ? string.Empty : xeServer.Element("ForgotURL").Value;
+                            string RegisterURL = xeServer.Element("RegisterURL") == null ? string.Empty : xeServer.Element("RegisterURL").Value;
+                            string VerifyURL = xeServer.Element("VerifyURL") == null ? string.Empty : xeServer.Element("VerifyURL").Value;
+
+                            BindingList<RuleInfo> Rules = new BindingList<RuleInfo>();
+
+                            XElement xeRules = xeServer.Element("Rules");
+                            if (xeRules != null)
+                            {
+                                foreach (XElement xeRule in xeRules.Elements())
+                                {
+                                    bool rEnable = xeRule.Element("IsEnable") != null && bool.Parse(xeRule.Element("IsEnable").Value);
+
+                                    int rType = 0;
+                                    if (xeRule.Element("RType") != null)
+                                    {
+                                        int.TryParse(xeRule.Element("RType").Value, out rType);
+                                    }
+
+                                    int rAction = 0;
+                                    if (xeRule.Element("RAction") != null)
+                                    {
+                                        int.TryParse(xeRule.Element("RAction").Value, out rAction);
+                                    }
+
+                                    string rArg = xeRule.Element("RArgument") == null ? string.Empty : xeRule.Element("RArgument").Value;
+
+                                    Rules.Add(new RuleInfo(rEnable, Guid.NewGuid(), (RuleType)rType, rArg, (RuleAction)rAction));
+                                }
+                            }
+
+                            WPCConfig.ServerList.AddServer(IsEnable, Guid.NewGuid(), ServerName, ServerIP, ServerPort, ForgotURL, RegisterURL, VerifyURL, Rules);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(LoadServerList_FromXDocument), ex);
+                    }
+                }
+
+                #endregion
+
                 public static void AddServer(
                     bool IsEnable, 
                     Guid SID, 
@@ -28901,6 +29232,77 @@ namespace WinsockPacketEditor
                 public static BindingList<NoticeInfo> lstNoticeInfo = new BindingList<NoticeInfo>();
 
                 #region//新增公告
+
+                #region//公告列表的 XML 往返（备份用）
+
+                public static XElement GetNoticeList_XML(BindingList<NoticeInfo> niList)
+                {
+                    try
+                    {
+                        XElement xeNoticeList = new XElement("NoticeList");
+
+                        foreach (NoticeInfo ni in niList)
+                        {
+                            xeNoticeList.Add(
+                                new XElement("Notice",
+                                new XElement("NoticeType", ni.NoticeType),
+                                new XElement("NoticeTitle", ni.NoticeTitle),
+                                new XElement("NoticeContent", ni.NoticeContent),
+                                new XElement("NoticeMore", ni.NoticeMore),
+                                //⚠️ 时间写成往返格式（"o"），别用当前区域的短格式 —— 换台机器就解析不回来了
+                                new XElement("NoticeTime", ni.NoticeTime.ToString("o"))
+                                ));
+                        }
+
+                        return xeNoticeList;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetNoticeList_XML), ex);
+                    }
+
+                    return null;
+                }
+
+                public static void LoadNoticeList_FromXDocument(XDocument xdoc)
+                {
+                    try
+                    {
+                        foreach (XElement xeNotice in xdoc.Root.Elements())
+                        {
+                            int NoticeType = 0;
+                            if (xeNotice.Element("NoticeType") != null)
+                            {
+                                int.TryParse(xeNotice.Element("NoticeType").Value, out NoticeType);
+                            }
+
+                            string Title = xeNotice.Element("NoticeTitle") == null ? string.Empty : xeNotice.Element("NoticeTitle").Value;
+                            string Content = xeNotice.Element("NoticeContent") == null ? string.Empty : xeNotice.Element("NoticeContent").Value;
+                            string More = xeNotice.Element("NoticeMore") == null ? string.Empty : xeNotice.Element("NoticeMore").Value;
+
+                            //解不出来就用当下的时间，别整条丢掉
+                            DateTime Time = DateTime.Now;
+                            if (xeNotice.Element("NoticeTime") != null)
+                            {
+                                DateTime parsed;
+                                if (DateTime.TryParse(xeNotice.Element("NoticeTime").Value, null,
+                                        System.Globalization.DateTimeStyles.RoundtripKind, out parsed))
+                                {
+                                    Time = parsed;
+                                }
+                            }
+
+                            //NID 与节点那边同一个理由：主键重新发，别沿用备份里的
+                            WPCConfig.NoticeList.AddNotice(Guid.NewGuid(), NoticeType, Title, Content, More, Time);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(LoadNoticeList_FromXDocument), ex);
+                    }
+                }
+
+                #endregion
 
                 public static void AddNotice(Guid NID, int NoticeType, string NoticeTitle, string NoticeContent, string NoticeMore, DateTime NoticeTime)
                 {
