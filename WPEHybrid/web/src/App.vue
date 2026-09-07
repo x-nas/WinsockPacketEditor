@@ -246,7 +246,11 @@ function site(page: string): string {
           <button class="wb gear" :class="{ on: appSetOpen }" :title="t('set.app')"
                   aria-haspopup="dialog" :aria-expanded="appSetOpen"
                   @mousedown="armBtn" @click="fireBtn($event, () => { appSetOpen = true })">
-            <svg class="ico" viewBox="0 0 24 24">
+            <!--
+              画布是 32 不是 24 —— 见下面 .wb.gear .ico 的说明。
+              图形仍然以 (12,12) 为心，正好是这个画布的中心。
+            -->
+            <svg class="ico" viewBox="-4 -4 32 32">
               <circle cx="12" cy="12" r="3.2" />
               <path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 9 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 9a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z" />
             </svg>
@@ -511,7 +515,24 @@ function site(page: string): string {
   以前它是宽按钮（图标 + 两字母语言标签），标签去掉之后自然回到方形，
   连带那条「定宽免得切语言时整排按钮平移」的讲究也不需要了。
 */
-.wb.gear .ico { stroke: var(--cyan); }
+/*
+  ⚠️ 齿轮<b>只有这一颗</b>要改画布与描边宽，理由是它的墨迹顶满了 24 的画布。
+
+  五颗按钮的 .ico 容器本来就一致（18x18 / viewBox 24 / stroke-width 2），
+  但<b>墨迹</b>差很多 —— 实测（含描边，user 单位）：
+    齿轮 24x24   最大化 18x18   退出 14x14   图钉 12x18
+  齿轮比最大化宽 33%、比退出宽 71%，摆在一排里就是它一个显得胖。
+  （这是 Lucide 那套图标的常态：同一格 24 的画布，各个字形占的比例本来就不同。）
+
+  做法是<b>把画布放大到 32</b>，同一条路径就画小了：24 x 18/32 = 13.5px，
+  与最大化那个方框逐像素相等。代价是描边也跟着缩到 1.125px，
+  所以这里把 stroke-width 补成 2 x 32/24 = 2.667，渲染出来仍是 1.5px ——
+  与另外四颗一致。<b>改画布就要同时改这个数，两者是一对。</b>
+
+  不用 transform: scale() 是因为那样描边也会被缩，得再加 vector-effect 去抵消，
+  绕的圈更多；也不用直接把 .ico 改小，那同样会连描边一起缩。
+*/
+.wb.gear .ico { stroke: var(--cyan); stroke-width: 2.667; }
 .wb.gear:hover { color: var(--cyan); background: rgb(var(--cyan-rgb) / 8%); }
 .wb.gear:hover .ico { stroke: var(--cyan); }
 .wb.gear:focus-visible { outline-color: var(--cyan); }
