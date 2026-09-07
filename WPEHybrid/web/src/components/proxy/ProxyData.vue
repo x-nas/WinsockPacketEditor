@@ -771,6 +771,11 @@ async function runAccept(): Promise<void> {
   flex-direction: column;
   gap: 8px;
   padding: 10px 12px 12px;
+  /*
+    兜底：收到最紧还是装不下时让它能滚。
+    原来是 visible，装不下就被 body 的 overflow: hidden 裁掉 —— 那一截既看不见也滚不到。
+  */
+  overflow-y: auto;
 }
 
 /* 统计：7 列 × 2 行，1px 发丝线分隔 */
@@ -883,6 +888,46 @@ async function runAccept(): Promise<void> {
   display: grid;
   grid-template-columns: minmax(300px, 22%) 1fr;
   gap: 8px;
+}
+
+
+/*
+  ── 矮窗口下的收缩 ───────────────────────────────────────────
+
+  这一屏是<b>四层竖着摞</b>的：状态条 54 + 统计格 126 + 封包表(min 220) + 下半部(min 180)，
+  加上间距与内边距一共要 <b>626px</b>。而窗口给的高度是 100vh − 46(标题栏) − 30(状态栏)。
+
+  ⚠️ <b>默认窗口 ClientSize 1280×800 是设备像素</b>，页面拿到的是 CSS 像素 = 设备像素 ÷ 缩放比：
+  100% 缩放下有 800、125% 只剩 640、150% 只剩 533 —— 再扣掉 76，
+  125% 下这一屏只有约 564px 可用，而它要 626px。
+  差的那 60px 原来<b>直接被裁掉</b>（.page 是 overflow: visible，body 又 hidden），
+  快捷面板与十六进制面板的下半截既看不见也滚不到。
+
+  两个动作：
+    ① 窗口矮下来时把两块地板和统计格一起收紧（下面两档）——
+       这一屏是「一眼看全」的，能收就别让它滚；
+    ② .page 补一个 overflow-y: auto 当<b>兜底</b>。收到最紧还是装不下时，
+       至少内容是<b>能滚到</b>的，而不是被裁掉。
+
+  为什么不是「直接上滚动条了事」：抓包时下半部的十六进制面板与封包表要<b>同时</b>看，
+  一滚就等于把正在看的那半屏推走了。滚动条只配当地板，不配当方案。
+*/
+@media (max-height: 760px) {
+  .grid { min-height: 170px; }
+  .lower { min-height: 140px; }
+
+  /* 统计格是这一屏最大的固定块（两行 126px），先收它 */
+  .st-c { padding: 3px 11px; }
+  .st-c .v { font-size: 15px; }
+}
+
+@media (max-height: 660px) {
+  .grid { min-height: 140px; }
+  .lower { min-height: 120px; }
+
+  .st-c { padding: 2px 10px; }
+  .st-c .v { font-size: 14px; line-height: 1.15; }
+  .st-c .z { line-height: 1.15; }
 }
 
 /* ▼▼▼ Dev 样式：发布前一并删掉 ▼▼▼ */

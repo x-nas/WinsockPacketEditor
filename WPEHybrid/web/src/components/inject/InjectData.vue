@@ -565,6 +565,8 @@ defineExpose({ onCleared })
   flex-direction: column;
   gap: 8px;
   padding: 10px 12px 12px;
+  /* 兜底：收到最紧还是装不下时能滚，别被裁掉。与代理数据页同一条 */
+  overflow-y: auto;
 }
 
 /* 统计：7 列 × 2 行，1px 发丝线分隔 —— 与代理数据页那块逐条对齐 */
@@ -640,5 +642,25 @@ defineExpose({ onCleared })
   display: grid;
   grid-template-columns: minmax(300px, 22%) 1fr;
   gap: 8px;
+}
+
+/*
+  矮窗口下的收缩 —— 与代理数据页那一份逐条对应，改一处就要改另一处。
+  理由与实测见 ProxyData.vue 里同名的那段注释（默认窗口是设备像素，
+  125% 缩放下这一屏只有约 564px 可用，而它要 626px）。
+*/
+@media (max-height: 760px) {
+  .grid { min-height: 170px; }
+  .lower { min-height: 140px; }
+  .st-c { padding: 3px 11px; }
+  .st-c .v { font-size: 15px; }
+}
+
+@media (max-height: 660px) {
+  .grid { min-height: 140px; }
+  .lower { min-height: 120px; }
+  .st-c { padding: 2px 10px; }
+  .st-c .v { font-size: 14px; line-height: 1.15; }
+  .st-c .z { line-height: 1.15; }
 }
 </style>
