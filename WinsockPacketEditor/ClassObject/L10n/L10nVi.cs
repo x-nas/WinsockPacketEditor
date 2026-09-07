@@ -746,6 +746,7 @@ namespace WinsockPacketEditor
             d["BackUpSettingsForm.Import"] = "Nhập bản sao lưu hệ thống";
             d["BackUpSettingsForm.Import.Success"] = "Đã nhập bản sao lưu hệ thống";
             d["BackUpSettingsForm.Export"] = "Xuất bản sao lưu hệ thống";
+            d["BackUpSettingsForm.Encrypt.NoPassword"] = "Đã yêu cầu mã hoá nhưng không có mật khẩu, đã huỷ xuất";
             d["BackUpSettingsForm.Export.Success"] = "Đã xuất bản sao lưu hệ thống";
             d["BackUpSettingsForm.Export.Fail"] = "Xuất bản sao lưu hệ thống thất bại";
             d["MultipleOpenSetting"] = "Cài đặt đa phiên";

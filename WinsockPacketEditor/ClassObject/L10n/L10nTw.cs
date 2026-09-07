@@ -751,6 +751,7 @@ namespace WinsockPacketEditor
             d["BackUpSettingsForm.Import"] = "匯入系統備份";
             d["BackUpSettingsForm.Import.Success"] = "匯入系統備份成功";
             d["BackUpSettingsForm.Export"] = "匯出系統備份";
+            d["BackUpSettingsForm.Encrypt.NoPassword"] = "要求加密但沒有密碼，已放棄匯出";
             d["BackUpSettingsForm.Export.Success"] = "匯出系統備份成功";
             d["BackUpSettingsForm.Export.Fail"] = "匯出系統備份失敗";
             d["MultipleOpenSetting"] = "多開設定";

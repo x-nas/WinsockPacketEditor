@@ -746,6 +746,7 @@ namespace WinsockPacketEditor
             d["BackUpSettingsForm.Import"] = "Import system backup";
             d["BackUpSettingsForm.Import.Success"] = "Successfully imported system backup";
             d["BackUpSettingsForm.Export"] = "Export system backup";
+            d["BackUpSettingsForm.Encrypt.NoPassword"] = "Encryption was requested but no password was given; the export was aborted";
             d["BackUpSettingsForm.Export.Success"] = "Successfully exported system backup";
             d["BackUpSettingsForm.Export.Fail"] = "Export system backup failed";
             d["MultipleOpenSetting"] = "Multiple Open Setting";

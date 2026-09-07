@@ -746,6 +746,7 @@ namespace WinsockPacketEditor
             d["BackUpSettingsForm.Import"] = "Импорт резервной копии";
             d["BackUpSettingsForm.Import.Success"] = "Резервная копия импортирована";
             d["BackUpSettingsForm.Export"] = "Экспорт резервной копии";
+            d["BackUpSettingsForm.Encrypt.NoPassword"] = "Запрошено шифрование, но пароль не задан — экспорт отменён";
             d["BackUpSettingsForm.Export.Success"] = "Резервная копия экспортирована";
             d["BackUpSettingsForm.Export.Fail"] = "Ошибка экспорта резервной копии";
             d["MultipleOpenSetting"] = "Настройка нескольких копий";

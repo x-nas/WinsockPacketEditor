@@ -4490,7 +4490,13 @@ namespace WinsockPacketEditor
                         }
                     }
 
-                    //代理映射
+                    /*
+                        代理映射 —— <b>本地与远程两份都要导</b>。
+
+                        ⚠️ 这里原来只导了本地：`GetMapRemote_XML` 一直存在、导入那边也一直在读
+                        `MapRemote` 这一节，只有导出漏了它。界面上那个勾选框写的是「代理映射」，
+                        用户勾了它，<b>远程映射被静默丢掉</b> —— 换台机器才发现少了一半。
+                    */
                     if (bProxyMapping)
                     {
                         //本地映射
@@ -4500,6 +4506,16 @@ namespace WinsockPacketEditor
                             if (xeMapLocal != null)
                             {
                                 xeBackUp.Add(xeMapLocal);
+                            }
+                        }
+
+                        //远程映射
+                        if (ProxyConfig.Mapping.lstMapRemote.Count > 0)
+                        {
+                            XElement xeMapRemote = ProxyConfig.Mapping.GetMapRemote_XML(ProxyConfig.Mapping.lstMapRemote);
+                            if (xeMapRemote != null)
+                            {
+                                xeBackUp.Add(xeMapRemote);
                             }
                         }
                     }
@@ -4556,12 +4572,31 @@ namespace WinsockPacketEditor
                     xdoc.Add(xeBackUp);
                     xdoc.Save(FilePath);
 
+                    /*
+                        ⚠️ <b>说要加密就必须真加密，没密码要当失败处理。</b>
+
+                        原来是「DoEncrypt 为真、密码为空 → 什么都不做」，于是磁盘上留下的是
+                        <b>明文</b>，而界面照样报「导出成功」。目前走不到这条路
+                        （GetEncryptExportAsync 密码为空时返回的是 DoEncrypt = false），
+                        但那是靠调用方兜着的 —— 多一个调用方就会漏，
+                        而漏掉的后果是用户以为加密了的那份里躺着代理账号与远程管理的口令。
+
+                        失败时把半成品删掉，别在磁盘上留一份明文备份。
+                    */
                     if (DoEncrypt)
                     {
-                        if (!string.IsNullOrEmpty(Password))
+                        if (string.IsNullOrEmpty(Password))
                         {
-                            SystemConfig.EncryptXMLFile(FilePath, Password);
+                            Operate.DoLog(nameof(ExportSystemBackUp),
+                                UI.T("BackUpSettingsForm.Encrypt.NoPassword", "要求加密但没有密码，已放弃导出"));
+
+                            try { if (File.Exists(FilePath)) { File.Delete(FilePath); } }
+                            catch (Exception exDel) { Operate.DoLog(nameof(ExportSystemBackUp) + ".Delete", exDel); }
+
+                            return false;
                         }
+
+                        SystemConfig.EncryptXMLFile(FilePath, Password);
                     }
 
                     return true;
@@ -4810,6 +4845,9 @@ namespace WinsockPacketEditor
                         };
                         MapLocal.Add(xeMapLocal);
 
+                        //⚠️ 先清空再装 —— 见下面「导入是替换不是追加」那段
+                        ProxyConfig.Mapping.MapLocalClear();
+
                         ProxyConfig.Mapping.LoadMapLocal_FromXDocument(MapLocal);
                     }
 
@@ -4822,6 +4860,7 @@ namespace WinsockPacketEditor
                             Declaration = new XDeclaration("1.0", "utf-8", "yes")
                         };
                         MapRemote.Add(xeMapRemote);
+                        ProxyConfig.Mapping.MapRemoteClear();
 
                         ProxyConfig.Mapping.LoadMapRemote_FromXDocument(MapRemote);
                     }
@@ -4846,6 +4885,20 @@ namespace WinsockPacketEditor
                         };
                         xdFilterList.Add(xeFilterList);
 
+                        /*
+                            ⚠️ <b>导入是「整份替换」，不是追加。</b>
+
+                            账号 / 白名单 / 黑名单一直是先 Clear 再 Load，而映射 / 滤镜 / 发送 /
+                            机器人这四份原来<b>直接 Load</b>（那几个 Load*_FromXDocument 内部也不清表，
+                            全是 foreach + Add）。同一份备份导两次，滤镜列表就有两份 ——
+                            而界面上的提示语写的正是「导入会整份替换当前配置与各份列表」，
+                            文案与行为相反。
+
+                            滤镜 / 发送 / 机器人的<b>顺序就是数据</b>（DoWork 按列表下标走），
+                            追加进去还会打乱执行顺序。
+                        */
+                        FilterConfig.List.FilterListClear();
+
                         FilterConfig.List.FilterListClear();
                         FilterConfig.List.LoadFilterList_FromXDocument(xdFilterList);
                     }
@@ -4869,6 +4922,7 @@ namespace WinsockPacketEditor
                             Declaration = new XDeclaration("1.0", "utf-8", "yes")
                         };
                         xdSendList.Add(xeSendList);
+                        SendConfig.List.SendListClear();
 
                         SendConfig.List.SendListClear();
                         SendConfig.List.LoadSendList_FromXDocument(xdSendList);
@@ -4893,6 +4947,7 @@ namespace WinsockPacketEditor
                             Declaration = new XDeclaration("1.0", "utf-8", "yes")
                         };
                         xdRobotList.Add(xeRobotList);
+                        RobotConfig.List.RobotListClear();
 
                         RobotConfig.List.RobotListClear();
                         RobotConfig.List.LoadRobotList_FromXDocument(xdRobotList);
