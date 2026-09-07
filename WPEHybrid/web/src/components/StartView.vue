@@ -104,91 +104,151 @@ onMounted(async () => {
 
     <p class="subtitle">{{ typed }}<span class="cur" /></p>
 
-    <div class="cards">
-      <!--
-        注入模式：IPC 改造之后可用了。
-        与另外两张卡同构 —— 不带 aria-disabled / title，它们是「点了没反应」时才需要的。
-      -->
-      <div
-        class="cd"
-        role="button"
-        tabindex="0"
-        @click="enterInject"
-        @keydown.enter.prevent="enterInject"
-        @keydown.space.prevent="enterInject"
-      >
-        <div class="num">Mode 01</div>
-        <div class="t">
-          <!-- 芯片：外壳 + 内核 + 四面引脚。原来的图只有左右两侧有脚，更像一枚电池 -->
-          <svg class="ico" viewBox="0 0 24 24">
-            <rect x="5" y="5" width="14" height="14" rx="1.5" />
-            <rect x="9.5" y="9.5" width="5" height="5" />
-            <path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3" />
-          </svg>
-          Inject
-        </div>
-        <div class="zh">{{ t('start.inject.zh') }}</div>
-        <p>{{ t('start.inject.desc') }}</p>
-        <!-- 与另外两张同构：各显示一条本模式的实测数据。上次注入的目标进程 -->
-        <div class="last">Target // <b>{{ sys?.lastInjection || '—' }}</b></div>
-      </div>
-
-      <!-- 代理模式：可用 -->
-      <!--
-        用 role="button" + tabindex 而不是真的 <button>：
-        <button> 的内容模型只允许短语内容，而卡片里是 div/h3/p 这些块级元素，
-        塞进去不合规范。卡片式可点区域的标准做法就是这一套。
-      -->
-      <div
-        class="cd cy"
-        role="button"
-        tabindex="0"
-        @click="enterProxy"
-        @keydown.enter.prevent="enterProxy"
-        @keydown.space.prevent="enterProxy"
-      >
-        <div class="num">Mode 02</div>
-        <div class="t">
-          <!--
-            火箭 = 加速器。与官网侧栏「代理客户端」那一项用的是同一枚图标
-            （cyber.js 的 wpc.html），产品家族里「加速」一直是这个符号。
-            原来那枚是房子轮廓，读起来是「主页」而不是代理。
-          -->
-          <svg class="ico" viewBox="0 0 24 24">
-            <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
-            <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
-            <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
-            <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
-          </svg>
-          Proxy
-        </div>
-        <div class="zh">{{ t('start.proxy.zh') }}</div>
-        <p>{{ t('start.proxy.desc') }}</p>
-        <div class="last">Socks5 // <b>0.0.0.0:{{ sys?.socks5Port ?? '—' }}</b></div>
-      </div>
-    </div>
-
     <!--
-      多开设置：贴在卡片网格<b>下沿</b>的一条窄入口（共用那圈发丝边，去掉上边框接上去）。
+      机架：一圈 1px 外框把「这次怎么跑」的三个入口装在一起，槽位之间留 10px 缝。
 
-      它与上面两张是「同一件事的两级」——都在这一屏决定「这次怎么跑」，
-      但它不是模式，所以不给它一张同款卡片：高度只有卡片的四分之一，
-      一眼就读得出主次。
+      【为什么不是三块各自漂着】多开那条窄行的从属关系是<b>画出来的</b> ——
+      它靠共用同一个框才读得出「比上面两张矮一级」。拆成三个各带完整边框的独立块之后，
+      主次就只剩高度在撑，而这一屏下面还有自检终端，整屏会变成四块没有骨架的浮板。
 
-      这里可以用<b>真的 &lt;button&gt;</b>（上面两张卡不行）——
-      一行里全是 svg 与 span，都是短语内容，合规范；卡片里是 div/h3/p，
-      塞进 button 不合内容模型，那两张才要 role="button" + tabindex 那套。
+      【为什么不是连体】卡片顶上各有一条色轨。贴着 1px 发丝缝相邻的话，
+      两条轨会读成一条「左绿右青」的双色长条 —— 像进度条，而不是两台设备各自的电源轨。
+
+      ⚠️ <b>槽缝不给背景，透出页面底色。</b>不能填 --sink：深色下它是纯黑、比页面更深，
+      看着对；但浅色下 --sink 与 --card 都是 #ffffff，缝隙会整个消失，
+      外框那条线就成了一条没来由的双线。透出页面底色则两套皮肤下「腔比卡深」都成立
+      （深 #0a0a0f vs #12121a、浅 #eef1f6 vs #ffffff），一个令牌都不用加。
     -->
-    <button class="inst" @click="enterInstance">
-      <svg class="ico" viewBox="0 0 24 24">
-        <ellipse cx="12" cy="6" rx="8" ry="3" />
-        <path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6" />
-      </svg>
-      <span class="nm">{{ t('start.inst.zh') }}</span>
-      <span class="ds">{{ t('start.inst.desc') }}</span>
-      <span class="cur">{{ sys?.dbInstance || '—' }}</span>
-      <span class="ar">→</span>
-    </button>
+    <div class="rack">
+      <div class="cards">
+        <!--
+          注入模式：IPC 改造之后可用了。
+          与代理那张同构 —— 不带 aria-disabled / title，它们是「点了没反应」时才需要的。
+        -->
+        <div
+          class="cd"
+          role="button"
+          tabindex="0"
+          @click="enterInject"
+          @keydown.enter.prevent="enterInject"
+          @keydown.space.prevent="enterInject"
+        >
+          <span class="rail" />
+          <!-- 机位号丝印。它是印在面板上的，不是内容 —— 所以不吃点击、也选不中 -->
+          <span class="wm">01</span>
+
+          <div class="hd">
+            <span class="num">Mode 01</span>
+            <!--
+              状态灯。启动页上两种模式都还没起来，所以恒为 Ready；
+              它要说的不是运行状态，是「这台设备通着电」——
+              与下面自检终端那三颗窗口灯同一套语汇。
+            -->
+            <span class="st"><i class="dot" />Ready</span>
+          </div>
+
+          <div class="t">
+            <span class="well">
+              <!-- 芯片：外壳 + 内核 + 四面引脚。原来的图只有左右两侧有脚，更像一枚电池 -->
+              <svg class="ico" viewBox="0 0 24 24">
+                <rect x="5" y="5" width="14" height="14" rx="1.5" />
+                <rect x="9.5" y="9.5" width="5" height="5" />
+                <path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3" />
+              </svg>
+            </span>
+            <span class="tx">
+              <b class="en">Inject</b>
+              <i class="zh">{{ t('start.inject.zh') }}</i>
+            </span>
+          </div>
+
+          <p>{{ t('start.inject.desc') }}</p>
+
+          <!-- 读数条：与另外两个入口同构，各显示一条本模式的实测数据 -->
+          <div class="foot">
+            <span class="last">
+              <span class="k">Target</span>
+              <b>{{ sys?.lastInjection || '—' }}</b>
+            </span>
+            <span class="ar">→</span>
+          </div>
+        </div>
+
+        <!--
+          代理模式。
+          用 role="button" + tabindex 而不是真的 <button>：
+          <button> 的内容模型只允许短语内容，而卡片里是 div/p 这些块级元素，
+          塞进去不合规范。卡片式可点区域的标准做法就是这一套。
+        -->
+        <div
+          class="cd cy"
+          role="button"
+          tabindex="0"
+          @click="enterProxy"
+          @keydown.enter.prevent="enterProxy"
+          @keydown.space.prevent="enterProxy"
+        >
+          <span class="rail" />
+          <span class="wm">02</span>
+
+          <div class="hd">
+            <span class="num">Mode 02</span>
+            <span class="st"><i class="dot" />Ready</span>
+          </div>
+
+          <div class="t">
+            <span class="well">
+              <!--
+                火箭 = 加速器。与官网侧栏「代理客户端」那一项用的是同一枚图标
+                （cyber.js 的 wpc.html），产品家族里「加速」一直是这个符号。
+                原来那枚是房子轮廓，读起来是「主页」而不是代理。
+              -->
+              <svg class="ico" viewBox="0 0 24 24">
+                <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+                <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
+                <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+                <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+              </svg>
+            </span>
+            <span class="tx">
+              <b class="en">Proxy</b>
+              <i class="zh">{{ t('start.proxy.zh') }}</i>
+            </span>
+          </div>
+
+          <p>{{ t('start.proxy.desc') }}</p>
+
+          <div class="foot">
+            <span class="last">
+              <span class="k">Socks5</span>
+              <b>0.0.0.0:{{ sys?.socks5Port ?? '—' }}</b>
+            </span>
+            <span class="ar">→</span>
+          </div>
+        </div>
+      </div>
+
+      <!--
+        多开设置：机架里的第三个槽位，高度只有卡片的六分之一。
+
+        它与上面两张是「同一件事的两级」—— 都在这一屏决定「这次怎么跑」，
+        但它不是模式，所以不给它一张同款卡片。
+
+        这里可以用<b>真的 &lt;button&gt;</b>（上面两张卡不行）——
+        一行里全是 svg 与 span，都是短语内容，合规范；卡片里是 div/p，
+        塞进 button 不合内容模型，那两张才要 role="button" + tabindex 那套。
+      -->
+      <button class="inst" @click="enterInstance">
+        <svg class="ico" viewBox="0 0 24 24">
+          <ellipse cx="12" cy="6" rx="8" ry="3" />
+          <path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6" />
+        </svg>
+        <span class="nm">{{ t('start.inst.zh') }}</span>
+        <span class="ds">{{ t('start.inst.desc') }}</span>
+        <span class="cur">{{ sys?.dbInstance || '—' }}</span>
+        <span class="ar">→</span>
+      </button>
+    </div>
 
     <!-- 系统自检 -->
     <div class="term">
@@ -308,76 +368,239 @@ onMounted(async () => {
 @keyframes cur { 50% { opacity: 0; } }
 
 /*
-  三张卡：gap 1px + 底色是 --border，做出发丝分隔线。
-  这是官网 .cards 的招 —— 比给每张卡加 border 干净，相邻处不会变成 2px。
+  机架：一圈 1px 外框把两张模式卡与多开窄行装在一起。
+
+  ⚠️ <b>不给 background</b> —— 槽缝要透出页面底色。填 --sink 的话浅色下会烂：
+  那边 --sink 与 --card 都是 #ffffff，缝隙整个消失，外框就成了一条没来由的双线。
+  透出页面底色则两套皮肤下「腔比卡深」都成立（深 #0a0a0f vs #12121a、浅 #eef1f6 vs #ffffff）。
 */
+.rack {
+  margin: 34px 0 0;
+  padding: 10px;
+  border: 1px solid var(--border);
+}
+
+/* 槽缝与机架的内边距取同一个值，卡片到框的距离才处处一样 */
 .cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-  margin: 34px 0 0;
+  gap: 10px;
 }
 
 .cd {
   position: relative;
+  overflow: hidden;
   background: var(--card);
-  padding: 24px 22px 22px;
+  border: 1px solid var(--border);
+  padding: 17px 16px 15px;
   cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+
+.cd:hover { background: var(--panel); border-color: var(--green); }
+.cd.cy:hover { border-color: var(--cyan); }
+
+/*
+  焦点环画在<b>内侧</b>：卡片外面只隔 10px 就是机架的框，正偏移会撞上去。
+  顺带让 hover 那几处在键盘聚焦时也点亮 —— 两种操作方式给同样的提示。
+*/
+.cd:focus-visible { outline-offset: -2px; }
+.cd.cy:focus-visible { outline-color: var(--cyan); }
+
+/*
+  顶沿的机架色轨：左三分之一实心、右侧衰减到 14%。
+  设备面板上的丝印色条，也是「这张卡是绿的还是青的」在第一眼就说清的地方。
+  悬停 / 聚焦时整条点亮。
+*/
+.rail {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--green) 0 34%, rgb(var(--green-rgb) / 14%) 34%);
   transition: background .15s;
 }
 
-.cd:hover { background: var(--panel); }
-
-.cd::after {
-  content: "→";
-  position: absolute;
-  right: 22px;
-  bottom: 18px;
-  color: var(--green);
-  opacity: 0;
-  transition: .15s;
-}
-
-.cd:hover::after { opacity: 1; right: 18px; }
-.cd.cy::after { color: var(--cyan); }
+.cd.cy .rail { background: linear-gradient(90deg, var(--cyan) 0 34%, rgb(var(--cyan-rgb) / 14%) 34%); }
+.cd:hover .rail, .cd:focus-visible .rail { background: var(--green); }
+.cd.cy:hover .rail, .cd.cy:focus-visible .rail { background: var(--cyan); }
 
 /*
-  焦点环画在<b>内侧</b>：卡片之间只有 1px 的发丝线，正偏移会压到邻居身上。
-  顺带让 hover 的那个箭头在键盘聚焦时也出来 —— 两种操作方式给同样的提示。
+  机位号水印。工业面板上的大号丝印数字 —— 几乎不占视觉预算，却把版面撑开了。
+  竖直居中而不是贴顶：贴顶会与右上角那枚状态灯叠在一起，两样东西挤成一团。
+  透明度写成通道值，两套皮肤各自算：深色下是亮绿的 8%，浅色下是暗绿的 8%，
+  都落在「看得出、读不清」这个刚好的位置上。
 */
-.cd:focus-visible { outline-offset: -2px; }
-.cd:focus-visible::after { opacity: 1; right: 18px; }
-.cd.cy:focus-visible { outline-color: var(--cyan); }
+.wm {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--orbit);
+  font-weight: 900;
+  font-size: 62px;
+  line-height: 1;
+  letter-spacing: -.04em;
+  color: rgb(var(--green-rgb) / 8%);
+  pointer-events: none;
+  user-select: none;
+}
+
+.cd.cy .wm { color: rgb(var(--cyan-rgb) / 8%); }
+
+/* 下面几层都要压在水印上面，所以各自 position: relative */
+.hd {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
 
 .cd .num {
   font-family: var(--share);
   font-size: 10px;
   letter-spacing: .18em;
   color: var(--muted);
-  margin-bottom: 10px;
+}
+
+/*
+  状态灯。启动页上两种模式都还没起来，所以恒为 Ready ——
+  它说的不是运行状态，是「这台设备通着电」。
+*/
+.st {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--share);
+  font-size: 10px;
+  letter-spacing: .18em;
+  color: var(--green);
+  white-space: nowrap;
+}
+
+.cd.cy .st { color: var(--cyan); }
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 6px currentColor;
 }
 
 .cd .t {
-  font-family: var(--orbit);
-  font-size: 15px;
-  text-transform: uppercase;
-  letter-spacing: .06em;
-  color: var(--green);
-  margin-bottom: 10px;
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 11px;
+  margin-bottom: 11px;
 }
 
-.cd.cy .t { color: var(--cyan); }
+/*
+  仪表窗：图标从「贴在标题左边的装饰」变成一个装在面板上的器件。
+  颜色给在窗上，.ico 是 stroke: currentColor，跟着走。
+*/
+.well {
+  position: relative;
+  flex: none;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  background: rgb(var(--inset-rgb) / 30%);
+  color: var(--green);
+}
+
+.cd.cy .well { color: var(--cyan); }
+
+/* 对角两枚角标 —— 与全项目那套四角标记同一种语言；四枚太吵，两枚就够点题 */
+.well::before,
+.well::after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border: 0 solid currentColor;
+}
+
+.well::before { left: -1px; top: -1px; border-left-width: 1px; border-top-width: 1px; }
+.well::after { right: -1px; bottom: -1px; border-right-width: 1px; border-bottom-width: 1px; }
+
+.tx { min-width: 0; }
+
+.en {
+  display: block;
+  font-family: var(--orbit);
+  font-weight: 400;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--green);
+}
+
+.cd.cy .en { color: var(--cyan); }
+
+/* <i> 只是拿来当行内容器，斜体要关掉 */
+.zh { display: block; margin-top: 4px; font-size: 13px; font-style: normal; color: var(--gray); }
+
+.cd p { position: relative; margin: 0 0 13px; font-size: 13px; line-height: 1.55; color: var(--muted); }
+
+/* 读数条 + 右端箭头同在一行：箭头另起一行会平白多 20px 高 */
+.foot { position: relative; display: flex; align-items: center; gap: 10px; }
 
 /*
-  多开设置那条窄入口。
+  读数条。这一屏每个入口都显示一条自己的实测值，做成读数窗才配得上这个定位。
+  底色用 --inset 而不是 --sink：后者在浅色下与 --card 同为 #ffffff，条就没了。
+*/
+.cd .last {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 10px;
+  background: rgb(var(--inset-rgb) / 30%);
+  border: 1px solid var(--border);
+}
 
-  <b>去掉上边框</b>与卡片网格接在一起 —— 网格自己有一圈 1px 的边，
-  这里再来一条就成了 2px 的粗线（.cards 用 gap:1px + 底色画分隔线，正是为了避开这个）。
+.cd .last .k {
+  flex: none;
+  font-family: var(--share);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+/* 进程路径可以很长 —— 值这一格必须能截断，否则会把整张卡撑宽 */
+.cd .last b {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-weight: 400;
+  color: var(--cyan);
+}
+
+/*
+  箭头常驻，不做成 hover 才出现：多开那条窄行的箭头本来就一直在，两处对齐；
+  而且「留一块空位等悬停」在视觉上是个说不清的缺口。
+*/
+.cd .ar { flex: none; color: var(--dim); transition: color .15s; }
+.cd:hover .ar, .cd:focus-visible .ar { color: var(--green); }
+.cd.cy:hover .ar, .cd.cy:focus-visible .ar { color: var(--cyan); }
+
+/*
+  多开设置那条窄入口 —— 机架里的第三个槽位，与上面两张卡隔同样的 10px。
+
   洋红沿用它当卡片时的色相：这一屏三个入口各有一个颜色，换了位置不该换身份。
 */
 .inst {
@@ -385,10 +608,10 @@ onMounted(async () => {
   align-items: center;
   gap: 10px;
   width: 100%;
-  padding: 0 18px 0 20px;
+  margin-top: 10px;
+  padding: 0 16px 0 18px;
   height: 40px;
   border: 1px solid var(--border);
-  border-top: 0;
   background: var(--card);
   color: var(--muted);
   font-family: inherit;
@@ -398,14 +621,15 @@ onMounted(async () => {
   transition: .15s;
 }
 
-.inst:hover { background: var(--panel); }
+.inst:hover { background: var(--panel); border-color: var(--magenta); }
 .inst:hover .nm,
 .inst:hover .ar { color: var(--magenta); }
-/* 焦点环走内侧：它左右都贴着网格的边，正偏移会压到边框上 */
+/* 焦点环走内侧：外面只隔 10px 就是机架的框，正偏移会撞上去 */
 .inst:focus-visible { outline: 1px solid var(--magenta); outline-offset: -2px; }
-.inst:focus-visible .ar { opacity: 1; }
+.inst:focus-visible .nm,
+.inst:focus-visible .ar { color: var(--magenta); }
 
-.inst .ico { width: 15px; height: 15px; stroke: var(--magenta); flex: none; }
+.inst .ico { width: 15px; height: 15px; color: var(--magenta); flex: none; }
 .inst .nm { color: var(--gray); flex: none; transition: .15s; }
 
 /* 说明占满中间；窄屏或俄语这类长文案下截断，别把右边的实例名挤掉 */
@@ -419,7 +643,7 @@ onMounted(async () => {
   font-size: 12.5px;
 }
 
-/* 当前实例名 —— 与卡片底部那行 last 同一个作用：这一屏的每个入口都显示一条实测值 */
+/* 当前实例名 —— 与卡片的读数条同一个作用：这一屏的每个入口都显示一条实测值 */
 .inst .cur {
   flex: none;
   font-family: var(--mono);
@@ -428,23 +652,6 @@ onMounted(async () => {
 }
 
 .inst .ar { flex: none; color: var(--dim); transition: .15s; }
-
-.cd .ico { width: 17px; height: 17px; }
-
-.cd .zh { font-size: 13px; color: var(--gray); margin-bottom: 6px; }
-.cd p { font-size: 13px; color: var(--muted); margin: 0; }
-
-.cd .last {
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border);
-  font-family: var(--share);
-  font-size: 10px;
-  letter-spacing: .14em;
-  color: var(--muted);
-}
-
-.cd .last b { color: var(--cyan); font-weight: 400; }
 
 /* 系统自检终端 */
 .term { margin: 26px 0 0; background: var(--sink); border: 1px solid var(--border); }
