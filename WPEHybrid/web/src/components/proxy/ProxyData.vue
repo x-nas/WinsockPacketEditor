@@ -546,8 +546,9 @@ const cells = computed(() => {
     { k: 'TCP Resp', z: t('proxy.st.tcpResp'), v: n(s.tcpResp), tone: 'g' },
     { k: 'UDP Req', z: t('proxy.st.udpReq'), v: n(s.udpReq), tone: 'g' },
     { k: 'UDP Resp', z: t('proxy.st.udpResp'), v: n(s.udpResp), tone: 'g' },
-    { k: 'HTTP Req', z: t('proxy.st.httpReq'), v: n(s.httpReq), tone: 'g' },
-    { k: 'HTTP Resp', z: t('proxy.st.httpResp'), v: n(s.httpResp), tone: 'g' },
+    //这两格含 WebSocket（类型 21 / 22 并进了 HTTP 计数，见 Operate 里那段说明）
+    { k: 'HTTP / WS Req', z: t('proxy.st.httpReq'), v: n(s.httpReq), tone: 'g' },
+    { k: 'HTTP / WS Resp', z: t('proxy.st.httpResp'), v: n(s.httpResp), tone: 'g' },
     /*
       实时网速。与总流量那格同一种排法（大字给合计、小字给拆分），
       两格分别落在两行的末尾，视觉上成对。
@@ -796,6 +797,14 @@ async function runAccept(): Promise<void> {
   letter-spacing: .14em;
   text-transform: uppercase;
   color: var(--muted);
+  /*
+    与 .v / .z 同样的兜底：格子只有七分之一屏宽，标题长了宁可截断 ——
+    折成两行会把整块统计格顶高一行，那是<b>固定高度</b>的一块，
+    顶高就直接吃掉封包列表的可见行数。
+  */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .st-c .v {

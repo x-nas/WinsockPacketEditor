@@ -9761,8 +9761,28 @@ namespace WinsockPacketEditor
                                     Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Downlink, bBuffer.Length);
                                     break;
 
+                                /*
+                                    ⚠️ <b>WebSocket 并进 HTTP 这两支</b>（2026-09-07）。
+
+                                    在此之前这个 switch 只有 TCP / UDP / HTTP / HTTPS 六个 case、
+                                    <b>也没有 default</b>，于是 WebSocket 请求 / 响应（类型 21 / 22，
+                                    由 SunnyNetCallback 在中间人那条路上产出）：
+                                      · 拿得到 ProxyInfo.Id（那是构造函数里发的），也进得了列表；
+                                      · 但<b>六个计数器一个都不进</b> —— 界面上「代理总数」是那六个相加，
+                                        于是最大序号会一直跑在总数前面（实测抓 28,979 个包时差 97 个）；
+                                      · <b>连 Total_Request / Total_Response 与实时速率也漏掉了</b>，
+                                        所以 BYTES 与 SPEED 同样少算 WebSocket 的流量。
+
+                                    并进 HTTP 而不是另开一对计数器，是<b>按要求</b>选的：
+                                    总数立刻对得上，代价是这两格的含义变宽 ——
+                                    界面上的文案已经跟着改成「HTTP / WS 请求·响应」。
+
+                                    ⚠️ <b>WinForms 那半边的标签还写着「HTTP」</b>（两条线并行，
+                                    Forms/ 下的东西这一轮不动），数字会跟着变、字没跟着变。
+                                */
                                 case PacketConfig.Packet.PacketType.HTTP_Req:
                                 case PacketConfig.Packet.PacketType.HTTPS_Req:
+                                case PacketConfig.Packet.PacketType.WebSocket_Req:
                                     Interlocked.Increment(ref ProxyConfig.Proxy.HTTP_Req_CNT);
                                     Interlocked.Add(ref ProxyConfig.Proxy.Total_Request, bBuffer.Length);
                                     Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Uplink, bBuffer.Length);
@@ -9770,6 +9790,7 @@ namespace WinsockPacketEditor
 
                                 case PacketConfig.Packet.PacketType.HTTP_Resp:
                                 case PacketConfig.Packet.PacketType.HTTPS_Resp:
+                                case PacketConfig.Packet.PacketType.WebSocket_Resp:
                                     Interlocked.Increment(ref ProxyConfig.Proxy.HTTP_Resp_CNT);
                                     Interlocked.Add(ref ProxyConfig.Proxy.Total_Response, bBuffer.Length);
                                     Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Downlink, bBuffer.Length);

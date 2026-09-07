@@ -587,6 +587,10 @@ defineExpose({ onCleared })
   letter-spacing: .14em;
   text-transform: uppercase;
   color: var(--muted);
+  /* 与代理数据页同一条：标题长了截断，别把固定高度的统计格顶成两行 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .st-c .v {

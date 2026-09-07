@@ -138,8 +138,9 @@ export const DICT = {
   'proxy.st.tcpResp': { zh: 'TCP 响应', en: 'TCP resp' },
   'proxy.st.udpReq': { zh: 'UDP 请求', en: 'UDP req' },
   'proxy.st.udpResp': { zh: 'UDP 响应', en: 'UDP resp' },
-  'proxy.st.httpReq': { zh: 'HTTP 请求', en: 'HTTP req' },
-  'proxy.st.httpResp': { zh: 'HTTP 响应', en: 'HTTP resp' },
+  //含 WebSocket —— 类型 21 / 22 并进了 HTTP 计数，见 Operate 的 ProxyInfo_ToQueue
+  'proxy.st.httpReq': { zh: 'HTTP / WS 请求', en: 'HTTP / WS req' },
+  'proxy.st.httpResp': { zh: 'HTTP / WS 响应', en: 'HTTP / WS resp' },
 
   // ── 代理模式：工具条与快捷面板 ──────────────────────
   'proxy.search': { zh: '在封包内容中查找…', en: 'Search in packet data…' },
