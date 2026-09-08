@@ -10,8 +10,13 @@ export const DEFAULT_PER_LINE = 16
 /**
  * 给定可用宽度（字符数），算每行放几个字节。
  *
- * 一行的字符数是 <b>11 + 4N</b>：偏移(8) + 两空格 + 十六进制(每字节 "XX " 共 3)
+ * 一行的字符数是 <b>fixed + 4N</b>：偏移(8) + 分隔 + 十六进制(每字节 "XX " 共 3)
  * + 一空格 + 字符栏(每字节 1)。下面就是反过来解这个 N。
+ *
+ * ⚠️ <b>fixed 要按调用方的真实版式给</b>，不是常数 11：
+ * 十六进制面板的偏移栏后面跟两个空格（8 + 2 + 1 = 11），
+ * 而并排对比视图（DiffView）只跟一个（8 + 1 + 1 = 10）。
+ * 多算的那 1 个字符是白扔的 —— 两侧各扔一个，一行就少一点可用宽度。
  *
  * <b>向下取到 2 的倍数。</b>这个粒度改过两轮，理由都是同一条线：
  *   8  最早取 8，是为了「能心算第几列是第几字节」；
@@ -24,9 +29,9 @@ export const DEFAULT_PER_LINE = 16
  *
  * 最少 8 —— 再窄就横向滚动，总比把一个字节拆两行强。
  */
-export function perLineFor(availChars: number): number {
-  const raw = Math.floor((availChars - 11) / 4)
-  return Math.max(8, Math.floor(raw / 2) * 2)
+export function perLineFor(availChars: number, fixed = 11, min = 8): number {
+  const raw = Math.floor((availChars - fixed) / 4)
+  return Math.max(min, Math.floor(raw / 2) * 2)
 }
 
 /**

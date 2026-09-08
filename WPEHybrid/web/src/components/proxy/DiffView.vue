@@ -73,10 +73,15 @@ function measure(): void {
   const cw = r.getBoundingClientRect().width / 100
   if (cw <= 0) return
 
-  //一行两半 + 中缝 26px + 滚动条余量
-  const half = (b.clientWidth - 26 - 14) / 2
-  //⚠️ 下限给 4，不是十六进制面板那个 8 —— 这里一行要装两份，窄窗口下 8 排不开
-  per.value = Math.max(4, perLineFor(Math.floor(half / cw)))
+  //一行两半 + 中缝（26 宽 + 左右各 6 外边距）+ 行内边距 12 + 滚动条余量
+  const half = (b.clientWidth - 38 - 12 - 14) / 2
+
+  /*
+    ⚠️ 固定开销传 <b>10</b> 不是默认的 11：这个组件的偏移栏后面只跟一个空格宽的外边距
+    （8ch + 1ch + 字符栏前的 1ch），比十六进制面板少一格。用默认值等于每侧白扔一个字符宽。
+    下限给 4 也不是 8 —— 一行要装两份，窄窗口下 8 排不开。
+  */
+  per.value = perLineFor(Math.floor(half / cw), 10, 4)
 }
 
 let ro: ResizeObserver | null = null
@@ -340,7 +345,10 @@ function side(r: Row, isA: boolean): Draw[] {
       <div class="dv-spacer" :style="{ height: rows.length * ROW_H + 'px' }">
         <div class="dv-win" :style="{ transform: `translateY(${start * ROW_H}px)` }">
           <div v-for="d in winDraw" :key="d.r.unit" class="dv-row" :class="d.r.op">
-            <!-- A 侧 -->
+            <!-- A 侧。⚠️ 包一层 .dv-half：不包的话所有列都是 flex:none 左排，
+                 取整剩下的那点宽度会<b>整块堆在 B 的右边</b>，看着像「B 没填满」（被问过一次）。
+                 包了之后两半各占一半，余量在两侧平分，是对称的。 -->
+            <div class="dv-half">
             <span class="dv-off">{{ d.r.aOff >= 0 ? off8(d.r.aOff) : '' }}</span>
 
             <template v-if="mode === 'text'">
@@ -355,10 +363,13 @@ function side(r: Row, isA: boolean): Draw[] {
               </span>
             </template>
 
+            </div>
+
             <!-- 中缝：同一行里的一个格子，连着几行就自然成了一道贯通的带 -->
             <span class="dv-gut" :class="d.r.op" />
 
             <!-- B 侧 -->
+            <div class="dv-half">
             <span class="dv-off">{{ d.r.bOff >= 0 ? off8(d.r.bOff) : '' }}</span>
 
             <template v-if="mode === 'text'">
@@ -372,6 +383,7 @@ function side(r: Row, isA: boolean): Draw[] {
                 <i v-for="(c, j) in d.b" :key="j" class="dv-c" :class="c.cls">{{ c.ch }}</i>
               </span>
             </template>
+            </div>
           </div>
         </div>
       </div>
@@ -422,6 +434,9 @@ function side(r: Row, isA: boolean): Draw[] {
 .dv-row.mod { background: rgb(var(--amber-rgb) / 7%); }
 .dv-row.ins { background: rgb(var(--green-rgb) / 7%); }
 .dv-row.del { background: rgb(var(--danger-rgb) / 7%); }
+
+/* 两半各占一半 —— 与上面那条结果区表头（.rh 的两个 .rhh）是同一套分法 */
+.dv-half { flex: 1 1 0; min-width: 0; display: flex; align-items: center; }
 
 .dv-off {
   flex: none;
