@@ -10852,14 +10852,65 @@ namespace WinsockPacketEditor
 
                 #region//新增代理账号IP信息
 
+                /*
+                    登录记录的口径：<b>一个 IP 一条，时间取最新的那次</b>。
+
+                    ⚠️ 写入有两条路，<b>两条都会并发</b>，所以要共用一把锁：
+                      · AddAccountIPInfo —— 从库 / XML / 备份加载。它是 async void，
+                        每条记录一个 await，循环里发出去的那一批会交错着回来；
+                      · IPInfo_ToAccount —— 运行期每次认证成功。跑在 SuperSocket 的会话线程上，
+                        同一个客户端开多条连接就是多个线程同时进来。
+
+                    读的那一路（GetAccountLogins_ById）也一起锁：BindingList 在被遍历时
+                    另一个线程 Add 会直接抛 InvalidOperationException。
+                */
+                private static readonly object aipLock = new object();
+
+                /// <summary>
+                /// 有这个 IP 就把时间往<b>新</b>里挪并返回 true；没有返回 false（由调用方去加）。
+                /// ⚠️ 必须在 <see cref="aipLock"/> 里调。
+                /// </summary>
+                private static bool TouchAccountIP(BindingList<AccountIPInfo> AIPInfo, DateTime LoginTime, string LoginIP)
+                {
+                    AccountIPInfo hit = AIPInfo.FirstOrDefault(item => item.LoginIP == LoginIP);
+                    if (hit == null)
+                    {
+                        return false;
+                    }
+
+                    //加载老库时同一个 IP 可能有好几行（就是这个 bug 留下的），取其中最新的那个时间
+                    if (LoginTime > hit.LoginTime)
+                    {
+                        hit.LoginTime = LoginTime;
+                    }
+
+                    return true;
+                }
+
                 public static async void AddAccountIPInfo(BindingList<AccountIPInfo> AIPInfo, DateTime LoginTime, string LoginIP)
                 {
                     try
                     {
+                        if (AIPInfo == null || string.IsNullOrEmpty(LoginIP))
+                        {
+                            return;
+                        }
+
+                        //已经有这个 IP 了：只把时间往新里挪，连归属地都不用查
+                        lock (aipLock)
+                        {
+                            if (TouchAccountIP(AIPInfo, LoginTime, LoginIP)) { return; }
+                        }
+
                         string IPLocation = await SystemConfig.GetIPLocation(LoginIP);
 
-                        AccountIPInfo aii = new AccountIPInfo(LoginTime, LoginIP, IPLocation);
-                        AIPInfo.Add(aii);
+                        lock (aipLock)
+                        {
+                            //⚠️ await 期间别的记录可能已经把它加进去了，这里必须再查一次
+                            if (TouchAccountIP(AIPInfo, LoginTime, LoginIP)) { return; }
+
+                            AIPInfo.Add(new AccountIPInfo(LoginTime, LoginIP, IPLocation));
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -11089,9 +11140,13 @@ namespace WinsockPacketEditor
 
                         if (ai != null && ai.AIPInfo != null)
                         {
-                            foreach (AccountIPInfo x in ai.AIPInfo)
+                            //⚠️ 遍历时另一个会话线程可能正在 Add，不锁会抛 InvalidOperationException
+                            lock (aipLock)
                             {
-                                rows.Add(AccountLoginRow.From_(x));
+                                foreach (AccountIPInfo x in ai.AIPInfo)
+                                {
+                                    rows.Add(AccountLoginRow.From_(x));
+                                }
                             }
                         }
                     }
@@ -11996,29 +12051,47 @@ namespace WinsockPacketEditor
 
                 #region//记录代理账号的IP地址（异步）
 
+                /*
+                    ⚠️ <b>「先查有没有」和「加进去」之间夹着一个 await，这是个竞态。</b>
+
+                    原来是：FirstOrDefault 查到 null → <b>await GetIPLocation 让出线程</b> → 才 Add。
+                    同一个客户端同时开几条连接时，几个会话线程都在那一刻查到 null、都往下走，
+                    于是同一个 IP 被加了好几条 —— 用户看到的正是「三条时间相近、IP 相同」，
+                    而且其中最早那条的时间还会被后来的登录更新掉（截图里 :47 / :45 / :45 就是这么来的）。
+
+                    现在分三步，await <b>不再夹在判断中间</b>：
+                      ① 先在锁里查一次 —— 命中就只更新时间，<b>连归属地都不用查</b>
+                         （重连是常态，这一步顺带把每次登录一次 QQWry 查询也省了）；
+                      ② 没有才去查归属地（这一步不能在锁里，lock 里不能 await）；
+                      ③ 回来<b>再查一次</b>再加 —— 这一次才是真正把窗口关上的那一句。
+                */
                 public static async Task IPInfo_ToAccount(Guid AID, string IPAddress)
                 {
                     try
                     {
-                        if (AID == null || AID == Guid.Empty || string.IsNullOrEmpty(IPAddress))
+                        if (AID == Guid.Empty || string.IsNullOrEmpty(IPAddress))
                         {
                             return;
                         }
 
                         AccountInfo ai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(item => item.AID == AID);
-                        if (ai != null)
+                        if (ai == null || ai.AIPInfo == null)
                         {
-                            AccountIPInfo aii = ai.AIPInfo.FirstOrDefault(item => item.LoginIP == IPAddress);
-                            if (aii == null)
-                            {
-                                string IPLocation = await SystemConfig.GetIPLocation(IPAddress);
-                                aii = new AccountIPInfo(DateTime.Now, IPAddress, IPLocation);
-                                ai.AIPInfo.Add(aii);
-                            }
-                            else
-                            {
-                                aii.LoginTime = DateTime.Now;
-                            }
+                            return;
+                        }
+
+                        lock (aipLock)
+                        {
+                            if (TouchAccountIP(ai.AIPInfo, DateTime.Now, IPAddress)) { return; }
+                        }
+
+                        string IPLocation = await SystemConfig.GetIPLocation(IPAddress);
+
+                        lock (aipLock)
+                        {
+                            if (TouchAccountIP(ai.AIPInfo, DateTime.Now, IPAddress)) { return; }
+
+                            ai.AIPInfo.Add(new AccountIPInfo(DateTime.Now, IPAddress, IPLocation));
                         }
                     }
                     catch (Exception ex)
