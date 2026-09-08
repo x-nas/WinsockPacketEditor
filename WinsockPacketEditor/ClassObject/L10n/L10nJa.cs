@@ -924,6 +924,7 @@ namespace WinsockPacketEditor
             d["SendEditForm.Export"] = "パケットを書き出す";
             d["SendEditForm.Clear"] = "パケットをすべて削除";
             d["SendEditForm.SystemSocket.Error"] = "システムソケットが不正です";
+            d["SendList.SystemSocket.Blocked"] = "送信「{0}」で「システムソケットを使用」がオンですが、システムソケットが未設定です —— パケット一覧で右クリックし「システムソケットを設定」を先に行ってください。";
             d["SendEditForm.Send.Stop"] = "送信を停止しました";
             d["SendEditForm.Send.Error"] = "送信中にエラーが発生しました:";
             d["SendEditForm.Send.Success"] = "送信が完了しました";

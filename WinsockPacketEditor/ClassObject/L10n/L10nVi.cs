@@ -924,6 +924,7 @@ namespace WinsockPacketEditor
             d["SendEditForm.Export"] = "Xuất gói tin";
             d["SendEditForm.Clear"] = "Xóa hết gói tin";
             d["SendEditForm.SystemSocket.Error"] = "Socket hệ thống không hợp lệ";
+            d["SendList.SystemSocket.Blocked"] = "Mục gửi “{0}” đã bật “Dùng socket hệ thống” nhưng socket hệ thống chưa được đặt — hãy chuột phải một gói tin trong danh sách và chọn “Đặt socket hệ thống” trước.";
             d["SendEditForm.Send.Stop"] = "Đã dừng gửi";
             d["SendEditForm.Send.Error"] = "Có lỗi khi gửi:";
             d["SendEditForm.Send.Success"] = "Đã gửi xong";

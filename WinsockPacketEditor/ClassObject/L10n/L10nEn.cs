@@ -924,6 +924,7 @@ namespace WinsockPacketEditor
             d["SendEditForm.Export"] = "Export Packet";
             d["SendEditForm.Clear"] = "Clear Packet";
             d["SendEditForm.SystemSocket.Error"] = "System Socket Error";
+            d["SendList.SystemSocket.Blocked"] = "Send “{0}” has “Use system socket” checked, but the system socket has not been set — right-click a packet in the packet list and choose “Set system socket” first.";
             d["SendEditForm.Send.Stop"] = "Send has stopped";
             d["SendEditForm.Send.Error"] = "Send error occurred:";
             d["SendEditForm.Send.Success"] = "Send Completed";

@@ -929,6 +929,7 @@ namespace WinsockPacketEditor
             d["SendEditForm.Export"] = "匯出所有傳送集";
             d["SendEditForm.Clear"] = "清空所有傳送集";
             d["SendEditForm.SystemSocket.Error"] = "系統通訊端錯誤";
+            d["SendList.SystemSocket.Blocked"] = "傳送「{0}」勾了「使用系統通訊端」，但系統通訊端還沒設定 —— 請先在封包列表裡按右鍵「設定系統通訊端」。";
             d["SendEditForm.Send.Stop"] = "傳送已停止";
             d["SendEditForm.Send.Error"] = "傳送發生錯誤：";
             d["SendEditForm.Send.Success"] = "傳送完畢";

@@ -3095,6 +3095,16 @@ namespace WPEHybrid
                     在外壳里跑等于拿外壳自己的套接字去发，一个包也发不出去（还静默计成失败）。
                     「在跑没在跑」也由目标说了算 —— 它随 1 Hz 的 Stats 事件报上来。
                 */
+                /*
+                    ⚠️ 预检要在<b>外壳这边</b>做：注入模式下 StartSendList 跑在目标进程里，
+                    那里没有 UI，「系统套接字没设置」只剩日志、弹不出提示。
+                    SystemSocket 本来就是外壳这份为准（再随 Runtime 快照推给目标）。
+                */
+                if (Operate.SendConfig.List.AllBlockedBySystemSocket())
+                {
+                    return new { running = false };
+                }
+
                 var link = this.AttachedLink();
 
                 if (link != null)

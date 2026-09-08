@@ -924,6 +924,7 @@ namespace WinsockPacketEditor
             d["SendEditForm.Export"] = "Экспорт пакетов";
             d["SendEditForm.Clear"] = "Очистить пакеты";
             d["SendEditForm.SystemSocket.Error"] = "Неверный системный сокет";
+            d["SendList.SystemSocket.Blocked"] = "В отправке «{0}» включено «Использовать системный сокет», но системный сокет не задан — сначала щёлкните пакет в списке правой кнопкой и выберите «Задать системный сокет».";
             d["SendEditForm.Send.Stop"] = "Отправка остановлена";
             d["SendEditForm.Send.Error"] = "Ошибка при отправке:";
             d["SendEditForm.Send.Success"] = "Отправка завершена";

@@ -503,16 +503,22 @@ namespace WinsockPacketEditor
             /// ⚠️ <b>热路径上的日志必须节流。</b>抓包时每秒几千条封包都走这儿，
             /// 逐条记会把日志列表冲垮 —— 而且真正有用的信息只是「发生了」和「第一条长什么样」。
             /// </summary>
-            public static void LogThrottled(string Where, string Text)
+            /// <summary>
+            /// 同一个 key 最多每 5 秒记一条。<b>返回 true = 这一次真的记了</b> ——
+            /// 调用方可以拿它当闸门，把「弹一次提示」也挂在同一把节流上
+            /// （机器人会在循环里一秒撞好几次，提示比日志更不能刷屏）。
+            /// </summary>
+            public static bool LogThrottled(string Where, string Text)
             {
                 DateTime last;
                 DateTime now = DateTime.Now;
 
-                if (dropLogAt.TryGetValue(Where, out last) && (now - last).TotalSeconds < 5) { return; }
+                if (dropLogAt.TryGetValue(Where, out last) && (now - last).TotalSeconds < 5) { return false; }
 
                 dropLogAt[Where] = now;
 
                 DoLog(Where, Text);
+                return true;
             }
 
             public static void LogDropped(string Where, int Dropped)
@@ -22290,6 +22296,56 @@ namespace WinsockPacketEditor
 
                 #region//执行发送
 
+                /*
+                    ⚠️ <b>勾了「使用系统套接字」却没设过系统套接字</b> —— 这条发送跑起来会在
+                    SendExecute.Send_DoWork 开头直接 return：<b>一个包都不发，连「执行次数」都不会 +1</b>。
+                    （它<b>不会</b>回退到每条封包自己记录的套接字 —— 那是<b>不勾</b>时才走的路。）
+
+                    原来这件事只在系统日志里留一条，界面上就是「点了没反应」。
+                    发送编辑弹窗的「执行」早就有校验（StartSendEdit），另外三条链路没有：
+                      · 发送列表的「开始发送」   StartSendList -> SendList_DoWork -> DoSend
+                      · 机器人的「发送 - 发送列表」 RobotExecute      -> DoSend
+                      · 快捷键 9001~9010          DoSend_ByIndex    -> DoSendAsync
+                    三条最后都汇到 <b>DoSendAsync</b>，所以闸设在那儿一处就够，不必各写一遍。
+
+                    SystemConfig.SystemSocket 是<b>纯运行期字段、不落库</b>，每次重启都回到 0，
+                    所以这不是个稀罕情形 —— 设过一次、重启之后再点，就撞上了。
+                */
+                internal static bool SystemSocketMissing(SendInfo si)
+                {
+                    return si != null && si.SSystemSocket && SystemConfig.SystemSocket <= 0;
+                }
+
+                /// <summary>
+                /// 只报不判 —— 给已经自己判过 <see cref="SystemSocketMissing"/> 的调用方用
+                /// （发送列表那边要先知道「是不是全都跑不了」再决定起不起 worker）。
+                /// </summary>
+                internal static void NoticeSystemSocketMissing(SendInfo si)
+                {
+                    BlockedBySystemSocket(si);
+                }
+
+                /// <summary>
+                /// 拦下并说清楚。返回 true = 拦住了，调用方别往下走。
+                /// ⚠️ 提示与日志共用同一把 5 秒节流：机器人可能在循环里反复撞到同一条发送。
+                /// </summary>
+                private static bool BlockedBySystemSocket(SendInfo si)
+                {
+                    if (!SystemSocketMissing(si)) { return false; }
+
+                    string text = string.Format(
+                        UI.T("SendList.SystemSocket.Blocked",
+                             "发送「{0}」勾了「使用系统套接字」，但系统套接字还没设置 —— 请先在封包列表里右键「设置系统套接字」。"),
+                        si.SName);
+
+                    if (SystemConfig.LogThrottled("SendSysSocket." + si.SID, text))
+                    {
+                        UI.Toast(UiIcon.Warn, text);
+                    }
+
+                    return true;
+                }
+
                 public static SendExecute DoSend(Guid SID)
                 {
                     return Task.Run(() => DoSendAsync(SID))
@@ -22331,6 +22387,12 @@ namespace WinsockPacketEditor
                             {
                                 if (si.IsEnable)
                                 {
+                                    //⚠️ 三条链路唯一的咽喉，见 SystemSocketMissing 上面那段
+                                    if (BlockedBySystemSocket(si))
+                                    {
+                                        return null;
+                                    }
+
                                     if (si.SCollection.Count > 0)
                                     {
                                         seReturn = new SendExecute();
@@ -23153,6 +23215,36 @@ namespace WinsockPacketEditor
 
                 #region//执行发送列表
 
+                /*
+                    「一条都跑不了」的预检。
+
+                    每条发送各自的拦截在 SendConfig.Send.DoSendAsync 里（那是三条链路的咽喉），
+                    这里<b>多拦一次全军覆没的情形</b>：否则 worker 照样起来、界面亮起「发送中」、
+                    一秒后自己结束，而计数一个都没动 —— 又是一次「点了没反应」。
+
+                    只在<b>全都被拦</b>时才拦：只有一部分不能跑时，剩下的照跑，
+                    被拦的那几条各自会在 DoSendAsync 里报一次。
+
+                    ⚠️ 做成 public 是给<b>注入模式</b>用的：那边 StartSendList 跑在<b>目标进程</b>里，
+                    目标里没有 UI，提示弹不出来（只剩日志经 evt 管道回到外壳的系统日志）。
+                    所以外壳在把命令发过去<b>之前</b>先在自己这边跑一次同样的预检 ——
+                    SystemSocket 本来就是外壳这份为准、再随 Runtime 快照推给目标的。
+                */
+                public static bool AllBlockedBySystemSocket()
+                {
+                    List<SendInfo> runnable = Operate.SendConfig.List.lstSendInfo
+                        .Where(item => item.IsEnable)
+                        .ToList();
+
+                    if (runnable.Count == 0 || !runnable.All(item => Send.SystemSocketMissing(item)))
+                    {
+                        return false;
+                    }
+
+                    Send.NoticeSystemSocketMissing(runnable[0]);
+                    return true;
+                }
+
                 public static void StartSendList()
                 {
                     try
@@ -23161,6 +23253,11 @@ namespace WinsockPacketEditor
                         {
                             if (!Operate.SendConfig.List.bgwSendList.IsBusy)
                             {
+                                if (AllBlockedBySystemSocket())
+                                {
+                                    return;
+                                }
+
                                 Operate.SendConfig.List.lstSendExecute.Clear();
                                 Operate.SendConfig.List.bgwSendList.RunWorkerAsync();
                             }
