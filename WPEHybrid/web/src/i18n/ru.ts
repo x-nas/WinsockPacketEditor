@@ -97,7 +97,6 @@ export const ru: Record<Key, string> = {
   'sp.text': 'Текст',
   'sp.modeHint': 'Что сопоставлять: текст (после декодирования UTF-8) или HEX (0A1B2C или 0A 1B 2C, регистр не важен)',
   'sp.next': 'Найти далее',
-  'sp.fromHead': 'Искать с начала',
   'sp.searching': 'Поиск…',
   'sp.noMatch': 'Совпадений не найдено',
   'sp.wrapped': 'Достигнут конец, продолжаем с начала',

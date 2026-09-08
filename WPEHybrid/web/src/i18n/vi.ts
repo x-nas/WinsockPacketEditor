@@ -97,7 +97,6 @@ export const vi: Record<Key, string> = {
   'sp.text': 'Văn bản',
   'sp.modeHint': 'Đổi đối tượng so khớp: văn bản (giải mã UTF-8) hoặc hex (0A1B2C hoặc 0A 1B 2C, không phân biệt hoa thường)',
   'sp.next': 'Tìm tiếp',
-  'sp.fromHead': 'Tìm từ đầu',
   'sp.searching': 'Đang tìm…',
   'sp.noMatch': 'Không có gói tin nào khớp',
   'sp.wrapped': 'Đã đến cuối, quay lại từ đầu',

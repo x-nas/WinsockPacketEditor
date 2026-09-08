@@ -97,7 +97,6 @@ export const ko: Record<Key, string> = {
   'sp.text': '텍스트',
   'sp.modeHint': '검색 대상 전환: 텍스트(UTF-8 디코딩) / 16진수(0A1B2C 또는 0A 1B 2C, 대소문자 무관)',
   'sp.next': '다음 찾기',
-  'sp.fromHead': '처음부터 찾기',
   'sp.searching': '찾는 중…',
   'sp.noMatch': '일치하는 패킷이 없습니다',
   'sp.wrapped': '끝에 도달해 처음부터 계속합니다',

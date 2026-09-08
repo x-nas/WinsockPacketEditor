@@ -258,6 +258,8 @@ function onSelect(anyRow: PacketListRow, ev: MouseEvent, index: number): void {
 
 /*
   与代理数据页那一份逐句对应，只差调 searchPacketList 而不是 searchProxyList。
+  （包括「只有一个按钮」那条：「查找下一个」走到末尾自己回头再来一圈，
+  所以不摆「从头查找」—— 曾经摆过，就是这个理由删掉的。）
 
   【游标留在前端】C# 侧不存 Search_Index：搜索是「从第 N 行往后找第一条」这一件事，
   游标是谁在翻页谁的状态。
@@ -283,7 +285,7 @@ const searchHit = ref<{ offset: number; length: number } | null>(null)
 
 interface SearchResult { Found: boolean; Id: number; Index: number; Offset: number; Length: number; NextPos: number; Error: string | null }
 
-async function findNext(fromHead = false): Promise<void> {
+async function findNext(): Promise<void> {
   const pattern = q.value.trim()
   if (!pattern || searching.value) return
 
@@ -291,8 +293,8 @@ async function findNext(fromHead = false): Promise<void> {
 
   try {
     //先在当前这一行的剩下部分找（searchPos），找不到 SearchForList 自己会往下一行走
-    const from = fromHead || searchAt.value < 0 ? 0 : searchAt.value
-    const fromPos = fromHead ? 0 : searchPos.value
+    const from = searchAt.value < 0 ? 0 : searchAt.value
+    const fromPos = searchPos.value
     let r = await call<SearchResult>('searchPacketList', { pattern, isHex: qHex.value, from, fromPos })
 
     if (r?.Error) {
@@ -598,7 +600,7 @@ defineExpose({ onCleared })
             class="sinp"
             spellcheck="false"
             :placeholder="t('proxy.search')"
-            @keydown.enter.prevent="findNext(false)"
+            @keydown.enter.prevent="findNext()"
             @keydown.esc.prevent="clearSearch"
           >
           <button v-if="q" class="sx" :title="t('sp.clear')" @click="clearSearch">×</button>
@@ -615,12 +617,13 @@ defineExpose({ onCleared })
           <button class="hx-segb after" :class="{ on: qHex }" @click="qHex = true">{{ t('sp.hex') }}</button>
           <button class="hx-segb before" :class="{ on: !qHex }" @click="qHex = false">{{ t('sp.text') }}</button>
         </div>
-        <button class="tb" :disabled="!q.trim() || searching" @click="findNext(false)">
+        <!--
+          只剩一个按钮。原先旁边还有个「从头查找」，在「查找下一个」会自己转一圈之后
+          就没有它能做而这个做不了的事了 —— 留着只是多一个要读的控件。
+          真要从头再来：改一下查找内容、或者按 Esc / 点 × 清空，游标都会退回开头。
+        -->
+        <button class="tb" :disabled="!q.trim() || searching" @click="findNext()">
           {{ searching ? t('sp.searching') : t('sp.next') }}
-        </button>
-        <!-- ⚠️ 不给 title：它原先写的就是按钮上那四个字，等于把标签又说一遍。旁边「查找下一个」本来就没有，两个也才一致 -->
-        <button class="tb" :disabled="!q.trim() || searching" @click="findNext(true)">
-          {{ t('sp.fromHead') }}
         </button>
 
         <button class="chk" :class="{ on: follow }" @click="follow = !follow"><i />{{ t('proxy.autoRoll') }}</button>
