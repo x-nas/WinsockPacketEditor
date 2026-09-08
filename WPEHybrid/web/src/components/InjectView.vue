@@ -310,7 +310,12 @@ function titleOf(k: PageKey): string {
       </div>
 
       <div class="tools">
-        <input v-model="search" class="search" :placeholder="t('inject.pick.search')" />
+        <!--
+          ⚠️ 这里<b>不能叫 .search</b>：那个类名是 .gtool 里那套「图标 + 输入框」的<b>外壳</b>，
+          规则全挂在 .gtool .search 下 —— 这一屏没有那个前缀，于是它一直是<b>浏览器原生外观</b>
+          （实测字体 Arial、边框是 UA 的灰）。它本来就是个普通文本框，走全局 .inp 就对了。
+        -->
+        <input v-model="search" class="inp psearch" spellcheck="false" :placeholder="t('inject.pick.search')" />
         <button class="btn" :disabled="loadingProcs" @click="refreshProcs">
           {{ loadingProcs ? t('inject.pick.loading') : t('inject.pick.refresh') }}
         </button>
@@ -444,6 +449,9 @@ function titleOf(k: PageKey): string {
 }
 
 /* ── 选目标 ─────────────────────────────── */
+/* .inp 刻意不带 flex / min-width，见 CLAUDE.md「输入框已经收进 style.css」 */
+.pickscr .inp.psearch { flex: 0 1 300px; min-width: 150px; }
+
 .pickscr {
   display: flex;
   flex-direction: column;

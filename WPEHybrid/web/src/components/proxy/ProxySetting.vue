@@ -286,19 +286,6 @@ async function exportCert(): Promise<void> {
 .sw.on i { left: 20px; background: var(--green); box-shadow: 0 0 6px var(--green); }
 .sw:focus-visible { outline-offset: 2px; }
 
-.mini {
-  padding: 9px 13px 7px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--cyan);
-  font-family: var(--share);
-  font-size: var(--btn-size);
-  /* 显式 1：Share Tech Mono 在 line-height: normal 下会把行距全压在字的下面，字号一大就明显偏上（实测） */
-  line-height: 1;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  cursor: pointer;
-}
+/* 小按钮的样式在 style.css 的 .mini */
 
-.mini:hover { background: rgb(var(--cyan-rgb) / 10%); }
 </style>

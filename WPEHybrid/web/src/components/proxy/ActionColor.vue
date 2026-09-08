@@ -188,23 +188,7 @@ input[type="color"] {
 input[type="color"]::-webkit-color-swatch-wrapper { padding: 2px; }
 input[type="color"]::-webkit-color-swatch { border: 0; }
 
-.mini {
-  margin-left: auto;
-  padding: 8px 12px 6px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--muted);
-  font-family: var(--share);
-  font-size: var(--btn-size);
-  /* 显式 1：Share Tech Mono 在 line-height: normal 下会把行距全压在字的下面，字号一大就明显偏上（实测） */
-  line-height: 1;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  cursor: pointer;
-}
+/* 小按钮在 style.css 的 .mini，这里只补布局 */
+.mini { margin-left: auto; }
 
-.mini:hover { border-color: var(--cyan); color: var(--cyan); }
-
-.mini.warn { border-color: rgb(var(--amber-rgb) / 45%); color: var(--amber); }
-.mini.warn:hover:not(:disabled) { background: rgb(var(--amber-rgb) / 10%); border-color: var(--amber); color: var(--amber); }
 </style>

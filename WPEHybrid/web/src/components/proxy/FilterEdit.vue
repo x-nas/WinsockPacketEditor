@@ -1119,21 +1119,7 @@ async function save(): Promise<void> {
 
 .inp.num { flex: none; width: 92px; font-variant-numeric: tabular-nums; }
 
-.mini {
-  padding: 8px 10px 6px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--gray);
-  font-family: var(--share);
-  font-size: var(--btn-size);
-  /* 显式 1：Share Tech Mono 在 line-height: normal 下会把行距全压在字的下面，字号一大就明显偏上（实测） */
-  line-height: 1;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-
-.mini:hover { border-color: var(--cyan); color: var(--cyan); }
+/* 小按钮的样式在 style.css 的 .mini */
 
 /* ── 格子 ── */
 

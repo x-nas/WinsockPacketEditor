@@ -337,23 +337,7 @@ function onMenuPick(id: string): void {
 
 .cap .n { color: var(--cyan); }
 
-.mini {
-  padding: 8px 10px 6px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--muted);
-  font-family: var(--share);
-  font-size: var(--btn-size);
-  /* 显式 1：Share Tech Mono 在 line-height: normal 下会把行距全压在字的下面，字号一大就明显偏上（实测） */
-  line-height: 1;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-
-.mini:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); }
-.mini.danger:hover:not(:disabled) { border-color: var(--danger); color: var(--danger); }
-.mini:disabled { opacity: .4; cursor: default; }
+/* 小按钮的样式在 style.css 的 .mini */
 
 .tbl {
   margin: 0 20px 6px;

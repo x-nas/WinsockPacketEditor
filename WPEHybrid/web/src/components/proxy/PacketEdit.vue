@@ -435,21 +435,7 @@ function offset(i: number): string { return i.toString(16).toUpperCase().padStar
 .inp.num { width: 92px; text-align: center; }
 .inp.num.sm { width: 76px; height: 26px; }
 
-.mini {
-  padding: 8px 10px 6px;
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--muted);
-  font-family: var(--share);
-  font-size: var(--btn-size);
-  line-height: 1;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-
-.mini:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); }
-.mini:disabled { opacity: .4; cursor: default; }
+/* 小按钮的样式在 style.css 的 .mini */
 
 /* 发送 / 递进两块 */
 .panels { flex: none; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }

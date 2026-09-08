@@ -269,7 +269,7 @@ const totalExec = computed(() => filters.value.reduce((n, f) => n + f.ExecutionC
           <span class="act" :class="ACTION_CLS[r.f.Action]">{{ t(ACTION_LABEL[r.f.Action] ?? 'proxy.act.none') }}</span>
           <span class="cnt">{{ r.f.ExecutionCount.toLocaleString() }}</span>
           <span class="share">
-            <span class="mini"><span class="mf" :style="{ width: pct(r.f.ExecutionCount, totalExec) + '%' }" /></span>
+            <span class="sbar"><span class="mf" :style="{ width: pct(r.f.ExecutionCount, totalExec) + '%' }" /></span>
             <span class="mp">{{ pctText(r.f.ExecutionCount, totalExec) }}%</span>
           </span>
         </div>
@@ -355,8 +355,8 @@ const totalExec = computed(() => filters.value.reduce((n, f) => n + f.ExecutionC
 .tg.off { color: var(--danger); border-color: rgb(var(--danger-rgb) / 30%); }
 
 .share { display: flex; align-items: center; gap: 8px; }
-.mini { flex: 1; height: 4px; background: rgb(var(--tint-rgb) / 5%); border: 1px solid var(--border); overflow: hidden; }
-.mf { display: block; height: 100%; background: var(--cyan); transition: width .3s; }
+.sbar { flex: 1; height: 4px; background: rgb(var(--tint-rgb) / 5%); border: 1px solid var(--border); overflow: hidden; }
+.sbar > .mf { display: block; height: 100%; background: var(--cyan); transition: width .3s; }
 .mp { flex: none; width: 42px; text-align: right; font-family: var(--mono); font-size: 11px; color: var(--muted); }
 
 .empty { padding: 40px 20px; text-align: center; color: var(--muted); font-size: 12.5px; line-height: 1.8; }

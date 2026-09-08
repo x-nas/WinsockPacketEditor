@@ -413,23 +413,7 @@ async function save(): Promise<void> {
 .tab.on { border-color: var(--cyan); color: var(--cyan); background: rgb(var(--cyan-rgb) / 10%); }
 .tab .n { font-family: var(--share); font-size: 9.5px; opacity: .8; }
 
-.mini {
-  padding: 8px 10px 6px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--muted);
-  font-family: var(--share);
-  font-size: var(--btn-size);
-  /* 显式 1：Share Tech Mono 在 line-height: normal 下会把行距全压在字的下面，字号一大就明显偏上（实测） */
-  line-height: 1;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-
-.mini:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); }
-.mini.danger:hover:not(:disabled) { border-color: var(--danger); color: var(--danger); }
-.mini:disabled { opacity: .4; cursor: default; }
+/* 小按钮的样式在 style.css 的 .mini */
 
 /*
   表头与数据行同在<b>一个</b>滚动容器里：sticky 只锁纵向，横向自然跟着一起滚。

@@ -195,6 +195,26 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+/*
+  ⚠️ <b>表单控件不继承字体，要自己接回来。</b>
+
+  这是 CSS 的老规矩：<code>button / input / select / textarea</code> 的 font 来自<b>操作系统</b>，
+  不跟 body 走。所以任何一个只写了 font-size 而没写 font-family 的控件，
+  文字都会落到 <b>Arial 13.33px</b> —— 也就是「一眼看出不是这个程序画的」。
+
+  这不是某一处写漏了，是<b>一整类</b>：实测扫过注入模式全部 11 页 + 7 个设置，
+  系统日志那三个页签、数据提取的三张类型卡都栽在这儿；防火墙设置的两个页签同理。
+  与其逐个补 font-family，不如在这里接一次 —— 显式写了 var(--share) 的照旧赢。
+
+  ⚠️ <b>只接 font-family，不接 font-size。</b> 尺寸各控件本来就各写各的
+  （按钮 var(--btn-size)、正文 12.5px…），一律 inherit 反而会把没写尺寸的图标按钮
+  从 13.33px 挪到 13px，白改一批布局。
+*/
+button,
+input,
+select,
+textarea { font-family: inherit; }
+
 html,
 body,
 #app { height: 100%; }
@@ -385,6 +405,40 @@ body.col-resizing * {
 .list-page .grow { flex: 1; }
 
 /* 取账号 / 滤镜两屏原本一致的那份值，不是我另起的 */
+/*
+  小按钮（.mini）—— 弹窗里那种「生成 / 导入 / 导出 / 清空 / 跳到」的一排。
+
+  ⚠️ 这一份以前<b>在 7 个组件的 scoped 里各抄一遍</b>，而且抄歪了：
+  字色 --muted(4) / --gray(2) / --cyan(1)、内边距 8/10/6 四份、8/11/6、8/12/6、9/13/7 各一份，
+  三份的 hover 写成 :hover 而不是 :hover:not(:disabled)（<b>禁用了还会跟着变色</b>），
+  另有三份根本没写 :disabled（<b>禁用了不压暗</b>）。
+  而注入模式的「选目标」屏是唯一<b>一份都没抄</b>的 —— 那两颗按钮一直是浏览器原生外观。
+
+  取值取多数派（8px 10px 6px / --muted）。ProxySetting 那份原是 9/13/7 + --cyan，
+  那其实就是 .btn，不是 .mini —— 统一之后它变成和别处一样的小按钮。
+*/
+.mini {
+  padding: 8px 10px 6px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: var(--share);
+  font-size: var(--btn-size);
+  line-height: 1;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* ⚠️ 一律 :not(:disabled) —— 禁用的按钮不该对鼠标有反应 */
+.mini:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); }
+.mini:disabled { opacity: .35; cursor: default; }
+
+.mini.danger:hover:not(:disabled) { border-color: var(--danger); color: var(--danger); }
+.mini.warn { border-color: rgb(var(--amber-rgb) / 45%); color: var(--amber); }
+.mini.warn:hover:not(:disabled) { background: rgb(var(--amber-rgb) / 10%); border-color: var(--amber); color: var(--amber); }
+
 .list-page .btn {
   flex: none;
   padding: 9px 13px 7px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
