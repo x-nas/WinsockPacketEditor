@@ -94,6 +94,7 @@ export const ru: Record<Key, string> = {
   'proxy.st.httpResp': 'HTTP / WS ответ',
   'proxy.search': 'Поиск в данных пакета…',
   'sp.hex': 'HEX',
+  'hex.charCol': 'Символы',
   'sp.text': 'Текст',
   'sp.modeHint': 'Что сопоставлять: текст (после декодирования UTF-8) или HEX (0A1B2C или 0A 1B 2C, регистр не важен)',
   'sp.next': 'Найти далее',

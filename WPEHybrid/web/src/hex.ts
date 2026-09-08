@@ -36,7 +36,7 @@ export function perLineFor(availChars: number): number {
  * 后面每字节一个两位列号 + 空格，正好压在下面对应的那一列上。
  * 列号超过 0xFF 不可能出现 —— 每行最多 64 字节。
  */
-export function headerLine(perLine: number): string {
+export function headerLine(perLine: number, label: string): string {
   const n = perLine > 0 ? perLine : DEFAULT_PER_LINE
   let hex = ''
 
@@ -45,14 +45,24 @@ export function headerLine(perLine: number): string {
   }
 
   /*
-    ⚠️ 这一栏<b>不叫 ASCII</b>。它按 Latin-1 显示（0xA0..0xFF 是 ¶ ² Ç ã ÿ 这些，
-    见 asciiOf），而 ASCII 只有 0x00..0x7F —— 标成 ASCII 是在说一件不成立的事。
+    ⚠️ 标签由调用方给（<b>要翻译</b>），hex.ts 本身不引 i18n —— 它是纯格式化，
+    验收跑测也在用，别给它挂上界面的依赖。
 
-    标签保持英文字面量、不进字典（与 Mode 01 / Ready / Target 同一条口径）：
-    它压在一排十六进制列号后面，本来就是这一行里唯一的英文。
-    宽度上也放得下 —— perLineFor 的下限是 8 个字节，而 "LATIN-1" 只要 7 格。
+    这一栏叫什么改过两轮，两次都是被用户问出来的：
+      ASCII    → 不对。它按 Latin-1 显示，0xA0..0xFF 是 ¶ ² Ç ã ÿ 这些，
+                 而 ASCII 只有 0x00..0x7F，标成 ASCII 是在说一件不成立的事；
+      LATIN-1  → 对，但是行话。
+      <b>字符</b>  → 现在这个。
+
+    ⚠️ <b>刻意不叫「文本」</b>：这块面板右上角那组分段按钮里已经有一个「文本」，
+    切过去看的是<b>按 UTF-8 解码</b>的整段文字 —— 与这一栏（逐字节、Latin-1）
+    根本是两样东西。两个一模一样的名字摆在同一块面板上、相隔一行，
+    谁都会以为是同一个东西（「自动清理」当年就是这么被问的）。
+
+    宽度放得下：perLineFor 的下限是 8 个字节，而各语言里最长的
+    「Символы」也只要 7 格。加语言时回来核一眼这条。
   */
-  return ' '.repeat(10) + hex.padEnd(n * 3, ' ') + ' ' + 'LATIN-1'
+  return ' '.repeat(10) + hex.padEnd(n * 3, ' ') + ' ' + label
 }
 
 /*

@@ -146,6 +146,7 @@ export const DICT = {
   'proxy.search': { zh: '在封包内容中查找…', en: 'Search in packet data…' },
   /* ── 查找封包（对应 WinForms 的 Controls/SearchPacket）───────── */
   'sp.hex': { zh: '十六进制', en: 'Hex' },
+  'hex.charCol': { zh: '字符', en: 'CHARS' },
   'sp.text': { zh: '文本', en: 'Text' },
   'sp.modeHint': { zh: '切换匹配对象：文本（UTF8 解码后）/ 十六进制（0A1B2C 或 0A 1B 2C，不分大小写）', en: 'Match against decoded text (UTF-8) or hex (0A1B2C or 0A 1B 2C, case-insensitive)' },
   'sp.next': { zh: '查找下一个', en: 'Find next' },

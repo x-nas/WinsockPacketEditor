@@ -531,7 +531,7 @@ defineExpose({ cur, nib, col, insertMode, hasSel, selCount, per, selectAll, sele
   >
     <!-- 列号表头与正文同在一个滚动容器里：sticky 只锁纵向，横向跟着一起滚 -->
     <div ref="scroller" class="hx-scroll" @scroll.passive="onScroll">
-      <div class="hx-head">{{ headerLine(per) }}</div>
+      <div class="hx-head">{{ headerLine(per, t('hex.charCol')) }}</div>
 
       <div class="spacer" :style="{ height: rows * ROW_H + 'px' }">
         <div class="win" :style="{ transform: `translateY(${start * ROW_H}px)` }">
