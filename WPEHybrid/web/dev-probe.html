@@ -58,6 +58,8 @@
       }
       cands.sort((x, y) => y[2] - x[2]);
       const uA = new Array(A.length).fill(false), uB = new Array(Bb.length).fill(false);
+      // 同一个序列只列一行（贪心挑的是「一次出现」，同一段出现多次会被收下好几条）
+      const seen = new Set();
       const occ = (hay, needle) => { const o = []; for (let i = 0; i + needle.length <= hay.length; i++) { let k = 0; while (k < needle.length && hay[i + k] === needle[k]) k++; if (k === needle.length) o.push(i) } return o };
       const rows = [];
       for (const c of cands) {
@@ -67,8 +69,11 @@
         if (bad) continue;
         for (let k = 0; k < len; k++) { uA[as + k] = true; uB[bs + k] = true }
         const seq = A.slice(as, as + len);
+        const key = seq.join(' ');
+        if (seen.has(key)) continue;
+        seen.add(key);
         const pa = occ(A, seq), pb = occ(Bb, seq);
-        rows.push({ Sequence: seq.join(' '), Length: len, CountInA: pa.length, CountInB: pb.length, PositionsInA: pa, PositionsInB: pb });
+        rows.push({ Sequence: key, Length: len, CountInA: pa.length, CountInB: pb.length, PositionsInA: pa, PositionsInB: pb });
       }
       rows.sort((x, y) => y.Length - x.Length);
       return { rows };

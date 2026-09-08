@@ -168,11 +168,23 @@ function coverage(rows: DupRow[], side: 'a' | 'b', total: number) {
 const covA = computed(() => coverage(dupRows.value, 'a', aBytes.value.length))
 const covB = computed(() => coverage(dupRows.value, 'b', bBytes.value.length))
 
-/** 占比：这一条片段一共占了多少字节 ÷ 两边总字节。按长度排看不出「哪条解释了大头」 */
-function share(d: DupRow): number {
+/*
+  占比：这一条片段一共占了多少字节 ÷ 两边总字节。按长度排看不出「哪条解释了大头」——
+  一条 5 字节出现两次，比一条 9 字节出现一次占得多。
+
+  ⚠️ <b>不能 Math.round 成整数百分比。</b> 用户在真实数据上问过「占比全是 0 正常吗」：
+  两段合计 11327 字节、片段只有 4 字节时，每条都是 0.1~0.3%，四舍五入之后<b>整列全是 0</b> ——
+  算得没错，但这一列就什么都没说。所以按大小给不同精度，小到看不见时也照实写出来。
+*/
+function share(d: DupRow): string {
   const total = aBytes.value.length + bBytes.value.length
-  if (!total) return 0
-  return Math.round(((d.Length * (d.CountInA + d.CountInB)) / total) * 100)
+  if (!total) return '0%'
+
+  const p = ((d.Length * (d.CountInA + d.CountInB)) / total) * 100
+  if (p >= 10) return p.toFixed(0) + '%'
+  if (p >= 1) return p.toFixed(1) + '%'
+  if (p > 0) return p.toFixed(2) + '%'
+  return '0%'
 }
 
 async function runDup(): Promise<void> {
@@ -547,7 +559,7 @@ function pickCov(side: 'a' | 'b', segIndex: number): void {
             <span class="len">{{ d.Length }}</span>
             <span class="cnt">{{ d.CountInA }}</span>
             <span class="cnt">{{ d.CountInB }}</span>
-            <span class="cnt sh">{{ share(d) }}%</span>
+            <span class="cnt sh">{{ share(d) }}</span>
             <!-- ⚠️ 位置可能有几十个，全铺出来是一坨读不了的数字。只列前 6 个，完整的挂 title -->
             <span class="pos2" :title="d.PositionsInA.join(', ')">{{ brief(d.PositionsInA) }}</span>
             <span class="pos2" :title="d.PositionsInB.join(', ')">{{ brief(d.PositionsInB) }}</span>

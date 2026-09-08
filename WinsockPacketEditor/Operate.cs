@@ -2658,6 +2658,20 @@ namespace WinsockPacketEditor
                     bool[] usedA = new bool[n];
                     bool[] usedB = new bool[m];
 
+                    /*
+                        ⚠️ <b>同一个序列只列一行。</b>
+
+                        贪心挑的是<b>一次出现</b>：同一段字节在 A 里出现三次、B 里两次时，
+                        (A@0,B@0) 与 (A@5,B@5) 是两条互不重叠的候选，两条都会被收下 ——
+                        于是表里出现<b>好几行一模一样的记录</b>（连次数和位置列都一样，
+                        因为下面数的是「所有出现位置」）。用户在真实数据上看到过三行同样的
+                        「17 03 03 00」。
+
+                        标记 usedA / usedB 照旧对<b>每一条</b>候选做（那些字节确实被这个序列解释了，
+                        不该再让别的候选去占），只是<b>不再重复往表里加</b>。
+                    */
+                    var seen = new HashSet<string>();
+
                     foreach (int[] c in cands)
                     {
                         int len = c[2];
@@ -2668,13 +2682,16 @@ namespace WinsockPacketEditor
 
                         for (int k = 0; k < len; k++) { usedA[aStart + k] = true; usedB[bStart + k] = true; }
 
+                        string seq = GetSequenceString(bytes1, aStart, len);
+                        if (!seen.Add(seq)) { continue; }
+
                         // ③ 两边各数一遍所有出现位置（不是只往后数）
                         List<int> pa = Occurrences(A, A, aStart, len);
                         List<int> pb = Occurrences(B, A, aStart, len);
 
                         duplicates.Add(new DuplicateInfo
                         {
-                            Sequence = GetSequenceString(bytes1, aStart, len),
+                            Sequence = seq,
                             Length = len,
                             CountInA = pa.Count,
                             CountInB = pb.Count,
