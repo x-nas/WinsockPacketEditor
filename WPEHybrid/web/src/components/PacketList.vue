@@ -788,10 +788,16 @@ defineExpose({ scrollToBottom, scrollToIndex })
   <b>唯一破例用圆角的地方。</b>整套界面是方角 + 发丝边框，但这是个浮在内容上的
   动作按钮、不属于版面结构，圆形反而能立刻和底下那张方格子表分开。
 */
+/*
+  「回到底部」的悬浮按钮，摆在<b>底部正中</b>（与聊天窗口「回到最新」同一个位置约定）。
+  原来在右下角，与那一侧的竖直滚动条挤在一起，也不像个「回到最新」的入口。
+*/
 .pl-paused {
   position: absolute;
-  right: 18px;
+  left: 50%;
   bottom: 16px;
+  /* ⚠️ 居中靠 transform，下面 :hover 那条<b>必须把这一段带上</b>，否则一悬停就弹回左边 */
+  transform: translateX(-50%);
   width: 34px;
   height: 34px;
   display: flex;
@@ -811,8 +817,8 @@ defineExpose({ scrollToBottom, scrollToIndex })
 .pl-paused:hover {
   background: rgb(var(--amber-rgb) / 16%);
   box-shadow: 0 0 16px rgb(var(--amber-rgb) / 28%);
-  /* 微微上抬，暗示「点它会动」*/
-  transform: translateY(-1px);
+  /* 微微上抬，暗示「点它会动」。⚠️ translateX(-50%) 是居中用的，不能丢 */
+  transform: translateX(-50%) translateY(-1px);
 }
 
 .pl-paused:focus-visible { outline-offset: 3px; outline-color: var(--amber); }
