@@ -28,7 +28,18 @@ const props = withDefaults(defineProps<{
   /** 额外高亮（查重命中的片段），[起点, 长度] 的字节区间 */
   hlA?: Array<[number, number]>
   hlB?: Array<[number, number]>
+  /*
+    plain 模式下两侧头部各垫几个空格。
+
+    查重的两侧<b>没有位置对应关系</b>（同一段可能在 A 的 2042、在 B 的 8147），
+    垫一下就能把当前关心的那一处对齐到同一行，横着比。
+    两个都是 0 时就是「各按自己的偏移铺开」。
+  */
+  padA?: number
+  padB?: number
 }>(), {
+  padA: 0,
+  padB: 0,
   aBytes: () => new Uint8Array(0),
   bBytes: () => new Uint8Array(0),
   aLines: () => [],
@@ -92,16 +103,22 @@ const changeOf = computed<number[]>(() => {
 
 const cells = computed<Cell[]>(() => {
   if (props.mode === 'plain') {
-    const n = Math.max(props.aBytes.length, props.bBytes.length)
+    const pa = Math.max(0, props.padA)
+    const pb = Math.max(0, props.padB)
+    const n = Math.max(pa + props.aBytes.length, pb + props.bBytes.length)
     const out: Cell[] = new Array(n)
+
     for (let i = 0; i < n; i++) {
+      const ai = i - pa
+      const bi = i - pb
       out[i] = {
-        ai: i < props.aBytes.length ? i : -1,
-        bi: i < props.bBytes.length ? i : -1,
+        ai: ai >= 0 && ai < props.aBytes.length ? ai : -1,
+        bi: bi >= 0 && bi < props.bBytes.length ? bi : -1,
         op: 'same',
         ci: -1,
       }
     }
+
     return out
   }
 

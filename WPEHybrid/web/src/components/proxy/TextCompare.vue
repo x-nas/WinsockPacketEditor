@@ -184,10 +184,22 @@ async function runDup(): Promise<void> {
     const r = await call<{ rows: DupRow[] }>('textDuplicates', { a, b, min: Math.max(1, Math.trunc(tcMinBytes.value || 1)) })
     const list = r?.rows ?? []
 
-    //两边换成规范形态（WinForms 也这么做），位置才对得上
-    textA.value = a.replace(/(..)(?=.)/g, '$1 ')
-    textB.value = b.replace(/(..)(?=.)/g, '$1 ')
+    /*
+        ⚠️ <b>这里以前会把 A / B 改写成规范形态（"AA BB CC"），那是个 bug 的来源，已删。</b>
 
+        表现是「点一次查重没反应，再点一次才出来」：改写 textA / textB 会触发
+        下面那个 watch([textA, textB]) -> wipe()，而 watch 是<b>下一拍</b>才跑的，
+        那时 ran 已经置 true 了 —— 于是刚算出来的结果被当场清空。
+        第二次点的时候文本已经是规范形态、改写成了空操作，watch 不触发，结果才留得住。
+
+        ⚠️ 触发条件是「文本不是规范形态」，而真实入口正好都是：
+        「添加到文本 A/B」灌进来的是 copyProxyHex 的结果，<b>一条封包一行、带换行</b>。
+        所以这个 bug 在真实用法上是必现的，只有手工贴规范形态时才碰不到。
+
+        而改写本来就没有必要了：位置是<b>字节下标</b>，aBytes / bBytes 由 toBytes(textA) 算出来，
+        它自己就会把空白与换行剔掉 —— 排不排版都对得上。
+        （老版本需要改写，是因为那时高亮是 textarea 里的<b>字符</b>区间。）
+    */
     dupRows.value = list
     blocks.value = []
     truncated.value = false
@@ -223,15 +235,27 @@ function go(i: number): void {
 
   if (tcMode.value === 'diff') { dv.value?.scrollToChange(cur.value); return }
 
-  //查重：只高亮这一条，并跳到它在 A 里的第一处（A 没有就用 B 的）
+  //查重：只高亮这一条
   const d = dupRows.value[cur.value]
   if (!d) return
 
   hlA.value = d.PositionsInA.map((p) => [p, d.Length] as [number, number])
   hlB.value = d.PositionsInB.map((p) => [p, d.Length] as [number, number])
 
-  const at = d.PositionsInA.length ? d.PositionsInA[0] : (d.PositionsInB.length ? d.PositionsInB[0] : -1)
-  if (at >= 0) dv.value?.scrollToUnit(at)
+  /*
+      ⚠️ 查重的两侧<b>没有位置对应关系</b>：同一段可能在 A 的 2042、在 B 的 8147。
+      早先只按 A 的位置滚，B 那边看到的是它自己的 2042 —— 用户报的「B 好像不会定位」就是这个。
+
+      修法不是「各滚各的」（那就回到两个独立滚动条了），而是<b>把选中的这一处对齐</b>：
+      短的那一侧头上垫 |posA - posB| 个空格，于是两处并排落在<b>同一行</b>，
+      能直接横着比。padA / padB 由下面那两个 computed 给 DiffView。
+  */
+  const pa = d.PositionsInA.length ? d.PositionsInA[0] : -1
+  const pb = d.PositionsInB.length ? d.PositionsInB[0] : -1
+  const at = Math.max(pa, pb)
+
+  //⚠️ 垫格会重建行，DiffView 的 watch(rows) 会把 scrollTop 归零 —— 必须等它跑完再滚
+  if (at >= 0) nextTick(() => dv.value?.scrollToUnit(at))
 }
 
 const next = (): void => go(cur.value + 1)
@@ -329,6 +353,18 @@ watch([tcMode, tcView], wipe)
 function edit(): void {
   editing.value = !editing.value
 }
+
+/*
+  查重模式下两侧的头部各垫多少格 —— 让选中那一处在 A 与 B 里落到同一行。
+  没选中、或某一侧没有这一段时都是 0（那就退回「各按自己的偏移铺开」）。
+*/
+const dupPad = computed(() => {
+  const d = tcMode.value === 'dup' ? dupRows.value[cur.value] : undefined
+  const pa = d?.PositionsInA[0]
+  const pb = d?.PositionsInB[0]
+  if (pa === undefined || pb === undefined) return { a: 0, b: 0 }
+  return { a: Math.max(0, pb - pa), b: Math.max(0, pa - pb) }
+})
 
 /** 选中的那一条在覆盖率条上是第几段（DiffMap 的 current 要的是段下标，不是片段下标） */
 function covCursor(cov: { blocks: DiffBlock[]; seq: number[] }, side: 'a' | 'b'): number {
@@ -469,6 +505,8 @@ function pickCov(side: 'a' | 'b', segIndex: number): void {
         :blocks="blocks"
         :hl-a="hlA"
         :hl-b="hlB"
+        :pad-a="dupPad.a"
+        :pad-b="dupPad.b"
         @view="(s, e) => { viewStart = s; viewEnd = e }"
       />
 
@@ -725,7 +763,9 @@ function pickCov(side: 'a' | 'b', segIndex: number): void {
 
 .row2 .no { color: var(--dim); }
 .row2 .seq { color: var(--cyan); }
-.row2 .len, .row2 .cnt { text-align: center; color: var(--soft); }
+/* ⚠️ 数字列<b>表头与内容一起</b>居中 —— 只居中内容的话表头还挂在左边，一眼就看得出没对上 */
+.hd-dup > .no, .hd-dup > .len, .hd-dup > .cnt { text-align: center; }
+.row2 .len, .row2 .cnt { color: var(--soft); }
 /* ⚠️ 必须写在 .cnt 之后：这一格的 class 是「cnt sh」，两条特异度相同，平局时后面的赢 */
 .row2 .sh { color: var(--cyan); }
 .row2 .pos2 { color: var(--dim); }
