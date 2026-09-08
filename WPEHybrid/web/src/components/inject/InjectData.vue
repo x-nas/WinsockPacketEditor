@@ -602,7 +602,8 @@ defineExpose({ onCleared })
         <button class="tb" :disabled="!q.trim() || searching" @click="findNext(false)">
           {{ searching ? t('sp.searching') : t('sp.next') }}
         </button>
-        <button class="tb" :disabled="!q.trim() || searching" :title="t('sp.fromHead')" @click="findNext(true)">
+        <!-- ⚠️ 不给 title：它原先写的就是按钮上那四个字，等于把标签又说一遍。旁边「查找下一个」本来就没有，两个也才一致 -->
+        <button class="tb" :disabled="!q.trim() || searching" @click="findNext(true)">
           {{ t('sp.fromHead') }}
         </button>
 
