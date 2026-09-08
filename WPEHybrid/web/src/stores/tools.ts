@@ -35,7 +35,16 @@ export const tcMode = ref<'diff' | 'dup'>('diff')
 */
 export const tcView = ref<'hex' | 'text'>('hex')
 export const tcRegex = ref('')
-export const tcMinBytes = ref(2)
+/*
+  查重的最小片段长度。⚠️ 默认 <b>4 不是 2</b>。
+
+  实测两段各 2048 字节的<b>随机</b>数据，min=2 时报出 65 条「共同片段」—— 全是巧合
+  （两个随机字节撞上的概率是 1/65536，2048² 个位置对里期望就有 64 次）。
+  min=4 时同一组数据是 0 条。2 这个默认值让这张表在真实数据上基本全是噪声。
+
+  ⚠️ WinForms 那边的默认仍是 2（两条线并行），两套 UI 这一项会不一样。
+*/
+export const tcMinBytes = ref(4)
 
 /* ── 异或计算 ── */
 export const xorSrc = shallowRef<Uint8Array>(new Uint8Array(0))

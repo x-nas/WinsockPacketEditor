@@ -18,7 +18,14 @@
        换成工具条上的 ‹ n / N › 前后导航 ＋ 底部一条差异缩略图（DiffMap）。
 
   【查重】不是差异，是「两段里共同出现的字节序列」，所以它<b>保留结果表</b>
-  （那张表本来就是几行，且真的在回答问题），视图切成不对齐的两栏并把命中处标青。
+  （那张表本来就是几行，且真的在回答问题），视图切成不对齐的两栏。2026-09-08 又改了三处：
+
+    ① <b>一次只高亮选中的那一条</b>，不再把所有命中一起点亮。
+       全点亮的结果是一片青，看不出哪段是哪段 —— 而「共同的分布在哪儿」这个问题
+       交给下面两条<b>覆盖率条</b>回答（A / B 各一条，青色是被共同片段盖住的部分）。
+    ② 表里多一列<b>占比</b>（长度 × 次数 ÷ 总字节）：哪一条真正解释了这段数据的大头，
+       按长度排是看不出来的 —— 一条 2 字节出现 40 次，比一条 8 字节出现 1 次占得多。
+    ③ 与「比较」共用同一个 ‹ n / N › 导航（F3 / Shift+F3），走的是<b>片段</b>不是出现位置。
 
   【正则】高亮只在<b>编辑区</b>生效（HiliteArea 的老本行）；「过滤」照旧改写 A/B 两边。
 */
@@ -116,6 +123,58 @@ function runDiff(): void {
 const hlA = ref<Array<[number, number]>>([])
 const hlB = ref<Array<[number, number]>>([])
 
+/* ── 查重：覆盖率 ──────────────────────────────────────────
+   把所有共同片段在某一侧的出现位置并成互不重叠的区间，再摊成 DiffMap 认的块
+   （盖住的记 mod、没盖住的记 same）。⚠️ 同时记下每一段属于哪一条片段 ——
+   点覆盖率条要能跳到对应的那一行。 */
+function coverage(rows: DupRow[], side: 'a' | 'b', total: number) {
+  const marks: Array<{ s: number; e: number; i: number }> = []
+
+  rows.forEach((d, i) => {
+    for (const p of (side === 'a' ? d.PositionsInA : d.PositionsInB)) {
+      marks.push({ s: p, e: p + d.Length, i })
+    }
+  })
+
+  marks.sort((x, y) => x.s - y.s)
+
+  const merged: Array<{ s: number; e: number; i: number }> = []
+  for (const m of marks) {
+    const last = merged[merged.length - 1]
+    if (last && m.s <= last.e) { last.e = Math.max(last.e, m.e); continue }
+    merged.push({ ...m })
+  }
+
+  const blocks: DiffBlock[] = []
+  const seq: number[] = []
+  let at = 0
+
+  for (const m of merged) {
+    const s0 = Math.min(m.s, total)
+    const e0 = Math.min(m.e, total)
+    if (e0 <= s0) continue
+    if (s0 > at) blocks.push({ op: 'same', aStart: at, aLen: s0 - at, bStart: at, bLen: s0 - at })
+    blocks.push({ op: 'mod', aStart: s0, aLen: e0 - s0, bStart: s0, bLen: e0 - s0 })
+    seq.push(m.i)
+    at = e0
+  }
+
+  if (at < total) blocks.push({ op: 'same', aStart: at, aLen: total - at, bStart: at, bLen: total - at })
+
+  const covered = merged.reduce((n, m) => n + Math.min(m.e, total) - Math.min(m.s, total), 0)
+  return { blocks, seq, pct: total ? Math.round((covered / total) * 100) : 0 }
+}
+
+const covA = computed(() => coverage(dupRows.value, 'a', aBytes.value.length))
+const covB = computed(() => coverage(dupRows.value, 'b', bBytes.value.length))
+
+/** 占比：这一条片段一共占了多少字节 ÷ 两边总字节。按长度排看不出「哪条解释了大头」 */
+function share(d: DupRow): number {
+  const total = aBytes.value.length + bBytes.value.length
+  if (!total) return 0
+  return Math.round(((d.Length * (d.CountInA + d.CountInB)) / total) * 100)
+}
+
 async function runDup(): Promise<void> {
   const a = normalize(textA.value), b = normalize(textB.value)
   if (!a || !b) { pushToast('warning', t('tc.needBoth')); return }
@@ -132,13 +191,13 @@ async function runDup(): Promise<void> {
     dupRows.value = list
     blocks.value = []
     truncated.value = false
-    cur.value = -1
     ran.value = true
-    hlA.value = list.flatMap((d) => d.PositionsInA.map((p) => [p, d.Length] as [number, number]))
-    hlB.value = list.flatMap((d) => d.PositionsInB.map((p) => [p, d.Length] as [number, number]))
-
     editing.value = false
-    if (!list.length) pushToast('info', t('tc.noDup'))
+
+    //选中最长的那一条（C# 已按长度倒序），只高亮它 —— 全点亮是一片青，看不出哪段是哪段
+    cur.value = -1
+    if (list.length) nextTick(() => go(0))
+    else { hlA.value = []; hlB.value = []; pushToast('info', t('tc.noDup')) }
   } catch (e) {
     console.error('[tc] 查重失败', e)
   } finally {
@@ -153,10 +212,26 @@ function run(): void {
 
 /* ── 差异之间跳 ────────────────────────────────────────────── */
 
+/** 这一页一共有几处可以跳：比较是差异块，查重是共同片段 */
+const hits = computed(() => (tcMode.value === 'diff' ? changes.value : dupRows.value.length))
+
 function go(i: number): void {
-  if (!changes.value) return
-  cur.value = ((i % changes.value) + changes.value) % changes.value
-  dv.value?.scrollToChange(cur.value)
+  const n = hits.value
+  if (!n) return
+
+  cur.value = ((i % n) + n) % n
+
+  if (tcMode.value === 'diff') { dv.value?.scrollToChange(cur.value); return }
+
+  //查重：只高亮这一条，并跳到它在 A 里的第一处（A 没有就用 B 的）
+  const d = dupRows.value[cur.value]
+  if (!d) return
+
+  hlA.value = d.PositionsInA.map((p) => [p, d.Length] as [number, number])
+  hlB.value = d.PositionsInB.map((p) => [p, d.Length] as [number, number])
+
+  const at = d.PositionsInA.length ? d.PositionsInA[0] : (d.PositionsInB.length ? d.PositionsInB[0] : -1)
+  if (at >= 0) dv.value?.scrollToUnit(at)
 }
 
 const next = (): void => go(cur.value + 1)
@@ -255,19 +330,37 @@ function edit(): void {
   editing.value = !editing.value
 }
 
-//查重那张表点一行，跳到 A 侧第一处
-function pickDup(i: number): void {
-  const d = dupRows.value[i]
-  if (!d || !d.PositionsInA.length) return
-  cur.value = i
-  hlA.value = [[d.PositionsInA[0], d.Length]]
-  hlB.value = d.PositionsInB.length ? [[d.PositionsInB[0], d.Length]] : []
+/** 选中的那一条在覆盖率条上是第几段（DiffMap 的 current 要的是段下标，不是片段下标） */
+function covCursor(cov: { blocks: DiffBlock[]; seq: number[] }, side: 'a' | 'b'): number {
+  const at = cov.seq.indexOf(cur.value)
+  if (at >= 0) return at
+
+  const d = dupRows.value[cur.value]
+  const pos = d ? (side === 'a' ? d.PositionsInA : d.PositionsInB)[0] : undefined
+  if (pos === undefined) return -1
+
+  //按位置找它落在第几段（只数被盖住的那些段，与 DiffMap 的 changeIndex 同一把尺）
+  let i = -1
+  for (const b of cov.blocks) {
+    if (b.op === 'same') continue
+    i++
+    if (pos >= b.aStart && pos < b.aStart + b.aLen) return i
+  }
+
+  return -1
 }
 
-function allDup(): void {
-  cur.value = -1
-  hlA.value = dupRows.value.flatMap((d) => d.PositionsInA.map((p) => [p, d.Length] as [number, number]))
-  hlB.value = dupRows.value.flatMap((d) => d.PositionsInB.map((p) => [p, d.Length] as [number, number]))
+/** 位置太多时只列前几个，完整的挂在 title 上 */
+function brief(list: number[]): string {
+  if (list.length <= 6) return list.join(', ')
+  return list.slice(0, 6).join(', ') + ' … +' + (list.length - 6)
+}
+
+/** 点覆盖率条：DiffMap 给的是「第几段」，换算成「第几条片段」 */
+function pickCov(side: 'a' | 'b', segIndex: number): void {
+  const map = (side === 'a' ? covA.value : covB.value).seq
+  const i = map[segIndex]
+  if (i !== undefined) go(i)
 }
 </script>
 
@@ -289,12 +382,12 @@ function allDup(): void {
         {{ busy ? t('proxy.working') : (tcMode === 'diff' ? t('tc.runDiff') : t('tc.runDup')) }}
       </button>
 
-      <!-- 差异导航：那张几千行的表换成了这一个计数器 -->
-      <template v-if="tcMode === 'diff' && ran">
-        <span class="nav" :class="{ zero: !changes }">
-          <button class="nb" :disabled="!changes" :title="t('tc.prevHit')" @click="prev">‹</button>
-          <b>{{ changes ? cur + 1 : 0 }}</b><span class="sl">/</span><b>{{ changes }}</b>
-          <button class="nb" :disabled="!changes" :title="t('tc.nextHit')" @click="next">›</button>
+      <!-- 导航：比较走差异块、查重走共同片段，同一个计数器 -->
+      <template v-if="ran">
+        <span class="nav" :class="{ zero: !hits }">
+          <button class="nb" :disabled="!hits" :title="t('tc.prevHit')" @click="prev">‹</button>
+          <b>{{ hits ? cur + 1 : 0 }}</b><span class="sl">/</span><b>{{ hits }}</b>
+          <button class="nb" :disabled="!hits" :title="t('tc.nextHit')" @click="next">›</button>
         </span>
         <span v-if="truncated" class="warn">{{ t('tc.tooMany') }}</span>
       </template>
@@ -307,8 +400,8 @@ function allDup(): void {
       <button class="btn" :disabled="!tcRegex" @click="leach">{{ t('tc.leach') }}</button>
 
       <template v-if="tcMode === 'dup'">
-        <span class="lb">{{ t('tc.minBytes') }}</span>
-        <input v-model.number="tcMinBytes" class="inp num" type="number" min="1" max="4096">
+        <span class="lb" :title="t('tc.minHint')">{{ t('tc.minBytes') }}</span>
+        <input v-model.number="tcMinBytes" class="inp num" type="number" min="1" max="4096" :title="t('tc.minHint')">
       </template>
 
       <span class="grow" />
@@ -335,6 +428,25 @@ function allDup(): void {
     <template v-if="ran">
       <!-- ⚠️ 这一条要与下面 DiffView 的两半<b>逐像素对齐</b>：两个等宽半边 + 中缝 38px
            （= .dv-gut 的 26px 宽 + 左右各 6px 外边距）。写死 38 的地方只有这一处与那一处，改一个就要改另一个。 -->
+      <!--
+        查重的覆盖率条：A / B 各一条，青色是被共同片段盖住的部分。
+        它回答的是「共同的集中在头部（协议头）还是散落各处」—— 而这正是
+        「把所有命中一起点亮」答不上来的（那样是一片青）。点一下跳到那一条片段。
+      -->
+      <div v-if="tcMode === 'dup' && dupRows.length" class="cov">
+        <div class="cov-row">
+          <span class="cl">{{ t('tc.textA') }}</span>
+          <DiffMap tone="dup" slim :blocks="covA.blocks" :current="covCursor(covA, 'a')" @pick="(i) => pickCov('a', i)" />
+          <span class="cp">{{ covA.pct }}%</span>
+        </div>
+        <div class="cov-row">
+          <span class="cl">{{ t('tc.textB') }}</span>
+          <DiffMap tone="dup" slim :blocks="covB.blocks" :current="covCursor(covB, 'b')" @pick="(i) => pickCov('b', i)" />
+          <span class="cp">{{ covB.pct }}%</span>
+        </div>
+        <span class="ch">{{ t('tc.covHint') }}</span>
+      </div>
+
       <div class="rh">
         <div class="rhh">
           <span class="rt">{{ t('tc.textA') }}</span>
@@ -378,6 +490,7 @@ function allDup(): void {
             <span class="len">{{ t('col.len') }}</span>
             <span class="cnt">{{ t('tc.countA') }}</span>
             <span class="cnt">{{ t('tc.countB') }}</span>
+            <span class="cnt">{{ t('tc.share') }}</span>
             <span class="pos2">{{ t('tc.posA') }}</span>
             <span class="pos2">{{ t('tc.posB') }}</span>
           </div>
@@ -389,16 +502,17 @@ function allDup(): void {
             :key="i"
             class="row2 hd-dup"
             :class="{ sel: cur === i }"
-            @click="pickDup(i)"
-            @dblclick="allDup"
+            @click="go(i)"
           >
             <span class="no">{{ i + 1 }}</span>
             <span class="seq" :title="d.Sequence">{{ d.Sequence }}</span>
             <span class="len">{{ d.Length }}</span>
             <span class="cnt">{{ d.CountInA }}</span>
             <span class="cnt">{{ d.CountInB }}</span>
-            <span class="pos2" :title="d.PositionsInA.join(', ')">{{ d.PositionsInA.join(', ') }}</span>
-            <span class="pos2" :title="d.PositionsInB.join(', ')">{{ d.PositionsInB.join(', ') }}</span>
+            <span class="cnt sh">{{ share(d) }}%</span>
+            <!-- ⚠️ 位置可能有几十个，全铺出来是一坨读不了的数字。只列前 6 个，完整的挂 title -->
+            <span class="pos2" :title="d.PositionsInA.join(', ')">{{ brief(d.PositionsInA) }}</span>
+            <span class="pos2" :title="d.PositionsInB.join(', ')">{{ brief(d.PositionsInB) }}</span>
           </div>
         </div>
       </div>
@@ -556,11 +670,39 @@ function allDup(): void {
 
 .head.hd-dup, .row2.hd-dup {
   display: grid;
-  grid-template-columns: 60px minmax(160px, 2fr) 70px 80px 80px minmax(120px, 1fr) minmax(120px, 1fr);
+  grid-template-columns: 52px minmax(150px, 2fr) 62px 70px 70px 62px minmax(110px, 1fr) minmax(110px, 1fr);
   gap: 8px;
   padding: 0 14px;
   align-items: center;
 }
+
+/* 覆盖率：两条 12px 的窄条摞起来，右边一句说明 */
+.cov {
+  flex: none;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 4px 8px;
+  padding: 7px 12px;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+
+.cov-row { display: contents; }
+
+.cov .cl {
+  font-family: var(--share);
+  font-size: var(--th-size);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--th-fg);
+}
+
+.cov .cp { font-family: var(--mono); font-size: 11px; color: var(--cyan); text-align: right; min-width: 4ch; }
+
+/* 说明横跨三列、单独一行 */
+.cov .ch { grid-column: 1 / -1; margin-top: 2px; font-size: 11px; color: var(--dim); }
+
 
 .head { position: sticky; top: 0; z-index: 1; height: var(--th-h); background: var(--panel); border-bottom: 1px solid var(--border); }
 
@@ -584,6 +726,8 @@ function allDup(): void {
 .row2 .no { color: var(--dim); }
 .row2 .seq { color: var(--cyan); }
 .row2 .len, .row2 .cnt { text-align: center; color: var(--soft); }
+/* ⚠️ 必须写在 .cnt 之后：这一格的 class 是「cnt sh」，两条特异度相同，平局时后面的赢 */
+.row2 .sh { color: var(--cyan); }
 .row2 .pos2 { color: var(--dim); }
 
 .empty { padding: 16px 14px; color: var(--muted); font-size: 12px; }

@@ -18,7 +18,15 @@ const props = withDefaults(defineProps<{
   /** 视窗覆盖的对齐单位区间 [start, end)，用来画那个方框 */
   viewStart?: number
   viewEnd?: number
-}>(), { current: -1, viewStart: 0, viewEnd: 0 })
+  /*
+    色调。diff = 按 op 分绿/琥珀/红（增/改/删）；
+    dup = 一律青 —— 查重那两条覆盖率条上每一段都是「共同片段」，没有增删改之分，
+    按 op 上色只会让人以为它们不是一回事。青也正是十六进制视图里查重命中的颜色。
+  */
+  tone?: 'diff' | 'dup'
+  /** 高度。覆盖率条比差异条矮一半，两条摞起来才不占地方 */
+  slim?: boolean
+}>(), { current: -1, viewStart: 0, viewEnd: 0, tone: 'diff', slim: false })
 
 const emit = defineEmits<{ (e: 'pick', changeIndex: number): void }>()
 
@@ -107,7 +115,7 @@ function onClick(e: MouseEvent): void {
 </script>
 
 <template>
-  <div class="dmap" @click="onClick">
+  <div class="dmap" :class="[tone, { slim }]" @click="onClick">
     <div v-if="box" class="dm-box" :style="{ left: box.left + '%', width: box.width + '%' }" />
     <div
       v-for="(s, i) in segs"
@@ -152,6 +160,15 @@ function onClick(e: MouseEvent): void {
 .dm-seg.mod { background: var(--amber); }
 .dm-seg.ins { background: var(--green); }
 .dm-seg.del { background: var(--danger); }
+
+/* 查重：一律青，与十六进制视图里命中的那个颜色一致 */
+.dmap.dup .dm-seg { background: var(--cyan); }
+
+.dmap.slim { height: 12px; }
+.dmap.slim .dm-seg { top: 2px; bottom: 2px; }
+
+/* ⚠️ 查重色调下段本身就是青的，光标线再用青就看不见了 —— 换琥珀 */
+.dmap.dup .dm-cur { background: var(--amber); box-shadow: 0 0 6px rgb(var(--amber-rgb) / 70%); }
 
 .dm-cur {
   position: absolute;

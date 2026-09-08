@@ -2502,6 +2502,30 @@ namespace WinsockPacketEditor
                 public List<int> PositionsInB { get; set; } // 在B中的位置列表(字节偏移)
             }
 
+/// <summary>
+            /// 只出「共同片段」那张表，<b>不做下划线遮罩</b>。
+            ///
+            /// ⚠️ <see cref="ComparePackets"/> 还要额外跑一遍 <c>FindCommonSequences</c>（又一趟 O(n·m·L)）
+            /// 才能把没命中的字节涂成下划线 —— 那是 WinForms 那两个只读框的显示方式，
+            /// 外壳<b>根本不读</b>（它自己在十六进制视图上按位置高亮）。以前桥调的是 ComparePackets，
+            /// 那半趟是白算的。
+            /// </summary>
+            public static List<DuplicateInfo> FindDuplicates(string stringA, string stringB, int minBytes)
+            {
+                try
+                {
+                    return AnalyzeContinuousDuplicates(
+                        SplitIntoBytes(CleanAndNormalizeHex(stringA)),
+                        SplitIntoBytes(CleanAndNormalizeHex(stringB)),
+                        minBytes) ?? new List<DuplicateInfo>();
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(FindDuplicates), ex);
+                    return new List<DuplicateInfo>();
+                }
+            }
+
             public static (string TextA, string TextB, List<DuplicateInfo> Duplicates) ComparePackets(string stringA, string stringB, int minBytes)
             {
                 try
@@ -2557,78 +2581,106 @@ namespace WinsockPacketEditor
                 return (string.Empty, string.Empty, new List<DuplicateInfo>());
             }
 
+            /*
+                找出两段字节里共同出现的片段。2026-09-08 重写过，先说清为什么。
+
+                ⚠️ <b>老写法是「先到先得」，不是「最长匹配」。</b> 它对 A 的每个位置 i 从头扫 B，
+                <b>撞上第一个够长的 j 就收工</b>并把 i 往前跳过那一段。实测：
+
+                    A = 11 22 33 44 55 66
+                    B = 11 22 FF FF 22 33 44 55
+
+                    应该报    「22 33 44 55」（4 字节，A@1 B@4）
+                    实际报的是「33 44 55」(3) ＋「11 22」(2)
+
+                 —— 因为 i=0 时先撞上 B@0 的「11 22」，收工之后 i 跳到 2，
+                <b>把 i=1 起那段更长的整个跨过去了</b>。查重这个功能的全部意义就是找最长的共同片段，
+                报一段更短的等于答错。
+
+                现在一趟 DP 求出所有<b>极大</b>公共子串，再按长度从大到小贪心地挑互不重叠的：
+
+                  ① dp[i][j] = A[i]==B[j] ? dp[i-1][j-1]+1 : 0，滚动两行，O(n·m) 时间、O(m) 空间；
+                     「极大」= 再往后一位对不上（或已到头），只有极大的才是一条候选，
+                     否则同一段会被它的每个前缀各报一次。
+                  ② 按长度排序，逐条挑：A 侧和 B 侧的这一段都没被更长的占用才收。
+                     ⚠️ 所以<b>一个位置只归一条</b> —— 上面那例里「11 22」会被「22 33 44 55」挤掉，
+                     这是有意的：否则长片段的每个子片段都会各占一行，表里全是冗余。
+                  ③ 收下之后再回两边数<b>所有</b>出现位置（老版本只从 i / j 往后数，前面的漏掉）。
+
+                顺带快了：老写法是 O(n·m·L)，两段 2048 字节实测 133ms；现在是 O(n·m)。
+            */
             public static List<DuplicateInfo> AnalyzeContinuousDuplicates(List<string> bytes1, List<string> bytes2, int minLength)
             {
+                var duplicates = new List<DuplicateInfo>();
+
                 try
                 {
-                    var duplicates = new List<DuplicateInfo>();
-                    var processedPositionsA = new HashSet<int>();
-                    var processedPositionsB = new HashSet<int>();
+                    if (bytes1 == null || bytes2 == null) { return duplicates; }
+                    if (minLength < 1) { minLength = 1; }
 
-                    // 查找所有连续的重复序列
-                    for (int i = 0; i <= bytes1.Count - minLength; i++)
+                    int n = bytes1.Count;
+                    int m = bytes2.Count;
+                    if (n < minLength || m < minLength) { return duplicates; }
+
+                    //字符串比较换成 int，DP 那两层循环要跑 n×m 次
+                    int[] A = new int[n];
+                    int[] B = new int[m];
+                    for (int i = 0; i < n; i++) { A[i] = Convert.ToInt32(bytes1[i], 16); }
+                    for (int j = 0; j < m; j++) { B[j] = Convert.ToInt32(bytes2[j], 16); }
+
+                    // ① 一趟 DP 收所有极大公共子串
+                    var cands = new List<int[]>();   //[aEnd, bEnd, len]
+                    int[] prev = new int[m + 1];
+                    int[] cur = new int[m + 1];
+
+                    for (int i = 0; i < n; i++)
                     {
-                        if (processedPositionsA.Contains(i)) continue;
-
-                        for (int j = 0; j <= bytes2.Count - minLength; j++)
+                        for (int j = 0; j < m; j++)
                         {
-                            if (processedPositionsB.Contains(j)) continue;
+                            if (A[i] != B[j]) { cur[j + 1] = 0; continue; }
 
-                            // 查找从当前位置开始的最长连续匹配
-                            int matchLen = 0;
-                            while (i + matchLen < bytes1.Count &&
-                                   j + matchLen < bytes2.Count &&
-                                   bytes1[i + matchLen] == bytes2[j + matchLen])
-                            {
-                                matchLen++;
-                            }
+                            int len = prev[j] + 1;
+                            cur[j + 1] = len;
 
-                            // 如果匹配长度满足要求
-                            if (matchLen >= minLength)
-                            {
-                                var sequence = GetSequenceString(bytes1, i, matchLen);
+                            if (len < minLength) { continue; }
+                            if (i + 1 < n && j + 1 < m && A[i + 1] == B[j + 1]) { continue; }   //还能往后长，不是极大
 
-                                // 记录在A中的所有连续出现位置
-                                var positionsInA = new List<int>();
-                                for (int k = i; k <= bytes1.Count - matchLen; k++)
-                                {
-                                    if (CompareSequences(bytes1, k, bytes2, j, matchLen))
-                                    {
-                                        positionsInA.Add(k);
-                                        processedPositionsA.Add(k); // 标记已处理
-                                    }
-                                }
-
-                                // 记录在B中的所有连续出现位置
-                                var positionsInB = new List<int>();
-                                for (int k = j; k <= bytes2.Count - matchLen; k++)
-                                {
-                                    if (CompareSequences(bytes2, k, bytes1, i, matchLen))
-                                    {
-                                        positionsInB.Add(k);
-                                        processedPositionsB.Add(k); // 标记已处理
-                                    }
-                                }
-
-                                if (positionsInA.Count > 0 && positionsInB.Count > 0)
-                                {
-                                    duplicates.Add(new DuplicateInfo
-                                    {
-                                        Sequence = sequence,
-                                        Length = matchLen,
-                                        CountInA = positionsInA.Count,
-                                        CountInB = positionsInB.Count,
-                                        PositionsInA = positionsInA,
-                                        PositionsInB = positionsInB
-                                    });
-                                }
-
-                                // 跳过已匹配的部分
-                                i += matchLen - 1;
-                                j += matchLen - 1;
-                                break;
-                            }
+                            cands.Add(new[] { i, j, len });
                         }
+
+                        int[] swap = prev; prev = cur; cur = swap;
+                        Array.Clear(cur, 0, cur.Length);
+                    }
+
+                    // ② 长的优先，挑互不重叠的
+                    cands.Sort((x, y) => y[2].CompareTo(x[2]));
+
+                    bool[] usedA = new bool[n];
+                    bool[] usedB = new bool[m];
+
+                    foreach (int[] c in cands)
+                    {
+                        int len = c[2];
+                        int aStart = c[0] - len + 1;
+                        int bStart = c[1] - len + 1;
+
+                        if (IsUsed(usedA, aStart, len) || IsUsed(usedB, bStart, len)) { continue; }
+
+                        for (int k = 0; k < len; k++) { usedA[aStart + k] = true; usedB[bStart + k] = true; }
+
+                        // ③ 两边各数一遍所有出现位置（不是只往后数）
+                        List<int> pa = Occurrences(A, A, aStart, len);
+                        List<int> pb = Occurrences(B, A, aStart, len);
+
+                        duplicates.Add(new DuplicateInfo
+                        {
+                            Sequence = GetSequenceString(bytes1, aStart, len),
+                            Length = len,
+                            CountInA = pa.Count,
+                            CountInB = pb.Count,
+                            PositionsInA = pa,
+                            PositionsInB = pb,
+                        });
                     }
 
                     return duplicates.OrderByDescending(d => d.Length).ToList();
@@ -2638,7 +2690,32 @@ namespace WinsockPacketEditor
                     Operate.DoLog(nameof(AnalyzeContinuousDuplicates), ex);
                 }
 
-                return null;
+                return duplicates;
+            }
+
+            private static bool IsUsed(bool[] used, int start, int length)
+            {
+                for (int i = 0; i < length; i++)
+                {
+                    if (used[start + i]) { return true; }
+                }
+                return false;
+            }
+
+            /// <summary>在 <paramref name="hay"/> 里找 <paramref name="needle"/> 的第 start 起 length 个元素，返回所有起点。</summary>
+            private static List<int> Occurrences(int[] hay, int[] needle, int start, int length)
+            {
+                var out_ = new List<int>();
+                int last = hay.Length - length;
+
+                for (int i = 0; i <= last; i++)
+                {
+                    int k = 0;
+                    while (k < length && hay[i + k] == needle[start + k]) { k++; }
+                    if (k == length) { out_.Add(i); }
+                }
+
+                return out_;
             }
 
             private static string GetSequenceString(List<string> bytes, int start, int length)

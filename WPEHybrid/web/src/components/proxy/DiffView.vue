@@ -263,7 +263,20 @@ function scrollToChange(i: number): void {
   el.scrollTop = Math.max(0, at * ROW_H - el.clientHeight / 3)
 }
 
-defineExpose({ scrollToChange })
+/**
+ * 跳到第 unit 个对齐单位。查重模式（plain）没有差异块可跳，跳的是<b>字节位置</b>。
+ */
+function scrollToUnit(unit: number): void {
+  const at = rows.value.findIndex((r) => unit >= r.unit && unit < r.unit + r.n)
+  if (at < 0) return
+
+  const el = scroller.value
+  if (!el) return
+
+  el.scrollTop = Math.max(0, at * ROW_H - el.clientHeight / 3)
+}
+
+defineExpose({ scrollToChange, scrollToUnit })
 
 /* ── 一行里那些格子 ────────────────────────────────────────────── */
 

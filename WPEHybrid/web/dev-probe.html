@@ -39,7 +39,40 @@
     stopRobotEdit: () => { window.__run = null; return { ok: true } },
     getRobotEditProgress: () => { const r = window.__run; if (!r) return { Running: false, Index: -1, Total: 0, Trail: '', Result: 'done' }; const i = Math.floor((Date.now() - r.t0) / 300); if (i >= r.n) { window.__run = null; return { Running: false, Index: r.n - 1, Total: r.n, Trail: Array.from({ length: r.n }, (_, k) => k + 1).join(', '), Result: 'done' } } return { Running: true, Index: i, Total: i, Trail: Array.from({ length: i + 1 }, (_, k) => k + 1).join(', ') } },
     // 四个工具页
-    textDuplicates: (a) => ({ textA: a.a, textB: a.b, rows: [{ Sequence: 'AA BB CC', Length: 3, CountInA: 2, CountInB: 1, PositionsInA: [0, 5], PositionsInB: [2] }] }),
+    // 照 C# 的 AnalyzeContinuousDuplicates 真算一遍，界面上的覆盖率 / 占比 / 导航才验得到
+    textDuplicates: (q) => {
+      const B = (h) => { const c = (h || '').replace(/[^0-9a-fA-F]/g, '').toUpperCase(); const o = []; for (let i = 0; i + 1 < c.length; i += 2) o.push(c.substr(i, 2)); return o };
+      const A = B(q.a), Bb = B(q.b), min = Math.max(1, q.min | 0);
+      const cands = [];
+      let prev = new Array(Bb.length + 1).fill(0);
+      for (let i = 0; i < A.length; i++) {
+        const cur = new Array(Bb.length + 1).fill(0);
+        for (let j = 0; j < Bb.length; j++) {
+          if (A[i] !== Bb[j]) continue;
+          const len = prev[j] + 1; cur[j + 1] = len;
+          if (len < min) continue;
+          if (i + 1 < A.length && j + 1 < Bb.length && A[i + 1] === Bb[j + 1]) continue;
+          cands.push([i, j, len]);
+        }
+        prev = cur;
+      }
+      cands.sort((x, y) => y[2] - x[2]);
+      const uA = new Array(A.length).fill(false), uB = new Array(Bb.length).fill(false);
+      const occ = (hay, needle) => { const o = []; for (let i = 0; i + needle.length <= hay.length; i++) { let k = 0; while (k < needle.length && hay[i + k] === needle[k]) k++; if (k === needle.length) o.push(i) } return o };
+      const rows = [];
+      for (const c of cands) {
+        const len = c[2], as = c[0] - len + 1, bs = c[1] - len + 1;
+        let bad = false;
+        for (let k = 0; k < len; k++) if (uA[as + k] || uB[bs + k]) { bad = true; break }
+        if (bad) continue;
+        for (let k = 0; k < len; k++) { uA[as + k] = true; uB[bs + k] = true }
+        const seq = A.slice(as, as + len);
+        const pa = occ(A, seq), pb = occ(Bb, seq);
+        rows.push({ Sequence: seq.join(' '), Length: len, CountInA: pa.length, CountInB: pb.length, PositionsInA: pa, PositionsInB: pb });
+      }
+      rows.sort((x, y) => y.Length - x.Length);
+      return { rows };
+    },
     transcode: (a) => ({ rows: ['Bytes','ANSI-GBK','UTF7','ANSI-UTF7','UTF8','ANSI-UTF8','UTF16','ANSI-UTF16','UTF32','ANSI-UTF32','Unicode','ANSI-Unicode','base64','ANSI-base64'].map((k, i) => ({ Key: k, Value: i % 2 ? '48 65 6C 6C 6F' : (a.decode ? 'decoded:' : 'encoded:') + a.text })) }),
     extractPick: (a) => ({ Path: 'C:/demo/session.chlsx', Text: ['AA BB CC DD', 'EE FF'].join(String.fromCharCode(10)), Error: '' }),
     extractBytes: (a) => ({ Path: a.name, Text: ['[System]', 'UserCount=1'].join(String.fromCharCode(10)), Error: '' }),

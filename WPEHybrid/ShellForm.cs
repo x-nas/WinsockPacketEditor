@@ -3320,14 +3320,14 @@ namespace WPEHybrid
                 string b = args["b"] == null ? string.Empty : (string)args["b"];
                 int min = args["min"] == null ? 2 : (int)args["min"];
 
-                var r = await Task.Run(() => Operate.SystemConfig.ComparePackets(a, b, Math.Max(1, min)));
+                /*
+                    ⚠️ 用 FindDuplicates 而不是 ComparePackets：后者还要再跑一趟 FindCommonSequences
+                    把没命中的字节涂成下划线 —— 那是 WinForms 那两个只读框的显示方式，
+                    外壳自己在十六进制视图上按位置高亮，<b>从来没读过</b>那两个串。白算了一趟。
+                */
+                var rows = await Task.Run(() => Operate.SystemConfig.FindDuplicates(a, b, Math.Max(1, min)));
 
-                return new
-                {
-                    textA = Operate.SystemConfig.FormatHex(r.TextA ?? string.Empty),
-                    textB = Operate.SystemConfig.FormatHex(r.TextB ?? string.Empty),
-                    rows = r.Duplicates,
-                };
+                return new { rows };
             });
 
             //GBK 浏览器里编不了，14 行结果全在 C# 算
