@@ -759,21 +759,9 @@ async function save(): Promise<void> {
 .sel.half { width: 112px; }
 .sel.grow { flex: 1; width: auto; }
 
-.inp {
-  flex: 1;
-  min-width: 0;
-  height: 28px;
-  padding: 0 10px;
-  background: rgb(var(--inset-rgb) / 30%);
-  border: 1px solid var(--border);
-  color: var(--gray);
-  font-family: var(--mono);
-  font-size: 12.5px;
-  outline: none;
-}
+/* 基样式在 style.css 的 .inp，这里只补布局 */
+.inp { flex: 1; min-width: 0; }
 
-.inp:focus { border-color: var(--cyan); }
-.inp:disabled { opacity: .5; }
 /*
   76px 而不是发送编辑那边的 92px：面板只有 372px 宽，「随机 [从] - [到] 毫秒 插入」和
   「滚动 [向上] 距离 [10] 插入」两行是按这个宽度算出来刚好放下的（实测 88px 时溢出 15–19px，面板底下多一条横向滚动条）。

@@ -430,19 +430,8 @@ function offset(i: number): string { return i.toString(16).toUpperCase().padStar
 .f .v.ty { color: var(--acc-violet); }
 .f .warn { font-size: 11.5px; color: var(--amber); }
 
-.inp {
-  height: 28px;
-  padding: 0 10px;
-  background: rgb(var(--inset-rgb) / 30%);
-  border: 1px solid var(--border);
-  color: var(--gray);
-  font-family: var(--mono);
-  font-size: 12.5px;
-  outline: none;
-}
+/* 基样式在 style.css 的 .inp，这一屏没有需要覆盖的 */
 
-.inp:focus { border-color: var(--cyan); }
-.inp:disabled { opacity: .5; }
 .inp.num { width: 92px; text-align: center; }
 .inp.num.sm { width: 76px; height: 26px; }
 

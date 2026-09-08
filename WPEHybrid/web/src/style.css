@@ -716,16 +716,49 @@ body.col-resizing * {
 .setf .rd.on i { border-color: var(--cyan); }
 .setf .rd.on i::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 5px var(--cyan); }
 
-.setf .inp { flex: 1; min-width: 0; height: 28px; padding: 0 10px; background: rgb(var(--inset-rgb) / 30%); border: 1px solid var(--border); color: var(--gray); font-family: var(--mono); font-size: 12.5px; outline: none; }
-.setf .inp:focus { border-color: var(--cyan); }
-.setf .inp:disabled { opacity: .5; }
+/* ══════════════════════════════════════════════════════════════
+   输入框（.inp）—— 全项目一份
+
+   ⚠️ 这一段以前<b>只有 .setf .inp</b>（设置弹窗那一套），于是不在弹窗里的页面
+   各自在 scoped 里抄一份基样式 —— 一共抄了 <b>14 份</b>，并且已经抄歪了：
+   禁用态透明度 .4 / .5 各半、字号 12.5 / 13、高度 26 / 28 / 30 / 46 都有。
+   （2026-09-08 重做文本对比页时我顺手把那份删了，两个框当场退回浏览器原生外观，
+   就是被这条坑出来的。）
+
+   现在基样式在这儿，组件里<b>只留自己真正不同的那几条</b>（多半是 flex / min-width
+   这类布局，不是外观）。⚠️ <b>flex 与 min-width 刻意不进这里</b> ——
+   那是「这个框在它那一行里占多宽」，各屏不同，放进来会把没设过的那几屏挤变形。
+
+   两处刻意<b>没有</b>并进来，它们不是同一个控件：
+     · EncryptPassword 的密码框（30px 高、右边留 34px 给眼睛图标、13px 字、带字距）
+     · InstanceView 的路径条（46px 高、无边框只有左边一道线、聚焦是底色不是边框色）
+   ══════════════════════════════════════════════════════════════ */
+
+.inp {
+  height: 28px;
+  padding: 0 10px;
+  background: rgb(var(--inset-rgb) / 30%);
+  border: 1px solid var(--border);
+  color: var(--gray);
+  font-family: var(--mono);
+  font-size: 12.5px;
+  outline: none;
+  /* body 上是 user-select: none，输入框里的内容要能选中复制 */
+  user-select: text;
+}
+
+.inp:focus { border-color: var(--cyan); }
+.inp:disabled { opacity: .5; }
+.inp::placeholder { color: var(--dim); }
+
+/* 设置弹窗里的只差「占满这一行」这一条，外观全走上面那份 */
+.setf .inp { flex: 1; min-width: 0; }
 .setf .inp.bad { border-color: var(--danger); }
 .setf .inp.num { flex: none; width: 90px; text-align: center; }
 .setf .inp.sm { flex: none; width: 160px; }
 .setf .inp.cap-key { cursor: pointer; caret-color: transparent; }
 .setf .inp.cap-key:focus { border-color: var(--green); box-shadow: inset 0 0 0 1px rgb(var(--green-rgb) / 25%); }
 .setf textarea.inp { height: 84px; padding: 6px 10px; resize: vertical; line-height: 1.5; }
-.setf .inp::placeholder { color: var(--dim); }
 
 .setf .sbtn { flex: none; padding: 8px 11px 6px; background: transparent; border: 1px solid var(--border); color: var(--gray); font-family: var(--share); font-size: var(--btn-size); line-height: 1; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; white-space: nowrap; }
 .setf .sbtn:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); }

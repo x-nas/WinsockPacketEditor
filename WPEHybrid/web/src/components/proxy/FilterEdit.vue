@@ -1114,23 +1114,9 @@ async function save(): Promise<void> {
 */
 .row.off > .k { opacity: .45; }
 
-.inp {
-  flex: 1;
-  min-width: 0;
-  height: 28px;
-  padding: 0 10px;
-  background: rgb(var(--inset-rgb) / 30%);
-  border: 1px solid var(--border);
-  color: var(--gray);
-  font-family: var(--mono);
-  font-size: 12.5px;
-  outline: none;
-  user-select: text;
-}
+/* 基样式在 style.css 的 .inp，这里只补布局 */
+.inp { flex: 1; min-width: 0; }
 
-.inp:focus { border-color: var(--cyan); }
-.inp:disabled { opacity: .4; }
-.inp::placeholder { color: var(--dim); }
 .inp.num { flex: none; width: 92px; font-variant-numeric: tabular-nums; }
 
 .mini {

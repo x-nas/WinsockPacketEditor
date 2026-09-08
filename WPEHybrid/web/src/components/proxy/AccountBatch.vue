@@ -343,22 +343,9 @@ async function exportRows(): Promise<void> {
 .rd.on i::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 5px var(--cyan); }
 .rd:focus-visible { outline-offset: 2px; outline-color: var(--cyan); }
 
-.inp {
-  height: 28px;
-  min-width: 0;
-  padding: 0 10px;
-  background: rgb(var(--inset-rgb) / 30%);
-  border: 1px solid var(--border);
-  color: var(--gray);
-  font-family: var(--mono);
-  font-size: 12.5px;
-  outline: none;
-  user-select: text;
-}
+/* 基样式在 style.css 的 .inp，这里只补布局 */
+.inp { min-width: 0; }
 
-.inp:focus { border-color: var(--cyan); }
-.inp:disabled { opacity: .4; }
-.inp::placeholder { color: var(--dim); }
 .inp.num { width: 84px; font-variant-numeric: tabular-nums; }
 .inp.dt { width: 200px; }
 .inp.pf { flex: 1; }

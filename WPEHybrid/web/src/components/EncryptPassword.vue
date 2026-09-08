@@ -293,8 +293,6 @@ function onKey(e: KeyboardEvent): void {
   user-select: text;
 }
 
-.inp:focus { border-color: var(--cyan); }
-.inp:disabled { opacity: .5; }
 
 .eye {
   position: absolute;

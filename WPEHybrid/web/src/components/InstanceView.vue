@@ -355,10 +355,19 @@ function sizeText(n: number): string {
   user-select: text;
 }
 
-.inp:focus { background: rgb(var(--cyan-rgb) / 6%); }
+/*
+  ⚠️ <b>border-left-color 必须自己写一遍。</b>
+
+  style.css 里现在有一条全局「.inp:focus { border-color: var(--cyan) }」，
+  它是 (0,2,0)，与这里的「.inp[data-v-…]」（也是 (0,2,0)）打平 ——
+  平局时 style.css 赢（main.ts 里组件样式在前、style.css 在后）。
+  于是这个路径条一聚焦左边那道线会变青，而它的聚焦提示<b>本来是底色</b>。
+
+  写成「.inp:focus」+ scoped 之后是 (0,3,0)，稳赢，不再依赖顺序。
+*/
+.inp:focus { background: rgb(var(--cyan-rgb) / 6%); border-left-color: var(--border); }
 .inp.bad { color: var(--danger); }
 .inp.ro { color: var(--muted); background: transparent; }
-.inp::placeholder { color: var(--dim); }
 
 .browse {
   height: 46px;

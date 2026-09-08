@@ -131,21 +131,8 @@ async function save(): Promise<void> {
 .hint { padding: 0 20px 0 124px; margin: 0 0 6px; font-size: 11.5px; color: var(--dim2); }
 .hint.warn { color: var(--amber); padding-left: 20px; margin-top: 6px; }
 
-.inp {
-  flex: 1;
-  min-width: 0;
-  height: 28px;
-  padding: 0 10px;
-  background: rgb(var(--inset-rgb) / 30%);
-  border: 1px solid var(--border);
-  color: var(--gray);
-  font-family: var(--mono);
-  font-size: 12.5px;
-  letter-spacing: .04em;
-  outline: none;
-}
-
-.inp:focus { border-color: var(--cyan); }
+/* 基样式在 style.css 的 .inp。这里填的是包头十六进制，加一点字距好数字节 */
+.inp { flex: 1; min-width: 0; letter-spacing: .04em; }
 
 /* 下拉是自绘的 CyberSelect，这里只给它在这一行里的宽度 */
 .sel { flex: 1; min-width: 0; }

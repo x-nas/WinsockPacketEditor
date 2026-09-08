@@ -457,20 +457,8 @@ async function save(): Promise<void> {
 .row > .k { font-size: 12.5px; color: var(--muted); }
 .row > .v { display: flex; align-items: center; gap: 12px; min-width: 0; }
 
-.inp {
-  flex: 1;
-  min-width: 0;
-  height: 28px;
-  padding: 0 10px;
-  background: rgb(var(--inset-rgb) / 30%);
-  border: 1px solid var(--border);
-  color: var(--gray);
-  font-family: var(--mono);
-  font-size: 12.5px;
-  outline: none;
-}
-
-.inp:focus { border-color: var(--cyan); }
+/* 基样式在 style.css 的 .inp，这里只补布局 */
+.inp { flex: 1; min-width: 0; }
 
 .runbar {
   display: flex;

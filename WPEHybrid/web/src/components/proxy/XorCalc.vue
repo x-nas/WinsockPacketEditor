@@ -158,18 +158,8 @@ function useOut(): void {
 
 .lb { flex: none; font-size: 12px; color: var(--muted); white-space: nowrap; }
 
-.inp {
-  height: 28px;
-  padding: 0 10px;
-  background: rgb(var(--inset-rgb) / 30%);
-  border: 1px solid var(--border);
-  color: var(--gray);
-  font-family: var(--mono);
-  font-size: 12.5px;
-  outline: none;
-}
+/* 基样式在 style.css 的 .inp，这一屏没有需要覆盖的 */
 
-.inp:focus { border-color: var(--cyan); }
 .inp.key { flex: 0 1 380px; min-width: 160px; }
 .inp.key.bad { border-color: var(--danger); color: var(--danger); }
 

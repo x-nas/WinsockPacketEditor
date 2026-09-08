@@ -591,19 +591,7 @@ function pickCov(side: 'a' | 'b', segIndex: number): void {
 .grow { flex: 1; }
 .lb { flex: none; color: var(--muted); font-size: var(--btn-size); font-family: var(--share); letter-spacing: .1em; }
 
-.inp {
-  height: 28px;
-  padding: 0 10px;
-  background: rgb(var(--inset-rgb) / 30%);
-  border: 1px solid var(--border);
-  color: var(--gray);
-  font-family: var(--mono);
-  font-size: 12.5px;
-  outline: none;
-}
-
-.inp::placeholder { color: var(--dim); }
-.inp:focus { border-color: var(--cyan); }
+/* 基样式在 style.css 的 .inp，这一屏没有需要覆盖的 */
 
 .inp.rx { flex: 1; min-width: 160px; }
 .inp.rx.bad { border-color: var(--danger); color: var(--danger); }

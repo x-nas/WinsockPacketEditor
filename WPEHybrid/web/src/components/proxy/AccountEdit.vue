@@ -274,22 +274,9 @@ async function save(): Promise<void> {
 .chk.on i::after { content: ""; position: absolute; inset: 2px; background: var(--green); }
 .chk:focus-visible { outline-offset: 2px; }
 
-.inp {
-  flex: 1;
-  min-width: 0;
-  height: 28px;
-  padding: 0 10px;
-  background: rgb(var(--inset-rgb) / 30%);
-  border: 1px solid var(--border);
-  color: var(--gray);
-  font-family: var(--mono);
-  font-size: 12.5px;
-  outline: none;
-  user-select: text;
-}
+/* 基样式在 style.css 的 .inp，这里只补布局 */
+.inp { flex: 1; min-width: 0; }
 
-.inp:focus { border-color: var(--cyan); }
-.inp:disabled { opacity: .4; }
 .inp:read-only { color: var(--muted); background: rgb(var(--inset-rgb) / 15%); }
 .inp.num { flex: none; width: 110px; font-variant-numeric: tabular-nums; }
 .inp.dt { flex: none; width: 200px; }

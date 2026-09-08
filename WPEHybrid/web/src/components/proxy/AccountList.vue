@@ -572,20 +572,8 @@ async function io(method: 'importAccounts' | 'exportAccounts'): Promise<void> {
   transform: translateY(-50%);
 }
 
-.inp {
-  height: 26px;
-  padding: 0 10px;
-  background: rgb(var(--inset-rgb) / 30%);
-  border: 1px solid var(--border);
-  color: var(--gray);
-  font-family: var(--mono);
-  font-size: 12.5px;
-  outline: none;
-  user-select: text;
-}
-
-.inp:focus { border-color: var(--cyan); }
-.inp::placeholder { color: var(--dim); }
+/* 基样式在 style.css 的 .inp。这一屏的框在工具条上，比表单里的矮 2px */
+.inp { height: 26px; }
 
 /* 到期日区间。没填时整块压暗，填了就点亮，一眼能看出筛选是否生效 */
 .rng {
