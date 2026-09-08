@@ -246,6 +246,57 @@ function schedule(): void {
   timer = window.setTimeout(render, DELAY)
 }
 
+/**
+ * 光标此刻指着谁 —— 鼠标移动与滚动共用这一段。
+ *
+ * @param reposition 目标可能被挪了位置（滚动那条路），盒子要跟着走
+ */
+function track(reposition: boolean): void {
+  const el = pick(lastX, lastY)
+
+  //还停在同一个目标上：已经弹出来的就别动，正在等的也别重新计时
+  if (el === host && host) {
+    if (reposition && box && box.style.display === 'block') place(host, box)
+    return
+  }
+
+  //离开了原来那个：先把它的 title 放回去
+  if (host) hide()
+
+  if (!el) return
+
+  //⚠️ 立刻摘，别等计时器 —— 否则原生提示会赶在前面弹出来（见 claim 上面那段）
+  claim(el)
+  schedule()
+}
+
+/*
+  ⚠️ <b>滚动不能一律 hide。</b>
+
+  用户报的是「封包列表在不停进新封包时，提示<b>根本弹不出来</b>，等它不动了才行」——
+  病根就在这儿：封包列表跟随底部时<b>每一拍都在改 scrollTop</b>，而改 scrollTop
+  是会真的派发 scroll 事件的。原来这条捕获阶段的监听二话不说就 hide()，
+  于是每帧把提示杀一次；更糟的是鼠标没动就<b>再也没有 pointermove 来重新接管</b>，
+  提示一去不回，而 title 已经被还回去了 —— 原生那个灰框反倒有机会冒出来。
+
+  真正要防的只有一件事：<b>提示指向的那个东西被滚走了</b>（盒子是 fixed 的，
+  会停在原地指着一个已经换了内容的位置）。所以：
+
+    · 滚的容器<b>不包含</b>当前目标 —— 它根本没动，什么都不用做（封包列表就是这一支，
+      每帧都滚，这里直接 return，连 elementFromPoint 都不跑）；
+    · 包含 —— 按光标最后的位置重新认一次：还是它就让盒子跟着挪，换人了才收。
+*/
+function onScroll(e: Event): void {
+  //没有目标就没有要维护的东西 —— 封包列表刷屏时绝大多数时候走的是这一句
+  if (!host) return
+
+  const t = e.target as Node | null
+  const whole = t === document || t === document.documentElement || t === document.body
+  if (!whole && !(t && t.contains(host))) return
+
+  track(true)
+}
+
 export function installTooltip(): void {
   //幂等：main.ts 与探针页都会调，别装两遍
   if ((window as any).__wpeTip) return
@@ -255,30 +306,19 @@ export function installTooltip(): void {
     lastX = e.clientX
     lastY = e.clientY
 
-    const el = pick(lastX, lastY)
-
-    //还停在同一个目标上：已经弹出来的就别动，正在等的也别重新计时
-    if (el === host && host) return
-
-    //离开了原来那个：先把它的 title 放回去
-    if (host) hide()
-
-    if (!el) return
-
-    //⚠️ 立刻摘，别等计时器 —— 否则原生提示会赶在前面弹出来（见 claim 上面那段）
-    claim(el)
-    schedule()
+    track(false)
   }, { passive: true, capture: true })
 
   /*
     这几条都要收，少一条就会留下一个「指向的东西已经不在那儿了」的浮框：
       · 滚动 —— 提示是 fixed 的，页面一滚它就停在原地（与 ContextMenu 同一个坑，
-        同样要用捕获阶段，滚动容器不冒泡也收得到）
+        同样要用捕获阶段，滚动容器不冒泡也收得到）。
+        ⚠️ 但<b>不能一律 hide</b>，见 onScroll 上面那段。
       · 点击 —— 点完多半是要看结果，浮框挡着碍事
       · 按键 —— Esc 之外，开始打字时也该让开
       · 窗口失焦 / 鼠标移出文档
   */
-  document.addEventListener('scroll', hide, { passive: true, capture: true })
+  document.addEventListener('scroll', onScroll, { passive: true, capture: true })
   document.addEventListener('pointerdown', hide, { passive: true, capture: true })
   document.addEventListener('keydown', hide, { passive: true, capture: true })
   window.addEventListener('blur', hide)
