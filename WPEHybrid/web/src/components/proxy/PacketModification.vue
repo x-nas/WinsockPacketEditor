@@ -270,26 +270,7 @@ function close(): void { emit('close') }
 .hx-meta { padding-top: 2px; font-family: Consolas, monospace; font-size: var(--th-size); color: var(--gray); }
 
 /* 改写前 / 改写后：与代理数据页的面板同一对按钮 */
-.hx-seg { display: flex; border: 1px solid var(--border); }
-
-.hx-segb {
-  padding: 7px 10px 5px;
-  background: transparent;
-  border: 0;
-  font-family: var(--share);
-  font-size: var(--btn-size);
-  line-height: 1;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.hx-segb + .hx-segb { border-left: 1px solid var(--border); }
-.hx-segb.after { color: var(--green-soft); }
-.hx-segb.before { color: var(--cyan-soft2); }
-.hx-segb.after.on { color: var(--green); background: rgb(var(--green-rgb) / 12%); }
-.hx-segb.before.on { color: var(--cyan); background: rgb(var(--cyan-rgb) / 12%); }
+/* .hx-seg / .hx-segb 在 style.css 里 —— 原先这儿有一份抄件，已删 */
 
 /* 差异表 */
 .tbl {

@@ -762,9 +762,17 @@ async function runAccept(): Promise<void> {
           <button v-if="q" class="sx" :title="t('sp.clear')" @click="clearSearch">×</button>
         </span>
 
-        <button class="chk" :class="{ on: qHex }" :title="t('sp.modeHint')" @click="qHex = !qHex">
-          <i />{{ qHex ? t('sp.hex') : t('sp.text') }}
-        </button>
+        <!--
+          ⚠️ 这里<b>不能用勾选框</b>：它原先是一个 .chk，标签跟着自己的状态变
+          （勾上＝绿＝「十六进制」，点一下变成没勾＝「文本」），读起来成了
+          「『文本』这一项没勾选」—— 而这是二选一，没有「都不选」这个态。
+          换成与十六进制面板同一套的分段按钮：两格都摆出来，亮着的那格就是当前值，
+          颜色也跟那边对齐（绿＝十六进制、青＝文本）。
+        -->
+        <div class="hx-seg" :title="t('sp.modeHint')">
+          <button class="hx-segb after" :class="{ on: qHex }" @click="qHex = true">{{ t('sp.hex') }}</button>
+          <button class="hx-segb before" :class="{ on: !qHex }" @click="qHex = false">{{ t('sp.text') }}</button>
+        </div>
         <button class="tb" :disabled="!q.trim() || searching" @click="findNext(false)">
           {{ searching ? t('sp.searching') : t('sp.next') }}
         </button>

@@ -366,10 +366,7 @@ watch(() => props.id, () => { asText.value = null })
 }
 
 /* 改写前 / 改写后：两格共用一个边框盒，选中的一格提亮 */
-.hx-seg { display: flex; border: 1px solid var(--wpe-line); }
-
-/* 文本 / 十六进制那一组靠右端 —— 与左边那些计数分开，读起来是两组东西 */
-.hx-seg.right { margin-left: auto; }
+/* .hx-seg / .hx-segb 在 style.css 里，两个数据页的查找框也在用 —— 别在这儿再抄一份 */
 
 /*
   文本视图。等宽字 + 保留空白与换行，横向溢出自己滚（HTTP 头里有很长的单行）。
@@ -388,47 +385,6 @@ watch(() => props.id, () => { asText.value = null })
   user-select: text;
   cursor: text;
 }
-
-.hx-segb {
-  padding: 7px 10px 5px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
-  background: transparent;
-  border: 0;
-  font-family: var(--share);
-  font-size: var(--btn-size);
-  /* 显式 1：Share Tech Mono 在 line-height: normal 下会把行距全压在字的下面，字号一大就明显偏上（实测） */
-  line-height: 1;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--wpe-muted);
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-/* 中缝：只给后一格加左边框，两格之间才是一条线而不是两条 */
-.hx-segb + .hx-segb { border-left: 1px solid var(--wpe-line); }
-
-/*
-  两格<b>各有各的色相</b>，而且未选中时也带着自己的颜色 ——
-  原来两格同色，只有底色深浅的区别，扫一眼分不出正在看哪一份，
-  非得读标签不可。现在按颜色就能认：绿=改写后（当前实际发出去的），
-  青=改写前（原始包）。
-
-  <b>改写前刻意不用琥珀</b>：琥珀已经是下面正文里"这一位被改过"的标记色，
-  再拿它当视图开关会把两件事混在一起。青是本项目的次要强调色，正好空着。
-
-  选中 9.5–12.5，未选中 4.9–5.4（对 --wpe-head）—— 亮度差两倍多，
-  加上选中态那层底色，选没选一眼就分得出，而未选中的也仍然读得清。
-*/
-.hx-segb.after { color: #5aa080; }
-.hx-segb.before { color: #5b93a6; }
-
-.hx-segb.after:hover { color: var(--wpe-accent); }
-.hx-segb.before:hover { color: var(--cyan); }
-
-.hx-segb.after.on { color: var(--wpe-accent); background: rgb(var(--green-rgb) / 12%); }
-.hx-segb.before.on { color: var(--cyan); background: rgb(var(--cyan-rgb) / 12%); }
-
-.hx-segb:focus-visible { outline-offset: -2px; }
 
 .hx-meta.dim { color: var(--wpe-muted); }
 .hx-meta.bad { color: #f48771; }

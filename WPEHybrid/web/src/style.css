@@ -760,6 +760,64 @@ body.col-resizing * {
 
 
 /* ══════════════════════════════════════════════════════════════
+   分段按钮（.hx-seg / .hx-segb）—— 「二选一」的那种控件
+
+   ⚠️ <b>二选一不要做成勾选框。</b> 这一段是被用户问出来的：查找框旁边那个
+   「文本 / 十六进制」原先是<b>一个 .chk 勾选框，标签跟着自己的状态变</b> ——
+   勾上是绿的、写着「十六进制」，点一下变成没勾、写着「文本」。
+   于是它读起来是「『文本』这一项没有勾选」，而那根本不是一个可以不勾的东西。
+   勾选框表达的是「这一项开还是关」，标签必须是<b>不变</b>的；
+   两个互斥的取值该用分段按钮，两格都摆出来、亮着的那格就是当前值。
+
+   两格<b>各有各的色相</b>，未选中时也带着自己的颜色 —— 原来两格同色、
+   只有底色深浅之别，扫一眼分不出正在看哪一份，非得读标签不可。
+   现在按颜色就能认：<b>绿 = 十六进制 / 改写后</b>，<b>青 = 文本 / 改写前</b>。
+   （改写前刻意不用琥珀：琥珀已经是正文里「这一位被改过」的标记色。）
+
+   .after / .before 是<b>颜色槽</b>（绿 / 青），不是「后 / 前」的意思 ——
+   十六进制面板拿它们同时表达了「改写后 / 改写前」与「十六进制 / 文本」两对。
+
+   原先 HexPanel 与 PacketModification 各抄了一份（padding 相同、颜色一份写死
+   一份用令牌、hover 与焦点环只有一份有），这里合成一份。
+   ⚠️ 未选中态一定要用令牌：写死的 #5aa080 / #5b93a6 是<b>深色那一档的值</b>，
+   浅色下不会跟着变 —— 那正是「组件里写死的弱化色」这一类的老毛病。
+   ══════════════════════════════════════════════════════════════ */
+
+.hx-seg { display: flex; border: 1px solid var(--border); }
+
+/* 靠右端 —— 与左边那些计数分开，读起来是两组东西 */
+.hx-seg.right { margin-left: auto; }
+
+.hx-segb {
+  padding: 7px 10px 5px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
+  background: transparent;
+  border: 0;
+  font-family: var(--share);
+  font-size: var(--btn-size);
+  /* 显式 1：Share Tech Mono 在 line-height: normal 下会把行距全压在字的下面，字号一大就明显偏上（实测） */
+  line-height: 1;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* 中缝：只给后一格加左边框，两格之间才是一条线而不是两条 */
+.hx-segb + .hx-segb { border-left: 1px solid var(--border); }
+
+.hx-segb.after { color: var(--green-soft); }
+.hx-segb.before { color: var(--cyan-soft2); }
+
+.hx-segb.after:hover { color: var(--green); }
+.hx-segb.before:hover { color: var(--cyan); }
+
+.hx-segb.after.on { color: var(--green); background: rgb(var(--green-rgb) / 12%); }
+.hx-segb.before.on { color: var(--cyan); background: rgb(var(--cyan-rgb) / 12%); }
+
+.hx-segb:focus-visible { outline-offset: -2px; }
+
+/* ══════════════════════════════════════════════════════════════
    封包表的工具条（.gtool）—— 代理数据页与注入封包页共用
 
    两屏的工具条结构一模一样：查找框 + 文本/十六进制 + 查找下一个 /
@@ -799,6 +857,7 @@ body.col-resizing * {
 */
 .gtool > .tb,
 .gtool > .chk,
+.gtool > .hx-seg,
 .gtool > .num,
 .gtool > .lbl,
 .gtool > .pair,
@@ -853,6 +912,9 @@ body.col-resizing * {
   搜索框吃掉工具条的剩余空间 —— 它后面的勾选框因此自动靠右，
   不再需要一根占位撑杆。min-width: 0 是必须的：flex 项的默认最小宽度是内容宽度。
 */
+/* 与旁边的 .tb 齐高：.tb 是 padding 8px …… 6px，分段按钮默认 7 / 5，补这 2px */
+.gtool .hx-segb { padding-top: 8px; padding-bottom: 6px; }
+
 .gtool .search {
   flex: 1;
   /*
