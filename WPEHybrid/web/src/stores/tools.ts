@@ -26,6 +26,14 @@ export interface DupRow {
 export const textA = ref('')
 export const textB = ref('')
 export const tcMode = ref<'diff' | 'dup'>('diff')
+/*
+  对齐粒度：hex = 按字节、text = 按行。
+
+  默认十六进制 —— 这一页的主力输入是封包列表右键「添加到文本 A/B」灌进来的十六进制
+  （copyProxyHex 的结果），按字符比毫无意义。⚠️ 内容不像十六进制时<b>不自动切</b>，
+  只在工具条上挂一句提示：自动切了用户不知道发生过什么。
+*/
+export const tcView = ref<'hex' | 'text'>('hex')
 export const tcRegex = ref('')
 export const tcMinBytes = ref(2)
 
