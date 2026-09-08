@@ -29,6 +29,17 @@
   ⚠️ 新建的元素<b>不会</b>产生 attributes 记录：Vue 是在元素还没插进文档时就 setAttribute 的。
   所以观察器必须<b>同时</b>盯 childList，对每一批新加进来的子树再扫一遍。
 
+  【键盘聚焦也要弹，只是弹的是我们自己那个盒子】
+  摘光 title 之后 Tab 过去就<b>什么都不弹</b>了 —— 而原生在聚焦时弹提示本来是一件对的事
+  （键盘用户与读屏用户就靠它知道这颗图标按钮是干什么的），不该顺手一起丢掉。
+  所以 focusin 那条路自己补一个盒子出来，位置 / 外观 / 延时与鼠标那条完全一样。
+
+  ⚠️ <b>只认键盘来的焦点，点出来的不算。</b>点一颗按钮也会让它获得焦点，
+  跟着弹一个提示是纯粹的打扰 —— 用户刚点完，已经知道那是什么了。
+  判据是「最近 300ms 内有没有按下过指针」，不是 <b>:focus-visible</b>：
+  后者在浏览器面板没有系统焦点时<b>根本不匹配</b>（本项目已经栽过一次），
+  拿它当闸门等于让这条路在自动化验证里永远走不到，出了问题也看不出来。
+
   【为什么用 elementFromPoint，不是给每个元素挂 mouseenter】
   两条理由，第二条是硬的：
     ① 169 个元素挂 338 个监听器，还要跟着 v-if / 虚拟滚动增删；
@@ -72,6 +83,17 @@ let lastY = 0
   后者是调用点自己写的、值也会变。全局只建一个，换目标时 disconnect 再 observe。
 */
 let watcher: MutationObserver | null = null
+
+/**
+ * 当前这个提示是<b>键盘聚焦</b>弹出来的吗（false = 鼠标指出来的）。
+ *
+ * 两条路的差别只在「谁决定它该收起来」：鼠标那条看光标还在不在目标上，
+ * 键盘这条看焦点还在不在目标上。滚动时的处理也因此不同（见 onScroll）。
+ */
+let viaKey = false
+
+/** 最近一次按下指针的时刻 —— 用来把「点出来的焦点」挡在门外，见 onFocusIn。 */
+let lastDown = 0
 
 /*
   把一个元素的 title 挪到 data-tip 上。摘完就不再还回去了。
@@ -228,6 +250,8 @@ function hide(): void {
     host = null
   }
 
+  viaKey = false
+
   if (box) box.style.display = 'none'
 }
 
@@ -257,6 +281,42 @@ function track(reposition: boolean): void {
 
   //⚠️ 立刻摘，别等计时器 —— 否则原生提示会赶在前面弹出来（见 claim 上面那段）
   claim(el)
+  viaKey = false
+  schedule()
+}
+
+/*
+  键盘把焦点挪到了一个带提示的东西上 —— 补一个自绘的盒子。
+
+  ⚠️ <b>点出来的焦点不算</b>（见文件头）：点一颗按钮也会让它聚焦，跟着弹提示是打扰。
+  300ms 这个窗口足够盖住「pointerdown → 焦点落定」这一段，又短到「点完之后再按 Tab」
+  仍然算键盘。
+
+  ⚠️ 焦点落在哪个元素上，与提示写在哪个元素上<b>不一定是同一个</b>
+  （常见的是按钮里套一个 svg，或者提示写在外面那层包装上），所以要 closest 往上找一层。
+*/
+function onFocusIn(e: FocusEvent): void {
+  if (Date.now() - lastDown < 300) return
+
+  const at = e.target as HTMLElement | null
+  if (!at || typeof at.closest !== 'function') return
+
+  const el = at.closest('[data-tip], [title]') as HTMLElement | null
+  if (!el) return
+
+  //⚠️ 保险：这个元素可能是「刚插进来、全局观察器的微任务还没跑」就被 Tab 到了
+  harvest(el)
+  if (!textOf(el)) return
+
+  if (el === host) return
+
+  if (host) hide()
+
+  host = el
+  viaKey = true
+  watch(el)
+
+  //与鼠标那条同样等 DELAY 再画：一路按住 Tab 扫过去时不会一路闪
   schedule()
 }
 
@@ -279,6 +339,17 @@ function track(reposition: boolean): void {
 function onScroll(e: Event): void {
   //没有目标就没有要维护的东西 —— 封包列表刷屏时绝大多数时候走的是这一句
   if (!host) return
+
+  /*
+    ⚠️ 键盘那条路不能拿光标位置去重认目标 —— 光标可能停在屏幕上任意一处，
+    与聚焦的那个元素毫无关系，一滚就会把提示判给别人（或者直接收掉）。
+    焦点还在谁身上是<b>确定</b>的，所以只让盒子跟着它挪。
+  */
+  if (viaKey) {
+    if (!host.isConnected) { hide(); return }
+    if (box && box.style.display === 'block') place(host, box)
+    return
+  }
 
   const t = e.target as Node | null
   const whole = t === document || t === document.documentElement || t === document.body
@@ -335,8 +406,23 @@ export function installTooltip(): void {
       · 窗口失焦 / 鼠标移出文档
   */
   document.addEventListener('scroll', onScroll, { passive: true, capture: true })
-  document.addEventListener('pointerdown', hide, { passive: true, capture: true })
+
+  //⚠️ 记时刻要在 hide 之前 —— onFocusIn 靠它把「点出来的焦点」挡掉
+  document.addEventListener('pointerdown', () => { lastDown = Date.now(); hide() },
+    { passive: true, capture: true })
+
+  /*
+    ⚠️ 按键仍然一律收，<b>连 Tab 也不例外</b>，而且这正是键盘那条路要的顺序：
+    Tab 的 keydown 先到（收掉上一个），焦点随后落定，focusin 再把新的那个弹出来。
+    在这里给 Tab 开后门反而会留下一个指着旧元素的浮框。
+  */
   document.addEventListener('keydown', hide, { passive: true, capture: true })
+
+  document.addEventListener('focusin', onFocusIn, { passive: true, capture: true })
+
+  //焦点走了就收 —— 鼠标那条路不受影响（它的 host 不是聚焦出来的）
+  document.addEventListener('focusout', () => { if (viaKey) hide() },
+    { passive: true, capture: true })
   window.addEventListener('blur', hide)
   document.addEventListener('mouseleave', hide)
 }
