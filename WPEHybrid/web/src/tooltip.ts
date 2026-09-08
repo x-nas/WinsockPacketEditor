@@ -7,25 +7,27 @@
   好几次「抄着抄着就不一样了」）。这里改成<b>事件委托 + 接管 title 属性</b>：
   调用点一个字都不用动，`title="…"` 照写，谁写都自动是这套皮肤。
 
-  【怎么接管】
-  原生提示是浏览器自己画的，没有任何 CSS 能改它，唯一的办法是<b>让它没得画</b> ——
-  悬停时把 `title` 摘到 `data-tip` 上，自己渲染一个盒子；鼠标离开再放回去。
+  【怎么接管：整份文档里<b>一个 title 都不留</b>】
+  原生提示是浏览器自己画的，没有任何 CSS 能改它，唯一的办法是<b>让它没得画</b>。
 
-  ⚠️ <b>摘掉之后 Vue 是会把它写回来的</b>，只要那是个<b>绑定的、值在变的</b> title。
-  Vue 的 patch 是「新旧值不等就 setAttribute」—— 静态 `title="…"` 的值永远不变，
-  所以确实不会回来；但统计格写的是 `:title="c.z + ' · ' + c.v"`，
-  而 `c.v` 每 500ms 跟着 getStats 变一次，于是每半秒就往回写一次。
+  ⚠️ 早先的做法是「悬停时摘、离开时还回去」，那<b>只挡得住鼠标那一条路</b>。
+  用户报的就是漏掉的另一条：<b>用 Tab 切焦点时原生提示又冒出来了</b> ——
+  Chromium 在元素<b>获得键盘焦点</b>时也会弹 title，而那个元素根本没被鼠标指到过，
+  它的 title 还好端端待在 DOM 里。
 
-  这件事有<b>两道</b>防线，缺一不可：
+  所以现在改成<b>全局摘除</b>：装上时全扫一遍，之后一个 MutationObserver 盯着整份文档，
+  凡是出现 title 就立刻挪到 data-tip 上，<b>再也不还回去</b>。
+  没有 title，浏览器就没有任何时机能画那个灰框 —— 悬停、聚焦、长按，一条都没有。
 
-    ① <b>值一直在变的文案，调用点直接写 `data-tip`，别写 `title`</b>（见下）——
-       原生从头到尾没有 title 可画，也就没有任何时间窗。
-    ② 兜底：`MutationObserver` 盯着 title，被谁写回来就再摘一次（watch / reclaim）。
+  这么改顺带删掉了一整类 bug：不再有「摘得比原生慢」的竞速、不再有「离开时还回去
+  结果又被弹出来」、也不再需要区分「这个 data-tip 是我摘的还是调用点自己写的」。
 
-  ⚠️ <b>只有 ① 是真正干净的。</b>② 摘走是在<b>下一个微任务</b>里做的，而 Blink 在
-  `setAttribute` 那一刻就可能把原生框弹出来；它会不会跟着我们的删除一起收掉，
-  是浏览器的实现细节，靠不住。所以每 500ms 变一次的那种文案必须走 ①，
-  ② 只用来接住「偶尔变一次」的那些（进程路径、注入目标名之类）。
+  ⚠️ <b>无障碍要补一手</b>：title 有可能是这个元素唯一的可访问名（图标按钮就是这样）。
+  摘走时若它没有别的名字（没有 aria-label / aria-labelledby、也没有文字内容），
+  就把这段文案写成 aria-label —— 读屏照旧念得出来，而 aria-label 不会画出原生框。
+
+  ⚠️ 新建的元素<b>不会</b>产生 attributes 记录：Vue 是在元素还没插进文档时就 setAttribute 的。
+  所以观察器必须<b>同时</b>盯 childList，对每一批新加进来的子树再扫一遍。
 
   【为什么用 elementFromPoint，不是给每个元素挂 mouseenter】
   两条理由，第二条是硬的：
@@ -71,14 +73,42 @@ let lastY = 0
 */
 let watcher: MutationObserver | null = null
 
-/**
- * 当前这个 `data-tip` 是<b>我们从 title 摘过来的</b>吗？
- *
- * ⚠️ 调用点直接写 `data-tip` 的那些（统计格）**没有** title，
- * 离开时也就<b>不能</b>给它安一个 —— 安上去就等于亲手把原生提示装了回去，
- * 而且 Vue 从没设过这个属性、以后也不会替我们清掉。
- */
-let owned = false
+/*
+  把一个元素的 title 挪到 data-tip 上。摘完就不再还回去了。
+
+  ⚠️ <b>先 removeAttribute 再 setAttribute</b>：反过来的话中间那一瞬间两个属性都在，
+  而观察器是下一个微任务才跑 —— 那一瞬间原生框是有机会画出来的。
+*/
+function harvest(el: Element): void {
+  const t = el.getAttribute('title')
+  if (t === null) return
+
+  el.removeAttribute('title')
+
+  //空 title 是「关掉继承提示」的写法，删掉就够了，不用往 data-tip 上搬
+  if (!t.trim()) return
+
+  el.setAttribute('data-tip', t)
+
+  /*
+    无障碍兜底：title 摘走之后，图标按钮这类<b>没有文字的</b>元素就没名字了。
+    ⚠️ 只在它确实没有别的名字时才补 —— 给一个本来有文字的元素加 aria-label
+    等于把那段文字对读屏<b>盖掉</b>。
+  */
+  if (
+    !el.hasAttribute('aria-label') &&
+    !el.hasAttribute('aria-labelledby') &&
+    !(el.textContent || '').trim()
+  ) {
+    el.setAttribute('aria-label', t)
+  }
+}
+
+/** 把一棵子树里所有带 title 的都摘了（含根自己）。 */
+function sweep(root: Element | Document): void {
+  if (root.nodeType === 1) harvest(root as Element)
+  root.querySelectorAll('[title]').forEach(harvest)
+}
 
 /** 找到光标下最近的一个带 title 的元素。inert / 禁用的也找得到。 */
 function pick(x: number, y: number): HTMLElement | null {
@@ -138,73 +168,42 @@ function place(el: HTMLElement, b: HTMLElement): void {
 }
 
 /*
-  ⚠️ <b>摘 title 与画盒子必须是两步，而且摘要立刻做。</b>
+  认下这个目标。
 
-  第一版把两件事写在一起、都等 DELAY 之后 —— 结果是<b>原生提示先闪一下</b>：
-  Chromium 大约 300ms 就弹它自己那个，比这里的 380ms 早。
-  于是顺序成了「原生弹出 → 我摘掉 title（Chromium 随即收掉它）→ 我的盒子出来」，
-  看着就是闪一下再换一个。
-
-  现在指到就摘（claim），盒子仍然等停稳 380ms 再画（render）——
-  原生那条路从此没有 title 可画，早晚都轮不到它。
+  ⚠️ 这里<b>不再搬运 title</b> —— 全局观察器早就把它摘走了。留一句 harvest 只是保险：
+  万一某个元素是「刚插进来、观察器的微任务还没跑」就被指到，这一下就地补上。
 */
 function claim(el: HTMLElement): void {
-  owned = false
-
-  if (el.hasAttribute('title')) {
-    const text = el.getAttribute('title') || ''
-
-    //空 title 不接管：那是别人用来「关掉继承提示」的写法，摘了反而多事
-    if (!text.trim()) return
-
-    el.setAttribute('data-tip', text)
-    el.removeAttribute('title')
-    owned = true
-  }
-
+  harvest(el)
   host = el
 
-  //盯住它：绑定值一变 Vue 就会把 title 写回来
+  //盯住它的 data-tip：统计格那几处的值每 500ms 变一次，盒子要跟着换字
   watch(el)
 }
 
 /*
-  title 又回来了：把新值接过来、再摘一次。
+  当前目标的文案变了：盒子已经画出来的话就换成新值。
 
-  ⚠️ 顺手把盒子里的字也换成新的 —— 统计格的数字每 500ms 变一次，
-  举着一个半秒前的旧值比不显示更误导。
-
-  ⚠️ <b>不会递归。</b>这里的 removeAttribute 自己也会产生一条变更记录，
-  但下一次回调进来时 title 已经没了、getAttribute 返回 null，第一句就 return 了。
+  统计格的数字每 500ms 变一次，举着一个半秒前的旧数字比不显示更误导。
+  （title 变回来这件事已经不归这里管了 —— 全局观察器会先把它摘掉，
+  摘的时候写的是 data-tip，于是这里跟着醒来。）
 */
 function reclaim(): void {
   if (!host) return
+  if (!box || box.style.display !== 'block') return
 
-  const back = host.getAttribute('title')
+  const text = textOf(host)
+  if (!text) return
 
-  //空 title 是「关掉继承提示」的写法，原生也画不出东西来，不去动它
-  if (back !== null && back.trim()) {
-    host.setAttribute('data-tip', back)
-    host.removeAttribute('title')
-    owned = true
-  }
-
-  //盒子已经画出来了就换成新值 —— 统计格的数字每 500ms 变一次，
-  //举着一个半秒前的旧数字比不显示更误导
-  if (box && box.style.display === 'block') {
-    const text = textOf(host)
-    if (text) {
-      box.textContent = text
-      place(host, box)
-    }
-  }
+  box.textContent = text
+  place(host, box)
 }
 
 function watch(el: HTMLElement): void {
   if (!watcher) watcher = new MutationObserver(reclaim)
   else watcher.disconnect()
 
-  watcher.observe(el, { attributes: true, attributeFilter: ['title', 'data-tip'] })
+  watcher.observe(el, { attributes: true, attributeFilter: ['data-tip'] })
 }
 
 function render(): void {
@@ -223,19 +222,10 @@ function hide(): void {
   timer = 0
 
   if (host) {
-    //⚠️ 先停掉观察再放回去，否则下面这句 setAttribute 会被自己的观察者再摘一遍
+    //⚠️ <b>不还回去。</b>还回去就等于亲手把原生提示装回来 —— Tab 切焦点时它就会冒出来，
+    //   而那正是这一版要根治的事。data-tip 留在元素上，下次指到它照样能用。
     if (watcher) watcher.disconnect()
-
-    //放回去：万一这套脚本以后出问题，至少还能退回原生提示。
-    //⚠️ 只还我们摘来的那些 —— 调用点自己写的 data-tip 不能安 title，见 owned 上面那段
-    const text = host.getAttribute('data-tip')
-    if (owned && text && host.isConnected) {
-      host.setAttribute('title', text)
-      host.removeAttribute('data-tip')
-    }
-
     host = null
-    owned = false
   }
 
   if (box) box.style.display = 'none'
@@ -301,6 +291,32 @@ export function installTooltip(): void {
   //幂等：main.ts 与探针页都会调，别装两遍
   if ((window as any).__wpeTip) return
   ;(window as any).__wpeTip = true
+
+  /*
+    ⚠️ <b>全局摘除。</b>整份文档里从此一个 title 都不留 —— 悬停、Tab 聚焦、长按，
+    浏览器一条路都画不出那个灰框。
+
+    两种记录都要收：
+      · attributes —— Vue patch 一个<b>绑定且值在变</b>的 title（统计格那种）；
+      · childList  —— 新插进来的子树。<b>这一支不能省</b>：Vue 是在元素还没进文档时
+        就 setAttribute 的，那时观察器根本看不到，不扫新子树就会漏。
+
+    代价：全项目 144 处 title，封包列表那张表里只有 2 处（列宽手柄与回到底部按钮），
+    都不在行单元格上 —— 刷屏时这个观察器基本没有活干。
+  */
+  sweep(document)
+
+  new MutationObserver((recs) => {
+    for (const r of recs) {
+      if (r.type === 'attributes') { harvest(r.target as Element); continue }
+      for (const n of r.addedNodes) { if (n.nodeType === 1) sweep(n as Element) }
+    }
+  }).observe(document.documentElement, {
+    subtree: true,
+    childList: true,
+    attributes: true,
+    attributeFilter: ['title'],
+  })
 
   document.addEventListener('pointermove', (e) => {
     lastX = e.clientX
