@@ -47,14 +47,36 @@ export const tcRegex = ref('')
 export const tcMinBytes = ref(4)
 
 /* ── 异或计算 ── */
+
+/**
+ * 算法：`⊕ 密钥` 把密钥循环铺开、`⊕ 数据 B` 把两段逐字节配对。
+ *
+ * 后者是抓包里真正常用的那个 —— 两条只差一点的封包异或一下，非零的字节就是变了的那几个；
+ * 拿「明文 + 密文」异或则直接得到密钥。WinForms 那边只有前者。
+ */
+export const xorMode = ref<'key' | 'b'>('key')
+
 export const xorSrc = shallowRef<Uint8Array>(new Uint8Array(0))
-export const xorOut = shallowRef<Uint8Array>(new Uint8Array(0))
+export const xorB = shallowRef<Uint8Array>(new Uint8Array(0))
 export const xorKey = ref('')
+
+/** 密钥怎么读：十六进制，还是逐字符取 Latin-1 字节（与十六进制视图的字符栏同一条口径）。 */
+export const xorKeyFmt = ref<'hex' | 'text'>('hex')
+
+/*
+  ⚠️ <b>结果刻意不存这里，它是算出来的。</b>
+
+  老版本把 xorOut 也放在 store 里、由「计算」按钮写一次 —— 于是改完源数据或密钥而没再点按钮时，
+  右边显示的是<b>上一次</b>的结果，界面上一点提示都没有。派生量就该是派生量，
+  组件里一个 computed 就把这一类 bug 从根上去掉了。
+*/
 
 /* ── 编码转换 ── */
 export const trInput = ref('')
 export const trRows = ref<TranscodeRow[]>([])
-export const trMode = ref<'' | 'enc' | 'dec'>('')
+
+/** 编码还是解码。⚠️ 没有「空」这一档了 —— 现在是实时跑的，进页面就有结果。 */
+export const trMode = ref<'enc' | 'dec'>('enc')
 
 /* ── 数据提取 ── */
 export const exKind = ref(0)

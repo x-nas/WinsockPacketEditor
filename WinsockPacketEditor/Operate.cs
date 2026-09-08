@@ -1841,12 +1841,44 @@ namespace WinsockPacketEditor
 
             #region//十六进制字符串转byte[]
 
+            /*
+                ⚠️ <b>暂存区的大小不能跟着入参走。</b>
+
+                原来这里是 stackalloc char[hexString.Length] —— 长度<b>直接来自用户输入</b>，
+                而「编码转换」那一屏的输入框是可以随手粘一大段进来的（解码那一路会走到这里）。
+                栈要 2 × 字符数个字节，超了就是 <b>StackOverflowException</b>：
+                它在 .NET 里<b>捕获不了</b>，进程当场没，日志一个字都不会留 ——
+                比抛异常糟得多（那还能记一条）。
+
+                实测：反射直接调，800 万字符（要 15MB 栈）当场
+                「Process is terminated due to StackOverflowException」。
+                PowerShell 的线程栈比应用大，所以那台上 200 万字符还活着；
+                外壳的 UI 线程是默认的 1MB，阈值约在<b>五十万字符</b>上下 —— 粘一份长一点的
+                封包十六进制就到了。
+
+                现在短的走栈、长的走堆，两条路共用同一段解析（HexCore）。
+                512 这个门槛覆盖了真正的热路径（滤镜包头、查找的匹配串、自动入库规则，
+                都是几十个字符），那些一次分配都不会多。
+            */
+            private const int HexStackMax = 512;
+
             public static byte[] HexToBytes(ReadOnlySpan<char> hexString)
             {
                 if (hexString.IsEmpty)
                     return Array.Empty<byte>();
 
-                Span<char> clean = stackalloc char[hexString.Length];
+                if (hexString.Length <= HexStackMax)
+                {
+                    Span<char> clean = stackalloc char[HexStackMax];
+                    return HexCore(hexString, clean);
+                }
+
+                return HexCore(hexString, new char[hexString.Length]);
+            }
+
+            /// <summary>把分隔符剔掉再两位一字节地解析。<paramref name="clean"/> 必须能装下 <paramref name="hexString"/>。</summary>
+            private static byte[] HexCore(ReadOnlySpan<char> hexString, Span<char> clean)
+            {
                 int cleanIndex = 0;
 
                 foreach (char c in hexString)
