@@ -176,7 +176,12 @@ onBeforeUnmount(() => {
 async function clearAll(): Promise<void> {
   selected.value = null
   picked.value = new Set()
-  await call('clearPackets')
+  /*
+    ⚠️ <b>要指明清哪一张表。</b> 不带 list 的话桥会把封包列表也一起清了 ——
+    外壳一次只在一种模式里，另一张本来就是空的，所以看不出差别；
+    但自从「清空」<b>连计数一起复位</b>之后，含糊的写法会顺带把另一种模式的计数也归零。
+  */
+  await call('clearPackets', { list: FeedList.Proxy })
   resetStat()
 }
 

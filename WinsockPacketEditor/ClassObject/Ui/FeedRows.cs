@@ -793,6 +793,13 @@ namespace WinsockPacketEditor
     public sealed class FilterStatsRow
     {
         public long ProxyTotal;
+
+        /*
+            被滤镜<b>改过的封包条数</b>。与 Execute 不是一回事：
+            一条封包可能被好几条滤镜依次处理，所以 Execute（执行次数）≥ Hit（封包条数）。
+            两个一起看才知道「命中面有多宽、每条命中平均被处理几次」。
+        */
+        public long Hit;
         public long Execute;
         public long Replace;
         public long Change;

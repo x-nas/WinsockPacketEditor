@@ -204,7 +204,19 @@ namespace WPEHookTest
                 int actReplace = captured.Count(p => p.FilterAction == Operate.FilterConfig.Filter.FilterAction.Replace);
                 rep.AppendLine("- 外壳收到 " + captured.Count + " 条封包，动作为 Replace 的 " + actReplace + " 条");
 
-                bool ok = replaced > 0 && lateOriginal == 0 && actReplace > 0;
+                /*
+                    滤镜的<b>全局</b>计数也要回到外壳（协议 v3 加的）。
+
+                    ⚠️ 这六个是在 DoFilterList 里递增的，而 DoFilterList 跑在<b>目标进程</b>的
+                    钩子线程上 —— 加这段之前外壳自己那份从头到尾是 0，
+                    「统计数据」页在注入模式下六条进度条恒为 0%（分母有、分子没有）。
+                    每条滤镜自己的 ExecutionCount 一直是回来的，所以光看那张表看不出这个缺口。
+                */
+                long gExec = Operate.FilterConfig.Filter.FilterExecute_CNT;
+                long gRep = Operate.FilterConfig.Filter.FilterReplace_CNT;
+                rep.AppendLine("- 外壳侧的全局计数：执行 **" + gExec + "** 次、其中 Replace **" + gRep + "** 次（随 Stats 事件回来的）");
+
+                bool ok = replaced > 0 && lateOriginal == 0 && actReplace > 0 && gExec > 0 && gRep > 0;
 
                 link.StopHook();
                 link.Detach();

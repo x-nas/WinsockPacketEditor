@@ -80,5 +80,8 @@ export const trMode = ref<'enc' | 'dec'>('enc')
 
 /* ── 数据提取 ── */
 export const exKind = ref(0)
+
+/** 这一次提出来几条（Charles 是会话数、FILT 是滤镜条数、账号是账号数）。C# 侧的 ExtractResult.Count */
+export const exCount = ref(0)
 export const exText = ref('')
 export const exPath = ref('')

@@ -370,6 +370,14 @@ namespace WinsockPacketEditor.Ipc
             for (int i = 0; i < mn; i++) { modules.Add(r.Str()); }
         }
 
+        /// <summary>让目标把滤镜的统计计数归零 —— 注入模式下那六个的真源在目标里。</summary>
+        public void ResetStats()
+        {
+            var w = new IpcWriter();
+            w.U8((byte)IpcCommand.ResetStats);
+            CallVoid(w);
+        }
+
         public void Detach()
         {
             try
@@ -601,6 +609,14 @@ namespace WinsockPacketEditor.Ipc
                     break;
                 }
             }
+
+            //滤镜的六个全局计数：目标那边才是真源，外壳这份是镜像（见 WpeCore.SendStats）
+            Operate.FilterConfig.Filter.FilterExecute_CNT = r.I64();
+            Operate.FilterConfig.Filter.FilterReplace_CNT = r.I64();
+            Operate.FilterConfig.Filter.FilterChange_CNT = r.I64();
+            Operate.FilterConfig.Filter.FilterIntercept_CNT = r.I64();
+            Operate.FilterConfig.Filter.FilterDisplay_CNT = r.I64();
+            Operate.FilterConfig.Filter.FilterNoDisplay_CNT = r.I64();
 
             int rn = r.I32();
             for (int i = 0; i < rn; i++)

@@ -1094,6 +1094,7 @@ namespace WPEHybrid
                     Operate.ProxyConfig.Queue.ClearProxyInfoQueue();
                     Operate.ProxyConfig.List.ClearProxyInfo();
                     UI.Feed.Clear(FeedList.Proxy);
+                    Operate.SystemConfig.ResetPacketCounters(false);
                 }
 
                 if (which == null || which.Value == (int)FeedList.Packet)
@@ -1101,7 +1102,16 @@ namespace WPEHybrid
                     Operate.PacketConfig.Queue.ClearPacketQueue();
                     Operate.PacketConfig.List.ClearPacketList();
                     UI.Feed.Clear(FeedList.Packet);
+                    Operate.SystemConfig.ResetPacketCounters(true);
                 }
+
+                /*
+                    ⚠️ <b>清空要连计数一起复位</b>，与 WinForms 的 CleanUp_ProxyListInfo /
+                    CleanUp_PacketListInfo 逐条对应。外壳原来只清列表不清计数 ——
+                    表现是「列表空了，统计格里的代理总数 / 流量 / 滤镜执行还举着清空前的数」，
+                    而且「统计数据」页那六条进度条<b>再也没有办法归零</b>（外壳没有别的入口）。
+                */
+                ResetFilterStatsEverywhere();
 
                 return new { ok = true };
             });
@@ -3470,6 +3480,16 @@ namespace WPEHybrid
 
             this.bridge.Register("getFilterStats", args => Operate.SystemConfig.GetFilterStats());
 
+            /*
+                统计数据页的「归零」。只清<b>滤镜</b>那一组（六个全局计数 + 每条滤镜的执行次数），
+                封包总数 / 流量不动 —— 那是代理数据页那一屏的仪表，清它要走「清空」。
+            */
+            this.bridge.Register("resetFilterStats", args =>
+            {
+                ResetFilterStatsEverywhere();
+                return new { ok = true };
+            });
+
             #endregion
 
             #region//系统日志（对应 WinForms 的 Controls/LogList 那个右键菜单）
@@ -5589,6 +5609,24 @@ namespace WPEHybrid
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// 把滤镜的统计计数归零。
+        ///
+        /// ⚠️ <b>注入模式下真源在目标进程里</b>（DoFilterList 跑在目标的钩子线程上，
+        /// 外壳那份只是随 Stats 事件更新的镜像）—— 只清外壳的，下一拍就被目标盖回去。
+        /// 所以附着着的时候要把这件事<b>发到目标</b>再做一次。
+        /// </summary>
+        private void ResetFilterStatsEverywhere()
+        {
+            Operate.SystemConfig.ResetFilterStats();
+
+            WinsockPacketEditor.Ipc.ShellLink link = this.AttachedLink();
+            if (link == null) { return; }
+
+            try { link.ResetStats(); }
+            catch (Exception ex) { Operate.DoLog(nameof(ResetFilterStatsEverywhere), ex); }
         }
 
         #region//验收跑测用的工具方法（B10e）

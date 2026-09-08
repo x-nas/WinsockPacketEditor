@@ -79,11 +79,14 @@
       return { rows };
     },
     transcode: (a) => ({ rows: ['Bytes','ANSI-GBK','UTF7','ANSI-UTF7','UTF8','ANSI-UTF8','UTF16','ANSI-UTF16','UTF32','ANSI-UTF32','Unicode','ANSI-Unicode','base64','ANSI-base64'].map((k, i) => ({ Key: k, Value: i % 2 ? '48 65 6C 6C 6F' : (a.decode ? 'decoded:' : 'encoded:') + a.text })) }),
-    extractPick: (a) => ({ Path: 'C:/demo/session.chlsx', Text: ['AA BB CC DD', 'EE FF'].join(String.fromCharCode(10)), Error: '' }),
-    extractBytes: (a) => ({ Path: a.name, Text: ['[System]', 'UserCount=1'].join(String.fromCharCode(10)), Error: '' }),
+    extractPick: (a) => ({ Path: 'C:/demo/session.chlsx', Text: ['AA BB CC DD', '', 'EE FF'].join(String.fromCharCode(10)), Error: '', Count: 2 }),
+    extractBytes: (a) => ({ Path: a.name, Text: ['[System]', 'UserCount=1'].join(String.fromCharCode(10)), Error: '', Count: 1 }),
     saveExtraction: (a) => { window.__savedExtract = a; return { path: 'C:/out.txt' } },
     // 统计 / WPC / 六个设置
-    getFilterStats: () => ({ ProxyTotal: 1280, Execute: 356, Replace: 120, Change: 30, Intercept: 66, Display: 100, NoDisplay: 40 }),
+    // Hit（被滤镜改过的封包条数）≤ Execute：一条封包可能被好几条滤镜依次处理
+    // 五项之和 120+30+66+100+40 = 356 = Execute —— 这个恒等式界面上会核对，假数据别写破
+    getFilterStats: () => ({ ProxyTotal: 1280, Hit: 214, Execute: 356, Replace: 120, Change: 30, Intercept: 66, Display: 100, NoDisplay: 40 }),
+    resetFilterStats: () => ({ ok: true }),
     getRuleTypes: () => ({ rows: ['DOMAIN','DOMAIN-SUFFIX','DOMAIN-KEYWORD','GEOIP','IP-CIDR','MATCH'].map((n, i) => ({ Value: i, Name: n })) }),
     getServerRules: () => ({ rows: window.__rules }),
     saveServerRule: (a) => { window.__rules.push({ Id: 'R' + Date.now(), IsEnable: a.enable, Type: a.type, TypeName: 'DOMAIN', Argument: a.argument, Action: a.ruleAction }); return { error: '' } },
@@ -244,7 +247,12 @@
   import { useList } from '/src/stores/lists'
   import { FeedList } from '/src/bridge/types'
   // 设置页与 WPC 页要的几份列表副本：直接写进 store
-  useList(FeedList.Filter).value = [{ Id: 'F1', IsEnable: true, Name: '登录包', ExecutionCount: 120, Action: 0 }, { Id: 'F2', IsEnable: false, Name: '心跳', ExecutionCount: 0, Action: 1 }, { Id: 'F3', IsEnable: true, Name: '聊天', ExecutionCount: 236, Action: 2 }]
+  useList(FeedList.Filter).value = [
+    { Id: 'F1', IsEnable: true, Name: '登录包', ExecutionCount: 120, Action: 0, Mode: 0 },
+    { Id: 'F2', IsEnable: false, Name: '心跳', ExecutionCount: 0, Action: 1, Mode: 1 },
+    { Id: 'F3', IsEnable: true, Name: '聊天', ExecutionCount: 236, Action: 2, Mode: 1 },
+    { Id: 'F4', IsEnable: true, Name: '不改只显示', ExecutionCount: 0, Action: 3, Mode: 0 },
+  ]
   useList(FeedList.Server).value = [{ Id: 'S1', IsEnable: true, Name: '华东节点', IP: '101.227.22.133', Port: 1080, ForgotURL: 'https://wpe64.com/forgot', RegisterURL: 'https://wpe64.com/reg', VerifyURL: '', RuleCount: 2 }, { Id: 'S2', IsEnable: false, Name: '备用', IP: '10.0.0.8', Port: 1081, ForgotURL: '', RegisterURL: '', VerifyURL: '', RuleCount: 0 }]
   useList(FeedList.Notice).value = [{ Id: 'N1', Type: 1, Title: '周末双倍活动', Content: '……', More: 'https://wpe64.com/news/1', Time: '2026-09-04 18:00:00' }, { Id: 'N2', Type: 2, Title: '例行维护', Content: '……', More: '', Time: '2026-09-03 09:00:00' }]
   useList(FeedList.SelectProcess).value = [{ IsCheck: false, ProcessName: 'game', ProcessID: 0, ModuleName: 'game.exe', ProcessPath: '' }]

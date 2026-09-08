@@ -422,6 +422,21 @@ namespace WinsockPacketEditor.Ipc
                 w.I64(si.ExecutionFail);
             }
 
+            /*
+                ⚠️ <b>滤镜那六个全局计数也要报上来。</b>
+
+                它们在 DoFilterList 里递增，而 DoFilterList 跑在<b>目标</b>的钩子线程上 ——
+                外壳自己那份从头到尾是 0。少了这一段，「统计数据」页在注入模式下
+                分母有（TotalPackets 由外壳的 ShellLink.Ingest 维护）、<b>分子恒为 0</b>，
+                六条进度条全是 0%，而且看不出是坏了还是真没命中。
+            */
+            w.I64(Operate.FilterConfig.Filter.FilterExecute_CNT);
+            w.I64(Operate.FilterConfig.Filter.FilterReplace_CNT);
+            w.I64(Operate.FilterConfig.Filter.FilterChange_CNT);
+            w.I64(Operate.FilterConfig.Filter.FilterIntercept_CNT);
+            w.I64(Operate.FilterConfig.Filter.FilterDisplay_CNT);
+            w.I64(Operate.FilterConfig.Filter.FilterNoDisplay_CNT);
+
             var robots = Operate.RobotConfig.List.lstRobotInfo;
             w.I32(robots.Count);
             foreach (RobotInfo ri in robots)
@@ -589,6 +604,15 @@ namespace WinsockPacketEditor.Ipc
                         w.U8((byte)IpcStatus.Ok);
                         w.Str(Operate.PacketConfig.Packet.GetIP_BySocket(socket, Operate.PacketConfig.Packet.IPType.From));
                         w.Str(Operate.PacketConfig.Packet.GetIP_BySocket(socket, Operate.PacketConfig.Packet.IPType.To));
+                        return w.ToArray();
+                    }
+
+                case IpcCommand.ResetStats:
+                    {
+                        Operate.SystemConfig.ResetFilterStats();
+
+                        var w = new IpcWriter();
+                        w.U8((byte)IpcStatus.Ok);
                         return w.ToArray();
                     }
 

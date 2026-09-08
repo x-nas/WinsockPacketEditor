@@ -28,7 +28,7 @@ namespace WinsockPacketEditor.Ipc
         /// 协议版本。两端 Hello 时对不上就直接拒绝，<b>不猜、不兼容</b>。
         /// 改了任何一个帧的字段就要 +1。
         /// </summary>
-        public const int Version = 2;
+        public const int Version = 3;
 
         /// <summary>控制通道单帧上限（1 MB）。快照最大的是滤镜表，几十条 × 几百字节，余量足够。</summary>
         public const int MaxControlFrame = 1024 * 1024;
@@ -109,6 +109,15 @@ namespace WinsockPacketEditor.Ipc
         /// 缩小目标里的程序集足迹（风险清单 R2）。先量一次，别凭猜去动一个三万行的类。
         /// </summary>
         GetFootprint = 9,
+
+        /// <summary>
+        /// 把统计计数归零（滤镜那六个 + 每条滤镜的执行次数）。
+        ///
+        /// ⚠️ 注入模式下这六个计数是<b>在目标里递增</b>的（DoFilterList 跑在目标的钩子线程上），
+        /// 外壳那份只是随 Stats 事件更新的<b>镜像</b> —— 只清外壳的，下一拍就被目标盖回去。
+        /// 所以复位必须发到目标这边来做。
+        /// </summary>
+        ResetStats = 10,
 
         /// <summary>卸钩 + 停执行器 + 断管道 + 核心休眠。不卸载 CLR（做不到，也不必要）。</summary>
         Detach = 8,

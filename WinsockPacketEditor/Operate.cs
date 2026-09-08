@@ -1136,6 +1136,7 @@ namespace WinsockPacketEditor
                     ProxyTotal = inject
                         ? PacketConfig.Packet.TotalPackets
                         : ProxyConfig.Proxy.TCP_Req_CNT + ProxyConfig.Proxy.TCP_Resp_CNT + ProxyConfig.Proxy.UDP_Req_CNT + ProxyConfig.Proxy.UDP_Resp_CNT,
+                    Hit = inject ? PacketConfig.Packet.FilterPacket_CNT : ProxyConfig.Proxy.FilterProxy_CNT,
                     Execute = FilterConfig.Filter.FilterExecute_CNT,
                     Replace = FilterConfig.Filter.FilterReplace_CNT,
                     Change = FilterConfig.Filter.FilterChange_CNT,
@@ -1143,6 +1144,62 @@ namespace WinsockPacketEditor
                     Display = FilterConfig.Filter.FilterDisplay_CNT,
                     NoDisplay = FilterConfig.Filter.FilterNoDisplay_CNT,
                 };
+            }
+
+            /// <summary>
+            /// 把<b>滤镜</b>的统计计数归零：六个全局计数 + 每条滤镜的执行次数。
+            ///
+            /// 注入模式下这几个的真源在目标进程里，所以外壳要经 <c>ShellLink.ResetStats</c>
+            /// 把这件事发下去；目标那边的控制线程调的就是本方法。
+            /// </summary>
+            public static void ResetFilterStats()
+            {
+                FilterConfig.Filter.FilterExecute_CNT = 0;
+                FilterConfig.Filter.FilterReplace_CNT = 0;
+                FilterConfig.Filter.FilterChange_CNT = 0;
+                FilterConfig.Filter.FilterIntercept_CNT = 0;
+                FilterConfig.Filter.FilterDisplay_CNT = 0;
+                FilterConfig.Filter.FilterNoDisplay_CNT = 0;
+
+                FilterConfig.List.InitFilterList_Count();
+            }
+
+            /// <summary>
+            /// 把某一种模式的<b>封包计数</b>归零，逐条对应 WinForms 的
+            /// <c>ProxyList.CleanUp_ProxyListInfo</c> / <c>PacketList.CleanUp_PacketListInfo</c>。
+            ///
+            /// ⚠️ 外壳的「清空」原来<b>只清列表、不清计数</b> —— 与 WinForms 不一致，
+            /// 表现是「列表空了，可统计格里的代理总数 / 流量 / 滤镜执行还举着清空前的数」，
+            /// 而且统计数据页那六条进度条<b>再也没有办法归零</b>（外壳没有别的入口）。
+            /// </summary>
+            public static void ResetPacketCounters(bool inject)
+            {
+                if (inject)
+                {
+                    PacketConfig.Packet.TotalPackets = 0;
+                    PacketConfig.Packet.Total_SendBytes = 0;
+                    PacketConfig.Packet.Total_RecvBytes = 0;
+                    PacketConfig.Packet.FilterPacket_CNT = 0;
+                    PacketConfig.Packet.Send_CNT = 0;
+                    PacketConfig.Packet.Recv_CNT = 0;
+                    PacketConfig.Packet.SendTo_CNT = 0;
+                    PacketConfig.Packet.RecvFrom_CNT = 0;
+                    PacketConfig.Packet.WSASend_CNT = 0;
+                    PacketConfig.Packet.WSARecv_CNT = 0;
+                    PacketConfig.Packet.WSASendTo_CNT = 0;
+                    PacketConfig.Packet.WSARecvFrom_CNT = 0;
+                }
+                else
+                {
+                    ProxyConfig.Proxy.ProxyTotal_CNT = 0;
+                    ProxyConfig.Proxy.TCP_Req_CNT = 0;
+                    ProxyConfig.Proxy.TCP_Resp_CNT = 0;
+                    ProxyConfig.Proxy.UDP_Req_CNT = 0;
+                    ProxyConfig.Proxy.UDP_Resp_CNT = 0;
+                    ProxyConfig.Proxy.FilterProxy_CNT = 0;
+                    ProxyConfig.Proxy.Total_Request = 0;
+                    ProxyConfig.Proxy.Total_Response = 0;
+                }
             }
 
             #endregion
@@ -2873,6 +2930,14 @@ namespace WinsockPacketEditor
                 public string Path = string.Empty;
                 public string Text = string.Empty;
                 public string Error = string.Empty;
+
+                /*
+                    提出来几条：Charles 是<b>会话数</b>、FILT 是<b>滤镜条数</b>、账号是<b>账号数</b>。
+
+                    界面上原来只显示行数与字符数 —— 那两个数回答不了「到底提出来几条」，
+                    而那正是按下「生成文件」之前唯一想确认的事。
+                */
+                public int Count;
             }
 
             /// <summary>
@@ -2896,18 +2961,44 @@ namespace WinsockPacketEditor
                     {
                         case ExtractCharles:
                         {
-                            XDocument xdoc = XDocument.Load(new MemoryStream(content));
-                            XElement xeResponse = xdoc.Descendants("response").FirstOrDefault();
-                            XElement xeBody = xeResponse == null ? null : xeResponse.Element("body");
+                            /*
+                                ⚠️ <b>一个 .chlsx 里通常有几十上百条会话，原来只取第一条。</b>
 
-                            if (xeBody == null)
+                                写法是 Descendants("response").FirstOrDefault() —— 导出一整段抓包
+                                拖进来，界面上只出来一条封包的十六进制，而且<b>一点提示都没有</b>，
+                                看着像「这个文件里就这么点东西」。
+
+                                现在把每一条会话的响应体都提出来，块与块之间空一行隔开
+                                （保持整段仍是可直接粘的十六进制，不掺注释行），条数从 Count 报给界面。
+
+                                ⚠️ 逐条 try：某一条的 body 不是合法 base64（Charles 对二进制以外的
+                                内容有别的编码）不该把整份文件带崩，跳过它继续。
+                            */
+                            XDocument xdoc = XDocument.Load(new MemoryStream(content));
+                            var blocks = new List<string>();
+
+                            foreach (XElement xeResponse in xdoc.Descendants("response"))
+                            {
+                                XElement xeBody = xeResponse.Element("body");
+                                if (xeBody == null || string.IsNullOrWhiteSpace(xeBody.Value)) { continue; }
+
+                                try
+                                {
+                                    byte[] bBody = Convert.FromBase64String(xeBody.Value);
+                                    if (bBody.Length == 0) { continue; }
+                                    blocks.Add(BitConverter.ToString(bBody).Replace("-", " "));
+                                }
+                                catch (FormatException) { /* 这一条不是 base64，跳过 */ }
+                            }
+
+                            if (blocks.Count == 0)
                             {
                                 r.Error = UI.T("ExtractionData.Parse.Error", "文件里没有找到可提取的数据，请检查格式");
                                 return r;
                             }
 
-                            byte[] bBody = Convert.FromBase64String(xeBody.Value);
-                            r.Text = BitConverter.ToString(bBody).Replace("-", " ");
+                            r.Text = string.Join("\r\n\r\n", blocks.ToArray());
+                            r.Count = blocks.Count;
                             return r;
                         }
 
@@ -2997,6 +3088,7 @@ namespace WinsockPacketEditor
                             }
 
                             r.Text = xdoc_Filt.Declaration.ToString() + "\r\n" + xdoc_Filt.ToString();
+                            r.Count = n;
                             return r;
                         }
 
@@ -3050,6 +3142,7 @@ namespace WinsockPacketEditor
                             }
 
                             r.Text = sb.ToString().Trim();
+                            r.Count = lstAccount.Count;
                             return r;
                         }
 
