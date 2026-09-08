@@ -95,7 +95,7 @@ export const ru: Record<Key, string> = {
   'proxy.search': 'Поиск в данных пакета…',
   'sp.hex': 'HEX',
   'sp.text': 'Текст',
-  'sp.modeHint': 'Что сопоставлять: текст (после декодирования UTF-8) или HEX (например 0A 1B 2C)',
+  'sp.modeHint': 'Что сопоставлять: текст (после декодирования UTF-8) или HEX (0A1B2C или 0A 1B 2C, регистр не важен)',
   'sp.next': 'Найти далее',
   'sp.fromHead': 'Искать с начала',
   'sp.searching': 'Поиск…',

@@ -95,7 +95,7 @@ export const vi: Record<Key, string> = {
   'proxy.search': 'Tìm trong nội dung gói tin…',
   'sp.hex': 'Hex',
   'sp.text': 'Văn bản',
-  'sp.modeHint': 'Đổi đối tượng so khớp: văn bản (giải mã UTF-8) hoặc hex (ví dụ 0A 1B 2C)',
+  'sp.modeHint': 'Đổi đối tượng so khớp: văn bản (giải mã UTF-8) hoặc hex (0A1B2C hoặc 0A 1B 2C, không phân biệt hoa thường)',
   'sp.next': 'Tìm tiếp',
   'sp.fromHead': 'Tìm từ đầu',
   'sp.searching': 'Đang tìm…',

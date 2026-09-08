@@ -1668,6 +1668,30 @@ namespace WinsockPacketEditor
                 return new string(chars);
             }
 
+            /// <summary>
+            /// 连续的大写十六进制，<b>不带任何分隔符</b>（"000A1B2C"）。
+            ///
+            /// 与 <see cref="ToHexString"/> 的区别只有分隔符，但用途完全不同：那个是给<b>人</b>看的
+            /// （十六进制面板、复制出去的文本），这个是给<b>查找</b>当干草堆用的 ——
+            /// 用户敲的是 "0A1B2C"，带空格的串永远匹配不上。
+            /// 而且没有分隔符之后「匹配位置 ÷ 2 = 字节位置」永远成立，偏移是算出来的、不用再回头找一遍。
+            /// </summary>
+            public static string HexRunOf(ReadOnlySpan<byte> buffer)
+            {
+                if (buffer.IsEmpty) return string.Empty;
+
+                char[] chars = new char[buffer.Length * 2];
+
+                for (int i = 0; i < buffer.Length; i++)
+                {
+                    byte b = buffer[i];
+                    chars[i * 2] = HexChars[(b >> 4) & 0x0F];
+                    chars[i * 2 + 1] = HexChars[b & 0x0F];
+                }
+
+                return new string(chars);
+            }
+
             public static string BytesToString(Operate.PacketConfig.Packet.EncodingFormat efFormat, ReadOnlySpan<byte> buffer)
             {
                 string sReturn = string.Empty;
@@ -10401,14 +10425,39 @@ namespace WinsockPacketEditor
                             return hit;
                         }
 
-                        //先自己校验一次正则：SearchForList 内部把异常吞成 -1，那样分不清「没找到」和「写错了」
+                        /*
+                            先自己把「写错了」和「没找到」分开 —— SearchForList 内部把异常吞成 -1，
+                            两者长得一模一样。
+
+                            ⚠️ 十六进制那一路的正则跑在<b>去掉空白之后</b>的串上（干草堆是连续的
+                            十六进制，用户敲的 "0A 1B 2C" 里那两个空格匹配不到任何东西），
+                            所以这里也要拿同一份串去校验，否则会出现「校验过了、搜的却是另一个串」。
+                        */
+                        string probe = IsHex ? Regex.Replace(Pattern, @"\s+", string.Empty) : Pattern;
+
+                        if (probe.Length == 0)
+                        {
+                            return hit;
+                        }
+
                         try
                         {
-                            new Regex(Pattern);
+                            new Regex(probe);
                         }
                         catch (ArgumentException ex)
                         {
                             hit.Error = ex.Message;
+                            return hit;
+                        }
+
+                        /*
+                            纯十六进制却是奇数位（"0A1"）：一个字节两位，这种写法只可能命中半个字节，
+                            而字节边界那道检查会把它全挡掉 —— 表现就是「明明有却报没找到」。
+                            直接说清楚，别让用户去猜。（掺了别的字符就当正则，不管。）
+                        */
+                        if (IsHex && (probe.Length % 2) != 0 && Regex.IsMatch(probe, @"^[0-9A-Fa-f]+$"))
+                        {
+                            hit.Error = UI.T("SearchPacketForm.HexOdd", "十六进制位数必须是偶数：一个字节两位（如 0A1B2C）");
                             return hit;
                         }
 
@@ -10440,24 +10489,40 @@ namespace WinsockPacketEditor
                         hit.Index = index;
 
                         /*
-                            命中字节在包里的偏移。
+                            命中字节在包里的偏移 —— 两种模式来路不同：
 
-                            文本模式下不能拿「匹配在字符串里的下标」当字节偏移 —— 那串是 UTF8 解码来的，
-                            一个字符可能占好几个字节，非法字节还会变成替换字符。稳妥的做法是把匹配到的那段
-                            重新编码成字节，再回原始缓冲里找一次；找不到就退回 -1，前端只选中行、不圈字节。
+                            · 十六进制：SearchForList 已经算准了（干草堆不带分隔符，匹配位置 ÷ 2
+                              就是字节位置），直接取 FindByteOffset。
+                              ⚠️ <b>不要</b>再拿命中的字节回缓冲里找一次：同一段字节在一个包里
+                              完全可能出现好几处，那样圈出来的是<b>第一处</b>而不是命中的那一处。
+                            · 文本：给不出精确偏移 —— 那串是 UTF8 解码来的，一个字符可能占好几个字节、
+                              非法字节还会变成替换字符，字符下标换算不回字节下标。只能把命中的文字重新
+                              编码成字节回缓冲里找一次；找不到就退回 -1，前端只选中行、不圈字节。
                         */
-                        byte[] buffer = pi.PacketBuffer;
-                        byte[] needle = IsHex
-                            ? PacketConfig.List.FindOptions.Hex
-                            : SystemConfig.StringToBytes(PacketConfig.Packet.EncodingFormat.UTF8, PacketConfig.List.FindOptions.Text);
-
-                        if (buffer != null && needle != null && needle.Length > 0)
+                        if (IsHex)
                         {
-                            int at = IndexOfBytes(buffer, needle);
-                            if (at >= 0)
+                            byte[] hex = PacketConfig.List.FindOptions.Hex;
+                            int off = PacketConfig.List.FindByteOffset;
+
+                            if (hex != null && hex.Length > 0 && off >= 0)
                             {
-                                hit.Offset = at;
-                                hit.Length = needle.Length;
+                                hit.Offset = off;
+                                hit.Length = hex.Length;
+                            }
+                        }
+                        else
+                        {
+                            byte[] buffer = pi.PacketBuffer;
+                            byte[] needle = SystemConfig.StringToBytes(PacketConfig.Packet.EncodingFormat.UTF8, PacketConfig.List.FindOptions.Text);
+
+                            if (buffer != null && needle != null && needle.Length > 0)
+                            {
+                                int at = IndexOfBytes(buffer, needle);
+                                if (at >= 0)
+                                {
+                                    hit.Offset = at;
+                                    hit.Length = needle.Length;
+                                }
                             }
                         }
 
@@ -16431,6 +16496,17 @@ namespace WinsockPacketEditor
                 public static int Search_Index = -1;
                 public static FindOptions FindOptions = new FindOptions();
                 public static string FindRegex = string.Empty;
+
+                /// <summary>
+                /// 上一次 <see cref="SearchForList{T}"/> 命中的那一段在封包里的<b>字节</b>偏移，没有则 −1。
+                ///
+                /// ⚠️ 只有十六进制模式给得出来：那一路正则跑在「整包的十六进制文本」上，
+                /// 匹配位置除以 2 就是字节位置，是精确的。
+                /// 文本模式给不出 —— 那串是 UTF8 解码来的，一个字符可能占好几个字节、
+                /// 非法字节还会变成替换字符，字符下标换算不回字节下标（那边仍然靠
+                /// 把命中的文字重新编码成字节、回原始缓冲里找一次）。
+                /// </summary>
+                public static int FindByteOffset = -1;
                 public static PacketInfo piSelect;
                 public static BindingList<PacketInfo> lstPacketInfo = new BindingList<PacketInfo>();
 
@@ -16749,14 +16825,39 @@ namespace WinsockPacketEditor
                             return hit;
                         }
 
-                        //先自己校验一次正则：SearchForList 内部把异常吞成 -1，那样分不清「没找到」和「写错了」
+                        /*
+                            先自己把「写错了」和「没找到」分开 —— SearchForList 内部把异常吞成 -1，
+                            两者长得一模一样。
+
+                            ⚠️ 十六进制那一路的正则跑在<b>去掉空白之后</b>的串上（干草堆是连续的
+                            十六进制，用户敲的 "0A 1B 2C" 里那两个空格匹配不到任何东西），
+                            所以这里也要拿同一份串去校验，否则会出现「校验过了、搜的却是另一个串」。
+                        */
+                        string probe = IsHex ? Regex.Replace(Pattern, @"\s+", string.Empty) : Pattern;
+
+                        if (probe.Length == 0)
+                        {
+                            return hit;
+                        }
+
                         try
                         {
-                            new Regex(Pattern);
+                            new Regex(probe);
                         }
                         catch (ArgumentException ex)
                         {
                             hit.Error = ex.Message;
+                            return hit;
+                        }
+
+                        /*
+                            纯十六进制却是奇数位（"0A1"）：一个字节两位，这种写法只可能命中半个字节，
+                            而字节边界那道检查会把它全挡掉 —— 表现就是「明明有却报没找到」。
+                            直接说清楚，别让用户去猜。（掺了别的字符就当正则，不管。）
+                        */
+                        if (IsHex && (probe.Length % 2) != 0 && Regex.IsMatch(probe, @"^[0-9A-Fa-f]+$"))
+                        {
+                            hit.Error = UI.T("SearchPacketForm.HexOdd", "十六进制位数必须是偶数：一个字节两位（如 0A1B2C）");
                             return hit;
                         }
 
@@ -16788,24 +16889,40 @@ namespace WinsockPacketEditor
                         hit.Index = index;
 
                         /*
-                            命中字节在包里的偏移。
+                            命中字节在包里的偏移 —— 两种模式来路不同：
 
-                            文本模式下不能拿「匹配在字符串里的下标」当字节偏移 —— 那串是 UTF8 解码来的，
-                            一个字符可能占好几个字节，非法字节还会变成替换字符。稳妥的做法是把匹配到的那段
-                            重新编码成字节，再回原始缓冲里找一次；找不到就退回 -1，前端只选中行、不圈字节。
+                            · 十六进制：SearchForList 已经算准了（干草堆不带分隔符，匹配位置 ÷ 2
+                              就是字节位置），直接取 FindByteOffset。
+                              ⚠️ <b>不要</b>再拿命中的字节回缓冲里找一次：同一段字节在一个包里
+                              完全可能出现好几处，那样圈出来的是<b>第一处</b>而不是命中的那一处。
+                            · 文本：给不出精确偏移 —— 那串是 UTF8 解码来的，一个字符可能占好几个字节、
+                              非法字节还会变成替换字符，字符下标换算不回字节下标。只能把命中的文字重新
+                              编码成字节回缓冲里找一次；找不到就退回 -1，前端只选中行、不圈字节。
                         */
-                        byte[] buffer = pi.PacketBuffer;
-                        byte[] needle = IsHex
-                            ? PacketConfig.List.FindOptions.Hex
-                            : SystemConfig.StringToBytes(PacketConfig.Packet.EncodingFormat.UTF8, PacketConfig.List.FindOptions.Text);
-
-                        if (buffer != null && needle != null && needle.Length > 0)
+                        if (IsHex)
                         {
-                            int at = ProxyConfig.List.IndexOfBytes(buffer, needle);
-                            if (at >= 0)
+                            byte[] hex = PacketConfig.List.FindOptions.Hex;
+                            int off = PacketConfig.List.FindByteOffset;
+
+                            if (hex != null && hex.Length > 0 && off >= 0)
                             {
-                                hit.Offset = at;
-                                hit.Length = needle.Length;
+                                hit.Offset = off;
+                                hit.Length = hex.Length;
+                            }
+                        }
+                        else
+                        {
+                            byte[] buffer = pi.PacketBuffer;
+                            byte[] needle = SystemConfig.StringToBytes(PacketConfig.Packet.EncodingFormat.UTF8, PacketConfig.List.FindOptions.Text);
+
+                            if (buffer != null && needle != null && needle.Length > 0)
+                            {
+                                int at = ProxyConfig.List.IndexOfBytes(buffer, needle);
+                                if (at >= 0)
+                                {
+                                    hit.Offset = at;
+                                    hit.Length = needle.Length;
+                                }
                             }
                         }
 
@@ -16938,6 +17055,9 @@ namespace WinsockPacketEditor
                 {
                     int iResult = -1;
 
+                    //⚠️ 先清掉上一轮的，不然这次没命中时调用方会读到上一次的偏移
+                    Operate.PacketConfig.List.FindByteOffset = -1;
+
                     try
                     {
                         if (!Operate.PacketConfig.List.FindOptions.IsValid)
@@ -16998,32 +17118,74 @@ namespace WinsockPacketEditor
 
                             case FindType.Hex:
 
+                                /*
+                                    ⚠️ 这一路 2026-09-08 重写过，改之前<b>常见的写法一个都搜不到</b>：
+
+                                      · 干草堆当时是 ToHexString 出的<b>带空格</b>串（"00 0A 1B 2C"），
+                                        而用户十有八九敲的是 "0A1B2C" —— 中间没有空格，永远匹配不上；
+                                      · Regex.Match 默认<b>区分大小写</b>，而干草堆是大写，敲小写 "0a1b2c" 同样落空；
+                                      · 就算侥幸命中，还可能命中在<b>半个字节</b>上：
+                                        缓冲 F0 A1 B2 的十六进制文本里能匹配到 "0A1B"，
+                                        那是两个字节的后一半接下一个字节的前一半，根本不是一段真的字节。
+                                        当时的结果是「报了命中、可十六进制面板圈不出东西」。
+
+                                    现在三件事一起解决：
+                                      · 干草堆改成<b>不带分隔符</b>的连续大写十六进制（HexRunOf）；
+                                      · 正则加 IgnoreCase，并把用户串里的<b>空白</b>去掉
+                                        （只去空白：'-' 在 [0-9A-F] 这类字符组里是有意义的，不能顺手一起去）；
+                                      · 只认<b>落在字节边界上</b>的匹配（起点与长度都是偶数），
+                                        不合的就在同一个包里继续往后找 —— 所以用 NextMatch 而不是 Match。
+
+                                    正则本身仍然全须全尾（"0A.{2}2C" 这种「中间一个任意字节」照样能写），
+                                    只是不再有那三个静默失效的坑。
+                                */
                                 if (!string.IsNullOrEmpty(PacketConfig.List.FindRegex))
                                 {
+                                    string hexPattern = Regex.Replace(PacketConfig.List.FindRegex, @"\s+", string.Empty);
+                                    if (hexPattern.Length == 0)
+                                    {
+                                        return -1;
+                                    }
+
+                                    Regex reHex;
+                                    try
+                                    {
+                                        reHex = new Regex(hexPattern, RegexOptions.IgnoreCase);
+                                    }
+                                    catch
+                                    {
+                                        // 正则表达式错误
+                                        return -1;
+                                    }
+
                                     for (int i = fromIndex; i < listCount; i++)
                                     {
                                         ReadOnlySpan<byte> packetBuffer = GetPacketBuffer(listItems[i], isPacketList);
-                                        string packetData = SystemConfig.BytesToString(PacketConfig.Packet.EncodingFormat.Hex, packetBuffer);
+                                        string packetData = SystemConfig.HexRunOf(packetBuffer);
 
-                                        try
+                                        for (Match mFind = reHex.Match(packetData); mFind.Success; mFind = mFind.NextMatch())
                                         {
-                                            Match mFind = Regex.Match(packetData, PacketConfig.List.FindRegex);
-                                            if (mFind.Success)
+                                            //空匹配（比如 "A*"）会让 NextMatch 原地打转，直接跳过
+                                            if (mFind.Length == 0)
                                             {
-                                                byte[] bHex = SystemConfig.StringToBytes(PacketConfig.Packet.EncodingFormat.Hex, mFind.Value);
-                                                if (bHex.Length == 0)
-                                                {
-                                                    return -1;
-                                                }
-
-                                                Operate.PacketConfig.List.FindOptions.Hex = bHex;
-                                                return i;
+                                                break;
                                             }
-                                        }
-                                        catch
-                                        {
-                                            // 正则表达式错误
-                                            return -1;
+
+                                            //⚠️ 必须落在字节边界上，否则拿到的是「半个字节接半个字节」
+                                            if ((mFind.Index % 2) != 0 || (mFind.Length % 2) != 0)
+                                            {
+                                                continue;
+                                            }
+
+                                            byte[] bHex = SystemConfig.StringToBytes(PacketConfig.Packet.EncodingFormat.Hex, mFind.Value);
+                                            if (bHex.Length == 0)
+                                            {
+                                                continue;
+                                            }
+
+                                            Operate.PacketConfig.List.FindOptions.Hex = bHex;
+                                            Operate.PacketConfig.List.FindByteOffset = mFind.Index / 2;
+                                            return i;
                                         }
                                     }
                                 }

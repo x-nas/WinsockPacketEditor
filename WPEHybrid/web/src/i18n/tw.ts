@@ -96,7 +96,7 @@ export const tw: Record<Key, string> = {
   'proxy.search': '在封包內容中查詢…',
   'sp.hex': '十六進位制',
   'sp.text': '文本',
-  'sp.modeHint': '切換匹配物件：文本（UTF8 解碼後）/ 十六進位制（形如 0A 1B 2C）',
+  'sp.modeHint': '切換匹配對象：文字（UTF8 解碼後）/ 十六進位（0A1B2C 或 0A 1B 2C，不分大小寫）',
   'sp.next': '查詢下一個',
   'sp.fromHead': '從頭查詢',
   'sp.searching': '查詢中…',

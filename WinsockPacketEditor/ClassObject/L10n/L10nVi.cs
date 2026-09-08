@@ -830,6 +830,7 @@ namespace WinsockPacketEditor
             d["SearchPacketForm.SeekDown"] = "Xuống dưới";
             d["SearchPacketForm.Empty"] = "Chưa nhập nội dung tìm";
             d["SearchPacketForm.NoMatch"] = "Không tìm thấy kết quả nào";
+            d["SearchPacketForm.HexOdd"] = "Chuỗi hex phải có số chữ số chẵn — mỗi byte hai chữ số (ví dụ 0A1B2C)";
             d["AccountEditForm"] = "Sửa tài khoản";
             d["AccountEditForm.Username"] = "Tên đăng nhập :";
             d["AccountEditForm.Password"] = "Mật khẩu :";

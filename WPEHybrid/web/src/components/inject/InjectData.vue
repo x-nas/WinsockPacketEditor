@@ -285,7 +285,13 @@ async function findNext(fromHead = false): Promise<void> {
     let r = await call<SearchResult>('searchPacketList', { pattern, isHex: qHex.value, from })
 
     if (r?.Error) {
-      pushToast('error', t('sp.badRegex') + ' · ' + r.Error)
+      /*
+        ⚠️ 十六进制那一路的 Error 是 C# 自己写的<b>整句</b>（而且已经本地化过），
+        套上「正则表达式有误」的帽子就成了病句 —— 位数是奇数跟正则没关系。
+        文本那一路的 Error 是 .NET 抛的 ArgumentException.Message（英文、只有半句），
+        那个才需要帽子。
+      */
+      pushToast('error', qHex.value ? r.Error : t('sp.badRegex') + ' · ' + r.Error)
       return
     }
 

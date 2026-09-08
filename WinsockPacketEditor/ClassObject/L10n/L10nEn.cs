@@ -830,6 +830,7 @@ namespace WinsockPacketEditor
             d["SearchPacketForm.SeekDown"] = "Seek Down";
             d["SearchPacketForm.Empty"] = "Search content Empty";
             d["SearchPacketForm.NoMatch"] = "No Match Found";
+            d["SearchPacketForm.HexOdd"] = "Hex must have an even number of digits — two per byte (e.g. 0A1B2C)";
             d["AccountEditForm"] = "Account Edit";
             d["AccountEditForm.Username"] = "Username :";
             d["AccountEditForm.Password"] = "Password :";

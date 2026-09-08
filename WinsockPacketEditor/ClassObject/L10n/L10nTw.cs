@@ -835,6 +835,7 @@ namespace WinsockPacketEditor
             d["SearchPacketForm.SeekDown"] = "向下搜尋";
             d["SearchPacketForm.Empty"] = "搜尋內容為空";
             d["SearchPacketForm.NoMatch"] = "沒有匹配的封包";
+            d["SearchPacketForm.HexOdd"] = "十六進位位數必須是偶數：一個位元組兩位（如 0A1B2C）";
             d["AccountEditForm"] = "帳號編輯";
             d["AccountEditForm.Username"] = "使用者名稱 :";
             d["AccountEditForm.Password"] = "密碼 :";

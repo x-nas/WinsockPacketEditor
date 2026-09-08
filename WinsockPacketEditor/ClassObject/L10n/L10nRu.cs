@@ -830,6 +830,7 @@ namespace WinsockPacketEditor
             d["SearchPacketForm.SeekDown"] = "Вниз";
             d["SearchPacketForm.Empty"] = "Строка поиска пуста";
             d["SearchPacketForm.NoMatch"] = "Совпадений не найдено";
+            d["SearchPacketForm.HexOdd"] = "Шестнадцатеричная строка должна содержать чётное число цифр — по две на байт (например 0A1B2C)";
             d["AccountEditForm"] = "Изменить учётную запись";
             d["AccountEditForm.Username"] = "Логин :";
             d["AccountEditForm.Password"] = "Пароль :";

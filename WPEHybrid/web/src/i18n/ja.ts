@@ -95,7 +95,7 @@ export const ja: Record<Key, string> = {
   'proxy.search': 'パケット内容を検索…',
   'sp.hex': '16 進数',
   'sp.text': 'テキスト',
-  'sp.modeHint': '照合対象の切り替え：テキスト（UTF-8 デコード後）/ 16 進数（例 0A 1B 2C）',
+  'sp.modeHint': '照合対象の切り替え：テキスト（UTF-8 デコード後）/ 16 進数（0A1B2C または 0A 1B 2C、大文字小文字は問わない）',
   'sp.next': '次を検索',
   'sp.fromHead': '先頭から検索',
   'sp.searching': '検索中…',

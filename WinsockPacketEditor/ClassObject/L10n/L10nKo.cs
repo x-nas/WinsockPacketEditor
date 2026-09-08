@@ -830,6 +830,7 @@ namespace WinsockPacketEditor
             d["SearchPacketForm.SeekDown"] = "아래로";
             d["SearchPacketForm.Empty"] = "찾을 내용이 비어 있습니다";
             d["SearchPacketForm.NoMatch"] = "일치하는 것을 찾지 못했습니다";
+            d["SearchPacketForm.HexOdd"] = "16진수는 짝수 자리여야 합니다 — 1바이트당 2자리 (예: 0A1B2C)";
             d["AccountEditForm"] = "계정 편집";
             d["AccountEditForm.Username"] = "사용자 이름 :";
             d["AccountEditForm.Password"] = "비밀번호 :";
