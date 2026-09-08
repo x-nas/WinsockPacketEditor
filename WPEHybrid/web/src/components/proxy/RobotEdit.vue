@@ -596,8 +596,13 @@ async function save(): Promise<void> {
 
             <span class="cnt run">{{ t('col.execCount') }} <b>{{ prog.Total }}</b></span>
 
-            <!-- 执行轨迹：WinForms 右上那个 txtINSTLog 的 "1, 2, 3, "；长了就在框里横向滚 -->
-            <span class="trail" :title="prog.Trail">
+            <!--
+              执行轨迹：WinForms 右上那个 txtINSTLog 的 "1, 2, 3, "；长了就在框里横向滚。
+
+              ⚠️ <b>:data-tip 而不是 :title</b> —— 跑起来之后这串每 200ms 跟着轮询变长一次，
+              写 title 就是每 200ms 往元素上安一次原生提示（详见 tooltip.ts 头上「两道防线」）。
+            -->
+            <span class="trail" :data-tip="prog.Trail">
               <span class="tl">{{ t('rb.e.trail') }}</span>
               <span class="tv">{{ trailTail || '—' }}</span>
             </span>

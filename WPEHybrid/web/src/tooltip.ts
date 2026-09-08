@@ -15,9 +15,17 @@
   Vue 的 patch 是「新旧值不等就 setAttribute」—— 静态 `title="…"` 的值永远不变，
   所以确实不会回来；但统计格写的是 `:title="c.z + ' · ' + c.v"`，
   而 `c.v` 每 500ms 跟着 getStats 变一次，于是每半秒就往回写一次。
-  结果是元素上<b>同时</b>挂着我们的 data-tip 与 Vue 刚写回的 title：
-  自绘的盒子还举着旧文案，原生的过一会儿又冒出来盖在旁边。
-  所以要盯着这个属性、回来一次就再摘一次，见下面的 watch / reclaim。
+
+  这件事有<b>两道</b>防线，缺一不可：
+
+    ① <b>值一直在变的文案，调用点直接写 `data-tip`，别写 `title`</b>（见下）——
+       原生从头到尾没有 title 可画，也就没有任何时间窗。
+    ② 兜底：`MutationObserver` 盯着 title，被谁写回来就再摘一次（watch / reclaim）。
+
+  ⚠️ <b>只有 ① 是真正干净的。</b>② 摘走是在<b>下一个微任务</b>里做的，而 Blink 在
+  `setAttribute` 那一刻就可能把原生框弹出来；它会不会跟着我们的删除一起收掉，
+  是浏览器的实现细节，靠不住。所以每 500ms 变一次的那种文案必须走 ①，
+  ② 只用来接住「偶尔变一次」的那些（进程路径、注入目标名之类）。
 
   【为什么用 elementFromPoint，不是给每个元素挂 mouseenter】
   两条理由，第二条是硬的：
@@ -58,10 +66,19 @@ let lastX = 0
 let lastY = 0
 
 /*
-  盯着当前目标的 title 属性 —— 它<b>会</b>被写回来（见文件头那段）。
-  全局只建一个，换目标时 disconnect 再 observe。
+  盯着当前目标的 title / data-tip —— 前者<b>会</b>被写回来（见文件头那段），
+  后者是调用点自己写的、值也会变。全局只建一个，换目标时 disconnect 再 observe。
 */
 let watcher: MutationObserver | null = null
+
+/**
+ * 当前这个 `data-tip` 是<b>我们从 title 摘过来的</b>吗？
+ *
+ * ⚠️ 调用点直接写 `data-tip` 的那些（统计格）**没有** title，
+ * 离开时也就<b>不能</b>给它安一个 —— 安上去就等于亲手把原生提示装了回去，
+ * 而且 Vue 从没设过这个属性、以后也不会替我们清掉。
+ */
+let owned = false
 
 /** 找到光标下最近的一个带 title 的元素。inert / 禁用的也找得到。 */
 function pick(x: number, y: number): HTMLElement | null {
@@ -132,6 +149,8 @@ function place(el: HTMLElement, b: HTMLElement): void {
   原生那条路从此没有 title 可画，早晚都轮不到它。
 */
 function claim(el: HTMLElement): void {
+  owned = false
+
   if (el.hasAttribute('title')) {
     const text = el.getAttribute('title') || ''
 
@@ -140,6 +159,7 @@ function claim(el: HTMLElement): void {
 
     el.setAttribute('data-tip', text)
     el.removeAttribute('title')
+    owned = true
   }
 
   host = el
@@ -160,18 +180,23 @@ function claim(el: HTMLElement): void {
 function reclaim(): void {
   if (!host) return
 
-  const text = host.getAttribute('title')
-  if (text === null) return
+  const back = host.getAttribute('title')
 
   //空 title 是「关掉继承提示」的写法，原生也画不出东西来，不去动它
-  if (!text.trim()) return
+  if (back !== null && back.trim()) {
+    host.setAttribute('data-tip', back)
+    host.removeAttribute('title')
+    owned = true
+  }
 
-  host.setAttribute('data-tip', text)
-  host.removeAttribute('title')
-
+  //盒子已经画出来了就换成新值 —— 统计格的数字每 500ms 变一次，
+  //举着一个半秒前的旧数字比不显示更误导
   if (box && box.style.display === 'block') {
-    box.textContent = text
-    place(host, box)
+    const text = textOf(host)
+    if (text) {
+      box.textContent = text
+      place(host, box)
+    }
   }
 }
 
@@ -179,7 +204,7 @@ function watch(el: HTMLElement): void {
   if (!watcher) watcher = new MutationObserver(reclaim)
   else watcher.disconnect()
 
-  watcher.observe(el, { attributes: true, attributeFilter: ['title'] })
+  watcher.observe(el, { attributes: true, attributeFilter: ['title', 'data-tip'] })
 }
 
 function render(): void {
@@ -201,13 +226,16 @@ function hide(): void {
     //⚠️ 先停掉观察再放回去，否则下面这句 setAttribute 会被自己的观察者再摘一遍
     if (watcher) watcher.disconnect()
 
-    //放回去：万一这套脚本以后出问题，至少还能退回原生提示
+    //放回去：万一这套脚本以后出问题，至少还能退回原生提示。
+    //⚠️ 只还我们摘来的那些 —— 调用点自己写的 data-tip 不能安 title，见 owned 上面那段
     const text = host.getAttribute('data-tip')
-    if (text && host.isConnected) {
+    if (owned && text && host.isConnected) {
       host.setAttribute('title', text)
       host.removeAttribute('data-tip')
     }
+
     host = null
+    owned = false
   }
 
   if (box) box.style.display = 'none'

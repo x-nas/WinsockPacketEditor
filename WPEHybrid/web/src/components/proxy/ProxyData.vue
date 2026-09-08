@@ -698,7 +698,15 @@ async function runAccept(): Promise<void> {
         能对得上的准确数（「最大序号 == 代理总数」那条自检要拿它去比），
         换成约数就没法比了。改成挂提示，截断时把完整的一行给出来。
       -->
-      <div v-for="c in cells" :key="c.k" class="st-c" :title="c.z + ' · ' + c.v">
+      <!--
+        ⚠️ 这里是 <b>:data-tip 而不是 :title</b> —— 全项目仅有的两处这么写。
+        这一格的值每 500ms 跟着 getStats 变一次，而 Vue 的 patch 就是 setAttribute：
+        写 title 的话，每半秒就往元素上安一次原生提示，自绘的那套只能在下一个
+        微任务里再摘走 —— 那个窗口够不够 Blink 把灰框弹出来，是它的实现细节，靠不住。
+        直接写 data-tip 就没有窗口：原生从头到尾无题可画，tooltip.ts 照样认得它。
+        详见 tooltip.ts 头上「两道防线」那段。
+      -->
+      <div v-for="c in cells" :key="c.k" class="st-c" :data-tip="c.z + ' · ' + c.v">
         <div class="k">{{ c.k }}</div>
         <div class="v" :class="c.tone">{{ c.v }}</div>
         <div class="z">{{ c.z }}</div>
