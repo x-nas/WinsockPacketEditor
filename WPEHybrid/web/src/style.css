@@ -915,6 +915,9 @@ body.col-resizing * {
 /* 与旁边的 .tb 齐高：.tb 是 padding 8px …… 6px，分段按钮默认 7 / 5，补这 2px */
 .gtool .hx-segb { padding-top: 8px; padding-bottom: 6px; }
 
+/* 同理，与 .list-page .btn（padding 9 / 7）齐高 —— 差 4px 的话一排控件高低不齐，一眼就看得出 */
+.list-page .bar .hx-segb { padding-top: 9px; padding-bottom: 7px; }
+
 .gtool .search {
   flex: 1;
   /*
