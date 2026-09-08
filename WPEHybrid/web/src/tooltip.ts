@@ -11,9 +11,13 @@
   原生提示是浏览器自己画的，没有任何 CSS 能改它，唯一的办法是<b>让它没得画</b> ——
   悬停时把 `title` 摘到 `data-tip` 上，自己渲染一个盒子；鼠标离开再放回去。
 
-  ⚠️ 摘掉之后如果 Vue 因为别的原因重渲染，它<b>不会</b>把 title 补回来 ——
-  Vue 只在绑定值变化时才 patch 这个属性，而值没变。所以不会出现「自绘的和原生的
-  一起冒出来」。真放不回去也只是这一个元素以后不再有提示，不影响别的。
+  ⚠️ <b>摘掉之后 Vue 是会把它写回来的</b>，只要那是个<b>绑定的、值在变的</b> title。
+  Vue 的 patch 是「新旧值不等就 setAttribute」—— 静态 `title="…"` 的值永远不变，
+  所以确实不会回来；但统计格写的是 `:title="c.z + ' · ' + c.v"`，
+  而 `c.v` 每 500ms 跟着 getStats 变一次，于是每半秒就往回写一次。
+  结果是元素上<b>同时</b>挂着我们的 data-tip 与 Vue 刚写回的 title：
+  自绘的盒子还举着旧文案，原生的过一会儿又冒出来盖在旁边。
+  所以要盯着这个属性、回来一次就再摘一次，见下面的 watch / reclaim。
 
   【为什么用 elementFromPoint，不是给每个元素挂 mouseenter】
   两条理由，第二条是硬的：
@@ -52,6 +56,12 @@ let timer = 0
 let host: HTMLElement | null = null
 let lastX = 0
 let lastY = 0
+
+/*
+  盯着当前目标的 title 属性 —— 它<b>会</b>被写回来（见文件头那段）。
+  全局只建一个，换目标时 disconnect 再 observe。
+*/
+let watcher: MutationObserver | null = null
 
 /** 找到光标下最近的一个带 title 的元素。inert / 禁用的也找得到。 */
 function pick(x: number, y: number): HTMLElement | null {
@@ -133,6 +143,43 @@ function claim(el: HTMLElement): void {
   }
 
   host = el
+
+  //盯住它：绑定值一变 Vue 就会把 title 写回来
+  watch(el)
+}
+
+/*
+  title 又回来了：把新值接过来、再摘一次。
+
+  ⚠️ 顺手把盒子里的字也换成新的 —— 统计格的数字每 500ms 变一次，
+  举着一个半秒前的旧值比不显示更误导。
+
+  ⚠️ <b>不会递归。</b>这里的 removeAttribute 自己也会产生一条变更记录，
+  但下一次回调进来时 title 已经没了、getAttribute 返回 null，第一句就 return 了。
+*/
+function reclaim(): void {
+  if (!host) return
+
+  const text = host.getAttribute('title')
+  if (text === null) return
+
+  //空 title 是「关掉继承提示」的写法，原生也画不出东西来，不去动它
+  if (!text.trim()) return
+
+  host.setAttribute('data-tip', text)
+  host.removeAttribute('title')
+
+  if (box && box.style.display === 'block') {
+    box.textContent = text
+    place(host, box)
+  }
+}
+
+function watch(el: HTMLElement): void {
+  if (!watcher) watcher = new MutationObserver(reclaim)
+  else watcher.disconnect()
+
+  watcher.observe(el, { attributes: true, attributeFilter: ['title'] })
 }
 
 function render(): void {
@@ -151,6 +198,9 @@ function hide(): void {
   timer = 0
 
   if (host) {
+    //⚠️ 先停掉观察再放回去，否则下面这句 setAttribute 会被自己的观察者再摘一遍
+    if (watcher) watcher.disconnect()
+
     //放回去：万一这套脚本以后出问题，至少还能退回原生提示
     const text = host.getAttribute('data-tip')
     if (text && host.isConnected) {
