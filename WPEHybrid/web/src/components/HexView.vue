@@ -28,7 +28,7 @@
 */
 import { computed, onBeforeUnmount, ref, shallowRef, watch } from 'vue'
 import { call } from '../bridge'
-import { headerLine, perLineFor, DEFAULT_PER_LINE } from '../hex'
+import { headerLine, perLineFor, DEFAULT_PER_LINE, asciiOf } from '../hex'
 import { t } from '../i18n'
 import { pushToast } from '../stores/toast'
 import ContextMenu from './ContextMenu.vue'
@@ -61,7 +61,8 @@ const len = computed(() => local.value.length)
 
 const HEX = '0123456789ABCDEF'
 function hex2(v: number): string { return HEX[v >> 4] + HEX[v & 15] }
-function asc(v: number): string { return v >= 0x20 && v < 0x7f ? String.fromCharCode(v) : '.' }
+//ASCII 栏的规则在 hex.ts 的 asciiOf 里（照抄 WinForms 那个控件的 converter），别在这儿另写一份
+function asc(v: number): string { return asciiOf(v) }
 function offset(i: number): string { return i.toString(16).toUpperCase().padStart(8, '0') }
 
 /** 十六进制串 → 字节。空白 / 0x / 逗号都容忍；非法或奇数长度返回 null。 */

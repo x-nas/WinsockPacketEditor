@@ -47,6 +47,31 @@ export function headerLine(perLine: number): string {
   return ' '.repeat(10) + hex.padEnd(n * 3, ' ') + ' ' + 'ASCII'
 }
 
+/*
+  字节 → ASCII 栏显示成什么字符。
+
+  ⚠️ 这一份<b>照抄 Be.Windows.Forms 的 DefaultByteCharConverter</b>（WinForms 那半边的
+  十六进制控件用的就是它，没有设过自定义 converter）。反射把 256 个字节全问过一遍，
+  它的规则精确到位：
+
+      0x00..0x1F 与 0x7F..0x9F  ->  '.'
+      其余                      ->  String.fromCharCode(b)   //也就是 Latin-1，字节值即码位
+
+  换句话说<b>高半区（0xA0..0xFF）是照 Latin-1 显示的</b>，不是一律打点 ——
+  ¶ ² Ç ã ¡ º ÿ 这些都看得见。两套 UI 摆在一起对同一个包，ASCII 栏必须逐格一样，
+  否则「同一条封包在两个界面里长得不一样」，而这一栏正是拿来肉眼找结构的。
+
+  ⚠️ <b>不是</b> UTF-8、也<b>不是</b> GBK：这一栏是<b>逐字节</b>的，一个字节一格、
+  与左边的十六进制一一对齐。多字节编码会让「第几格 = 第几字节」当场失效。
+  要看解码后的文本请用十六进制面板的「文本」页签（那边才按 UTF-8 解）。
+
+  ⚠️ 0xA0 是不断行空格、0xAD 是软连字符，两者渲染出来都是空白 ——
+  WinForms 那边也一样（GDI 画的同样是空白），这是忠实照搬，不是漏了。
+*/
+export function asciiOf(b: number): string {
+  return b > 0x1f && !(b > 0x7e && b < 0xa0) ? String.fromCharCode(b) : '.'
+}
+
 /** base64 → 十六进制 + ASCII。 */
 export function dump(b64: string | null, perLine: number = DEFAULT_PER_LINE): string {
   if (!b64) return ''
@@ -67,7 +92,7 @@ export function dump(b64: string | null, perLine: number = DEFAULT_PER_LINE): st
     for (let i = off; i < end; i++) {
       const c = bin.charCodeAt(i)
       hex += c.toString(16).padStart(2, '0').toUpperCase() + ' '
-      asc += c >= 0x20 && c < 0x7f ? bin[i] : '.'
+      asc += asciiOf(c)
     }
 
     out.push(
