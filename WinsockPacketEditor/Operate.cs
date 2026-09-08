@@ -10414,9 +10414,9 @@ namespace WinsockPacketEditor
                 /// （形如 "0A 1B 2C"，与十六进制面板显示的一致），否则匹配 UTF8 解码后的文本。
                 /// 出参只有基础类型 —— 外壳拿不到 ProxyInfo（CS0012）。
                 /// </summary>
-                public static PacketSearchHit SearchProxy_Shell(string Pattern, bool IsHex, int FromIndex)
+                public static PacketSearchHit SearchProxy_Shell(string Pattern, bool IsHex, int FromIndex, int FromPos)
                 {
-                    var hit = new PacketSearchHit { Found = false, Id = 0, Index = -1, Offset = -1, Length = 0, Error = null };
+                    var hit = new PacketSearchHit { Found = false, Id = 0, Index = -1, Offset = -1, Length = 0, NextPos = 0, Error = null };
 
                     try
                     {
@@ -10471,7 +10471,7 @@ namespace WinsockPacketEditor
                         PacketConfig.List.FindRegex = Pattern;
                         PacketConfig.List.FindOptions.IsValid = true;
 
-                        int index = PacketConfig.List.SearchForList<ProxyInfo>(FromIndex, false);
+                        int index = PacketConfig.List.SearchForList<ProxyInfo>(FromIndex, false, FromPos);
 
                         if (index < 0 || index >= lstProxyInfo.Count)
                         {
@@ -10489,41 +10489,23 @@ namespace WinsockPacketEditor
                         hit.Index = index;
 
                         /*
-                            命中字节在包里的偏移 —— 两种模式来路不同：
+                            偏移与「下一处从哪儿接着找」都由 SearchForList 算好，这里只是搬运。
 
-                            · 十六进制：SearchForList 已经算准了（干草堆不带分隔符，匹配位置 ÷ 2
-                              就是字节位置），直接取 FindByteOffset。
-                              ⚠️ <b>不要</b>再拿命中的字节回缓冲里找一次：同一段字节在一个包里
-                              完全可能出现好几处，那样圈出来的是<b>第一处</b>而不是命中的那一处。
-                            · 文本：给不出精确偏移 —— 那串是 UTF8 解码来的，一个字符可能占好几个字节、
-                              非法字节还会变成替换字符，字符下标换算不回字节下标。只能把命中的文字重新
-                              编码成字节回缓冲里找一次；找不到就退回 -1，前端只选中行、不圈字节。
+                            ⚠️ <b>不要</b>在这儿拿命中的内容回缓冲里再找一次：同一段东西在一个包里
+                            完全可能出现好几处，那样圈出来的永远是<b>第一处</b> —— 而「查找下一个」
+                            走到第二处时，圈的还是第一处。
                         */
-                        if (IsHex)
-                        {
-                            byte[] hex = PacketConfig.List.FindOptions.Hex;
-                            int off = PacketConfig.List.FindByteOffset;
+                        hit.NextPos = PacketConfig.List.FindNextPos;
 
-                            if (hex != null && hex.Length > 0 && off >= 0)
-                            {
-                                hit.Offset = off;
-                                hit.Length = hex.Length;
-                            }
-                        }
-                        else
-                        {
-                            byte[] buffer = pi.PacketBuffer;
-                            byte[] needle = SystemConfig.StringToBytes(PacketConfig.Packet.EncodingFormat.UTF8, PacketConfig.List.FindOptions.Text);
+                        int off = PacketConfig.List.FindByteOffset;
+                        int hitLen = IsHex
+                            ? (PacketConfig.List.FindOptions.Hex == null ? 0 : PacketConfig.List.FindOptions.Hex.Length)
+                            : SystemConfig.StringToBytes(PacketConfig.Packet.EncodingFormat.UTF8, PacketConfig.List.FindOptions.Text).Length;
 
-                            if (buffer != null && needle != null && needle.Length > 0)
-                            {
-                                int at = IndexOfBytes(buffer, needle);
-                                if (at >= 0)
-                                {
-                                    hit.Offset = at;
-                                    hit.Length = needle.Length;
-                                }
-                            }
+                        if (off >= 0 && hitLen > 0)
+                        {
+                            hit.Offset = off;
+                            hit.Length = hitLen;
                         }
 
                         return hit;
@@ -10533,29 +10515,6 @@ namespace WinsockPacketEditor
                         Operate.DoLog(nameof(SearchProxy_Shell), ex);
                         return hit;
                     }
-                }
-
-                /// <summary>
-                /// 朴素子串查找。needle 通常只有几个字节、haystack 是一个封包，不值得上 KMP。
-                /// internal：注入模式那份 SearchPacket_Shell 用的是同一个实现，抄一份没道理。
-                /// </summary>
-                internal static int IndexOfBytes(byte[] Haystack, byte[] Needle)
-                {
-                    if (Haystack == null || Needle == null || Needle.Length == 0 || Needle.Length > Haystack.Length)
-                    {
-                        return -1;
-                    }
-
-                    int last = Haystack.Length - Needle.Length;
-
-                    for (int i = 0; i <= last; i++)
-                    {
-                        int j = 0;
-                        while (j < Needle.Length && Haystack[i + j] == Needle[j]) { j++; }
-                        if (j == Needle.Length) { return i; }
-                    }
-
-                    return -1;
                 }
 
                 #endregion
@@ -16500,13 +16459,25 @@ namespace WinsockPacketEditor
                 /// <summary>
                 /// 上一次 <see cref="SearchForList{T}"/> 命中的那一段在封包里的<b>字节</b>偏移，没有则 −1。
                 ///
-                /// ⚠️ 只有十六进制模式给得出来：那一路正则跑在「整包的十六进制文本」上，
-                /// 匹配位置除以 2 就是字节位置，是精确的。
-                /// 文本模式给不出 —— 那串是 UTF8 解码来的，一个字符可能占好几个字节、
-                /// 非法字节还会变成替换字符，字符下标换算不回字节下标（那边仍然靠
-                /// 把命中的文字重新编码成字节、回原始缓冲里找一次）。
+                /// 十六进制模式是精确的：那一路正则跑在「整包的十六进制文本」上，匹配位置除以 2 就是字节位置。
+                /// 文本模式只能<b>估</b>：那串是 UTF8 解码来的，一个字符可能占好几个字节、
+                /// 非法字节还会变成替换字符，字符下标换算不回字节下标 —— 做法见 Text 分支里的注释。
                 /// </summary>
                 public static int FindByteOffset = -1;
+
+                /// <summary>
+                /// 上一次命中<b>之后</b>该从哪儿接着找（在这一行<b>之内</b>的位置，单位与该模式的正则跑在
+                /// 哪个串上一致：十六进制是十六进制文本的字符下标，文本是解码后字符串的字符下标）。
+                ///
+                /// ⚠️ 这一条是「查找下一个」能走到<b>同一个封包里下一处</b>的全部依据。
+                /// 没有它的时候游标只有「行」这一个粒度，一个包里命中三次也只看得到第一处，
+                /// 点「查找下一个」直接跳去下一条包 —— 而 WinForms 那边是逐处走的
+                /// （那边十六进制控件自带的查找是从当前光标往后走的，实测 1 → 5 → 9 → −1，
+                /// 而 ProxyList 只在它返回 false 时才把 Search_Index 加一）。
+                ///
+                /// 调用方把它原样再传回 <c>fromPos</c> 即可，<b>不需要知道它是什么单位</b>。
+                /// </summary>
+                public static int FindNextPos = 0;
                 public static PacketInfo piSelect;
                 public static BindingList<PacketInfo> lstPacketInfo = new BindingList<PacketInfo>();
 
@@ -16814,9 +16785,9 @@ namespace WinsockPacketEditor
                 /// 出参只有基础类型；游标（「查找下一个」从第几行接着找）留在前端，
                 /// C# 侧不碰 <c>Search_Index</c>：那是「谁在翻页谁的状态」。
                 /// </summary>
-                public static PacketSearchHit SearchPacket_Shell(string Pattern, bool IsHex, int FromIndex)
+                public static PacketSearchHit SearchPacket_Shell(string Pattern, bool IsHex, int FromIndex, int FromPos)
                 {
-                    var hit = new PacketSearchHit { Found = false, Id = 0, Index = -1, Offset = -1, Length = 0, Error = null };
+                    var hit = new PacketSearchHit { Found = false, Id = 0, Index = -1, Offset = -1, Length = 0, NextPos = 0, Error = null };
 
                     try
                     {
@@ -16871,7 +16842,7 @@ namespace WinsockPacketEditor
                         PacketConfig.List.FindRegex = Pattern;
                         PacketConfig.List.FindOptions.IsValid = true;
 
-                        int index = PacketConfig.List.SearchForList<PacketInfo>(FromIndex, true);
+                        int index = PacketConfig.List.SearchForList<PacketInfo>(FromIndex, true, FromPos);
 
                         if (index < 0 || index >= lstPacketInfo.Count)
                         {
@@ -16889,41 +16860,23 @@ namespace WinsockPacketEditor
                         hit.Index = index;
 
                         /*
-                            命中字节在包里的偏移 —— 两种模式来路不同：
+                            偏移与「下一处从哪儿接着找」都由 SearchForList 算好，这里只是搬运。
 
-                            · 十六进制：SearchForList 已经算准了（干草堆不带分隔符，匹配位置 ÷ 2
-                              就是字节位置），直接取 FindByteOffset。
-                              ⚠️ <b>不要</b>再拿命中的字节回缓冲里找一次：同一段字节在一个包里
-                              完全可能出现好几处，那样圈出来的是<b>第一处</b>而不是命中的那一处。
-                            · 文本：给不出精确偏移 —— 那串是 UTF8 解码来的，一个字符可能占好几个字节、
-                              非法字节还会变成替换字符，字符下标换算不回字节下标。只能把命中的文字重新
-                              编码成字节回缓冲里找一次；找不到就退回 -1，前端只选中行、不圈字节。
+                            ⚠️ <b>不要</b>在这儿拿命中的内容回缓冲里再找一次：同一段东西在一个包里
+                            完全可能出现好几处，那样圈出来的永远是<b>第一处</b> —— 而「查找下一个」
+                            走到第二处时，圈的还是第一处。
                         */
-                        if (IsHex)
-                        {
-                            byte[] hex = PacketConfig.List.FindOptions.Hex;
-                            int off = PacketConfig.List.FindByteOffset;
+                        hit.NextPos = PacketConfig.List.FindNextPos;
 
-                            if (hex != null && hex.Length > 0 && off >= 0)
-                            {
-                                hit.Offset = off;
-                                hit.Length = hex.Length;
-                            }
-                        }
-                        else
-                        {
-                            byte[] buffer = pi.PacketBuffer;
-                            byte[] needle = SystemConfig.StringToBytes(PacketConfig.Packet.EncodingFormat.UTF8, PacketConfig.List.FindOptions.Text);
+                        int off = PacketConfig.List.FindByteOffset;
+                        int hitLen = IsHex
+                            ? (PacketConfig.List.FindOptions.Hex == null ? 0 : PacketConfig.List.FindOptions.Hex.Length)
+                            : SystemConfig.StringToBytes(PacketConfig.Packet.EncodingFormat.UTF8, PacketConfig.List.FindOptions.Text).Length;
 
-                            if (buffer != null && needle != null && needle.Length > 0)
-                            {
-                                int at = ProxyConfig.List.IndexOfBytes(buffer, needle);
-                                if (at >= 0)
-                                {
-                                    hit.Offset = at;
-                                    hit.Length = needle.Length;
-                                }
-                            }
+                        if (off >= 0 && hitLen > 0)
+                        {
+                            hit.Offset = off;
+                            hit.Length = hitLen;
                         }
 
                         return hit;
@@ -17051,12 +17004,24 @@ namespace WinsockPacketEditor
 
                 #region //搜索封包列表
 
-                public static int SearchForList<T>(int fromIndex, bool isPacketList = true) where T : class
+                /// <param name="fromPos">
+                /// 在第 <paramref name="fromIndex"/> 行<b>之内</b>从哪儿接着找（上一次的
+                /// <see cref="FindNextPos"/>）。只对这一行有效，往后的行一律从头开始。
+                /// ⚠️ 参数放在最后、给了默认值 —— WinForms 那两个调用点按位置传的是
+                /// <paramref name="isPacketList"/>，插在中间会把它们悄悄改掉。
+                /// </param>
+                public static int SearchForList<T>(int fromIndex, bool isPacketList = true, int fromPos = 0) where T : class
                 {
                     int iResult = -1;
 
                     //⚠️ 先清掉上一轮的，不然这次没命中时调用方会读到上一次的偏移
                     Operate.PacketConfig.List.FindByteOffset = -1;
+                    Operate.PacketConfig.List.FindNextPos = 0;
+
+                    if (fromPos < 0)
+                    {
+                        fromPos = 0;
+                    }
 
                     try
                     {
@@ -17093,25 +17058,60 @@ namespace WinsockPacketEditor
                         {
                             case FindType.Text:
 
+                                Regex reText;
+                                try
+                                {
+                                    reText = new Regex(PacketConfig.List.FindRegex);
+                                }
+                                catch
+                                {
+                                    // 正则表达式错误
+                                    return -1;
+                                }
+
                                 for (int i = fromIndex; i < listCount; i++)
                                 {
                                     ReadOnlySpan<byte> packetBuffer = GetPacketBuffer(listItems[i], isPacketList);
                                     string packetData = SystemConfig.BytesToString(PacketConfig.Packet.EncodingFormat.UTF8, packetBuffer);
 
-                                    try
+                                    //只有起点那一行接着上次的位置往后找，后面的行都从头来
+                                    int at = (i == fromIndex) ? Math.Min(fromPos, packetData.Length) : 0;
+
+                                    Match mFind = reText.Match(packetData, at);
+
+                                    //空匹配（"a*" 这种）不算命中：既圈不出东西，还会让游标停在原地打转
+                                    if (!mFind.Success || mFind.Length == 0)
                                     {
-                                        Match mFind = Regex.Match(packetData, PacketConfig.List.FindRegex);
-                                        if (mFind.Success)
+                                        continue;
+                                    }
+
+                                    PacketConfig.List.FindOptions.Text = mFind.Value;
+                                    PacketConfig.List.FindNextPos = mFind.Index + 1;
+
+                                    /*
+                                        字节偏移：文本模式只能<b>估</b>。
+
+                                        不能拿字符下标当字节偏移（一个字符可能占好几个字节），也不能
+                                        把整个前缀重新编码去数字节 —— 缓冲里的非法字节解码成了替换字符，
+                                        再编码回去是三个字节，位置就飘了。
+
+                                        做法是「把命中的那段文字重新编码成字节，回缓冲里找一次」，
+                                        但<b>从 mFind.Index 这个下限往后找</b>：UTF8 里每个字符至少占一个字节，
+                                        所以真实字节偏移一定 ≥ 字符下标。加了这个下限，同一段文字在一个包里
+                                        出现好几次时才不会永远圈住第一处（这正是这次要修的毛病）。
+                                        找不到就退回 −1，前端只选中行、不圈字节。
+                                    */
+                                    byte[] needle = SystemConfig.StringToBytes(PacketConfig.Packet.EncodingFormat.UTF8, mFind.Value);
+                                    if (needle != null && needle.Length > 0 && mFind.Index < packetBuffer.Length)
+                                    {
+                                        int hit = packetBuffer.Slice(mFind.Index).IndexOf(new ReadOnlySpan<byte>(needle));
+                                        if (hit >= 0)
                                         {
-                                            PacketConfig.List.FindOptions.Text = mFind.Value;
-                                            return i;
+                                            PacketConfig.List.FindByteOffset = mFind.Index + hit;
                                         }
                                     }
-                                    catch
-                                    {
-                                        // 正则表达式错误
-                                        return -1;
-                                    }
+
+                                    return i;
                                 }
 
                                 break;
@@ -17163,7 +17163,10 @@ namespace WinsockPacketEditor
                                         ReadOnlySpan<byte> packetBuffer = GetPacketBuffer(listItems[i], isPacketList);
                                         string packetData = SystemConfig.HexRunOf(packetBuffer);
 
-                                        for (Match mFind = reHex.Match(packetData); mFind.Success; mFind = mFind.NextMatch())
+                                        //只有起点那一行接着上次的位置往后找，后面的行都从头来
+                                        int at = (i == fromIndex) ? Math.Min(fromPos, packetData.Length) : 0;
+
+                                        for (Match mFind = reHex.Match(packetData, at); mFind.Success; mFind = mFind.NextMatch())
                                         {
                                             //空匹配（比如 "A*"）会让 NextMatch 原地打转，直接跳过
                                             if (mFind.Length == 0)
@@ -17185,6 +17188,9 @@ namespace WinsockPacketEditor
 
                                             Operate.PacketConfig.List.FindOptions.Hex = bHex;
                                             Operate.PacketConfig.List.FindByteOffset = mFind.Index / 2;
+
+                                            //往后挪<b>一个字节</b>（两个字符）：挪一个字符只会落在半字节上，白跑一趟边界检查
+                                            Operate.PacketConfig.List.FindNextPos = mFind.Index + 2;
                                             return i;
                                         }
                                     }

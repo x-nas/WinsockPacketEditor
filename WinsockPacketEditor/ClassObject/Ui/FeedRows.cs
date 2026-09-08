@@ -1071,6 +1071,14 @@ namespace WinsockPacketEditor
         public int Index;
         public int Offset;      // 命中字节在包里的偏移；-1 表示只定位到行、圈不出具体位置
         public int Length;
+
+        /// <summary>
+        /// 「查找下一个」该从<b>这一行的哪个位置</b>接着找。前端原样存下、下次原样传回来即可，
+        /// <b>不需要知道它是什么单位</b>（十六进制模式是十六进制文本的字符下标，文本模式是解码后的字符下标）。
+        /// ⚠️ 有它才走得到<b>同一个封包里的第二处</b>；只按行号加一的话，一个包里命中三次也只看得到第一处。
+        /// </summary>
+        public int NextPos;
+
         public string Error;    // 正则写错时的说明，前端直接显示
     }
 

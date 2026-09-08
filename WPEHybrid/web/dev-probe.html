@@ -129,9 +129,21 @@
     getListSetting: () => ({ showSocket: true, showType: true, showClientAddr: true, showClientLoc: true, showServerAddr: true, showServerLoc: true, showLen: true, autoClear: true, autoClearValue: 5000 }),
     getStats: () => ({ queue: 0, list: 40, total: 40, autoClear: true, autoClearValue: 5000, proxyRunning: true, socks5Addr: '0.0.0.0:1080', onlineInfo: '1/3', totalRequest: 1024, totalResponse: 2048, speedUp: 0, speedDown: 0 }),
     //查找：偶数次命中第 7 行、奇数次没命中，用来同时验「命中」与「没有匹配」两条路
-    searchProxyList: (a) => (a.pattern === 'zzz' ? { Found: false, Id: 0, Index: -1, Offset: -1, Length: 0, Error: null } : a.pattern === 'bad(' ? { Found: false, Id: 0, Index: -1, Offset: -1, Length: 0, Error: '括号不配对' }
-      : a.from > 7 ? { Found: false, Id: 0, Index: -1, Offset: -1, Length: 0, Error: null }
-      : { Found: true, Id: 1007, Index: 7, Offset: 9, Length: 6, Error: null }),
+    // 第 7 条包里有<b>两处</b>命中、第 9 条一处 —— 这样才验得到「查找下一个」走不走得到同一个包的第二处
+    searchProxyList: (a) => {
+      if (a.pattern === 'zzz') return { Found: false, Id: 0, Index: -1, Offset: -1, Length: 0, NextPos: 0, Error: null };
+      if (a.pattern === 'bad(') return { Found: false, Id: 0, Index: -1, Offset: -1, Length: 0, NextPos: 0, Error: '括号不配对' };
+      const HITS = [
+        // ⚠️ 挑<b>非 HTTP</b> 的那几行：HTTP 类的封包面板默认进「文本」页签，那一档刻意不圈字节，验不到选区
+        { Id: 1009, Index: 9,  Pos: 4,  Offset: 2,  Length: 6 },
+        { Id: 1009, Index: 9,  Pos: 40, Offset: 20, Length: 6 },
+        { Id: 1011, Index: 11, Pos: 8,  Offset: 4,  Length: 6 },
+      ];
+      const from = a.from || 0, fromPos = a.fromPos || 0;
+      const h = HITS.find((x) => x.Index > from || (x.Index === from && x.Pos >= fromPos));
+      if (!h) return { Found: false, Id: 0, Index: -1, Offset: -1, Length: 0, NextPos: 0, Error: null };
+      return { Found: true, Id: h.Id, Index: h.Index, Offset: h.Offset, Length: h.Length, NextPos: h.Pos + 2, Error: null };
+    },
     getPacketDetail: (a) => { const raw = atob(sample); const mod = raw.slice(0,3) + String.fromCharCode(0x99,0x98) + raw.slice(5) + String.fromCharCode(1, 2); return { id: a.id, packet: btoa(mod), raw: sample, modified: true } },
   };
   window.__inst = [{ t: 2, c: '3' }, { t: 1, c: '100' }, { t: 4, c: 'Press|A' }, { t: 3, c: '' }];

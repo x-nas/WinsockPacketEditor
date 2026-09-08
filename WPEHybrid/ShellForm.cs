@@ -3951,8 +3951,11 @@ namespace WPEHybrid
                 bool isHex = args["isHex"] != null && (bool)args["isHex"];
                 int from = args["from"] == null ? 0 : (int)args["from"];
 
+                //在这一行之内从哪儿接着找。前端把上一次的 NextPos 原样传回来，它不需要知道这是什么单位
+                int fromPos = args["fromPos"] == null ? 0 : (int)args["fromPos"];
+
                 return await System.Threading.Tasks.Task.Run(
-                    () => Operate.ProxyConfig.List.SearchProxy_Shell(pattern, isHex, from));
+                    () => Operate.ProxyConfig.List.SearchProxy_Shell(pattern, isHex, from, fromPos));
             });
 
             //注入模式那一份。同样跑在 Task.Run 上，同样把游标留给前端
@@ -3961,9 +3964,10 @@ namespace WPEHybrid
                 string pattern = (string)args["pattern"] ?? string.Empty;
                 bool isHex = args["isHex"] != null && (bool)args["isHex"];
                 int from = args["from"] == null ? 0 : (int)args["from"];
+                int fromPos = args["fromPos"] == null ? 0 : (int)args["fromPos"];
 
                 return await System.Threading.Tasks.Task.Run(
-                    () => Operate.PacketConfig.List.SearchPacket_Shell(pattern, isHex, from));
+                    () => Operate.PacketConfig.List.SearchPacket_Shell(pattern, isHex, from, fromPos));
             });
 
             #endregion

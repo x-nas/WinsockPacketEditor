@@ -267,12 +267,21 @@ function onSelect(anyRow: PacketListRow, ev: MouseEvent, index: number): void {
 const q = ref('')
 const qHex = ref(false)
 const searching = ref(false)
-/** 上一次命中的行在 C# 列表里的下标；「查找下一个」从它 + 1 接着找。−1 = 还没找过 */
+/** 上一次命中的行在 C# 列表里的下标。−1 = 还没找过 */
 const searchAt = ref(-1)
+/*
+  上一次命中<b>之后</b>该从这一行的哪个位置接着找（C# 给的 NextPos，原样存、原样传回去，
+  前端不需要知道它是什么单位）。
+
+  ⚠️ 这一条是「查找下一个」能走到<b>同一个封包里下一处</b>的全部依据。
+  早先游标只有 searchAt 一个、每次传 searchAt + 1，于是一个包里命中三次也只看得到第一处，
+  点一下直接跳去下一条包 —— 而 WinForms 那边是逐处走的。
+*/
+const searchPos = ref(0)
 /** 命中的那段字节，交给十六进制面板圈出来 */
 const searchHit = ref<{ offset: number; length: number } | null>(null)
 
-interface SearchResult { Found: boolean; Id: number; Index: number; Offset: number; Length: number; Error: string | null }
+interface SearchResult { Found: boolean; Id: number; Index: number; Offset: number; Length: number; NextPos: number; Error: string | null }
 
 async function findNext(fromHead = false): Promise<void> {
   const pattern = q.value.trim()
@@ -281,8 +290,10 @@ async function findNext(fromHead = false): Promise<void> {
   searching.value = true
 
   try {
-    const from = fromHead ? 0 : searchAt.value + 1
-    let r = await call<SearchResult>('searchPacketList', { pattern, isHex: qHex.value, from })
+    //先在当前这一行的剩下部分找（searchPos），找不到 SearchForList 自己会往下一行走
+    const from = fromHead || searchAt.value < 0 ? 0 : searchAt.value
+    const fromPos = fromHead ? 0 : searchPos.value
+    let r = await call<SearchResult>('searchPacketList', { pattern, isHex: qHex.value, from, fromPos })
 
     if (r?.Error) {
       /*
@@ -296,19 +307,21 @@ async function findNext(fromHead = false): Promise<void> {
     }
 
     //没找到而且不是从头找的 —— 回到开头再来一圈（转完还找不到才算真没有）
-    if (!r?.Found && from > 0) {
-      r = await call<SearchResult>('searchPacketList', { pattern, isHex: qHex.value, from: 0 })
+    if (!r?.Found && (from > 0 || fromPos > 0)) {
+      r = await call<SearchResult>('searchPacketList', { pattern, isHex: qHex.value, from: 0, fromPos: 0 })
       if (r?.Found) pushToast('info', t('sp.wrapped'))
     }
 
     if (!r?.Found) {
       searchAt.value = -1
+      searchPos.value = 0
       searchHit.value = null
       pushToast('warning', t('sp.noMatch'))
       return
     }
 
     searchAt.value = r.Index
+    searchPos.value = r.NextPos
 
     /*
       滚动用<b>前端副本里的下标</b>，不直接用 C# 给的 Index。
@@ -337,12 +350,15 @@ async function findNext(fromHead = false): Promise<void> {
 //改了条件就把游标退回开头；上一次的高亮也一并丢掉，它标的是上一个条件命中的那一段
 watch([q, qHex], () => {
   searchAt.value = -1
+  searchPos.value = 0
   searchHit.value = null
 })
 
 function clearSearch(): void {
   q.value = ''
+  //watch 也会清，但那是下一拍的事 —— 这里同步清干净，与 searchAt 一致
   searchAt.value = -1
+  searchPos.value = 0
   searchHit.value = null
 }
 

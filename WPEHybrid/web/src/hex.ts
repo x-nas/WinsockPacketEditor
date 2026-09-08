@@ -11,7 +11,7 @@ export const DEFAULT_PER_LINE = 16
  * 给定可用宽度（字符数），算每行放几个字节。
  *
  * 一行的字符数是 <b>11 + 4N</b>：偏移(8) + 两空格 + 十六进制(每字节 "XX " 共 3)
- * + 一空格 + ASCII(每字节 1)。下面就是反过来解这个 N。
+ * + 一空格 + 字符栏(每字节 1)。下面就是反过来解这个 N。
  *
  * <b>向下取到 2 的倍数。</b>这个粒度改过两轮，理由都是同一条线：
  *   8  最早取 8，是为了「能心算第几列是第几字节」；
@@ -20,7 +20,7 @@ export const DEFAULT_PER_LINE = 16
  *   2  现在按 word 分组，最多只浪费 1 个字节的宽度（约 26px）。
  *
  * <b>不取到 1</b>：保持偶数，十六进制通常按 2 字节一组读（word 边界），
- * 而且奇数长度会让 ASCII 那栏在行与行之间错半格。
+ * 而且奇数长度会让字符栏在行与行之间错半格。
  *
  * 最少 8 —— 再窄就横向滚动，总比把一个字节拆两行强。
  */
@@ -44,11 +44,22 @@ export function headerLine(perLine: number): string {
     hex += i.toString(16).padStart(2, '0').toUpperCase() + ' '
   }
 
-  return ' '.repeat(10) + hex.padEnd(n * 3, ' ') + ' ' + 'ASCII'
+  /*
+    ⚠️ 这一栏<b>不叫 ASCII</b>。它按 Latin-1 显示（0xA0..0xFF 是 ¶ ² Ç ã ÿ 这些，
+    见 asciiOf），而 ASCII 只有 0x00..0x7F —— 标成 ASCII 是在说一件不成立的事。
+
+    标签保持英文字面量、不进字典（与 Mode 01 / Ready / Target 同一条口径）：
+    它压在一排十六进制列号后面，本来就是这一行里唯一的英文。
+    宽度上也放得下 —— perLineFor 的下限是 8 个字节，而 "LATIN-1" 只要 7 格。
+  */
+  return ' '.repeat(10) + hex.padEnd(n * 3, ' ') + ' ' + 'LATIN-1'
 }
 
 /*
-  字节 → ASCII 栏显示成什么字符。
+  字节 → 字符栏显示成什么字符。
+
+  ⚠️ 这一栏<b>不是 ASCII</b>（表头上写的也是 LATIN-1）—— 名字里留着 ascii
+  只是沿用行业叫法，规则见下面。
 
   ⚠️ 这一份<b>照抄 Be.Windows.Forms 的 DefaultByteCharConverter</b>（WinForms 那半边的
   十六进制控件用的就是它，没有设过自定义 converter）。反射把 256 个字节全问过一遍，
@@ -72,7 +83,7 @@ export function asciiOf(b: number): string {
   return b > 0x1f && !(b > 0x7e && b < 0xa0) ? String.fromCharCode(b) : '.'
 }
 
-/** base64 → 十六进制 + ASCII。 */
+/** base64 → 十六进制 + 字符栏。 */
 export function dump(b64: string | null, perLine: number = DEFAULT_PER_LINE): string {
   if (!b64) return ''
 
@@ -81,7 +92,7 @@ export function dump(b64: string | null, perLine: number = DEFAULT_PER_LINE): st
   const len = bin.length
   const out: string[] = []
 
-  //十六进制那段的固定宽度，最后一行不满时靠它把 ASCII 列对齐
+  //十六进制那段的固定宽度，最后一行不满时靠它把字符栏对齐
   const hexWidth = n * 3
 
   for (let off = 0; off < len; off += n) {

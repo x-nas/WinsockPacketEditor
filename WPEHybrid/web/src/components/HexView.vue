@@ -19,7 +19,7 @@
 
   【渲染】每个字节一个格子、行定高 18px、虚拟滚动 —— 64KB 是 4096 行，全铺开是 13 万个格子。
   早先只读那块是整包排成一个 <pre>（靠原生文本选择复制），合并后统一成格子：
-  原生选择会把偏移列和 ASCII 列一起复制出去，几乎从来不是用户想要的；格子模型下复制的只有字节。
+  原生选择会把偏移列和字符栏一起复制出去，几乎从来不是用户想要的；格子模型下复制的只有字节。
 
   【光标模型】字节下标 + 高低半字节，另有一个落在末尾（= 长度）的追加位。
   覆盖模式默认（同 HexBox），Insert 切换；末尾键入永远是追加。点十六进制区按十六进制键入、
@@ -61,7 +61,7 @@ const len = computed(() => local.value.length)
 
 const HEX = '0123456789ABCDEF'
 function hex2(v: number): string { return HEX[v >> 4] + HEX[v & 15] }
-//ASCII 栏的规则在 hex.ts 的 asciiOf 里（照抄 WinForms 那个控件的 converter），别在这儿另写一份
+//字符栏的规则在 hex.ts 的 asciiOf 里（照抄 WinForms 那个控件的 converter），别在这儿另写一份
 function asc(v: number): string { return asciiOf(v) }
 function offset(i: number): string { return i.toString(16).toUpperCase().padStart(8, '0') }
 
@@ -212,7 +212,7 @@ function differs(i: number): boolean {
   return i >= c.length || c[i] !== local.value[i]
 }
 
-/** 最后一行末尾补的空格数，ASCII 栏才对得齐 */
+/** 最后一行末尾补的空格数，字符栏才对得齐 */
 function tailPad(): string {
   const rest = len.value % per.value
   const used = rest + (props.readonly ? 0 : 1)   //可编辑时多一格追加位
@@ -624,7 +624,7 @@ defineExpose({ cur, nib, col, insertMode, hasSel, selCount, per, selectAll, sele
 .ascs { margin-left: 1ch; }
 .pad { flex: none; }
 
-/* 每个字节 "XX " 三格；ASCII 一格 */
+/* 每个字节 "XX " 三格；字符栏一格 */
 .b { display: inline-block; width: 3ch; }
 .c { display: inline-block; width: 1ch; }
 
