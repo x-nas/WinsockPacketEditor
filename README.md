@@ -24,7 +24,7 @@ WPE x64 是一款可以拦截并修改 WinSock 封包的 Windows 软件，自适
 
 WPE x64 支持直接注入 Windows 进程来拦截 Winsock 封包，也可以通过 SOCKS 代理模式来拦截 Winsock 封包.
 
-本软件使用微软 VS2022 集成开发环境与 .NET Framework 4.8 开发框架，界面基于 WebView2 + Vue 3（需要 Microsoft Edge WebView2 Runtime，Windows 11 已自带）。发布形态是**绿色免安装版**：整个 Release 目录打成自解压包，双击后解压到 `wpe64\<版本号>\` 即可运行，不写注册表、不需要安装。升级请到[官方网站](https://www.wpe64.com)或本仓库的 [Releases](https://github.com/x-nas/WinsockPacketEditor/releases) 下载新版本。
+本软件使用微软 VS2022 集成开发环境与 .NET Framework 4.8 开发框架，界面基于 WebView2 + Vue 3（需要 Microsoft Edge WebView2 Runtime：Windows 11 已自带，Windows 10 一般随 Edge 装好；发布包不带运行时，缺失时程序会提示并引导下载微软官方安装程序）。发布形态是**绿色免安装版**：整个 Release 目录打成自解压包，双击后解压到 `wpe64\<版本号>\` 即可运行，不写注册表、不需要安装。升级请到[官方网站](https://www.wpe64.com)或本仓库的 [Releases](https://github.com/x-nas/WinsockPacketEditor/releases) 下载新版本。
 
 ## [📚] Introduction
 
@@ -32,7 +32,7 @@ WPE x64 is a Windows software that can intercept and modify WinSock packets, wit
 
 WPE x64 supports direct injection into Windows processes to intercept Winsock packets, and can also intercept Winsock packets through SOCKS proxy mode.
 
-This software is built with Microsoft Visual Studio 2022 and .NET Framework 4.8; the UI is WebView2 + Vue 3 (requires the Microsoft Edge WebView2 Runtime, which ships with Windows 11). It ships as a **portable build**: the whole Release folder is packed into a self-extracting archive that unpacks to `wpe64\<version>\` and runs directly — no installer and no registry writes. To upgrade, download the newer build from the [official website](https://www.wpe64.com) or this repository's [Releases](https://github.com/x-nas/WinsockPacketEditor/releases) page.
+This software is built with Microsoft Visual Studio 2022 and .NET Framework 4.8; the UI is WebView2 + Vue 3 (requires the Microsoft Edge WebView2 Runtime — built into Windows 11 and usually present on Windows 10 with Edge; it is not bundled, and if it is missing the program tells you how to install Microsoft's official installer). It ships as a **portable build**: the whole Release folder is packed into a self-extracting archive that unpacks to `wpe64\<version>\` and runs directly — no installer and no registry writes. To upgrade, download the newer build from the [official website](https://www.wpe64.com) or this repository's [Releases](https://github.com/x-nas/WinsockPacketEditor/releases) page.
 
 ## [🎖️] 软件特色
 

@@ -58,11 +58,10 @@ namespace WPEHybrid
                 System.Threading.Tasks.TaskScheduler.UnobservedTaskException += (s, e) =>
                     LogFile.Crash("Task", e.Exception);
 
-                //WebView2 运行时缺失时给出明确指引，而不是抛一个看不懂的 COM 异常
-                string sRuntimeError = ShellForm.CheckWebView2Runtime();
-                if (sRuntimeError != null)
+                //WebView2 运行时缺失时引导用户去装（发布包不带运行时），而不是抛一个看不懂的 COM 异常
+                if (!ShellForm.HasWebView2Runtime())
                 {
-                    MessageBox.Show(sRuntimeError, "WPE x64", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    ShellForm.PromptInstallWebView2();
                     return;
                 }
 

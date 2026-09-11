@@ -167,32 +167,86 @@ namespace WPEHybrid
         #region//运行时检测
 
         /// <summary>
-        /// 检查 WebView2 运行时是否可用。可用返回 null，否则返回给用户看的说明。
-        ///
-        /// 目前用 Evergreen（机器级安装，Win11 自带、Win10 通常随 Edge 有）。
-        /// 将来若要彻底去掉这个依赖，可改用 Fixed Version：把运行时打进自解压包
-        /// （约 +180MB），再用 CreateAsync 的 browserExecutableFolder 指过去。
+        /// 微软官方的 WebView2 Evergreen 引导安装程序（MicrosoftEdgeWebview2Setup.exe，约 2MB，
+        /// 运行后自动联网下载并装好对应架构的运行时）。这是 WebView2 文档里给应用分发用的固定链接。
         /// </summary>
-        public static string CheckWebView2Runtime()
+        private const string WebView2SetupUrl = "https://go.microsoft.com/fwlink/p/?LinkId=2124703";
+
+        /// <summary>WebView2 的下载页，引导安装程序打不开时的退路（离线安装包也在这一页）。</summary>
+        private const string WebView2PageUrl = "https://developer.microsoft.com/microsoft-edge/webview2/";
+
+        /// <summary>
+        /// 检查 WebView2 运行时是否可用。
+        ///
+        /// ⚠️ <b>发布包不带运行时</b>（2.1.9 定的：用 Evergreen，不用 Fixed Version）——
+        /// Win11 自带、Win10 通常随 Edge 装好；真没有时由 <see cref="PromptInstallWebView2"/>
+        /// 引导用户去装，而不是把约 180MB 的运行时打进自解压包。
+        /// </summary>
+        public static bool HasWebView2Runtime()
         {
             try
             {
-                string ver = CoreWebView2Environment.GetAvailableBrowserVersionString();
-
-                if (!string.IsNullOrEmpty(ver))
-                {
-                    return null;
-                }
+                return !string.IsNullOrEmpty(CoreWebView2Environment.GetAvailableBrowserVersionString());
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(CheckWebView2Runtime), ex);
+                //没装时 GetAvailableBrowserVersionString 抛 WebView2RuntimeNotFoundException，属于正常分支
+                Operate.DoLog(nameof(HasWebView2Runtime), ex);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 缺运行时的时候告诉用户怎么装，并替他打开官方安装程序的下载地址。
+        ///
+        /// 这一刻库还没建、界面语言还没读出来，所以按<b>系统界面语言</b>给中文或英文。
+        /// 装完要重开本程序 —— 运行时是在启动时才检测的。
+        /// </summary>
+        public static void PromptInstallWebView2()
+        {
+            bool zh = System.Globalization.CultureInfo.CurrentUICulture.Name.StartsWith("zh", StringComparison.OrdinalIgnoreCase);
+
+            string text = zh
+                ? "未检测到 Microsoft Edge WebView2 运行时，WPE x64 的界面需要它才能显示。\r\n\r\n"
+                  + "安装步骤：\r\n"
+                  + "  1. 点「是」，下载微软官方安装程序 MicrosoftEdgeWebview2Setup.exe（约 2MB）\r\n"
+                  + "  2. 运行它，按提示装完（需要联网）\r\n"
+                  + "  3. 重新打开 WPE x64\r\n\r\n"
+                  + "Windows 11 一般已自带；Windows 10 通常随 Microsoft Edge 一起安装。\r\n"
+                  + "也可以手动到下面这个页面下载：\r\n" + WebView2PageUrl + "\r\n\r\n"
+                  + "现在下载安装程序吗？"
+                : "Microsoft Edge WebView2 Runtime was not found. WPE x64 needs it to show its interface.\r\n\r\n"
+                  + "To install:\r\n"
+                  + "  1. Click Yes to download Microsoft's installer, MicrosoftEdgeWebview2Setup.exe (about 2 MB)\r\n"
+                  + "  2. Run it and follow the prompts (an internet connection is required)\r\n"
+                  + "  3. Start WPE x64 again\r\n\r\n"
+                  + "Windows 11 usually ships with it; on Windows 10 it normally comes with Microsoft Edge.\r\n"
+                  + "You can also download it manually from:\r\n" + WebView2PageUrl + "\r\n\r\n"
+                  + "Download the installer now?";
+
+            DialogResult r = MessageBox.Show(text, "WPE x64", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (r != DialogResult.Yes)
+            {
+                return;
             }
 
-            return "未检测到 Microsoft Edge WebView2 运行时。\r\n\r\n"
-                 + "请先安装后再运行本程序：\r\n"
-                 + "https://developer.microsoft.com/microsoft-edge/webview2/\r\n\r\n"
-                 + "（Windows 11 通常已自带；Windows 10 一般随 Microsoft Edge 一起安装）";
+            foreach (string url in new[] { WebView2SetupUrl, WebView2PageUrl })
+            {
+                try
+                {
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(url) { UseShellExecute = true });
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(PromptInstallWebView2), ex);
+                }
+            }
+
+            MessageBox.Show(
+                (zh ? "打不开浏览器，请手动访问：\r\n" : "Could not open a browser. Please visit:\r\n") + WebView2PageUrl,
+                "WPE x64", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         #endregion
@@ -5030,7 +5084,7 @@ namespace WPEHybrid
                     isAdmin = Operate.SystemConfig.IsAdministrator(),
                     /*
                         这里曾返回 WebView2 版本给自检显示，已去掉：
-                        程序能跑起来就说明运行时在（Program.Main 建窗前调 CheckWebView2Runtime，
+                        程序能跑起来就说明运行时在（Program.Main 建窗前调 HasWebView2Runtime，
                         缺失时直接弹框并退出），所以那一项永远显示「有」，没有信息量。
                         真正会变、会过期的是归属地库，那个才值得占位置。
                     */
