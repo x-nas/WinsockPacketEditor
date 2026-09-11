@@ -11,9 +11,10 @@
     ///             IsScrollBarHide / IsTextRenderingHighQuality / IsDark / DefaultLanguage
     ///   XML 备份：同名元素
     ///
-    /// <b>本类是这些值的唯一真源</b>：AntdUI.Config 与 AntdUI.Localization 是它的运行时镜像。
-    ///   Prefs → 运行时：WinFormsUiHost.ApplyPrefs() / ApplyLanguage() / ApplyAll()
-    ///   界面上改了设置：先写本类，再调上面的 Apply*，不要直接写 AntdUI.Config
+    /// <b>本类是这些值的唯一真源</b>：外壳经桥读写它（getPrefs / setAppearance / setLanguage），
+    ///   UI.T 走的 CoreL10n 每次都现读 Language，不需要「应用」这一步。
+    ///   IsAnimation / IsShadowEnabled / IsShowInWindow / IsScrollBarHide / IsTextRenderingHighQuality
+    ///   只对当年的 AntdUI 界面有效，现在没人读；字段与库列刻意保留，免得改表结构与备份格式。
     ///
     /// 纯 POCO，任何时候都可用，不依赖是否已 UI.Attach
     /// （注入模式在建窗之前就要读配置，所以这一点是必需的）。
@@ -71,7 +72,7 @@
         // 存储格式与迁移前完全一致：SQLite 与 XML 里存的都是 ARGB int
         //（原来是 Color.ToArgb() / Color.FromArgb(int)，现在是 RgbColor.Argb / new RgbColor(int)）。
         // 默认值取自搬迁前 Operate 里的字段初始值，括号里是原来的 KnownColor 名。
-        // 只有这 9 个颜色是用户可改的；主题灰阶与滤镜标记色是常量，放在 UI 层的 UiTheme。
+        // 只有这 9 个颜色是用户可改的；主题灰阶与滤镜标记色是前端的 CSS 令牌。
 
         /// <summary>主题色（22,119,255）。</summary>
         public RgbColor SystemColor = RgbColor.FromRgb(22, 119, 255);

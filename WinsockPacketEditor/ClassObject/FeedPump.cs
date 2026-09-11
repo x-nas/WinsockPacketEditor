@@ -23,7 +23,7 @@ namespace WinsockPacketEditor
     /// 编辑弹窗是<b>就地改对象的属性</b>，不动列表结构，所以一个事件都不会有
     /// （这些模型都没实现 INotifyPropertyChanged，全项目 ResetBindings 调用为 0 —— WinForms 侧
     /// 靠 AntdUI 表格自己重绘，桥没有这份便利，因为它持有的是另一侧的副本）。
-    /// 所以 <c>UiDialogs.OpenEditModal</c> 在弹窗关掉后会调一次 <see cref="PushNow"/>。
+    /// 所以各编辑入口改完之后要调一次 <see cref="PushNow"/> 或 <c>MarkDirty</c>。
     ///
     /// 【为什么要攒一拍再推】
     /// 从数据库载入是 Clear + N 次 Add，会连着来 N+1 个事件；逐个事件整表推就是 O(N²)。

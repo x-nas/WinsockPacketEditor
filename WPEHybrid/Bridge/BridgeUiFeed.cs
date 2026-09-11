@@ -8,8 +8,7 @@ namespace WPEHybrid
     /// <summary>
     /// <see cref="IUiFeed"/> 的桥实现（B10c）。
     ///
-    /// 与 <c>WinFormsUiFeed</c> 的根本差别是 <see cref="NeedsRows"/> 返回 <b>true</b>：
-    /// WinForms 是进程内消费者，直接绑 BindingList 就行；前端在另一侧，必须拿到 DTO。
+    /// <see cref="NeedsRows"/> 返回 <b>true</b>：前端在另一侧，必须拿到 DTO。
     /// 这个标志一翻，B9c 埋在 Operate.FlushToFeed 里的
     /// <c>if (UI.Feed.NeedsRows) rows[i] = PacketRow.From_(...)</c> 立刻生效。
     ///

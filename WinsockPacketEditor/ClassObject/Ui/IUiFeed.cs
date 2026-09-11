@@ -77,8 +77,8 @@
     /// Vue 前端没有这个机制，必须改成「C# 推 JSON、前端维护副本」。本接口就是那条推送契约。
     ///
     /// 【实现】
-    ///   WinFormsUiFeed —— 继续维护那 19 个 BindingList，行为与迁移前完全一致
-    ///   BridgeUiFeed   —— 将来把每次调用变成一条 JSON-RPC 事件推给前端
+    ///   BridgeUiFeed（WPEHybrid/Bridge）—— 把每次调用变成一条 JSON-RPC 事件推给前端。
+    ///   未注入时是 UI.NullFeed（NeedsRows 为 false）—— 注入模式的目标进程里就是它。
     ///
     /// 【线程】可能被非 UI 线程调用，线程切换由实现方负责。
     /// </summary>

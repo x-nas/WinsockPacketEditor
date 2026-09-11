@@ -698,7 +698,7 @@ namespace WinsockPacketEditor
 
             /// <summary>
             /// 取导出用的加密密码。用户取消返回 (false, string.Empty)。
-            /// 弹窗形态与「密码留空则不关闭」的循环都在 UiDialogs.RegisterPrompts 里，本方法只等结果。
+            /// 弹窗形态与「密码留空则不关闭」的循环都在前端（EncryptPassword.vue），本方法只等结果。
             /// </summary>
             public static async Task<(bool DoEncrypt, string Password)> GetEncryptExportAsync(string Title)
             {
@@ -5293,7 +5293,7 @@ namespace WinsockPacketEditor
 
                     foreach (Process p in procesArr)
                     {
-                        //图标不在这里生成：Operate 只出数据，图标由 UI 层的 UiImages.FillIcons 补
+                        //图标不在这里生成：Operate 只出数据，图标由外壳按路径去取（getProcessIcons）
                         string ProcessPath = GetProcessPath(p);
 
                         string ModuleName = string.Empty;
@@ -17805,7 +17805,7 @@ namespace WinsockPacketEditor
 
             /// <summary>
             /// 保存：套接字 + 整段字节写回那一条。返回空串表示成功，否则是要显示的错误文案。
-            /// 代理数据那份是高频列表，改完按行 <c>UI.Feed.Update</c>（与 UiDialogs.OpenPacketEdit 一致）；
+            /// 代理数据那份是高频列表，改完按行 <c>UI.Feed.Update</c>；
             /// 发送集那份是工作副本，随发送编辑的「保存」整份写回，这里不落库。
             /// </summary>
             public static string Save(string List, long Id, int Socket, byte[] Bytes)

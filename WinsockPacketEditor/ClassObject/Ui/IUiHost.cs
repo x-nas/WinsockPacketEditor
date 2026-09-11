@@ -41,11 +41,11 @@ namespace WinsockPacketEditor
     /// Operate 唯一允许依赖的 UI 出口。
     ///
     /// 目的：把「弹窗 / 通知 / 文件框 / 遮罩」从业务逻辑里剥离，
-    ///       使 Operate 既能被 WinForms 外壳消费，也能被将来的 WebView2 桥消费。
+    ///       Operate 只出数据与请求，界面由外壳决定怎么画。
     ///
     /// 实现：
-    ///   WinFormsUiHost —— 现有的这套 AntdUI 调用（Forms/UiHost/WinFormsUiHost.cs）
-    ///   BridgeUiHost   —— 将来的 JSON-RPC 桥，把每个调用推给前端并等待回值
+    ///   BridgeUiHost（WPEHybrid/Bridge）—— 把每个调用经 JSON-RPC 推给 Vue 前端并等待回值。
+    ///   （2026-09-11 之前还有一个 WinFormsUiHost，随 WinForms 界面删除。）
     ///
     /// 约定：
     ///   1. 所有方法都可能被非 UI 线程调用，线程切换由实现方负责。
@@ -77,7 +77,7 @@ namespace WinsockPacketEditor
         /// <summary>
         /// 表单弹窗。FormId 是两端约定的字符串（如 "encrypt-export" / "whitelist-edit"）。
         /// 用户取消返回 null。
-        /// WinForms 侧的渲染方式由 WinFormsUiHost.RegisterPrompt 注册，桥侧由前端组件实现。
+        /// 渲染由前端组件实现（桥上的 ask「prompt」）。
         /// </summary>
         Task<TResult> PromptAsync<TResult>(string FormId, object Arg) where TResult : class;
     }

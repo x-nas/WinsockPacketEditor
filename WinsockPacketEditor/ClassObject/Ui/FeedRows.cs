@@ -14,7 +14,7 @@ namespace WinsockPacketEditor
           枚举                -> int      前端按 int 分支，不依赖 C# 枚举名
           byte[]              -> 排除     字节流不进推送流，按 Id 单独取
                                           （见 Operate.PacketConfig.List.GetPacketBufferById）
-          Image               -> 排除     图标由 UI 层按路径自己生成（UiImages.GetProcessIcon）
+          Image               -> 排除     图标由外壳按路径自己取（getProcessIcons）
           嵌套 BindingList<T> -> 排除     改为计数字段，明细按需单独取
 
         【为什么带上全部标量字段】
@@ -429,7 +429,7 @@ namespace WinsockPacketEditor
         }
     }
 
-    /// <summary>进程的一行。<b>不含图标</b>，界面按 ProcessPath 自己生成（UiImages.GetProcessIcon）。</summary>
+    /// <summary>进程的一行。<b>不含图标</b>，界面按 ProcessPath 自己取（桥方法 getProcessIcons）。</summary>
     public sealed class ProcessRow
     {
         public bool IsCheck;

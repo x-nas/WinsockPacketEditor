@@ -11,7 +11,6 @@ namespace WPEHybrid
     /// <see cref="IUiHost"/> 的桥实现（B10b）。
     ///
     /// 每个方法变成一次 <see cref="WebBridge.AskAsync{T}"/>，由 Vue 前端渲染对应的界面并回答。
-    /// 与 <c>WinFormsUiHost</c> 是平级的两个实现，Operate 感知不到差别。
     ///
     /// 【约定】所有方法都不抛异常；前端没答、答错、超时，一律回落到安全默认值
     ///        （Confirm → false 即「什么都不做」，其余 → null）。这条约定由 AskAsync 保证。
@@ -84,7 +83,6 @@ namespace WPEHybrid
             而 Operate 要的就是路径。绕到前端再绕回来毫无收益，只多一次超时风险。
             用户看到的也是熟悉的 Windows 文件对话框，比自绘的更好用。
 
-            与 WinFormsUiHost.PickOpenAsync / PickSaveAsync 是同一套实现，只是宿主窗体不同。
         */
 
         public Task<string> PickOpenAsync(FilePick Pick)
@@ -156,7 +154,7 @@ namespace WPEHybrid
 
         /// <summary>
         /// 工作体在 C# 侧的后台线程跑，前端只负责显示/收起遮罩。
-        /// 与 WinFormsUiHost 一样，Work 不得访问 UI、不得等 UI 线程。
+        /// Work 不得访问 UI、不得等 UI 线程。
         /// </summary>
         public async Task<T> BusyAsync<T>(string Text, Func<T> Work)
         {

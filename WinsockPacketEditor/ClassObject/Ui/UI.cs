@@ -8,10 +8,10 @@ namespace WinsockPacketEditor
     /// <summary>
     /// UI 门面。Operate 通过它访问界面，从而不再直接依赖 AntdUI / System.Windows.Forms。
     ///
-    /// 【注入时机】与 Operate.SystemConfig.InvokeAction 同级，在三个窗体的构造函数里各一行：
-    ///     UI.Attach(new WinFormsUiHost(this), new AntdL10n());
+    /// 【注入时机】外壳 ShellForm 建好桥之后一行：
+    ///     UI.Attach(new BridgeUiHost(bridge, this), new CoreL10n());
     ///
-    /// 【未注入时的行为】（注入模式下 Hook.Run 会在建窗之前就 LoadSystemConfig_FromDB）：
+    /// 【未注入时的行为】（外壳在建窗之前就读配置；注入模式的目标进程里从来不注入）：
     ///     T()        → 直接返回中文兜底文案
     ///     Prefs      → 永远可用，纯 POCO
     ///     Confirm    → false（即「什么都不做」，是安全的默认：不会误删数据）

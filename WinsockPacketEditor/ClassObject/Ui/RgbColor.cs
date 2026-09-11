@@ -7,7 +7,7 @@
     /// 替代 Operate 里被当作配置存储的 System.Drawing.Color（主题色板、8 个滤镜配色等）。
     ///
     /// 数据库与 XML 备份里存的一直是 ARGB int，本类型 <b>不改变任何存储格式</b>。
-    /// 与 System.Drawing.Color 的互转见 Forms/UiHost/UiAdapters.cs 的 ColorAdapter。
+    /// 前端拿的是 <c>Hex</c>（#RRGGBB）。
     /// </summary>
     public struct RgbColor
     {

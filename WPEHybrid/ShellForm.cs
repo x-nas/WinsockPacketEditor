@@ -5070,7 +5070,7 @@ namespace WPEHybrid
                 }
 
                 //走 UI.Prompt 而不是 event：它是模态的、要等用户点「知道了」，
-                //与 WinForms 侧 UiDialogs.ShowBetaMessage 的行为一致
+                //（当年 WinForms 的测试版提示也是模态的）
                 await UI.Prompt<object>("beta-notice", new
                 {
                     title = UI.T("BetaVersion", "这是一个测试版程序"),
