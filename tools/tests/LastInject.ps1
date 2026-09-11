@@ -1,9 +1,12 @@
 ﻿$ErrorActionPreference = 'Stop'
-$bin = 'C:\Users\Gary\Desktop\程序源代码\x-nas\WinsockPacketEditor\WPEHybrid\bin\Debug\net48'
+$bin = 'C:\Users\Gary\Desktop\程序源代码\x-nas\WinsockPacketEditor\WinsockPacketEditor\bin\Debug'
 Set-Location $bin
 [Environment]::CurrentDirectory = $bin
 
-$asm = [Reflection.Assembly]::LoadFrom((Join-Path $bin 'WinsockPacketEditor.dll'))
+# 合并 WPEHybrid 之后主程序集是 WinsockPacketEditor.exe（不再有独立的 .dll）
+$asmFile = Join-Path $bin 'WinsockPacketEditor.exe'
+if (-not (Test-Path $asmFile)) { $asmFile = Join-Path $bin 'WinsockPacketEditor.dll' }
+$asm = [Reflection.Assembly]::LoadFrom($asmFile)
 $op  = $asm.GetType('WinsockPacketEditor.Operate')
 $sc  = $op.GetNestedType('SystemConfig')
 $db  = $op.GetNestedType('DataBase')

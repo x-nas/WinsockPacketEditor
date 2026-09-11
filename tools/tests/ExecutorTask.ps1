@@ -4,15 +4,15 @@
 param([string]$Bin)
 if (-not $Bin) {
     $Bin = Join-Path $PSScriptRoot '..\..\WinsockPacketEditor\bin\Debug'
-    if (-not (Test-Path (Join-Path $Bin 'WinsockPacketEditor.dll'))) {
-        $Bin = Join-Path $PSScriptRoot '..\..\WPEHybrid\bin\Debug\net48'
-    }
 }
 $Bin = (Resolve-Path $Bin).Path
 Set-Location $Bin
 [Environment]::CurrentDirectory = $Bin
 
-$asm = [Reflection.Assembly]::LoadFrom((Join-Path $Bin 'WinsockPacketEditor.dll'))
+# 合并 WPEHybrid 之后主程序集是 WinsockPacketEditor.exe（不再有独立的 .dll）
+$asmFile = Join-Path $Bin 'WinsockPacketEditor.exe'
+if (-not (Test-Path $asmFile)) { $asmFile = Join-Path $Bin 'WinsockPacketEditor.dll' }
+$asm = [Reflection.Assembly]::LoadFrom($asmFile)
 
 $reType   = $asm.GetType('WinsockPacketEditor.RobotExecute')
 $riType   = $asm.GetType('WinsockPacketEditor.RobotInfo')

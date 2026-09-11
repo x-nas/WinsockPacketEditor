@@ -85,4 +85,20 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!--
+    合并 WPEHybrid 之后：产品 exe（WinsockPacketEditor.exe）与 WPEHook 在同一仓库，
+    而 WPEHook 引用主工程（方向是反的），主工程不能 ProjectReference 它（会成环）。
+    注入按文件名找 WPEHook.dll，所以 WPEHook 编完（它排在主工程之后）把自己拷进主工程输出目录。
+    WPEHookTest 那条 ProjectReference 不受影响，仍从 WPEHook 自己的 bin 取。
+    ⚠️ 只编主工程、不编解决方案时，这个拷贝不会跑 —— 产品一律从解决方案构建。
+  -->
+  <Target Name="CopyHookToMainBin" AfterTargets="Build">
+    <ItemGroup>
+      <_HookOut Include="$(TargetPath)" />
+      <_HookOut Include="$(TargetDir)$(TargetName).pdb" Condition="Exists('$(TargetDir)$(TargetName).pdb')" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_HookOut)"
+          DestinationFolder="..\WinsockPacketEditor\bin\$(Configuration)\"
+          SkipUnchangedFiles="true" ContinueOnError="true" />
+  </Target>
 </Project>

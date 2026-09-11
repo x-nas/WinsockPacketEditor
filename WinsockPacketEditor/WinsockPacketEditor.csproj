@@ -5,9 +5,24 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B5ED16ED-ABD5-438B-A589-E8ACC2377432}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <!--
+      合并 WPEHybrid 之后：产品是单一 WinsockPacketEditor.exe（不再是 exe + dll 两个程序集）。
+      入口是原外壳的 Program.Main（命名空间仍是 WPEHybrid，只是并进同一个程序集）。
+      WebView2 外壳 + Vue 前端一并进来，源在 Program.cs / ShellForm.cs / Bridge\，
+      前端源在 WebUI\（原 WPEHybrid\web\，因与管理台 Web\ 在 Windows 上大小写撞名而改名），产物在 wwwroot\。
+    -->
+    <OutputType>WinExe</OutputType>
     <RootNamespace>WinsockPacketEditor</RootNamespace>
     <AssemblyName>WinsockPacketEditor</AssemblyName>
+    <StartupObject>WPEHybrid.Program</StartupObject>
+    <!-- 清单声明 asInvoker + PerMonitorV2，提权在 Program.Main 里靠 RestartAsAdmin 做 -->
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>wpe.ico</ApplicationIcon>
+    <!-- binding redirects：与 WPEHybrid 一致，自动生成到 .exe.config（靠 App.config 打底）-->
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <!-- WebView2 包同时含 WinForms/WPF 两套，压掉 WPF 引入的版本冲突噪声 -->
+    <MSBuildWarningsAsMessages>MSB3277</MSBuildWarningsAsMessages>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>false</Deterministic>
@@ -131,6 +146,16 @@
     <Reference Include="WindowsInput, Version=1.0.4.0, Culture=neutral, PublicKeyToken=9b287f7dc5073cad, processorArchitecture=MSIL">
       <HintPath>..\packages\InputSimulator.1.0.4.0\lib\net20\WindowsInput.dll</HintPath>
     </Reference>
+    <!-- WebView2（外壳承载 Vue 前端）。原生 loader 在下面的 Content 里按 runtimes\win-*\native 布局显式列出。 -->
+    <Reference Include="Microsoft.Web.WebView2.Core">
+      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.4129.50\lib\net462\Microsoft.Web.WebView2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebView2.WinForms">
+      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.4129.50\lib\net462\Microsoft.Web.WebView2.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebView2.Wpf">
+      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.4129.50\lib\net462\Microsoft.Web.WebView2.Wpf.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassObject\AccountInfo.cs" />
@@ -207,6 +232,13 @@
     <Compile Include="NativeMethods\WS2_32.cs" />
     <Compile Include="NativeMethods\WSock32.cs" />
     <Compile Include="Operate.cs" />
+    <!-- 原 WPEHybrid 外壳（WebView2 宿主 + 桥）。命名空间仍是 WPEHybrid。 -->
+    <Compile Include="Program.cs" />
+    <Compile Include="ShellForm.cs" />
+    <Compile Include="Bridge\RpcMessage.cs" />
+    <Compile Include="Bridge\WebBridge.cs" />
+    <Compile Include="Bridge\BridgeUiHost.cs" />
+    <Compile Include="Bridge\BridgeUiFeed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -258,6 +290,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+    <None Include="App.config" />
+    <None Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="EasyHook32.dll">
@@ -294,7 +328,7 @@
       设计令牌：<b>直接引外壳工程里那个源文件</b>，Link 把它投影成输出目录的 Web\tokens.css。
       这样管理台与 Vue 界面共用同一份令牌，不是各抄一份（改配色只改那一个文件）。
     -->
-    <Content Include="..\WPEHybrid\web\src\tokens.css">
+    <Content Include="WebUI\src\tokens.css">
       <Link>Web\tokens.css</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -320,6 +354,23 @@
     <Content Include="Web\fonts\OFL.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <!--
+      WebView2 原生 loader（AnyCPU：三种架构各一份放进 runtimes\win-*\native\，
+      运行期按进程位数挑）。刻意显式列出、不靠 WebView2 的 .targets 自动拷 ——
+      老式工程 + packages.config 复现不出 PackageReference 那套 runtimes 布局。
+    -->
+    <Content Include="..\packages\Microsoft.Web.WebView2.1.0.4129.50\runtimes\win-x86\native\WebView2Loader.dll">
+      <Link>runtimes\win-x86\native\WebView2Loader.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\packages\Microsoft.Web.WebView2.1.0.4129.50\runtimes\win-x64\native\WebView2Loader.dll">
+      <Link>runtimes\win-x64\native\WebView2Loader.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\packages\Microsoft.Web.WebView2.1.0.4129.50\runtimes\win-arm64\native\WebView2Loader.dll">
+      <Link>runtimes\win-arm64\native\WebView2Loader.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -338,4 +389,18 @@
     <Error Condition="!Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.119.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.119.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets'))" />
   </Target>
   <Import Project="..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.119.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets" Condition="Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.119.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" />
+  <!--
+    前端产物 wwwroot 整目录镜像进输出目录。刻意不用 Content Include（Vite 哈希文件名 +
+    Content 求值期展开会漏新文件 / 留死文件）；清理与拷贝在同一个 target 成对做。
+    详见原 WPEHybrid.csproj 的说明（此段照搬）。WebUI\node_modules 不会被碰 ——
+    老式工程没有默认通配，只有这里显式 glob 的 wwwroot\**\*。
+  -->
+  <Target Name="StageWwwroot" AfterTargets="Build">
+    <ItemGroup>
+      <WwwrootFile Include="wwwroot\**\*" />
+    </ItemGroup>
+    <RemoveDir Directories="$(OutDir)wwwroot" />
+    <Copy SourceFiles="@(WwwrootFile)"
+          DestinationFiles="@(WwwrootFile->'$(OutDir)wwwroot\%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
 </Project>
