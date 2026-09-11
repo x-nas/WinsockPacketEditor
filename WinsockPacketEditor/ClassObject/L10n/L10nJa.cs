@@ -40,6 +40,7 @@ namespace WinsockPacketEditor
             d["Inject.QuickNone"] = "まだ注入していません。先に対象を選んでください";
             d["Inject.QuickNoFile"] = "前回の実行ファイルが見つかりません：{0}";
             d["Inject.QuickNoProc"] = "「{0}」は動作していません。先に起動してください";
+            d["Hook.SkipWSARecvEx64"] = "64 ビットの対象では WSARecvEx をフックしません（ほかの WinSock 関数は通常どおりフックします）";
             d["Inject.NotAttached"] = "まだ対象にアタッチしていません";
             d["Inject.PickFailed"] = "マウスをフックできません。管理者として実行してください";
             d["Customize"] = "カスタム";

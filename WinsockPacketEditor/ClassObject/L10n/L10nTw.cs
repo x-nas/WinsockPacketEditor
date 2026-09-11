@@ -46,6 +46,7 @@ namespace WinsockPacketEditor
             d["Inject.QuickNone"] = "還沒有注入過，先挑一個目標";
             d["Inject.QuickNoFile"] = "找不到上次那個執行檔：{0}";
             d["Inject.QuickNoProc"] = "「{0}」沒有在執行，先把它啟動起來";
+            d["Hook.SkipWSARecvEx64"] = "64 位元目標不攔截 WSARecvEx（其餘 WinSock 入口照常攔截）";
             d["Inject.NotAttached"] = "還沒有附加到目標";
             d["Inject.PickFailed"] = "無法監聽滑鼠，請以系統管理員身分執行";
             d["Customize"] = "自定義";

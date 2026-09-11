@@ -108,7 +108,23 @@ namespace WinsockPacketEditor
                 {
                     #region//Winsock Microsoft Start Hook
 
-                    if (Operate.PacketConfig.Packet.HookWSA_Recv)
+                    /*
+                        ⚠️ 64 位目标上<b>不装</b> WSARecvEx 的钩子（2.1.9 起）。
+
+                        它的真实签名是 int WSARecvEx(SOCKET, char*, int, int *flags)，第 4 个参数是指针，
+                        而 NativeMethods/Mswsock.cs 把它导成了按值传的 SocketFlags（4 字节）：
+                        x86 下指针本来就 4 字节、原样传回去正好是对的；x64 下指针被截成低 32 位，
+                        钩子再把它传给原函数就是野指针 —— 目标进程当场 AV（实测 0xC0000005）。
+
+                        要在 x64 上也抓它，得给 WSARecvEx 单开一个钩子体（flags 按 IntPtr 收），
+                        不能改 Recv_Hook —— 那个 Flags 是 WS1/WS2 recv 共用的、按值传才对。
+                        在那之前宁可少抓这一个入口，也不能把目标弄崩。
+                    */
+                    if (Operate.PacketConfig.Packet.HookWSA_Recv && Environment.Is64BitProcess)
+                    {
+                        Operate.DoLog(nameof(StartHook), UI.T("Hook.SkipWSARecvEx64", "64 位目标不拦截 WSARecvEx（其余 WinSock 入口照常拦截）"));
+                    }
+                    else if (Operate.PacketConfig.Packet.HookWSA_Recv)
                     {
                         lhWSA_RecvEx = LocalHook.Create(LocalHook.GetProcAddress(Mswsock.ModuleName, "WSARecvEx"), new Mswsock.DWSARecvEx(Mswsock.WSARecvExHook), this);
                         lhWSA_RecvEx.ThreadACL.SetExclusiveACL(new Int32[] { 0 });

@@ -40,6 +40,7 @@ namespace WinsockPacketEditor
             d["Inject.QuickNone"] = "아직 주입한 적이 없습니다. 대상을 먼저 고르세요";
             d["Inject.QuickNoFile"] = "지난 실행 파일을 찾을 수 없습니다: {0}";
             d["Inject.QuickNoProc"] = "「{0}」이(가) 실행 중이 아닙니다. 먼저 실행하세요";
+            d["Hook.SkipWSARecvEx64"] = "64비트 대상에서는 WSARecvEx를 후킹하지 않습니다(다른 WinSock 함수는 그대로 후킹합니다)";
             d["Inject.NotAttached"] = "아직 대상에 연결되지 않았습니다";
             d["Inject.PickFailed"] = "마우스를 후킹할 수 없습니다. 관리자 권한으로 실행하세요";
             d["Customize"] = "직접 지정";

@@ -40,6 +40,7 @@ namespace WinsockPacketEditor
             d["Inject.QuickNone"] = "Nothing injected yet — pick a target first";
             d["Inject.QuickNoFile"] = "Cannot find last executable: {0}";
             d["Inject.QuickNoProc"] = "「{0}」 is not running — start it first";
+            d["Hook.SkipWSARecvEx64"] = "64-bit target: WSARecvEx is not hooked (all other WinSock entries are hooked as usual)";
             d["Inject.NotAttached"] = "Not attached to a target yet";
             d["Inject.PickFailed"] = "Cannot hook the mouse — run as administrator";
             d["Customize"] = "Customize";

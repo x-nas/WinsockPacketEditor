@@ -40,6 +40,7 @@ namespace WinsockPacketEditor
             d["Inject.QuickNone"] = "Внедрений ещё не было — сначала выберите цель";
             d["Inject.QuickNoFile"] = "Не найден прошлый исполняемый файл: {0}";
             d["Inject.QuickNoProc"] = "«{0}» не запущен — сначала запустите его";
+            d["Hook.SkipWSARecvEx64"] = "64-битная цель: WSARecvEx не перехватывается (остальные функции WinSock перехватываются как обычно)";
             d["Inject.NotAttached"] = "Ещё не подключено к цели";
             d["Inject.PickFailed"] = "Не удалось перехватить мышь — запустите от имени администратора";
             d["Customize"] = "Вручную";

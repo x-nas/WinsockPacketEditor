@@ -40,6 +40,7 @@ namespace WinsockPacketEditor
             d["Inject.QuickNone"] = "Chưa tiêm lần nào — hãy chọn một đích trước";
             d["Inject.QuickNoFile"] = "Không tìm thấy tệp thực thi lần trước: {0}";
             d["Inject.QuickNoProc"] = "«{0}» không chạy — hãy khởi động nó trước";
+            d["Hook.SkipWSARecvEx64"] = "Tiến trình 64 bit: không hook WSARecvEx (các hàm WinSock khác vẫn hook như thường)";
             d["Inject.NotAttached"] = "Chưa gắn vào mục tiêu";
             d["Inject.PickFailed"] = "Không móc được chuột — hãy chạy với quyền quản trị";
             d["Customize"] = "Tùy chỉnh";
