@@ -209,6 +209,10 @@ namespace WinsockPacketEditor
                                 //进度只有轮询在读，直接写就行，不必 marshal（BW 时代走 ReportProgress）
                                 this.SendCollection_Index = j;
                                 Operate.SystemConfig.DoSleep(this.LoopINT, token);
+
+                                //⚠️ DoSleep 被取消时提前返回、不抛 —— 若这是最后一发，两层循环随即
+                                //自然结束、报「执行完毕」，而用户按了停止。补一句让它如实报「已停止」。
+                                token.ThrowIfCancellationRequested();
                             }
                         }
                     }

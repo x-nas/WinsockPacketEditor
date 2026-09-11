@@ -517,12 +517,22 @@ namespace WinsockPacketEditor
                                     break;
                             }
 
-                            if (RInstruction[i].InstType != Operate.RobotConfig.Robot.InstructionType.LoopStart && 
+                            /*
+                                ⚠️ 处理完这条指令再查一次取消（顶上那次只挡「还没开始下一条」）。
+
+                                延迟指令的 DoSleep 被取消时是<b>提前返回</b>、不抛 —— 如果它正好是
+                                最后一条，循环随即自然结束，body 正常返回、报「执行完毕」，而用户明明按了停止。
+                                在这里补一句，让「取消发生在最后一条延迟里」也如实报「已停止」。
+                                （SendSendList 那一支自己已经 ThrowIfCancellationRequested 了，不重复。）
+                            */
+                            token.ThrowIfCancellationRequested();
+
+                            if (RInstruction[i].InstType != Operate.RobotConfig.Robot.InstructionType.LoopStart &&
                                 RInstruction[i].InstType != Operate.RobotConfig.Robot.InstructionType.LoopEnd)
                             {
                                 this.Total_Instruction++;
                             }
-                        }                        
+                        }
                     }
 
                     this.riSelect.ExecutionCount++;

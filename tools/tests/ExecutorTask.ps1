@@ -25,8 +25,8 @@ $execEnum = $asm.GetType('WinsockPacketEditor.Operate+SystemConfig+Execute')
 $running  = $reType.GetProperty('Running')
 
 function New-Robot([string[]]$delayContents) {
-    # 每个元素一条 Delay 指令。⚠️ 取消只在每轮循环<b>顶上</b>检测（与旧 BW 逐字相同）——
-    # 所以要验「停止 → stopped」，延迟指令后面必须还有一条指令，好让 DoSleep 返回后的下一轮抛出取消。
+    # 每个元素一条 Delay 指令。取消在「每轮顶上」和「每条指令处理完」各查一次，
+    # 所以「取消发生在最后一条延迟里」也如实报 stopped（2026-09-11 补的那句 ThrowIfCancellationRequested）。
     $list = [Activator]::CreateInstance($blType)
     $delay = [enum]::Parse($instEnum, 'Delay')
     foreach ($c in $delayContents) {
@@ -78,6 +78,11 @@ $r = Run-Robot (New-Robot @('5000','1')) 200
 T '中途停止：Running 起过' $r.WasRunning $r.WasRunning
 T '中途停止：Completed = stopped' ($r.Result -eq 'stopped') $r.Result
 T '中途停止：取消及时 (<400ms)' ($r.StopMs -lt 400) ("停到不 Running: " + $r.StopMs + "ms")
+
+# ②b 取消发生在<b>最后一条延迟</b>里 —— 单条 Delay，200ms 后停。
+#    这一条在补那句 ThrowIfCancellationRequested 之前会报 done（旧 BW 的老行为），补后应报 stopped。
+$r = Run-Robot (New-Robot @('5000')) 200
+T '末条延迟里停止：Completed = stopped' ($r.Result -eq 'stopped') $r.Result
 
 # ③ 列表级：两条机器人（各延迟 3000），Together 同时执行
 $lst = $listType.GetField('lstRobotInfo').GetValue($null)
