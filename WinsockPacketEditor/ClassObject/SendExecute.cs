@@ -82,7 +82,7 @@ namespace WinsockPacketEditor
 
                         this.Worker.RunWorkerAsync();
 
-                        string sLog = string.Format(AntdUI.Localization.Get("SendExecute.DoSend", "执行发送 [{0}]"), this.SendName);
+                        string sLog = string.Format(UI.T("SendExecute.DoSend", "执行发送 [{0}]"), this.SendName);
                         Operate.DoLog(nameof(StartSend), sLog);
                     }
                 }         
@@ -140,7 +140,7 @@ namespace WinsockPacketEditor
                 {
                     if (Operate.SystemConfig.SystemSocket <= 0)
                     {
-                        Operate.DoLog(nameof(Send_DoWork), AntdUI.Localization.Get("System.SystemSocket.Error", "系统套接字未设置"));
+                        Operate.DoLog(nameof(Send_DoWork), UI.T("System.SystemSocket.Error", "系统套接字未设置"));
                         return;
                     }
                 }
@@ -262,15 +262,15 @@ namespace WinsockPacketEditor
 
                 if (e.Cancelled)
                 {
-                    sMsg = string.Format(AntdUI.Localization.Get("SendExecute.Stop", "发送 [{0}] 已停止"), this.SendName);                    
+                    sMsg = string.Format(UI.T("SendExecute.Stop", "发送 [{0}] 已停止"), this.SendName);                    
                 }
                 else if (e.Error != null) 
                 {
-                    sMsg = string.Format(AntdUI.Localization.Get("SendExecute.Error", "发送[{0}] 发生错误: {1}"), this.SendName, e.Error.Message);                    
+                    sMsg = string.Format(UI.T("SendExecute.Error", "发送[{0}] 发生错误: {1}"), this.SendName, e.Error.Message);                    
                 }
                 else
                 {
-                    sMsg = string.Format(AntdUI.Localization.Get("SendExecute.Success", "发送[{0}] 执行完毕"), this.SendName);                    
+                    sMsg = string.Format(UI.T("SendExecute.Success", "发送[{0}] 执行完毕"), this.SendName);                    
                 }
 
                 Operate.DoLog(nameof(Send_RunCompleted), sMsg);                

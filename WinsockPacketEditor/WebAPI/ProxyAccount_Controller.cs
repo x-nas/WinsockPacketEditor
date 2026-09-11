@@ -56,7 +56,7 @@ namespace WinsockPacketEditor
             {
                 if (Operate.ProxyConfig.Account.CheckProxyAccount_Exist(pai.UserName))
                 {
-                    return BadRequest(AntdUI.Localization.Get("UserName.Exists", "该用户名已存在"));
+                    return BadRequest(UI.T("UserName.Exists", "该用户名已存在"));
                 }
 
                 if (pai.ExpiryTime == null)
@@ -82,11 +82,11 @@ namespace WinsockPacketEditor
 
                 if (bOK)
                 {
-                    return Ok(AntdUI.Localization.Get("AddAccount.Success", "添加账号成功"));
+                    return Ok(UI.T("AddAccount.Success", "添加账号成功"));
                 }
                 else
                 {
-                    return BadRequest(AntdUI.Localization.Get("AddAccount.Error", "添加账号失败"));
+                    return BadRequest(UI.T("AddAccount.Error", "添加账号失败"));
                 }
             }
             catch (Exception ex)
@@ -94,7 +94,7 @@ namespace WinsockPacketEditor
                 Operate.DoLog(nameof(AddProxyAccount), ex);
             }
 
-            return BadRequest(AntdUI.Localization.Get("AddAccount.Error", "添加账号失败"));
+            return BadRequest(UI.T("AddAccount.Error", "添加账号失败"));
         }
 
         #endregion
@@ -110,11 +110,11 @@ namespace WinsockPacketEditor
 
             if (bOK)
             {
-                return Ok(AntdUI.Localization.Get("DeleteAccount.Success", "删除账号成功"));
+                return Ok(UI.T("DeleteAccount.Success", "删除账号成功"));
             }
             else
             {
-                return BadRequest(AntdUI.Localization.Get("DeleteAccount.Error", "删除账号失败"));
+                return BadRequest(UI.T("DeleteAccount.Error", "删除账号失败"));
             }
         }
 
@@ -147,11 +147,11 @@ namespace WinsockPacketEditor
 
             if (bOK)
             {
-                return Ok(AntdUI.Localization.Get("UpdateAccount.Success", "更新账号成功"));
+                return Ok(UI.T("UpdateAccount.Success", "更新账号成功"));
             }
             else
             {
-                return BadRequest(AntdUI.Localization.Get("UpdateAccount.Error", "更新账号失败"));
+                return BadRequest(UI.T("UpdateAccount.Error", "更新账号失败"));
             }            
         }
 

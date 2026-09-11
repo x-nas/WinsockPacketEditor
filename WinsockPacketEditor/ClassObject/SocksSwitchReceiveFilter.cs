@@ -39,7 +39,7 @@ namespace WinsockPacketEditor
                             DateTime.Now);
                     }
 
-                    string sLog = string.Format(AntdUI.Localization.Get("SOCKS.Unsupport", "不支持的 Socks 协议: {0} [ {1} ]"), version, session.ClientIP);
+                    string sLog = string.Format(UI.T("SOCKS.Unsupport", "不支持的 Socks 协议: {0} [ {1} ]"), version, session.ClientIP);
                     Operate.DoLog(nameof(Filter), sLog);
 
                     return null;

@@ -127,4 +127,35 @@ namespace WinsockPacketEditor
             }
         }
     }
+
+    /// <summary>
+    /// <see cref="IL10n"/> 的实现：按 <c>UI.Prefs.Language</c> 直接查上面的对照表。
+    ///
+    /// 【它取代了什么】原先外壳注入的是 <c>AntdL10n</c>，那是转发给
+    /// <c>AntdUI.Localization</c> 的一层，还要靠 <c>ApplyLanguage()</c> 先把 Provider 装上。
+    /// WinForms 界面删掉之后，AntdUI 在这个进程里已经没有任何界面可管，
+    /// 为了查一张表把它整个带着走不划算 —— 表本来就在这里。
+    ///
+    /// 【每次都现读语言】不在构造时记下语言：切语言只是改 <c>UI.Prefs.Language</c>，
+    /// 不必再有一步「应用」，也就不会出现「改了设置、文案还是旧的」。
+    /// 读一个字段 + 一次字典查找，比 AntdUI 那条路还短。
+    ///
+    /// 【回退与原来逐条相同】简体与认不出来的语言 → 返回调用点的中文兜底；
+    /// 其余语言缺键时由 <see cref="L10n.Get"/> 先回退英文（繁体除外），再回退中文兜底。
+    /// </summary>
+    public sealed class CoreL10n : IL10n
+    {
+        public string Get(string Key, string Fallback)
+        {
+            string lang = UI.Prefs == null ? null : UI.Prefs.Language;
+
+            if (!L10n.Has(lang))
+            {
+                return Fallback;
+            }
+
+            string s = L10n.Get(lang, Key);
+            return string.IsNullOrEmpty(s) ? Fallback : s;
+        }
+    }
 }

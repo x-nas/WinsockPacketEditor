@@ -9,15 +9,14 @@ namespace WPEHybrid
         #region//主函数
 
         /// <summary>
-        /// 启动顺序与主程序 WinsockPacketEditor/Program.cs 保持一致，
-        /// 只是最后打开的是 WebView2 外壳而不是 StartForm。
+        /// 程序入口：提权 → DPI → 崩溃留痕 → 运行时检测 → 发起 WebView2 环境预热 → 建库 → 读配置 → 建窗。
         /// </summary>
         [STAThread]
         private static void Main()
         {
             try
             {
-                //代理模式要装系统代理、开监听端口，与主程序一样需要管理员权限
+                //代理模式要装系统代理、开监听端口，注入模式要往别的进程里装钩子 —— 都要管理员权限
                 if (!Operate.SystemConfig.IsAdministrator())
                 {
                     Operate.SystemConfig.RestartAsAdmin();
@@ -86,12 +85,6 @@ namespace WPEHybrid
                 LogFile.BeginSession(
                     typeof(Operate).Assembly.GetName().Version.ToString(),
                     Operate.DataBase.dbPath);
-
-                //配置只落到 UI.Prefs，这里才真正应用到 AntdUI（必须早于任何窗体创建）
-                //注意：外壳本身没有 AntdUI 界面，但 Operate 内部仍会读 UI.Prefs，
-                //而且将来若从这里弹出 WinForms 编辑器也需要它
-                WinFormsUiHost.ApplyAll();
-                UiDialogs.RegisterPrompts();
 
                 Application.Run(new ShellForm());
             }

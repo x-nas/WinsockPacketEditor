@@ -78,14 +78,14 @@ namespace WinsockPacketEditor
                         int iReturn = Operate.RobotConfig.Robot.CheckRobotInstruction(false, this.RInstruction);
                         if (iReturn > -1)
                         {
-                            string sLog = string.Format(AntdUI.Localization.Get("System.Robot.Error", "机器人指令 {0} 错误! [{1}]"), iReturn + 1, this.RobotName);
+                            string sLog = string.Format(UI.T("System.Robot.Error", "机器人指令 {0} 错误! [{1}]"), iReturn + 1, this.RobotName);
                             Operate.DoLog(nameof(StartRobot), sLog);
                         }
                         else
                         {
                             this.Worker.RunWorkerAsync();
 
-                            string sLog = string.Format(AntdUI.Localization.Get("System.Robot.Start", "启动机器人 [{0}]"), this.RobotName);
+                            string sLog = string.Format(UI.T("System.Robot.Start", "启动机器人 [{0}]"), this.RobotName);
                             Operate.DoLog(nameof(StartRobot), sLog);
                         }
                     }
@@ -269,7 +269,7 @@ namespace WinsockPacketEditor
                                     if (!int.TryParse(sContent, out LoopCount) || LoopCount < 1)
                                     {
                                         Operate.SystemConfig.LogThrottled(nameof(Robot_DoWork),
-                                            string.Format(AntdUI.Localization.Get("System.Robot.LoopCount",
+                                            string.Format(UI.T("System.Robot.LoopCount",
                                                 "指令 {0} 的循环次数不正确（{1}），已按 1 次处理"), i + 1, sContent));
 
                                         LoopCount = 1;
@@ -565,17 +565,17 @@ namespace WinsockPacketEditor
             {
                 if (e.Cancelled)
                 {
-                    string sLog = string.Format(AntdUI.Localization.Get("Robot.Stop", "机器人 [{0}] 已停止"), this.RobotName);
+                    string sLog = string.Format(UI.T("Robot.Stop", "机器人 [{0}] 已停止"), this.RobotName);
                     Operate.DoLog(nameof(Robot_RunCompleted), sLog);                    
                 }
                 else if (e.Error != null)
                 {
-                    string sLog = string.Format(AntdUI.Localization.Get("Robot.Error", "机器人 [{0}] 发生错误: {1}"), this.RobotName, e.Error.Message);
+                    string sLog = string.Format(UI.T("Robot.Error", "机器人 [{0}] 发生错误: {1}"), this.RobotName, e.Error.Message);
                     Operate.DoLog(nameof(Robot_RunCompleted), sLog);
                 }
                 else
                 {
-                    string sLog = string.Format(AntdUI.Localization.Get("Robot.Success", "机器人 [{0}] 执行完毕"), this.RobotName);
+                    string sLog = string.Format(UI.T("Robot.Success", "机器人 [{0}] 执行完毕"), this.RobotName);
                     Operate.DoLog(nameof(Robot_RunCompleted), sLog);
                 }              
             }
@@ -624,7 +624,7 @@ namespace WinsockPacketEditor
             if (from > to)
             {
                 Operate.SystemConfig.LogThrottled(nameof(NextRandom),
-                    string.Format(AntdUI.Localization.Get("System.Robot.RandomRange",
+                    string.Format(UI.T("System.Robot.RandomRange",
                         "随机延迟的区间是反的（{0}-{1}），已按 {1}-{0} 处理"), from, to));
 
                 int t = from; from = to; to = t;

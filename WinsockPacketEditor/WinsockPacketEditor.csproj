@@ -215,6 +215,7 @@
     <Compile Include="ClassObject\AuthInfo.cs" />
     <Compile Include="ClassObject\AutoStoresInfo.cs" />
     <Compile Include="ClassObject\BitInfo.cs" />
+    <Compile Include="ClassObject\CountryCodes.cs" />
     <Compile Include="ClassObject\BlackListInfo.cs" />
     <Compile Include="ClassObject\DataInfo.cs" />
     <Compile Include="ClassObject\FilterInfo.cs" />

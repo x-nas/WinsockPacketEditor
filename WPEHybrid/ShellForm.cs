@@ -380,11 +380,11 @@ namespace WPEHybrid
                 */
                 core.ProcessFailed += this.OnWebProcessFailed;
 
-                //B10b：架起桥，并把 IUiHost 的实现从 WinForms 换成桥版本
+                //B10b：架起桥，UI 出口接到桥上；文案直接查 ClassObject/L10n 的表
                 this.bridge = new WebBridge(core, AllowedHosts);
                 this.RegisterMethods();
 
-                UI.Attach(new BridgeUiHost(this.bridge, this), new AntdL10n());
+                UI.Attach(new BridgeUiHost(this.bridge, this), new CoreL10n());
 
                 //B10c：数据出口换成桥版本。NeedsRows 一返回 true，
                 //B9c 埋在 Operate.FlushToFeed 里的 DTO 构造与推送立刻生效
@@ -1230,22 +1230,16 @@ namespace WPEHybrid
             /*
                 主题：深色 / 浅色 / 跟随系统。
 
-                【用的是已有的 UI.Prefs.IsDark】WinForms 顶栏那个暗色开关存的就是它
-                （SystemConfig 表的 IsDark 列，备份 XML 里也带着）。外壳另起一份的话，
-                两套 UI 会各记各的 —— 用户在 WinForms 里切了、进外壳又变回去，
-                而且备份导入之后两边对不上。
+                【用的是已有的 UI.Prefs.IsDark】SystemConfig 表的 IsDark 列，备份 XML 里也带着。
+                （它是当年 WinForms 顶栏那个暗色开关留下的字段，沿用它就不必改表结构与备份格式。）
 
                 【三态怎么存】IsDark 是 bool，装不下三态，所以拆成两个字段：
-                  · IsDark            —— <b>解析后的实际主题</b>。跟随系统时存的是
-                                         那一刻系统给出的值，所以 WinForms 那半边
-                                         （AntdUI 只认深浅两态）拿到的一直是能用的值。
+                  · IsDark            —— <b>解析后的实际主题</b>。跟随系统时存的是那一刻系统给出的值。
                   · FollowSystemTheme —— 「这个值是不是跟着系统走出来的」。
                 前端每次系统主题变了都会再调一次这里，把新解析出来的 isDark 送过来。
 
-                ApplyPrefs() 是<b>给 WinForms 那半边用的</b>：外壳自己的界面是 CSS 令牌
-                在管（style.css 的 :root[data-theme="light"]），与 AntdUI 无关。
-                但同一个进程里 UiDialogs 的几个原生弹窗仍然是 AntdUI 画的，
-                不 Apply 的话它们会停在旧主题上。
+                界面本身是 CSS 令牌在管（style.css 的 :root[data-theme="light"]），
+                这里只负责存。
             */
             this.bridge.Register("setAppearance", args =>
             {
@@ -1266,13 +1260,12 @@ namespace WPEHybrid
                         UI.Prefs.IsDark = (bool)args["isDark"];
                     }
 
-                    //氛围层那条游走亮带。只有外壳有这一层，AntdUI 那半边不认识它
+                    //氛围层那条游走亮带
                     if (args["scan"] != null)
                     {
                         UI.Prefs.ScanLine = (bool)args["scan"];
                     }
 
-                    WinFormsUiHost.ApplyPrefs();
                     Operate.SystemConfig.SaveSystemConfig_ToDB();
 
                     return new { ok = true, isDark = UI.Prefs.IsDark, mode = ThemeMode(), scan = UI.Prefs.ScanLine };
@@ -1427,10 +1420,9 @@ namespace WPEHybrid
                 但<b>弹窗与通知的文案来自 Operate 的 UI.T</b>（C# 侧），
                 所以必须把选择推回来 —— 否则会出现「界面英文、弹窗中文」的分裂。
 
-                UI.Prefs.Language 是唯一真源；ApplyLanguage() 把它应用到 AntdUI 的
-                Localization（UI.T 走的就是那里），再落库持久化，下次启动跟着走。
-                这三步与 WinForms 侧 StartForm 的语言下拉完全一致，只多了落库
-                —— 那边靠退出时统一保存，外壳这里没有那个时机。
+                UI.Prefs.Language 是唯一真源：UI.T 走的 CoreL10n 每次都现读它，
+                改完这个字段文案就跟着换了，不需要再有一步「应用」。
+                剩下的只是落库，下次启动跟着走。
             */
             this.bridge.Register("setLanguage", args =>
             {
@@ -1446,7 +1438,6 @@ namespace WPEHybrid
                 lang = Normalize(lang);
 
                 UI.Prefs.Language = lang;
-                WinFormsUiHost.ApplyLanguage();
                 Operate.SystemConfig.SaveSystemConfig_ToDB();
 
                 return new { language = lang };
@@ -1805,7 +1796,7 @@ namespace WPEHybrid
                 匹配是 207 条的前缀线性扫描，每秒几千行地调就是每秒上百万次字符串比较。
                 前端只在渲染可见行（约 40 行）时才查，且按归属地做了记忆化。
             */
-            this.bridge.Register("getCountryTable", args => UiImages.CountryTable);
+            this.bridge.Register("getCountryTable", args => CountryCodes.Table);
 
             #region//代理设置（对应 WinForms 的 Controls/ProxySetting）
 
@@ -4128,14 +4119,14 @@ namespace WPEHybrid
             });
 
             /*
-                导入备份：配置与各份列表被整份换掉。WinForms 那边靠退出时统一保存 + IProxyMode 刷新界面；
-                外壳这里：① 偏好真正应用到 AntdUI（备份里可能带着主题与语言）② 全部列表标脏整表重推 ③ 立刻落库。
+                导入备份：配置与各份列表被整份换掉。
+                ① 全部列表标脏整表重推 ② 立刻落库。
                 语言回给前端，页面字典要跟着切（否则弹窗英文、页面中文）。
+                （C# 侧的文案不用做什么：UI.T 每次都现读 UI.Prefs.Language。）
             */
             this.bridge.Register("importBackup", async args =>
             {
                 await Operate.SystemConfig.ImportSystemBackUp_Dialog(null);
-                WinFormsUiHost.ApplyAll();
                 FeedPump.MarkAllDirty();
                 this.SaveProxyState();
 
@@ -4149,8 +4140,7 @@ namespace WPEHybrid
 
                 /*
                     语言与主题都要带回去：备份里存着 DefaultLanguage 与 IsDark，
-                    ApplyAll() 只把它们应用到 AntdUI（那是 WinForms 那半边），
-                    <b>外壳自己的界面是前端在管的</b> —— 不回传的话会变成
+                    <b>界面是前端在管的</b> —— 不回传的话会变成
                     「弹窗切过去了、页面还是旧语言旧配色」。
                 */
                 return new
@@ -4833,9 +4823,6 @@ namespace WPEHybrid
 
                     //纯字段赋值，可重复调用；不碰任何 BindingList（已核过 2582–2665 行）
                     Operate.SystemConfig.LoadSystemConfig_FromDB();
-
-                    //新库里的主题 / 语言要真正生效 —— UI.T 走的是 AntdUI.Localization
-                    WinFormsUiHost.ApplyAll();
 
                     Operate.DoLog("saveInstance", "已切换数据库 : " + CurrentDbFull());
 
