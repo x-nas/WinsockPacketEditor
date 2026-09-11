@@ -2890,13 +2890,13 @@ namespace WPEHybrid
                     return new { ok = false };
                 }
 
-                await Operate.ProxyConfig.Account.DeleteAccount_Dialog_ById(null, id);
+                await Operate.ProxyConfig.Account.DeleteAccount_Dialog_ById(id);
                 return new { ok = true };
             });
 
             this.bridge.Register("clearAllAccounts", async args =>
             {
-                await Operate.ProxyConfig.Account.ClearAllAccounts_Dialog(null);
+                await Operate.ProxyConfig.Account.ClearAllAccounts_Dialog();
                 return new { ok = true };
             });
 
@@ -2913,7 +2913,7 @@ namespace WPEHybrid
             //导入 / 导出。两个都是 Operate 侧现成的 _Dialog，文件框走 UI.PickOpen / UI.PickSave
             this.bridge.Register("importAccounts", async args =>
             {
-                await Operate.ProxyConfig.Account.LoadAccountList_Dialog(null);
+                await Operate.ProxyConfig.Account.LoadAccountList_Dialog();
                 return new { ok = true };
             });
 
@@ -3061,7 +3061,7 @@ namespace WPEHybrid
 
             this.bridge.Register("deleteSelectedAccounts", async args =>
             {
-                await Operate.ProxyConfig.Account.DeleteAccount_Dialog_ByIds(null, ReadIds(args));
+                await Operate.ProxyConfig.Account.DeleteAccount_Dialog_ByIds(ReadIds(args));
                 return new { ok = true };
             });
 
@@ -4126,7 +4126,7 @@ namespace WPEHybrid
             */
             this.bridge.Register("importBackup", async args =>
             {
-                await Operate.SystemConfig.ImportSystemBackUp_Dialog(null);
+                await Operate.SystemConfig.ImportSystemBackUp_Dialog();
                 FeedPump.MarkAllDirty();
                 this.SaveProxyState();
 

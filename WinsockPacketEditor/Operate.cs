@@ -43,10 +43,6 @@ namespace WinsockPacketEditor
             public static bool IsBeta = true;
             public static int PID = -1;
             public static int AutoSaveINT = 600000;
-            public static string PNAME = string.Empty;
-            public static string PATH = string.Empty;
-            public static string WebSite_Tutorials_CN = "https://www.wpe64.com/tutorials.html";
-            public static string WebSite_Tutorials_EN = "https://www.wpe64.com/tutorials_enUS.html";            
             /*
                 上次注入的那一次，五个字段是一条记录 —— 界面上要显示，「快捷注入」要拿它重放。
 
@@ -70,9 +66,6 @@ namespace WinsockPacketEditor
 
             /// <summary>上次注入的时刻，`DateTime.ToString("o")`；空串表示还没注入过。</summary>
             public static string LastInjectTime = string.Empty;
-            public static string WPE64_URL = "https://www.wpe64.com";
-            public static string WPE64_IP = "http://101.132.222.195";
-            public static string WPE64_Issuse = "https://github.com/x-nas/WinsockPacketEditor/issues";
             public static string WPE64_DLL = "WPEHook.dll";
             public static int HotKeyType = 0;
             public static string HotKey1 = "Ctrl + Alt + F1";
@@ -319,35 +312,6 @@ namespace WinsockPacketEditor
                     }
                     return ((System.Reflection.AssemblyCompanyAttribute)attributes[0]).Company;
                 }
-            }
-
-            #endregion
-
-            #region//检测网站可访问性
-
-            public static async Task<bool> CheckWebSite(string sURL)
-            {
-                bool bReturn = false;
-
-                try
-                {
-                    using (HttpClient client = new HttpClient())
-                    {
-                        client.Timeout = TimeSpan.FromSeconds(5);
-                        HttpResponseMessage response = await client.GetAsync(sURL);
-
-                        if (response.IsSuccessStatusCode)
-                        {
-                            bReturn = true;
-                        }
-                    }
-                }
-                catch
-                {
-                    bReturn = false;
-                }
-
-                return bReturn;
             }
 
             #endregion
@@ -611,122 +575,6 @@ namespace WinsockPacketEditor
 
             #endregion
 
-            #region//获取列表的右键菜单
-
-            public static MenuNode[] GetCMS_List()
-            {                
-                List<MenuNode> menuItems = new List<MenuNode>();
-
-                menuItems.Add(new MenuNode
-                {
-                    TextFallback = "置顶",
-                    SubText = "Ctrl+⬆",
-                    Id = "Top",
-                    IconSvg = "VerticalAlignTopOutlined",
-                    TextKey = "Top",
-                });
-                menuItems.Add(MenuNode.Divider());
-                menuItems.Add(new MenuNode
-                {
-                    TextFallback = "向上移动",
-                    SubText = "Alt+⬆",
-                    Id = "Up",
-                    IconSvg = "ArrowUpOutlined",
-                    TextKey = "Up",
-                });
-                menuItems.Add(new MenuNode
-                {
-                    TextFallback = "向下移动",
-                    SubText = "Alt+⬇",
-                    Id = "Down",
-                    IconSvg = "ArrowDownOutlined",
-                    TextKey = "Down",
-                });
-                menuItems.Add(MenuNode.Divider());
-                menuItems.Add(new MenuNode
-                {
-                    TextFallback = "置底",
-                    SubText = "Ctrl+⬇",
-                    Id = "Bottom",
-                    IconSvg = "VerticalAlignBottomOutlined",
-                    TextKey = "Bottom",
-                });
-                menuItems.Add(MenuNode.Divider());
-                menuItems.Add(new MenuNode
-                {
-                    TextFallback = "导出",
-                    Id = "Export",
-                    IconSvg = "DeliveredProcedureOutlined",
-                    TextKey = "Export",
-                });
-                menuItems.Add(new MenuNode
-                {
-                    TextFallback = "复制",
-                    Id = "Copy",
-                    IconSvg = "CopyOutlined",
-                    TextKey = "Copy",
-                });                
-                menuItems.Add(new MenuNode
-                {
-                    TextFallback = "删除",
-                    Id = "Delete",
-                    IconSvg = "DeleteOutlined",
-                    TextKey = "Delete",
-                });                
-
-                return menuItems.ToArray();
-            }
-
-            #endregion
-
-            #region//获取异或计算的右键菜单
-
-            public static MenuNode[] GetCMS_XOR(HexState hex)
-            {
-                List<MenuNode> menuItems = new List<MenuNode>();
-
-                menuItems.Add(new MenuNode
-                {
-                    TextFallback = "剪切",
-                    Enabled = hex.CanCut,
-                    Id = "Cut",
-                    IconSvg = "ScissorOutlined",
-                    TextKey = "Cut",
-                });
-
-                menuItems.Add(new MenuNode
-                {
-                    TextFallback = "复制",
-                    Enabled = hex.CanCopy,
-                    Id = "Copy",
-                    IconSvg = "CopyOutlined",
-                    TextKey = "Copy",
-                });
-
-                menuItems.Add(new MenuNode
-                {
-                    TextFallback = "粘贴",
-                    Enabled = hex.CanPaste,
-                    Id = "Paste",
-                    IconSvg = "SnippetsOutlined",
-                    TextKey = "Paste",
-                });
-
-                menuItems.Add(MenuNode.Divider());
-
-                menuItems.Add(new MenuNode
-                {
-                    TextFallback = "全选",
-                    Id = "SelectAll",
-                    IconSvg = "ProfileOutlined",
-                    TextKey = "SelectAll",
-                });
-
-                return menuItems.ToArray();
-            }
-
-            #endregion
-
             #region//获取中文字符串对应的bool类型
 
             public static bool GetBoolFromChineseString(string ChineseString)
@@ -964,10 +812,6 @@ namespace WinsockPacketEditor
 
             #endregion
 
-            #region//初始化悬浮按钮
-
-            #endregion
-
             #region//初始化列表执行
 
             public static void InitListExecute()
@@ -982,14 +826,6 @@ namespace WinsockPacketEditor
                 Operate.RobotConfig.List.bgwRobotList.DoWork -= Operate.RobotConfig.List.RobotList_DoWork;
                 Operate.RobotConfig.List.bgwRobotList.DoWork += Operate.RobotConfig.List.RobotList_DoWork;
             }
-
-            #endregion
-
-            #region//初始化列表数据
-
-            #endregion
-
-            #region//查找树节点
 
             #endregion
 
@@ -2167,25 +2003,6 @@ namespace WinsockPacketEditor
                 return bReturn;
             }
 
-            public static bool ValidateHexValueWithWildcardAndShowMessage(string ValidateHex)
-            {
-                if (!System.Text.RegularExpressions.Regex.IsMatch(ValidateHex, "^([0-9A-F*]{2})$"))
-                {
-                    UI.Toast(UiIcon.Error, UI.T("InvalidHex", "请输入有效的十六进制数值或通配符 (*)"));
-
-                    return false;
-                }
-
-                if (ValidateHex == "**")
-                {
-                    UI.Toast(UiIcon.Warn, UI.T("InvalidWildcard", "请使用留空替代 (**)"));
-
-                    return false;
-                }
-
-                return true;
-            }
-
             #endregion
 
             #region//判断是否是有效的IPV4字符串
@@ -2420,19 +2237,6 @@ namespace WinsockPacketEditor
                 }
 
                 return result;
-            }
-
-            public static bool IsModifierKey(Keys key)
-            {
-                return key == Keys.ControlKey ||
-                       key == Keys.LControlKey ||
-                       key == Keys.RControlKey ||
-                       key == Keys.Menu ||
-                       key == Keys.LMenu ||
-                       key == Keys.RMenu ||
-                       key == Keys.ShiftKey ||
-                       key == Keys.LShiftKey ||
-                       key == Keys.RShiftKey;
             }
 
             #endregion
@@ -2806,19 +2610,6 @@ namespace WinsockPacketEditor
             private static string GetSequenceString(List<string> bytes, int start, int length)
             {
                 return string.Join(" ", bytes.Skip(start).Take(length));
-            }
-
-            private static bool CompareSequences(List<string> source, int sourceStart, List<string> target, int targetStart, int length)
-            {
-                for (int i = 0; i < length; i++)
-                {
-                    if (sourceStart + i >= source.Count || targetStart + i >= target.Count)
-                        return false;
-
-                    if (source[sourceStart + i] != target[targetStart + i])
-                        return false;
-                }
-                return true;
             }
 
             #region//工具页（WPEHybrid 用：编码转换 / 数据提取）
@@ -3260,23 +3051,6 @@ namespace WinsockPacketEditor
 
             #endregion
 
-            public static string FormatHex(string hex)
-            {
-                StringBuilder sb = new StringBuilder();
-
-                for (int i = 0; i < hex.Length; i++)
-                {
-                    sb.Append(hex[i]);
-
-                    if (i % 2 == 1 && i != hex.Length - 1)
-                    {
-                        sb.Append(" ");
-                    }
-                }
-
-                return sb.ToString();
-            }
-
             private static List<string> SplitIntoBytes(string hex)
             {
                 List<string> bytes = new List<string>();
@@ -3346,10 +3120,6 @@ namespace WinsockPacketEditor
 
                 return sb.ToString();
             }
-
-            #endregion
-
-            #region//文本过滤（正则表达式）
 
             #endregion
 
@@ -5062,7 +4832,7 @@ namespace WinsockPacketEditor
 
             #region//从文件导入系统备份（对话框）
 
-            public static async Task ImportSystemBackUp_Dialog(object form)
+            public static async Task ImportSystemBackUp_Dialog()
             {
                 try
                 {
@@ -5075,7 +4845,7 @@ namespace WinsockPacketEditor
                         string FilePath = sPickedPath;
                         if (!string.IsNullOrEmpty(FilePath))
                         {
-                            if (await ImportSystemBackUp(form, FilePath, true))
+                            if (await ImportSystemBackUp(FilePath, true))
                             {
                                 string Title = UI.T("BackUpSettingsForm.Import.Success", "导入系统备份成功");
                                 UI.Notify(UiIcon.Success, Title, FilePath);
@@ -5090,7 +4860,7 @@ namespace WinsockPacketEditor
                 }
             }
 
-            private static async Task<bool> ImportSystemBackUp(object form, string FilePath, bool LoadFromUser)
+            private static async Task<bool> ImportSystemBackUp(string FilePath, bool LoadFromUser)
             {
                 try
                 {
@@ -5126,7 +4896,7 @@ namespace WinsockPacketEditor
                             return false;
                         }
 
-                        ImportSystemBackUp_FromXDocument(form, xdoc);
+                        ImportSystemBackUp_FromXDocument(xdoc);
                         return true;
                     }
                 }
@@ -5138,7 +4908,7 @@ namespace WinsockPacketEditor
                 return false;
             }
 
-            private static void ImportSystemBackUp_FromXDocument(object form, XDocument xdoc)
+            private static void ImportSystemBackUp_FromXDocument(XDocument xdoc)
             {
                 #region//有效性检测
 
@@ -5218,11 +4988,6 @@ namespace WinsockPacketEditor
 
                         ProxyConfig.Account.ClearAccountInfo();
                         ProxyConfig.Account.LoadAccountList_FromXDocument(ProxyAccountList);
-
-                        if (form is InterfaceInfo.IProxyMode pmForm)
-                        {
-                            pmForm.RefreshAccountList();
-                        }
                     }
                 }
                 catch (Exception ex)
@@ -11911,7 +11676,7 @@ namespace WinsockPacketEditor
 
                 #region//删除代理账号（对话框）                
 
-                public static async Task DeleteAccount_Dialog(object form, List<AccountInfo> aiList)
+                public static async Task DeleteAccount_Dialog(List<AccountInfo> aiList)
                 {
                     try
                     {
@@ -11931,11 +11696,6 @@ namespace WinsockPacketEditor
                                     ProxyConfig.Account.lstAccountInfo.Remove(ai);
                                     DataBase.DeleteTable_ProxyAccount(ai.AID);
                                 }
-                            }
-
-                            if (form is InterfaceInfo.IProxyMode pmForm)
-                            {
-                                pmForm.RefreshAccountList();
                             }
                         }
                     }
@@ -12232,7 +11992,7 @@ namespace WinsockPacketEditor
                 */
 
                 /// <summary>删一个账号（带确认框）。AID 为空什么都不做。</summary>
-                public static async Task DeleteAccount_Dialog_ById(object form, string AID)
+                public static async Task DeleteAccount_Dialog_ById(string AID)
                 {
                     try
                     {
@@ -12252,7 +12012,7 @@ namespace WinsockPacketEditor
                         using (FeedPump.Suppress(FeedList.Account))
                         {
                             await ProxyConfig.Account.DeleteAccount_Dialog(
-                                form, new List<AccountInfo> { ai });
+                                new List<AccountInfo> { ai });
                         }
 
                         /*
@@ -12277,7 +12037,7 @@ namespace WinsockPacketEditor
                 /// 单独一个方法、单独一个桥入口 —— 见上面那段说明：
                 /// 这个动作不可逆，必须是<b>显式</b>调用它才发生，不能是别的方法少了个参数的后果。
                 /// </summary>
-                public static async Task ClearAllAccounts_Dialog(object form)
+                public static async Task ClearAllAccounts_Dialog()
                 {
                     try
                     {
@@ -12286,7 +12046,7 @@ namespace WinsockPacketEditor
                             return;
                         }
 
-                        await ProxyConfig.Account.DeleteAccount_Dialog(form, null);
+                        await ProxyConfig.Account.DeleteAccount_Dialog(null);
                     }
                     catch (Exception ex)
                     {
@@ -12406,13 +12166,13 @@ namespace WinsockPacketEditor
                 /// 删除选中的账号（带确认框，数量写在提示里）。
                 /// 不做增量推送：一次删几百行，几百条 Remove 不如让 ListChanged 合并成一次整表推。
                 /// </summary>
-                public static async Task DeleteAccount_Dialog_ByIds(object form, IList<string> Ids)
+                public static async Task DeleteAccount_Dialog_ByIds(IList<string> Ids)
                 {
                     List<AccountInfo> picked = ProxyConfig.Account.PickAccounts(Ids);
 
                     if (picked.Count > 0)
                     {
-                        await ProxyConfig.Account.DeleteAccount_Dialog(form, picked);
+                        await ProxyConfig.Account.DeleteAccount_Dialog(picked);
                     }
                 }
 
@@ -13580,143 +13340,6 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//获取账号列表的右键菜单
-
-                public static MenuNode[] GetCMS_AccountList()
-                {
-                    List<MenuNode> menuItems = new List<MenuNode>();
-                                        
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "批量调整",
-                        Id = "Adjust",                        
-                        IconSvg = "UnorderedListOutlined",
-                        TextKey = "AccountList.BatchAdjustment",
-                        Sub = new MenuNode[]
-                        {
-                            new MenuNode
-                            {
-                                TextFallback = "过期时间",
-                                Id = "ExpiryTime",
-                                IconSvg = "FieldTimeOutlined",
-                                TextKey = "AccountList.ExpiryTime",
-                            },
-                            new MenuNode
-                            {
-                                TextFallback = "链接数",
-                                Id = "LimitLinks",
-                                IconSvg = "ForkOutlined",
-                                TextKey = "AccountList.LimitLinks",
-                            },
-                            new MenuNode
-                            {
-                                TextFallback = "设备数",
-                                Id = "LimitDevices",
-                                IconSvg = "TabletOutlined",
-                                TextKey = "AccountList.LimitDevices",
-                            },
-                        },
-                    });                    
-                    menuItems.Add(MenuNode.Divider());                    
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "批量导出",
-                        Id = "Export",
-                        IconSvg = "DeliveredProcedureOutlined",
-                        TextKey = "AccountList.BatchExport",
-                    });
-                    menuItems.Add(MenuNode.Divider());
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "批量删除",
-                        Id = "Delete",
-                        IconSvg = "DeleteOutlined",
-                        TextKey = "AccountList.Delete",
-                    });
-
-                    return menuItems.ToArray();
-                }
-
-                #endregion                
-
-                #region//获取批量创建账号的右键菜单
-
-                public static MenuNode[] GetCMS_BatchAccounts()
-                {
-                    List<MenuNode> menuItems = new List<MenuNode>();
-                    
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "导出到Excel",
-                        Id = "ToExcel",
-                        IconSvg = "FileExcelOutlined",
-                        TextKey = "SaveToExcel",
-                    });
-
-                    return menuItems.ToArray();
-                }
-
-                #endregion
-
-                #region//获取认证列表的右键菜单
-
-                public static MenuNode[] GetCMS_AuthList()
-                {
-                    List<MenuNode> menuItems = new List<MenuNode>();
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "加入白名单",
-                        Id = "WhiteList_Permanent",
-                        IconSvg = "EyeOutlined",
-                        TextKey = "FireWallSetting.WhiteList.Add",
-                    });
-
-                    menuItems.Add(MenuNode.Divider());
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "加入黑名单",
-                        Id = "BlackList",
-                        IconSvg = "EyeInvisibleOutlined",
-                        TextKey = "FireWallSetting.BlackList.Add",
-                        Sub = new MenuNode[]
-                        {
-                            new MenuNode
-                            {
-                                TextFallback = "屏蔽 1 小时",
-                                Id = "BlackList_1Hour",
-                                TextKey = "FireWallSetting.BlackList.1Hour",
-                            },
-                            MenuNode.Divider(),
-                            new MenuNode
-                            {
-                                TextFallback = "屏蔽 1 天",
-                                Id = "BlackList_1Day",
-                                TextKey = "FireWallSetting.BlackList.1Day",
-                            },
-                            MenuNode.Divider(),
-                            new MenuNode
-                            {
-                                TextFallback = "屏蔽 30 天",
-                                Id = "BlackList_30Day",
-                                TextKey = "FireWallSetting.BlackList.30Day",
-                            },
-                            MenuNode.Divider(),
-                            new MenuNode
-                            {
-                                TextFallback = "永久屏蔽",
-                                Id = "BlackList_Permanent",                                
-                                TextKey = "FireWallSetting.BlackList.Permanent",
-                            },
-                        },
-                    });
-
-                    return menuItems.ToArray();
-                }
-
-                #endregion               
-
                 #region//保存批量创建的账号到Excel（对话框）
 
                 public static async Task SaveBatchAccounts_Dialog(string FileName, BindingList<AccountInfo> aiList)
@@ -14058,7 +13681,7 @@ namespace WinsockPacketEditor
 
                 #region//从文件加载代理账号列表（对话框）
 
-                public static async Task LoadAccountList_Dialog(object form)
+                public static async Task LoadAccountList_Dialog()
                 {
                     try
                     {
@@ -14078,11 +13701,6 @@ namespace WinsockPacketEditor
                                     string Title = UI.T("InjectModeForm.ImportProxyAccountList.Success", "导入代理账号列表成功");
                                     UI.Notify(UiIcon.Success, Title, FilePath);
                                     Operate.DoLog(nameof(LoadAccountList_Dialog), Title + ": " + FilePath);
-                                }
-
-                                if (form is InterfaceInfo.IProxyMode pmForm)
-                                {
-                                    pmForm.RefreshAccountList();
                                 }
                             }
                         }
@@ -14966,52 +14584,6 @@ namespace WinsockPacketEditor
                         rule.PortFrom == Port_From &&
                         Path_From.StartsWith(rule.PathFrom, StringComparison.OrdinalIgnoreCase));
                     }
-                }
-
-                #endregion
-
-                #region//获取代理映射的右键菜单
-
-                public static MenuNode[] GetCMS_Mapping()
-                {
-                    List<MenuNode> menuItems = new List<MenuNode>();
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "置顶",
-                        SubText = "Ctrl+⬆",
-                        Id = "Top",
-                        IconSvg = "VerticalAlignTopOutlined",
-                        TextKey = "Top",
-                    });
-                    menuItems.Add(MenuNode.Divider());
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "向上移动",
-                        SubText = "Alt+⬆",
-                        Id = "Up",
-                        IconSvg = "ArrowUpOutlined",
-                        TextKey = "Up",
-                    });
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "向下移动",
-                        SubText = "Alt+⬇",
-                        Id = "Down",
-                        IconSvg = "ArrowDownOutlined",
-                        TextKey = "Down",
-                    });
-                    menuItems.Add(MenuNode.Divider());
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "置底",
-                        SubText = "Ctrl+⬇",
-                        Id = "Bottom",
-                        IconSvg = "VerticalAlignBottomOutlined",
-                        TextKey = "Bottom",
-                    });                    
-
-                    return menuItems.ToArray();
                 }
 
                 #endregion
@@ -16758,235 +16330,6 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//获取封包数据的右键菜单
-
-                public static MenuNode[] GetCMS_PacketData(HexState hex)
-                {
-                    List<MenuNode> menuItems = new List<MenuNode>();
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "编辑",
-                        Id = "Edit",
-                        IconSvg = "EditOutlined",
-                        TextKey = "Edit",
-                    });
-
-                    menuItems.Add(MenuNode.Divider());
-
-                    if (SendConfig.List.lstSendInfo.Count > 0)
-                    {
-                        menuItems.Add(new MenuNode
-                        {
-                            TextFallback = "添加到发送",
-                            Id = "ToSend",
-                            IconSvg = "PlaySquareOutlined",
-                            TextKey = "ToSend",
-                            Sub = Operate.SendConfig.List.GetCMS_ToSend(),
-                        });
-                    }
-                    else
-                    {
-                        menuItems.Add(new MenuNode
-                        {
-                            TextFallback = "添加到发送",
-                            Enabled = false,
-                            Id = "ToSend",
-                            IconSvg = "PlaySquareOutlined",
-                            TextKey = "ToSend",
-                        });
-                    }
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "添加到滤镜列表",
-                        Id = "ToFilterList",
-                        IconSvg = "FunnelPlotOutlined",
-                        TextKey = "ToFilterList",
-                    });
-
-                    menuItems.Add(MenuNode.Divider());
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "复制",
-                        Enabled = hex.CanCopy,
-                        Id = "Copy",
-                        IconSvg = "CopyOutlined",
-                        TextKey = "Copy",
-                        Sub = new MenuNode[]
-                        {
-                            new MenuNode
-                            {
-                                TextFallback = "复制文本",
-                                Enabled = hex.CanCopy,
-                                Id = "Copy_Text",
-                                IconSvg = "CopyOutlined",
-                                TextKey = "CopyText",
-                            },
-                            new MenuNode
-                            {
-                                TextFallback = "复制十六进制",
-                                Enabled = hex.CanCopy,
-                                Id = "Copy_Hex",
-                                IconSvg = "CopyOutlined",
-                                TextKey = "CopyHex",
-                            },
-                        },
-                    });
-
-                    menuItems.Add(MenuNode.Divider());
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "添加到文本A",
-                        Id = "ToTextA",
-                        IconSvg = "FontColorsOutlined",
-                        TextKey = "ToTextA",
-                    });
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "添加到文本B",
-                        Id = "ToTextB",
-                        IconSvg = "BoldOutlined",
-                        TextKey = "ToTextB",
-                    });
-
-                    menuItems.Add(MenuNode.Divider());
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "全选",
-                        Id = "SelectAll",
-                        IconSvg = "ProfileOutlined",
-                        TextKey = "SelectAll",
-                    });
-
-                    return menuItems.ToArray();
-                }
-
-                #endregion
-
-                #region//获取封包编辑的右键菜单
-
-                public static MenuNode[] GetCMS_PacketEdit(HexState hex)
-                {
-                    List<MenuNode> menuItems = new List<MenuNode>();
-
-                    if (SendConfig.List.lstSendInfo.Count > 0)
-                    {
-                        menuItems.Add(new MenuNode
-                        {
-                            TextFallback = "添加到发送",
-                            Id = "ToSend",
-                            IconSvg = "PlaySquareOutlined",
-                            TextKey = "ToSend",
-                            Sub = Operate.SendConfig.List.GetCMS_ToSend(),
-                        });
-                    }
-                    else
-                    {
-                        menuItems.Add(new MenuNode
-                        {
-                            TextFallback = "添加到发送",
-                            Enabled = false,
-                            Id = "ToSend",
-                            IconSvg = "PlaySquareOutlined",
-                            TextKey = "ToSend",
-                        });
-                    }
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "添加到滤镜列表",
-                        Id = "ToFilterList",
-                        IconSvg = "FunnelPlotOutlined",
-                        TextKey = "ToFilterList",
-                    });
-
-                    menuItems.Add(MenuNode.Divider());
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "剪切",
-                        Enabled = hex.CanCut,
-                        Id = "Cut",
-                        IconSvg = "ScissorOutlined",
-                        TextKey = "Cut",
-                    });
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "复制",
-                        Enabled = hex.CanCopy,
-                        Id = "Copy",
-                        IconSvg = "CopyOutlined",
-                        TextKey = "Copy",
-                        Sub = new MenuNode[]
-                        {
-                            new MenuNode
-                            {
-                                TextFallback = "复制文本",
-                                Enabled = hex.CanCopy,
-                                Id = "Copy_Text",
-                                IconSvg = "CopyOutlined",
-                                TextKey = "CopyText",
-                            },
-                            new MenuNode
-                            {
-                                TextFallback = "复制十六进制",
-                                Enabled = hex.CanCopy,
-                                Id = "Copy_Hex",
-                                IconSvg = "CopyOutlined",
-                                TextKey = "CopyHex",
-                            },
-                        },
-                    });
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "粘贴",
-                        Enabled = hex.CanPaste,
-                        Id = "Paste",
-                        IconSvg = "SnippetsOutlined",
-                        TextKey = "Paste",
-                        Sub = new MenuNode[]
-                        {
-                            new MenuNode
-                            {
-                                TextFallback = "粘贴文本",
-                                Enabled = hex.CanPaste,
-                                Id = "Paste_Text",
-                                IconSvg = "SnippetsOutlined",
-                                TextKey = "PasteText",
-                            },
-                            new MenuNode
-                            {
-                                TextFallback = "粘贴十六进制",
-                                Enabled = hex.CanPasteHex,
-                                Id = "Paste_Hex",
-                                IconSvg = "SnippetsOutlined",
-                                TextKey = "PasteHex",
-                            },
-                        },
-                    });
-
-                    menuItems.Add(MenuNode.Divider());
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "全选",
-                        Id = "SelectAll",
-                        IconSvg = "ProfileOutlined",
-                        TextKey = "SelectAll",
-                    });
-
-                    return menuItems.ToArray();
-                }
-
-                #endregion
-
                 #region//获取 SockAddr 对应的 IP 地址和端口
 
                 public static string GetIPString_BySocketAddr(int pSocket, Operate.PacketConfig.Packet.SockAddr pAddr, Operate.PacketConfig.Packet.PacketType pType)
@@ -18244,157 +17587,6 @@ namespace WinsockPacketEditor
 
                     return dtReturn;
                 }                
-
-                #endregion
-
-                #region//获取封包列表的右键菜单
-
-                public static MenuNode[] GetCMS_PacketList()
-                {
-                    List<MenuNode> menuItems = new List<MenuNode>();
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "编辑",
-                        Id = "Edit",
-                        IconSvg = "EditOutlined",
-                        TextKey = "Edit",
-                    });
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "复制",
-                        SubText = "Ctrl+C",
-                        Id = "Copy",
-                        IconSvg = "CopyOutlined",
-                        TextKey = "Copy",
-                    });
-
-                    menuItems.Add(MenuNode.Divider());
-
-                    if (SendConfig.List.lstSendInfo.Count > 0)
-                    {
-                        menuItems.Add(new MenuNode
-                        {
-                            TextFallback = "添加到发送",
-                            Id = "ToSend",
-                            IconSvg = "PlaySquareOutlined",
-                            TextKey = "ToSend",
-                            Sub = Operate.SendConfig.List.GetCMS_ToSend(),
-                        });
-                    }
-                    else
-                    {
-                        menuItems.Add(new MenuNode
-                        {
-                            TextFallback = "添加到发送",
-                            Enabled = false,
-                            Id = "ToSend",
-                            IconSvg = "PlaySquareOutlined",
-                            TextKey = "ToSend",                            
-                        });
-                    }
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "添加到滤镜列表",
-                        Id = "ToFilterList",
-                        IconSvg = "FunnelPlotOutlined",
-                        TextKey = "ToFilterList",
-                    });
-
-                    if (WareHouseConfig.List.lstWareHouseInfo.Count > 0)
-                    {
-                        menuItems.Add(new MenuNode
-                        {
-                            TextFallback = "添加到仓库",
-                            Id = "ToWareHouse",
-                            IconSvg = "BankOutlined",
-                            TextKey = "ToWareHouse",
-                            Sub = Operate.WareHouseConfig.List.GetCMS_ToWareHouse(),
-                        });
-                    }
-                    else
-                    {
-                        menuItems.Add(new MenuNode
-                        {
-                            TextFallback = "添加到仓库",
-                            Enabled = false,
-                            Id = "ToWareHouse",
-                            IconSvg = "BankOutlined",
-                            TextKey = "ToWareHouse",
-                        });
-                    }
-
-                    menuItems.Add(MenuNode.Divider());
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "设置系统套接字",
-                        Id = "SYSSocket",
-                        IconSvg = "CheckSquareOutlined",
-                        TextKey = "SetSSocket",
-                    });
-
-                    menuItems.Add(MenuNode.Divider());
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "查看数据修改",
-                        Id = "PacketModification",
-                        IconSvg = "FormOutlined",
-                        TextKey = "PacketModification",
-                    });
-
-                    menuItems.Add(MenuNode.Divider());
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "导出到Excel",
-                        Id = "ToExcel",
-                        IconSvg = "FileExcelOutlined",
-                        TextKey = "SaveToExcel",
-                    });
-
-                    menuItems.Add(MenuNode.Divider());
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "添加到文本A",
-                        Id = "ToTextA",
-                        IconSvg = "FontColorsOutlined",
-                        TextKey = "ToTextA",
-                    });
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "添加到文本B",
-                        Id = "ToTextB",
-                        IconSvg = "BoldOutlined",
-                        TextKey = "ToTextB",
-                    });
-
-                    menuItems.Add(MenuNode.Divider());
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "全选",
-                        SubText = "Ctrl+A",
-                        Id = "SelectAll",
-                        IconSvg = "UnorderedListOutlined",
-                        TextKey = "SelectAll",
-                    });
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "取消选择",
-                        Id = "DeSelect",
-                        IconSvg = "DeleteRowOutlined",
-                        TextKey = "DeSelect",
-                    });
-
-                    return menuItems.ToArray();
-                }
 
                 #endregion
 
@@ -19837,10 +19029,6 @@ namespace WinsockPacketEditor
 
                     return sReturn;
                 }
-
-                #endregion
-
-                #region//获取滤镜执行类型
 
                 #endregion
 
@@ -24562,29 +23750,6 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//获取添加到发送的右键菜单
-
-                public static MenuNode[] GetCMS_ToSend()
-                {
-                    MenuNode[] imsReturn = new MenuNode[Operate.SendConfig.List.lstSendInfo.Count];
-                    if (Operate.SendConfig.List.lstSendInfo.Count > 0)
-                    {
-                        for (int i = 0; i < imsReturn.Length; i++)
-                        {
-                            imsReturn[i] = new MenuNode
-                            {
-                                TextFallback = Operate.SendConfig.List.lstSendInfo[i].SName,
-                                Id = Operate.SendConfig.List.lstSendInfo[i].SID.ToString().ToUpper(),
-                                Tag = "ToSend",
-                            };
-                        }
-                    }
-
-                    return imsReturn;
-                }
-
-                #endregion
-
                 #region//清空发送列表（对话框）
 
                 public static async Task CleanUpSendList_Dialog()
@@ -25788,68 +24953,6 @@ namespace WinsockPacketEditor
                     {
                         Operate.DoLog(nameof(AddRobotInstruction), ex);
                     }
-                }
-
-                #endregion
-
-                #region//获取指令集的右键菜单
-
-                public static MenuNode[] GetCMS_RobotInstruction()
-                {
-                    List<MenuNode> menuItems = new List<MenuNode>();
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "置顶",
-                        SubText = "Ctrl+⬆",
-                        Id = "Top",
-                        IconSvg = "VerticalAlignTopOutlined",
-                        TextKey = "Top",
-                    });
-                    menuItems.Add(MenuNode.Divider());
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "向上移动",
-                        SubText = "Alt+⬆",
-                        Id = "Up",
-                        IconSvg = "ArrowUpOutlined",
-                        TextKey = "Up",
-                    });
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "向下移动",
-                        SubText = "Alt+⬇",
-                        Id = "Down",
-                        IconSvg = "ArrowDownOutlined",
-                        TextKey = "Down",
-                    });
-                    menuItems.Add(MenuNode.Divider());
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "置底",
-                        SubText = "Ctrl+⬇",
-                        Id = "Bottom",
-                        IconSvg = "VerticalAlignBottomOutlined",
-                        TextKey = "Bottom",
-                    });
-                    menuItems.Add(MenuNode.Divider());
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "删除",
-                        Id = "Delete",
-                        IconSvg = "CloseOutlined",
-                        TextKey = "Delete",
-                    });
-                    menuItems.Add(MenuNode.Divider());
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "清空所有指令",
-                        Id = "ClearUp",
-                        IconSvg = "DeleteOutlined",
-                        TextKey = "Clear",
-                    });
-
-                    return menuItems.ToArray();
                 }
 
                 #endregion
@@ -28125,124 +27228,6 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//获取自动入库的右键菜单
-
-                public static MenuNode[] GetCMS_AutoStores()
-                {
-                    List<MenuNode> menuItems = new List<MenuNode>();
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "置顶",
-                        SubText = "Ctrl+⬆",
-                        Id = "Top",
-                        IconSvg = "VerticalAlignTopOutlined",
-                        TextKey = "Top",
-                    });
-                    menuItems.Add(MenuNode.Divider());
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "向上移动",
-                        SubText = "Alt+⬆",
-                        Id = "Up",
-                        IconSvg = "ArrowUpOutlined",
-                        TextKey = "Up",
-                    });
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "向下移动",
-                        SubText = "Alt+⬇",
-                        Id = "Down",
-                        IconSvg = "ArrowDownOutlined",
-                        TextKey = "Down",
-                    });
-                    menuItems.Add(MenuNode.Divider());
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "置底",
-                        SubText = "Ctrl+⬇",
-                        Id = "Bottom",
-                        IconSvg = "VerticalAlignBottomOutlined",
-                        TextKey = "Bottom",
-                    });
-
-                    return menuItems.ToArray();
-                }
-
-                #endregion
-
-                #region//获取添加到仓库的右键菜单
-
-                public static MenuNode[] GetCMS_ToWareHouse()
-                {
-                    MenuNode[] imsReturn = new MenuNode[Operate.WareHouseConfig.List.lstWareHouseInfo.Count];
-                    if (Operate.WareHouseConfig.List.lstWareHouseInfo.Count > 0)
-                    {
-                        for (int i = 0; i < imsReturn.Length; i++)
-                        {
-                            imsReturn[i] = new MenuNode
-                            {
-                                TextFallback = Operate.WareHouseConfig.List.lstWareHouseInfo[i].WName,
-                                Tag = "ToWareHouse",
-                                Id = Operate.WareHouseConfig.List.lstWareHouseInfo[i].WID.ToString().ToUpper(),
-                            };
-                        }
-                    }
-
-                    return imsReturn;
-                }
-
-                #endregion
-
-                #region//获取仓储数据的右键菜单
-
-                public static MenuNode[] GetCMS_StoresData(HexState hex)
-                {
-                    List<MenuNode> menuItems = new List<MenuNode>();                    
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "复制",
-                        Enabled = hex.CanCopy,
-                        Id = "Copy",
-                        IconSvg = "CopyOutlined",
-                        TextKey = "Copy",
-                        Sub = new MenuNode[]
-                        {
-                            new MenuNode
-                            {
-                                TextFallback = "复制文本",
-                                Enabled = hex.CanCopy,
-                                Id = "Copy_Text",
-                                IconSvg = "CopyOutlined",
-                                TextKey = "CopyText",
-                            },
-                            new MenuNode
-                            {
-                                TextFallback = "复制十六进制",
-                                Enabled = hex.CanCopy,
-                                Id = "Copy_Hex",
-                                IconSvg = "CopyOutlined",
-                                TextKey = "CopyHex",
-                            },
-                        },
-                    });
-
-                    menuItems.Add(MenuNode.Divider());                    
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "全选",
-                        Id = "SelectAll",
-                        IconSvg = "ProfileOutlined",
-                        TextKey = "SelectAll",
-                    });
-
-                    return menuItems.ToArray();
-                }
-
-                #endregion
-
                 #region//保存仓库列表到文件（对话框）
 
                 public static async Task SaveWareHouseList_Dialog(string FileName, List<WareHouseInfo> whiList)
@@ -29713,60 +28698,6 @@ namespace WinsockPacketEditor
 
         public static class WPCConfig
         {
-            #region//获取列表的右键菜单
-
-            public static MenuNode[] GetCMS_List()
-            {
-                List<MenuNode> menuItems = new List<MenuNode>();
-
-                menuItems.Add(new MenuNode
-                {
-                    TextFallback = "置顶",
-                    SubText = "Ctrl+⬆",
-                    Id = "Top",
-                    IconSvg = "VerticalAlignTopOutlined",
-                    TextKey = "Top",
-                });
-                menuItems.Add(MenuNode.Divider());
-                menuItems.Add(new MenuNode
-                {
-                    TextFallback = "向上移动",
-                    SubText = "Alt+⬆",
-                    Id = "Up",
-                    IconSvg = "ArrowUpOutlined",
-                    TextKey = "Up",
-                });
-                menuItems.Add(new MenuNode
-                {
-                    TextFallback = "向下移动",
-                    SubText = "Alt+⬇",
-                    Id = "Down",
-                    IconSvg = "ArrowDownOutlined",
-                    TextKey = "Down",
-                });
-                menuItems.Add(MenuNode.Divider());
-                menuItems.Add(new MenuNode
-                {
-                    TextFallback = "置底",
-                    SubText = "Ctrl+⬇",
-                    Id = "Bottom",
-                    IconSvg = "VerticalAlignBottomOutlined",
-                    TextKey = "Bottom",
-                });
-                menuItems.Add(MenuNode.Divider());
-                menuItems.Add(new MenuNode
-                {
-                    TextFallback = "删除",
-                    Id = "Delete",
-                    IconSvg = "DeleteOutlined",
-                    TextKey = "Delete",
-                });
-
-                return menuItems.ToArray();
-            }
-
-            #endregion
-
             #region//服务器列表
 
             public static class ServerList
@@ -31418,63 +30349,6 @@ namespace WinsockPacketEditor
                     {
                         Operate.DoLog(nameof(ExportLog_Dialog), ex);
                     }
-                }
-
-                #endregion
-
-                #region//获取日志列表的右键菜单
-
-                public static MenuNode[] GetCMS_LogList()
-                {
-                    List<MenuNode> menuItems = new List<MenuNode>();
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "复制",
-                        SubText = "Ctrl+C",
-                        Id = "Copy",
-                        IconSvg = "CopyOutlined",
-                        TextKey = "Copy",
-                    });
-
-                    menuItems.Add(MenuNode.Divider());
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "导出到Excel",
-                        Id = "ToExcel",
-                        IconSvg = "FileExcelOutlined",
-                        TextKey = "SaveToExcel",
-                    });
-
-                    menuItems.Add(MenuNode.Divider());
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "清空日志列表",
-                        Id = "ClearUp",
-                        IconSvg = "DeleteOutlined",
-                        TextKey = "Clear",
-                    });
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "全选",
-                        SubText = "Ctrl+A",
-                        Id = "SelectAll",
-                        IconSvg = "UnorderedListOutlined",
-                        TextKey = "SelectAll",
-                    });
-
-                    menuItems.Add(new MenuNode
-                    {
-                        TextFallback = "取消选择",
-                        Id = "DeSelect",
-                        IconSvg = "DeleteRowOutlined",
-                        TextKey = "DeSelect",
-                    });
-
-                    return menuItems.ToArray();
                 }
 
                 #endregion

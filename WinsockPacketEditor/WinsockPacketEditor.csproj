@@ -137,7 +137,6 @@
     <Compile Include="ClassObject\AccountIPInfo.cs" />
     <Compile Include="ClassObject\AuthInfo.cs" />
     <Compile Include="ClassObject\AutoStoresInfo.cs" />
-    <Compile Include="ClassObject\BitInfo.cs" />
     <Compile Include="ClassObject\CountryCodes.cs" />
     <Compile Include="ClassObject\BlackListInfo.cs" />
     <Compile Include="ClassObject\DataInfo.cs" />
@@ -145,7 +144,6 @@
     <Compile Include="ClassObject\FilterLogInfo.cs" />
     <Compile Include="ClassObject\FindOptions.cs" />
     <Compile Include="ClassObject\InstructionInfo.cs" />
-    <Compile Include="ClassObject\InterfaceInfo.cs" />
     <Compile Include="ClassObject\IIpRule.cs" />
     <Compile Include="ClassObject\IPConnectionFilter.cs" />
     <Compile Include="ClassObject\L10n\L10n.cs" />
@@ -195,11 +193,9 @@
     <Compile Include="ClassObject\Core\Ipc\WpeCore.cs" />
     <Compile Include="ClassObject\Core\IHookHost.cs" />
     <Compile Include="ClassObject\Ui\FeedRows.cs" />
-    <Compile Include="ClassObject\Ui\HexState.cs" />
     <Compile Include="ClassObject\Ui\IL10n.cs" />
     <Compile Include="ClassObject\Ui\IUiFeed.cs" />
     <Compile Include="ClassObject\Ui\IUiHost.cs" />
-    <Compile Include="ClassObject\Ui\MenuNode.cs" />
     <Compile Include="ClassObject\Ui\PasswordResult.cs" />
     <Compile Include="ClassObject\Ui\RgbColor.cs" />
     <Compile Include="ClassObject\Ui\UI.cs" />
