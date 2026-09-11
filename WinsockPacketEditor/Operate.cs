@@ -1,6 +1,4 @@
-﻿using Be.Windows.Forms;
-using DiffPlex.DiffBuilder.Model;
-using Microsoft.Owin.Hosting;
+﻿using Microsoft.Owin.Hosting;
 using Microsoft.Win32;
 using QQWry;
 using SunnyNetlibray.Event;
@@ -13,7 +11,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Data.Entity;
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.Globalization;
@@ -2560,18 +2557,6 @@ namespace WinsockPacketEditor
             }
 
             #endregion
-
-            #region//文本对比
-
-            public class DifferenceItem
-            {
-                public int Position { get; set; }
-                public string ValueA { get; set; }
-                public string ValueB { get; set; }
-                public ChangeType ChangeType { get; set; }
-            }
-
-            #endregion            
 
             #region //文本查重
 
