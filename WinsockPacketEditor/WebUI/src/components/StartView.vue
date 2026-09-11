@@ -387,6 +387,20 @@ onMounted(async () => {
 .glitch::before { color: var(--magenta); animation: g1 2.4s infinite steps(2) alternate-reverse; }
 .glitch::after { color: var(--cyan); animation: g2 3.2s infinite steps(2) alternate-reverse; }
 
+/*
+  ⚠️ 浅色下混合模式要反过来：screen 只在<b>深底</b>上是「加一层彩边」。
+  错位层自带一块页面底色（--black）用来盖住那一截原字，深色下它是近黑，screen 上去等于没有，
+  只留下彩色的错位字 → 读成霓虹色散；浅色下它是 #eef1f6，screen 一叠那一截原字被洗成近白，
+  只剩一条发灰、偏 2px 的错位字 —— 看着就是「字体被切歪了」（2026-09-11 用户截图报的）。
+  multiply 是 screen 在浅底上的镜像（浅底 ≈ 不变、彩字把原字压暗一截），字形完整；
+  浓度降到 .45，否则压暗的那一截太重，读成一道黑带。
+*/
+:root[data-theme="light"] .glitch::before,
+:root[data-theme="light"] .glitch::after {
+  mix-blend-mode: multiply;
+  opacity: .45;
+}
+
 @keyframes g1 {
   0% { clip-path: inset(20% 0 60% 0); transform: translate(-2px); }
   100% { clip-path: inset(65% 0 8% 0); transform: translate(2px); }

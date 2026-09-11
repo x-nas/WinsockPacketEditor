@@ -277,7 +277,7 @@ function clearAll(): void {
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  background: rgb(var(--scrim-rgb) / 55%);
+  background: rgb(var(--veil-rgb) / 55%);   /* 字直接在蒙层上，用 --veil（浅色下是磨砂），见 tokens.css */
   border: 1px dashed var(--cyan);
   color: var(--cyan);
   font-size: var(--fs-lead);

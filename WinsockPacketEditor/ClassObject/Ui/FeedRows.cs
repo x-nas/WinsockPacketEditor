@@ -386,6 +386,14 @@ namespace WinsockPacketEditor
         public int DomainType;
 
         public string ServerAddress;
+
+        /*
+            这条会话是 SOCKS5 的 <b>UDP ASSOCIATE</b>（UDP 中继的那条 TCP 控制连接），不是一条 TCP 连接。
+            这种会话不走 HandleConnectCommand，所以 ServerAddress 一直是空的；
+            DomainType 又是按端口猜的（53 → Socket）—— 不单独标出来的话，界面上就是
+            「协议：套接字 · 实际出口：—」，看不出它其实是一路 UDP（多半是 DNS）。
+        */
+        public bool Udp;
     }
 
     public sealed class AuthRow

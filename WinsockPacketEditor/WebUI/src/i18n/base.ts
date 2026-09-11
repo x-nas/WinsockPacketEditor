@@ -280,6 +280,15 @@ export const DICT = {
   'cli.via': { zh: '实际出口', en: 'Via' },
   //相同时写「直连」而不是短横 —— 短横看着像没取到数据，而事实是没有被转走
   'cli.direct': { zh: '直连', en: 'Direct' },
+  'cli.udpRelay': { zh: 'UDP 中继', en: 'UDP relay' },
+  'cli.udpTip': {
+    zh: 'SOCKS5 的 UDP 关联：这条 TCP 连接只是 UDP 中继的控制通道，数据报走 UDP（多半是 DNS 查询）。目标是客户端声明的 UDP 目的地址。',
+    en: 'SOCKS5 UDP associate: this TCP connection is only the control channel of a UDP relay; the datagrams go over UDP (usually DNS). The target is the UDP destination the client declared.',
+  },
+  'cli.socketTip': {
+    zh: '普通 TCP 连接：端口不是 80 / 8080 / 443 / 8443，认不出应用层协议，按原始套接字原样转发。',
+    en: 'Plain TCP connection: the port is not 80 / 8080 / 443 / 8443, so no application protocol is recognized and it is relayed as a raw socket.',
+  },
   'cli.viaHint': {
     zh: '实际连过去的地址。没有被转走时显示「直连」；走外部代理或命中远程映射规则时，这里显示真正连过去的地址。',
     en: 'Where it actually connected. Shows Direct when untouched; shows the real address when an external proxy or a remote mapping rule redirected it.',
@@ -558,6 +567,10 @@ export const DICT = {
   'pm.sysSocketFail': { zh: '设置系统套接字失败', en: 'Failed to set system socket' },
 
   'lst.needPick': { zh: '请先勾选要操作的行', en: 'Select the rows to act on first' },
+  'pm.pickTrimmed': {
+    zh: '选中的封包已被自动清理（列表只保留最近的那些），请重新选一行',
+    en: 'The selected packets were removed by auto clear (the list keeps only the most recent ones). Select a row again.',
+  },
 
   // ── 代理模式：账号列表 ──────────────────────────────
   //列名照 Controls/AccountList.cs 里那组 AntdUI.Column
@@ -1054,7 +1067,7 @@ export const DICT = {
   // ── 工具页：编码转换 ──
   'tr.encode': { zh: '编码', en: 'Encode' },
   'tr.decode': { zh: '解码', en: 'Decode' },
-  'tr.hint': { zh: '编码：文本 → 各编码的字节 · 解码：字节 → 各编码的文本 · 改动即时生效', en: 'Encode: text → bytes · Decode: bytes → text · under every encoding, live' },
+  'tr.hint': { zh: '编码：文本 → 各编码的字节 · 解码：字节 → 各编码的文本 · 改动即时生效', en: 'Encode: text → bytes · Decode: bytes → text · under every encoding, live' },
   'tr.hintTip': { zh: '编码 = 文本按各编码转成字节；解码 = 把输入当字节（十六进制那半）或当默认编码的文本（另一半），再按各编码解回字符串。改动即时生效。', en: 'Encode turns the text into bytes under each encoding. Decode reads the input as bytes (the hex half) or as system-default text (the other half) and turns it back into a string under each encoding. Results update as you type.' },
   'tr.input': { zh: '输入', en: 'Input' },
   'tr.inputPh': { zh: '输入文本；解码时可以是十六进制（空格可有可无）', en: 'Enter text; when decoding this can be hex, with or without spaces' },

@@ -38,7 +38,8 @@ defineProps<{ text?: string }>()
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgb(var(--scrim-rgb) / 72%);
+  /* 动画与文案直接画在遮罩上（没有卡片），所以用 --veil 而不是 --scrim：浅色下是磨砂，见 tokens.css */
+  background: rgb(var(--veil-rgb) / 72%);
   backdrop-filter: blur(2px);
 }
 

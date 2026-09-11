@@ -85,6 +85,39 @@ export function useRowPick<T, K>(
     anchor = -1
   }
 
+  /**
+   * 表头被裁掉了一段（封包列表的环形自动清理：只留最近 N 条）。
+   *
+   * 两件事都要做，缺一件都会静默出错：
+   *   ① 选中集里剔掉那些 Id —— 不剔的话右键「编辑」拿去的是一条 C# 那边已经没有的封包；
+   *   ② 锚点跟着前移 —— 它存的是<b>全表下标</b>，表头少了 N 行，Shift 连选就会连错 N 行。
+   *
+   * 返回选中集里被剔掉了几条（调用方据此判断「选中的封包是被自动清理掉的」）。
+   * autoPrune 关着的列表（封包列表）靠这个收拾；开着的那些整表 Replace 自己会对。
+   */
+  function trimHead(removed: readonly T[]): number {
+    const n = removed.length
+    if (!n) return 0
+
+    if (anchor >= 0) anchor = anchor - n >= 0 ? anchor - n : -1
+
+    if (!picked.value.size) return 0
+
+    let lost = 0
+    let next: Set<K> | null = null
+
+    for (const r of removed) {
+      const id = idOf(r)
+      if (!picked.value.has(id)) continue
+      if (!next) next = new Set(picked.value)
+      next.delete(id)
+      lost++
+    }
+
+    if (next) picked.value = next
+    return lost
+  }
+
   /*
     整表换掉后对一次选中集：别处删掉的 Id 留着不会出错（C# 侧一律按 Id 取交集），
     但计数会虚高 —— 看着像选了 8 条却只动得了 3 条，比空着更费解。
@@ -103,5 +136,5 @@ export function useRowPick<T, K>(
     })
   }
 
-  return { picked, pickedIds, onRowClick, selectAll, clear }
+  return { picked, pickedIds, onRowClick, selectAll, clear, trimHead }
 }

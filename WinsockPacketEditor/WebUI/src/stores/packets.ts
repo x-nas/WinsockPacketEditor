@@ -42,6 +42,13 @@ export interface PacketFeed<T> {
   attach: () => () => void
   clearLocal: () => void
   resetStat: () => void
+  /**
+   * 自动清理（环形裁剪）裁掉了哪些行。返回取消订阅的函数。
+   *
+   * 页面的选中集 / 详情面板里挂着的 Id 要靠它收拾 —— 那两份不在 rows 里，
+   * 行被裁掉之后它们还指着一条 C# 那边已经没有的封包，右键「编辑」就会撞上「不在列表里」。
+   */
+  onTrimmed: (fn: (removed: readonly T[]) => void) => () => void
 }
 
 /**
@@ -62,6 +69,9 @@ export function createPacketFeed<T extends { Id: number }>(list: FeedList): Pack
   let rafId = 0
   let lastRateAt = 0
   let lastRateRows = 0
+
+  /** 裁剪的订阅者（onTrimmed）。通常只有当前挂着的那个数据页一个。 */
+  const trimListeners = new Set<(removed: readonly T[]) => void>()
 
   function scheduleFlush(): void {
     if (rafId) return
@@ -115,9 +125,14 @@ export function createPacketFeed<T extends { Id: number }>(list: FeedList): Pack
       const drop = all.length - d.keep
       if (drop <= 0) return
 
-      all.splice(0, drop)
+      //splice 本来就返回被删掉的那一段，交给订阅者收拾它们手里的 Id（没人订阅就不用管它）
+      const removed = all.splice(0, drop)
       stat.value.dropped += drop
       scheduleFlush()
+
+      for (const fn of trimListeners) {
+        try { fn(removed) } catch (e) { console.error('[feed] onTrimmed 回调出错', e) }
+      }
     })
     const offClear = on('feed:clear', (d: { list: number }) => {
       if (d.list !== list) return
@@ -163,6 +178,10 @@ export function createPacketFeed<T extends { Id: number }>(list: FeedList): Pack
       lastRateRows = 0
       lastRateAt = performance.now()
     },
+    onTrimmed(fn) {
+      trimListeners.add(fn)
+      return () => { trimListeners.delete(fn) }
+    },
   }
 }
 
@@ -178,6 +197,7 @@ export const stat = proxyFeed.stat
 export const attachPacketFeed = proxyFeed.attach
 export const clearLocal = proxyFeed.clearLocal
 export const resetStat = proxyFeed.resetStat
+export const onProxyTrimmed = proxyFeed.onTrimmed
 
 /** 注入模式的主列表（对应 WinForms 的 Controls/PacketList.cs）。 */
 export const injectFeed = createPacketFeed<PacketRow>(FeedList.Packet)

@@ -255,7 +255,23 @@ const cells = computed(() => {
 const pick = useRowPick<PacketRow, number>(rows, (r) => r.Id, { autoPrune: false })
 const picked = pick.picked
 
-watch(() => rows.value.length, (n) => { if (n === 0) pick.clear() })
+//整表清空（用户点清空 / 切库）走这条；自动清理是环形裁剪，走下面的 onTrimmed
+watch(() => rows.value.length, (n) => { if (n === 0) { pick.clear(); pickTrimmed.value = false } })
+
+/*
+  选中的封包被自动清理（环形，只留最近 N 条）裁掉了 —— 从选中集里剔掉，并记下是被裁掉的，
+  右键动作撞上空选中集时说清楚原因。理由与代理数据页的同名那段一样（真机冒烟报过）；
+  详情面板刻意不清，用户可能正读着。
+*/
+const pickTrimmed = ref(false)
+
+const offTrimmed = injectFeed.onTrimmed((removed) => {
+  if (pick.trimHead(removed) > 0 && picked.value.size === 0) pickTrimmed.value = true
+})
+
+function needPickToast(): void {
+  pushToast('warning', pickTrimmed.value ? t('pm.pickTrimmed') : t('lst.needPick'))
+}
 
 onMounted(async () => {
   try {
@@ -284,12 +300,14 @@ onMounted(async () => {
 onBeforeUnmount(() => {
   //推送的订阅在 InjectView 上，这一屏切走时不该断掉；这个轮询是自己的，要收
   window.clearInterval(statsTimer)
+  offTrimmed()
 })
 
 function onSelect(anyRow: PacketListRow, ev: MouseEvent, index: number): void {
   //mode="inject" 时表里的行一定是 PacketRow
   const row = anyRow as PacketRow
   pick.onRowClick(row, ev, index)
+  pickTrimmed.value = false
   selected.value = row
   selectedId.value = row.Id
 
@@ -325,6 +343,9 @@ function onSelect(anyRow: PacketListRow, ev: MouseEvent, index: number): void {
 const q = ref('')
 const qHex = ref(false)
 const searching = ref(false)
+//「正在查找」的可见状态，超过 SLOW_SEARCH_MS 才亮 —— 理由见 ProxyData 的同名声明（每点一次闪一圈琥珀框）
+const slowSearch = ref(false)
+const SLOW_SEARCH_MS = 250
 /** 上一次命中的行在 C# 列表里的下标。−1 = 还没找过 */
 const searchAt = ref(-1)
 /*
@@ -346,12 +367,13 @@ async function findNext(): Promise<void> {
   if (!pattern || searching.value) return
 
   searching.value = true
+  const slowTimer = window.setTimeout(() => { slowSearch.value = true }, SLOW_SEARCH_MS)
 
   try {
     //先在当前这一行的剩下部分找（searchPos），找不到 SearchForList 自己会往下一行走
     const from = searchAt.value < 0 ? 0 : searchAt.value
     const fromPos = searchPos.value
-    let r = await call<SearchResult>('searchPacketList', { pattern, isHex: qHex.value, from, fromPos })
+    let r = await call<SearchResult>('searchPacketList',{ pattern, isHex: qHex.value, from, fromPos })
 
     if (r?.Error) {
       /*
@@ -401,6 +423,8 @@ async function findNext(): Promise<void> {
     console.error('[sp] 查找封包失败', e)
     pushToast('error', String(e))
   } finally {
+    window.clearTimeout(slowTimer)
+    slowSearch.value = false
     searching.value = false
   }
 }
@@ -498,7 +522,7 @@ async function onMenuPick(id: string): Promise<void> {
 
   //子菜单：id 形如 "send:<GUID>" / "house:<GUID>"
   if (id.startsWith('send:') || id.startsWith('house:')) {
-    if (!ids.length) { pushToast('warning', t('lst.needPick')); return }
+    if (!ids.length) { needPickToast(); return }
 
     const toSend = id.startsWith('send:')
     const key = id.slice(id.indexOf(':') + 1)
@@ -520,10 +544,12 @@ async function onMenuPick(id: string): Promise<void> {
   switch (id) {
     case 'selectAll':
       pick.selectAll()
+      pickTrimmed.value = false
       return
 
     case 'deselect':
       pick.clear()
+      pickTrimmed.value = false
       return
 
     //导出不要求先选：ids 为空时 C# 侧会导整张表
@@ -533,7 +559,7 @@ async function onMenuPick(id: string): Promise<void> {
   }
 
   if (!ids.length) {
-    pushToast('warning', t('lst.needPick'))
+    needPickToast()
     return
   }
 
@@ -665,7 +691,7 @@ defineExpose({ onCleared })
           查找封包。Enter = 查找下一个，Esc = 清空；右边两个按钮是「文本 / 十六进制」与「从头查找」。
           没有独立的「向下搜索」单选 —— 主按钮本身就是向下找，找到末尾自己回头再来一圈。
         -->
-        <span class="search" :class="{ busy: searching }">
+        <span class="search" :class="{ busy: slowSearch }">
           <svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" /><path d="M20 20l-4-4" /></svg>
           <input
             v-model="q"
@@ -694,8 +720,8 @@ defineExpose({ onCleared })
           就没有它能做而这个做不了的事了 —— 留着只是多一个要读的控件。
           真要从头再来：改一下查找内容、或者按 Esc / 点 × 清空，游标都会退回开头。
         -->
-        <button class="tb" :disabled="!q.trim() || searching" @click="findNext()">
-          {{ searching ? t('sp.searching') : t('sp.next') }}
+        <button class="tb" :disabled="!q.trim() || slowSearch" @click="findNext()">
+          {{ slowSearch ? t('sp.searching') : t('sp.next') }}
         </button>
 
         <button class="chk" :class="{ on: follow }" @click="follow = !follow"><i />{{ t('proxy.autoRoll') }}</button>

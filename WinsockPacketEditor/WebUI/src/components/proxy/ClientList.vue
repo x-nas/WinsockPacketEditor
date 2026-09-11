@@ -184,7 +184,12 @@ interface ConnRow {
   Target: string
   DomainType: number
   ServerAddress: string
+  /** SOCKS5 UDP ASSOCIATE 的那条控制连接（C# 的 ClientConnRow.Udp）。 */
+  Udp?: boolean
 }
+
+/** DomainType 的 0 —— 端口认不出应用层协议的普通 TCP（C# 的 DomainType.Socket）。 */
+const DOMAIN_SOCKET = 0
 
 /*
   DOMAIN_TYPE 存的是 <b>i18n 键</b>（'dt.https' 这种），不是可显示的文字 ——
@@ -343,14 +348,27 @@ watch(rows, () => {
           <span class="cport">:{{ c.ClientPort }}</span>
           <span class="carrow">→</span>
           <span class="ctarget">{{ c.Target || '—' }}</span>
-          <span class="cproto">{{ protoText[c.DomainType] || c.DomainType }}</span>
+          <!--
+            UDP 关联（SOCKS5 UDP ASSOCIATE）单独写「UDP」：它的 DomainType 是按端口猜的
+            （53 → 套接字），照写就是「协议：套接字」，看不出这其实是一路 UDP。
+            「套接字」＝ 端口认不出应用层协议的普通 TCP 连接，挂一句提示说清楚。
+          -->
+          <span v-if="c.Udp" class="cproto" :title="t('cli.udpTip')">UDP</span>
+          <span v-else class="cproto" :title="c.DomainType === DOMAIN_SOCKET ? t('cli.socketTip') : undefined">
+            {{ protoText[c.DomainType] || c.DomainType }}
+          </span>
           <!--
             实际出口。相同时<b>写「直连」而不是一条短横</b> ——
             短横看着像"没取到数据"，而这里的事实是"没有被转走"，是有内容的。
             地址原样并排写两遍才是噪声；真正要一眼看见的是它<b>不一样</b>的那两种情况：
             走了外部代理（ServerAddress = 上游代理地址），或命中了远程映射规则。
           -->
-          <span class="csrv" :class="{ same: !diffVia(c) }">
+          <!--
+            UDP 关联没有「连过去的地址」—— 数据报每一个都可以发往不同的目标，
+            ServerAddress 从来不写。原来画成一条短横，看着像「没取到」，照实写成「UDP 中继」。
+          -->
+          <span v-if="c.Udp" class="csrv same" :title="t('cli.udpTip')">{{ t('cli.udpRelay') }}</span>
+          <span v-else class="csrv" :class="{ same: !diffVia(c) }">
             {{ diffVia(c) ? c.ServerAddress : (c.ServerAddress ? t('cli.direct') : '—') }}
           </span>
         </div>

@@ -15,7 +15,7 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { call } from '../../bridge'
 import { FeedList, type PacketListRow, type Prefs, type ProxyRow, type SendRow, type Stats, type WareHouseRow } from '../../bridge/types'
 import { t } from '../../i18n'
-import { attachPacketFeed, resetStat, rows } from '../../stores/packets'
+import { attachPacketFeed, onProxyTrimmed, resetStat, rows } from '../../stores/packets'
 import { useList } from '../../stores/lists'
 import { pushToast } from '../../stores/toast'
 import { useRowPick } from '../../usePick'
@@ -184,6 +184,7 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   detach?.()
+  offTrimmed()
   window.clearInterval(statsTimer)
 })
 
@@ -216,14 +217,38 @@ async function clearAll(): Promise<void> {
   而这一屏的 rows 每帧都 triggerRef —— 挂上去等于每秒跑 60 次。
   这里改成只在列表被清空时清一次（下面那个 watch），代价与收益都对得上。
 */
-const { picked, onRowClick, selectAll, clear } =
+const { picked, onRowClick, selectAll, clear, trimHead } =
   useRowPick(rows, (r) => r.Id, { autoPrune: false })
+
+/*
+  选中的封包被自动清理裁掉了。
+
+  自动清理 2026-09-07 起是<b>环形</b>（只留最近 N 条），不是整表清空 ——
+  选中集里的 Id 会随着表头被裁一起失效，而页面上看不出来（那一行已经滚走了）。
+  以前没人收拾：右键「编辑」拿着一条 C# 那边已经没有的 Id 去开编辑器，
+  弹出来的是「这条封包已经不在列表里了」—— 真机冒烟里被报成了毛病。
+
+  现在裁剪一来就把它们从选中集里剔掉，并记下「是被裁掉的」：
+  右键动作撞上空选中集时，说清楚是自动清理把它清掉了，而不是一句笼统的「请先选中」。
+  详情面板（selected）<b>刻意不清</b>：字节已经取回来了，用户可能正读着 ——
+  与「环形而不是整表清空」是同一个理由，别把正在看的那一屏抹掉。
+*/
+const pickTrimmed = ref(false)
+
+const offTrimmed = onProxyTrimmed((removed) => {
+  if (trimHead(removed) > 0 && picked.value.size === 0) pickTrimmed.value = true
+})
+
+function needPickToast(): void {
+  pushToast('warning', pickTrimmed.value ? t('pm.pickTrimmed') : t('lst.needPick'))
+}
 
 function onSelect(anyRow: PacketListRow, ev: MouseEvent, index: number): void {
   //PacketList 两种模式共用，事件签名是并集；这一屏是 mode="proxy"，行一定是 ProxyRow
   const r = anyRow as ProxyRow
   selected.value = r
   onRowClick(r, ev, index)
+  pickTrimmed.value = false
 
   /*
     手动点行就把查找的高亮丢掉。
@@ -235,11 +260,12 @@ function onSelect(anyRow: PacketListRow, ev: MouseEvent, index: number): void {
 }
 
 /*
-  自动清理会把整表清空，选中集必须跟着清 ——
+  用户点「清空」/ 切库会把整表清空（feed:clear），选中集跟着清 ——
   留着已经不存在的 Id 不会报错，但「选了 8 条」却一条都动不了，比空着更费解。
+  自动清理不走这条（它是环形裁剪），见上面 onProxyTrimmed。
 */
 watch(() => rows.value.length, (n) => {
-  if (n === 0) clear()
+  if (n === 0) { clear(); pickTrimmed.value = false }
 })
 
 /* ── 查找封包（对应 WinForms 的 Controls/SearchPacket）───────── */
@@ -267,6 +293,15 @@ const listRef = ref<InstanceType<typeof PacketList> | null>(null)
 const q = ref('')
 const qHex = ref(false)
 const searching = ref(false)
+/*
+  「正在查找」的<b>可见</b>状态（搜索框转琥珀、按钮写「查找中」）。
+
+  ⚠️ 与 searching 分开：一次查找通常几毫秒就完，把忙碌态直接挂在 searching 上，
+  每点一次「查找下一个」搜索框就闪一圈琥珀框 —— 真机冒烟里被当成毛病报上来过。
+  超过 SLOW_SEARCH_MS 还没回来才亮，那时它才是有信息量的。防重入仍看 searching。
+*/
+const slowSearch = ref(false)
+const SLOW_SEARCH_MS = 250
 /** 上一次命中的行在 C# 列表里的下标。−1 = 还没找过 */
 const searchAt = ref(-1)
 /*
@@ -288,6 +323,7 @@ async function findNext(): Promise<void> {
   if (!pattern || searching.value) return
 
   searching.value = true
+  const slowTimer = window.setTimeout(() => { slowSearch.value = true }, SLOW_SEARCH_MS)
 
   try {
     //先在当前这一行的剩下部分找（searchPos），找不到 SearchForList 自己会往下一行走
@@ -349,6 +385,8 @@ async function findNext(): Promise<void> {
     console.error('[sp] 查找封包失败', e)
     pushToast('error', String(e))
   } finally {
+    window.clearTimeout(slowTimer)
+    slowSearch.value = false
     searching.value = false
   }
 }
@@ -454,7 +492,7 @@ async function onMenuPick(id: string): Promise<void> {
 
   //子菜单：id 形如 "send:<GUID>" / "house:<GUID>"
   if (id.startsWith('send:') || id.startsWith('house:')) {
-    if (!ids.length) { pushToast('warning', t('lst.needPick')); return }
+    if (!ids.length) { needPickToast(); return }
 
     const toSend = id.startsWith('send:')
     const key = id.slice(id.indexOf(':') + 1)
@@ -476,10 +514,12 @@ async function onMenuPick(id: string): Promise<void> {
   switch (id) {
     case 'selectAll':
       selectAll()
+      pickTrimmed.value = false
       return
 
     case 'deselect':
       clear()
+      pickTrimmed.value = false
       return
 
     //导出不要求先选：ids 为空时 C# 侧会导整张表
@@ -489,7 +529,7 @@ async function onMenuPick(id: string): Promise<void> {
   }
 
   if (!ids.length) {
-    pushToast('warning', t('lst.needPick'))
+    needPickToast()
     return
   }
 
@@ -792,7 +832,7 @@ async function runAccept(): Promise<void> {
           查找封包。Enter = 查找下一个，Esc = 清空；右边两个按钮是「文本 / 十六进制」与「从头查找」。
           没有独立的「向下搜索」单选 —— 主按钮本身就是向下找，找到末尾自己回头再来一圈。
         -->
-        <span class="search" :class="{ busy: searching }">
+        <span class="search" :class="{ busy: slowSearch }">
           <svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" /><path d="M20 20l-4-4" /></svg>
           <input
             v-model="q"
@@ -821,8 +861,9 @@ async function runAccept(): Promise<void> {
           就没有它能做而这个做不了的事了 —— 留着只是多一个要读的控件。
           真要从头再来：改一下查找内容、或者按 Esc / 点 × 清空，游标都会退回开头。
         -->
-        <button class="tb" :disabled="!q.trim() || searching" @click="findNext()">
-          {{ searching ? t('sp.searching') : t('sp.next') }}
+        <!-- 忙碌态看 slowSearch 而不是 searching —— 理由见它的声明；连点由 findNext 自己的防重入挡住 -->
+        <button class="tb" :disabled="!q.trim() || slowSearch" @click="findNext()">
+          {{ slowSearch ? t('sp.searching') : t('sp.next') }}
         </button>
 
         <button class="chk" :class="{ on: autoRoll }" @click="autoRoll = !autoRoll"><i />{{ t('proxy.autoRoll') }}</button>

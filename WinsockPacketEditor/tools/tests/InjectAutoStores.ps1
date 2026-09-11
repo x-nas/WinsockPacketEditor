@@ -24,15 +24,19 @@ $ErrorActionPreference = 'Stop'
 
 $bin = Join-Path $PSScriptRoot ('..\..\bin\' + $Config)
 $bin = [System.IO.Path]::GetFullPath($bin)
-if (-not (Test-Path (Join-Path $bin 'WinsockPacketEditor.dll'))) {
-    throw "找不到 $bin\WinsockPacketEditor.dll —— 先用 VS 的 MSBuild 编一次 Debug"
+
+# 合并 WPEHybrid 之后主程序集是 WinsockPacketEditor.exe（不再有独立的 .dll）
+$asmFile = Join-Path $bin 'WinsockPacketEditor.exe'
+if (-not (Test-Path $asmFile)) { $asmFile = Join-Path $bin 'WinsockPacketEditor.dll' }
+if (-not (Test-Path $asmFile)) {
+    throw "找不到 $bin\WinsockPacketEditor.exe —— 先用 VS 的 MSBuild 从解决方案编一次 Debug"
 }
 
 # ⚠️ Set-Location 不改 .NET 侧的工作目录，两句都要写
 Set-Location $bin
 [Environment]::CurrentDirectory = $bin
 
-$asm = [Reflection.Assembly]::LoadFrom((Join-Path $bin 'WinsockPacketEditor.dll'))
+$asm = [Reflection.Assembly]::LoadFrom($asmFile)
 $op = $asm.GetType('WinsockPacketEditor.Operate')
 
 $B = [Reflection.BindingFlags]'Public,NonPublic,Static'

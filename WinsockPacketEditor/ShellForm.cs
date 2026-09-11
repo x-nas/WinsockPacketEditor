@@ -229,8 +229,8 @@ namespace WPEHybrid
                 不接缩放的话窗口就变成固定尺寸了，而封包列表是宽表，很需要拉宽。
             */
             this.FormBorderStyle = FormBorderStyle.None;
-            //与 CSS 里 body 的 --black 同值；下面 WebView2 的两处背景也用它
-            this.BackColor = System.Drawing.Color.FromArgb(0x0A, 0x0A, 0x0F);
+            //与 CSS 里 body 的 --black 同值（跟着主题走，见 ShellBack）；下面 WebView2 的两处背景也用它
+            this.BackColor = ShellBack();
 
             /*
                 先隐形，等前端把首屏画完（uiReady）再露脸。
@@ -256,9 +256,10 @@ namespace WPEHybrid
                 Chromium 收不到 mouseup，会补派发一次 click —— 正是把程序点退出的那类问题。
                 原生这条路上按下发生在窗体的 HWND，Chromium 从没接过这次按下，不存在这个状态。
 
-                颜色与页面底色相同（#0A0A0F），视觉上看不出这圈边；最大化时收掉（见 OnResize）。
+                颜色与页面底色相同（ShellBack，跟着主题走），视觉上看不出这圈边；最大化时收掉。
+                右 / 下两边可能多出几个像素的零头，那是把 WebView2 对齐到整数 CSS 像素用的（见 UpdateShellPadding）。
             */
-            this.Padding = new Padding(ResizeBorder);
+            this.UpdateShellPadding();
 
             try
             {
@@ -277,11 +278,11 @@ namespace WPEHybrid
                   ② WebView2 已初始化、页面还没渲染 → DefaultBackgroundColor（默认是白色，就是它）
                   ③ 页面渲染出来之后          → CSS 里 body 的 background
 
-                三处都刷成页面底色 #0A0A0F，整个启动过程就没有跳变了。
+                三处都刷成页面底色（深色 #0A0A0F / 浅色 #EEF1F6），整个启动过程就没有跳变了。
                 DefaultBackgroundColor 必须在 EnsureCoreWebView2Async 之前设，
                 控件会在创建 controller 时把它带过去。
             */
-            System.Drawing.Color shellBack = System.Drawing.Color.FromArgb(0x0A, 0x0A, 0x0F);
+            System.Drawing.Color shellBack = ShellBack();
             this.web.BackColor = shellBack;
             this.web.DefaultBackgroundColor = shellBack;
 
@@ -295,6 +296,9 @@ namespace WPEHybrid
         {
             //在任何 await 之前起兜底计时器：下面这条链上任何一步卡住，窗口都还能露脸
             this.StartRevealTimeout();
+
+            //构造时窗口还没摆到最终那块屏上，按那块屏的缩放再对齐一次 WebView2 的尺寸
+            this.UpdateShellPadding();
 
             try
             {
@@ -488,13 +492,7 @@ namespace WPEHybrid
         {
             base.OnResize(e);
 
-            //最大化时没有可拉的边，把那一圈收掉，免得四周挂一道黑框
-            int pad = this.WindowState == FormWindowState.Maximized ? 0 : ResizeBorder;
-
-            if (this.Padding.All != pad)
-            {
-                this.Padding = new Padding(pad);
-            }
+            this.UpdateShellPadding();
 
             //标题栏上的最大化/还原图标要跟着变
             if (this.bridge != null)
@@ -504,6 +502,108 @@ namespace WPEHybrid
                     maximized = this.WindowState == FormWindowState.Maximized,
                 });
             }
+        }
+
+        /// <summary>
+        /// 窗体底色，与 CSS 的 --black 同值：深色 #0A0A0F / 浅色 #EEF1F6（见 tokens.css）。
+        ///
+        /// 窗体四周那圈缩放内边距（ResizeBorder）露出来的就是它 —— 写死成深色的话，
+        /// 浅色主题下窗口四周就挂着一道黑框。
+        /// </summary>
+        private static System.Drawing.Color ShellBack()
+        {
+            return UI.Prefs.IsDark
+                ? System.Drawing.Color.FromArgb(0x0A, 0x0A, 0x0F)
+                : System.Drawing.Color.FromArgb(0xEE, 0xF1, 0xF6);
+        }
+
+        /// <summary>主题变了（或切库 / 导入备份把 IsDark 换了）之后，把窗体与 WebView2 的底色跟上。</summary>
+        private void ApplyShellBack()
+        {
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(new Action(this.ApplyShellBack));
+                return;
+            }
+
+            try
+            {
+                System.Drawing.Color back = ShellBack();
+                this.BackColor = back;
+                this.web.BackColor = back;
+                this.web.DefaultBackgroundColor = back;
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(ApplyShellBack), ex);
+            }
+        }
+
+        /// <summary>
+        /// 定窗体内边距：普通状态留 ResizeBorder 那一圈给缩放，最大化时收掉；
+        /// 另外把 WebView2 的宽高<b>对齐到整数个 CSS 像素</b>。
+        ///
+        /// ⚠️ 为什么要对齐：WebView2 的 CSS 视口 ＝ 控件的设备像素 ÷ 缩放比，而 Chromium 把它<b>向上</b>取整。
+        /// 125% 下默认窗口 1600×1000 扣掉两边各 3px 是 1594×994，÷1.25 ＝ 1275.2×795.2，
+        /// 于是页面按 1276×796 排版、却只显示得下 1594×994 —— <b>右边与下边各被裁掉 1 个设备像素</b>。
+        /// 表现是四角标记里右上 / 左下 / 右下那三个的右边或下边贴着窗口边，只有左上那个两边都留着缝。
+        ///
+        /// 所以让 WebView2 的宽高是「一个 CSS 像素对应整数个设备像素」的倍数：
+        /// 缩放比 dpi/96 化成最简分数后，分母就是这个步长（120→5、144→3、168→7、192→2、96→1）。
+        /// 除不尽的那几个像素拆到两侧的内边距里（左 / 上拿一半，右 / 下拿另一半），
+        /// 两侧最多差 1 个设备像素。
+        ///
+        /// 最大化时不对齐：那时四周本来就不留边，拆出来的零头会在屏幕四周挂一道细边，
+        /// 比右 / 下被裁掉 1 个像素更显眼。
+        /// </summary>
+        private void UpdateShellPadding()
+        {
+            Padding want;
+
+            if (this.WindowState == FormWindowState.Maximized)
+            {
+                want = new Padding(0);
+            }
+            else
+            {
+                int dpi = 96;
+                try
+                {
+                    System.Drawing.Rectangle b = this.Bounds;
+                    dpi = DpiAt(new System.Drawing.Point(b.Left + b.Width / 2, b.Top + b.Height / 2));
+                }
+                catch { }
+
+                int step = dpi / Gcd(dpi, 96);
+                int rw = step > 1 ? Math.Max(0, this.ClientSize.Width - 2 * ResizeBorder) % step : 0;
+                int rh = step > 1 ? Math.Max(0, this.ClientSize.Height - 2 * ResizeBorder) % step : 0;
+
+                want = new Padding(
+                    ResizeBorder + rw / 2,
+                    ResizeBorder + rh / 2,
+                    ResizeBorder + rw - rw / 2,
+                    ResizeBorder + rh - rh / 2);
+            }
+
+            if (this.Padding != want)
+            {
+                this.Padding = want;
+            }
+        }
+
+        private static int Gcd(int a, int b)
+        {
+            a = Math.Abs(a);
+            b = Math.Abs(b);
+
+            while (b != 0)
+            {
+                int t = a % b;
+                a = b;
+                b = t;
+            }
+
+            return a == 0 ? 1 : a;
         }
 
         /// <summary>
@@ -861,10 +961,13 @@ namespace WPEHybrid
             int w = this.ClientSize.Width;
             int h = this.ClientSize.Height;
 
-            bool left = p.X <= ResizeBorder;
-            bool right = p.X >= w - ResizeBorder;
-            bool top = p.Y <= ResizeBorder;
-            bool bottom = p.Y >= h - ResizeBorder;
+            //按实际内边距判：右 / 下两边可能比 ResizeBorder 多出几个像素的对齐零头（见 UpdateShellPadding），
+            //那几个像素上面没有 WebView2，不算作缩放条的话就成了点了没反应的一道缝
+            Padding pad = this.Padding;
+            bool left = p.X <= Math.Max(ResizeBorder, pad.Left);
+            bool right = p.X >= w - Math.Max(ResizeBorder, pad.Right);
+            bool top = p.Y <= Math.Max(ResizeBorder, pad.Top);
+            bool bottom = p.Y >= h - Math.Max(ResizeBorder, pad.Bottom);
 
             //沿边放宽一段算「角」，斜向缩放才有得点（见 CornerZone）
             bool nearLeft = p.X <= CornerZone;
@@ -1257,6 +1360,9 @@ namespace WPEHybrid
                     if (args["isDark"] != null)
                     {
                         UI.Prefs.IsDark = (bool)args["isDark"];
+
+                        //窗体四周那圈缩放内边距露的是窗体自己的底色 —— 不跟着换，浅色下就是一道黑框
+                        this.ApplyShellBack();
                     }
 
                     //氛围层那条游走亮带
@@ -4137,6 +4243,9 @@ namespace WPEHybrid
                 var link = this.AttachedLink();
                 if (link != null) { link.TryPush(link.PushAll); }
 
+                //备份里的 IsDark 可能与当前相反，窗体四周那圈底色跟着换
+                this.ApplyShellBack();
+
                 /*
                     语言与主题都要带回去：备份里存着 DefaultLanguage 与 IsDark，
                     <b>界面是前端在管的</b> —— 不回传的话会变成
@@ -4822,6 +4931,7 @@ namespace WPEHybrid
 
                     //纯字段赋值，可重复调用；不碰任何 BindingList（已核过 2582–2665 行）
                     Operate.SystemConfig.LoadSystemConfig_FromDB();
+                    this.ApplyShellBack();
 
                     Operate.DoLog("saveInstance", "已切换数据库 : " + CurrentDbFull());
 

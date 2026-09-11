@@ -12859,6 +12859,7 @@ namespace WinsockPacketEditor
                                 Target = s.ClientAddress,
                                 DomainType = (int)s.DomainType,
                                 ServerAddress = s.ServerAddress,
+                                Udp = s.CommandType == ProxyConfig.Proxy.CommandType.UDP,
                             });
                         }
                     }

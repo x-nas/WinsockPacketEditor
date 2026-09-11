@@ -201,6 +201,16 @@ export function initTheme(
 
   applyDocumentTheme()
   listen()
+
+  /*
+    「跟随系统」时，C# 手里的 isDark 是<b>上次</b>解析出来的值 —— 程序关着的时候系统换了深浅，
+    这里解析出来的就和它对不上。那一份不只是存档：窗体四周那圈缩放内边距露的是窗体底色，
+    它按 isDark 取色，不对齐的话页面是浅的、四周却是一道黑框。
+    只在确实对不上时送一次，且只送 isDark（稀疏报文，别把 mode 一起送）。
+  */
+  if (theme.value === 'system' && typeof isDark === 'boolean' && isDark !== _systemDark.value) {
+    call('setAppearance', { isDark: _systemDark.value }).catch(() => { /* 存不上不影响本次会话 */ })
+  }
 }
 
 /**
