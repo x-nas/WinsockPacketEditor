@@ -16,7 +16,7 @@
 import { computed, ref, watch } from 'vue'
 import { call } from '../../bridge'
 import { t } from '../../i18n'
-import { socks5Addr } from '../../stores/runtime'
+import { httpAddr, socks5Addr } from '../../stores/runtime'
 import CyberSelect from '../CyberSelect.vue'
 import SettingsModal from './SettingsModal.vue'
 
@@ -93,6 +93,8 @@ async function save(): Promise<void> {
 
     // 监听地址可能变了，状态栏与运行状态条都在读它
     if (r.socks5Addr) socks5Addr.value = r.socks5Addr
+    //⚠️ httpAddr 无条件写 —— 这一屏正是关掉 HTTP 代理的地方，那时它必须变回空串
+    httpAddr.value = r.httpAddr || ''
 
     emit('update:open', false)
   } catch (e) {
@@ -128,7 +130,7 @@ async function exportCert(): Promise<void> {
   <SettingsModal
     :open="props.open"
     :title="t('set.proxy')"
-    subtitle="Controls/ProxySetting"
+    subtitle="Proxy Listener"
     :busy="busy"
     :error="error"
     @update:open="emit('update:open', $event)"
@@ -139,6 +141,7 @@ async function exportCert(): Promise<void> {
       <p v-if="locked" class="lock">{{ t('set.lockedHint') }}</p>
 
       <!-- 监听地址 -->
+      <section class="sec">
       <div class="grp">{{ t('set.grp.addr') }}</div>
 
       <div class="row">
@@ -156,7 +159,9 @@ async function exportCert(): Promise<void> {
         </div>
       </div>
 
+      </section>
       <!-- SOCKS5 -->
+      <section class="sec">
       <div class="grp">{{ t('set.grp.socks') }}</div>
 
       <div class="row">
@@ -195,7 +200,9 @@ async function exportCert(): Promise<void> {
         </div>
       </div>
 
+      </section>
       <!-- HTTP -->
+      <section class="sec">
       <div class="grp">{{ t('set.grp.http') }}</div>
 
       <div class="row">
@@ -214,7 +221,9 @@ async function exportCert(): Promise<void> {
         </div>
       </div>
 
+      </section>
       <!-- 系统代理 / 证书 -->
+      <section class="sec">
       <div class="grp">{{ t('set.grp.system') }}</div>
 
       <div class="row">
@@ -233,6 +242,7 @@ async function exportCert(): Promise<void> {
           <button class="mini" @click="exportCert">{{ t('set.exportCert') }}</button>
         </div>
       </div>
+      </section>
     </template>
 
     <div v-else class="loading">{{ t('hex.loading') }}</div>
@@ -241,14 +251,14 @@ async function exportCert(): Promise<void> {
 </template>
 
 <style scoped>
-.loading { padding: 40px 0; text-align: center; color: var(--muted); font-size: 12px; }
+.loading { padding: 40px 0; text-align: center; color: var(--muted); font-size: var(--fs-body); }
 
 .lock {
   margin: 10px 20px 4px;
   padding: 8px 12px;
   border: 1px solid rgb(var(--amber-rgb) / 32%);
   background: rgb(var(--amber-rgb) / 7%);
-  font-size: 12px;
+  font-size: var(--fs-small);
   color: var(--amber);
 }
 
@@ -259,7 +269,7 @@ async function exportCert(): Promise<void> {
   外面的 .setf .row > .v 已经是 flex-wrap: wrap，让它自己折下去即可。
 */
 .tip {
-  font-size: 11px;
+  font-size: var(--fs-small);
   color: var(--dim);
   min-width: 0;
   line-height: 1.5;

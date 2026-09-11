@@ -218,7 +218,7 @@ onBeforeUnmount(close)
   border: 1px solid var(--border);
   color: var(--gray);
   font-family: var(--mono);
-  font-size: 12.5px;
+  font-size: var(--fs-body);
   text-align: left;
   cursor: pointer;
   outline: none;
@@ -259,7 +259,7 @@ onBeforeUnmount(close)
   border: 0;
   color: var(--gray);
   font-family: var(--mono);
-  font-size: 12.5px;
+  font-size: var(--fs-body);
   text-align: left;
   white-space: nowrap;
   overflow: hidden;
@@ -271,5 +271,5 @@ onBeforeUnmount(close)
 .cs-opt.on { color: var(--cyan); }
 .cs-opt.dis { opacity: .4; cursor: default; }
 
-.cs-empty { padding: 8px 10px; color: var(--muted); font-size: 12px; text-align: center; }
+.cs-empty { padding: 8px 10px; color: var(--muted); font-size: var(--fs-body); text-align: center; }
 </style>

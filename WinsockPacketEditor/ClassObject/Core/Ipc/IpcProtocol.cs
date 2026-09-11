@@ -27,8 +27,12 @@ namespace WinsockPacketEditor.Ipc
         /// <summary>
         /// 协议版本。两端 Hello 时对不上就直接拒绝，<b>不猜、不兼容</b>。
         /// 改了任何一个帧的字段就要 +1。
+        ///
+        /// 4（2026-09-10）：Stats 事件末尾加了<b>封包计数那 11 个 long</b>（计数搬回目标，
+        ///                  见 <c>WpeCore.OnPacket</c> 那段说明）；ResetStats 命令加了一个
+        ///                  <c>u8 掩码</c>（要清哪几组计数）。
         /// </summary>
-        public const int Version = 3;
+        public const int Version = 4;
 
         /// <summary>控制通道单帧上限（1 MB）。快照最大的是滤镜表，几十条 × 几百字节，余量足够。</summary>
         public const int MaxControlFrame = 1024 * 1024;
@@ -111,10 +115,12 @@ namespace WinsockPacketEditor.Ipc
         GetFootprint = 9,
 
         /// <summary>
-        /// 把统计计数归零（滤镜那六个 + 每条滤镜的执行次数）。
+        /// 把统计计数归零。载荷是一个 <c>u8 掩码</c>，见 <see cref="ResetWhat"/>。
         ///
-        /// ⚠️ 注入模式下这六个计数是<b>在目标里递增</b>的（DoFilterList 跑在目标的钩子线程上），
-        /// 外壳那份只是随 Stats 事件更新的<b>镜像</b> —— 只清外壳的，下一拍就被目标盖回去。
+        /// ⚠️ 注入模式下这些计数<b>全都在目标里递增</b>（滤镜六个与每条滤镜的执行次数在
+        /// DoFilterList 里、封包那 11 个在 OnPacket 里、发送 / 机器人的执行次数在目标的
+        /// BackgroundWorker 里），外壳那份只是随 Stats 事件更新的<b>镜像</b> ——
+        /// 只清外壳的，下一拍就被目标盖回去（用户看到的是「数字闪一下又回来了」）。
         /// 所以复位必须发到目标这边来做。
         /// </summary>
         ResetStats = 10,
@@ -124,11 +130,9 @@ namespace WinsockPacketEditor.Ipc
 
         //—— 阶段 2 的执行器命令，先占位，实现在阶段 2 ——
         StartSend = 20,
-        StopSend = 21,
         StartSendList = 22,
         StopSendList = 23,
         StartRobot = 24,
-        StopRobot = 25,
         StartRobotList = 26,
         StopRobotList = 27,
     }
@@ -159,10 +163,29 @@ namespace WinsockPacketEditor.Ipc
 
         /// <summary>目标侧出了不可恢复的错。</summary>
         Fatal = 7,
+    }
 
-        //—— 阶段 2 ——
-        SendProgress = 20,
-        RobotProgress = 21,
+    /// <summary>
+    /// <see cref="IpcCommand.ResetStats"/> 要清哪几组计数（可以按位或）。
+    ///
+    /// 分组而不是「一个命令清所有」：界面上这几处入口的语义各不相同 ——
+    /// 统计数据页的「归零」只清滤镜那一组（封包总数与流量不动，那是数据页的仪表），
+    /// 数据页的「清空」清封包计数，发送 / 机器人列表各自的「重置计数」只清自己那一列。
+    /// </summary>
+    [Flags]
+    public enum ResetWhat : byte
+    {
+        /// <summary>滤镜那六个全局计数 + 每条滤镜的 ExecutionCount。</summary>
+        FilterStats = 1,
+
+        /// <summary>封包计数（TotalPackets / 八个方向 / 收发字节）。</summary>
+        PacketCounters = 2,
+
+        /// <summary>每条发送的执行次数 / 成功 / 失败。</summary>
+        SendCounts = 4,
+
+        /// <summary>每个机器人的执行次数。</summary>
+        RobotCounts = 8,
     }
 
     /// <summary>配置快照的类别（见 INJECT-IPC-PLAN.md 第 3.3 节）。</summary>
@@ -347,8 +370,6 @@ namespace WinsockPacketEditor.Ipc
 
         public IpcReader(byte[] buf) { _buf = buf; _pos = 0; }
         public IpcReader(byte[] buf, int start) { _buf = buf; _pos = start; }
-
-        public bool Eof { get { return _pos >= _buf.Length; } }
 
         private void Need(int n)
         {

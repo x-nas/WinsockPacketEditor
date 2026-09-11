@@ -16,6 +16,7 @@
 */
 import { nextTick, ref, watch } from 'vue'
 import { t } from '../../i18n'
+import { useModal } from '../../useModal'
 
 const props = defineProps<{
   open: boolean
@@ -32,6 +33,16 @@ const props = defineProps<{
   readonly?: boolean
   /** 弹窗宽度（px）。默认 620；装着表格的那几个（进程 / 映射 / 规则）要宽一些 */
   width?: number
+  /** 「保存」那颗按钮的文案。默认「保存」；确认类的弹窗写它真正要做的事（如「启动并注入」）*/
+  saveText?: string
+  /**
+   * 「保存」那颗按钮点不点得动。挑选类的弹窗用得着 ——
+   * 进程表里一行都没选中时，「注入」没有对象可注。
+   * ⚠️ 与 busy 分开：busy 是「正在办」，这个是「还没得办」，两者都会禁用但含义不同。
+   */
+  saveDisabled?: boolean
+  /** 「取消」那颗按钮的文案。默认「取消」；挑选类的弹窗写「关闭」更准（没什么可取消的）*/
+  cancelText?: string
 }>()
 
 const emit = defineEmits<{
@@ -58,10 +69,24 @@ function close(): void {
   if (props.busy) return
   emit('update:open', false)
 }
+
+/* 登记进模态栈：父窗体因此变 inert；自己被后开的弹窗盖住时也会 inert。见 useModal.ts */
+const { covered } = useModal(() => props.open)
 </script>
 
 <template>
-  <div v-if="props.open" class="mask" @mousedown.self="close">
+  <!--
+    ⚠️ <b>Teleport 到 body</b> —— 不是为了好看，是必须的，两个理由都在 useModal.ts 里：
+    ① 代理模式的 .proxy 是 z-index: 10 的层叠上下文，弹窗留在里面时遮罩盖不住标题栏；
+    ② 出去了才不会被 .shell 的 inert 一起禁掉。
+
+    ⚠️ <b>刻意不换行、不重排缩进</b>：模板里有 white-space: pre 的块，
+    整体缩进一动，Vue 模板编译器的 condense 会连带改掉渲染结果。
+
+    ⚠️ <b>点遮罩不再关闭弹窗</b>：编辑器里都是填了一半的东西，点空白处就丢掉太容易误操作。
+    出口只留「取消 / 关闭」按钮与 Esc。
+  -->
+  <Teleport to="body"><div v-if="props.open" class="mask" :inert="covered">
     <div ref="box" class="dlg" role="dialog" aria-modal="true" :style="props.width ? { width: props.width + 'px' } : undefined" @keydown.esc="close">
       <header class="hd">
         <span class="mk tl" /><span class="mk tr" />
@@ -85,15 +110,15 @@ function close(): void {
         </span>
         <span class="grow" />
         <button class="btn" :class="{ primary: props.readonly }" :disabled="props.busy" @click="close">
-          {{ props.readonly ? t('dlg.close') : t('dlg.cancel') }}
+          {{ props.cancelText || (props.readonly ? t('dlg.close') : t('dlg.cancel')) }}
         </button>
-        <button v-if="!props.readonly" class="btn primary" :disabled="props.busy" @click="emit('save')">
-          {{ props.busy ? t('proxy.working') : t('set.save') }}
+        <button v-if="!props.readonly" class="btn primary" :disabled="props.busy || props.saveDisabled" @click="emit('save')">
+          {{ props.busy ? t('proxy.working') : (props.saveText || t('set.save')) }}
         </button>
         <span class="mk bl" /><span class="mk br" />
       </footer>
     </div>
-  </div>
+  </div></Teleport>
 </template>
 
 <style scoped>
@@ -143,14 +168,14 @@ function close(): void {
 .tt .zh {
   font-family: var(--orbit);
   font-weight: 700;
-  font-size: 15px;
+  font-size: var(--fs-title);
   letter-spacing: .04em;
   color: var(--cyan);
 }
 
 .tt .sub {
   font-family: var(--share);
-  font-size: 10px;
+  font-size: var(--fs-caption);
   letter-spacing: .14em;
   text-transform: uppercase;
   color: var(--muted);
@@ -192,14 +217,14 @@ function close(): void {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  font-size: 12px;
+  font-size: var(--fs-small);
   color: var(--danger);
 }
 
 .err .ico { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2; fill: none; flex: none; }
 
 .btn {
-  padding: 12px 20px 10px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
+  padding: 11px 20px 11px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
   background: transparent;
   border: 1px solid var(--border);
   color: var(--gray);

@@ -94,13 +94,13 @@ onMounted(async () => {
 </script>
 
 <template>
-  <main class="start">
+  <main class="start scrn">
     <div class="eyebrow">
       <span class="dash" />
       <span class="lbl">{{ t('start.eyebrow') }}</span>
     </div>
 
-    <h1 class="glitch" data-text="Winsock Packet Editor">Winsock Packet Editor</h1>
+    <h1 class="ttl glitch" data-text="Winsock Packet Editor">Winsock Packet Editor</h1>
 
     <p class="subtitle">{{ typed }}<span class="cur" /></p>
 
@@ -296,8 +296,11 @@ onMounted(async () => {
   而它省下的那几像素往往正是压垮的最后一根。
 */
 .start {
-  --g-eyebrow: 16px;   /* eyebrow 与标题之间 */
-  --g-sub: 14px;       /* 标题与副标题之间 */
+  --hd: var(--green);
+  --hd-rgb: var(--green-rgb);
+  --hd-glow: 40%;      /* 首屏这一档比二级页浓一点，那是原来就量好的 */
+  --hd-gap: 16px;      /* eyebrow 与标题之间（共用件 .scrn 的令牌）*/
+  --hd-sub: 14px;      /* 标题与副标题之间（共用件 .scrn 的令牌）*/
   --g-rack: 34px;      /* 副标题与机架之间 */
   --g-term: 26px;      /* 机架与自检终端之间 */
   --slot: 10px;        /* 机架的内边距 ＝ 槽缝，两者必须同值 */
@@ -305,7 +308,7 @@ onMounted(async () => {
   --cd-ry: 12px;       /* 卡片里三处竖直间距（状态行 / 标题行 / 描述）*/
   --term-py: 12px;     /* 终端正文的上下内边距 */
   --inst-h: 40px;      /* 多开那条窄行的高度 */
-  --title: clamp(32px, 3.6vw, 46px);
+  --ttl-size: clamp(32px, 3.6vw, 46px);
 
   position: relative;
   z-index: 10;
@@ -325,8 +328,8 @@ onMounted(async () => {
 /* 1280×800 在 125% 缩放下的那一档（CSS 640 高）*/
 @media (max-height: 690px) {
   .start {
-    --g-eyebrow: 12px;
-    --g-sub: 11px;
+    --hd-gap: 12px;
+    --hd-sub: 11px;
     --g-rack: 26px;
     --g-term: 21px;
     --slot: 9px;
@@ -334,15 +337,15 @@ onMounted(async () => {
     --cd-ry: 10px;
     --term-py: 10px;
     --inst-h: 38px;
-    --title: clamp(30px, 3.4vw, 42px);
+    --ttl-size: clamp(30px, 3.4vw, 42px);
   }
 }
 
 /* 150% 缩放（CSS 533 高）以及被拖到很矮的窗口 */
 @media (max-height: 590px) {
   .start {
-    --g-eyebrow: 6px;
-    --g-sub: 7px;
+    --hd-gap: 6px;
+    --hd-sub: 7px;
     --g-rack: 14px;
     --g-term: 12px;
     --slot: 7px;
@@ -350,34 +353,24 @@ onMounted(async () => {
     --cd-ry: 7px;
     --term-py: 7px;
     --inst-h: 34px;
-    --title: clamp(24px, 2.8vw, 32px);
+    --ttl-size: clamp(24px, 2.8vw, 32px);
   }
 }
 
-/* eyebrow：绿色短横 + 代号 */
-.eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: var(--g-eyebrow); }
-.eyebrow .dash { width: 32px; height: 1px; background: var(--green); box-shadow: 0 0 6px var(--green); }
-.eyebrow .lbl {
-  font-family: var(--share);
-  font-size: 10px;
-  letter-spacing: .3em;
-  text-transform: uppercase;
-  color: var(--green);
-}
+/*
+  eyebrow 与标题的<b>基样式在 style.css 的 `.scrn`</b>（三屏共用），这里只留本屏独有的：
+  ① 那两条 latin-only 的排版（标题是写死的英文）；② 三层错位霓虹。
 
-/* glitch 标题：三层错位霓虹 */
+  ⚠️ 别把 font-family / 字号 / 颜色再抄回来 —— `.glitch[data-v-x]` 与 `.scrn .ttl`
+  同为 (0,2,0)，平局时<b>后加载的 style.css 赢</b>（main.ts 先 import App.vue），抄了也不生效。
+  真要覆盖得提高特异度。
+*/
 .glitch {
-  font-family: var(--orbit);
-  font-weight: 900;
   text-transform: uppercase;
   letter-spacing: -.02em;
-  font-size: var(--title);
   line-height: 1;
-  color: var(--green);
   position: relative;
   display: inline-block;
-  align-self: flex-start;
-  text-shadow: 0 0 26px rgb(var(--green-rgb) / 40%);
 }
 
 .glitch::before,
@@ -404,28 +397,7 @@ onMounted(async () => {
   100% { clip-path: inset(15% 0 70% 0); transform: translate(-2px); }
 }
 
-.subtitle {
-  margin: var(--g-sub) 0 0;
-  font-family: var(--share);
-  font-size: 13px;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--muted);
-  min-height: 1.3em;
-}
-
-.subtitle .cur {
-  display: inline-block;
-  width: 8px;
-  height: 1em;
-  background: var(--green);
-  box-shadow: 0 0 6px var(--green);
-  vertical-align: -2px;
-  margin-left: 3px;
-  animation: cur 1s steps(1) infinite;
-}
-
-@keyframes cur { 50% { opacity: 0; } }
+/* 副标题与光标的基样式在 style.css 的 `.scrn` 里（三屏共用），这里只给间距 */
 
 /*
   机架：一圈 1px 外框把两张模式卡与多开窄行装在一起。
@@ -521,7 +493,7 @@ onMounted(async () => {
 
 .cd .num {
   font-family: var(--share);
-  font-size: 10px;
+  font-size: var(--fs-caption);
   letter-spacing: .18em;
   color: var(--muted);
 }
@@ -535,7 +507,7 @@ onMounted(async () => {
   align-items: center;
   gap: 6px;
   font-family: var(--share);
-  font-size: 10px;
+  font-size: var(--fs-caption);
   letter-spacing: .18em;
   color: var(--green);
   white-space: nowrap;
@@ -591,13 +563,32 @@ onMounted(async () => {
 .well::before { left: -1px; top: -1px; border-left-width: 1px; border-top-width: 1px; }
 .well::after { right: -1px; bottom: -1px; border-right-width: 1px; border-bottom-width: 1px; }
 
-.tx { min-width: 0; }
+/*
+  ⚠️ 双行标题要与仪表窗<b>上下齐平</b>：EN 的墨迹顶 = 窗顶，中文那行的墨迹底 = 窗底。
+  两个数都是量出来的，别凭感觉调 ——
+
+    .zh 的 margin-top   决定<b>墨迹跨度</b>（两行墨迹一共占多高）
+    .tx 的 padding-bottom 决定<b>整块往上抬多少</b>（窗是在 .t 里居中的，块高一变窗就跟着挪）
+
+  ⚠️ 跨度补不到每种语言都是 0：行高是定值（25.5 / 22.1），所以 EN 那头对所有语言都一样，
+  而中文那一行的墨迹底在行盒里的位置<b>随语种变</b>（日韩最高、俄语最低，实测差 2.13px）。
+  ⚠️ 中文那行是 13px 时量的是 1.85 / 2；2026-09-11 字号规范把它改成 13.5px（--fs-lead）后，
+  margin-top 重量为 <b>1.1px</b>（简体：EN 墨顶 +0.08、中文墨底 −0.42，与改前的 +0.13 / −0.42 相同）。
+  当年 1.85 / 2 取的是让<b>最大偏差最小</b>的那一组，与「.ordbar 徽标别按某一种语言调到 0」同一条口径。
+
+  实测（正号＝比窗底低）：EN 墨顶 <b>七种语言恒为 0.00</b>；中文那行的墨底
+  简 / 繁 −0.43 · 日 / 韩 −1.06 · 英 +0.20 · 越 +0.83 · 俄 +1.08（改前是 +1.02 ~ +3.15）。
+
+  两行墨迹之间还留着 14.4px，<b>离重叠远得很</b>；块高 51.6 → 51.45，卡片高度不变。
+  换字号 / 换字体栈 / 改行高，这两个数都要回来重量。
+*/
+.tx { min-width: 0; padding-bottom: 2px; }
 
 .en {
   display: block;
   font-family: var(--orbit);
   font-weight: 400;
-  font-size: 15px;
+  font-size: var(--fs-title);
   text-transform: uppercase;
   letter-spacing: .07em;
   color: var(--green);
@@ -606,9 +597,9 @@ onMounted(async () => {
 .cd.cy .en { color: var(--cyan); }
 
 /* <i> 只是拿来当行内容器，斜体要关掉 */
-.zh { display: block; margin-top: 4px; font-size: 13px; font-style: normal; color: var(--gray); }
+.zh { display: block; margin-top: 1.1px; font-size: var(--fs-lead); font-style: normal; color: var(--gray); }
 
-.cd p { position: relative; margin: 0 0 var(--cd-ry); font-size: 13px; line-height: 1.55; color: var(--muted); }
+.cd p { position: relative; margin: 0 0 var(--cd-ry); font-size: var(--fs-lead); line-height: 1.55; color: var(--muted); }
 
 /* 读数条 + 右端箭头同在一行：箭头另起一行会平白多 20px 高 */
 .foot { position: relative; display: flex; align-items: center; gap: 10px; }
@@ -632,7 +623,7 @@ onMounted(async () => {
 .cd .last .k {
   flex: none;
   font-family: var(--share);
-  font-size: 10px;
+  font-size: var(--fs-caption);
   letter-spacing: .14em;
   text-transform: uppercase;
   color: var(--dim);
@@ -645,7 +636,7 @@ onMounted(async () => {
   text-overflow: ellipsis;
   white-space: nowrap;
   font-family: var(--mono);
-  font-size: 11.5px;
+  font-size: var(--fs-small);
   font-weight: 400;
   color: var(--cyan);
 }
@@ -675,7 +666,7 @@ onMounted(async () => {
   background: var(--card);
   color: var(--muted);
   font-family: inherit;
-  font-size: 13px;
+  font-size: var(--fs-lead);
   text-align: left;
   cursor: pointer;
   transition: .15s;
@@ -700,53 +691,23 @@ onMounted(async () => {
   text-overflow: ellipsis;
   white-space: nowrap;
   color: var(--dim4);
-  font-size: 12.5px;
+  font-size: var(--fs-body);
 }
 
 /* 当前实例名 —— 与卡片的读数条同一个作用：这一屏的每个入口都显示一条实测值 */
 .inst .cur {
   flex: none;
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: var(--fs-body);
   color: var(--magenta);
 }
 
 .inst .ar { flex: none; color: var(--dim); transition: .15s; }
 
 /* 系统自检终端 */
-.term { margin: var(--g-term) 0 0; background: var(--sink); border: 1px solid var(--border); }
-
-.term-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: calc(var(--term-py) - 4px) 14px;
-  background: var(--panel);
-  border-bottom: 1px solid var(--border);
-}
-
-.term-bar .d { width: 10px; height: 10px; border-radius: 50%; }
-
-.term-bar .lbl {
-  margin-left: 8px;
-  font-family: var(--share);
-  font-size: 10px;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.term-body {
-  padding: var(--term-py) 16px;
-  font-size: 12.5px;
-  color: var(--soft);
-  overflow-x: auto;
-}
-
-.term-body .l { display: block; white-space: pre; }
-.term-body .g { color: var(--green); }
-.term-body .c { color: var(--muted); }
-.term-body .y { color: var(--cyan); }
-.term-body .a { color: var(--amber); }
-.term-body .r { color: var(--danger); }
+/*
+  自检终端块的外观在 `style.css` 的 `.scrn .term`（与注入模式选方式屏共用一份）。
+  这里只留「它与上面那台机架隔多远」—— 那是本屏独有的。
+*/
+.term { margin: var(--g-term) 0 0; }
 </style>

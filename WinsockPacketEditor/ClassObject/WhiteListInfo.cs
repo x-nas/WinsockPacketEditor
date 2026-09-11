@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Threading;
 
 namespace WinsockPacketEditor
 {
-    public class WhiteListInfo : NotifyProperty
+    public class WhiteListInfo : NotifyProperty, IIpRule
     {
         #region//IP地址
 
@@ -160,6 +161,28 @@ namespace WinsockPacketEditor
         public bool ContainsIp(long ipValue)
         {
             return this._StartIP != -1 && this._EndIP != -1 && ipValue >= this._StartIP && ipValue <= this._EndIP;
+        }
+
+        /// <summary>
+        /// 命中一次（<see cref="IIpRule.HitOnce"/>）。
+        ///
+        /// <para>
+        /// ⚠️ <b>直接改后备字段，两条都是刻意的</b>：
+        /// </para>
+        /// <para>
+        /// ① 用 <c>Interlocked</c>：这里跑在 SuperSocket 的<b>连接线程</b>上，
+        /// 多条连接会并发命中同一条规则，而 <c>long</c> 的 <c>++</c> 是读-改-写三步，
+        /// 丢掉的计数<b>再也补不回来</b>（与代理列表那六个计数器同一条教训）。
+        /// </para>
+        /// <para>
+        /// ② <b>不走属性、不发 OnPropertyChanged</b>：那会经 <c>BindingList.ItemChanged</c>
+        /// 冒到 WinForms 那张绑着这份列表的表格上 —— 跨线程改绑定列表是崩溃路径。
+        /// 「生效次数」这一列由 1 秒统计拍统一标脏刷新，晚一拍无所谓。
+        /// </para>
+        /// </summary>
+        public void HitOnce()
+        {
+            Interlocked.Increment(ref this._EffectCount);
         }
 
         #endregion        

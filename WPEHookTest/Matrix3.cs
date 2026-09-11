@@ -19,6 +19,7 @@ namespace WPEHookTest
     ///   #1  32 位目标（矩阵要求每一项都在两种位数上跑）
     ///   #4  3000 包/秒持续压测：丢包、目标的吞吐有没有被拖慢
     ///   #5  把外壳<b>整个挂起</b> 5 秒：目标不能跟着卡
+    ///   #6  同 #5，但<b>配一条每个包都命中的滤镜</b>：事件流也不能拖住钩子线程
     ///   #12 挂机：目标的工作集不能一直涨（环是有界的）
     /// </summary>
     internal static class Matrix3
@@ -112,6 +113,7 @@ namespace WPEHookTest
             results.Add(Case1_Target32(rep));
             results.Add(Case4_Load(rep, loadSeconds));
             results.Add(Case5_ShellStalled(rep));
+            results.Add(Case6_ShellStalledWithFilter(rep));
 
             bool ok = results.All(x => x);
 
@@ -331,12 +333,51 @@ namespace WPEHookTest
 
         #endregion
 
-        #region//#5 外壳整个卡住，目标不能跟着卡
+        #region//#5 · #6 外壳整个卡住，目标不能跟着卡
 
         private static bool Case5_ShellStalled(StringBuilder rep)
         {
-            rep.AppendLine("## #5 把外壳整个挂起 5 秒 —— 目标不能跟着卡");
+            return ShellStalled(rep, false,
+                "## #5 把外壳整个挂起 5 秒 —— 目标不能跟着卡",
+                "→ ok（环满丢旧包，钩子线程没有被管道拖住）");
+        }
+
+        /// <summary>
+        /// #6 = #5 + <b>一条每个包都命中的滤镜</b>。
+        ///
+        /// 【为什么要单独一项】#5 那一档是<b>空滤镜</b>跑的，事件流从头到尾没有东西 ——
+        /// 于是它只验到了「封包环不会拖住钩子线程」，而事件流那条路完全没被覆盖。
+        ///
+        /// 滤镜一命中，目标就在<b>钩子线程</b>上调一次 DoFilterLog → OnFilterLog → 事件流。
+        /// 事件流原来是<b>同步写管道</b>的：外壳一卡住，两头的管道缓冲（各 64 KB）一满，
+        /// Write 就阻塞 —— 阻塞的是目标的 send()，也就是<b>把目标游戏卡住</b>。
+        /// 3000 包/秒 × 约 41 字节的日志帧 ≈ 123 KB/s，一秒出头就填满了。
+        ///
+        /// ⚠️ <b>反证已经取过</b>（把 SendEvent 改回同步写、重编、重跑）：同一轮里
+        /// #5 仍然 <b>100%</b> 通过，而 #6 挂起期间从 11.7 MB/s 塌到 <b>699 KB/s（6%）</b>。
+        /// 也就是说这一项盖住的那一块，#5 永远碰不到 —— 这才是它单独存在的理由。
+        ///
+        /// ⚠️ 报告里那句「滤镜命中 N 次 / 收到 M 条滤镜日志」是<b>断言的一部分</b>，
+        /// N 为 0 直接判 FAIL：一次都没命中的话事件流从头到尾没有东西，这一项就与 #5 重复了。
+        /// </summary>
+        private static bool Case6_ShellStalledWithFilter(StringBuilder rep)
+        {
+            return ShellStalled(rep, true,
+                "## #6 外壳挂起 5 秒 + 每个包都命中滤镜 —— 事件流也不能拖住钩子线程",
+                "→ ok（事件流也是有界队列，钩子线程没有被它拖住）");
+        }
+
+        /// <summary>#6 从临时外壳的 stdout 上收回来的证据（见 Matrix.RunGhostShell 的 --noisy）。</summary>
+        private static long noisyHits;
+        private static long noisyLogs;
+
+        private static bool ShellStalled(StringBuilder rep, bool noisy, string title, string okText)
+        {
+            rep.AppendLine(title);
             rep.AppendLine();
+
+            Interlocked.Exchange(ref noisyHits, 0);
+            Interlocked.Exchange(ref noisyLogs, 0);
 
             /*
                 【怎么造出「外壳卡住」】
@@ -362,7 +403,7 @@ namespace WPEHookTest
 
                 var psi = new ProcessStartInfo(
                     Process.GetCurrentProcess().MainModule.FileName,
-                    "--ghost-shell " + target.Id)
+                    "--ghost-shell " + target.Id + (noisy ? " --noisy" : string.Empty))
                 {
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
@@ -380,7 +421,26 @@ namespace WPEHookTest
                     return false;
                 }
 
-                rep.AppendLine("- 临时外壳: " + line);
+                rep.AppendLine("- 临时外壳: " + line + (noisy ? "（配了一条每个包都命中的滤镜）" : string.Empty));
+
+                /*
+                    临时外壳每 500ms 往 stdout 报一行「滤镜命中数 / 收到的滤镜日志数」。
+                    ⚠️ 这一路必须<b>持续读空</b>：不读的话它的 stdout 管道缓冲会满，
+                    报告线程被阻塞 —— 而我们正是在验「谁阻塞了谁」，多一处阻塞源只会添乱。
+                */
+                if (noisy)
+                {
+                    StreamReader so = ghost.StandardOutput;
+                    new Thread(() =>
+                    {
+                        try
+                        {
+                            string l;
+                            while ((l = so.ReadLine()) != null) { TakeNoisy(l); }
+                        }
+                        catch { }
+                    }) { IsBackground = true }.Start();
+                }
 
                 //=== 正常跑一段，量基线 ===
                 Thread.Sleep(1000);
@@ -412,14 +472,22 @@ namespace WPEHookTest
                 rep.AppendLine("- 外壳挂起期间目标保持了基线的 **" + keep.ToString("P0") + "**");
                 rep.AppendLine("- 目标还活着: " + (!target.HasExited ? "是" : "否"));
 
+                if (noisy)
+                {
+                    rep.AppendLine("- 滤镜命中 **" + Interlocked.Read(ref noisyHits) +
+                                   "** 次，外壳侧收到 **" + Interlocked.Read(ref noisyLogs) + "** 条滤镜日志");
+                }
+
                 /*
                     判据：外壳整个不动的这 5 秒里，目标的吞吐不能塌。
-                    环满之后丢的是最旧的包，Enqueue 永不阻塞 —— 这正是那条背压设计要保证的东西。
+                    ⚠️ noisy 那一档还要求<b>滤镜真的命中过</b> —— 一次都没命中的话事件流从头到尾
+                    没有东西，那这一项等于没验（与 #5 完全重复）。
                 */
-                bool ok = !target.HasExited && normal > 0 && keep >= 0.5;
+                bool ok = !target.HasExited && normal > 0 && keep >= 0.5
+                          && (!noisy || Interlocked.Read(ref noisyHits) > 0);
 
                 rep.AppendLine();
-                rep.AppendLine(ok ? "→ ok（环满丢旧包，钩子线程没有被管道拖住）" : "→ FAIL");
+                rep.AppendLine(ok ? okText : "→ FAIL");
                 rep.AppendLine();
                 return ok;
             }
@@ -442,6 +510,28 @@ namespace WPEHookTest
         #endregion
 
         #region//杂项
+
+        /// <summary>
+        /// 解析临时外壳报回来的 "NOISY hits=N logs=M"（见 Matrix.RunGhostShell 的 --noisy）。
+        /// 每 500ms 来一行，只留最新的那一份。
+        /// </summary>
+        private static void TakeNoisy(string line)
+        {
+            if (line == null || !line.StartsWith("NOISY ")) { return; }
+
+            foreach (string part in line.Substring(6).Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                int eq = part.IndexOf('=');
+                if (eq <= 0) { continue; }
+
+                long v;
+                if (!long.TryParse(part.Substring(eq + 1), out v)) { continue; }
+
+                if (part.StartsWith("hits=")) { Interlocked.Exchange(ref noisyHits, v); }
+                else if (part.StartsWith("logs=")) { Interlocked.Exchange(ref noisyLogs, v); }
+            }
+        }
+
 
         [DllImport("ntdll.dll")] private static extern int NtSuspendProcess(IntPtr h);
         [DllImport("ntdll.dll")] private static extern int NtResumeProcess(IntPtr h);

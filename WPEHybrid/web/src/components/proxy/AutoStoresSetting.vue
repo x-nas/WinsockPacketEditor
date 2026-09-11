@@ -189,7 +189,7 @@ function onMenuPick(id: string): void {
   <SettingsModal
     :open="props.open"
     :title="t('as.title')"
-    subtitle="Controls/AutoStoresList"
+    subtitle="Auto Store"
     :busy="busy"
     :error="error"
     @update:open="emit('update:open', $event)"
@@ -296,31 +296,16 @@ function onMenuPick(id: string): void {
   margin-top: 10px;
 }
 
-.row > .k { font-size: 12.5px; color: var(--muted); }
+.row > .k { font-size: var(--fs-body); color: var(--muted); }
 .row > .v { display: flex; align-items: center; gap: 14px; min-width: 0; }
 
-.notice { font-size: 11.5px; color: var(--amber); }
+.notice { font-size: var(--fs-small); color: var(--amber); }
 
-.hint { padding: 0 20px; margin: 4px 0 12px; font-size: 11.5px; color: var(--dim2); line-height: 1.6; }
+.hint { padding: 0 20px; margin: 4px 0 12px; font-size: var(--fs-small); color: var(--dim2); line-height: 1.6; }
 
 /* 与 FireWallSetting 同一份勾选框写法 */
-.chk {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 0;
-  background: transparent;
-  border: 0;
-  font-size: 12.5px;
-  color: var(--muted);
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.chk i { width: 13px; height: 13px; border: 1px solid var(--dim); position: relative; flex: none; }
-.chk.on { color: var(--chk-on); }
-.chk.on i { border-color: var(--chk-on); background: rgb(var(--chk-on-rgb) / 14%); }
-.chk.on i::after { content: ""; position: absolute; inset: 2px; background: var(--chk-on); }
+/* 基样式在 style.css 的「勾选框 / 单选框」；这一屏勾选框成片出现，用压暗的绿 */
+.chk { --chk-fill: var(--chk-on); --chk-fill-rgb: var(--chk-on-rgb); --chk-tint: 14%; }
 
 /* ── 规则表 ── */
 
@@ -329,7 +314,7 @@ function onMenuPick(id: string): void {
 
 .cap {
   font-family: var(--share);
-  font-size: 10.5px;
+  font-size: var(--fs-label);
   letter-spacing: .14em;
   text-transform: uppercase;
   color: var(--dim2);
@@ -357,7 +342,7 @@ function onMenuPick(id: string): void {
   align-items: center;
   gap: 10px;
   padding: 0 10px;
-  font-size: 12.5px;
+  font-size: var(--fs-body);
 }
 
 .thead {
@@ -375,7 +360,7 @@ function onMenuPick(id: string): void {
   white-space: nowrap;
 }
 
-.empty { padding: 26px 0; text-align: center; color: var(--muted); font-size: 12px; }
+.empty { padding: 26px 0; text-align: center; color: var(--muted); font-size: var(--fs-body); }
 
 .trow { height: 30px; color: var(--soft); cursor: default; }
 .trow:hover { background: rgb(var(--tint-rgb) / 4%); }
@@ -389,7 +374,7 @@ function onMenuPick(id: string): void {
 
 .head { font-family: var(--mono); color: var(--cyan); letter-spacing: .04em; }
 .house { color: var(--dim3); }
-.house.gone { color: var(--danger); font-size: 11.5px; }
+.house.gone { color: var(--danger); font-size: var(--fs-small); }
 
 .ops { display: flex; align-items: center; justify-content: flex-end; gap: 2px; }
 

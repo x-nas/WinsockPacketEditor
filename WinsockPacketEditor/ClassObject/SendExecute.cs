@@ -15,10 +15,22 @@ namespace WinsockPacketEditor
         public int Total_Send = 0;
         public string SendName = string.Empty;
 
-        private CancellationTokenSource cts;
         private SendInfo siSelect;
         private BindingList<PacketInfo> SendCollection;
         public BackgroundWorker Worker = new BackgroundWorker();
+
+        /*
+            ⚠️⚠️ <b>取消的唯一真源</b>（2026-09-10）。
+
+            此前查的是 Worker.CancellationPending —— 它是个<b>裸 bool</b>，
+            没有 WaitHandle，于是所有等待只能轮询（DoSleep 切片、排空循环 Thread.Sleep(100)）。
+            换成 token 之后「等某件事做完」那几处才能改成阻塞等待。
+
+            ⚠️ <b>StopSend 里刻意不再调 Worker.CancelAsync()</b> —— 两个都翻就是两个真源。
+            CancellationPending 现在全项目没有任何人读（grep 过）。
+            e.Cancelled 不受影响：它来自 DoWork 里的 e.Cancel，与 CancelAsync 无关。
+        */
+        private CancellationTokenSource cts;
 
         #region//初始化
 
@@ -49,9 +61,17 @@ namespace WinsockPacketEditor
                 {
                     if (!this.Worker.IsBusy)
                     {
+                        //⚠️ 每轮一个新的：CTS 取消过就不能复位（与 RunWorkerAsync 会自己清 CancellationPending 不同）
+                        if (this.cts != null) { this.cts.Dispose(); }
+                        this.cts = new CancellationTokenSource();
+
                         this.Total_Send = 0;
                         this.Send_Success = 0;
                         this.Send_Failure = 0;
+
+                        //上一轮跑到第几条的痕迹要一起清 —— 不清的话新一轮开头那一瞬间，
+                        //界面上高亮的是上一次停在的那一行（LoopINT 为 0 时它更是从头到尾都不会被覆盖）。
+                        this.SendCollection_Index = 0;
 
                         this.siSelect = si;
                         this.SendName = si.SName;
@@ -60,7 +80,6 @@ namespace WinsockPacketEditor
                         this.LoopINT = si.SLoopINT;
                         this.SendCollection = si.SCollection;                        
 
-                        this.cts = new CancellationTokenSource();
                         this.Worker.RunWorkerAsync();
 
                         string sLog = string.Format(AntdUI.Localization.Get("SendExecute.DoSend", "执行发送 [{0}]"), this.SendName);
@@ -84,12 +103,14 @@ namespace WinsockPacketEditor
             {
                 if (this.Worker.IsBusy)
                 {
-                    if (this.cts != null)
-                    {
-                        this.cts.Cancel();
-                    }
-                    
-                    this.Worker.CancelAsync();
+                    /*
+                        ⚠️ 2026-09-10 上午这里刚删掉一个「建了 CTS 却没人读 Token」的死写法，
+                        下午把它<b>正着</b>加了回来 —— 区别是这次 DoWork 与 DoSleep 查的都是它。
+
+                        <b>只 Cancel token，不调 Worker.CancelAsync()</b>：取消只能有一个真源。
+                    */
+                    CancellationTokenSource c = this.cts;
+                    if (c != null) { c.Cancel(); }
                 }
             }
             catch (Exception ex)
@@ -102,10 +123,19 @@ namespace WinsockPacketEditor
 
         #region//执行发送集
 
+        /*
+            ⚠️ <b>这里不加 try/catch。</b> 加了的话异常被吞掉、e.Error 恒为 null，
+            Send_RunCompleted 里「发生错误」那一支就成了死代码 ——
+            发送炸在半路，日志里写的却是「执行完毕」（2026-09-10 修，与机器人那处同一个病根）。
+
+            BackgroundWorker 会把 DoWork 抛出的异常收进 e.Error，<b>不会崩进程</b>；
+            日志由 Send_RunCompleted 统一记一处。
+        */
         private void Send_DoWork(object sender, DoWorkEventArgs e)
         {
-            try
             {
+                CancellationToken token = this.cts.Token;
+
                 if (this.SystemSocket)
                 {
                     if (Operate.SystemConfig.SystemSocket <= 0)
@@ -124,7 +154,7 @@ namespace WinsockPacketEditor
                         PacketInfo pi = this.SendCollection[j];
                         if (pi != null)
                         {
-                            if (Worker.CancellationPending)
+                            if (token.IsCancellationRequested)
                             {
                                 e.Cancel = true;
                                 return;
@@ -137,7 +167,34 @@ namespace WinsockPacketEditor
                                     Socket = Operate.SystemConfig.SystemSocket;
                                 }
 
-                                if (Socket > 0)
+                                /*
+                                    ⚠️⚠️ 套接字 <= 0 原来是<b>整条静默跳过</b>：不发、不计数、不记日志。
+
+                                    而 <b>SunnyNet 那条中间人路上产出的封包套接字一律是 0</b>
+                                    （HTTP / HTTPS / WebSocket —— 它们靠会话号回发，压根没有套接字；
+                                    SunnyNetCallback 里 8 个入队调用点第 4 个参数都是字面量 0）。
+                                    而「代理数据页右键 → 添加到发送」正是把这种封包放进发送集最自然的一条路。
+
+                                    于是不勾「使用系统套接字」时：<b>一个包都发不出去，三个计数全是 0，
+                                    日志还写着「执行完毕」</b> —— 又一次「点了没反应」。
+                                    实测（2026-09-10，改动前）：Total=0 OK=0 Fail=0，而「执行次数」照加了 1。
+
+                                    现在<b>计入失败</b>并记一条节流日志。判据很简单：用户要求发这一条、
+                                    结果什么都没发出去，那就是失败，不是「没这回事」。
+                                */
+                                if (Socket <= 0)
+                                {
+                                    this.Send_Failure++;
+                                    this.siSelect.ExecutionFail++;
+                                    this.Total_Send++;
+
+                                    //⚠️ 必须节流：一条几百个包的发送集全是 0 的话，逐条记会把日志刷爆
+                                    Operate.SystemConfig.LogThrottled("SendNoSocket." + this.SendName, string.Format(
+                                        UI.T("SendExecute.Socket.Missing",
+                                             "发送「{0}」里有封包没有套接字（HTTP / HTTPS / WebSocket 走的是会话号，套接字恒为 0）—— 这些封包发不出去，请勾上「使用系统套接字」并先在封包列表里右键设置它。"),
+                                        this.SendName));
+                                }
+                                else
                                 {
                                     /*
                                         第三个参数<b>必须传 PacketFrom，不能是 string.Empty</b>。
@@ -174,17 +231,13 @@ namespace WinsockPacketEditor
                                     if (this.LoopINT > 0)
                                     {
                                         Worker.ReportProgress(j);
-                                        Operate.SystemConfig.DoSleep(this.LoopINT, this.Worker);
+                                        Operate.SystemConfig.DoSleep(this.LoopINT, token);
                                     }
                                 }
                             }
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(Send_DoWork), ex);
             }
         }
 

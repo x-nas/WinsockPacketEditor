@@ -48,6 +48,19 @@ function onScroll(): void {
   if (el) scrollTop.value = el.scrollTop
 }
 
+/*
+  执行方式（Operate.SystemConfig.ListExecute）：0 = 同时执行，1 = 按顺序执行。
+  <b>发送列表与机器人列表共用这一个开关</b>，改它的入口在系统设置。
+
+  ⚠️ 它与滤镜的 FilterConfig.Filter.Execute 是<b>两个反着的</b>同名枚举
+  （那边 0 = 优先原则、1 = 按顺序），别照抄那边的 `=== 0` 判断。
+
+  ⚠️ 只在挂载时读一次 —— 与滤镜列表同一条口径。这一屏是 v-if 挂的，
+  从系统设置改完再切回来会重新挂载、跟着重取；开着这一屏改的话要切一次页才刷新。
+*/
+const execMode = ref(1)
+const isTogether = computed(() => execMode.value === 0)
+
 let ro: ResizeObserver | null = null
 let stopRunning: (() => void) | null = null
 
@@ -60,8 +73,9 @@ onMounted(async () => {
   }
 
   try {
-    const r = await call<{ running: boolean }>('getRobotMeta')
+    const r = await call<{ running: boolean; listExecute: number }>('getRobotMeta')
     running.value = !!r?.running
+    execMode.value = r?.listExecute ?? 1
   } catch (e) {
     console.error('[rb] 取元信息失败', e)
   }
@@ -214,8 +228,14 @@ async function onMenuPick(id: string): Promise<void> {
       <button class="btn danger" :disabled="!rows.length || running" @click="simple('clearRobots')">{{ t('rb.clearAll') }}</button>
     </div>
 
-    <div v-if="rows.length > 1" class="hint">
-      <span class="tx">{{ t('rb.runHint') }}</span>
+    <!--
+      顺序即执行顺序 —— 但「顺序意味着什么」取决于执行方式，所以模式是<b>读出来的实际值</b>，
+      不是写死的一句通用话（与滤镜列表同一条口径）。样式在 style.css 的 .list-page .ordbar。
+    -->
+    <div v-if="rows.length > 1" class="ordbar" :class="{ alt: isTogether }">
+      <span class="mk">{{ isTogether ? t('set.exec.together') : t('set.exec.sequence') }}</span>
+      <span class="tx">{{ isTogether ? t('rb.mode.togetherHint') : t('rb.mode.sequenceHint') }}</span>
+      <span class="note">{{ t('lst.mode.note') }}</span>
     </div>
 
     <div ref="scroller" class="body" @scroll.passive="onScroll">
@@ -293,7 +313,7 @@ async function onMenuPick(id: string): Promise<void> {
 
 /* 启停：与发送列表同一对图标与配色 */
 .btn.run { display: inline-flex; align-items: center; gap: 7px; border-color: rgb(var(--green-rgb) / 45%); color: var(--green); }
-.btn.run .ico { width: 11px; height: 11px; margin: -1px 0; flex: none; position: relative; top: -1px; }
+.btn.run .ico { width: 11px; height: 11px; margin: -1px 0; flex: none; }
 .btn.run.on { border-color: rgb(var(--danger-rgb) / 30%); color: var(--danger); }
 .btn.run.on .ico { animation: pulse 1.1s ease-in-out infinite; }
 .btn.run:hover:not(:disabled) { background: rgb(var(--green-rgb) / 10%); border-color: var(--green); color: var(--green); }
@@ -303,19 +323,6 @@ async function onMenuPick(id: string): Promise<void> {
 
 @media (prefers-reduced-motion: reduce) {
   .btn.run.on .ico { animation: none; }
-}
-
-.hint {
-  flex: none;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 5px 10px;
-  border: 1px solid var(--border);
-  border-left: 2px solid var(--dim);
-  background: rgb(var(--inset-rgb) / 20%);
-  font-size: 11.5px;
-  color: var(--dim2);
 }
 
 /* 只留这一屏独有的：列宽、列间距、最小宽度 */

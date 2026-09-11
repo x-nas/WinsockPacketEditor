@@ -63,6 +63,20 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WinsockPacketEditor\WinsockPacketEditor.csproj" />
+
+    <!--
+      注入模式要用的 WPEHook.dll —— ⚠️ 少了它「注入」当场抛 FileNotFoundException。
+
+      ShellLink.Attach 是按「主程序所在目录 + Operate.SystemConfig.WPE64_DLL」找它的
+      （typeof(Operate).Assembly.Location 的目录，在外壳里就是 bin\<配置>\net48\），
+      而 WPEHook <b>不被主工程引用</b>（方向是反的：WPEHook -> 主工程），
+      它自己的 OutputPath 又写死指向 ..\WinsockPacketEditor\bin\<配置>\ ——
+      所以既不会被 ProjectReference 传递过来，也不会有人替外壳拷一份。
+
+      ⚠️ 这个洞在自动化跑测里<b>看不到</b>：WPEHookTest 自己引了这一条（那边的注释
+      写的就是这件事），所以 WPEHookTest 的 shell / matrix 那几组全绿，而真正跑起来的外壳注不进去。
+    -->
+    <ProjectReference Include="..\WPEHook\WPEHook.csproj" />
   </ItemGroup>
 
   <!--

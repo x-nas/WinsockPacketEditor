@@ -370,11 +370,15 @@ namespace WinsockPacketEditor.Ipc
             for (int i = 0; i < mn; i++) { modules.Add(r.Str()); }
         }
 
-        /// <summary>让目标把滤镜的统计计数归零 —— 注入模式下那六个的真源在目标里。</summary>
-        public void ResetStats()
+        /// <summary>
+        /// 让目标把某几组计数归零 —— 注入模式下这些计数的真源全在目标里，
+        /// 只清外壳那份的话下一拍 Stats 就把它盖回来（界面上是「数字闪一下又回来了」）。
+        /// </summary>
+        public void ResetStats(ResetWhat what)
         {
             var w = new IpcWriter();
             w.U8((byte)IpcCommand.ResetStats);
+            w.U8((byte)what);
             CallVoid(w);
         }
 
@@ -395,13 +399,62 @@ namespace WinsockPacketEditor.Ipc
 
         #region//配置快照下推
 
+        /// <summary>上一次真的推下去的那份载荷，按类别记。见 <see cref="PushConfig"/>。</summary>
+        private readonly Dictionary<ConfigKind, byte[]> _lastPushed = new Dictionary<ConfigKind, byte[]>();
+        private readonly object _pushGate = new object();
+
+        /*
+            ⚠️⚠️ <b>内容没变就不推</b>。这不是省流量，是修一个自激循环。
+
+            链路是这样的：目标 1 Hz 的 Stats 事件 → ApplyStats 把执行计数写回外壳的模型 →
+            标脏 → FeedPump 整表推给前端 → <c>FeedPump.ListPushed</c> →
+            <c>ShellForm.OnListPushed</c> → 把<b>同一份</b>滤镜 / 发送 / 机器人快照又推给目标 →
+            目标 <c>ApplySends</c> 把 lstSendInfo <b>Clear + Add 整表重建</b>。
+            也就是说：<b>发送列表一跑起来，目标那三份表就每秒被重建一次</b>。两个后果：
+
+              · <b>执行计数冻在那儿不动了</b>。正在跑的 SendExecute 握着的是<b>旧的</b>
+                SendInfo 对象，它继续往那上面累加；而新表里那一条是按 GUID 把旧值搬过来的
+                副本 —— 下一拍 Stats 报的是这个副本，于是界面上「执行次数 / 成功 / 失败」
+                看起来就是停住了。
+              · <b>SendList_DoWork 正在按下标遍历这张表</b>
+                （`for (i < lstSendInfo.Count) { si = lstSendInfo[i]; }`）。
+                撞上 Clear 与 Add 之间那一瞬间就是下标越界 —— 异常被 DoWork 的 try 吞掉、
+                只记一条日志，表现是「发送列表跑到一半自己停了」。
+
+            而这些快照里<b>本来就不含运行期计数</b>（ExecutionCount 刻意不下推，见 ConfigSnapshot），
+            所以「计数变了」根本不该产生一次下推。按载荷逐字节比一次就够了：
+            滤镜表几十行、几 KB，Encode + 比较是微秒级，而省掉的是一次管道往返
+            加目标那边一次整表重建。
+
+            ⚠️ 缓存挂在<b>实例</b>上：重新附加会新建一个 ShellLink，
+            所以「连上先推全量」那条路不会被这层缓存挡住（目标那边的状态是未知的，必须推）。
+        */
         private void PushConfig(ConfigKind kind, byte[] payload)
         {
+            byte[] last;
+
+            lock (_pushGate)
+            {
+                if (_lastPushed.TryGetValue(kind, out last) && SameBytes(last, payload)) { return; }
+            }
+
             var w = new IpcWriter();
             w.U8((byte)IpcCommand.SetConfig);
             w.U8((byte)kind);
             w.Bytes(payload);
             CallVoid(w);
+
+            //⚠️ 成功了才记 —— 抛出去的那次目标并没有收到，记下来会让下一次真的该推时被挡掉
+            lock (_pushGate) { _lastPushed[kind] = payload; }
+        }
+
+        private static bool SameBytes(byte[] a, byte[] b)
+        {
+            if (ReferenceEquals(a, b)) { return true; }
+            if (a == null || b == null) { return false; }
+            if (a.Length != b.Length) { return false; }
+            for (int i = 0; i < a.Length; i++) { if (a[i] != b[i]) { return false; } }
+            return true;
         }
 
         public void PushHookFlags() { PushConfig(ConfigKind.HookFlags, ConfigSnapshot.EncodeHookFlags()); }
@@ -466,10 +519,17 @@ namespace WinsockPacketEditor.Ipc
                 var type = (Operate.PacketConfig.Packet.PacketType)d.PacketType;
                 var action = (Operate.FilterConfig.Filter.FilterAction)d.FilterAction;
 
-                //统计：外壳按<b>收到的</b>计。与目标侧计数的差别就是被环丢掉的那些，
-                //而那些界面上另有「丢弃 N」在显示，不会无声消失。
-                Operate.PacketConfig.Packet.CountPacketInfo(type, d.Modified.Length);
+                /*
+                    ⚠️ <b>这里不再计数</b>（原来是 CountPacketInfo(type, d.Modified.Length)）。
 
+                    「外壳按收到的计」听着合理，但漏了两种包：<b>极速模式下的全部</b>
+                    （目标那头直接就不发了，于是统计格 13 个数字全是 0 —— 而开极速模式
+                    恰恰就是为了看那几个数），以及<b>地址解析不出来的</b>（写线程丢掉了，
+                    而进程内那条路是数了的）。
+
+                    现在计数在目标的 OnPacket 里数、随 1 Hz 的 Stats 报上来，
+                    与滤镜那六个全局计数同一条路数。详见 WpeCore.OnPacket 那段说明。
+                */
                 string fromLoc = await Operate.SystemConfig.GetIPLocation(d.From.Split(':')[0]);
                 string toLoc = await Operate.SystemConfig.GetIPLocation(d.To.Split(':')[0]);
 
@@ -585,27 +645,43 @@ namespace WinsockPacketEditor.Ipc
             SendListRunning = r.Bool();
             RobotListRunning = r.Bool();
 
+            //真的变了才标脏 —— 见这个方法末尾那段说明
+            bool filterChanged = false, sendChanged = false, robotChanged = false;
+
             int fn = r.I32();
             for (int i = 0; i < fn; i++)
             {
                 Guid fid = r.Guid_();
                 long count = r.I64();
                 FilterInfo fi = Operate.FilterConfig.Filter.GetFilter_ByGuid(fid);
-                if (fi != null) { fi.ExecutionCount = count; }
+
+                if (fi != null && fi.ExecutionCount != count)
+                {
+                    fi.ExecutionCount = count;
+                    filterChanged = true;
+                }
             }
 
             int sn = r.I32();
+            var sends = Snapshot(Operate.SendConfig.List.lstSendInfo);
+
             for (int i = 0; i < sn; i++)
             {
                 Guid sid = r.Guid_();
                 long c = r.I64(), ok = r.I64(), fail = r.I64();
 
-                foreach (SendInfo si in Operate.SendConfig.List.lstSendInfo)
+                foreach (SendInfo si in sends)
                 {
                     if (si.SID != sid) { continue; }
-                    si.ExecutionCount = c;
-                    si.ExecutionSuccess = ok;
-                    si.ExecutionFail = fail;
+
+                    if (si.ExecutionCount != c || si.ExecutionSuccess != ok || si.ExecutionFail != fail)
+                    {
+                        si.ExecutionCount = c;
+                        si.ExecutionSuccess = ok;
+                        si.ExecutionFail = fail;
+                        sendChanged = true;
+                    }
+
                     break;
                 }
             }
@@ -619,40 +695,72 @@ namespace WinsockPacketEditor.Ipc
             Operate.FilterConfig.Filter.FilterNoDisplay_CNT = r.I64();
 
             int rn = r.I32();
+            var robots = Snapshot(Operate.RobotConfig.List.lstRobotInfo);
+
             for (int i = 0; i < rn; i++)
             {
                 Guid rid = r.Guid_();
                 long c = r.I64();
 
-                foreach (RobotInfo ri in Operate.RobotConfig.List.lstRobotInfo)
+                foreach (RobotInfo ri in robots)
                 {
                     if (ri.RID != rid) { continue; }
-                    ri.ExecutionCount = c;
+
+                    if (ri.ExecutionCount != c) { ri.ExecutionCount = c; robotChanged = true; }
                     break;
                 }
             }
 
             /*
+                封包计数那 11 个 —— 注入模式下真源在目标（钩子线程上数的），这份是镜像。
+                ⚠️ 顺序与 WpeCore.SendStats 里写的那一串逐个对应。
+                ⚠️ FilterPacket_CNT 不在其内 —— 「已过滤」是外壳的 FlushToFeed 数的，
+                目标压根不碰它，混进来只会把真值冲成 0。
+            */
+            Operate.PacketConfig.Packet.TotalPackets = r.I64();
+            Operate.PacketConfig.Packet.Send_CNT = (int)r.I64();
+            Operate.PacketConfig.Packet.SendTo_CNT = (int)r.I64();
+            Operate.PacketConfig.Packet.Recv_CNT = (int)r.I64();
+            Operate.PacketConfig.Packet.RecvFrom_CNT = (int)r.I64();
+            Operate.PacketConfig.Packet.WSASend_CNT = (int)r.I64();
+            Operate.PacketConfig.Packet.WSASendTo_CNT = (int)r.I64();
+            Operate.PacketConfig.Packet.WSARecv_CNT = (int)r.I64();
+            Operate.PacketConfig.Packet.WSARecvFrom_CNT = (int)r.I64();
+            Operate.PacketConfig.Packet.Total_SendBytes = r.I64();
+            Operate.PacketConfig.Packet.Total_RecvBytes = r.I64();
+
+            /*
                 ⚠️ 计数是<b>就地改属性</b>，不动列表结构 —— BindingList.ListChanged 不会触发，
                 前端副本里的数字一动不动。所以要手动标脏，让 FeedPump 下一拍整表推一次。
-                这与发送列表「跑的时候标脏」是同一个道理（见 CLAUDE.md 的发送列表）。
 
-                只在<b>真有东西在跑</b>的时候标 —— 闲着的时候一分钱不花。
-                停下来那一拍也要补推，让最终计数能到界面。
+                【判据从「在不在跑」改成「值有没有变」】原来是
+                `if (SendListRunning || RobotListRunning || 上一拍在跑)` 就三份都标脏，两处不对：
+
+                  · <b>滤镜的执行次数漏了</b>。滤镜是「有包经过就在执行」，与发送 / 机器人
+                    列表在不在跑毫无关系 —— 于是注入模式下滤镜列表那一列平时根本不刷新，
+                    非得同时在跑一个发送列表才动。
+                  · 闲着的时候三份表<b>照样每秒整表推一遍</b>给前端（那 1 Hz 是 Stats 来的）。
+
+                按「值真的变了」标脏两头都对：滤镜一有命中就刷，全都不动时一次也不推。
+                「刚停下那一拍」也自然覆盖 —— 最后一次变化就是它。
             */
-            bool running = SendListRunning || RobotListRunning;
-
-            if (running || _wasRunning)
-            {
-                FeedPump.MarkDirty(FeedList.Filter);
-                FeedPump.MarkDirty(FeedList.Send);
-                FeedPump.MarkDirty(FeedList.Robot);
-            }
-
-            _wasRunning = running;
+            if (filterChanged) { FeedPump.MarkDirty(FeedList.Filter); }
+            if (sendChanged) { FeedPump.MarkDirty(FeedList.Send); }
+            if (robotChanged) { FeedPump.MarkDirty(FeedList.Robot); }
         }
 
-        private bool _wasRunning;
+        /// <summary>
+        /// 取一份定格的列表再遍历。
+        ///
+        /// ⚠️ 这一拍跑在<b>事件线程</b>上，而 UI 线程随时可能在增删这两份列表
+        /// （用户在滤镜 / 发送 / 机器人页上点一下就是 Clear + Add）——
+        /// 直接 foreach 撞上就抛「集合已修改」，整包统计静默丢掉。
+        /// </summary>
+        private static List<T> Snapshot<T>(System.ComponentModel.BindingList<T> list)
+        {
+            try { return new List<T>(list); }
+            catch { return new List<T>(); }
+        }
 
         #endregion
 

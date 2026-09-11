@@ -286,17 +286,17 @@ const totalExec = computed(() => filters.value.reduce((n, f) => n + f.ExecutionC
 
 .ch { display: flex; align-items: baseline; gap: 12px; }
 .nm { flex: none; font-family: var(--share); font-size: var(--th-size); letter-spacing: .14em; text-transform: uppercase; color: var(--th-fg); }
-.note { font-size: 11px; color: var(--dim2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
-.bad { flex: none; font-size: 11.5px; color: var(--danger); }
+.note { font-size: var(--fs-small); color: var(--dim2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.bad { flex: none; font-size: var(--fs-small); color: var(--danger); }
 
 /* ── 漏斗那三个数 ── */
 .nums { display: flex; align-items: baseline; gap: 14px; margin: 10px 0 9px; flex-wrap: wrap; }
 .n { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
-.n .k { font-family: var(--share); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
-.n .v { font-family: var(--orbit); font-size: 22px; font-weight: 700; color: var(--gray); letter-spacing: .02em; }
+.n .k { font-family: var(--share); font-size: var(--fs-label); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+.n .v { font-family: var(--orbit); font-size: var(--fs-num-lg); font-weight: 700; color: var(--gray); letter-spacing: .02em; }
 .n .v.hit { color: var(--amber); }
 .n .v.exe { color: var(--cyan); }
-.n .p { font-family: var(--mono); font-size: 12px; color: var(--muted); white-space: nowrap; }
+.n .p { font-family: var(--mono); font-size: var(--fs-small); color: var(--muted); white-space: nowrap; }
 .sep { flex: none; font-size: 16px; color: var(--dim); }
 
 .track { height: 6px; background: rgb(var(--tint-rgb) / 5%); border: 1px solid var(--border); overflow: hidden; }
@@ -321,15 +321,15 @@ const totalExec = computed(() => filters.value.reduce((n, f) => n + f.ExecutionC
 .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; }
 .lg { display: flex; align-items: baseline; gap: 6px; }
 .lg .dot { width: 8px; height: 8px; background: var(--ac); flex: none; align-self: center; }
-.lg .k { font-size: 11.5px; color: var(--soft); }
-.lg .v { font-family: var(--mono); font-size: 12.5px; font-weight: 400; color: var(--gray); }
-.lg .p { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.lg .k { font-size: var(--fs-small); color: var(--soft); }
+.lg .v { font-family: var(--mono); font-size: var(--fs-body); font-weight: 400; color: var(--gray); }
+.lg .p { font-family: var(--mono); font-size: var(--fs-small); color: var(--muted); }
 
 /* ── 表 ── */
 .tbl { flex: 1; min-height: 0; display: flex; flex-direction: column; border: 1px solid var(--border); background: var(--sink); }
 .tbody { flex: 1; min-height: 0; overflow-y: auto; }
 
-.head, .row2 { display: grid; grid-template-columns: 56px minmax(150px, 1fr) 74px 90px 90px 100px 170px; align-items: center; gap: 8px; padding: 0 14px; font-size: 12.5px; }
+.head, .row2 { display: grid; grid-template-columns: 56px minmax(150px, 1fr) 74px 90px 90px 100px 170px; align-items: center; gap: 8px; padding: 0 14px; font-size: var(--fs-body); }
 .row2 { height: 30px; border-bottom: 1px solid rgb(var(--border-rgb) / 45%); color: var(--soft); }
 .row2:hover { background: rgb(var(--tint-rgb) / 3%); }
 .row2.off > span:not(.stt) { opacity: .5; }
@@ -339,7 +339,7 @@ const totalExec = computed(() => filters.value.reduce((n, f) => n + f.ExecutionC
 
 .no { color: var(--dim); font-variant-numeric: tabular-nums; }
 .name { color: var(--gray); }
-.md { color: var(--muted); font-size: 11.5px; }
+.md { color: var(--muted); font-size: var(--fs-small); }
 .cnt { font-family: var(--mono); color: var(--cyan); font-variant-numeric: tabular-nums; }
 
 /* 动作那一列跟着堆叠条的配色 —— 表与图对得上，扫一眼就知道这条属于哪一段 */
@@ -349,7 +349,7 @@ const totalExec = computed(() => filters.value.reduce((n, f) => n + f.ExecutionC
 .act.dsp { color: var(--green); }
 .act.hid { color: var(--muted); }
 
-.tg { display: inline-block; padding: 4px 7px 2px; border: 1px solid; font-family: var(--share); font-size: 10.5px; line-height: 1; letter-spacing: .08em; text-transform: uppercase; font-style: normal; }
+.tg { display: inline-block; padding: 3px 7px 3px; border: 1px solid; font-family: var(--share); font-size: var(--fs-label); line-height: 1; letter-spacing: .08em; text-transform: uppercase; font-style: normal; }
 .tg.on { color: var(--green); border-color: rgb(var(--green-rgb) / 35%); }
 .tg.run { color: var(--cyan); border-color: rgb(var(--cyan-rgb) / 35%); }
 .tg.off { color: var(--danger); border-color: rgb(var(--danger-rgb) / 30%); }
@@ -357,7 +357,7 @@ const totalExec = computed(() => filters.value.reduce((n, f) => n + f.ExecutionC
 .share { display: flex; align-items: center; gap: 8px; }
 .sbar { flex: 1; height: 4px; background: rgb(var(--tint-rgb) / 5%); border: 1px solid var(--border); overflow: hidden; }
 .sbar > .mf { display: block; height: 100%; background: var(--cyan); transition: width .3s; }
-.mp { flex: none; width: 42px; text-align: right; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.mp { flex: none; width: 42px; text-align: right; font-family: var(--mono); font-size: var(--fs-small); color: var(--muted); }
 
-.empty { padding: 40px 20px; text-align: center; color: var(--muted); font-size: 12.5px; line-height: 1.8; }
+.empty { padding: 40px 20px; text-align: center; color: var(--muted); font-size: var(--fs-body); line-height: 1.8; }
 </style>

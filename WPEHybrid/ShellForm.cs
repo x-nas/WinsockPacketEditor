@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -202,8 +203,21 @@ namespace WPEHybrid
         {
             this.Text = "WPE x64";
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.ClientSize = new System.Drawing.Size(1280, 800);
-            this.MinimumSize = new System.Drawing.Size(1120, 700);
+
+            /*
+                默认大小与最小尺寸按「逻辑像素」给（＝100% 缩放下的像素＝页面里的 CSS 像素），
+                再乘窗口将要出现的那块显示器的缩放 —— 见 FitToDpi。
+
+                ⚠️ 2026-09-11 之前这里写死的是 1280×800 <b>设备像素</b>：这个窗体没有 AutoScaleMode，
+                而清单是 PerMonitorV2，于是 125% 缩放下页面只拿到 1024×640 CSS，
+                主页内容区（扣掉标题栏、状态栏、侧栏）只剩 828×564 —— 工具条折行、
+                矮窗口挤压那一串问题的根源就在这儿。原 WinForms 的两个模式窗体是
+                AutoScaleMode.Font 的 1450×800，会跟着缩放放大，两者在 125% 下差出一大截。
+
+                CenterScreen 对没有 owner 的窗体取的是<b>鼠标所在</b>那块屏，这里取同一块。
+            */
+            System.Drawing.Point at = Cursor.Position;
+            this.FitToDpi(DpiAt(at), Screen.FromPoint(at).WorkingArea, true);
 
             /*
                 无边框：标题栏由前端自绘（官网那套四角标记 + 霓虹标题栏），
@@ -519,6 +533,7 @@ namespace WPEHybrid
 
         #region//无边框窗口的拖动与缩放
 
+        private const int WM_GETMINMAXINFO = 0x0024;
         private const int WM_NCHITTEST = 0x0084;
         private const int WM_NCLBUTTONDOWN = 0x00A1;
         private const int HTCLIENT = 1;
@@ -526,6 +541,27 @@ namespace WPEHybrid
         private const int HTLEFT = 10, HTRIGHT = 11;
         private const int HTTOP = 12, HTTOPLEFT = 13, HTTOPRIGHT = 14;
         private const int HTBOTTOM = 15, HTBOTTOMLEFT = 16, HTBOTTOMRIGHT = 17;
+
+        /*
+            WM_GETMINMAXINFO 的两个结构体。字段顺序不能动 —— 它们是按内存布局
+            直接映射 Win32 的 POINT / MINMAXINFO 的。
+        */
+        [StructLayout(LayoutKind.Sequential)]
+        private struct POINT
+        {
+            public int X;
+            public int Y;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct MINMAXINFO
+        {
+            public POINT Reserved;
+            public POINT MaxSize;
+            public POINT MaxPosition;
+            public POINT MinTrackSize;
+            public POINT MaxTrackSize;
+        }
 
         /// <summary>
         /// 缩放条的厚度，同时也是窗体内边距 —— 两者必须一致：
@@ -541,6 +577,174 @@ namespace WPEHybrid
         /// 系统自带边框也是这么做的（角比边宽）。
         /// </summary>
         private const int CornerZone = 16;
+
+        #region//跟着显示器缩放定窗口大小
+
+        /*
+            窗口的默认大小与最小尺寸，单位是<b>逻辑像素</b>（＝100% 缩放下的设备像素＝页面里的 CSS 像素）。
+            实际的设备像素是它乘所在显示器的缩放，见 FitToDpi。
+
+            1280×800 是这套界面照着排版的那一档（启动页、数据页、选注入方式屏的
+            「设计值」都是按 1280×800 CSS 量的）；1120×700 是原来的最小尺寸。
+        */
+        private const int LogicalWidth = 1280;
+        private const int LogicalHeight = 800;
+        private const int LogicalMinWidth = 1120;
+        private const int LogicalMinHeight = 700;
+
+        private const int WM_DPICHANGED = 0x02E0;
+        private const uint MONITOR_DEFAULTTONEAREST = 2;
+        private const int MDT_EFFECTIVE_DPI = 0;
+        private const uint SWP_NOZORDER = 0x0004;
+        private const uint SWP_NOACTIVATE = 0x0010;
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct RECT
+        {
+            public int Left;
+            public int Top;
+            public int Right;
+            public int Bottom;
+        }
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr MonitorFromPoint(POINT pt, uint dwFlags);
+
+        //shcore 是 Windows 8.1 才有的；Win7 上这句会抛 DllNotFoundException，DpiAt 里退回系统 DPI
+        [DllImport("shcore.dll")]
+        private static extern int GetDpiForMonitor(IntPtr hmonitor, int dpiType, out uint dpiX, out uint dpiY);
+
+        [DllImport("user32.dll")]
+        private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+
+        /// <summary>
+        /// 屏幕上某一点所在显示器的 DPI（96 ＝ 100%，120 ＝ 125%，144 ＝ 150%）。
+        ///
+        /// ⚠️ 不能用 Graphics.FromHwnd(IntPtr.Zero).DpiX 当主路 —— 清单是 PerMonitorV2，
+        /// 那个取到的是<b>系统 DPI</b>（登录时主屏的那一档），窗口开在另一块缩放不同的屏上就错了。
+        /// 它只在 Win7（没有 GetDpiForMonitor）上当退路。
+        ///
+        /// 进程若因故没拿到 DPI 感知，GetDpiForMonitor 返回 96 —— 那时系统会整窗位图拉伸，
+        /// 按 1 倍算正是对的。
+        /// </summary>
+        private static int DpiAt(System.Drawing.Point p)
+        {
+            try
+            {
+                IntPtr mon = MonitorFromPoint(new POINT { X = p.X, Y = p.Y }, MONITOR_DEFAULTTONEAREST);
+                uint dx, dy;
+
+                if (mon != IntPtr.Zero && GetDpiForMonitor(mon, MDT_EFFECTIVE_DPI, out dx, out dy) == 0 && dx > 0)
+                {
+                    return (int)dx;
+                }
+            }
+            catch (DllNotFoundException) { }        //Win7：走下面的系统 DPI
+            catch (EntryPointNotFoundException) { }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(DpiAt), ex);
+            }
+
+            try
+            {
+                using (System.Drawing.Graphics g = System.Drawing.Graphics.FromHwnd(IntPtr.Zero))
+                {
+                    return (int)Math.Round(g.DpiX);
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(DpiAt), ex);
+                return 96;
+            }
+        }
+
+        private static System.Drawing.Size ScaleByDpi(int width, int height, int dpi)
+        {
+            return new System.Drawing.Size(
+                (int)Math.Round(width * dpi / 96.0),
+                (int)Math.Round(height * dpi / 96.0));
+        }
+
+        /// <summary>
+        /// 最小尺寸：逻辑 1120×700 乘缩放，但<b>不超过这块屏工作区的 80%</b>。
+        ///
+        /// 不封顶的话，1920×1080 的屏开 150% 缩放时最小尺寸是 1680×1050，比工作区（1920×1040）还高 ——
+        /// 窗口塞不进屏幕，而且一点都缩不了。80% 让小屏上始终留得出往下拖的余地；
+        /// 那时页面会落到 ≤690 / ≤590 那两档矮窗口排版，它们本来就是为这种情形写的。
+        /// </summary>
+        private static System.Drawing.Size MinSizeFor(int dpi, System.Drawing.Rectangle work)
+        {
+            System.Drawing.Size min = ScaleByDpi(LogicalMinWidth, LogicalMinHeight, dpi);
+
+            return new System.Drawing.Size(
+                Math.Min(min.Width, work.Width * 4 / 5),
+                Math.Min(min.Height, work.Height * 4 / 5));
+        }
+
+        /// <summary>
+        /// 按 DPI 定最小尺寸；setClientSize 为 true 时连默认大小一起定（只在构造时）。
+        ///
+        /// 默认大小是逻辑 1280×800 乘缩放，<b>超出工作区就收到工作区那么大</b> ——
+        /// 1080p 屏开 150% 时逻辑上只有 1280×693 可用，放不下 1280×800 的界面，铺满工作区是唯一合理的样子。
+        /// 无边框窗口的 Size 就是 ClientSize（缩放用的那圈 Padding 在客户区里面），所以两个值可以直接比。
+        /// </summary>
+        private void FitToDpi(int dpi, System.Drawing.Rectangle work, bool setClientSize)
+        {
+            if (setClientSize)
+            {
+                System.Drawing.Size want = ScaleByDpi(LogicalWidth, LogicalHeight, dpi);
+                this.ClientSize = new System.Drawing.Size(
+                    Math.Min(want.Width, work.Width),
+                    Math.Min(want.Height, work.Height));
+            }
+
+            this.MinimumSize = MinSizeFor(dpi, work);
+        }
+
+        /// <summary>
+        /// 窗口被拖到缩放不同的另一块屏上（或那块屏的缩放被改了）。
+        ///
+        /// 清单是 PerMonitorV2，系统只<b>通知</b>、不替我们改大小：WinForms 在 .NET Framework 上
+        /// 只有 app.config 里显式开了 DpiAwareness 才会处理这条消息，而本工程没有那份配置。
+        /// 不接的话窗口保持原来的设备像素，页面的 CSS 尺寸就跟着变 —— 从 100% 的屏拖到 150% 的屏，
+        /// 界面当场缩成三分之二。
+        ///
+        /// lParam 是系统建议的新窗口矩形（已按新旧缩放之比换算好），照它摆即可。
+        /// ⚠️ <b>最小尺寸与新矩形的先后顺序有讲究</b>：MinimumSize 会经 WM_GETMINMAXINFO
+        /// 夹住 SetWindowPos —— 先设新的（往低缩放去时）会被旧的最小尺寸顶回去；
+        /// 先抬高（往高缩放去时）又会让窗口在原地先胀一下。所以先放成「新旧两者逐维取小」，
+        /// 摆好矩形，再设成最终值：取小那一步永远不会让窗口变大，也不会挡住新矩形。
+        /// </summary>
+        private void OnDpiChanged(ref Message m)
+        {
+            try
+            {
+                int dpi = (int)((long)m.WParam & 0xFFFF);
+                RECT r = (RECT)Marshal.PtrToStructure(m.LParam, typeof(RECT));
+                System.Drawing.Rectangle to = System.Drawing.Rectangle.FromLTRB(r.Left, r.Top, r.Right, r.Bottom);
+                System.Drawing.Size min = MinSizeFor(dpi, Screen.FromRectangle(to).WorkingArea);
+
+                this.MinimumSize = new System.Drawing.Size(
+                    Math.Min(min.Width, this.MinimumSize.Width),
+                    Math.Min(min.Height, this.MinimumSize.Height));
+
+                //最大化时由系统管位置与大小，只更新最小尺寸（还原回来时用得上）
+                if (this.WindowState == FormWindowState.Normal)
+                {
+                    SetWindowPos(this.Handle, IntPtr.Zero, to.Left, to.Top, to.Width, to.Height, SWP_NOZORDER | SWP_NOACTIVATE);
+                }
+
+                this.MinimumSize = min;
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(OnDpiChanged), ex);
+            }
+        }
+
+        #endregion
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         private static extern bool ReleaseCapture();
@@ -582,6 +786,62 @@ namespace WPEHybrid
             }
 
             base.WndProc(ref m);
+
+            if (m.Msg == WM_DPICHANGED && m.LParam != IntPtr.Zero)
+            {
+                this.OnDpiChanged(ref m);
+                return;
+            }
+
+            /*
+                ⚠️ <b>无边框窗口最大化会连任务栏一起盖住</b>，除非自己回答这条消息。
+
+                FormBorderStyle.None 的窗口，Windows 默认按<b>显示器的整个 Bounds</b> 最大化 ——
+                有边框的窗口不会这样，是窗口管理器替它算好了工作区。我们把标题栏画进了页面，
+                也就一并接过了这份责任。
+
+                所以这里把最大化的尺寸与位置改成当前显示器的 WorkingArea（已经扣掉任务栏）。
+
+                ⚠️ <b>ptMaxPosition 是相对于所在显示器的，不是桌面坐标。</b>
+                副屏在主屏左边时桌面坐标是负数，直接填 work.Left 会把窗口甩到另一块屏上 ——
+                所以要减去 Bounds 的原点。
+
+                ⚠️ <b>用 Screen.FromHandle 取「当前」显示器，不是 PrimaryScreen。</b>
+                窗口拖到副屏再最大化，两块屏的分辨率与任务栏位置都可能不一样。
+                窗口跨屏移动时系统会重新发这条消息，所以不必自己盯着。
+
+                ⚠️ <b>改在 base.WndProc 之后</b>：让系统先把 MinTrackSize 那几项按
+                WinForms 的 MinimumSize 填好，我们只覆盖最大化相关的两项。
+                MaxTrackSize 刻意不动 —— 那管的是「用手拖能拖多大」，与最大化是两件事。
+
+                （已知未覆盖：任务栏设成<b>自动隐藏</b>时，铺满工作区的窗口会让它弹不出来。
+                 那要另外查 ABM_GETSTATE 并留出 1px，等真有人用自动隐藏再说。）
+            */
+            if (m.Msg == WM_GETMINMAXINFO && m.LParam != IntPtr.Zero)
+            {
+                try
+                {
+                    Screen screen = Screen.FromHandle(this.Handle);
+                    System.Drawing.Rectangle work = screen.WorkingArea;
+                    System.Drawing.Rectangle all = screen.Bounds;
+
+                    MINMAXINFO mmi = (MINMAXINFO)Marshal.PtrToStructure(m.LParam, typeof(MINMAXINFO));
+
+                    mmi.MaxSize.X = work.Width;
+                    mmi.MaxSize.Y = work.Height;
+                    mmi.MaxPosition.X = work.Left - all.Left;
+                    mmi.MaxPosition.Y = work.Top - all.Top;
+
+                    Marshal.StructureToPtr(mmi, m.LParam, false);
+                }
+                catch (Exception ex)
+                {
+                    //填不上就退回系统的默认值：最大化会盖住任务栏，但窗口还能用
+                    Operate.DoLog("WndProc.MinMaxInfo", ex);
+                }
+
+                return;
+            }
 
             if (m.Msg != WM_NCHITTEST || (int)m.Result != HTCLIENT)
             {
@@ -678,6 +938,14 @@ namespace WPEHybrid
                     正常退出就该干净地收尾，不要让用户的游戏白白多跑三秒钩子。
                 */
                 this.DetachInjectOnExit();
+
+                /*
+                    ⚠️ 被驱动拦截的进程要从驱动上摘掉，与系统代理那条同级：
+                    外壳没了而驱动还把它们的连接转到一个已经不存在的端口上，表现是「关掉 WPE 之后目标进程断网」。
+                    驱动本身不卸（卸载会重启电脑）。UDP 那头的 SOCKS5 关联一并收掉。
+                */
+                Operate.ProxyConfig.Proxy.ReleaseDriverProcesses();
+                Operate.ProxyConfig.Proxy.CloseAllUDPProxy();
 
                 //远程管理与启动时的 StartRemoteMGT 成对（在 EnsureProxyConfigLoaded 里）
                 Operate.SystemConfig.StopRemoteMGT();
@@ -894,11 +1162,6 @@ namespace WPEHybrid
                 batchMax = Operate.SystemConfig.FeedBatchMax,
             });
 
-            //取文案：验证 Operate 的本地化在桥这边照常工作
-            this.bridge.Register("t", args => UI.T(
-                (string)args["key"] ?? string.Empty,
-                (string)args["fallback"] ?? string.Empty));
-
             //按 Id 取封包完整字节，滤镜改写前后一并给。
             //一次往返拿两份：十六进制面板本来就要并排显示，分两次调只是多一次延迟。
             //字节流刻意不进推送流（100 条/秒 x 4KB 走 base64 是每秒 1MB 的纯浪费），
@@ -1102,7 +1365,12 @@ namespace WPEHybrid
                     Operate.PacketConfig.Queue.ClearPacketQueue();
                     Operate.PacketConfig.List.ClearPacketList();
                     UI.Feed.Clear(FeedList.Packet);
-                    Operate.SystemConfig.ResetPacketCounters(true);
+
+                    /*
+                        ⚠️ 封包计数<b>也要发到目标</b>：注入模式下它们是在目标的钩子线程上数的
+                        （见 WpeCore.OnPacket），只清外壳这份，下一拍 Stats 就会把清空前的数盖回来。
+                    */
+                    ResetCountsEverywhere(WinsockPacketEditor.Ipc.ResetWhat.PacketCounters);
                 }
 
                 /*
@@ -1111,7 +1379,7 @@ namespace WPEHybrid
                     表现是「列表空了，统计格里的代理总数 / 流量 / 滤镜执行还举着清空前的数」，
                     而且「统计数据」页那六条进度条<b>再也没有办法归零</b>（外壳没有别的入口）。
                 */
-                ResetFilterStatsEverywhere();
+                ResetCountsEverywhere(WinsockPacketEditor.Ipc.ResetWhat.FilterStats);
 
                 return new { ok = true };
             });
@@ -1228,13 +1496,56 @@ namespace WPEHybrid
             {
                 Operate.SystemConfig.SelectMode = Operate.SystemConfig.SystemMode.Inject;
 
-                //两种模式要加载的配置是同一套（WinForms 侧 InjectModeForm_Load 与
-                //ProxyModeForm_Load 里那两串逐项相同），所以复用同一个方法
-                EnsureProxyConfigLoaded();
-                FeedPump.MarkAllDirty();
+                /*
+                    ⚠️ <b>这里刻意不加载配置、也不起远程管理。</b>
 
-                //「上次注入」在 WinForms 的 ProcessList 上是一行提示，这里显示在选目标屏的标题下
-                return new { ok = true, lastInjection = Operate.SystemConfig.LastInjection ?? string.Empty };
+                    这一屏是「选注入目标」，还没进注入模式 —— 而 EnsureProxyConfigLoaded 会
+                    顺手 StartRemoteMGT()，那会在用户还在挑进程时就弹一句「远程管理已启用」。
+                    真正的对应关系是：
+
+                        代理模式  ProxyView 挂载        → enterProxyMode → 加载 + 起远程管理
+                        注入模式  <b>injectAttach 成功</b> → 主界面出来   → 同上
+
+                    注入模式多了一屏「选目标」，所以这件事的入口比代理模式晚一步。
+                    加载本来就是 injectAttach 的第一句（推快照给目标要用滤镜 / 发送 / 机器人
+                    那三份表），这里去掉之后仍然一次都不会漏。
+
+                    ⚠️ 选目标屏上<b>没有侧栏、也没有「设置 ▾」</b>（模板里那两样都在 v-else
+                    那一支），所以推迟加载不会让谁读到一份没加载的配置 ——
+                    「列表设置一保存就把 12 个拦截开关洗成全开」那个坑够不着这一屏。
+                */
+
+                /*
+                    「上次注入」在 WinForms 的 ProcessList 上只是一行提示（一个进程名），
+                    这里出的是<b>整条记录</b>（时间 / 方式 / 目标 / 路径 / 参数）——
+                    选目标屏的注入检测块要显示，「快捷注入」要拿它重放。
+                */
+                return new { ok = true, lastInject = this.LastInjectInfo() };
+            });
+
+            /*
+                快捷注入：照上次那条记录重放一次。
+
+                ⚠️ 目标解析与兜底在 ResolveQuickTarget 里（进程还在不在 / 文件还在不在），
+                <b>先查再注</b> —— 直接把上次那个 pid 存下来重用是错的：pid 会被系统回收，
+                下次开机同一个号多半是别的进程，那就成了「注进一个毫不相干的程序」。
+            */
+            this.bridge.Register("injectQuick", async args =>
+            {
+                int pid;
+                string path;
+                string error;
+
+                if (!this.ResolveQuickTarget(out pid, out path, out error))
+                {
+                    return new { ok = false, error = error };
+                }
+
+                return await this.AttachTarget(
+                    pid,
+                    path,
+                    Operate.SystemConfig.LastInjectArgs,
+                    Operate.SystemConfig.LastInjectMethod);
             });
 
             /// 进程列表。枚举几百个进程 + 读 MainModule 是几十毫秒的活，丢后台去。
@@ -1259,71 +1570,28 @@ namespace WPEHybrid
                 ⚠️ 挂起启动的命令行要<b>以 exe 路径本身开头</b> —— CreateProcess 会把
                 lpCommandLine 的第一个 token 当 argv[0] 丢掉，只写参数的话第一个参数会凭空消失。
             */
+            /*
+                两条路都走 AttachTarget：
+                ① injectAttach —— 用户在选目标屏挑了一个（三种方式之一）；
+                ② injectQuick  —— 照上次那条记录重放。
+                抽出来是因为「附加」这件事有二十多行（加载配置 / 防自注 / 挂遮罩 /
+                接执行器与发包路由 / 记录这一次），复制一份必然会漂。
+            */
             this.bridge.Register("injectAttach", async args =>
             {
-                EnsureProxyConfigLoaded();
-
-                int pid = args["pid"] == null ? -1 : (int)args["pid"];
-                string path = args["path"] == null ? null : (string)args["path"];
-                string extraArgs = args["args"] == null ? null : (string)args["args"];
-
-                string cmdLine = null;
-
-                if (pid < 0)
-                {
-                    if (string.IsNullOrEmpty(path))
-                    {
-                        return new { ok = false, error = UI.T("Inject.NoTarget", "没有选择目标") };
-                    }
-
-                    cmdLine = "\"" + path + "\"";
-                    if (!string.IsNullOrEmpty(extraArgs)) { cmdLine += " " + extraArgs; }
-                }
-
-                this.DisposeInjectLink();
-
-                var link = new WinsockPacketEditor.Ipc.ShellLink();
-                link.StateChanged += this.OnInjectStateChanged;
-
-                try
-                {
-                    //注入是同步阻塞的（EasyHook 的 Inject/CreateAndInject 就是），丢后台并盖遮罩
-                    //UI.Busy 只有 Func<T> 的重载（要一个返回值），所以补一个 true
-                    await UI.Busy(
-                        UI.T("Loading", "正在加载..."),
-                        () => { link.Attach(pid, path, 15000, cmdLine); return true; });
-                }
-                catch (Exception ex)
-                {
-                    link.Dispose();
-                    Operate.DoLog("injectAttach", ex);
-                    return new { ok = false, error = ex.Message };
-                }
-
-                this.injectLink = link;
-
-                //三份共用列表一变就把快照推给目标（滤镜引擎与两个执行器在那边）
-                FeedPump.ListPushed -= this.OnListPushed;
-                FeedPump.ListPushed += this.OnListPushed;
+                int pid0 = args["pid"] == null ? -1 : (int)args["pid"];
+                string path0 = args["path"] == null ? null : (string)args["path"];
+                string args0 = args["args"] == null ? null : (string)args["args"];
 
                 /*
-                    所有「发包」都要交给目标 —— 套接字句柄是进程私有的，
-                    在外壳里调 send() 命中的是外壳自己句柄表里碰巧同号的那个东西。
-
-                    挂在 PacketConfig.Packet.SendPacket 这一层，一次覆盖四个入口：
-                    封包编辑、发送编辑 / 发送列表、机器人指令、快捷键。
-                    与执行器启停在 AttachedLink() 那里分流是同一件事，
-                    只是那几个的分流点在桥方法上，而这些跑在 Operate 的后台线程里，桥拦不住。
+                    这次用的是哪种方式（0 选择进程 · 1 选择窗体 · 2 可执行文件）——
+                    ⚠️ <b>必须由前端说</b>：方式 01 与 02 最后都是「附加到一个 pid」，
+                    从参数上分辨不出来，而「快捷注入」要照原样重放，得知道当初点的是哪张卡。
+                    没给就按 pid 猜一个（挂起启动只能是方式 03）。
                 */
-                Operate.PacketConfig.Packet.SendRouter = link.SendPacket;
+                int method0 = args["method"] == null ? (pid0 < 0 ? 2 : 0) : (int)args["method"];
 
-                //记下这次注入的目标，启动页那张卡上要显示（与 WinForms 的 LastInjection 一致）
-                Operate.SystemConfig.LastInjection = string.IsNullOrEmpty(path)
-                    ? this.SafeProcessName(link.TargetPid)
-                    : System.IO.Path.GetFileName(path);
-                Operate.SystemConfig.SaveSystemConfig_LastInjection_ToDB();
-
-                return this.InjectStatus();
+                return await this.AttachTarget(pid0, path0, args0, method0);
             });
 
             this.bridge.Register("injectStartHook", async args =>
@@ -1359,22 +1627,6 @@ namespace WPEHybrid
                 try { await System.Threading.Tasks.Task.Run(() => link.StopHook()); }
                 catch (Exception ex) { Operate.DoLog("injectStopHook", ex); return new { ok = false, error = ex.Message }; }
 
-                return this.InjectStatus();
-            });
-
-            /*
-                断开。目标卸钩、停执行器、断管道、核心休眠 ——
-                <b>但已抓到的封包一条都不清</b>，用户还要看、还要导出。
-            */
-            this.bridge.Register("injectDetach", async args =>
-            {
-                var link = this.injectLink;
-                if (link == null) { return this.InjectStatus(); }
-
-                try { await System.Threading.Tasks.Task.Run(() => link.Detach()); }
-                catch (Exception ex) { Operate.DoLog("injectDetach", ex); }
-
-                this.DisposeInjectLink();
                 return this.InjectStatus();
             });
 
@@ -1458,11 +1710,15 @@ namespace WPEHybrid
                     UI.T("Loading", "正在加载..."),
                     () => Operate.ProxyConfig.Proxy.StartProxy());
 
+                string socks5Addr, httpAddr;
+                ProxyAddresses(out socks5Addr, out httpAddr);
+
                 return new
                 {
                     ok = ok,
                     running = Operate.ProxyConfig.Proxy.IsRunning,
-                    socks5Addr = Socks5Address(),
+                    socks5Addr = socks5Addr,
+                    httpAddr = httpAddr,
                 };
             });
 
@@ -1616,11 +1872,35 @@ namespace WPEHybrid
                     return new { ok = false, error = UI.T("ProxySettingsForm.Port.Error", "端口必须在 1 ~ 65535 之间") };
                 }
 
+                /*
+                    不勾「自动检测」就必须真给出一个监听地址。
+
+                    留空（或值坏了）时 InitProxyServer 走的是 IPAddress.TryParse 失败那一支，
+                    <b>静默退回自动</b> —— TCP 听 0.0.0.0、UDP 绑 ProxyServerIP[0]，
+                    与勾上「自动检测」的结果逐字相同。而界面上「自动检测」没勾、地址框空着，
+                    看起来像「我指定了监听地址」，两者对不上且没有任何提示。
+
+                    WinForms 侧撞不到：Controls/ProxySetting.InitProxyIP 里有一句
+                    「SelectedValue == null 就 SelectedIndex = 0」，下拉永远有值。
+                    外壳的 CyberSelect 没有那个默认，所以在这儿拦。
+                */
+                bool proxyIpAuto = args["proxyIpAuto"] != null && (bool)args["proxyIpAuto"];
+                string proxyIp = args["proxyIp"] == null ? string.Empty : ((string)args["proxyIp"]).Trim();
+
+                if (!proxyIpAuto && !IPAddress.TryParse(proxyIp, out IPAddress _))
+                {
+                    return new
+                    {
+                        ok = false,
+                        error = UI.T("ProxySettingsForm.ProxyIP.Empty", "请选择监听地址，或勾上「自动检测」"),
+                    };
+                }
+
                 try
                 {
 
-                    ProxyCfg.ProxyIP_Auto = args["proxyIpAuto"] != null && (bool)args["proxyIpAuto"];
-                    ProxyCfg.ProxyIP = args["proxyIp"] == null ? string.Empty : (string)args["proxyIp"];
+                    ProxyCfg.ProxyIP_Auto = proxyIpAuto;
+                    ProxyCfg.ProxyIP = proxyIp;
                     ProxyCfg.Enable_SOCKS5 = enableSocks5;
                     ProxyCfg.SOCKS5_Port = (ushort)socks5Port;
                     ProxyCfg.Enable_Auth = args["enableAuth"] != null && (bool)args["enableAuth"];
@@ -1632,7 +1912,10 @@ namespace WPEHybrid
 
                     UI.Toast(UiIcon.Success, UI.T("ProxySettingsForm.Success", "代理设置保存成功"));
 
-                    return new { ok = true, socks5Addr = Socks5Address() };
+                    string socks5Addr, httpAddr;
+                    ProxyAddresses(out socks5Addr, out httpAddr);
+
+                    return new { ok = true, socks5Addr = socks5Addr, httpAddr = httpAddr };
                 }
                 catch (Exception ex)
                 {
@@ -2809,7 +3092,7 @@ namespace WPEHybrid
 
             /*
                 滤镜列表的执行模式。设置项在<b>系统设置</b>（Controls/SystemSetting 的
-                rbFilterSet_*），不是列表设置 —— 那一屏还没做，这里只读来显示。
+                rbFilterSet_*），不是列表设置 —— 两屏都已完成，这里只读来显示。
 
                 语义以 DoFilterList 为准，不是照着标签猜的：
                   Priority（优先原则）  从上到下，第一个命中的执行完就 return，后面不再跑
@@ -3029,6 +3312,11 @@ namespace WPEHybrid
             {
                 systemSocket = Operate.SystemConfig.SystemSocket,
                 running = Operate.SendConfig.List.IsSendListRunning,
+
+                //列表页顶上那条「执行顺序」说明条要照实说是哪种模式。
+                //0 = Together（同时）/ 1 = Sequence（按顺序）—— 与滤镜那个同名枚举<b>反着</b>，别对调。
+                //发送与机器人共用这一个开关，所以 getRobotMeta 里也有一份。
+                listExecute = (int)Operate.SystemConfig.ListExecute,
             });
 
             this.bridge.Register("addSend", args => new
@@ -3054,7 +3342,8 @@ namespace WPEHybrid
             //运行期计数，不落库
             this.bridge.Register("resetSendCount", args =>
             {
-                Operate.SendConfig.List.ResetSendCount();
+                //⚠️ 注入模式下执行次数在目标里累加，只清外壳那份会被下一拍 Stats 盖回来
+                ResetCountsEverywhere(WinsockPacketEditor.Ipc.ResetWhat.SendCounts);
                 return new { ok = true };
             });
 
@@ -3098,7 +3387,7 @@ namespace WPEHybrid
                 它会自己跑完（所有发送执行完 worker 就结束），前端记的话会一直显示在跑。
                 界面靠 1 秒的统计拍轮询这个值。
             */
-            this.bridge.Register("startSendList", args =>
+            this.bridge.Register("startSendList", async args =>
             {
                 /*
                     ⚠️ 注入模式下执行器<b>在目标进程里</b>。
@@ -3119,7 +3408,16 @@ namespace WPEHybrid
 
                 if (link != null)
                 {
-                    link.StartSendList();
+                    /*
+                        ⚠️ 丢后台：这是一次<b>同步的管道往返</b>，而桥的处理器跑在 UI 线程上。
+                        目标那头处理这条命令要真干活（StartSendList 起 worker、
+                        SendPacket 可能撞上一个满的发送缓冲），占住 UI 线程就是整个界面卡住。
+                        injectStartHook / OnListPushed 早就是这么写的，这四个漏了。
+
+                        「在跑没在跑」不看这次调用的返回 —— 它由目标随 1 Hz 的 Stats 报上来，
+                        前端靠 send:running 事件收，所以这里先回上一次的值完全够用。
+                    */
+                    await System.Threading.Tasks.Task.Run(() => link.StartSendList());
                     return new { running = link.SendListRunning };
                 }
 
@@ -3127,13 +3425,14 @@ namespace WPEHybrid
                 return new { running = Operate.SendConfig.List.IsSendListRunning };
             });
 
-            this.bridge.Register("stopSendList", args =>
+            this.bridge.Register("stopSendList", async args =>
             {
                 var link = this.AttachedLink();
 
                 if (link != null)
                 {
-                    link.StopSendList();
+                    //同 startSendList：同步管道往返不占 UI 线程
+                    await System.Threading.Tasks.Task.Run(() => link.StopSendList());
                     return new { running = link.SendListRunning };
                 }
 
@@ -3149,6 +3448,7 @@ namespace WPEHybrid
             this.bridge.Register("getRobotMeta", args => new
             {
                 running = Operate.RobotConfig.List.IsRobotListRunning,
+                listExecute = (int)Operate.SystemConfig.ListExecute,   //见 getSendMeta 那条注释
             });
 
             this.bridge.Register("addRobot", args => new
@@ -3172,7 +3472,8 @@ namespace WPEHybrid
             //运行期计数，不落库
             this.bridge.Register("resetRobotCount", args =>
             {
-                Operate.RobotConfig.List.ResetRobotCount();
+                //同发送列表：真源在目标里
+                ResetCountsEverywhere(WinsockPacketEditor.Ipc.ResetWhat.RobotCounts);
                 return new { ok = true };
             });
 
@@ -3213,14 +3514,14 @@ namespace WPEHybrid
                 机器人列表的启停。「运行中」由 C# 说了算（IsRobotListRunning），
                 worker 会自己跑完，前端靠 1 秒的统计拍收 robot:running 事件。
             */
-            this.bridge.Register("startRobotList", args =>
+            this.bridge.Register("startRobotList", async args =>
             {
                 //同发送列表：注入模式下执行器在目标里
                 var link = this.AttachedLink();
 
                 if (link != null)
                 {
-                    link.StartRobotList();
+                    await System.Threading.Tasks.Task.Run(() => link.StartRobotList());
                     return new { running = link.RobotListRunning };
                 }
 
@@ -3228,13 +3529,13 @@ namespace WPEHybrid
                 return new { running = Operate.RobotConfig.List.IsRobotListRunning };
             });
 
-            this.bridge.Register("stopRobotList", args =>
+            this.bridge.Register("stopRobotList", async args =>
             {
                 var link = this.AttachedLink();
 
                 if (link != null)
                 {
-                    link.StopRobotList();
+                    await System.Threading.Tasks.Task.Run(() => link.StopRobotList());
                     return new { running = link.RobotListRunning };
                 }
 
@@ -3486,7 +3787,7 @@ namespace WPEHybrid
             */
             this.bridge.Register("resetFilterStats", args =>
             {
-                ResetFilterStatsEverywhere();
+                ResetCountsEverywhere(WinsockPacketEditor.Ipc.ResetWhat.FilterStats);
                 return new { ok = true };
             });
 
@@ -3592,25 +3893,47 @@ namespace WPEHybrid
                 进程图标按路径单独取（ProcessRow 里没有图标 —— B9 的规则把 Image 排除在 DTO 之外）。
                 前端按路径记忆化，一次会话里同一个 exe 只取一次。
             */
-            this.bridge.Register("getProcessIcon", args =>
+            /*
+                批量取：进程表回来之后前端按去重后的路径一次要一批。
+                原先是逐个取（getProcessIcon）—— 二百多个进程就是二百多次桥往返、二百多次 ExtractAssociatedIcon 在 UI 线程上，
+                前端那边每回来一个还整表重渲染一次。现在 Task.Run 在后台一次抽完，前端只写一次。
+            */
+            this.bridge.Register("getProcessIcons", async args =>
             {
-                try
-                {
-                    string path = args["path"] == null ? string.Empty : (string)args["path"];
-                    if (string.IsNullOrEmpty(path) || !System.IO.File.Exists(path)) { return new { png = string.Empty }; }
+                var arr = args["paths"] as Newtonsoft.Json.Linq.JArray;
+                var paths = new List<string>();
+                if (arr != null) { foreach (var x in arr) { string p = (string)x; if (!string.IsNullOrEmpty(p)) { paths.Add(p); } } }
 
-                    using (var ico = System.Drawing.Icon.ExtractAssociatedIcon(path))
-                    using (var bmp = ico.ToBitmap())
-                    using (var ms = new System.IO.MemoryStream())
-                    {
-                        bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                        return new { png = Convert.ToBase64String(ms.ToArray()) };
-                    }
-                }
-                catch
+                var icons = await Task.Run(() =>
                 {
-                    return new { png = string.Empty };
-                }
+                    var map = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+                    foreach (string path in paths)
+                    {
+                        if (map.ContainsKey(path)) { continue; }
+
+                        try
+                        {
+                            if (!System.IO.File.Exists(path)) { map[path] = string.Empty; continue; }
+
+                            using (var ico = System.Drawing.Icon.ExtractAssociatedIcon(path))
+                            using (var bmp = ico.ToBitmap())
+                            using (var ms = new System.IO.MemoryStream())
+                            {
+                                bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                                map[path] = Convert.ToBase64String(ms.ToArray());
+                            }
+                        }
+                        catch
+                        {
+                            map[path] = string.Empty;
+                        }
+                    }
+
+                    return map;
+                });
+
+                return new { icons = icons };
             });
 
             this.bridge.Register("addSelectProcessName", args => new
@@ -3625,7 +3948,8 @@ namespace WPEHybrid
 
             this.bridge.Register("uninstallDriver", async args => new { ok = await Operate.ProxyConfig.Proxy.UninstallDriver_Dialog() });
 
-            this.bridge.Register("saveProcessSetting", args =>
+            //保存是异步的：先真连一次转代理服务器，装驱动那一段走 UI.Busy 在后台跑（首次装驱动要几秒）
+            this.bridge.Register("saveProcessSetting", async args =>
             {
                 var pids = new List<int>();
                 var arr = args["pids"] as Newtonsoft.Json.Linq.JArray;
@@ -3633,7 +3957,7 @@ namespace WPEHybrid
 
                 return new
                 {
-                    error = Operate.ProxyConfig.Proxy.SaveProcessSetting(
+                    error = await Operate.ProxyConfig.Proxy.SaveProcessSetting(
                         args["driverType"] == null ? 1 : (int)args["driverType"],
                         args["mustTcp"] != null && (bool)args["mustTcp"],
                         args["ip"] == null ? null : (string)args["ip"],
@@ -4515,6 +4839,9 @@ namespace WPEHybrid
 
                     Operate.DoLog("saveInstance", "已切换数据库 : " + CurrentDbFull());
 
+                    string socks5Addr, httpAddr;
+                    ProxyAddresses(out socks5Addr, out httpAddr);
+
                     return new
                     {
                         ok = true,
@@ -4525,7 +4852,8 @@ namespace WPEHybrid
                         //配置换了一份，这三样界面都得跟着刷新
                         language = UI.Prefs.Language ?? "zh-CN",
                         socks5Port = Operate.ProxyConfig.Proxy.SOCKS5_Port,
-                        socks5Addr = Socks5Address(),
+                        socks5Addr = socks5Addr,
+                        httpAddr = httpAddr,
                     };
                 }
                 catch (Exception ex)
@@ -4598,6 +4926,9 @@ namespace WPEHybrid
                 string dbDir = Operate.DataBase.dbPath ?? string.Empty;
                 string dbFile = Operate.DataBase.dbName ?? string.Empty;
 
+                string socks5Addr, httpAddr;
+                ProxyAddresses(out socks5Addr, out httpAddr);
+
                 return new
                 {
                     isAdmin = Operate.SystemConfig.IsAdministrator(),
@@ -4650,8 +4981,10 @@ namespace WPEHybrid
                     isDark = UI.Prefs.IsDark,
                     scanLine = UI.Prefs.ScanLine,
                     lastInjection = Operate.SystemConfig.LastInjection ?? string.Empty,
+                    lastInject = this.LastInjectInfo(),
                     socks5Port = Operate.ProxyConfig.Proxy.SOCKS5_Port,
-                    socks5Addr = Socks5Address(),
+                    socks5Addr = socks5Addr,
+                    httpAddr = httpAddr,
                     /*
                         IP 归属地库的版本与条目数，由 Operate 暴露成 string / int ——
                         外壳因此不用引用 QQWry 程序集（直接读 ipSearch.Version 会 CS0012）。
@@ -4864,21 +5197,39 @@ namespace WPEHybrid
             }
         }
 
-        private static string Socks5Address()
+        /// <summary>
+        /// SOCKS5 与 HTTP 两个监听地址，<b>一次算出来</b>。
+        ///
+        /// ⚠️ 两者共用同一个 <c>GetLocalIPAddress()</c>，而它实测 <b>70ms</b>（枚举网卡）——
+        /// 各写一个方法各算一遍，等于在启动自检那条路上白付两遍。
+        /// 这也是它只能待在一次性路径上的原因，见 CLAUDE.md「拖窗口时每半秒卡一下」。
+        ///
+        /// HTTP 那个在<b>没启用时返回空串</b>，界面据此显示「未启用」而不是一个连不上的地址。
+        /// </summary>
+        private static void ProxyAddresses(out string socks5, out string http)
         {
+            socks5 = string.Empty;
+            http = string.Empty;
+
             try
             {
                 var ips = Operate.SystemConfig.GetLocalIPAddress();
                 string ip = ips != null && ips.Length > 0 ? ips[0].ToString() : "0.0.0.0";
 
-                return ip + ":" + Operate.ProxyConfig.Proxy.SOCKS5_Port;
+                socks5 = ip + ":" + Operate.ProxyConfig.Proxy.SOCKS5_Port;
+
+                //与 InitHttpProxy 那条日志同一个口径（那边打的是 ProxyUDP_IP，起来之后就等于这个 ip）
+                if (Operate.ProxyConfig.Proxy.Enable_HTTP)
+                {
+                    http = ip + ":" + Operate.ProxyConfig.Proxy.HTTP_Port;
+                }
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(Socks5Address), ex);
-                return string.Empty;
+                Operate.DoLog(nameof(ProxyAddresses), ex);
             }
         }
+
 
         /// <summary>
         /// 在一份列表里按 Id 找到那一条，改它的启用状态。
@@ -5069,7 +5420,7 @@ namespace WPEHybrid
 
             if (link == null)
             {
-                return new { ok = true, state = "idle", pid = 0, name = "", module = "", is64 = false, hooked = false, dropped = 0L, ws1 = false, ws2 = false, msws = false };
+                return new { ok = true, state = "idle", pid = 0, name = "", is64 = false, hooked = false, dropped = 0L, ws1 = false, ws2 = false, msws = false };
             }
 
             return new
@@ -5079,11 +5430,19 @@ namespace WPEHybrid
                 pid = link.TargetPid,
                 name = this.SafeProcessName(link.TargetPid),
                 /*
-                    目标的主窗口标题 —— 对应 WinForms 的 lModuleName。
-                    那边取的是 Process.GetCurrentProcess()（界面就在目标里，「当前进程」就是目标），
-                    外壳这边必须按 PID 取，否则拿到的是 WPEHybrid 自己。
+                    ⚠️ <b>这里原来还有一个 module（目标主窗口标题）</b>，2026-09-10 删掉了：
+                    它是<b>死字段</b> —— 状态条上那块「窗口」读数窗早就撤了（日志里记了完整的
+                    注入记录），前端从此没有任何地方读它，只剩 InjectStatus 接口里一个声明。
+
+                    而它不是白占一个字段那么便宜：这个方法是前端 <b>1 秒一次</b>轮询的，
+                    每次都要 Process.GetProcessById + MainWindowTitle ——
+                    后者会 EnumWindows 把<b>整个桌面的顶层窗口</b>扫一遍去找那个 pid 的主窗口，
+                    而且这一趟跑在<b>UI 线程</b>上（桥的处理器就在 UI 线程）。
+                    正是「往被轮询的桥方法里加字段之前先问它要不要碰系统 API」那条。
+
+                    要再显示窗口标题的话：在<b>附加成功那一次</b>取一回存下来即可，
+                    它本来也不怎么变（SafeWindowTitle 留着没删）。
                 */
-                module = this.SafeWindowTitle(link.TargetPid),
                 is64 = link.TargetIs64,
                 hooked = link.HookInstalled,
                 //环满丢掉的条数。界面上要显示「丢弃 N」—— 无声丢包比阻塞更糟
@@ -5138,9 +5497,325 @@ namespace WPEHybrid
         /// 取进程名。目标可能刚刚没了，这里绝不能抛 ——
         /// 状态条恰恰是「目标没了」的时候最需要显示的东西。
         /// </summary>
+
+        /*
+            附加到目标。pid > -1 = 附加到已运行的进程；否则按 path 挂起启动。
+
+            method 只用来<b>记录</b>（0 进程 · 1 窗体 · 2 文件），不影响怎么附加 ——
+            方式 01 与 02 到这一步是同一件事，区别只在目标是怎么挑出来的。
+        */
+        private async System.Threading.Tasks.Task<object> AttachTarget(int pid, string path, string extraArgs, int method)
+        {
+            /*
+                加载必须在注入<b>之前</b>：link.Attach 之后要把滤镜 / 发送 / 机器人
+                三份表的快照推给目标，表没加载推过去就是空的。
+
+                ⚠️ 与 enterProxyMode 一样，加载完要 MarkAllDirty 把 14 份列表推给前端 ——
+                这两句原来在 enterInjectMode 里（选目标屏），2026-09-10 挪到这儿，
+                理由见那边那段注释。前端的 attachListFeed() 在 InjectView 挂载时就订阅了，
+                早于这一刻，所以不会出现「推的时候还没人接」。
+            */
+            EnsureProxyConfigLoaded();
+            FeedPump.MarkAllDirty();
+
+
+            /*
+                这次用的是哪种方式（0 选择进程 · 1 选择窗体 · 2 可执行文件）——
+                ⚠️ <b>必须由前端说</b>：方式 01 与 02 最后都是「附加到一个 pid」，
+                从参数上分辨不出来，而「快捷注入」要照原样重放，得知道当初点的是哪张卡。
+                没给就按 pid 猜一个（挂起启动只能是方式 03）。
+            */
+
+            /*
+                ⚠️ 业务层兜一次「不能注入自己」。
+
+                界面那半边已经不出自己那一行了（ProcessConfig.GetProcessRows），
+                但那是<b>控件属性不是约束</b>那条老规矩管的情形 —— 选窗体那条路
+                （用户点到本程序自己的窗口）绕开了进程表，快捷键与将来别的调用方同理。
+            */
+            if (pid >= 0 && Operate.ProxyConfig.Proxy.IsSelfProcess(pid, null))
+            {
+                return this.InjectFail(UI.T("Inject.Self", "不能注入到 WPE 自己"));
+            }
+
+            string cmdLine = null;
+
+            if (pid < 0)
+            {
+                if (string.IsNullOrEmpty(path))
+                {
+                    return this.InjectFail(UI.T("Inject.NoTarget", "没有选择目标"));
+                }
+
+                cmdLine = "\"" + path + "\"";
+                if (!string.IsNullOrEmpty(extraArgs)) { cmdLine += " " + extraArgs; }
+            }
+
+            this.DisposeInjectLink();
+
+            var link = new WinsockPacketEditor.Ipc.ShellLink();
+            link.StateChanged += this.OnInjectStateChanged;
+
+            try
+            {
+                //注入是同步阻塞的（EasyHook 的 Inject/CreateAndInject 就是），丢后台并盖遮罩
+                //UI.Busy 只有 Func<T> 的重载（要一个返回值），所以补一个 true
+                await UI.Busy(
+                    UI.T("Loading", "正在加载..."),
+                    () => { link.Attach(pid, path, 15000, cmdLine); return true; });
+            }
+            catch (Exception ex)
+            {
+                link.Dispose();
+
+                /*
+                    ⚠️ 完整异常进系统日志、界面上只给<b>第一行</b>。
+
+                    EasyHook 抛的那条是「一句英文 + 换行 + 文件名: 长路径」，整段塞进
+                    右下角那个提示框既读不完也读不懂（2026-09-10 用户真撞上一次：
+                    WPEHook.dll 没进外壳的输出目录）。而排查要的堆栈本来就该去日志里看。
+                */
+                Operate.DoLog("injectAttach", ex);
+
+                string[] lines = (ex.Message ?? string.Empty).Split(
+                    new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                string first = lines.Length > 0 ? lines[0] : string.Empty;
+
+                return this.InjectFail(string.Format(
+                    UI.T("Inject.AttachFail", "注入失败：{0}"), first), false);
+            }
+
+            this.injectLink = link;
+
+            //三份共用列表一变就把快照推给目标（滤镜引擎与两个执行器在那边）
+            FeedPump.ListPushed -= this.OnListPushed;
+            FeedPump.ListPushed += this.OnListPushed;
+
+            /*
+                所有「发包」都要交给目标 —— 套接字句柄是进程私有的，
+                在外壳里调 send() 命中的是外壳自己句柄表里碰巧同号的那个东西。
+
+                挂在 PacketConfig.Packet.SendPacket 这一层，一次覆盖四个入口：
+                封包编辑、发送编辑 / 发送列表、机器人指令、快捷键。
+                与执行器启停在 AttachedLink() 那里分流是同一件事，
+                只是那几个的分流点在桥方法上，而这些跑在 Operate 的后台线程里，桥拦不住。
+            */
+            Operate.PacketConfig.Packet.SendRouter = link.SendPacket;
+
+            this.RememberLastInject(method, path, extraArgs, link.TargetPid);
+            this.LogInjectAttached(method, path, extraArgs, link);
+
+            return this.InjectStatus();
+        }
+
+        /*
+            注入失败的统一出口：**记一条系统日志 + 出 { ok = false }**。
+
+            ⚠️ 以前只有「抛异常」那一支进日志，`不能注入自己` / `没有选择目标`
+            这类业务拒绝只回给前端弹一下就没了 —— 而右下角那个提示是会自己消失的，
+            用户回头想查「刚才为什么没进去」时什么都找不到。
+
+            alreadyLogged：异常那一支上面已经用 DoLog(…, ex) 记过完整堆栈，别再记第二遍。
+        */
+        private object InjectFail(string reason, bool logIt = true)
+        {
+            if (logIt)
+            {
+                Operate.DoLog("InjectAttach", string.Format(
+                    UI.T("Inject.Log.Fail", "注入失败 —— {0}"), reason));
+            }
+
+            return new { ok = false, error = reason };
+        }
+
+        /*
+            注入成功往系统日志记一条 —— 与代理模式启动时那条（「SOCKS5 代理地址 : …」）同一条口径：
+            **动作成功了就在日志里留一行能对得上的事实**，而不是只弹一个会消失的提示。
+
+            记的是「目标 + 位数 + 方式 + 路径」四样：出问题时要回答的正是
+            「当时注的到底是哪一个进程、怎么进去的」，光一个进程名不够（同名进程能开好几个）。
+        */
+        private void LogInjectAttached(int method, string path, string extraArgs,
+            WinsockPacketEditor.Ipc.ShellLink link)
+        {
+            try
+            {
+                string name = !string.IsNullOrEmpty(path)
+                    ? System.IO.Path.GetFileName(path)
+                    : this.SafeProcessName(link.TargetPid);
+
+                string full = !string.IsNullOrEmpty(path) ? path : this.SafeProcessPath(link.TargetPid);
+
+                string sLog = string.Format(
+                    UI.T("Inject.Log.Attached", "已注入目标 [ {0} #{1} · {2} ] 方式 [ {3} ]"),
+                    name, link.TargetPid, link.TargetIs64 ? "x64" : "x86", this.MethodName(method));
+
+                if (!string.IsNullOrEmpty(full)) { sLog += " " + full; }
+                if (!string.IsNullOrEmpty(extraArgs)) { sLog += " " + extraArgs; }
+
+                Operate.DoLog("InjectAttach", sLog);
+            }
+            catch (Exception ex) { Operate.DoLog("LogInjectAttached", ex); }
+        }
+
+        /*
+            方式的名字。⚠️ 三条文案与前端选方式屏那三张卡<b>用同一套说法</b>
+            （inject.pick.mProc / inject.pick.window / inject.pick.mFile），
+            日志里写「可执行文件」而界面上那张卡叫别的，对不上就没法互相印证。
+        */
+        private string MethodName(int method)
+        {
+            if (method == 1) { return UI.T("Inject.Method.Window", "选择窗体"); }
+            if (method == 2) { return UI.T("Inject.Method.File", "选择文件"); }
+            return UI.T("Inject.Method.Process", "选择进程");
+        }
+
+        /*
+            记下这一次注入 —— 选目标屏的「上次注入」那一块要显示，「快捷注入」要拿它重放。
+
+            ⚠️ 名字与路径分开存：方式 01 / 02 手上只有一个 pid，路径靠 MainModule 取（取不到就空）；
+            方式 03 本来就有完整路径。重放时方式 03 按路径重新挂起启动，01 / 02 按名字找同名进程。
+        */
+        private void RememberLastInject(int method, string path, string extraArgs, int pid)
+        {
+            try
+            {
+                bool byFile = !string.IsNullOrEmpty(path);
+
+                Operate.SystemConfig.LastInjection = byFile
+                    ? System.IO.Path.GetFileName(path)
+                    : this.SafeProcessName(pid);
+
+                Operate.SystemConfig.LastInjectMethod = method;
+                Operate.SystemConfig.LastInjectPath = byFile ? path : this.SafeProcessPath(pid);
+                Operate.SystemConfig.LastInjectArgs = extraArgs ?? string.Empty;
+                Operate.SystemConfig.LastInjectTime = DateTime.Now.ToString("o");
+
+                Operate.SystemConfig.SaveSystemConfig_LastInjection_ToDB();
+            }
+            catch (Exception ex) { Operate.DoLog("RememberLastInject", ex); }
+        }
+
+        /// <summary>目标的完整路径；取不到（权限 / 已退出 / 位数不同）就返回空串，一条都不许抛。</summary>
+        private string SafeProcessPath(int Pid)
+        {
+            try
+            {
+                using (System.Diagnostics.Process p = System.Diagnostics.Process.GetProcessById(Pid))
+                {
+                    return p.MainModule == null ? string.Empty : (p.MainModule.FileName ?? string.Empty);
+                }
+            }
+            catch { return string.Empty; }
+        }
+
+        /*
+            「上次注入」那条记录，出给前端。
+
+            ⚠️ 时间在<b>这一侧</b>格式化好（与 19 份列表的 DTO 同一条口径：C# 出串、前端不解析）。
+            库里存的是 "o"，万一解析不回来就原样给出去 —— 那也比在界面上印一串 ISO 时间戳强。
+        */
+        private object LastInjectInfo()
+        {
+            string raw = Operate.SystemConfig.LastInjectTime ?? string.Empty;
+            string shown = string.Empty;
+
+            if (raw.Length > 0)
+            {
+                DateTime t;
+                shown = DateTime.TryParse(raw, null, System.Globalization.DateTimeStyles.RoundtripKind, out t)
+                    ? t.ToString("yyyy-MM-dd HH:mm:ss")
+                    : raw;
+            }
+
+            return new
+            {
+                target = Operate.SystemConfig.LastInjection ?? string.Empty,
+                method = Operate.SystemConfig.LastInjectMethod,
+                path = Operate.SystemConfig.LastInjectPath ?? string.Empty,
+                args = Operate.SystemConfig.LastInjectArgs ?? string.Empty,
+                time = shown,
+            };
+        }
+
+        /*
+            「快捷注入」的目标解析 —— 把上次那条记录还原成一次 AttachTarget 的入参。
+
+            ⚠️ <b>兜底全在这儿</b>，而且要说清是哪一种不成立：
+              · 压根没注入过        → 让人先挑一个
+              · 方式 03 的文件没了  → 说出路径（可能是盘符变了 / 游戏卸了）
+              · 方式 01 / 02 的进程不在了 → 说出名字（多半是关掉了）
+            一句笼统的「注入失败」在这儿最没用：这三种的下一步动作完全不同。
+        */
+        private bool ResolveQuickTarget(out int Pid, out string Path, out string Error)
+        {
+            Pid = -1;
+            Path = null;
+            Error = null;
+
+            string name = Operate.SystemConfig.LastInjection ?? string.Empty;
+            int method = Operate.SystemConfig.LastInjectMethod;
+            string last = Operate.SystemConfig.LastInjectPath ?? string.Empty;
+
+            if (name.Length == 0 && last.Length == 0)
+            {
+                Error = UI.T("Inject.QuickNone", "还没有注入过，先挑一个目标");
+                return false;
+            }
+
+            //方式 03：照原样再挂起启动一次，所以文件必须还在
+            if (method == 2)
+            {
+                if (last.Length == 0 || !System.IO.File.Exists(last))
+                {
+                    Error = string.Format(UI.T("Inject.QuickNoFile", "找不到上次那个可执行文件：{0}"), last);
+                    return false;
+                }
+
+                Path = last;
+                return true;
+            }
+
+            /*
+                方式 01 / 02：按<b>进程名</b>找一个还活着的同名进程。
+
+                ⚠️ 名字要去掉 .exe —— GetProcessesByName 收的是不带扩展名的那种，
+                而方式 03 存进去的名字是带的（同一个字段两种来源，这里统一一次）。
+                ⚠️ 跳过自己：与进程表那两道兜底同一个判据，别让「快捷注入」成为第三条漏网的路。
+            */
+            string bare = name.EndsWith(".exe", StringComparison.OrdinalIgnoreCase)
+                ? name.Substring(0, name.Length - 4)
+                : name;
+
+            try
+            {
+                System.Diagnostics.Process[] found = System.Diagnostics.Process.GetProcessesByName(bare);
+
+                for (int i = 0; i < found.Length; i++)
+                {
+                    using (System.Diagnostics.Process p = found[i])
+                    {
+                        if (Pid >= 0) { continue; }
+                        if (Operate.ProxyConfig.Proxy.IsSelfProcess(p.Id, null)) { continue; }
+                        Pid = p.Id;
+                    }
+                }
+            }
+            catch (Exception ex) { Operate.DoLog("ResolveQuickTarget", ex); }
+
+            if (Pid < 0)
+            {
+                Error = string.Format(UI.T("Inject.QuickNoProc", "「{0}」没有在运行，先把它启动起来"), name);
+                return false;
+            }
+
+            return true;
+        }
         private string SafeProcessName(int pid)
         {
-            try { return System.Diagnostics.Process.GetProcessById(pid).ProcessName; }
+            //⚠️ Process 是 IDisposable —— 不 Dispose 就是每秒攒一个进程句柄等终结器
+            //（这个方法在 1 秒一次的 InjectStatus() 里）。隔壁 SafeWindowTitle 一直是对的。
+            try { using (var proc = System.Diagnostics.Process.GetProcessById(pid)) { return proc.ProcessName; } }
             catch { return "(" + pid + ")"; }
         }
 
@@ -5307,6 +5982,10 @@ namespace WPEHybrid
         private IntPtr pickMouseHook;
         private IntPtr pickKeyHook;
         private IntPtr pickLastHover;
+
+        /// <summary>「选窗体」时把自己最小化了没有，以及最小化之前是哪一档（可能是最大化）。</summary>
+        private bool pickMinimized;
+        private FormWindowState pickPrevState = FormWindowState.Normal;
         private System.Threading.Tasks.TaskCompletionSource<object> pickTcs;
 
         private System.Threading.Tasks.Task<object> PickWindowAsync()
@@ -5335,6 +6014,25 @@ namespace WPEHybrid
                 {
                     this.FinishPickWindow(new { ok = false, error = UI.T("Inject.PickFailed", "无法监听鼠标，请以管理员身份运行") });
                 }
+                else
+                {
+                    /*
+                        ⚠️ 装上钩子<b>之后</b>再把自己最小化。
+
+                        「选窗体」要用户去点<b>别的程序</b>的窗口，而本窗口十有八九正压在它上面 ——
+                        不让开就得先手动挪走，那正是这个功能想省掉的一步。
+
+                        ⚠️ 顺序不能反：先最小化再装钩，中间那一小段里用户已经能点别的窗口了，
+                        点中的那一下没人接。
+
+                        ⚠️ 还原写在 FinishPickWindow 里，不写在这儿 —— 出口有四条
+                        （选中 / Esc 取消 / 前端调 cancelPickWindow / 装钩失败），
+                        它们全都汇到那一个方法，只有写在那里才不会漏掉其中一条。
+                    */
+                    this.pickPrevState = this.WindowState;
+                    this.pickMinimized = true;
+                    this.WindowState = FormWindowState.Minimized;
+                }
             }
             catch (Exception ex)
             {
@@ -5362,6 +6060,24 @@ namespace WPEHybrid
 
             this.pickMouseProc = null;
             this.pickKeyProc = null;
+
+            /*
+                还原窗口。四条出口都会走到这儿，所以只在这一处写。
+
+                ⚠️ 要记住<b>原来是哪一档</b>（可能是最大化），照 Normal 还原会把用户的最大化吃掉。
+                ⚠️ Activate() 不能省：用户刚点过别的窗口，那个窗口现在是前台 ——
+                只还原不激活的话，界面回来了却压在人家后面，看着像没反应。
+            */
+            if (this.pickMinimized)
+            {
+                this.pickMinimized = false;
+                try
+                {
+                    this.WindowState = this.pickPrevState;
+                    this.Activate();
+                }
+                catch (Exception ex) { Operate.DoLog("FinishPickWindow.Restore", ex); }
+            }
 
             var tcs = this.pickTcs;
             this.pickTcs = null;
@@ -5612,21 +6328,46 @@ namespace WPEHybrid
         }
 
         /// <summary>
-        /// 把滤镜的统计计数归零。
+        /// 把某几组计数归零 —— 外壳这份清掉，<b>附着着的话还要发到目标</b>。
         ///
-        /// ⚠️ <b>注入模式下真源在目标进程里</b>（DoFilterList 跑在目标的钩子线程上，
-        /// 外壳那份只是随 Stats 事件更新的镜像）—— 只清外壳的，下一拍就被目标盖回去。
-        /// 所以附着着的时候要把这件事<b>发到目标</b>再做一次。
+        /// ⚠️ <b>注入模式下这些计数的真源全在目标进程里</b>：滤镜六个与每条滤镜的执行次数
+        /// 在 DoFilterList 里（目标的钩子线程）、封包那 11 个在 OnPacket 里、
+        /// 发送 / 机器人的执行次数在目标的 BackgroundWorker 里。外壳那份只是随 1 Hz 的
+        /// Stats 事件更新的<b>镜像</b> —— 只清外壳的，下一拍就被目标盖回去，
+        /// 用户看到的是「数字闪一下又回来了」。
+        ///
+        /// 【为什么收成一个方法】四处入口（统计页归零 / 数据页清空 / 发送与机器人各自的
+        /// 重置计数）都要走这一步，散着写必然漏 —— 前两处原来就只清了外壳那半边。
         /// </summary>
-        private void ResetFilterStatsEverywhere()
+        private void ResetCountsEverywhere(WinsockPacketEditor.Ipc.ResetWhat what)
         {
-            Operate.SystemConfig.ResetFilterStats();
+            if ((what & WinsockPacketEditor.Ipc.ResetWhat.FilterStats) != 0)
+            {
+                Operate.SystemConfig.ResetFilterStats();
+            }
+
+            if ((what & WinsockPacketEditor.Ipc.ResetWhat.PacketCounters) != 0)
+            {
+                //封包计数只有「注入」那一组会在目标里递增，所以这一支固定传 true；
+                //代理那一组由 clearPackets 自己 ResetPacketCounters(false)，与目标无关
+                Operate.SystemConfig.ResetPacketCounters(true);
+            }
+
+            if ((what & WinsockPacketEditor.Ipc.ResetWhat.SendCounts) != 0)
+            {
+                Operate.SendConfig.List.ResetSendCount();
+            }
+
+            if ((what & WinsockPacketEditor.Ipc.ResetWhat.RobotCounts) != 0)
+            {
+                Operate.RobotConfig.List.ResetRobotCount();
+            }
 
             WinsockPacketEditor.Ipc.ShellLink link = this.AttachedLink();
             if (link == null) { return; }
 
-            try { link.ResetStats(); }
-            catch (Exception ex) { Operate.DoLog(nameof(ResetFilterStatsEverywhere), ex); }
+            try { link.ResetStats(what); }
+            catch (Exception ex) { Operate.DoLog(nameof(ResetCountsEverywhere), ex); }
         }
 
         #region//验收跑测用的工具方法（B10e）

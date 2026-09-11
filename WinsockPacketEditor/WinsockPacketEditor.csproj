@@ -222,6 +222,7 @@
     <Compile Include="ClassObject\FontLoader.cs" />
     <Compile Include="ClassObject\InstructionInfo.cs" />
     <Compile Include="ClassObject\InterfaceInfo.cs" />
+    <Compile Include="ClassObject\IIpRule.cs" />
     <Compile Include="ClassObject\IPConnectionFilter.cs" />
     <Compile Include="ClassObject\L10n\L10n.cs" />
     <Compile Include="ClassObject\L10n\L10nEn.cs" />
@@ -242,6 +243,7 @@
     <Compile Include="ClassObject\ProxyInfo.cs" />
     <Compile Include="ClassObject\ProxySession.cs" />
     <Compile Include="ClassObject\ProxyUDP.cs" />
+    <Compile Include="ClassObject\MustTcpUdpRelay.cs" />
     <Compile Include="ClassObject\RobotExecute.cs" />
     <Compile Include="ClassObject\RobotInfo.cs" />
     <Compile Include="ClassObject\RuleInfo.cs" />
@@ -1208,70 +1210,43 @@
     <Content Include="Web\CCProxy\cn_acclistadmin.htm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Web\EditAccount.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Web\footer.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Web\header.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Web\images\body-bg.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Web\images\cpu.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Web\images\fail.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Web\images\highlight-bg.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Web\images\hr.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Web\images\mem.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Web\images\pass.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Web\images\Time.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Web\index.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Web\ProxyAccount.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Web\SystemLog.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Web\web_images\downloads.css">
+    <Content Include="Web\ProxyAccount.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Web\web_images\github-dark.css">
+    <!--
+      设计令牌：<b>直接引外壳工程里那个源文件</b>，Link 把它投影成输出目录的 Web\tokens.css。
+      这样管理台与 Vue 界面共用同一份令牌，不是各抄一份（改配色只改那一个文件）。
+    -->
+    <Content Include="..\WPEHybrid\web\src\tokens.css">
+      <Link>Web\tokens.css</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Web\web_images\jquery-1.11.3.min.js">
+    <Content Include="Web\wpe.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Web\web_images\print.css">
+    <!-- 站点图标：../wpe.ico 的子集（只留 16/32/48 三层），见 Web/index.html 的说明 -->
+    <Content Include="Web\wpe.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Web\web_images\script.js">
+    <Content Include="Web\wpe.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Web\web_images\stylesheet.css">
+    <Content Include="Web\fonts\jetbrainsmono.woff2">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Web\web_images\wpe.ico">
+    <Content Include="Web\fonts\orbitron.woff2">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Web\web_images\wpe.png">
+    <Content Include="Web\fonts\sharetechmono.woff2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Web\fonts\OFL.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="wpe.ico" />

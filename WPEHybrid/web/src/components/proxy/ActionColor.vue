@@ -107,7 +107,7 @@ async function save(): Promise<void> {
   <SettingsModal
     :open="!!props.action"
     :title="title"
-    subtitle="UiPrefs / FilterAction"
+    subtitle="Action Colors"
     :busy="busy"
     :error="error"
     @update:open="!$event && emit('close')"
@@ -159,14 +159,14 @@ async function save(): Promise<void> {
   align-items: center;
   padding: 4px 8px;
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: var(--fs-body);
 }
 
 .prev > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .hexv {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: var(--fs-body);
   color: var(--dim2);
   font-variant-numeric: tabular-nums;
 }

@@ -76,13 +76,14 @@ async function save(): Promise<void> {
   <SettingsModal
     :open="props.open"
     :title="t('set.system')"
-    subtitle="Controls/SystemSetting"
+    subtitle="Work Mode · Execution"
     :busy="busy"
     :error="error"
     @update:open="emit('update:open', $event)"
     @save="save"
   >    <div class="setf" style="--setf-k: 152px">
 
+    <section class="sec">
     <div class="grp">{{ t('set.grp.workMode') }}</div>
 
     <div class="row">
@@ -95,7 +96,9 @@ async function save(): Promise<void> {
     </div>
 
     <p class="hint">{{ t('set.speedModeHint') }}</p>
+    </section>
 
+    <section class="sec">
     <div class="grp">{{ t('set.grp.listExecute') }}</div>
 
     <div class="row">
@@ -113,7 +116,9 @@ async function save(): Promise<void> {
     <p class="hint">
       {{ form.listExecute === 0 ? t('set.exec.togetherHint') : t('set.exec.sequenceHint') }}
     </p>
+    </section>
 
+    <section class="sec">
     <div class="grp">{{ t('set.grp.filterExecute') }}</div>
 
     <div class="row">
@@ -131,6 +136,7 @@ async function save(): Promise<void> {
     <p class="hint">
       {{ form.filterExecute === 0 ? t('set.exec.priorityHint') : t('set.exec.fseqHint') }}
     </p>
+    </section>
     </div>
   </SettingsModal>
 </template>

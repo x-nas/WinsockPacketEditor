@@ -53,6 +53,13 @@ const props = withDefaults(
 const emit = defineEmits<{
   (e: 'select', row: AnyRow, ev: MouseEvent, index: number): void
   (e: 'menu', ev: MouseEvent, row: AnyRow): void
+  /*
+    双击一行 —— 两个数据页都拿它开「封包编辑」，与 WinForms 的
+    `dgvPacketList_CellMouseDoubleClick` / `dgvProxyList_CellMouseDoubleClick` 对应。
+    全项目别的列表（滤镜 / 发送 / 机器人 / 仓库 / 账号 / 进程表）双击都是打开编辑，
+    只有这两屏一直没有，是移植时漏的。
+  */
+  (e: 'open', row: AnyRow): void
 }>()
 
 /*
@@ -516,6 +523,7 @@ defineExpose({ scrollToBottom, scrollToIndex })
             :style="colorOf(r.Action)"
             @click="emit('select', r, $event, start + i)"
             @contextmenu.prevent="emit('menu', $event, r)"
+            @dblclick="emit('open', r)"
           >
             <div
               v-for="c in cols"
@@ -745,26 +753,59 @@ defineExpose({ scrollToBottom, scrollToIndex })
   text-shadow: 0 0 6px rgb(var(--green-rgb) / 22%);
 }
 
-.pl-row:hover {
-  outline: 1px solid var(--wpe-accent);
-  outline-offset: -1px;
-}
+/*
+  ══ 悬停与选中：与全项目<b>同一套青色记号</b>（2026-09-09 统一）══
 
-.pl-row.sel {
-  outline: 2px solid var(--wpe-accent);
-  outline-offset: -2px;
+  原来这两条是<b>绿色描边</b>（`outline: 2px solid var(--wpe-accent)`，而那个令牌就是 --green）——
+  与全局焦点环 `outline: 2px solid var(--green)` <b>粗细、颜色一模一样</b>，只差一个
+  outline-offset（−2 对 +2），隔着屏幕分不出来。用户直接问「是不是没把焦点框去掉」。
+
+  ⚠️ 两条各自都对的规矩撞在了一起，而错的是这里选的颜色：
+  · 绿在这套界面里<b>一律表示「正在跑」</b>（状态灯、开始按钮、数据列 —— 「回到最新」
+    那颗按钮的注释里就写着这句），拿它标「选中」本来就串了；
+  · 「选中」在全项目是<b>青色左边线 + 淡青底</b>（`.list-page .row.sel`），
+    这一屏的多选（.pick）本来就是那一套 —— 只有 .sel 是全项目唯一的例外。
+
+  ⚠️ <b>一律用 inset 阴影，不用 background / outline</b>：命中滤镜的行带<b>行内</b> background
+  （colorOf() 打的），写 background 会被行内样式压过去；而阴影画在背景之上，压得住。
+  这也是 .pick 当初就这么写的理由。
+
+  ⚠️ box-shadow <b>不会跨规则叠加</b>（后面的整条替换前面的），所以每种组合都要把
+  「左边线 + 底色」<b>一起写全</b>，不能指望 .pick 那条自己叠上来。
+*/
+
+/* 悬停：4% 提亮，与 .list-page .row:hover 同一个观感（那边用的是 background）*/
+.pl-row:hover {
+  box-shadow: inset 0 0 0 999px rgb(var(--tint-rgb) / 4%);
 }
 
 /*
-  多选中的行给一条左边线 + 淡底 —— 与账号 / 滤镜那几屏的 .row.sel 同一套记号。
-  <b>与「正在看的那一行」用的是两种记号</b>（那边是描边）：一行可以既在多选集里、
-  又是详情面板正在看的那条，两种记号得能同时看出来。
-
-  背景用 inset 阴影而不是 background：命中滤镜的行有自己的行内 background，
-  写 background 会被行内样式压过去，而阴影不会。
+  在多选集里 —— 逐条对齐 `.list-page .row.sel`（左边线 var(--cyan) + 6% 青底），
+  悬停时加深到 10%，与那边的 `.row.sel:hover` 同值。
+  ⚠️ 底色从 7% 收到 6% 就是为了与那条逐字相同，别再改回去。
 */
 .pl-row.pick {
-  box-shadow: inset 2px 0 0 var(--cyan), inset 0 0 0 999px rgb(var(--cyan-rgb) / 7%);
+  box-shadow: inset 2px 0 0 var(--cyan), inset 0 0 0 999px rgb(var(--cyan-rgb) / 6%);
+}
+
+.pl-row.pick:hover {
+  box-shadow: inset 2px 0 0 var(--cyan), inset 0 0 0 999px rgb(var(--cyan-rgb) / 10%);
+}
+
+/*
+  详情面板正在看的那一行。**同一套青、只是底色实一档**（13%）——
+  不再另起一种记号。
+
+  ⚠️ 它与 .pick <b>几乎总是同一行</b>：onSelect 里 `selected = r` 与 `onRowClick(...)`
+  是挨着的两句，普通点击会把多选集清成这一条。所以绝大多数时候屏幕上只有一种记号、
+  与别的表一模一样；只有多选了好几行时才看得出「其中哪一条的字节在下面」。
+
+  ⚠️ 这两条写在最后：`.pl-row.sel:hover` 与 `.pl-row.pick:hover` 特异度都是 (0,3,0)，
+  平局时后写的赢 —— 挪到 .pick 前面会让「正在看的那一行」在悬停时降回 10%。
+*/
+.pl-row.sel,
+.pl-row.sel:hover {
+  box-shadow: inset 2px 0 0 var(--cyan), inset 0 0 0 999px rgb(var(--cyan-rgb) / 13%);
 }
 
 .pl-cell {
@@ -775,7 +816,7 @@ defineExpose({ scrollToBottom, scrollToIndex })
   white-space: nowrap;
   text-overflow: ellipsis;
   font-family: Consolas, 'Cascadia Mono', monospace;
-  font-size: 12px;
+  font-size: var(--fs-dense);
 }
 
 /*

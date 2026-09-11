@@ -86,18 +86,26 @@ const MIN_COL = 60
 
 //「过期时间」用 1fr 吃掉剩余宽度，所以它和操作列都不给手柄
 const gridCols = computed(
-  () => `${colW.ip}px ${colW.loc}px 64px minmax(110px, 1fr) 56px`)
+  //⚠️ 生效那列 64 → 88：越南语的「Số lần khớp」实测要 84px，64 下被省略号截掉
+  () => `${colW.ip}px ${colW.loc}px 88px minmax(110px, 1fr) 56px`)
 
 /*
   表头与每一行共用这一份样式，宽度才必然一致。
 
   ⚠️ <b>不要用 width: max-content</b>：那样带 1fr 的那一列会按<b>各自</b>的内容
   去撑宽，地址长的行就比别的行宽，与表头对不齐。改成给一个共同的 min-width
-  （固定列之和 + 4 条 10px 间隙），容器够宽时 1fr 吃掉余量、不够宽时一起横向滚。
+  （固定列之和 + 4 条 10px 间隙 + 自己的左右内边距），
+  容器够宽时 1fr 吃掉余量、不够宽时一起横向滚。
+
+  ⚠️ <b>最后那 20 是 .thead / .trow 自己的 padding: 0 10px。</b>
+  全局 box-sizing 是 border-box，min-width <b>含内边距</b> —— 漏掉它，
+  声明的 580 里只有 560 留给 grid，而 grid 要 580，于是元素被内容撑开，
+  声明值与实际宽度对不上。（这不是滚动条的成因，成因是弹窗宽度，见下面 width。）
 */
+const GRID_PAD = 20
 const rowStyle = computed(() => ({
   gridTemplateColumns: gridCols.value,
-  minWidth: `${colW.ip + colW.loc + 64 + 110 + 56 + 40}px`,
+  minWidth: `${colW.ip + colW.loc + 88 + 110 + 56 + 40 + GRID_PAD}px`,
 }))
 
 let drag: { key: string; x: number; w: number } | null = null
@@ -206,16 +214,39 @@ async function save(): Promise<void> {
 </script>
 
 <template>
+  <!--
+    ⚠️ <b>:width 是必须的，不能用默认的 620。</b>
+    这张名单有 5 列（IP / 客户端地 / 生效 / 过期时间 / 操作），默认列宽加上间距与内边距
+    要 600px，而 620 的弹窗只留得出 576 —— 于是<b>名单为空时也挂着一根横向滚动条</b>
+    （表头一直在，它自己就撑破了容器）。用户直接问了这根线是哪来的。
+
+    700 之后可用宽度 656：既装得下，「过期时间」那列（minmax(110, 1fr)）还能吃到 166px，
+    刚好显示完整的 <b>2026-09-09 15:49:00</b> 而不截断。
+
+    ⚠️ 横向滚动本身要留着 —— IP / 客户端地两列是<b>可以拖宽</b>的，
+    拖宽之后出滚动条是对的；这里治的只是「默认状态就溢出」。
+  -->
+  <!--
+    ⚠️ 宽度 700 → 770。两笔加起来的：分区卡的左右外边距 + 边框吃掉 <b>42px</b>，
+    「生效」那列为俄语从 64 加宽到 88 又吃掉 <b>24px</b> —— 不补回来，
+    「过期时间」那个 1fr 列会缩到 132px，而完整的 2026-09-06 08:00:00 要 143px。
+    1024 CSS 宽（125% 缩放）下仍在 max-width: calc(100vw - 64px) = 960 之内。
+
+    ⚠️⚠️ <b>注释不能待在开标签的属性区里</b> —— Vue 会把它当成一串属性名，
+    报的却是「缺少 title 属性」，看不出是注释的事。真栽过一次。
+  -->
   <SettingsModal
     :open="props.open"
+    :width="770"
     :title="t('set.firewall')"
-    subtitle="Controls/FireWallSetting"
+    subtitle="Access Control"
     :busy="busy"
     :error="error"
     @update:open="emit('update:open', $event)"
     @save="save"
   >    <div class="setf" style="--setf-k: 132px">
 
+    <section class="sec">
     <div class="grp">{{ t('fw.grp.main') }}</div>
 
     <div class="row">
@@ -239,7 +270,9 @@ async function save(): Promise<void> {
     </div>
 
     <p class="hint">{{ form.whiteMode ? t('fw.whiteModeHint') : t('fw.blackModeHint') }}</p>
+    </section>
 
+    <section class="sec">
     <div class="grp">{{ t('fw.grp.rules') }}</div>
 
     <div class="row" :class="{ off: !form.enable }">
@@ -300,26 +333,44 @@ async function save(): Promise<void> {
         </button>
       </div>
     </div>
+    </section>
 
+    <section class="sec">
     <div class="grp">{{ t('fw.grp.lists') }}</div>
 
-    <div class="lbar" :class="{ off: !form.enable }">
-      <button class="tab" :class="{ on: !isBlack }" :disabled="!form.enable" @click="tab = 'white'">
+    <!--
+      ⚠️ <b>名单区不跟着总开关禁用</b>（2026-09-09 改）。
+      上面那几行（工作模式、四条自动规则、屏蔽时长）是<b>运行时行为</b>，关掉防火墙它们就没有
+      意义，压暗是对的；而<b>名单是数据</b> —— 先把要放行 / 要拦的 IP 备好、回头再开启，
+      是再正常不过的用法，锁住它只是在为难人。
+
+      这也是项目里既有的口径：自动入库那边就是「总开关关着时规则表只压暗不锁：规则得能先备好」，
+      防火墙这里原来正好相反，属于不一致。
+    -->
+    <div class="lbar">
+      <button class="tab" :class="{ on: !isBlack }" @click="tab = 'white'">
         {{ t('fw.whiteList') }} <span class="n">{{ white.length }}</span>
       </button>
-      <button class="tab" :class="{ on: isBlack }" :disabled="!form.enable" @click="tab = 'black'">
+      <button class="tab" :class="{ on: isBlack }" @click="tab = 'black'">
         {{ t('fw.blackList') }} <span class="n">{{ black.length }}</span>
       </button>
 
       <span class="grow" />
 
-      <button class="mini" :disabled="!form.enable" @click="add">{{ t('fw.add') }}</button>
-      <button class="mini" :disabled="!form.enable" @click="listAction(8)">{{ t('flt.import') }}</button>
-      <button class="mini" :disabled="!form.enable || !rows.length" @click="listAction(5)">{{ t('lst.export') }}</button>
-      <button class="mini danger" :disabled="!form.enable || !rows.length" @click="listAction(7)">{{ t('flt.clearAll') }}</button>
+      <button class="mini" @click="add">{{ t('fw.add') }}</button>
+      <button class="mini" @click="listAction(8)">{{ t('flt.import') }}</button>
+      <button class="mini" :disabled="!rows.length" @click="listAction(5)">{{ t('lst.export') }}</button>
+      <button class="mini danger" :disabled="!rows.length" @click="listAction(7)">{{ t('flt.clearAll') }}</button>
     </div>
 
-    <div class="tbl" :class="{ off: !form.enable }">
+    <!--
+      放开之后必须说一句「现在还不生效」——否则用户认认真真加完一批 IP，
+      而防火墙关着，屏幕上没有任何东西提示他还差最后一步。
+      （「默认不出声的东西要出声」，与统计页那条恒等式校验同一条规矩。）
+    -->
+    <p v-if="!form.enable" class="hint idle">{{ t('fw.listIdle') }}</p>
+
+    <div class="tbl">
       <div class="thead" :style="rowStyle">
         <span class="so" :class="{ on: sort.active('ip') }" @click="sort.toggle('ip')">
           {{ t('cli.ip') }}<i class="ar">{{ sort.mark('ip') }}</i>
@@ -372,6 +423,7 @@ async function save(): Promise<void> {
         </div>
       </div>
     </div>
+    </section>
 
     <IPRuleEdit
       :target="editing"
@@ -387,14 +439,31 @@ async function save(): Promise<void> {
 
 <style scoped>
 
-.k2 { font-size: 12.5px; color: var(--muted); }
+.k2 { font-size: var(--fs-body); color: var(--muted); }
 /* 时长后面那句注解，比「分钟」再暗一档，读成旁注而不是第二个标签 */
 .k2.dim { color: var(--muted); }
 
 /* ── 名单 ── */
 
-.lbar { display: flex; align-items: center; gap: 8px; padding: 0 20px 6px; }
-.lbar.off, .tbl.off { opacity: .45; pointer-events: none; }
+/*
+  ⚠️ 允许折行。名单区这条工具条有六颗按钮（白名单 / 黑名单 + 新增 / 导入 / 导出 / 清空），
+  俄语实测要 723px —— 不折行就把整个弹窗撑出横向滚动条（改造前就有，卡片化之后更明显）。
+  这与 .gtool / .list-page .bar 是同一条口径：排不下就折行，别把最后一颗切掉半个字。
+  左右内边距跟着卡内的行走 14px（它现在长在 .sec 里）。
+*/
+.lbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; row-gap: 6px; padding: 0 14px 6px; }
+
+/*
+  ⚠️ 这里<b>没有</b> .lbar.off / .tbl.off —— 名单区不跟着总开关禁用，理由见模板里那段。
+  上面那几行仍然用 .row.off（工作模式与自动规则是运行时行为，关掉就该压暗）。
+*/
+/*
+  ⚠️ 用<b>这个组件已有的 .hint</b>（工作模式下面那句用的就是它），只覆盖颜色。
+  别为这一句新造一个类：`.tip` 在 style.css 与本组件里<b>都没有定义</b>，
+  写出来只会得到一行没有字号、没有边距的裸文字。
+  改琥珀是因为它说的是「还差一步」，不是普通说明。
+*/
+.hint.idle { color: var(--amber); }
 .grow { flex: 1; }
 
 /* 白 / 黑名单二选一，不并排 —— 并排每张只剩一半宽，而 IP + 所属地 + 时间本来就不窄 */
@@ -406,12 +475,12 @@ async function save(): Promise<void> {
   background: transparent;
   border: 1px solid var(--border);
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--fs-body);
   cursor: pointer;
 }
 
 .tab.on { border-color: var(--cyan); color: var(--cyan); background: rgb(var(--cyan-rgb) / 10%); }
-.tab .n { font-family: var(--share); font-size: 9.5px; opacity: .8; }
+.tab .n { font-family: var(--share); font-size: var(--fs-caption); opacity: .8; }
 
 /* 小按钮的样式在 style.css 的 .mini */
 
@@ -436,7 +505,7 @@ async function save(): Promise<void> {
   align-items: center;
   gap: 10px;
   padding: 0 10px;
-  font-size: 12.5px;
+  font-size: var(--fs-body);
 }
 
 .thead {
@@ -457,7 +526,7 @@ async function save(): Promise<void> {
 /* 定高 + 滚动：名单可能几百条，不能让它把弹窗撑到屏幕外 */
 .tbody { min-width: 100%; }
 
-.empty { padding: 26px 0; text-align: center; color: var(--muted); font-size: 12px; }
+.empty { padding: 26px 0; text-align: center; color: var(--muted); font-size: var(--fs-body); }
 
 .trow { height: 30px; color: var(--soft); cursor: default; }
 .trow:hover { background: rgb(var(--tint-rgb) / 4%); }
@@ -507,9 +576,9 @@ async function save(): Promise<void> {
   background: var(--cyan);
   box-shadow: 0 0 4px var(--cyan);
 }
-.exp { color: var(--muted); font-family: var(--mono); font-size: 12px; }
+.exp { color: var(--muted); font-family: var(--mono); font-size: var(--fs-body); }
 /* 「永久有效」是句话不是时间戳，等宽字体反而别扭 */
-.exp.never { font-family: inherit; font-size: 12.5px; color: var(--dim4); }
+.exp.never { font-family: inherit; font-size: var(--fs-body); color: var(--dim4); }
 
 .ops { display: flex; align-items: center; justify-content: flex-end; gap: 2px; }
 

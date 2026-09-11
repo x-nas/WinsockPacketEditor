@@ -31,8 +31,9 @@ import { pushToast } from '../../stores/toast'
 import ContextMenu from '../ContextMenu.vue'
 import CyberSelect from '../CyberSelect.vue'
 import { ICON, type MenuItem } from '../menu'
+import { useModal } from '../../useModal'
 
-const props = defineProps<{ id: string | null }>()
+const props = withDefaults(defineProps<{ id: string | null; mode?: 'proxy' | 'inject' }>(), { mode: 'proxy' })
 const emit = defineEmits<{ (e: 'close'): void }>()
 
 /*
@@ -533,30 +534,34 @@ const ACTIONS: Array<{ v: number; label: Key }> = [
 ]
 
 /*
-  作用域<b>只出代理模式那四个</b>。
+  作用域<b>随 mode 变</b>——与 LeachSetting 的类别开关同一条口径。
 
-  FunctionMask 有 12 位，但 WinForms 从来不会一次全摆出来：
-  tabFilterFunction 里是两张互斥的页，按宿主窗体挑一张（FilterEdit 96–103）——
+  FunctionMask 有 12 位，WinForms 里是两张互斥的页，按宿主窗体挑一张（FilterEdit 96–103）：
 
       this.form is IInjectMode → tpInjectMode  Send / SendTo / Recv / RecvFrom
                                                + WSA 那四个（第 0~7 位）
       this.form is IProxyMode  → tpProxyMode   TCP / UDP 的请求与响应（第 8~11 位）
 
   道理很直接：注入模式钩的是 WinSock 函数，代理模式根本不经过那些钩子；
-  在代理模式下勾 WSASend 只会得到一条永不命中的滤镜。
-  外壳目前只有代理模式（注入模式留在 WinForms），所以这里就是 tpProxyMode 那一页。
+  在代理模式下勾 WSASend 只会得到一条永不命中的滤镜，反过来在注入模式勾 TCP 请求同理。
+  <b>位序照 Operate.cs 的 MaskToFunction</b>：0 Send · 1 SendTo · 2 Recv · 3 RecvFrom
+  · 4 WSASend · 5 WSASendTo · 6 WSARecv · 7 WSARecvFrom（注入）；8 TCP_Req · 9 UDP_Req
+  · 10 TCP_Resp · 11 UDP_Resp（代理）。
 
-  <b>另外八位不会因为看不见就丢。</b>WinForms 也是 12 个复选框全部载入、
-  保存时全部回写（160–171 / 1795–1806），隐藏那页的值原样带过。
-  这边同理：save() 把 f.FunctionMask 整个交回去，没有界面碰过的位保持原值 ——
-  一条在注入模式下建的滤镜，在这里改完名字存回去，它的 Send 位仍然在。
-
-  列的顺序也照 tlpFilterFunction_ProxyMode：TCP 一组、UDP 一组。
+  <b>看不见的那半边不会丢。</b>save() 把 f.FunctionMask 整个交回去，没有界面碰过的位
+  保持原值 —— 一条在注入模式下建的滤镜，在代理模式改完名字存回去，它的 Send 位仍然在。
 */
-const FUNCS: Array<{ bit: number; label: Key }> = [
+const PROXY_FUNCS: Array<{ bit: number; label: Key }> = [
   { bit: 8, label: 'pt.tcpReq' }, { bit: 10, label: 'pt.tcpResp' },
   { bit: 9, label: 'pt.udpReq' }, { bit: 11, label: 'pt.udpResp' },
 ]
+const INJECT_FUNCS: Array<{ bit: number; label: Key }> = [
+  { bit: 0, label: 'pt.ws2Send' }, { bit: 1, label: 'pt.ws2SendTo' },
+  { bit: 2, label: 'pt.ws2Recv' }, { bit: 3, label: 'pt.ws2RecvFrom' },
+  { bit: 4, label: 'pt.wsaSend' }, { bit: 5, label: 'pt.wsaSendTo' },
+  { bit: 6, label: 'pt.wsaRecv' }, { bit: 7, label: 'pt.wsaRecvFrom' },
+]
+const FUNCS = computed(() => (props.mode === 'inject' ? INJECT_FUNCS : PROXY_FUNCS))
 
 function hasFunc(bit: number): boolean {
   return !!f.value && (f.value.FunctionMask & (1 << bit)) !== 0
@@ -681,10 +686,24 @@ async function save(): Promise<void> {
     busy.value = false
   }
 }
+
+/* 登记进模态栈：父窗体因此变 inert；自己被后开的弹窗盖住时也会 inert。见 useModal.ts */
+const { covered } = useModal(() => props.id !== null)
 </script>
 
 <template>
-  <div v-if="props.id !== null" class="editor-mask" @mousedown.self="emit('close')">
+  <!--
+    ⚠️ <b>Teleport 到 body</b> —— 不是为了好看，是必须的，两个理由都在 useModal.ts 里：
+    ① 代理模式的 .proxy 是 z-index: 10 的层叠上下文，弹窗留在里面时遮罩盖不住标题栏；
+    ② 出去了才不会被 .shell 的 inert 一起禁掉。
+
+    ⚠️ <b>刻意不换行、不重排缩进</b>：模板里有 white-space: pre 的块，
+    整体缩进一动，Vue 模板编译器的 condense 会连带改掉渲染结果。
+
+    ⚠️ <b>点遮罩不再关闭弹窗</b>：编辑器里都是填了一半的东西，点空白处就丢掉太容易误操作。
+    出口只留「取消 / 关闭」按钮与 Esc。
+  -->
+  <Teleport to="body"><div v-if="props.id !== null" class="editor-mask" :inert="covered">
     <div class="dlg" role="dialog" aria-modal="true" @keydown.esc="emit('close')">
       <span class="mk tl" /><span class="mk tr" /><span class="mk bl" /><span class="mk br" />
 
@@ -737,9 +756,9 @@ async function save(): Promise<void> {
               <i />{{ t('flt.e.executeOn') }}
             </button>
 
-            <CyberSelect v-model="f.ExecuteType" class="sel" :options="execTypeOptions" :disabled="!f.IsExecute" />
+            <CyberSelect v-model="f.ExecuteType" class="dd" :options="execTypeOptions" :disabled="!f.IsExecute" />
 
-            <CyberSelect v-model="f.ExecuteId" class="sel grow" :options="execTargetOptions"
+            <CyberSelect v-model="f.ExecuteId" class="dd grow" :options="execTargetOptions"
                          :disabled="!f.IsExecute || execTargets.length === 0" />
 
             <span v-if="f.IsExecute && execTargets.length === 0" class="tip">
@@ -937,7 +956,7 @@ async function save(): Promise<void> {
     </div>
 
     <ContextMenu :at="menuAt" :items="menuItems" @pick="onMenuPick" @close="menuAt = null" />
-  </div>
+  </div></Teleport>
 </template>
 
 <style scoped>
@@ -952,11 +971,11 @@ async function save(): Promise<void> {
 }
 
 .hd .tt { flex: 1; display: flex; align-items: baseline; gap: 10px; }
-.hd .zh { font-size: 13.5px; color: var(--gray); }
+.hd .zh { font-family: var(--orbit); font-weight: 700; font-size: var(--fs-title); letter-spacing: .04em; color: var(--gray); }
 
 .hd .sub {
   font-family: var(--share);
-  font-size: 9.5px;
+  font-size: var(--fs-caption);
   letter-spacing: .18em;
   text-transform: uppercase;
   color: var(--dim);
@@ -966,7 +985,7 @@ async function save(): Promise<void> {
 .hd .x:hover { color: var(--danger); }
 .hd .x .ico { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; }
 
-.loading { padding: 60px; text-align: center; color: var(--muted); font-size: 12.5px; }
+.loading { padding: 60px; text-align: center; color: var(--muted); font-size: var(--fs-body); }
 
 .bd { flex: 1; min-height: 0; overflow-y: auto; padding: 4px 0 12px; }
 
@@ -983,7 +1002,7 @@ async function save(): Promise<void> {
 */
 .grp {
   font-family: var(--share);
-  font-size: 10.5px;
+  font-size: var(--fs-label);
   letter-spacing: .14em;
   text-transform: uppercase;
   color: var(--dim2);
@@ -1002,19 +1021,20 @@ async function save(): Promise<void> {
   min-height: 30px;
 }
 
-.row > .k { font-size: 12.5px; color: var(--muted); }
+.row > .k { font-size: var(--fs-body); color: var(--muted); }
 .row > .v { display: flex; align-items: center; gap: 14px; min-width: 0; }
 .row > .v.wrap { flex-wrap: wrap; gap: 8px 16px; }
 
-.k2 { font-size: 12.5px; color: var(--muted); }
-.tip { font-size: 11.5px; color: var(--dim2); }
+.k2 { font-size: var(--fs-body); color: var(--muted); }
+.tip { font-size: var(--fs-small); color: var(--dim2); }
 
 /*
   下拉是自绘的 CyberSelect（全项目统一；它自带滚动、键盘首字母跳转与超出视口时的翻转，
   早先「自绘不划算」的顾虑已经在组件里补齐）。这里只给宽度。
 */
-.sel { width: 150px; max-width: 260px; }
-.sel.grow { flex: 1; min-width: 0; max-width: none; }
+/* 下拉宽度类叫 .dd 不叫 .sel —— 字节格的选中态也是 .sel，裸 .sel 会把选中的格子一起改宽 */
+.dd { width: 150px; max-width: 260px; }
+.dd.grow { flex: 1; min-width: 0; max-width: none; }
 
 /*
   作用域只剩四项，一行放得下。
@@ -1068,21 +1088,8 @@ async function save(): Promise<void> {
   gap: 10px;
 }
 
-.chk, .rd {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 0;
-  background: transparent;
-  border: 0;
-  font-size: 12.5px;
-  color: var(--muted);
-  cursor: pointer;
-  white-space: nowrap;
-}
-
+/* 基样式在 style.css 的「勾选框 / 单选框」，这里只覆盖颜色与布局 */
 .chk.k { justify-self: start; }
-.chk i { width: 13px; height: 13px; border: 1px solid var(--dim); position: relative; flex: none; }
 
 /*
   勾选态用<b>压暗的绿</b>（var(--chk-on)），不是主色 --green。
@@ -1097,16 +1104,7 @@ async function save(): Promise<void> {
   作用域 / 指定类型 / 递进三组共用这条规则 —— 它们是同一类东西，
   只压一组会变成同一个弹窗里两种深浅的绿。
 */
-.chk.on { color: var(--chk-on); }
-.chk.on i { border-color: var(--chk-on); background: rgb(var(--chk-on-rgb) / 14%); }
-.chk.on i::after { content: ""; position: absolute; inset: 2px; background: var(--chk-on); }
-.chk:disabled { opacity: .4; cursor: default; }
-
-.rd i { width: 13px; height: 13px; border: 1px solid var(--dim); border-radius: 50%; position: relative; flex: none; }
-.rd.on { color: var(--cyan); }
-.rd.on i { border-color: var(--cyan); }
-.rd.on i::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 5px var(--cyan); }
-.rd:disabled { opacity: .45; cursor: default; }
+.chk { --chk-fill: var(--chk-on); --chk-fill-rgb: var(--chk-on-rgb); --chk-tint: 14%; }
 
 /*
   普通模式下「修改起始于」压暗但仍在（WinForms 是 Enabled = false）。
@@ -1145,7 +1143,7 @@ async function save(): Promise<void> {
   /* 上外边距兼作「表格块与上面几行设置」的间隔，两张表之间也靠它 */
   margin: 10px 18px 4px;
   font-family: var(--share);
-  font-size: 10.5px;
+  font-size: var(--fs-label);
   letter-spacing: .14em;
   /* 与 .grp 同一套标签样式，理由见那里 */
   color: var(--dim2);
@@ -1170,7 +1168,7 @@ async function save(): Promise<void> {
   height: 32px;
   background: var(--panel);
   font-family: var(--share);
-  font-size: 11px;
+  font-size: var(--fs-label);
   /*
     列号必须读得清 —— 它是这张表唯一的坐标，找第几个字节全靠它。
     原来的 --muted 压在 --panel 上只有 3.46:1，低于正文 4.5 的底线，
@@ -1222,7 +1220,7 @@ async function save(): Promise<void> {
   border: 0;
   color: #4169e1;
   font-family: var(--mono);
-  font-size: 12.5px;
+  font-size: var(--fs-body);
   font-weight: 600;
   text-align: center;
   text-transform: uppercase;
@@ -1245,7 +1243,7 @@ async function save(): Promise<void> {
 .cell.sel { outline: 2px solid var(--green); outline-offset: -2px; }
 
 /* 三个色块在左、跳转在右：margin-left:auto 把中间的空隙全给它 */
-.legend { display: flex; align-items: center; gap: 16px; padding: 4px 18px 0; font-size: 11px; }
+.legend { display: flex; align-items: center; gap: 16px; padding: 4px 18px 0; font-size: var(--fs-small); }
 /* 跳转的文字跟三个色块的说明同色 —— 它们同属这一行的注解层 */
 .legend .jump { margin-left: auto; color: var(--muted); }
 .legend .lg { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
@@ -1280,11 +1278,11 @@ async function save(): Promise<void> {
 }
 
 .ft .grow { flex: 1; }
-.ft .err { font-size: 12px; color: var(--danger); }
+.ft .err { font-size: var(--fs-small); color: var(--danger); }
 
 .btn {
   min-width: 84px;
-  padding: 11px 16px 9px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
+  padding: 10px 16px 10px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
   background: transparent;
   border: 1px solid var(--border);
   color: var(--gray);

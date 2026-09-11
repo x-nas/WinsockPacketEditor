@@ -186,13 +186,18 @@ const anything = computed(() => xorSrc.value.length > 0 || xorB.value.length > 0
 
       <template v-if="xorMode === 'key'">
         <span class="lb">{{ t('xo.key') }}</span>
+        <!--
+          写错了：框变红 + 悬停提示给原因。工具条上原来另有一行红字（.kerr），2026-09-11 去掉了 ——
+          中间的密钥面板本来就用同一句话说着这件事，而那行红字一出现就把整条工具条挤成两行，
+          敲着字工具条跟着上下跳。
+        -->
         <input v-model="xorKey" class="inp key" :class="{ bad: keyBad }" spellcheck="false"
+               :title="keyBad ? (xorKeyFmt === 'hex' ? t('xo.keyBad') : t('xo.keyBadText')) : (xorKeyFmt === 'hex' ? t('xo.keyTipHex') : t('xo.keyTipText'))"
                :placeholder="xorKeyFmt === 'hex' ? t('xo.keyPhHex') : t('xo.keyPhText')">
         <div class="hx-seg">
           <button class="hx-segb after" :class="{ on: xorKeyFmt === 'hex' }" @click="xorKeyFmt = 'hex'">{{ t('hex.asHex') }}</button>
           <button class="hx-segb before" :class="{ on: xorKeyFmt === 'text' }" @click="xorKeyFmt = 'text'">{{ t('hex.asText') }}</button>
         </div>
-        <span v-if="keyBad" class="kerr">{{ xorKeyFmt === 'hex' ? t('xo.keyBad') : t('xo.keyBadText') }}</span>
       </template>
 
       <span class="grow" />
@@ -286,11 +291,20 @@ const anything = computed(() => xorSrc.value.length > 0 || xorB.value.length > 0
   padding: 10px 12px 12px;
 }
 
-.lb { flex: none; font-size: 12px; color: var(--muted); white-space: nowrap; }
-.kerr { flex: none; font-size: 11.5px; color: var(--danger); white-space: nowrap; }
+.lb { flex: none; font-size: var(--fs-body); color: var(--muted); white-space: nowrap; }
 
 /* 基样式在 style.css 的 .inp，这里只补布局 */
-.inp.key { flex: 0 1 340px; min-width: 150px; }
+/*
+  工具条上的输入框跟着同一行的按钮走（`--btn-size`），与数据页工具条的搜索框同一条口径 ——
+  12.5px 夹在一排 10.5px 的按钮与分段按钮中间，提示文字是全场最大的那个（2026-09-11 按要求改）。
+  框高仍是 .inp 那 28px，与按钮齐平。
+*/
+/*
+  ⚠️ 原来是 `flex: 0 1 340px; min-width: 150px` —— flex-wrap 按「假想宽度」断行，而那个 340 就是假想宽度，
+  125% 缩放下（1024 CSS 宽）整条差 7px 就放不下，右边四颗按钮全被甩到第二行（2026-09-11 按要求收成一行）。
+  现在假想宽度是 0 → 夹到 min-width 110：宽度够时长到 340 封顶（剩下的给 .grow），不够时一路让到 110。
+*/
+.inp.key { flex: 1 1 0; min-width: 110px; max-width: 340px; font-size: var(--btn-size); }
 .inp.key.bad { border-color: var(--danger); color: var(--danger); }
 
 /*
@@ -368,7 +382,7 @@ const anything = computed(() => xorSrc.value.length > 0 || xorB.value.length > 0
   border: 1px solid rgb(var(--cyan-rgb) / 30%);
   background: rgb(var(--inset-rgb) / 30%);
   font-family: Consolas, monospace;
-  font-size: 12px;
+  font-size: var(--fs-dense);
   line-height: 1.2;
   color: var(--cyan);
 }
@@ -382,8 +396,8 @@ const anything = computed(() => xorSrc.value.length > 0 || xorB.value.length > 0
   border-top: 1px solid rgb(var(--border-rgb) / 60%);
 }
 
-.tile .k { font-family: var(--share); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
-.tile .v { font-family: Consolas, monospace; font-size: 12px; color: var(--gray); }
+.tile .k { font-family: var(--share); font-size: var(--fs-label); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.tile .v { font-family: Consolas, monospace; font-size: var(--fs-dense); color: var(--gray); }
 
 /* 运算符钉在密钥栏底部：它说的是「这一栏与左边那块做异或」 */
 .op {
@@ -396,7 +410,7 @@ const anything = computed(() => xorSrc.value.length > 0 || xorB.value.length > 0
   border-top: 1px solid var(--border);
   color: var(--cyan);
   font-family: var(--share);
-  font-size: 10.5px;
+  font-size: var(--fs-label);
   letter-spacing: .14em;
   opacity: .8;
 }
@@ -411,10 +425,10 @@ const anything = computed(() => xorSrc.value.length > 0 || xorB.value.length > 0
   padding: 20px;
   text-align: center;
   color: var(--muted);
-  font-size: 12.5px;
+  font-size: var(--fs-body);
   line-height: 1.8;
 }
 
-.empty.small { padding: 10px 2px; font-size: 11.5px; }
+.empty.small { padding: 10px 2px; font-size: var(--fs-small); }
 .empty.bad { color: var(--danger); }
 </style>

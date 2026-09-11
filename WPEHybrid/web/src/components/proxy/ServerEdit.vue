@@ -46,7 +46,7 @@ async function save(): Promise<void> {
 </script>
 
 <template>
-  <SettingsModal :open="!!props.target" :title="title" subtitle="Controls/ServerEdit" :busy="busy" :error="error"
+  <SettingsModal :open="!!props.target" :title="title" subtitle="Proxy Node" :busy="busy" :error="error"
                  @update:open="!$event && emit('close')" @save="save">
     <div class="setf">
       <div class="row">

@@ -162,7 +162,8 @@ namespace WinsockPacketEditor
                     {
                         if(record is MapRemote mr)
                         {
-                            return $"{mr.ProtocolTypeTo.ToString().ToLower()}://{mr.HostTo}:{mr.PortTo}{mr.PathTo}";
+                            //协议写死 http：运行期只按明文 HTTP 处理，读 ProtocolTypeTo 会让老库里那个装饰值显示成 https
+                            return $"http://{mr.HostTo}:{mr.PortTo}{mr.PathTo}";
                         }
 
                         return value;

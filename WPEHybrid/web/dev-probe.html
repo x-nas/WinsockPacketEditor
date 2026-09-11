@@ -19,6 +19,19 @@
   }
   const answers = {
     openPacketEdit: (a) => ({ Id: String(a.id), List: a.list, Socket: 3464, Type: 13, From: '10.10.10.8:41758', To: '101.227.22.133:443', Buffer: sample, CanSendBySession: false, SystemSocket: 1284 }),
+    // 发送编辑：#send 系统套接字已设 / #send0 未设 —— 「未设置时不给勾」只有两种状态都摆出来才验得了
+    openSendEdit: () => ({ Id: 'S1', Name: '发送 1', Notes: '', LoopCount: 1, LoopInterval: 1000,
+      // #send 系统套接字已设 / #send0 未设
+      UseSystemSocket: false,
+      SystemSocket: location.hash === '#send0' ? 0 : 3448 }),
+    getSendCollection: () => ({ rows: [] }),
+    // #lists：三张列表的执行模式。listExecute 0 = 同时 / 1 = 按顺序（与 SystemConfig.Execute 一致），
+    // filterExecute 0 = 优先原则 / 1 = 按顺序（那是<b>另一个</b>同名枚举，别对调）
+    getFilterExecute: () => ({ mode: location.hash === '#lists0' ? 0 : 1 }),
+    getSendMeta: () => ({ systemSocket: 3448, running: false, listExecute: location.hash === '#lists0' ? 0 : 1 }),
+    getRobotMeta: () => ({ running: false, listExecute: location.hash === '#lists0' ? 0 : 1 }),
+    getSendEditProgress: () => ({ Running: false, Total: 0, Success: 0, Fail: 0, Index: -1 }),
+    closeSendEdit: () => null,
     clipboardWrite: (a) => { clip = a.text; window.__clip = clip; return { ok: true } },
     clipboardRead: () => ({ text: clip }),
     savePacketEdit: (a) => { window.__saved = a; return { error: '' } },
@@ -92,13 +105,49 @@
     saveServerRule: (a) => { window.__rules.push({ Id: 'R' + Date.now(), IsEnable: a.enable, Type: a.type, TypeName: 'DOMAIN', Argument: a.argument, Action: a.ruleAction }); return { error: '' } },
     serverRuleAction: (a) => { if (a.action === 6) window.__rules = window.__rules.filter((r) => !a.ids.includes(r.Id)); return { ok: true } },
     saveServer: () => ({ error: '' }), saveNotice: () => ({ error: '' }), setServerEnable: () => ({ ok: true }),
-    getProcessSetting: () => ({ DriverType: 1, IsLoadDriver: false, MustTCP: true, IP: '127.0.0.1', Port: 1080, AppointPort: false, AppointPortContent: '', Auth: false, UserName: '', PassWord: '', CheckedPids: [4321] }),
-    getProcessRows: () => ({ rows: [{ IsCheck: true, ProcessName: 'game', ProcessID: 4321, ModuleName: 'game.exe', ProcessPath: '' }, { IsCheck: false, ProcessName: 'chrome', ProcessID: 8800, ModuleName: 'chrome.exe', ProcessPath: '' }, { IsCheck: false, ProcessName: 'explorer', ProcessID: 1200, ModuleName: 'explorer.exe', ProcessPath: '' }] }),
-    getProcessIcon: () => ({ png: '' }), addSelectProcessName: () => ({ ok: true }), removeSelectProcessName: () => ({ ok: true }),
+    /*
+      代理设置：这一屏原来在探针页<b>根本打不开</b>（假宿主没有 getProxySetting，
+      组件走 v-else 显示「取字节中…」），于是它是唯一一个只能靠真程序看的设置屏。
+      #o-proxy0 给的是「HTTP 代理关着 + 服务在跑」那一档 —— 运行中会锁住监听相关的项，
+      那条分支不给一份假数据同样走不到。
+    */
+    getProxySetting: () => ({
+      proxyIpAuto: location.hash !== '#o-proxy0',
+      proxyIp: '10.172.190.252',
+      localIps: ['10.172.190.252', '192.168.56.1', '127.0.0.1'],
+      enableSocks5: true, socks5Port: 1080, enableAuth: true, maxConnection: 500,
+      enableHttp: location.hash !== '#o-proxy0', httpPort: 1081,
+      enableSystemProxy: false, running: location.hash === '#o-proxy0',
+    }),
+    saveProxySetting: () => ({ ok: true, socks5Addr: '10.172.190.252:1080', httpAddr: '10.172.190.252:1081' }),
+    setSystemProxy: (a) => ({ ok: true, on: !!a.on }),
+    exportCert: () => ({ ok: true, path: 'C:/wpe64.crt' }),
+    /*
+      进程设置：四种链路状态各一档，四张步骤卡与顶上那条链路图的分支全靠它们才走得到。
+        #ps      混合 —— 驱动没装（待办）、选了 1 个、转本机、服务在跑
+        #ps0     全断 —— 没管理员、没选进程、HTTP 代理关着、服务没起
+        #psok    全通 —— 该亮的都亮，链路图应当整条通、末尾两节也亮
+        #psauth  本机 SOCKS5 开着认证而这边没勾 —— 第 3 步 bad、链路图那两节转红
+    */
+    getProcessSetting: () => {
+      const h = location.hash
+      const base = { DriverType: 1, MustTCP: true, IP: '127.0.0.1', Port: 1080, AppointPort: false, AppointPortContent: '', UserName: '', PassWord: '', HttpPort: 1081, Socks5Port: 1080 }
+      if (h === '#ps0') return { ...base, IsLoadDriver: false, Auth: false, CheckedPids: [], EnableHttp: false, EnableSocks5: true, EnableAuth: false, Running: false, IsAdmin: false }
+      if (h === '#psok') return { ...base, IsLoadDriver: true, Auth: false, CheckedPids: [4321], EnableHttp: true, EnableSocks5: true, EnableAuth: false, Running: true, IsAdmin: true }
+      if (h === '#psauth') return { ...base, IsLoadDriver: true, Auth: false, CheckedPids: [4321], EnableHttp: true, EnableSocks5: true, EnableAuth: true, Running: true, IsAdmin: true }
+      return { ...base, IsLoadDriver: false, Auth: false, CheckedPids: [4321], EnableHttp: true, EnableSocks5: true, EnableAuth: false, Running: true, IsAdmin: true }
+    },
+    /*
+      ⚠️ IsCheck 必须跟着 getProcessSetting 的 CheckedPids 走 —— C# 那边它就是按
+      lstSelectProcessID 勾的。两份假数据自相矛盾的话，「一个都没选」那一档
+      （第 2 步待办 / 链路首节点熄灭）永远走不到。
+    */
+    getProcessRows: () => ({ rows: [{ IsCheck: location.hash !== '#ps0', ProcessName: 'game', ProcessID: 4321, ModuleName: 'game.exe', ProcessPath: '' }, { IsCheck: false, ProcessName: 'chrome', ProcessID: 8800, ModuleName: 'chrome.exe', ProcessPath: '' }, { IsCheck: false, ProcessName: 'explorer', ProcessID: 1200, ModuleName: 'explorer.exe', ProcessPath: '' }] }),
+    getProcessIcons: (a) => ({ icons: Object.fromEntries((a.paths || []).map((p, i) => [p, i % 4 === 3 ? '' : 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAOklEQVR42mNkYPhfz0AEYBxVSF+FjAxkAiZClY0qHFVIfYWMpEQNIxMDaWmRlKgZVTiqkPoKR8vDIQAAsWMK1J8CDLIAAAAASUVORK5CYII='])) }), addSelectProcessName: () => ({ ok: true }), removeSelectProcessName: () => ({ ok: true }),
     testSocksProxy: () => ({ error: '' }), saveProcessSetting: () => ({ error: '' }),
     getMapSetting: () => ({ enableLocal: true, enableRemote: false }), saveMapSetting: () => ({ ok: true }), pickLocalFile: () => ({ path: 'C:/data/config.json' }), saveMapLocal: () => ({ error: '' }), saveMapRemote: () => ({ error: '' }),
     getExtProxySetting: () => ({ Enable: true, IP: '10.0.0.5', Port: 8889, AppointPort: true, AppointPortContent: '80,443', Auth: false, UserName: '', PassWord: '' }), saveExtProxySetting: () => ({ error: '' }),
-    getHotkeySetting: () => ({ Type: 0, Keys: Array.from({ length: 12 }, (_, i) => 'Ctrl + Alt + F' + (i + 1)) }), registerHotkey: (a) => ({ ok: !a.text.includes('F4') }), saveHotkeyType: () => ({ ok: true }),
+    getHotkeySetting: () => { const hk = new URLSearchParams(location.search).get('hk'); return { Type: hk === 'robot' ? 1 : 0, Keys: Array.from({ length: 12 }, (_, i) => hk === 'none' ? '' : 'Ctrl + Alt + F' + (i + 1)) } }, registerHotkey: (a) => ({ ok: !a.text.includes('F4') }), saveHotkeyType: () => ({ ok: true }),
     exportBackup: () => ({ ok: true }), importBackup: () => ({ language: 'zh' }),
     getRemoteSetting: () => ({ IsRemote: true, IP: '192.168.1.10', IPs: ['192.168.1.10', '10.0.0.2'], Port: 88, UserName: 'admin', PassWord: 'x', Running: true }), saveRemoteSetting: () => ({ error: '', running: true }),
     setTopMost: (a) => ({ topMost: !!a.on }),
@@ -108,7 +157,16 @@
     getLeachSetting: () => ({ notShow: false, checkSocket: false, socketValue: '', checkIP: false, ipValue: '', checkPort: false, portValue: '', checkHead: false, headValue: '', checkData: false, dataValue: '', checkLen: false, lenValue: '', checkType: true, send: true, sendTo: false, recv: true, recvFrom: false, wsaSend: true, wsaSendTo: false, wsaRecv: true, wsaRecvFrom: false, tcpReq: true, tcpResp: true, udpReq: false, udpResp: false }),
     saveLeachSetting: (a) => { window.__leach = a; return { ok: true } },
     // 注入模式：假的进程列表 + 假的链路状态机（附加 → 装钩 → 断开）
-    enterInjectMode: () => ({ ok: true, lastInjection: 'game.exe' }),
+    //上次注入那条记录。#inject0 = 还没注入过（检测块的空态与「快捷注入」压暗那一支）
+    enterInjectMode: () => ({ ok: true, lastInject: location.hash === '#inject0'
+      ? { target: '', method: 0, path: '', args: '', time: '' }
+      : { target: 'game.exe', method: 2, path: 'D:/Games/game/bin/very/deep/path/that/goes/on/game.exe', args: '-windowed -novid', time: '2026-09-10 15:42:07' } }),
+
+    //快捷注入。#injectbad = 上次那个目标已经不在了（验兜底提示那条路）
+    injectQuick: () => location.hash === '#injectbad'
+      ? { ok: false, error: '找不到上次那个可执行文件：D:/Games/game/bin/very/deep/path/that/goes/on/game.exe' }
+      : (window.__inj = { state: 'attached', pid: 4321, name: 'game',
+          is64: true, hooked: false, dropped: 0, ws1: true, ws2: true, msws: false, ok: true }),
     //选择窗体：假装 1.2 秒后用户点中了 chrome，中间先推两条悬停
     pickWindow: () => new Promise((res) => {
       setTimeout(() => ls.forEach((cb) => cb({ data: { type: 'event', name: 'inject:hover', data: { pid: 8800, name: 'chrome', path: 'C:/Program Files/chrome.exe', title: 'New Tab' } } })), 300)
@@ -117,16 +175,60 @@
       setTimeout(() => res({ ok: true, pid: 4321, name: 'game', path: 'D:/Games/game.exe', title: 'MyGame' }), 2500)
     }),
     cancelPickWindow: () => { if (window.__cancelPick) window.__cancelPick(); return { ok: true } },
+    //⚠️ 40 条：3 条时表根本不出滚动条，「表头与行错列」那个 bug 就验不到（造假数据的老规矩）
+    //另外掺了一条<b>没有路径</b>的（取不到 MainModule 的进程），与一批很长的路径
     getInjectProcessList: () => ([
-      { ProcessName: 'game', ProcessID: 4321, ModuleName: 'game.exe', ProcessPath: 'D:/Games/game.exe' },
-      { ProcessName: 'chrome', ProcessID: 8800, ModuleName: 'chrome.exe', ProcessPath: 'C:/Program Files/chrome.exe' },
-      { ProcessName: 'notepad', ProcessID: 1200, ModuleName: 'notepad.exe', ProcessPath: 'C:/Windows/notepad.exe' },
+      { ProcessName: 'game', ProcessID: 1000, ModuleName: 'game.exe', ProcessPath: 'C:/Program Files/game/bin/very/deep/path/that/goes/on/game.exe' },
+      { ProcessName: 'chrome', ProcessID: 1137, ModuleName: 'chrome.exe', ProcessPath: 'C:/Windows/System32/chrome.exe' },
+      { ProcessName: 'notepad', ProcessID: 1274, ModuleName: 'notepad.exe', ProcessPath: 'C:/Windows/System32/notepad.exe' },
+      { ProcessName: 'explorer', ProcessID: 1411, ModuleName: 'explorer.exe', ProcessPath: 'C:/Program Files/explorer/bin/very/deep/path/that/goes/on/explorer.exe' },
+      { ProcessName: 'svchost', ProcessID: 1548, ModuleName: 'svchost.exe', ProcessPath: 'C:/Windows/System32/svchost.exe' },
+      { ProcessName: 'dwm', ProcessID: 1685, ModuleName: 'dwm.exe', ProcessPath: '' },
+      { ProcessName: 'conhost', ProcessID: 1822, ModuleName: 'conhost.exe', ProcessPath: 'C:/Program Files/conhost/bin/very/deep/path/that/goes/on/conhost.exe' },
+      { ProcessName: 'powershell', ProcessID: 1959, ModuleName: 'powershell.exe', ProcessPath: 'C:/Windows/System32/powershell.exe' },
+      { ProcessName: 'code', ProcessID: 2096, ModuleName: 'code.exe', ProcessPath: 'C:/Windows/System32/code.exe' },
+      { ProcessName: 'discord', ProcessID: 2233, ModuleName: 'discord.exe', ProcessPath: 'C:/Program Files/discord/bin/very/deep/path/that/goes/on/discord.exe' },
+      { ProcessName: 'steam', ProcessID: 2370, ModuleName: 'steam.exe', ProcessPath: 'C:/Windows/System32/steam.exe' },
+      { ProcessName: 'msedge', ProcessID: 2507, ModuleName: 'msedge.exe', ProcessPath: 'C:/Windows/System32/msedge.exe' },
+      { ProcessName: 'spotify', ProcessID: 2644, ModuleName: 'spotify.exe', ProcessPath: 'C:/Program Files/spotify/bin/very/deep/path/that/goes/on/spotify.exe' },
+      { ProcessName: 'obs64', ProcessID: 2781, ModuleName: 'obs64.exe', ProcessPath: 'C:/Windows/System32/obs64.exe' },
+      { ProcessName: 'wireshark', ProcessID: 2918, ModuleName: 'wireshark.exe', ProcessPath: 'C:/Windows/System32/wireshark.exe' },
+      { ProcessName: 'curl', ProcessID: 3055, ModuleName: 'curl.exe', ProcessPath: 'C:/Program Files/curl/bin/very/deep/path/that/goes/on/curl.exe' },
+      { ProcessName: 'node', ProcessID: 3192, ModuleName: 'node.exe', ProcessPath: 'C:/Windows/System32/node.exe' },
+      { ProcessName: 'python', ProcessID: 3329, ModuleName: 'python.exe', ProcessPath: 'C:/Windows/System32/python.exe' },
+      { ProcessName: 'javaw', ProcessID: 3466, ModuleName: 'javaw.exe', ProcessPath: 'C:/Program Files/javaw/bin/very/deep/path/that/goes/on/javaw.exe' },
+      { ProcessName: 'QQ', ProcessID: 3603, ModuleName: 'QQ.exe', ProcessPath: 'C:/Windows/System32/QQ.exe' },
+      { ProcessName: 'WeChat', ProcessID: 3740, ModuleName: 'WeChat.exe', ProcessPath: 'C:/Windows/System32/WeChat.exe' },
+      { ProcessName: 'Telegram', ProcessID: 3877, ModuleName: 'Telegram.exe', ProcessPath: 'C:/Program Files/Telegram/bin/very/deep/path/that/goes/on/Telegram.exe' },
+      { ProcessName: 'vlc', ProcessID: 4014, ModuleName: 'vlc.exe', ProcessPath: 'C:/Windows/System32/vlc.exe' },
+      { ProcessName: 'ffmpeg', ProcessID: 4151, ModuleName: 'ffmpeg.exe', ProcessPath: 'C:/Windows/System32/ffmpeg.exe' },
+      { ProcessName: 'nginx', ProcessID: 4288, ModuleName: 'nginx.exe', ProcessPath: 'C:/Program Files/nginx/bin/very/deep/path/that/goes/on/nginx.exe' },
+      { ProcessName: 'mysqld', ProcessID: 4425, ModuleName: 'mysqld.exe', ProcessPath: 'C:/Windows/System32/mysqld.exe' },
+      { ProcessName: 'redis-server', ProcessID: 4562, ModuleName: 'redis-server.exe', ProcessPath: 'C:/Windows/System32/redis-server.exe' },
+      { ProcessName: 'dotnet', ProcessID: 4699, ModuleName: 'dotnet.exe', ProcessPath: 'C:/Program Files/dotnet/bin/very/deep/path/that/goes/on/dotnet.exe' },
+      { ProcessName: 'devenv', ProcessID: 4836, ModuleName: 'devenv.exe', ProcessPath: 'C:/Windows/System32/devenv.exe' },
+      { ProcessName: 'ssh', ProcessID: 4973, ModuleName: 'ssh.exe', ProcessPath: 'C:/Windows/System32/ssh.exe' },
+      { ProcessName: 'ping', ProcessID: 5110, ModuleName: 'ping.exe', ProcessPath: 'C:/Program Files/ping/bin/very/deep/path/that/goes/on/ping.exe' },
+      { ProcessName: 'mstsc', ProcessID: 5247, ModuleName: 'mstsc.exe', ProcessPath: 'C:/Windows/System32/mstsc.exe' },
+      { ProcessName: 'taskmgr', ProcessID: 5384, ModuleName: 'taskmgr.exe', ProcessPath: 'C:/Windows/System32/taskmgr.exe' },
+      { ProcessName: 'regedit', ProcessID: 5521, ModuleName: 'regedit.exe', ProcessPath: 'C:/Program Files/regedit/bin/very/deep/path/that/goes/on/regedit.exe' },
+      { ProcessName: 'cmd', ProcessID: 5658, ModuleName: 'cmd.exe', ProcessPath: 'C:/Windows/System32/cmd.exe' },
+      { ProcessName: 'winlogon', ProcessID: 5795, ModuleName: 'winlogon.exe', ProcessPath: 'C:/Windows/System32/winlogon.exe' },
+      { ProcessName: 'lsass', ProcessID: 5932, ModuleName: 'lsass.exe', ProcessPath: 'C:/Program Files/lsass/bin/very/deep/path/that/goes/on/lsass.exe' },
+      { ProcessName: 'csrss', ProcessID: 6069, ModuleName: 'csrss.exe', ProcessPath: 'C:/Windows/System32/csrss.exe' },
+      { ProcessName: 'audiodg', ProcessID: 6206, ModuleName: 'audiodg.exe', ProcessPath: 'C:/Windows/System32/audiodg.exe' },
+      { ProcessName: 'SearchIndexer', ProcessID: 6343, ModuleName: 'SearchIndexer.exe', ProcessPath: 'C:/Program Files/SearchIndexer/bin/very/deep/path/that/goes/on/SearchIndexer.exe' },
     ]),
     pickTargetExe: () => ({ path: 'D:/Games/launcher.exe' }),
-    injectAttach: (a) => { window.__inj = { state: 'attached', pid: a.pid > 0 ? a.pid : 9999, name: a.pid > 0 ? 'game' : 'launcher', is64: true, hooked: false, dropped: 0, ws1: true, ws2: true, msws: false, ok: true }; return window.__inj },
+    //#injectfail = 注入失败那一支：必须留在选方式页并弹错误，不能进主页
+    injectAttach: (a) => location.hash === '#injectfail'
+      ? { ok: false, error: '注入失败（模拟）：EasyHook 找不到 WPEHook.dll' }
+      : (window.__inj = { state: 'attached', pid: a.pid > 0 ? a.pid : 9999, name: a.pid > 0 ? 'game' : 'launcher',
+          //⚠️ module（目标主窗口标题）已于 2026-09-10 从状态里删掉：状态条上那块读数窗早就撤了，
+          //而 C# 那边为了填它每秒要 EnumWindows 扫一遍整个桌面。别顺手加回来。
+          is64: true, hooked: false, dropped: 0, ws1: true, ws2: true, msws: false, ok: true }),
     injectStartHook: () => { window.__inj.hooked = true; setTimeout(pushInjectRows, 300); return window.__inj },
     injectStopHook: () => { window.__inj.hooked = false; return window.__inj },
-    injectDetach: () => { window.__inj = null; return { ok: true, state: 'idle', pid: 0, name: '', is64: false, hooked: false, dropped: 0, ws1: false, ws2: false, msws: false } },
     //注入模式封包列表的右键菜单：与代理那一族逐个对应，只是取另一张表
     copyPacketHex: (a) => ({ text: a.ids.map((i) => 'PK ' + i + ' : 48 45 4C 4C 4F').join(String.fromCharCode(10)) }),
     addPacketToSend: (a) => { window.__acted = a; return { count: a.ids.length } },
@@ -164,9 +266,34 @@
       不给应答的话主题与语言都会落到默认值，验不了「跟随系统」这一档。
       themeMode 与 isDark 是两个值：前者是用户选的那一档，后者是解析后的实际主题。
     */
-    getSystemCheck: () => ({ version: '2.1.8', isBeta: true, dbInstance: 'WPE64DB', socks5Addr: '0.0.0.0:1080', nativeDrag: true, language: 'zh-CN', themeMode: window.__themeMode || 'dark', isDark: (window.__themeMode || 'dark') !== 'light' }),
+    // ⚠️ httpAddr 空串 = 没启用 HTTP 代理，状态条那块端口牌会显示「未启用」并压暗；
+    //    #data0 就是拿来走这一支的，两种都得能验到（假数据要覆盖会走不同分支的取值）
+    getSystemCheck: () => ({ version: '2.1.8', isBeta: true, dbInstance: 'WPE64DB', socks5Addr: '10.172.190.252:1080', httpAddr: location.hash === '#data0' ? '' : '10.172.190.252:1081', nativeDrag: true, language: 'zh-CN', themeMode: window.__themeMode || 'dark', isDark: (window.__themeMode || 'dark') !== 'light' }),
     //记下来给脚本断言用；「字段出现才改」的稀疏协议在这里也照着走
     setAppearance: (a) => { if (a.mode != null) window.__themeMode = a.mode; if (a.isDark != null) window.__isDark = a.isDark; return { ok: true, isDark: !!window.__isDark, mode: window.__themeMode || 'dark' } },
+    /*
+      #cli 下半部的连接明细。没有这条应答的话那一半永远是「没有连接」，
+      表头、列对齐、滚动一项都验不到。
+
+      条数按 IP 给得不一样，而且 <b>10.10.10.9 那个故意多到会出滚动条</b> ——
+      「表头在滚动容器外面」那套（scrollbar-gutter + 表头补右内边距）只有出了滚动条才验得到。
+      三种出口都要有：直连（ServerAddress 与目标相同）、走外部代理、命中远程映射。
+    */
+    getClientConnections: (a) => {
+      const N = a.ip === '10.10.10.9' ? 40 : (a.ip === '203.0.113.7' ? 1 : 4);
+      return {
+        items: Array.from({ length: N }, (_, i) => {
+          const target = 'example' + (i % 7) + '.com:' + (i % 2 ? 443 : 80);
+          return {
+            ClientPort: 61000 + i,
+            Target: target,
+            DomainType: i % 4,
+            //每 5 条里有 1 条走上游代理、1 条命中映射，其余直连
+            ServerAddress: i % 5 === 1 ? '203.0.113.9:8080' : (i % 5 === 2 ? 'mirror.internal:8443' : target),
+          };
+        }),
+      };
+    },
     getListSetting: () => ({ showSocket: true, showType: true, showClientAddr: true, showClientLoc: true, showServerAddr: true, showServerLoc: true, showLen: true, autoClear: true, autoClearValue: 5000 }),
     getStats: () => ({ queue: 0, list: 40, total: 40, autoClear: true, autoClearValue: 5000, proxyRunning: true, socks5Addr: '0.0.0.0:1080', onlineInfo: '1/3', totalRequest: 1024, totalResponse: 2048, speedUp: 0, speedDown: 0 }),
     //查找：偶数次命中第 7 行、奇数次没命中，用来同时验「命中」与「没有匹配」两条路
@@ -185,9 +312,42 @@
       if (!h) return { Found: false, Id: 0, Index: -1, Offset: -1, Length: 0, NextPos: 0, Error: null };
       return { Found: true, Id: h.Id, Index: h.Index, Offset: h.Offset, Length: h.Length, NextPos: h.Pos + 2, Error: null };
     },
-    getPacketDetail: (a) => { const raw = atob(sample); const mod = raw.slice(0,3) + String.fromCharCode(0x99,0x98) + raw.slice(5) + String.fromCharCode(1, 2); return { id: a.id, packet: btoa(mod), raw: sample, modified: true } },
+    /*
+      查看数据修改用的两份字节。⚠️ 三种变更都要覆盖，否则并排视图与差异表里的
+      ins / del 两支永远走不到（假数据要覆盖会走不同分支的取值）：
+        · 改 —— 偏移 3~4 换掉两个字节
+        · 删 —— 偏移 20 起的 4 个字节没了
+        · 增 —— 同一处插进 3 个，末尾再追加 2 个
+      长度因此前后不等，正好也验「按位置逐字节比会整体错位、Myers 不会」。
+    */
+    getPacketDetail: (a) => {
+      const raw = atob(sample);
+      const mod = raw.slice(0, 3) + String.fromCharCode(0x99, 0x98) + raw.slice(5, 20)
+        + String.fromCharCode(0xAA, 0xBB, 0xCC) + raw.slice(24) + String.fromCharCode(1, 2);
+      return { id: a.id, packet: btoa(mod), raw: sample, modified: true };
+    },
   };
-  window.__inst = [{ t: 2, c: '3' }, { t: 1, c: '100' }, { t: 4, c: 'Press|A' }, { t: 3, c: '' }];
+  /*
+    假指令集要覆盖<b>会走不同分支</b>的那些形状，否则程序流那一栏等于没验：
+    ① <b>循环套循环</b>（缩进两层）② 每种类型都出现一次（七个色轨）
+    ③ #robot0 另给一份<b>配不上对</b>的（多一个循环结束 + 一个没闭合的循环开始），
+       验「没有闭合 / 没有对应的开始」两个红标记。
+  */
+  window.__inst = location.hash === '#robot0'
+    ? [{ t: 3, c: '' }, { t: 1, c: '50' }, { t: 2, c: '2' }, { t: 4, c: 'Press|A' }]
+    : [
+      { t: 7, c: 'Customize|3448' },
+      { t: 2, c: '3' },
+      { t: 0, c: '登录重放' },
+      { t: 2, c: '5' },
+      { t: 1, c: '100-200' },
+      { t: 4, c: 'Combine|Ctrl + Shift + A' },
+      { t: 3, c: '' },
+      { t: 5, c: 'MoveTo|960, 540' },
+      { t: 3, c: '' },
+      { t: 8, c: 'Enable|SendList|刷怪' },
+      { t: 6, c: '' },
+    ];
   window.__rules = [{ Id: 'R1', IsEnable: true, Type: 1, TypeName: 'DOMAIN-SUFFIX', Argument: 'example.com', Action: 0 }, { Id: 'R2', IsEnable: false, Type: 5, TypeName: 'MATCH', Argument: '', Action: 2 }];
   const ls = [];
   window.__asks = {};
@@ -214,11 +374,17 @@
 </head><body><div id="app"></div>
 <script type="module">
   import { createApp, h } from 'vue'
-  import '/src/style.css'
   import PacketEdit from '/src/components/proxy/PacketEdit.vue'
   import ToastStack from '/src/components/ToastStack.vue'
   import HexPanel from '/src/components/HexPanel.vue'
   import ProxyData from '/src/components/proxy/ProxyData.vue'
+  /*
+    ⚠️ 必须带 .ts 后缀（与上面 i18n 那条同一个坑）：'/src/stores/runtime' 与组件里写的
+    '../../stores/runtime' 会被解析成两个 URL，也就是两份模块状态，塞进去组件读不到。
+    #data 这一屏只挂 ProxyData、不挂 App.vue，getSystemCheck 压根没人调 ——
+    状态条上那两块端口牌的值要探针自己种，否则永远是「— / 未启用」，那两支就都验不到。
+  */
+  import { httpAddr, socks5Addr } from '/src/stores/runtime.ts'
   import App from '/src/App.vue'
   import FireWallSetting from '/src/components/proxy/FireWallSetting.vue'
   import SystemLog from '/src/components/proxy/SystemLog.vue'
@@ -228,8 +394,18 @@
   import ConfirmDialog from '/src/components/ConfirmDialog.vue'
   import { attachUiHost } from '/src/bridge/host'
   import { installTooltip } from '/src/tooltip'
+  import { onMounted, ref, watchEffect } from 'vue'
+  /*
+    ⚠️ <b>必须带 .ts 后缀。</b>写 '/src/i18n' 的话浏览器按<b>那个 URL</b> 缓存模块，
+    而 .vue 里的 import 被 Vite 解析成 '/src/i18n.ts' —— 两个 URL 就是<b>两份模块状态</b>，
+    于是这里改 lang，组件那边纹丝不动（第一次就撞上了，切语言只有一半界面跟着变）。
+    /src/bridge/host 与 /src/tooltip 看不出问题，只因为探针页从它们那儿取的是<b>函数</b>；
+    lang 是模块级 ref，两份就当场显形。
+  */
+  import { defOf, lang } from '/src/i18n.ts'
   import PacketModification from '/src/components/proxy/PacketModification.vue'
   import RobotEdit from '/src/components/proxy/RobotEdit.vue'
+  import SendEdit from '/src/components/proxy/SendEdit.vue'
   import TextCompare from '/src/components/proxy/TextCompare.vue'
   import XorCalc from '/src/components/proxy/XorCalc.vue'
   import Transcode from '/src/components/proxy/Transcode.vue'
@@ -244,8 +420,18 @@
   import BackupSetting from '/src/components/proxy/BackupSetting.vue'
   import RemoteSetting from '/src/components/proxy/RemoteSetting.vue'
   import InjectView from '/src/components/InjectView.vue'
+  import FilterList from '/src/components/proxy/FilterList.vue'
+  import SendList from '/src/components/proxy/SendList.vue'
+  import RobotList from '/src/components/proxy/RobotList.vue'
   import { useList } from '/src/stores/lists'
   import { FeedList } from '/src/bridge/types'
+  /*
+    ⚠️ style.css 必须排在所有组件之后 import —— 与 main.ts（先 App.vue 再 style.css）同序。
+    打包产物里组件的 scoped 样式在前、style.css 在后，特异度打平时<b>全局那条赢</b>；
+    原来这里第一个 import 它，dev 下注入顺序反过来，平局就变成<b>组件那条赢</b> ——
+    探针页与真程序渲染不一样且不报错（2026-09-11 撞到：发送编辑的表头这里是 12.5px，真程序是 10.5px）。
+  */
+  import '/src/style.css'
   // 设置页与 WPC 页要的几份列表副本：直接写进 store
   useList(FeedList.Filter).value = [
     { Id: 'F1', IsEnable: true, Name: '登录包', ExecutionCount: 120, Action: 0, Mode: 0 },
@@ -256,22 +442,116 @@
   useList(FeedList.Server).value = [{ Id: 'S1', IsEnable: true, Name: '华东节点', IP: '101.227.22.133', Port: 1080, ForgotURL: 'https://wpe64.com/forgot', RegisterURL: 'https://wpe64.com/reg', VerifyURL: '', RuleCount: 2 }, { Id: 'S2', IsEnable: false, Name: '备用', IP: '10.0.0.8', Port: 1081, ForgotURL: '', RegisterURL: '', VerifyURL: '', RuleCount: 0 }]
   useList(FeedList.Notice).value = [{ Id: 'N1', Type: 1, Title: '周末双倍活动', Content: '……', More: 'https://wpe64.com/news/1', Time: '2026-09-04 18:00:00' }, { Id: 'N2', Type: 2, Title: '例行维护', Content: '……', More: '', Time: '2026-09-03 09:00:00' }]
   useList(FeedList.SelectProcess).value = [{ IsCheck: false, ProcessName: 'game', ProcessID: 0, ModuleName: 'game.exe', ProcessPath: '' }]
-  useList(FeedList.MapLocal).value = [{ Id: 'L1', IsEnable: true, Protocol: 0, Host: 'cdn.example.com', Port: 80, RemotePath: '/config.json', LocalPath: 'C:\\data\\config.json' }]
-  useList(FeedList.MapRemote).value = [{ Id: 'M1', IsEnable: false, IsCheck: false, ProtocolFrom: 0, HostFrom: 'api.example.com', PortFrom: 80, PathFrom: '/v1', ProtocolTo: 1, HostTo: '127.0.0.1', PortTo: 8443, PathTo: '/v1' }]
+  /*
+    ⚠️ 第二条<b>刻意给一个很长的路径</b>：短地址在 900 宽的弹窗里根本不会溢出，
+    「主机不收缩 + 路径从头省略」那条分支就一次都走不到（假数据要覆盖会走不同分支的取值）。
+  */
+  useList(FeedList.MapLocal).value = [
+    { Id: 'L1', IsEnable: true, Protocol: 0, Host: 'cdn.example.com', Port: 80, RemotePath: '/config.json', LocalPath: 'C:/data/config.json' },
+    { Id: 'L2', IsEnable: true, Protocol: 0, Host: 'static.assets.example-cdn.com', Port: 8080, RemotePath: '/v3/release/2026/09/bundle/app.min.config.json', LocalPath: 'C:/data/bundle/app.min.config.json' },
+  ]
+  useList(FeedList.MapRemote).value = [
+    { Id: 'M1', IsEnable: false, IsCheck: false, ProtocolFrom: 0, HostFrom: 'api.example.com', PortFrom: 80, PathFrom: '/v1', ProtocolTo: 1, HostTo: '127.0.0.1', PortTo: 8443, PathTo: '/v1' },
+    { Id: 'M2', IsEnable: true, IsCheck: false, ProtocolFrom: 0, HostFrom: 'gateway.api.example.com', PortFrom: 80, PathFrom: '/service/v2/account/profile/detail', ProtocolTo: 0, HostTo: '127.0.0.1', PortTo: 9000, PathTo: '/mock/account/profile/detail' },
+  ]
+  //#lists：发送与机器人各 3 行 —— 提示条是 rows.length > 1 才出的
+  useList(FeedList.Send).value = [
+    { Id: 'S1', IsEnable: true, Name: '登录重放', SystemSocket: false, Socket: 3448, LoopCount: 1, LoopInterval: 100, ExecutionCount: 4, SuccessCount: 4, FailCount: 0, PacketCount: 3, Notes: '' },
+    { Id: 'S2', IsEnable: false, Name: '心跳', SystemSocket: true, Socket: 0, LoopCount: 0, LoopInterval: 0, ExecutionCount: 0, SuccessCount: 0, FailCount: 0, PacketCount: 0, Notes: '空发送集' },
+    { Id: 'S3', IsEnable: true, Name: '刷怪', SystemSocket: false, Socket: 3450, LoopCount: 5, LoopInterval: 200, ExecutionCount: 12, SuccessCount: 11, FailCount: 1, PacketCount: 8, Notes: '' },
+  ]
+  useList(FeedList.Robot).value = [
+    { Id: 'R1', IsEnable: true, Name: '自动打怪', ExecutionCount: 9, InstructionCount: 12 },
+    { Id: 'R2', IsEnable: false, Name: '自动捡物', ExecutionCount: 0, InstructionCount: 0 },
+    { Id: 'R3', IsEnable: true, Name: '自动回城', ExecutionCount: 2, InstructionCount: 5 },
+  ]
   const older = await Promise.all(['ProxySetting', 'ListSetting', 'LeachSetting', 'HookSetting', 'SystemSetting', 'FireWallSetting'].map((n) => import('/src/components/proxy/' + n + '.vue').then((m) => m.default)))
-  const settingComp = { '#ps': ProcessSetting, '#map': MapSetting, '#xp': ExtProxySetting, '#hk': HotkeySetting, '#bk': BackupSetting, '#rm': RemoteSetting,
-    '#o-proxy': older[0], '#o-list': older[1], '#o-leach': older[2], '#o-hook': older[3], '#o-sys': older[4], '#o-fw': older[5] }[location.hash]
+  useList(FeedList.SelectProcess).value = location.hash === '#ps0' ? []
+    : [{ IsCheck: false, ProcessName: 'notepad', ProcessID: 0, ModuleName: 'notepad.exe', ProcessPath: '' }]
+  const settingComp = { '#ps': ProcessSetting, '#ps0': ProcessSetting, '#psok': ProcessSetting, '#psauth': ProcessSetting,
+    '#map': MapSetting, '#xp': ExtProxySetting, '#hk': HotkeySetting, '#bk': BackupSetting, '#rm': RemoteSetting,
+    '#o-proxy': older[0], '#o-proxy0': older[0], '#o-list': older[1], '#o-leach': older[2], '#o-hook': older[3], '#o-sys': older[4], '#o-fw': older[5] }[location.hash]
   installTooltip()   //自绘悬停提示，产品里由 main.ts 装，这儿要自己来一次才验得到
 
+  /*
+    ⚠️ 跟着语言走的那两个令牌，产品里由 App.vue 的 watchEffect 写在 :root 上 ——
+    探针页没有 App.vue，不补的话它们退回默认 1，<b>俄语 / 越南语下量到的标签列比产品窄</b>，
+    于是「多语言会不会挤」在这儿永远验不准（这一屏第一次验就撞上了）。
+  */
+  watchEffect(() => {
+    const wide = defOf(lang.value).wide
+    document.documentElement.style.setProperty('--setf-kx', wide ? '1.3' : '1')
+    document.documentElement.style.setProperty('--side-w', wide ? '228px' : '196px')
+  })
+
+  //验证脚本切语言的唯一入口：console 里自己 import 会拿到另一份模块状态（见上面那段）
+  window.__lang = lang
+
+  /*
+    设置弹窗的多语言体检：七种语言各切一遍，量「自己滚不了却装不下」与「真的被省略号截了」。
+    ⚠️ 别靠眼睛看 —— 俄语 / 越南语比中文长一半，出问题的往往是某一格里的一个词。
+    放在探针页而不是每次往 console 里贴：reload 之后它还在，逐屏扫才跑得动。
+  */
+  window.__scan = async function () {
+    const LANGS = ['zh', 'tw', 'en', 'ja', 'ko', 'vi', 'ru']
+    const bad = []
+    for (const L of LANGS) {
+      lang.value = L
+      await new Promise((r) => setTimeout(r, 90))
+      const dlg = document.querySelector('.dlg')
+      if (!dlg) { bad.push(L + ': 没有弹窗'); continue }
+      for (const el of dlg.querySelectorAll('*')) {
+        const cs = getComputedStyle(el)
+        if (el.clientWidth > 0 && el.scrollWidth > el.clientWidth + 2 && cs.overflowX === 'visible') {
+          bad.push(L + ' 横向溢出 ' + (el.className || el.tagName) + ' ' + el.scrollWidth + '/' + el.clientWidth)
+        }
+        /*
+          ⚠️ 带<b>绝对定位子元素</b>的格子要跳过 —— 表头那条 7px 的列宽拖拽手柄
+          （position: absolute）会把 scrollWidth 撑出 8px，而文字一个字都没被截。
+          不排掉它，防火墙那张表七种语言全都会报「截断」，全是假的。
+        */
+        const hasAbs = [...el.children].some((c) => getComputedStyle(c).position === 'absolute')
+        /*
+          ⚠️ 「被省略号截了、但完整值悬停看得见」不算问题 —— 那是全项目既定的口径
+          （仓库备注、映射的长地址、查重的位置列都是这么处理的）。
+          判据：自己或某个祖先带着 data-tip / title，且那段文本<b>包含</b>本元素的全文。
+          （自绘提示是全局摘除 title 的，所以要一起认 data-tip。）
+        */
+        const full = (el.textContent || '').trim()
+        let tipped = false
+        for (let a2 = el; a2 && a2 !== dlg; a2 = a2.parentElement) {
+          const tip = a2.getAttribute('data-tip') || a2.getAttribute('title')
+          if (tip && full && tip.includes(full)) { tipped = true; break }
+        }
+        if (!hasAbs && !tipped && el.clientWidth > 0 && cs.textOverflow === 'ellipsis' && cs.whiteSpace === 'nowrap' && el.scrollWidth > el.clientWidth + 1) {
+          bad.push(L + ' 截断 ' + (el.className || el.tagName) + ' 「' + (el.textContent || '').trim().slice(0, 18) + '」')
+        }
+      }
+      const b = dlg.querySelector('.bd')
+      if (dlg.getBoundingClientRect().width > innerWidth) bad.push(L + ' 弹窗宽过视口')
+      if (b && b.scrollWidth > b.clientWidth + 2) bad.push(L + ' 内容区横向溢出 ' + b.scrollWidth + '/' + b.clientWidth)
+    }
+    lang.value = 'zh'
+    await new Promise((r) => setTimeout(r, 60))
+    return bad.length ? [...new Set(bad)] : 'clean'
+  }
+
   const httpMode = location.hash === '#http'
-  const dataPage = location.hash === '#data'
+  //#data0 与 #data 同一屏，只差 getSystemCheck 给不给 httpAddr —— 验状态条那块端口牌的两支
+  const dataPage = location.hash === '#data' || location.hash === '#data0'
+  if (dataPage) {
+    socks5Addr.value = '10.172.190.252:1080'
+    httpAddr.value = location.hash === '#data0' ? '' : '10.172.190.252:1081'
+  }
   const appPage = location.hash === '#app'
   const fwPage = location.hash === '#fw'
   const logPage = location.hash === '#log'
   const quickPage = location.hash === '#quick'
   const cliPage = location.hash === '#cli'
   const acctPage = location.hash === '#acct'
-  const injectPage = location.hash === '#inject'
+  //四档：#inject 有上次记录 · #inject0 还没注入过 · #injectbad 上次的目标已经没了 · #injectfail 这次注入失败
+  const injectPage = location.hash === '#inject' || location.hash === '#inject0'
+    || location.hash === '#injectbad' || location.hash === '#injectfail'
   if (injectPage) attachUiHost()   //注入失败会弹提示
   if (acctPage) {
     //乱序 + 有/无限制 + 有/无到期，用来验排序把「不限制 / 永不过期」排到最后
@@ -315,10 +595,28 @@
     { IPAddress: '10.10.10.8', StartIP: 0, EndIP: 0, IPLocation: '局域网', EffectCount: 3, IsExpiry: false, ExpiryTime: '', CreateTime: '2026-09-05 08:00:00' },
     { IPAddress: '203.0.113.7', StartIP: 0, EndIP: 0, IPLocation: '美国', EffectCount: 0, IsExpiry: true, ExpiryTime: '2026-09-06 08:00:00', CreateTime: '2026-09-05 08:00:00' },
   ]
+  //三条提示条要并排看才比得出「统一了没有」
+  const listsPage = location.hash === '#lists' || location.hash === '#lists0'
+  if (listsPage) attachUiHost()
   const page = location.hash === '#panel' || httpMode
   const modify = location.hash === '#modify'
-  const robot = location.hash === '#robot'
-  const tool = { '#tc': TextCompare, '#xor': XorCalc, '#tr': Transcode, '#ex': ExtractData, '#stat': StatData, '#wpc': WpcConfig }[location.hash] || (settingComp ? { setup: () => () => h(settingComp, { open: true, 'onUpdate:open': () => { window.__closed = true } }) } : null)
+  const robot = location.hash === '#robot' || location.hash === '#robot0'   //#robot0：循环配不上对的那一份
+  const sendEdit = location.hash === '#send' || location.hash === '#send0'
+  const tool = { '#tc': TextCompare, '#xor': XorCalc, '#tr': Transcode, '#ex': ExtractData, '#stat': StatData, '#wpc': WpcConfig }[location.hash] || (settingComp ? {
+    /*
+      ⚠️ open 要从 false 翻成 true，不能一上来就 true。
+
+      各设置屏的取数挂在 watch(() => props.open) 上，而那些 watch <b>没有 immediate</b> ——
+      直接以 open: true 挂载，它一次都不会触发。别的屏因为 form 有默认值看不出来，
+      代理设置却会卡在「取字节中…」（它的 s 在取到之前是 null）——
+      于是那一屏在探针页里<b>从来没打开过</b>，一直只能靠真程序看。
+    */
+    setup: () => {
+      const o = ref(false)
+      onMounted(() => { o.value = true })
+      return () => h(settingComp, { open: o.value, 'onUpdate:open': (v) => { if (!v) window.__closed = true } })
+    },
+  } : null)
   if (tool) { const NL = String.fromCharCode(10); textA.value = 'AA BB CC 11 22 AA BB CC' + NL + 'Hello World'; textB.value = 'AA 00 CC 11 22 AA BB CC' + NL + 'Hello there'; xorSrc.value = new Uint8Array([0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x21]) }
   if (dataPage) {
     /*
@@ -349,6 +647,10 @@
     }, 400);
   }
 
-  createApp({ render: () => injectPage ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(InjectView)]), h(ConfirmDialog), h(ToastStack)] : acctPage ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(AccountList)]), h(ToastStack)] : appPage ? [h(App)] : logPage ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(SystemLog)]), h(ConfirmDialog), h(ToastStack)] : quickPage ? [h('div', { style: 'position:fixed;inset:40px;width:320px' }, [h(QuickPanel)]), h(ToastStack)] : cliPage ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(ClientList)]), h(ToastStack)] : fwPage ? [h(FireWallSetting, { open: true, 'onUpdate:open': () => {} }), h(ConfirmDialog), h(ToastStack)] : tool ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(tool)]), h(ToastStack)] : robot ? [h(RobotEdit, { id: 'R1', onClose: () => { window.__closed = true } }), h(ToastStack)] : modify ? [h(PacketModification, { id: 314, onClose: () => { window.__closed = true } }), h(ToastStack)] : dataPage ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(ProxyData)]), h(ToastStack)] : page ? [h('div', { style: 'position:fixed;inset:40px;display:flex' }, [h(HexPanel, { id: 314, packetType: httpMode ? 17 : 0, highlight: { offset: 9, length: 6 } })]), h(ToastStack)] : [h(PacketEdit, { target: { list: 'proxy', id: 1 }, onClose: () => { window.__closed = true } }), h(ToastStack)] }).mount('#app')
+  createApp({ render: () => listsPage ? [h('div', { style: 'position:fixed;inset:0;display:flex;flex-direction:column' }, [
+      h('div', { style: 'flex:1;display:flex;min-height:0' }, [h(FilterList)]),
+      h('div', { style: 'flex:1;display:flex;min-height:0' }, [h(SendList)]),
+      h('div', { style: 'flex:1;display:flex;min-height:0' }, [h(RobotList)]),
+    ]), h(ConfirmDialog), h(ToastStack)] : injectPage ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(InjectView)]), h(ConfirmDialog), h(ToastStack)] : acctPage ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(AccountList)]), h(ToastStack)] : appPage ? [h(App)] : logPage ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(SystemLog)]), h(ConfirmDialog), h(ToastStack)] : quickPage ? [h('div', { style: 'position:fixed;inset:40px;width:320px' }, [h(QuickPanel)]), h(ToastStack)] : cliPage ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(ClientList)]), h(ToastStack)] : fwPage ? [h(FireWallSetting, { open: true, 'onUpdate:open': () => {} }), h(ConfirmDialog), h(ToastStack)] : tool ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(tool)]), h(ToastStack)] : sendEdit ? [h(SendEdit, { id: 'S1', onClose: () => { window.__closed = true } }), h(ToastStack)] : robot ? [h(RobotEdit, { id: 'R1', onClose: () => { window.__closed = true } }), h(ToastStack)] : modify ? [h(PacketModification, { id: 314, onClose: () => { window.__closed = true } }), h(ToastStack)] : dataPage ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(ProxyData)]), h(ToastStack)] : page ? [h('div', { style: 'position:fixed;inset:40px;display:flex' }, [h(HexPanel, { id: 314, packetType: httpMode ? 17 : 0, highlight: { offset: 9, length: 6 } })]), h(ToastStack)] : [h(PacketEdit, { target: { list: 'proxy', id: 1 }, onClose: () => { window.__closed = true } }), h(ToastStack)] }).mount('#app')
 </script>
 </body></html>

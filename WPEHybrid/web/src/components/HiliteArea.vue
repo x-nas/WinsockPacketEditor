@@ -104,7 +104,7 @@ defineExpose({ focusAt })
   margin: 0;
   padding: 8px 10px;
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: var(--fs-body);
   line-height: 18px;
   white-space: pre;
   tab-size: 4;
@@ -122,6 +122,9 @@ defineExpose({ focusAt })
   resize: none;
   overflow: auto;
 }
+
+/* 焦点由外层容器的边框表示（TextCompare 的 .iop），这里不画环 —— 见 style.css 的 .inp:focus */
+.ha-ta:focus-visible { outline: none; }
 
 .ha-ta::placeholder { color: var(--dim); }
 .ha-ta::selection { background: rgb(var(--cyan-rgb) / 28%); }

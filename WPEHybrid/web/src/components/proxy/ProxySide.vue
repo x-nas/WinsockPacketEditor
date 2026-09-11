@@ -100,15 +100,13 @@ function fmt(n: number | undefined): string {
         v-for="p in g.items"
         :key="p.key"
         class="sb-item"
-        :class="{ on: p.key === props.current, off: !p.ready }"
+        :class="{ on: p.key === props.current }"
         role="button"
-        :tabindex="p.ready ? 0 : -1"
-        :aria-disabled="!p.ready"
+        tabindex="0"
         :aria-current="p.key === props.current ? 'page' : undefined"
-        :title="p.ready ? undefined : t('proxy.notReady')"
-        @click="p.ready && emit('go', p.key)"
-        @keydown.enter.prevent="p.ready && emit('go', p.key)"
-        @keydown.space.prevent="p.ready && emit('go', p.key)"
+        @click="emit('go', p.key)"
+        @keydown.enter.prevent="emit('go', p.key)"
+        @keydown.space.prevent="emit('go', p.key)"
       >
         <svg class="ico" viewBox="0 0 24 24" v-html="p.icon" />
         <!-- 加宽之后仍可能被截（比如俄语的「Извлечение данных」），悬停能看到全名 -->
@@ -129,7 +127,7 @@ function fmt(n: number | undefined): string {
 
 .sb-cap {
   font-family: var(--share);
-  font-size: 9px;
+  font-size: var(--fs-caption);
   letter-spacing: .26em;
   text-transform: uppercase;
   color: var(--dim);
@@ -145,7 +143,7 @@ function fmt(n: number | undefined): string {
   gap: 10px;
   padding: 7px 18px;
   color: var(--muted);
-  font-size: 12.5px;
+  font-size: var(--fs-body);
   cursor: pointer;
   /* 选中态用左侧竖条，不用整块反色 —— 侧栏很窄，反色会显得脏 */
   border-left: 2px solid transparent;
@@ -157,11 +155,11 @@ function fmt(n: number | undefined): string {
 
 .sb-item .n {
   font-family: var(--share);
-  font-size: 10px;
+  font-size: var(--fs-caption);
   color: var(--dim);
 }
 
-.sb-item:hover:not(.off) { color: var(--gray); background: rgb(var(--tint-rgb) / 3%); }
+.sb-item:hover { color: var(--gray); background: rgb(var(--tint-rgb) / 3%); }
 
 .sb-item.on {
   color: var(--cyan);
@@ -170,9 +168,6 @@ function fmt(n: number | undefined): string {
 }
 
 .sb-item.on .n { color: var(--cyan); }
-
-/* 还没做的页面：压暗但仍显示，点了不响应（与启动页注入卡同一套口径）*/
-.sb-item.off { opacity: .42; cursor: default; }
 
 /* 焦点环画在内侧：侧栏右边就是内容区的边界，正偏移会压过去 */
 .sb-item:focus-visible { outline-offset: -2px; }

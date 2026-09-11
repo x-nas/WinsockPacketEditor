@@ -1,330 +1,243 @@
-﻿<!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=420, initial-scale=1">
-    <link rel="icon" href="./web_images/wpe.ico" />
-    <link rel="stylesheet" type="text/css" href="./web_images/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="./web_images/github-dark.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="./web_images/print.css" media="print">
-    <link rel="stylesheet" type="text/css" href="./web_images/downloads.css" media="all">
-    <script src="./web_images/jquery-1.11.3.min.js" type="text/javascript"></script>
-    <script src="./web_images/script.js" type="text/javascript"></script>
-
-    <title>Winsock Packet Editor</title>
-
-    <style>
-        .bold {
-            font-weight: bold;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-            display: none;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        .button-container {
-            margin-bottom: 10px;
-        }
-
-            .button-container button {
-                margin-right: 10px;
-                padding: 5px 10px;
-                cursor: pointer;
-                background-color: #f9f9f9;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-            }
-
-                .button-container button.active {
-                    background-color: #4CAF50;
-                    color: white;
-                    border-color: #4CAF50;
-                }
-    </style>
+    <meta charset="UTF-8">
+    <!--
+        ⚠️ 旧版这里写的是 width=420 —— 定死 420px，手机上就是一张缩得看不清的图。
+        viewport-fit=cover 配合 wpe.css 里的 env(safe-area-inset-*)，
+        刘海屏上内容不会钻到状态栏和圆角底下。
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#0a0a0f">
+    <!-- 管理台是内网的实时状态，不该被任何中间层缓存 -->
+    <meta http-equiv="Cache-Control" content="no-store">
+    <title>总览 · WPE x64</title>
+    <!--
+      站点图标 = <b>程序自己的那枚</b>（exe 的 ApplicationIcon）。
+      Web/wpe.ico 是 ../wpe.ico 的<b>子集</b>：只留 16/32/48 三层（浏览器用得到的），
+      源图 361KB -> 14.7KB —— 256x256 那一层单独就 270KB，是给 Explorer 大图标用的，
+      标签页图标一辈子用不到，整份带上等于每个访问者白下 361KB。
+      ⚠️ 换了源图要重新生成：见 CLAUDE.md「管理台的站点图标」。
+    -->
+    <link rel="icon" href="./wpe.ico" sizes="48x48 32x32 16x16">
+    <!-- 令牌在前、组件样式在后：tokens.css 与外壳的 Vue 界面是同一个源文件 -->
+    <link rel="stylesheet" href="./tokens.css">
+    <link rel="stylesheet" href="./wpe.css">
+    <!--
+        ⚠️ 这里<b>不能</b>加 defer。延迟脚本要等整份文档解析完才执行，
+        而页尾那段内联脚本是解析到就跑的 —— 加了 defer 就会「内联先跑、
+        wpe.js 后跑」，页面上是一片「—」加一个 poll is not defined。
+        它只有 6KB 且与页面同机，同步加载的代价可以忽略。
+    -->
+    <script src="./wpe.js"></script>
 </head>
 
-<body style="padding: 0px 0px 154px;">
-    <div id="container" style="height: auto !important; min-height: 0px !important;">
-        <div class="inner" style="height: auto !important;">
-            <div id="header-container"></div>
-            <section id="main_content" style="height: auto !important;">
+<body>
+    <div class="pcb"></div>
+    <span class="cn tl"></span><span class="cn tr"></span>
+    <span class="cn bl"></span><span class="cn br"></span>
 
-                <h2>>> 系统监控</h2>
+    <header class="top">
+        <div class="brand">WPE <small>x64</small></div>
+        <nav class="nav">
+            <a href="index.html">总览</a>
+            <a href="ProxyAccount.html">账号</a>
+            <a href="SystemLog.html">日志</a>
+        </nav>
+        <span class="led" id="led"></span>
+    </header>
 
-                <div class="button-container">
-                    <button id="btnSystem" class="active">查看服务器状态</button>
-                    <button id="btnSocket">查看封包数据</button>
-                    <button id="btnProxy">查看代理数据</button>
+    <main class="wrap">
+        <!-- ── 系统 ───────────────────────────────── -->
+        <section class="card">
+            <div class="hd">
+                <h2>系统</h2>
+                <span class="sub">System</span>
+                <span class="grow"></span>
+                <button class="btn" id="btnPause" type="button">暂停刷新</button>
+            </div>
+            <div class="bd">
+                <div class="stats">
+                    <div class="st">
+                        <div class="k">CPU</div>
+                        <div class="v" id="cpu">—</div>
+                        <div class="bar"><i id="cpuBar"></i></div>
+                    </div>
+                    <div class="st cy">
+                        <div class="k">内存</div>
+                        <div class="v" id="mem">—</div>
+                        <div class="bar cy"><i id="memBar"></i></div>
+                    </div>
+                    <div class="st">
+                        <div class="k">运行时长</div>
+                        <div class="v" id="uptime">—</div>
+                        <div class="z" id="startAt">—</div>
+                    </div>
+                    <div class="st mg">
+                        <div class="k">当前模式</div>
+                        <div class="v" id="mode">—</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── 代理模式 ───────────────────────────── -->
+        <section class="card">
+            <div class="hd">
+                <h2>代理模式</h2>
+                <span class="sub">Proxy</span>
+                <span class="grow"></span>
+                <span class="sub" id="proxyMode">—</span>
+            </div>
+            <div class="bd">
+                <div class="stats">
+                    <div class="st"><div class="k">代理总数</div><div class="v" id="pTotal">—</div></div>
+                    <div class="st cy"><div class="k">TCP</div><div class="v" id="pTCP">—</div></div>
+                    <div class="st mg"><div class="k">UDP</div><div class="v" id="pUDP">—</div></div>
+                    <div class="st am"><div class="k">连接数</div><div class="v" id="pLinks">—</div></div>
+                    <div class="st"><div class="k">待处理</div><div class="v" id="pCache">—</div></div>
                 </div>
 
-                <table id="systemTable">
-                    <thead>
-                        <tr>
-                            <th class="bold">服务器</th>
-                            <th><span id="SelectMode"></span></th>
-                        </tr>
-                    </thead>
-                    <tr>
-                        <td>
-                            <img src="./images/cpu.png" style="vertical-align: middle;">
-                        </td>
-                        <td>
-                            <span id="CPU" class="bold">0%</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <img src="./images/mem.png" style="vertical-align: middle;">
-                        </td>
-                        <td>
-                            <span id="MEM" class="bold">0%</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <img src="./images/Time.png" style="vertical-align: middle;">
-                        </td>
-                        <td>
-                            <span id="ServerUptime"></span>
-                        </td>
-                    </tr>
-                </table>
+                <div class="stats wide" style="margin-top:12px">
+                    <div class="st cy"><div class="k">在线账号</div><div class="v z" id="pOnline">—</div></div>
+                    <div class="st"><div class="k">实时速率</div><div class="v z" id="pSpeed">—</div></div>
+                    <div class="st am"><div class="k">累计流量</div><div class="v z" id="pBytes">—</div></div>
+                </div>
+            </div>
+        </section>
 
-                <table id="socketTable">
-                    <thead>
-                        <tr>
-                            <th class="bold">封包数据</th>
-                            <th><span id="SocketWorkMode"></span> - <span id="SocketProcess"></span></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>封包总数</td>
-                            <td><span id="SocketTotal" class="bold">0</span></td>
-                        </tr>
-                        <tr>
-                            <td>滤镜执行</td>
-                            <td><span id="SocketFilter" class="bold">0</span></td>
-                        </tr>
-                        <tr>
-                            <td>缓存区</td>
-                            <td><span id="SocketCache" class="bold">0</span></td>
-                        </tr>
-                        <tr>
-                            <td>过滤</td>
-                            <td><span id="SocketLeach" class="bold">0</span></td>
-                        </tr>
-                        <tr>
-                            <td>发送</td>
-                            <td><span id="SocketSend" class="bold">0</span></td>
-                        </tr>
-                        <tr>
-                            <td>接收</td>
-                            <td><span id="SocketRecv" class="bold">0</span></td>
-                        </tr>
-                        <tr>
-                            <td>发送到</td>
-                            <td><span id="SocketSendTo" class="bold">0</span></td>
-                        </tr>
-                        <tr>
-                            <td>接收自</td>
-                            <td><span id="SocketRecvFrom" class="bold">0</span></td>
-                        </tr>
-                        <tr>
-                            <td>WSA发送</td>
-                            <td><span id="SocketWSASend" class="bold">0</span></td>
-                        </tr>
-                        <tr>
-                            <td>WSA接收</td>
-                            <td><span id="SocketWSARecv" class="bold">0</span></td>
-                        </tr>
-                        <tr>
-                            <td>WSA发送到</td>
-                            <td><span id="SocketWSASendTo" class="bold">0</span></td>
-                        </tr>
-                        <tr>
-                            <td>WSA接收自</td>
-                            <td><span id="SocketWSARecvFrom" class="bold">0</span></td>
-                        </tr>
-                        <tr>
-                            <td>流量</td>
-                            <td><span id="SocketBytes">0</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+        <!-- ── 注入模式 ───────────────────────────── -->
+        <section class="card">
+            <div class="hd">
+                <h2>注入模式</h2>
+                <span class="sub">Inject</span>
+                <span class="grow"></span>
+                <span class="sub" id="sMode">—</span>
+            </div>
+            <div class="bd">
+                <div class="stats">
+                    <div class="st cy"><div class="k">封包总数</div><div class="v" id="sTotal">—</div></div>
+                    <div class="st am"><div class="k">滤镜执行</div><div class="v" id="sFilter">—</div></div>
+                    <div class="st mg"><div class="k">命中封包</div><div class="v" id="sLeach">—</div></div>
+                    <div class="st"><div class="k">待处理</div><div class="v" id="sCache">—</div></div>
+                </div>
 
-                <table id="proxyTable">
-                    <thead>
-                        <tr>
-                            <th class="bold">代理数据</th>
-                            <th><span id="ProxyWorkMode"></span></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>代理总数</td>
-                            <td><span id="ProxyTotal" class="bold">0</span></td>
-                        </tr>
-                        <tr>
-                            <td>TCP</td>
-                            <td><span id="ProxyTCP" class="bold">0</span></td>
-                        </tr>
-                        <tr>
-                            <td>UDP</td>
-                            <td><span id="ProxyUDP" class="bold">0</span></td>
-                        </tr>
-                        <tr>
-                            <td>缓存区</td>
-                            <td><span id="ProxyCache" class="bold">0</span></td>
-                        </tr>
-                        <tr>
-                            <td>在线</td>
-                            <td><span id="ProxyOnLine" class="bold">0</span></td>
-                        </tr>
-                        <tr>
-                            <td>链接数</td>
-                            <td><span id="ProxyLinks" class="bold">0</span></td>
-                        </tr>
-                        <tr>
-                            <td>速率</td>
-                            <td><span id="ProxySpeed">0</span></td>
-                        </tr>
-                        <tr>
-                            <td>流量</td>
-                            <td><span id="ProxyBytes">0</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="stats wide" style="margin-top:12px">
+                    <div class="st"><div class="k">目标进程</div><div class="v z" id="sProc">—</div></div>
+                    <div class="st"><div class="k">实时速率</div><div class="v z" id="sSpeed">—</div></div>
+                </div>
 
-            </section>
+                <p class="hint" style="margin:12px 0 8px">WinSock 各入口计数</p>
 
-            <div id="footer-container"></div>
-        </div>
-    </div>
+                <div class="stats">
+                    <div class="st"><div class="k">Send</div><div class="v" id="hSend">—</div></div>
+                    <div class="st"><div class="k">Recv</div><div class="v" id="hRecv">—</div></div>
+                    <div class="st"><div class="k">SendTo</div><div class="v" id="hSendTo">—</div></div>
+                    <div class="st"><div class="k">RecvFrom</div><div class="v" id="hRecvFrom">—</div></div>
+                    <div class="st cy"><div class="k">WSASend</div><div class="v" id="hWSASend">—</div></div>
+                    <div class="st cy"><div class="k">WSARecv</div><div class="v" id="hWSARecv">—</div></div>
+                    <div class="st cy"><div class="k">WSASendTo</div><div class="v" id="hWSASendTo">—</div></div>
+                    <div class="st cy"><div class="k">WSARecvFrom</div><div class="v" id="hWSARecvFrom">—</div></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="foot">WPE x64 · REMOTE CONSOLE</footer>
+    <div class="toasts" id="toasts"></div>
 
     <script>
-        let startTime;
+        'use strict';
 
-        function fetchData() {
-            if (!startTime) {
-                fetch('./SystemInfo/GetStartTime')
-                    .then(response => response.json())
-                    .then(data => {
-                        startTime = new Date(data);
-                        updateUptime();
-                        setInterval(updateUptime, 1000);
-                    });
+        // 启动时刻只取一次：它是个常量，没必要跟着 2 秒一拍反复要
+        var startedAt = null;
+
+        function set(id, v) {
+            var n = document.getElementById(id);
+            if (n) n.textContent = (v === null || v === undefined || v === '') ? '—' : v;
+        }
+
+        /** 百分比条。C# 给的是 "12.34%" 这种带百分号的串，先剥出数字。 */
+        function setPct(id, barId, raw) {
+            set(id, raw);
+            var bar = document.getElementById(barId);
+            if (!bar) return;
+            var n = parseFloat(String(raw || '').replace('%', ''));
+            if (!isFinite(n)) { bar.style.width = '0'; return; }
+            bar.style.width = Math.max(0, Math.min(100, n)) + '%';
+            // 吃紧了就变色 —— 手机上扫一眼颜色比读数字快
+            var wrap = bar.parentNode;
+            wrap.className = 'bar' + (n >= 90 ? ' dg' : n >= 70 ? ' am' : (barId === 'memBar' ? ' cy' : ''));
+        }
+
+        function refresh() {
+            api('SystemInfo/GetCPUAndMemory').then(function (d) {
+                setPct('cpu', 'cpuBar', d && d.Cpu);
+                setPct('mem', 'memBar', d && d.Memory);
+            }).catch(function () { });
+
+            api('SystemInfo/GetSelectMode').then(function (d) { set('mode', d); }).catch(function () { });
+
+            if (startedAt === null) {
+                api('SystemInfo/GetStartTime').then(function (d) {
+                    startedAt = d;
+                    set('startAt', dateTime(d) + ' 启动');
+                }).catch(function () { });
             }
+            if (startedAt) set('uptime', uptime(startedAt));
 
-            fetch('./SystemInfo/GetCPUAndMemory')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('CPU').textContent = data[0];
-                    document.getElementById('MEM').textContent = data[1];
-                })
+            /*
+                ⚠️ 这几个接口回的是<b>具名对象</b>，不是位置数组。
+                原来是 string[9] / string[15]，前端只能按下标绑（d[13]）——
+                C# 那边往中间插一个字段，后面每一格都会静默错位，
+                页面上是一排对不上的数字而不报任何错。2026-09-09 改掉了，别改回去。
+            */
+            api('ProxyInfo/GetProxyInfo').then(function (d) {
+                if (!d) return;
+                set('proxyMode', d.WorkMode);
+                set('pTotal', num(d.Total));
+                set('pTCP', num(d.TCP));
+                set('pUDP', num(d.UDP));
+                set('pCache', num(d.Queue));
+                set('pOnline', d.OnLine);
+                set('pLinks', num(d.Links));
+                set('pSpeed', d.Speed);
+                set('pBytes', d.Bytes);
+            }).catch(function () { });
 
-            fetch('./SystemInfo/GetSelectMode')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('SelectMode').textContent = data;
-                })
-
-            fetch('./ProxyInfo/GetProxyInfo')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('ProxyWorkMode').textContent = data[0];
-                    document.getElementById('ProxyTotal').textContent = data[1];
-                    document.getElementById('ProxyTCP').textContent = data[2];
-                    document.getElementById('ProxyUDP').textContent = data[3];
-                    document.getElementById('ProxyCache').textContent = data[4];
-                    document.getElementById('ProxyOnLine').textContent = data[5];
-                    document.getElementById('ProxyLinks').textContent = data[6];
-                    document.getElementById('ProxySpeed').textContent = data[7];
-                    document.getElementById('ProxyBytes').textContent = data[8];
-                })
-
-            fetch('./SocketInfo/GetSocketInfo')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('SocketProcess').textContent = data[0];
-                    document.getElementById('SocketWorkMode').textContent = data[1];
-                    document.getElementById('SocketTotal').textContent = data[2];
-                    document.getElementById('SocketFilter').textContent = data[3];
-                    document.getElementById('SocketCache').textContent = data[4];
-                    document.getElementById('SocketLeach').textContent = data[5];
-                    document.getElementById('SocketSend').textContent = data[6];
-                    document.getElementById('SocketRecv').textContent = data[7];
-                    document.getElementById('SocketSendTo').textContent = data[8];
-                    document.getElementById('SocketRecvFrom').textContent = data[9];
-                    document.getElementById('SocketWSASend').textContent = data[10];
-                    document.getElementById('SocketWSARecv').textContent = data[11];
-                    document.getElementById('SocketWSASendTo').textContent = data[12];
-                    document.getElementById('SocketWSARecvFrom').textContent = data[13];
-                    document.getElementById('SocketBytes').textContent = data[14];
-                })
+            api('SocketInfo/GetSocketInfo').then(function (d) {
+                if (!d) return;
+                set('sProc', d.Process);
+                set('sMode', d.WorkMode);
+                set('sTotal', num(d.Total));
+                set('sFilter', num(d.FilterExecute));
+                set('sCache', num(d.Queue));
+                set('sLeach', num(d.FilterHit));
+                set('hSend', num(d.Send));
+                set('hRecv', num(d.Recv));
+                set('hSendTo', num(d.SendTo));
+                set('hRecvFrom', num(d.RecvFrom));
+                set('hWSASend', num(d.WSASend));
+                set('hWSARecv', num(d.WSARecv));
+                set('hWSASendTo', num(d.WSASendTo));
+                set('hWSARecvFrom', num(d.WSARecvFrom));
+                set('sSpeed', d.Speed);
+            }).catch(function () { });
         }
 
-        function updateUptime() {
-            const now = new Date();
-            const uptime = now - startTime;
-            const days = Math.floor(uptime / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((uptime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((uptime % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((uptime % (1000 * 60)) / 1000);
-            document.getElementById('ServerUptime').textContent = ` ${days} 天 ${hours} 小时 ${minutes} 分 ${seconds} 秒`;
-        }
+        var timer = poll(refresh, 2000);
 
-        document.getElementById('btnSystem').addEventListener('click', () => {
-            switchTableDisplay(true, false, false);
+        // 运行时长每秒自己走一格，不必为它多发一轮请求
+        setInterval(function () {
+            if (startedAt && !timer.paused && !document.hidden) set('uptime', uptime(startedAt));
+        }, 1000);
+
+        document.getElementById('btnPause').addEventListener('click', function () {
+            this.textContent = timer.toggle() ? '继续刷新' : '暂停刷新';
         });
-
-        document.getElementById('btnSocket').addEventListener('click', () => {
-            switchTableDisplay(false, true, false);
-        });
-
-        document.getElementById('btnProxy').addEventListener('click', () => {
-            switchTableDisplay(false, false, true);
-        });
-
-        function switchTableDisplay(systemVisible, socketVisible, proxyVisible) {
-            const systemTable = document.getElementById('systemTable');
-            const socketTable = document.getElementById('socketTable');
-            const proxyTable = document.getElementById('proxyTable');
-            const btnSystem = document.getElementById('btnSystem');
-            const btnSocket = document.getElementById('btnSocket');
-            const btnProxy = document.getElementById('btnProxy');
-
-            systemTable.style.display = systemVisible ? 'table' : 'none';
-            socketTable.style.display = socketVisible ? 'table' : 'none';
-            proxyTable.style.display = proxyVisible ? 'table' : 'none';
-
-            btnSystem.classList.toggle('active', systemVisible);
-            btnSocket.classList.toggle('active', socketVisible);
-            btnProxy.classList.toggle('active', proxyVisible);
-        }
-
-        window.onload = () => {
-            fetchData();
-            switchTableDisplay(true, false, false);
-        };
-
-        setInterval(fetchData, 5000);
     </script>
-
 </body>
+
 </html>

@@ -229,7 +229,7 @@ async function onSave(): Promise<void> {
   border: 1px solid var(--border);
   color: var(--gray);
   font-family: inherit;
-  font-size: 12.5px;
+  font-size: var(--fs-body);
   line-height: 1;
   text-align: left;
   cursor: pointer;
@@ -260,8 +260,8 @@ async function onSave(): Promise<void> {
 .opt.th .nm { flex: none; }
 .opt.th .tick { position: absolute; right: 9px; bottom: 11px; }
 
-.cult { font-family: var(--mono); font-size: 11px; color: var(--dim2); font-style: normal; margin-left: 6px; }
+.cult { font-family: var(--mono); font-size: var(--fs-small); color: var(--dim2); font-style: normal; margin-left: 6px; }
 
 /* 说明是整句，截断了就没意义 —— 与列表设置那几处同一条口径 */
-.tip { margin: 0; padding: 0 20px 10px; font-size: 11.5px; line-height: 1.6; color: var(--dim2); }
+.tip { margin: 0; padding: 0 20px 10px; font-size: var(--fs-small); line-height: 1.6; color: var(--dim2); }
 </style>

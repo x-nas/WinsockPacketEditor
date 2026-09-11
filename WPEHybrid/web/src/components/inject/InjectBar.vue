@@ -3,9 +3,31 @@
   注入模式的运行状态条 —— 对应 WinForms 的 PacketList 工具条左半边
   （bHookStart / bHookStop / lProcessName / lModuleName / lWinsockInfo / lSpeedInfo）。
 
-  与代理模式的 RunBar 是同一个位置、同一套外观，但内容不能共用：
-  那边的核心状态是「SOCKS5 在不在监听」，这边是「附在哪个进程上、钩子装没装」。
-  硬凑成一个组件会变成一堆 v-if，两种模式各自的读法都被拖累。
+  【2026-09-10 整条改成与代理模式的 RunBar 同形】
+
+  外观与构件走 style.css 的共用件 `.modebar`（容器 / 状态灯 / 状态字 / 读数窗 / 右端按钮），
+  <b>次序也照它</b>：状态灯 → 状态字 → 一排读数窗 → 撑开 → 右端一排动作按钮。
+
+  改之前这一条是自己长出来的另一套：「开始 / 停止」蹲在<b>最左边</b>、没有状态字、
+  几段信息是裸文字 —— 两屏并排切过去读出来就是两个程序，而它们本来是同一件事的两种数据源。
+
+  ⚠️ 内容仍然不共用：代理那边的核心状态是「SOCKS5 在不在监听」，这边是
+  「附在哪个进程上、钩子装没装」。硬凑成一个组件会变成一堆 v-if，两种模式的读法都被拖累。
+  共用的是<b>构件与次序</b>，不是数据。
+
+  【2026-09-10 第二轮，按要求收窄】
+
+  ① **去掉了速率读数窗** —— 统计格里本来就有一格 `RATE 实时速率`，就在这条状态条正下方，
+     同一个数字在相隔十几像素的地方说两遍，只是在挤这一行的横向空间。
+  ② **去掉了「断开」按钮** —— 退出程序时由 `ShellForm.OnFormClosing` 的
+     `DetachInjectOnExit()` 自动断开（那一句本来就在，与「关系统代理」同级）。
+     ⚠️ 代价要知道：**换一个目标得重启程序**，与代理模式「选完模式就回不去了」同一条口径。
+  ③ **窗口标题那一块也去掉了**（第三轮）—— 注入成功时系统日志里已经记了一条完整的
+     「已注入目标 […] 方式 […] 路径」，那才是事后要回去查的地方；
+     而它装的是完整路径、长起来没有上限，摆在状态条上要独占一整行。
+     ⚠️ 顺带留下的教训别丢：`.ports` <b>不能写 `flex: none`</b> ——
+     那样基准宽度是 max-content，整组超宽之后既不折行也不截断，直接从右边<b>裁掉</b>
+     （用户截图里 WinSock 那块就被切了一半）。现在是 `flex: 0 1 auto` + 自己内部折行。
 
   「设置 ▾」与代理那边同样弹共用的 ContextMenu，清单取 INJECT_SETTINGS（代理 12 项的子集）。
 */
@@ -16,22 +38,42 @@ import { INJECT_SETTINGS, type SettingKey } from '../proxy/settings'
 import ContextMenu from '../ContextMenu.vue'
 import type { MenuItem } from '../menu'
 
-const props = defineProps<{ busy: boolean; rate: number; rows: number }>()
+const props = defineProps<{ busy: boolean }>()
 
 const emit = defineEmits<{
   (e: 'toggleHook'): void
   (e: 'clear'): void
-  (e: 'detach'): void
   (e: 'openSetting', key: SettingKey): void
 }>()
 
 const disconnected = computed(() => status.value.state === 'disconnected')
 
+/*
+  已附加、但还没开始拦截 —— 状态灯与状态字走<b>青</b>（`.modebar.ready`）。
+
+  ⚠️ 这一档不能留在 `.st` 的默认灰上：那是代理那边「未启动」用的颜色，
+  而两者正相反 —— 那边是<b>还没开始</b>，这边是<b>已经连上目标了</b>，只差点一下拦截。
+  全项目的色语是「绿＝在跑 · 青＝就绪 · 红＝出事 · 灰＝没开始」，这里正是青那一档。
+*/
+const attached = computed(() => !disconnected.value && !status.value.hooked)
+
+/*
+  状态字 —— 三态，与代理那边「运行中 / 未启动」占同一个位置。
+
+  ⚠️ 这一句同时替掉了原来右端那枚「已附加 / 已断开」徽标：
+  「断开」与「在不在拦截」不是两件要并排显示的事 —— 断开之后钩子早就没有意义了，
+  两处各说一半反而要读两遍。
+*/
+const stateText = computed(() => {
+  if (disconnected.value) return t('inject.state.lost')
+  return status.value.hooked ? t('inject.hooking') : t('inject.state.ok')
+})
+
 const menuAt = ref<{ x: number; y: number; anchor: { left: number; right: number; top: number; bottom: number } } | null>(null)
 const menuOpen = computed(() => menuAt.value !== null)
 
 const settingItems = computed<MenuItem[]>(() =>
-  INJECT_SETTINGS.map((x) => ({ id: x.key, label: t(x.label), disabled: !x.ready })))
+  INJECT_SETTINGS.map((x) => ({ id: x.key, label: t(x.label) })))
 
 function openMenu(e: MouseEvent): void {
   if (menuAt.value) { menuAt.value = null; return }
@@ -41,9 +83,39 @@ function openMenu(e: MouseEvent): void {
 </script>
 
 <template>
-  <div class="runbar" :class="{ on: status.hooked, off: disconnected }">
+  <div class="modebar" :class="{ on: status.hooked, ready: attached, bad: disconnected, off: disconnected }">
     <span class="led" />
+    <span class="st">{{ stateText }}</span>
 
+    <!--
+      定长的那几块读数窗。包在 .ports 里当<b>一个</b> flex 项 —— 这条是 flex-wrap 的，
+      不包的话换行点可能落在两块中间，后一块会被甩到第二行去挨着不相干的东西。
+    -->
+    <span class="ports">
+      <span class="port">
+        <b class="pk">{{ t('inject.target') }}</b>
+        <span class="pv">{{ status.name || '—' }}</span>
+        <span class="px">#{{ status.pid }} · {{ status.is64 ? 'x64' : 'x86' }}</span>
+      </span>
+
+      <span class="port">
+        <b class="pk">WinSock</b>
+        <span class="pv">{{ wsText(status) }}</span>
+      </span>
+
+      <!--
+        丢弃计数：环满时目标丢的是最旧的包。
+        无声丢包比阻塞更糟，所以只要不是 0 就必须显示出来 —— 用 .bad 那一档（红）。
+      -->
+      <span v-if="status.dropped > 0" class="port bad">
+        <b class="pk">{{ t('inject.dropped') }}</b>
+        <span class="pv">{{ status.dropped }}</span>
+      </span>
+    </span>
+
+    <span class="grow" />
+
+    <!-- 右端一排动作按钮，次序照代理那边：<b>主动作在最左</b>，然后是清空、设置 -->
     <button
       class="tb"
       :class="status.hooked ? 'stop' : 'go'"
@@ -55,44 +127,6 @@ function openMenu(e: MouseEvent): void {
       {{ status.hooked ? t('inject.stopHook') : t('inject.startHook') }}
     </button>
 
-    <div class="meta">
-      <span class="k">{{ t('inject.target') }}</span>
-      <b>{{ status.name || '—' }}</b>
-      <span class="dim">#{{ status.pid }} · {{ status.is64 ? 'x64' : 'x86' }}</span>
-    </div>
-
-    <!-- 主窗口标题：同名进程开好几个时，这是唯一能分清「注的是哪一个」的东西 -->
-    <div v-if="status.module" class="meta win">
-      <span class="k">{{ t('inject.window') }}</span>
-      <b :title="status.module">{{ status.module }}</b>
-    </div>
-
-    <div class="meta">
-      <span class="k">WinSock</span>
-      <b>{{ wsText(status) }}</b>
-    </div>
-
-    <div class="meta">
-      <span class="k">{{ t('inject.rate') }}</span>
-      <b>{{ props.rate }}/s</b>
-      <span class="dim">{{ props.rows }} {{ t('inject.rows') }}</span>
-    </div>
-
-    <!--
-      丢弃计数：环满时目标丢的是最旧的包。
-      无声丢包比阻塞更糟，所以只要不是 0 就必须显示出来。
-    -->
-    <div v-if="status.dropped > 0" class="meta warn">
-      <span class="k">{{ t('inject.dropped') }}</span>
-      <b>{{ status.dropped }}</b>
-    </div>
-
-    <span class="grow" />
-
-    <div class="state" :class="status.state">
-      {{ disconnected ? t('inject.state.lost') : t('inject.state.ok') }}
-    </div>
-
     <button class="tb" @click="emit('clear')">
       <svg class="ico" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13" /></svg>
       {{ t('inject.clear') }}
@@ -103,109 +137,23 @@ function openMenu(e: MouseEvent): void {
       {{ t('proxy.settings') }} ▾
     </button>
 
-    <button class="tb" :disabled="props.busy" @click="emit('detach')">
-      <svg class="ico" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg>
-      {{ t('inject.detach') }}
-    </button>
 
     <ContextMenu :at="menuAt" :items="settingItems" @pick="emit('openSetting', $event as SettingKey)" @close="menuAt = null" />
   </div>
 </template>
 
 <style scoped>
-.runbar {
-  flex: none;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  /*
-    ⚠️ 换行 + 各项 flex: none。这一条是加了六种语言之后补的：
-    越南语的「Bắt đầu bắt」「Cài đặt ▾」比中文长一半，1280 宽的窗口里
-    刚好把中间那几段元信息挤到要用省略号 —— 而被吃掉的正是目标进程名。
-    宁可让整条状态条折成两行，也不要把它认不出来。
-  */
-  flex-wrap: wrap;
-  row-gap: 8px;
-  padding: 9px 14px;
-  border: 1px solid var(--border);
-  background: var(--card);
-}
+/*
+  状态条的外观（容器 / 状态灯 / 状态字 / 读数窗 / 右端按钮）在 style.css 的 `.modebar` 里，
+  与代理数据页那条<b>共用同一份</b>。这里只留注入这一屏独有的一条。
+*/
 
-/* 钩子装上时左侧透出一层绿光 —— 与代理的 RunBar 同一条视觉约定 */
-.runbar.on { background: linear-gradient(90deg, rgb(var(--green-rgb) / 7%), transparent 45%), var(--card); }
-.runbar.off { opacity: .72; }
+/*
+  目标没了：整条压暗。
 
-.led { width: 9px; height: 9px; background: var(--muted); flex: none; }
-.runbar.on .led { background: var(--green); box-shadow: 0 0 8px var(--green); animation: beat 1.6s steps(1) infinite; }
-
-@keyframes beat { 50% { opacity: .35; } }
-
-/* flex: none —— 让它们各占自然宽度；空间不够时由上面的 flex-wrap 折行，而不是逐个压扁 */
-.meta { display: flex; align-items: baseline; gap: 6px; font-size: 12px; min-width: 0; flex: none; }
-
-/* 窗口标题可以很长，让它先被压缩，别把右边的动作按钮挤出去 */
-.meta.win { flex: 0 1 auto; overflow: hidden; }
-.meta.win b { max-width: 22ch; }
-
-.meta .k {
-  font-family: var(--share);
-  font-size: var(--label-size);
-  line-height: 1;
-  letter-spacing: .1em;
-  color: var(--muted);
-  text-transform: uppercase;
-}
-
-.meta b { color: var(--gray); font-family: var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.meta .dim { color: var(--muted); font-size: 11px; white-space: nowrap; }
-.meta.warn b { color: var(--danger); }
-
-.grow { flex: 1; }
-
-.state {
-  font-family: var(--share);
-  font-size: var(--label-size);
-  letter-spacing: .12em;
-  padding: 3px 9px 1px;
-  border: 1px solid var(--border);
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.state.attached { color: var(--green); border-color: rgb(var(--green-rgb) / 40%); }
-.state.disconnected { color: var(--danger); border-color: rgb(var(--danger-rgb) / 40%); }
-
-.tb {
-  padding: 11px 15px 9px;   /* 上 +1 下 -1：Share Tech Mono 的字形在 em 框里偏上 1px */
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--gray);
-  font-family: var(--share);
-  font-size: var(--btn-size);
-  line-height: 1;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  white-space: nowrap;
-  transition: .15s;
-}
-
-.tb .ico { width: 13px; height: 13px; position: relative; top: -1px; }
-.tb:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); }
-.tb:disabled { opacity: .45; cursor: default; }
-.tb:focus-visible { outline-offset: -2px; }
-
-/* 悬停要把边框与字色一起写上：通用的 .tb:hover 是 (0,3,0)，压得过 .tb.go 的 (0,2,0) */
-.tb.go { border-color: rgb(var(--green-rgb) / 45%); color: var(--green); }
-.tb.go:hover:not(:disabled) { background: rgb(var(--green-rgb) / 10%); border-color: var(--green); color: var(--green); }
-.tb.go:focus-visible { outline-color: var(--green); }
-
-.tb.stop { border-color: rgb(var(--danger-rgb) / 45%); color: var(--danger); }
-.tb.stop:hover:not(:disabled) { background: rgb(var(--danger-rgb) / 12%); border-color: var(--danger); color: var(--danger); }
-.tb.stop:focus-visible { outline-color: var(--danger); }
-
-.tb.on { border-color: var(--cyan); color: var(--cyan); }
+  ⚠️ 与 `.bad`（状态灯与状态字转红）是两件事，一起加才完整 ——
+  红是「出事了」，压暗是「这上面的数字已经不再更新了」。
+  数据仍留在列表里，所以只压暗、不隐藏。
+*/
+.modebar.off { opacity: .72; }
 </style>

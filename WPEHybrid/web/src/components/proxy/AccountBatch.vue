@@ -159,7 +159,7 @@ async function exportRows(): Promise<void> {
   <SettingsModal
     :open="props.open"
     :title="t('acct.batch')"
-    subtitle="Controls/BatchAccounts"
+    subtitle="Batch Create"
     :busy="busy"
     :error="error"
     @update:open="emit('update:open', $event)"
@@ -247,7 +247,7 @@ async function exportRows(): Promise<void> {
 <style scoped>
 .grp {
   font-family: var(--share);
-  font-size: 9px;
+  font-size: var(--fs-caption);
   letter-spacing: .26em;
   text-transform: uppercase;
   color: var(--dim);
@@ -269,7 +269,7 @@ async function exportRows(): Promise<void> {
   padding: 6px 11px;
   border: 1px solid rgb(var(--amber-rgb) / 32%);
   background: rgb(var(--amber-rgb) / 7%);
-  font-size: 11.5px;
+  font-size: var(--fs-small);
   color: var(--amber);
 }
 
@@ -282,51 +282,15 @@ async function exportRows(): Promise<void> {
   min-height: 32px;
 }
 
-.row > .k { font-size: 12.5px; color: var(--muted); }
+.row > .k { font-size: var(--fs-body); color: var(--muted); }
 .row > .v { display: flex; align-items: center; gap: 10px; min-width: 0; }
 
-.k2 { font-size: 12.5px; color: var(--muted); margin-left: 8px; white-space: nowrap; }
-.tip { font-size: 11px; color: var(--dim); }
+.k2 { font-size: var(--fs-body); color: var(--muted); margin-left: 8px; white-space: nowrap; }
+.tip { font-size: var(--fs-small); color: var(--dim); }
 
-.chk {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 0;
-  background: transparent;
-  border: 0;
-  font-size: 12.5px;
-  color: var(--muted);
-  cursor: pointer;
-  white-space: nowrap;
-}
-
+/* 基样式在 style.css 的「勾选框 / 单选框」，这里只覆盖框线色与布局 */
+.chk, .rd { --chk-ring: var(--border); }
 .chk.k { justify-self: start; }
-.chk i { width: 13px; height: 13px; border: 1px solid var(--border); position: relative; flex: none; }
-.chk.on { color: var(--green); }
-.chk.on i { border-color: var(--green); background: rgb(var(--green-rgb) / 18%); }
-.chk.on i::after { content: ""; position: absolute; inset: 2px; background: var(--green); }
-.chk:focus-visible { outline-offset: 2px; }
-
-/* 命名规则是二选一，用圆钮与勾选框区分开 */
-.rd {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 0;
-  background: transparent;
-  border: 0;
-  font-size: 12.5px;
-  color: var(--muted);
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.rd i { width: 13px; height: 13px; border: 1px solid var(--border); border-radius: 50%; position: relative; flex: none; }
-.rd.on { color: var(--cyan); }
-.rd.on i { border-color: var(--cyan); }
-.rd.on i::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 5px var(--cyan); }
-.rd:focus-visible { outline-offset: 2px; outline-color: var(--cyan); }
 
 /* 基样式在 style.css 的 .inp，这里只补布局 */
 .inp { min-width: 0; }
@@ -352,7 +316,7 @@ async function exportRows(): Promise<void> {
   align-items: center;
   gap: 10px;
   padding: 0 10px;
-  font-size: 12.5px;
+  font-size: var(--fs-body);
 }
 
 .head {
@@ -376,7 +340,7 @@ async function exportRows(): Promise<void> {
 /* 重名的这一条落库时会被挡下，先标出来 */
 .drow.dup .user { color: var(--amber); text-decoration: line-through; }
 
-.empty { padding: 24px 0; text-align: center; color: var(--dim); font-size: 12px; }
+.empty { padding: 24px 0; text-align: center; color: var(--dim); font-size: var(--fs-body); }
 
 .no { color: var(--dim); font-variant-numeric: tabular-nums; text-align: center; }
 .user { color: var(--gray); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

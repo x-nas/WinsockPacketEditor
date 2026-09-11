@@ -143,7 +143,7 @@ async function save(): Promise<void> {
   <SettingsModal
     :open="props.open"
     :title="t('set.leach')"
-    subtitle="Controls/LeachSetting"
+    subtitle="Capture Filter"
     :busy="busy"
     :error="error"
     @update:open="emit('update:open', $event)"
@@ -152,6 +152,7 @@ async function save(): Promise<void> {
 
     <p class="lead">{{ t('set.leach.lead') }}</p>
 
+    <section class="sec">
     <div class="grp">{{ t('set.leach.mode') }}</div>
 
     <div class="modes">
@@ -162,7 +163,9 @@ async function save(): Promise<void> {
         <i />{{ t('set.leach.hide') }}
       </button>
     </div>
+    </section>
 
+    <section class="sec">
     <div class="grp">{{ t('set.leach.conds') }}</div>
 
     <p v-if="!anyOn" class="warn">{{ t('set.leach.none') }}</p>
@@ -179,7 +182,9 @@ async function save(): Promise<void> {
         :placeholder="t(c.ph)"
       >
     </div>
+    </section>
 
+    <section class="sec">
     <div class="grp">{{ t('set.leach.types') }}</div>
 
     <div class="row">
@@ -197,19 +202,20 @@ async function save(): Promise<void> {
         ><i />{{ t(x.label) }}</button>
       </div>
     </div>
+    </section>
     </div>
   </SettingsModal>
 </template>
 
 <style scoped>
-.lead { margin: 12px 20px 0; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+.lead { margin: 12px 20px 0; font-size: var(--fs-body); color: var(--muted); line-height: 1.6; }
 
 .warn {
   margin: 0 20px 8px;
   padding: 7px 11px;
   border: 1px solid rgb(var(--amber-rgb) / 32%);
   background: rgb(var(--amber-rgb) / 7%);
-  font-size: 11.5px;
+  font-size: var(--fs-small);
   color: var(--amber);
 }
 

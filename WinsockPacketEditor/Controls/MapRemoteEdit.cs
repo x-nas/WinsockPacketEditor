@@ -38,14 +38,10 @@ namespace WinsockPacketEditor
                     this.nudPortFrom.Value = this.mrSelect.PortFrom;
                     this.txtPathFrom.Text = this.mrSelect.PathFrom;
 
-                    if (this.mrSelect.ProtocolTypeTo == Operate.ProxyConfig.Proxy.MapProtocol.Http)
-                    {
-                        this.ddlProtocolTo.SelectedIndex = 0;
-                    }
-                    else if (this.mrSelect.ProtocolTypeTo == Operate.ProxyConfig.Proxy.MapProtocol.Https)
-                    {
-                        this.ddlProtocolTo.SelectedIndex = 1;
-                    }
+                    //⚠️ 老库里可能存着 ProtocolTo=Https（外壳早先的下拉能选，那是个装饰项，
+                    //已于 2026-09-09 去掉）。这个下拉只有一项，原来那支会把 SelectedIndex
+                    //指到不存在的 1。一律回到 0，改一次就归正。
+                    this.ddlProtocolTo.SelectedIndex = 0;
 
                     this.txtHostTo.Text = this.mrSelect.HostTo;
                     this.nudPortTo.Value = this.mrSelect.PortTo;
@@ -114,25 +110,13 @@ namespace WinsockPacketEditor
                     return;
                 }
 
-                Operate.ProxyConfig.Proxy.MapProtocol ProtocolFrom_New = new Operate.ProxyConfig.Proxy.MapProtocol();
-                if (this.ddlProtocolFrom.SelectedIndex == 0)
-                {
-                    ProtocolFrom_New = Operate.ProxyConfig.Proxy.MapProtocol.Http;
-                }
-                else
-                {
-                    ProtocolFrom_New = Operate.ProxyConfig.Proxy.MapProtocol.Http;
-                }
-
-                Operate.ProxyConfig.Proxy.MapProtocol ProtocolTo_New = new Operate.ProxyConfig.Proxy.MapProtocol();
-                if (this.ddlProtocolTo.SelectedIndex == 0)
-                {
-                    ProtocolTo_New = Operate.ProxyConfig.Proxy.MapProtocol.Http;
-                }
-                else if (this.ddlProtocolTo.SelectedIndex == 1)
-                {
-                    ProtocolTo_New = Operate.ProxyConfig.Proxy.MapProtocol.Https;
-                }
+                //两个下拉都只有 "http" 一项（见 Designer 的 Items.AddRange），
+                //SelectedIndex 恒为 0，原来那两组分支走不到。
+                //映射端的 https 尤其不能给：ProtocolTypeTo 在任何数据路径上都没被读过 ——
+                //ConnectToTarget 开的是明文 TCP，ModifyRequestHostAndPath 拼的是明文 HTTP 请求，
+                //选了 https 只会把请求明文发到一个 TLS 端口上。
+                Operate.ProxyConfig.Proxy.MapProtocol ProtocolFrom_New = Operate.ProxyConfig.Proxy.MapProtocol.Http;
+                Operate.ProxyConfig.Proxy.MapProtocol ProtocolTo_New = Operate.ProxyConfig.Proxy.MapProtocol.Http;
 
                 int PortFrom_New = ((int)this.nudPortFrom.Value);
                 int PortTo_New = ((int)this.nudPortTo.Value);

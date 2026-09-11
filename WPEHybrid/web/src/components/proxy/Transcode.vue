@@ -210,9 +210,8 @@ const inputBytes = computed(() => new TextEncoder().encode(trInput.value).length
         <button class="hx-segb before" :class="{ on: trMode === 'dec' }" @click="trMode = 'dec'">{{ t('tr.decode') }}</button>
       </div>
 
-      <span class="lb">{{ t('tr.hint') }}</span>
-
-      <span class="grow" />
+      <!-- 短的那句常驻，完整的解释（解码时输入怎么被读）挂在悬停提示上 -->
+      <span class="lb" :title="t('tr.hintTip')">{{ t('tr.hint') }}</span>
 
       <button class="btn danger" :disabled="!trInput && !trRows.length" @click="clearAll">{{ t('rb.clearAll') }}</button>
     </div>
@@ -271,14 +270,25 @@ const inputBytes = computed(() => new TextEncoder().encode(trInput.value).length
   padding: 10px 12px 12px;
 }
 
+/*
+  ⚠️ `flex: 1 1 0`：假想宽度为 0，这句提示<b>永远不会</b>让工具条折行 —— 放不下就省略号（完整的在悬停提示里）。
+  原来是默认的 `0 1 auto`，假想宽度 = 整句的长度，125% 缩放下它自己占一行、「清空」再占一行（2026-09-11 改）。
+  它顺带接替了原来那个 .grow：吃掉剩余宽度，把「清空」顶到最右。
+*/
 .lb {
-  font-size: 11.5px;
+  flex: 1 1 0;
+  font-size: var(--fs-small);
   color: var(--dim2);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   min-width: 0;
 }
+
+/* 里面的 .ta 没有自己的边框，焦点由这层容器表示 —— 与输入框同一种语言 */
+.src:focus-within,
+.out:focus-within { border-color: var(--cyan); }
+.ta:focus-visible { outline: none; }
 
 .src,
 .out {
@@ -326,7 +336,7 @@ const inputBytes = computed(() => new TextEncoder().encode(trInput.value).length
   color: var(--gray);
   caret-color: var(--cyan);
   font-family: var(--mono);
-  font-size: 12.5px;
+  font-size: var(--fs-body);
   line-height: 1.6;
 }
 
@@ -348,12 +358,12 @@ const inputBytes = computed(() => new TextEncoder().encode(trInput.value).length
 
 .gn {
   font-family: var(--share);
-  font-size: 11px;
+  font-size: var(--fs-label);
   letter-spacing: .14em;
   color: var(--cyan);
 }
 
-.gnote { font-size: 11px; color: var(--dim2); }
+.gnote { font-size: var(--fs-small); color: var(--dim2); }
 
 .r {
   display: grid;
@@ -373,7 +383,7 @@ const inputBytes = computed(() => new TextEncoder().encode(trInput.value).length
 */
 .k {
   font-family: var(--share);
-  font-size: 10.5px;
+  font-size: var(--fs-label);
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--muted);
@@ -383,7 +393,7 @@ const inputBytes = computed(() => new TextEncoder().encode(trInput.value).length
 .v {
   min-width: 0;
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: var(--fs-body);
   line-height: 1.5;
   color: var(--acc-green2);
   word-break: break-all;
@@ -396,5 +406,5 @@ const inputBytes = computed(() => new TextEncoder().encode(trInput.value).length
 
 .ops { display: flex; align-items: center; justify-content: center; gap: 4px; }
 
-.empty { padding: 40px 20px; text-align: center; color: var(--muted); font-size: 12.5px; line-height: 1.8; }
+.empty { padding: 40px 20px; text-align: center; color: var(--muted); font-size: var(--fs-body); line-height: 1.8; }
 </style>

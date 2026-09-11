@@ -151,7 +151,7 @@ async function save(): Promise<void> {
   <SettingsModal
     :open="props.open"
     :title="t('set.hook')"
-    subtitle="Controls/HookSetting"
+    subtitle="Interception"
     :busy="busy"
     :error="error"
     @update:open="emit('update:open', $event)"
@@ -160,6 +160,7 @@ async function save(): Promise<void> {
 
     <!-- ── 注入模式：12 个 WinSock 钩子 ────────────────────── -->
     <template v-if="props.mode === 'inject'">
+      <section class="sec">
       <div class="grp">{{ t('set.grp.hookDir') }}</div>
 
       <!-- 组名放进标签列：三组各四个入口，右边一行排开正好 -->
@@ -177,11 +178,13 @@ async function save(): Promise<void> {
       </div>
 
       <p class="hint">{{ t('set.hook.injectHint') }}</p>
+      </section>
       <p v-if="anyInjectOff" class="warn">{{ t('set.hook.injectWarn') }}</p>
     </template>
 
     <!-- ── 代理模式：四个方向 + 拆包 ───────────────────────── -->
     <template v-else>
+    <section class="sec">
     <div class="grp">{{ t('set.grp.hookDir') }}</div>
 
     <div class="row">
@@ -214,7 +217,9 @@ async function save(): Promise<void> {
       {{ t('set.hook.offWarn') }}
     </p>
     <p class="hint">{{ t('set.hook.runOnly') }}</p>
+    </section>
 
+    <section class="sec">
     <div class="grp">{{ t('set.grp.unpack') }}</div>
 
     <div class="row">
@@ -244,6 +249,7 @@ async function save(): Promise<void> {
         <span class="tip">{{ t('set.hook.lengthHint') }}</span>
       </div>
     </div>
+    </section>
     </template>
     </div>
   </SettingsModal>
@@ -252,9 +258,9 @@ async function save(): Promise<void> {
 <style scoped>
 
 /* 有方向被关掉时才出现 —— 那是「看不到数据」的头号原因 */
-.warn { padding: 0 20px; margin: 2px 0 4px; font-size: 11.5px; color: var(--amber); }
+.warn { padding: 0 20px; margin: 2px 0 4px; font-size: var(--fs-small); color: var(--amber); }
 
-.tip { font-size: 11.5px; color: var(--dim2); }
+.tip { font-size: var(--fs-small); color: var(--dim2); }
 
 
 </style>

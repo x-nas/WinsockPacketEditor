@@ -14,8 +14,6 @@ export interface InjectStatus {
   state: 'idle' | 'attaching' | 'attached' | 'disconnected'
   pid: number
   name: string
-  /** 目标的主窗口标题（没有标题就是主模块名）—— 对应 WinForms 的 lModuleName */
-  module: string
   is64: boolean
   hooked: boolean
   dropped: number
@@ -25,8 +23,14 @@ export interface InjectStatus {
   msws: boolean
 }
 
+/*
+  ⚠️ 这里原来还有一个 `module`（目标的主窗口标题）。2026-09-10 删掉了：
+  状态条上那块「窗口」读数窗早就撤了（注入成功时系统日志里记了完整的一条），
+  从此没有任何地方读它 —— 而 C# 那边为了填它，每秒要 EnumWindows 扫一遍整个桌面
+  的顶层窗口，还是在 UI 线程上。「去掉调用方就顺手清被调方」。
+*/
 export const status = ref<InjectStatus>({
-  state: 'idle', pid: 0, name: '', module: '', is64: false,
+  state: 'idle', pid: 0, name: '', is64: false,
   hooked: false, dropped: 0, ws1: false, ws2: false, msws: false,
 })
 
@@ -37,7 +41,21 @@ export const status = ref<InjectStatus>({
  * 分成两处写的话，总会有一条路径忘了同步（状态栏就会停在上一个目标上）。
  */
 export function setStatus(s: InjectStatus): void {
-  status.value = s
+  /*
+    ⚠️ **必须拷一份，不能直接把入参挂上去。**
+
+    Vue 的 ref 赋值是按<b>引用</b>判等的：调用方要是把同一个对象改几个字段再传回来，
+    `status.value = s` 什么都不会触发 —— 而模板里 `status.hooked` 这种<b>直接读属性</b>的
+    绑定会在下一次因为别的原因重渲染时读到新值，`computed` 却因为没被通知而<b>一直返回旧值</b>。
+
+    表现是「同一条状态条上，按钮已经变成『停止拦截』、灯也绿了，状态字还写着『已附加』」——
+    2026-09-10 在探针页当场撞到（假宿主的 injectStartHook 返回的正是同一个 window.__inj）。
+
+    真程序走桥、每次都是新解析出来的 JSON 对象，所以碰不到；但这份 store 不该<b>依赖</b>
+    调用方的这个习惯 —— 拷一份是常数开销（十来个标量），换掉的是一整类只在某些调用方身上
+    发作的静默 bug。
+  */
+  status.value = { ...s }
   injectHooked.value = !!s.hooked
   injectTarget.value = s.pid > 0 ? s.name + ' #' + s.pid : ''
 }

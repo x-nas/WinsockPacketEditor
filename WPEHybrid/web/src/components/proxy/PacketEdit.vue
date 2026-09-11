@@ -25,6 +25,7 @@ import { useList } from '../../stores/lists'
 import { pushToast } from '../../stores/toast'
 import HexView from '../HexView.vue'
 import { ICON, type MenuItem } from '../menu'
+import { useModal } from '../../useModal'
 
 const props = defineProps<{
   /**
@@ -261,10 +262,24 @@ const typeText = computed(() => {
 })
 
 function offset(i: number): string { return i.toString(16).toUpperCase().padStart(8, '0') }
+
+/* 登记进模态栈：父窗体因此变 inert；自己被后开的弹窗盖住时也会 inert。见 useModal.ts */
+const { covered } = useModal(() => !!props.target)
 </script>
 
 <template>
-  <div v-if="props.target" class="editor-mask" @mousedown.self="close">
+  <!--
+    ⚠️ <b>Teleport 到 body</b> —— 不是为了好看，是必须的，两个理由都在 useModal.ts 里：
+    ① 代理模式的 .proxy 是 z-index: 10 的层叠上下文，弹窗留在里面时遮罩盖不住标题栏；
+    ② 出去了才不会被 .shell 的 inert 一起禁掉。
+
+    ⚠️ <b>刻意不换行、不重排缩进</b>：模板里有 white-space: pre 的块，
+    整体缩进一动，Vue 模板编译器的 condense 会连带改掉渲染结果。
+
+    ⚠️ <b>点遮罩不再关闭弹窗</b>：编辑器里都是填了一半的东西，点空白处就丢掉太容易误操作。
+    出口只留「取消 / 关闭」按钮与 Esc。
+  -->
+  <Teleport to="body"><div v-if="props.target" class="editor-mask" :inert="covered">
     <div class="dlg" role="dialog" aria-modal="true" @keydown.esc="close">
       <span class="mk tl" /><span class="mk tr" /><span class="mk bl" /><span class="mk br" />
 
@@ -351,7 +366,9 @@ function offset(i: number): string { return i.toString(16).toUpperCase().padStar
             <span class="hx-meta">{{ len }} {{ t('hex.bytes') }}</span>
             <span class="hx-meta">{{ t('pe.cursor') }} {{ offset(hv?.cur ?? 0) }} ({{ hv?.cur ?? 0 }})</span>
             <span v-if="hv?.hasSel" class="hx-meta sel">{{ t('pe.selected') }} {{ hv?.selCount }} {{ t('pe.bytes') }}</span>
-            <span class="hx-meta dim">{{ hv?.col === 'asc' ? t('pe.ascii') : t('pe.hex') }} · {{ hv?.insertMode ? t('pe.insert') : t('pe.overwrite') }}</span>
+            <span class="hx-meta dim">{{ hv?.col === 'asc' ? t('pe.ascii') : t('pe.hex') }}</span>
+            <!-- 覆盖 / 插入：唯一决定「键入会不会改变封包长度」的开关，必须一眼看得出来，见 <style> 里那段 -->
+            <span class="hx-meta mode" :class="hv?.insertMode ? 'ins' : 'ovr'">{{ hv?.insertMode ? t('pe.insert') : t('pe.overwrite') }}</span>
             <span class="grow" />
             <span class="hx-meta dim keys" :title="t('pe.keysHint')">{{ t('pe.keysHint') }}</span>
           </div>
@@ -375,7 +392,7 @@ function offset(i: number): string { return i.toString(16).toUpperCase().padStar
         </button>
       </footer>
     </div>
-  </div>
+  </div></Teleport>
 </template>
 
 <style scoped>
@@ -390,8 +407,8 @@ function offset(i: number): string { return i.toString(16).toUpperCase().padStar
 }
 
 .tt { flex: 1; min-width: 0; display: flex; align-items: baseline; gap: 12px; }
-.tt .zh { font-family: var(--orbit); font-size: 14px; color: var(--gray); letter-spacing: .04em; }
-.tt .sub { font-family: var(--share); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
+.tt .zh { font-family: var(--orbit); font-weight: 700; font-size: var(--fs-title); color: var(--gray); letter-spacing: .04em; }
+.tt .sub { font-family: var(--share); font-size: var(--fs-caption); letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
 
 .x {
   display: inline-flex;
@@ -408,7 +425,7 @@ function offset(i: number): string { return i.toString(16).toUpperCase().padStar
 .x:hover { border-color: var(--danger); color: var(--danger); }
 .x .ico { width: 15px; height: 15px; stroke: currentColor; stroke-width: 2; fill: none; }
 
-.loading { padding: 60px 0; text-align: center; color: var(--muted); font-size: 12.5px; }
+.loading { padding: 60px 0; text-align: center; color: var(--muted); font-size: var(--fs-body); }
 
 .bd {
   flex: 1;
@@ -423,12 +440,12 @@ function offset(i: number): string { return i.toString(16).toUpperCase().padStar
 /* 字段行：一行铺开，五个字段 */
 .fields { flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 22px; }
 .f { display: flex; align-items: center; gap: 8px; min-width: 0; }
-.f .k { font-size: 12.5px; color: var(--muted); white-space: nowrap; }
-.f .v { font-size: 12.5px; color: var(--gray); }
-.f .v.mono { font-family: var(--mono); font-size: 12px; color: var(--dim3); }
+.f .k { font-size: var(--fs-body); color: var(--muted); white-space: nowrap; }
+.f .v { font-size: var(--fs-body); color: var(--gray); }
+.f .v.mono { font-family: var(--mono); font-size: var(--fs-body); color: var(--dim3); }
 .f .v.cyan { color: var(--cyan); }
 .f .v.ty { color: var(--acc-violet); }
-.f .warn { font-size: 11.5px; color: var(--amber); }
+.f .warn { font-size: var(--fs-small); color: var(--amber); }
 
 /* 基样式在 style.css 的 .inp，这一屏没有需要覆盖的 */
 
@@ -459,42 +476,20 @@ function offset(i: number): string { return i.toString(16).toUpperCase().padStar
 
 .line { display: flex; align-items: center; gap: 10px; min-height: 26px; }
 .line .grow { flex: 1; }
-.k2 { font-size: 12.5px; color: var(--muted); white-space: nowrap; }
-.tip { margin: 0; font-size: 11.5px; color: var(--dim2); line-height: 1.5; }
+.k2 { font-size: var(--fs-body); color: var(--muted); white-space: nowrap; }
+.tip { margin: 0; font-size: var(--fs-small); color: var(--dim2); line-height: 1.5; }
 
-.cnts .cnt { font-size: 12px; color: var(--muted); font-family: var(--share); letter-spacing: .06em; }
+.cnts .cnt { font-size: var(--fs-label); color: var(--muted); font-family: var(--share); letter-spacing: .06em; }
 .cnts .cnt b { font-family: var(--mono); font-variant-numeric: tabular-nums; }
 .cnts .cnt.run b { color: var(--cyan); }
 .cnts .cnt.ok b { color: var(--green); }
 .cnts .cnt.bad b { color: var(--danger); }
 
-.chk, .rd {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 0;
-  background: transparent;
-  border: 0;
-  font-size: 12.5px;
-  color: var(--muted);
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.chk i { width: 13px; height: 13px; border: 1px solid var(--dim); position: relative; flex: none; }
-.chk.on { color: var(--green); }
-.chk.on i { border-color: var(--green); background: rgb(var(--green-rgb) / 18%); }
-.chk.on i::after { content: ""; position: absolute; inset: 2px; background: var(--green); }
-.chk:disabled, .rd:disabled { opacity: .45; cursor: default; }
-
-.rd i { width: 13px; height: 13px; border: 1px solid var(--dim); border-radius: 50%; position: relative; flex: none; }
-.rd.on { color: var(--cyan); }
-.rd.on i { border-color: var(--cyan); }
-.rd.on i::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 5px var(--cyan); }
+/* 基样式在 style.css 的「勾选框 / 单选框」，这一屏没有需要覆盖的 */
 
 .btn {
   flex: none;
-  padding: 9px 13px 7px;
+  padding: 8px 13px 8px;
   background: transparent;
   border: 1px solid var(--border);
   color: var(--gray);
@@ -513,7 +508,7 @@ function offset(i: number): string { return i.toString(16).toUpperCase().padStar
 .btn.primary:hover:not(:disabled) { background: rgb(var(--green-rgb) / 10%); border-color: var(--green); }
 
 .btn.run { display: inline-flex; align-items: center; gap: 7px; border-color: rgb(var(--green-rgb) / 45%); color: var(--green); }
-.btn.run .ico { width: 11px; height: 11px; margin: -1px 0; flex: none; position: relative; top: -1px; }
+.btn.run .ico { width: 11px; height: 11px; margin: -1px 0; flex: none; }
 .btn.run.on { border-color: rgb(var(--danger-rgb) / 30%); color: var(--danger); }
 .btn.run.on .ico { animation: pulse 1.1s ease-in-out infinite; }
 .btn.run:hover:not(:disabled) { background: rgb(var(--green-rgb) / 10%); border-color: var(--green); color: var(--green); }
@@ -564,6 +559,29 @@ function offset(i: number): string { return i.toString(16).toUpperCase().padStar
 .hx-meta.sel { color: var(--cyan); }
 .hx-meta.dim { color: var(--muted); }
 .hx-meta.keys { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+
+/*
+  覆盖 / 插入 —— 编辑器里唯一一个「键入会不会改变封包长度」的开关，
+  而它<b>只能用 Insert 键切，界面上没有第二个入口</b>。所以它必须一眼看得出来。
+
+  原先它和栏位挤在同一个 .dim 里（`十六进制 · 覆盖`），两种状态还<b>同色</b> ——
+  等于得把那行灰色小字读完才知道现在是哪种。现在拆成独立的描边胶囊，两态两色：
+
+    覆盖 → 绿：常态，长度不变
+    插入 → 琥珀：会把包撑长，更该当心
+
+  ⚠️ 不用青色 —— 旁边的「选中 N 字节」（.hx-meta.sel）就是青的，两个挨着分不出来。
+*/
+.hx-meta.mode {
+  flex: none;
+  /* 3.6/1.4 是量出来的：胶囊自带边框、结构与旁边的裸文字不同，要让它的墨迹与同排那几项落在同一条线上 */
+  padding: 3.6px 7px 1.4px;
+  border: 1px solid;
+  letter-spacing: .08em;
+}
+
+.hx-meta.mode.ovr { border-color: rgb(var(--green-rgb) / 45%); background: rgb(var(--green-rgb) / 12%); color: var(--green); }
+.hx-meta.mode.ins { border-color: rgb(var(--amber-rgb) / 55%); background: rgb(var(--amber-rgb) / 16%); color: var(--amber); }
 .hx-bar .grow { flex: 1; min-width: 12px; }
 
 .ft {
@@ -577,5 +595,5 @@ function offset(i: number): string { return i.toString(16).toUpperCase().padStar
 }
 
 .ft .grow { flex: 1; }
-.err { font-size: 12px; color: var(--danger); }
+.err { font-size: var(--fs-small); color: var(--danger); }
 </style>

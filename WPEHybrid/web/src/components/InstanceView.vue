@@ -15,7 +15,7 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { call } from '../bridge'
 import { lang, normalize, t } from '../i18n'
-import { socks5Addr } from '../stores/runtime'
+import { httpAddr, socks5Addr } from '../stores/runtime'
 
 const emit = defineEmits<{ (e: 'back'): void }>()
 
@@ -115,12 +115,13 @@ async function save(): Promise<void> {
 
     /*
       配置换了一份，两处缓存要跟着刷新：
-        · socks5Addr 在状态栏上（新库里的代理配置可能不同）
+        · socks5Addr / httpAddr 在状态栏与运行状态条上（新库里的代理配置可能不同）
         · 语言：C# 侧 ApplyAll 已经把 AntdUI 切过去了，前端字典也得跟上，
           否则会出现「弹窗英文、页面中文」。
       这里不调 setLang —— 那个会反过来再写一次 C#，绕一圈还可能把值写反。
     */
     socks5Addr.value = r.socks5Addr || ''
+    httpAddr.value = r.httpAddr || ''
     lang.value = normalize(r.language)
 
     emit('back')
@@ -141,13 +142,13 @@ function sizeText(n: number): string {
 </script>
 
 <template>
-  <main class="inst">
+  <main class="inst scrn">
     <div class="eyebrow">
       <span class="dash" />
       <span class="lbl">{{ t('inst.eyebrow') }}</span>
     </div>
 
-    <h1 class="glitch">Multiple Open</h1>
+    <h1 class="ttl">Multiple Open</h1>
 
     <p class="subtitle">{{ typed }}<span class="cur" /></p>
 
@@ -243,55 +244,20 @@ function sizeText(n: number): string {
 }
 
 /* eyebrow / 标题 / 副标题：与 StartView 同构，只是主色换成洋红 */
-.eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
-.eyebrow .dash { width: 32px; height: 1px; background: var(--magenta); box-shadow: 0 0 6px var(--magenta); }
-
-.eyebrow .lbl {
-  font-family: var(--share);
-  font-size: 10px;
-  letter-spacing: .3em;
-  text-transform: uppercase;
-  color: var(--magenta);
-}
-
 /*
-  这里不做 StartView 那套三层错位 glitch —— 那是首屏的开场效果。
-  二级页面每进一次都抖一遍会烦，保留字体与辉光即可。
+  eyebrow 与标题走 style.css 的共用件 `.scrn`，这里只把强调色换成洋红。
+  ⚠️ 这一屏<b>不做</b> StartView 那套三层错位 glitch —— 那是首屏的开场效果，
+  二级页面每进一次都抖一遍会烦。
 */
-.glitch {
-  font-family: var(--orbit);
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: -.02em;
-  font-size: clamp(28px, 3vw, 38px);
-  line-height: 1;
-  color: var(--magenta);
-  align-self: flex-start;
-  text-shadow: 0 0 26px rgb(var(--magenta-rgb) / 35%);
+.inst {
+  --hd: var(--magenta);
+  --hd-rgb: var(--magenta-rgb);
 }
 
-.subtitle {
-  margin: 14px 0 0;
-  font-family: var(--share);
-  font-size: 13px;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--muted);
-  min-height: 1.3em;
-}
+/* 标题是写死的英文，那两条 latin-only 的排版留在本屏（共用件里刻意没有）*/
+.ttl { text-transform: uppercase; letter-spacing: -.02em; }
 
-.subtitle .cur {
-  display: inline-block;
-  width: 8px;
-  height: 1em;
-  background: var(--magenta);
-  box-shadow: 0 0 6px var(--magenta);
-  vertical-align: -2px;
-  margin-left: 3px;
-  animation: cur 1s steps(1) infinite;
-}
-
-@keyframes cur { 50% { opacity: 0; } }
+/* 副标题与光标的基样式在 style.css 的 `.scrn` 里（三屏共用）*/
 
 /* 「仅本次有效」——用琥珀色警示，与测试版提示同一套语汇 */
 .note {
@@ -306,7 +272,7 @@ function sizeText(n: number): string {
 
 .note .bang {
   font-family: var(--share);
-  font-size: 10px;
+  font-size: var(--fs-caption);
   letter-spacing: .18em;
   text-transform: uppercase;
   color: var(--amber);
@@ -314,7 +280,7 @@ function sizeText(n: number): string {
   padding-top: 2px;
 }
 
-.note p { font-size: 12.5px; color: var(--dim3); margin: 0; }
+.note p { font-size: var(--fs-body); color: var(--dim3); margin: 0; }
 
 /* 表单：整块一个边框，行与行之间发丝线，与卡片网格同一种做法 */
 .form { margin: 22px 0 0; border: 1px solid var(--border); background: var(--card); }
@@ -330,7 +296,7 @@ function sizeText(n: number): string {
 
 .row > .k {
   font-family: var(--share);
-  font-size: 11px;
+  font-size: var(--fs-label);
   letter-spacing: .14em;
   text-transform: uppercase;
   color: var(--muted);
@@ -349,7 +315,7 @@ function sizeText(n: number): string {
   border-left: 1px solid var(--border);
   color: var(--gray);
   font-family: var(--mono);
-  font-size: 13px;
+  font-size: var(--fs-lead);
   outline: none;
   /* 路径要能选中复制 —— body 上是 user-select: none */
   user-select: text;
@@ -377,7 +343,7 @@ function sizeText(n: number): string {
   border-left: 1px solid var(--border);
   color: var(--cyan);
   font-family: var(--share);
-  font-size: 11px;
+  font-size: var(--fs-label);
   letter-spacing: .14em;
   text-transform: uppercase;
   cursor: pointer;
@@ -391,7 +357,6 @@ function sizeText(n: number): string {
 
 /* 焦点环画在内侧：输入框与按钮之间只有 1px 发丝线，正偏移会压到邻居 */
 .browse:focus-visible { outline-offset: -2px; outline-color: var(--cyan); }
-.inp:focus-visible { outline-offset: -2px; }
 
 .ico.sm { width: 15px; height: 15px; }
 
@@ -412,13 +377,13 @@ function sizeText(n: number): string {
 .term-bar .lbl {
   margin-left: 8px;
   font-family: var(--share);
-  font-size: 10px;
+  font-size: var(--fs-caption);
   letter-spacing: .16em;
   text-transform: uppercase;
   color: var(--muted);
 }
 
-.term-body { padding: 12px 16px; font-size: 12.5px; color: var(--soft); overflow-x: auto; }
+.term-body { padding: 12px 16px; font-size: var(--fs-body); color: var(--soft); overflow-x: auto; }
 .term-body .l { display: block; white-space: pre; }
 .term-body .g { color: var(--green); }
 .term-body .c { color: var(--muted); }
@@ -430,7 +395,7 @@ function sizeText(n: number): string {
 .acts { display: flex; gap: 12px; margin: 24px 0 0; }
 
 .btn {
-  padding: 16px 26px 14px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
+  padding: 15px 26px 15px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
   background: transparent;
   border: 1px solid var(--border);
   color: var(--gray);
@@ -455,7 +420,7 @@ function sizeText(n: number): string {
 .hint {
   align-self: center;
   font-family: var(--share);
-  font-size: 10px;
+  font-size: var(--fs-caption);
   letter-spacing: .14em;
   text-transform: uppercase;
   color: var(--muted);

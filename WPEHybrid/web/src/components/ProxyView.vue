@@ -4,14 +4,10 @@
 
   那边是「一个 119px 的 Menu（14 项）+ 一个 Tabs（14 页）」两套同步的导航；
   这里只保留侧栏一套，与官网 WPEWeb.Cyber 的 .sidebar 一致。
-  页面定义（顺序 / 分组 / 图标 / 做没做）集中在 proxy/pages.ts。
-
-  14 页里目前只有「代理数据」有 Vue 版，其余在侧栏里压暗、点了不响应
-  —— 与启动页那张注入卡同一套口径。
+  页面定义（顺序 / 分组 / 图标）集中在 proxy/pages.ts，与注入模式共用一份。
 */
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { call } from '../bridge'
-import { t } from '../i18n'
 import { loadCountryTable } from '../flags'
 import { attachListFeed } from '../stores/lists'
 import { gotoPage } from '../stores/runtime'
@@ -64,16 +60,6 @@ onMounted(() => {
   void loadCountryTable()
 })
 onBeforeUnmount(() => detach?.())
-
-function titleOf(k: PageKey): string {
-  const p = PAGES.find((x) => x.key === k)
-  return p ? t(p.label) : ''
-}
-
-/** 这一屏做完没有。占位块靠它决定要不要出现，见模板里那段说明。 */
-function isReady(k: PageKey): boolean {
-  return PAGES.find((x) => x.key === k)?.ready === true
-}
 </script>
 
 <template>
@@ -127,18 +113,6 @@ function isReady(k: PageKey): boolean {
     <!-- 统计数据（页面开着时每秒刷）与 WPC 配置（两份列表都在推送流里） -->
     <StatData v-if="page === 'stat'" />
     <WpcConfig v-if="page === 'wpc'" />
-
-    <!--
-      「还没做」那一屏。
-
-      条件<b>不要写成一串 page !== 'x'</b>：每做完一屏就得回来加一个否定，
-      漏了的表现是新页面和占位块同时画出来。改成读 pages.ts 的 ready ——
-      那个标记本来就要改（侧栏靠它决定压不压暗），一处改完两处生效。
-    -->
-    <div v-if="!isReady(page)" class="soon">
-      <div class="eyebrow"><span class="dash" /><span class="lbl">{{ titleOf(page) }}</span></div>
-      <p>{{ t('proxy.notReady') }}</p>
-    </div>
   </div>
 </template>
 
@@ -151,27 +125,4 @@ function isReady(k: PageKey): boolean {
   display: grid;
   grid-template-columns: var(--side-w, 196px) 1fr;
 }
-
-.soon {
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  color: var(--muted);
-}
-
-.eyebrow { display: flex; align-items: center; gap: 10px; }
-.eyebrow .dash { width: 32px; height: 1px; background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
-
-.eyebrow .lbl {
-  font-family: var(--share);
-  font-size: 11px;
-  letter-spacing: .3em;
-  text-transform: uppercase;
-  color: var(--cyan);
-}
-
-.soon p { font-size: 12.5px; margin: 0; }
 </style>

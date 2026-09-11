@@ -5,6 +5,7 @@
 // （启动页并不需要那份数据，白轮询是浪费）。
 
 import { ref } from 'vue'
+import { call } from '../bridge'
 
 /**
  * 别的视图想切到代理模式的某一页时写这里（例如封包列表右键「添加到文本 A」后想看文本对比页）。
@@ -14,6 +15,15 @@ export const gotoPage = ref<string | null>(null)
 
 /** SOCKS5 的监听地址，形如 192.168.1.10:1080。启动时取一次，配置不变就不会变。 */
 export const socks5Addr = ref('')
+
+/**
+ * HTTP 代理（SunnyNet）的监听地址，同上。
+ *
+ * ⚠️ **空串 = 没启用 HTTP 代理**，不是「取不到」—— C# 侧 `ProxyAddresses` 在
+ * `Enable_HTTP` 为 false 时就返回空串，界面据此显示「未启用」而不是一个连不上的地址。
+ * 它与 socks5Addr 共用同一次 GetLocalIPAddress()（70ms），所以两者总是一起取、一起写。
+ */
+export const httpAddr = ref('')
 
 /**
  * SOCKS5 服务在不在跑。由 ProxyData 的 getStats 轮询写入，RunBar 的启停按钮也写它。
@@ -51,3 +61,28 @@ export const listSetting = ref<{
   autoClear: boolean
   autoClearValue: number
 } | null>(null)
+
+/*
+  ── 全局快捷键作用在哪一份列表上 ────────────────────────
+
+  快捷面板底部那一条要显示它，而改它的地方在「快捷键设置」弹窗、备份导入 ——
+  三处不是父子关系，所以放在这里共用一份。
+
+  ⚠️ **真源是 C# 的 SystemConfig.HotKeyType**（0 = 发送列表、1 = 机器人列表），
+  这里只是个镜像：改过它的地方各自调一次 refreshHotkey()，不要在前端另记一份。
+*/
+
+/** 0 = 发送列表、1 = 机器人列表。 */
+export const hotkeyType = ref(0)
+
+/** 12 个快捷键里设了几个。0 = 一个都没设 —— 那时说「作用在哪」没有意义。 */
+export const hotkeyCount = ref(0)
+
+/** 从 C# 重取一次。桥没接上（探针页）时静默保持原值。 */
+export async function refreshHotkey(): Promise<void> {
+  try {
+    const r = await call<{ Type: number; Keys: string[] }>('getHotkeySetting')
+    hotkeyType.value = r?.Type === 1 ? 1 : 0
+    hotkeyCount.value = (r?.Keys ?? []).filter((k) => !!(k && k.trim())).length
+  } catch { /* 断了 */ }
+}

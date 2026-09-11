@@ -9,7 +9,7 @@
 import { computed, ref } from 'vue'
 import { call } from '../../bridge'
 import { lang, normalize, t } from '../../i18n'
-import { socks5Addr } from '../../stores/runtime'
+import { httpAddr, refreshHotkey, socks5Addr } from '../../stores/runtime'
 import { initTheme } from '../../stores/theme'
 import SettingsModal from './SettingsModal.vue'
 
@@ -85,8 +85,15 @@ async function importBackup(): Promise<void> {
     if (r?.language) lang.value = normalize(r.language)
     //主题同理：用 initTheme（只应用、不回写），备份里带的那份已经在 C# 侧落库了
     if (r?.themeMode) initTheme(r.themeMode, r.isDark, r.scanLine)
+    //备份里带着快捷键与它作用的列表，快捷面板底部那一条要跟上
+    void refreshHotkey()
     //监听地址可能跟着代理配置一起换了
-    try { const s = await call<{ socks5Addr?: string }>('getSystemCheck'); if (s?.socks5Addr) socks5Addr.value = s.socks5Addr } catch { /* 取不到就留旧值 */ }
+    try {
+      const s = await call<{ socks5Addr?: string; httpAddr?: string }>('getSystemCheck')
+      if (s?.socks5Addr) socks5Addr.value = s.socks5Addr
+      //httpAddr 要无条件写：备份里可能把 HTTP 代理关掉了，那时它就该变回空串
+      if (s) httpAddr.value = s.httpAddr || ''
+    } catch { /* 取不到就留旧值 */ }
   } catch (e) {
     console.error('[bk] 导入失败', e)
   } finally {
@@ -96,23 +103,31 @@ async function importBackup(): Promise<void> {
 </script>
 
 <template>
-  <SettingsModal :open="props.open" :title="t('set.backup')" subtitle="Controls/BackUpSetting" :busy="busy" readonly
+  <SettingsModal :open="props.open" :title="t('set.backup')" subtitle="Backup · Restore" :busy="busy" readonly
                  @update:open="emit('update:open', $event)">
     <div class="setf bk">
       <p class="hint">{{ t('bk.hint') }}</p>
 
       <div class="groups" :class="{ two: twoCol }">
-        <div v-for="g in GROUPS" :key="g.key" class="g">
-          <div class="gt">{{ t(g.key) }}</div>
-          <button
-            v-for="[k, lb, tip] in g.items"
-            :key="k"
-            class="chk"
-            :class="{ on: f[k] }"
-            :title="tip ? t(tip) : undefined"
-            @click="f[k] = !f[k]"
-          ><i />{{ t(lb) }}</button>
-        </div>
+        <!--
+          ⚠️ 用<b>共用的 .sec / .grp</b>，不再自己画一套卡片（原来是 .g / .gt）——
+          这一屏原先的抬头还是老的「青色 Share Tech Mono 小标题」，
+          与另外 10 屏改成分区卡之后就对不上了，一眼看得出是漏改的那一个。
+          勾选框收进 .gb：.sec 只负责卡的外观，卡身怎么排由各屏自己定。
+        -->
+        <section v-for="g in GROUPS" :key="g.key" class="sec">
+          <div class="grp">{{ t(g.key) }}</div>
+          <div class="gb">
+            <button
+              v-for="[k, lb, tip] in g.items"
+              :key="k"
+              class="chk"
+              :class="{ on: f[k] }"
+              :title="tip ? t(tip) : undefined"
+              @click="f[k] = !f[k]"
+            ><i />{{ t(lb) }}</button>
+          </div>
+        </section>
       </div>
 
       <div class="acts">
@@ -149,24 +164,23 @@ async function importBackup(): Promise<void> {
   margin-bottom: -10px;
 }
 
-.g {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 12px 14px;
-  margin-bottom: 10px;
-  border: 1px solid var(--border);
-  background: rgb(var(--inset-rgb) / 20%);
-  break-inside: avoid;
-}
-.gt { font-family: var(--share); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--cyan); margin-bottom: 2px; }
+/*
+  ⚠️ 卡片本身走共用的 .sec（边框 / 底色 / 左沿色轨 / 带编号的抬头都在 style.css），
+  这里只覆盖<b>多列流里特有</b>的那三条：
+    · 左右外边距归 0 —— .groups 已经有 20px 内边距了，再让 20 会把卡挤成窄条
+    · break-inside: avoid —— 不加的话一组会被拦腰断到下一列去
+    · padding-bottom 收一点 —— 卡身是勾选框不是表单行，不需要 .sec 默认那 8px
+*/
+.groups .sec { margin: 0 0 10px; padding-bottom: 10px; break-inside: avoid; }
+
+/* 卡身：勾选框竖排 */
+.gb { display: flex; flex-direction: column; gap: 8px; padding: 8px 14px 0; }
 
 /*
   组内两列（判据与量法见上面 twoCol 那段注释）。5 项的组从 5 行变 3 行，两个长组各省两行。
   内边距从 14 收到 12、列缝取 10，都是为了把格子从 121.5 挤到 122.5 —— 韩语最长那条 114.5 差得不多。
 */
-.groups.two .g { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 10px; padding: 12px; }
-.groups.two .gt { grid-column: 1 / -1; }
+.groups.two .gb { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 10px; padding: 8px 12px 0; }
 
 /*
   ⚠️ <b>标签在这里必须允许折行。</b>`.setf .chk` 是 nowrap 的（那是给定高表行准备的），
@@ -175,9 +189,9 @@ async function importBackup(): Promise<void> {
   它是给「以后哪条文案变长了」留的软着陆。
   align-items 跟着从 center 改成 flex-start，否则真折了行勾选框会跑到两行的正中间。
 */
-.groups.two .chk { align-items: flex-start; white-space: normal; text-align: left; }
-/* 勾选框 13px 高，跟首行文字的中心对齐：12.5px × 1.4 行高 ≈ 17.5，(17.5 − 13) ÷ 2 ≈ 2 */
-.groups.two .chk i { margin-top: 2px; }
+.groups.two .gb .chk { align-items: flex-start; white-space: normal; text-align: left; }
+/* 勾选框 16px 高，跟首行文字的中心对齐：12.5px × 1.4 行高 ≈ 17.5，(17.5 − 16) ÷ 2 ≈ 1 */
+.groups.two .gb .chk i { margin-top: 1px; }
 .acts { display: flex; align-items: center; gap: 8px; padding: 11px 20px 4px; }   /* 上边距是量着定的：日语最长的那几条差 1px 就会出滚动条 */
 .acts .grow { flex: 1; }
 
@@ -193,7 +207,16 @@ async function importBackup(): Promise<void> {
 @media (max-height: 620px) {
   .bk .hint { margin: 2px 0; }
   .groups { padding: 0 20px; }
-  .g { gap: 5px; padding: 8px 12px; margin-bottom: 7px; }
+  /*
+    ⚠️ 分区卡的抬头在这一档也要收 —— 它比原来那条纯文本小标题高出约 12px/张，
+    四张就是 48px，而这一屏在 533px（150% 缩放）下本来就只剩「滚一点点」的余量。
+    不收的话实测从 44px 溢出涨到 86px，韩语更是从 0 变成 45。
+  */
+  .groups .sec { margin-bottom: 6px; padding-bottom: 5px; }
+  .groups .sec > .grp { padding: 3px 12px 2px; margin-bottom: 0; }
+  .groups .sec > .grp::before { padding: 1px 3px 0; min-width: 19px; }
+  .gb { gap: 5px; padding: 4px 12px 0; }
+  .groups.two .gb { gap: 5px 10px; padding: 4px 12px 0; }
   .groups { margin-bottom: -7px; }
   .acts { padding: 10px 20px 2px; }
 }

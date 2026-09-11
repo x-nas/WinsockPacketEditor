@@ -438,9 +438,38 @@ namespace WPEHookTest
         /// </summary>
         public static int RunGhostShell(string[] args)
         {
+            bool noisy = args.Contains("--noisy");
             int pid = int.Parse(args[Array.IndexOf(args, "--ghost-shell") + 1]);
 
             InitShellSide();
+
+            /*
+                --noisy：配一条<b>每个包都命中</b>的滤镜。
+
+                【它验的是什么】滤镜一命中，目标那边就在<b>钩子线程</b>上调一次
+                DoFilterLog → OnFilterLog → 事件流。事件流原来是<b>同步写管道</b>的，
+                于是外壳一卡住、管道缓冲一满，写就阻塞 —— 阻塞的是目标的 send()，
+                也就是把目标游戏卡住。封包那条路一直有环护着，事件这条路漏了。
+
+                匹配串 "0|00,1|01,2|02" 对着 target3 的载荷（payload[i] = i & 0xFF），
+                所以每一个包都命中。动作用 NoModify_Display：不改字节、只产生日志，
+                这样量到的吞吐变化只来自「事件流阻不阻塞」这一件事。
+            */
+            if (noisy)
+            {
+                Operate.FilterConfig.List.lstFilterInfo.Clear();
+                Operate.FilterConfig.Filter.AddFilter(
+                    true, Guid.NewGuid(), "压测滤镜",
+                    false, "", false, "", false, "", false, "",
+                    Operate.FilterConfig.Filter.FilterMode.Normal,
+                    Operate.FilterConfig.Filter.FilterAction.NoModify_Display,
+                    false, Operate.FilterConfig.Filter.FilterExecuteType.None, Guid.Empty,
+                    new Operate.FilterConfig.Filter.FilterFunction(
+                        true, true, true, true, true, true, true, true, true, true, true, true),
+                    Operate.FilterConfig.Filter.FilterStartFrom.Head,
+                    false, false, 1, false, 0, "", 0, "", "",
+                    "0|00,1|01,2|02", "");
+            }
 
             var link = new ShellLink();
             link.Attach(pid, null, 15000);
@@ -448,6 +477,32 @@ namespace WPEHookTest
 
             Console.WriteLine("GHOST_ATTACHED pid=" + link.TargetPid + " state=" + link.State);
             Console.Out.Flush();
+
+            /*
+                --noisy 还要往回报一行「滤镜命中了几次、外壳这边收到几条滤镜日志」。
+
+                ⚠️ <b>这一行不是装饰，它是 #6 的证据。</b>没有它，「滤镜一次都没命中」
+                与「事件流没有拖住钩子线程」在报告上长得一模一样 —— 那条断言就成了空的。
+
+                hits 从 Stats 事件带回来（协议 v3 起附了滤镜那六个全局计数），
+                logs 是外壳侧滤镜日志队列的长度：前者证明目标那边真的在钩子线程上
+                调 DoFilterLog，后者证明那些事件真的流到了外壳。
+
+                队列只涨不消是有意的 —— 临时外壳没有搬运拍，本来也不需要。
+            */
+            if (noisy)
+            {
+                new Thread(() =>
+                {
+                    while (true)
+                    {
+                        Thread.Sleep(500);
+                        Console.WriteLine("NOISY hits=" + Operate.FilterConfig.Filter.FilterExecute_CNT
+                                          + " logs=" + Operate.LogConfig.Queue.cqFilterLogInfo.Count);
+                        Console.Out.Flush();
+                    }
+                }) { IsBackground = true }.Start();
+            }
 
             //等着被杀。绝不主动 Detach —— 那就不是「崩溃」了。
             Thread.Sleep(Timeout.Infinite);

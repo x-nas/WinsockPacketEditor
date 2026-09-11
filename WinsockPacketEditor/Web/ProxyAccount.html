@@ -1,371 +1,416 @@
-﻿<!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=420, initial-scale=1">
-    <link rel="icon" href="./web_images/wpe.ico" />
-    <link rel="stylesheet" type="text/css" href="./web_images/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="./web_images/github-dark.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="./web_images/print.css" media="print">
-    <link rel="stylesheet" type="text/css" href="./web_images/downloads.css" media="all">
-    <script src="./web_images/jquery-1.11.3.min.js" type="text/javascript"></script>
-    <script src="./web_images/script.js" type="text/javascript"></script>
-
-    <title>Winsock Packet Editor</title>
-
-    <style>
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 10px 0;
-        }
-
-        tr.selected {
-            background-color: #87CEEB;
-            font-weight: bold;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-            vertical-align: middle;
-        }
-
-        th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        input[type="text"],
-        input[type="password"],
-        input[type="datetime-local"] {
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-        }
-
-        input[type="checkbox"] {
-            margin: 0 10px;
-        }
-
-        button {
-            padding: 8px 15px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-            button:hover {
-                background-color: #0056b3;
-            }
-
-        .text-left {
-            text-align: left;
-        }
-
-        .text-right {
-            text-align: right;
-        }
-    </style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#0a0a0f">
+    <meta http-equiv="Cache-Control" content="no-store">
+    <title>代理账号 · WPE x64</title>
+    <!--
+      站点图标 = <b>程序自己的那枚</b>（exe 的 ApplicationIcon）。
+      Web/wpe.ico 是 ../wpe.ico 的<b>子集</b>：只留 16/32/48 三层（浏览器用得到的），
+      源图 361KB -> 14.7KB —— 256x256 那一层单独就 270KB，是给 Explorer 大图标用的，
+      标签页图标一辈子用不到，整份带上等于每个访问者白下 361KB。
+      ⚠️ 换了源图要重新生成：见 CLAUDE.md「管理台的站点图标」。
+    -->
+    <link rel="icon" href="./wpe.ico" sizes="48x48 32x32 16x16">
+    <!-- 令牌在前、组件样式在后：tokens.css 与外壳的 Vue 界面是同一个源文件 -->
+    <link rel="stylesheet" href="./tokens.css">
+    <link rel="stylesheet" href="./wpe.css">
+    <!--
+        ⚠️ 这里<b>不能</b>加 defer。延迟脚本要等整份文档解析完才执行，
+        而页尾那段内联脚本是解析到就跑的 —— 加了 defer 就会「内联先跑、
+        wpe.js 后跑」，页面上是一片「—」加一个 poll is not defined。
+        它只有 6KB 且与页面同机，同步加载的代价可以忽略。
+    -->
+    <script src="./wpe.js"></script>
 </head>
 
-<body style="padding: 0px 0px 154px;">
-    <div id="container" style="height: auto !important; min-height: 0px !important;">
-        <div class="inner" style="height: auto !important;">
-            <div id="header-container"></div>
-            <section id="main_content" style="height: auto !important;">
+<body>
+    <div class="pcb"></div>
+    <span class="cn tl"></span><span class="cn tr"></span>
+    <span class="cn bl"></span><span class="cn br"></span>
 
-                <h2>>> 账号管理</h2>
-                
-                <form id="AccountInfo">
-                    <table>
-                        <tr>
-                            <td class="text-left"><label for="isEnable">启用:</label></td>
-                            <td class="text-left"><input type="checkbox" id="isEnable" name="isEnable"></td>
-                        </tr>
-                        <tr>
-                            <td class="text-left"><label for="username">用户名:</label></td>
-                            <td class="text-left"><input type="text" id="username" name="username" required></td>
-                        </tr>
-                        <tr>
-                            <td class="text-left"><label for="password">密码:</label></td>
-                            <td class="text-left"><input type="password" id="password" name="password" required></td>
-                        </tr>
-                        <tr>
-                            <td class="text-left"><label for="isExpiry">是否过期:</label></td>
-                            <td class="text-left"><input type="checkbox" id="isExpiry" name="isExpiry"></td>
-                        </tr>
-                        <tr>
-                            <td class="text-left"><label for="expiryTime">过期时间:</label></td>
-                            <td class="text-left"><input type="datetime-local" id="expiryTime" name="expiryTime" required></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" style="text-align: center;">
-                                <button type="submit" id="addButton">新增</button>
-                            </td>
-                        </tr>
-                    </table>
-                </form>
+    <header class="top">
+        <div class="brand">WPE <small>x64</small></div>
+        <nav class="nav">
+            <a href="index.html">总览</a>
+            <a href="ProxyAccount.html">账号</a>
+            <a href="SystemLog.html">日志</a>
+        </nav>
+        <span class="led" id="led"></span>
+    </header>
 
-                <br />
+    <main class="wrap">
+        <section class="card">
+            <div class="hd">
+                <h2>代理账号</h2>
+                <span class="sub" id="cnt">—</span>
+                <span class="grow"></span>
+                <button class="btn primary" id="btnAdd" type="button">新增</button>
+            </div>
 
-                <div id="data"></div>
+            <div class="bd">
+                <div class="bar-tools">
+                    <input class="inp" id="q" type="search" placeholder="搜索用户名" autocomplete="off">
+                    <button class="btn" id="btnOnline" type="button">只看在线</button>
+                    <button class="btn" id="btnRefresh" type="button">刷新</button>
+                </div>
+            </div>
 
-            </section>
+            <table class="tbl acct">
+                <thead>
+                    <tr>
+                        <th>启用</th>
+                        <th class="user">用户名</th>
+                        <th>状态</th>
+                        <th>到期</th>
+                        <th>连接数</th>
+                        <th>设备数</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="body"></tbody>
+            </table>
 
-            <div id="footer-container"></div>
+            <div class="empty" id="empty" hidden>没有账号</div>
+        </section>
+    </main>
+
+    <footer class="foot">WPE x64 · REMOTE CONSOLE</footer>
+    <div class="toasts" id="toasts"></div>
+
+    <!-- ── 新增 / 编辑 ─────────────────────────────── -->
+    <div class="mask" id="edit" hidden>
+        <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="editTitle">
+            <div class="hd">
+                <h3 id="editTitle">新增账号</h3>
+                <span class="grow"></span>
+                <button class="x" type="button" title="关闭" aria-label="关闭" data-close>
+                    <svg class="ico" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg>
+                </button>
+            </div>
+            <div class="bd">
+                <div class="fld">
+                    <label for="fUser">用户名</label>
+                    <input class="inp" id="fUser" autocomplete="off" spellcheck="false">
+                </div>
+                <div class="fld">
+                    <label for="fPass">密码</label>
+                    <input class="inp" id="fPass" autocomplete="new-password" spellcheck="false">
+                </div>
+                <div class="fld">
+                    <button class="chk" id="fEnable" type="button"><i></i>启用</button>
+                </div>
+                <div class="fld">
+                    <button class="chk" id="fExpiry" type="button"><i></i>到期时间</button>
+                    <input class="inp" id="fExpiryAt" type="datetime-local">
+                </div>
+                <div class="fld">
+                    <button class="chk" id="fLimitLinks" type="button"><i></i>限制连接数</button>
+                    <input class="inp" id="fLinks" type="number" min="1" inputmode="numeric">
+                </div>
+                <div class="fld">
+                    <button class="chk" id="fLimitDevices" type="button"><i></i>限制设备数</button>
+                    <input class="inp" id="fDevices" type="number" min="1" inputmode="numeric">
+                </div>
+                <p class="err" id="fErr" hidden></p>
+            </div>
+            <div class="ft">
+                <button class="btn" type="button" data-close>取消</button>
+                <button class="btn primary" id="fSave" type="button">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── 删除确认 ───────────────────────────────── -->
+    <div class="mask" id="del" hidden>
+        <div class="dlg" role="dialog" aria-modal="true">
+            <div class="hd"><h3>删除账号</h3></div>
+            <div class="bd"><p id="delText">确定删除吗？</p></div>
+            <div class="ft">
+                <button class="btn" type="button" data-close>取消</button>
+                <button class="btn danger" id="delOk" type="button">删除</button>
+            </div>
         </div>
     </div>
 
     <script>
+        'use strict';
 
-        //获取账号列表
-        function fetchData()
-        {            
-            fetch('./ProxyAccount/GetProxyAccountList')
-                .then(response => response.json())
-                .then(data =>
-                {
-                    displayData(data);
-                });                
-        }                
+        /*
+            ⚠️ 只渲染前 MAX 条。GetProxyAccountList 返回的是整份 lstAccountInfo，
+            账号是拿来卖的、几万个是真实规模，而每条还带着 AIPInfo（登录记录）。
+            手机上把几万行铺成 DOM 会直接卡死 —— 所以先搜再看，列表只画前 200 条。
+            （真要在手机上管几万个账号，该给 C# 加一个带分页与关键字的接口，
+            那是另一件事，这里不动后端。）
+        */
+        var MAX = 200;
 
-        //显示账号列表
-        function displayData(data)
-        {
-            const dataDiv = document.getElementById('data');
-            const table = document.createElement('table');
+        var all = [];
+        var onlineOnly = false;
+        var editing = null;   // null = 新增；否则是被编辑的那条
+        var pendingDel = null;
 
-            const headerRow = document.createElement('tr');
-            const headers = ['序号', '启用', '用户名', '登录 IP', '在线', '开通时间', '是否过期', '过期时间', '操作'];
-
-            headers.forEach(headerText =>
-            {
-                const th = document.createElement('th');
-                th.textContent = headerText;
-                th.style.textAlign = 'center';              
-                headerRow.appendChild(th);
-            });
-
-            table.appendChild(headerRow);
-
-            data.forEach((item, index) =>
-            {
-                const row = document.createElement('tr');
-                const cells = [
-                    document.createElement('td'),
-                    document.createElement('td'),
-                    document.createElement('td'),
-                    document.createElement('td'),
-                    document.createElement('td'),
-                    document.createElement('td'),
-                    document.createElement('td'),
-                    document.createElement('td'),
-                    document.createElement('td')
-                ];                
-
-                cells[0].textContent = index + 1;
-
-                const enableCheckbox = document.createElement('input');
-                enableCheckbox.type = 'checkbox';
-                enableCheckbox.readOnly = true;
-                enableCheckbox.checked = item.IsEnable;
-                cells[1].appendChild(enableCheckbox);
-
-                cells[2].textContent = item.UserName;
-                cells[3].textContent = item.LoginIP;
-
-                const loginIPCheckbox = document.createElement('input');
-                loginIPCheckbox.type = 'checkbox';
-                loginIPCheckbox.readOnly = true;
-                loginIPCheckbox.checked = item.IsOnLine;
-                cells[4].appendChild(loginIPCheckbox);
-
-                cells[5].textContent = formatDate(new Date(item.CreateTime));
-
-                const expiryCheckbox = document.createElement('input');
-                expiryCheckbox.type = 'checkbox';
-                expiryCheckbox.readOnly = true;
-                expiryCheckbox.checked = item.IsExpiry;
-                cells[6].appendChild(expiryCheckbox);
-
-                cells[7].textContent = formatDate(new Date(item.ExpiryTime));
-
-                const editButton = document.createElement('button');
-                editButton.textContent = '编辑';
-                editButton.style.marginBottom = '10px';
-                editButton.addEventListener('click', () => {
-                    editAccount(item.AID);
-                });
-                cells[8].appendChild(editButton);
-
-                const deleteButton = document.createElement('button');
-                deleteButton.textContent = '删除';
-                deleteButton.addEventListener('click', () =>
-                {
-                    if (confirm(`确定要删除此账号吗？用户名: ${item.UserName}`)) {
-                        deleteAccount(item.AID);
-                    }
-                });
-                cells[8].appendChild(deleteButton);
-
-                cells.forEach(cell =>
-                {
-                    cell.style.textAlign = 'center';
-                    row.appendChild(cell);
-                });
-
-                table.appendChild(row);
-            });
-
-            dataDiv.innerHTML = '';
-            dataDiv.appendChild(table);
+        /* ── 勾选框：三态之外没有别的，点一下翻一下 ── */
+        function chk(id, on) {
+            var b = document.getElementById(id);
+            if (on !== undefined) b.classList.toggle('on', !!on);
+            return b.classList.contains('on');
         }
 
-        //格式化显示日期
-        function formatDate(date)
-        {
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            const hours = String(date.getHours()).padStart(2, '0');
-            const minutes = String(date.getMinutes()).padStart(2, '0');
+        /*
+          ⚠️ <b>只认 button.chk，不能只写 .chk。</b>
 
-            return `${year}-${month}-${day} ${hours}:${minutes}`;
-        }
+          真正的勾选框（弹窗里那四个）是 &lt;button class="chk"&gt;；
+          而账号表「启用」列的只读标记<b>复用了同一套 .chk 样式</b>（为的是长得一模一样），
+          只是换成了 &lt;span&gt;。按 .chk 匹配的话它也会被这个委托选中，
+          点一下就 toggle('on') —— <b>方框当场翻转、却不发任何请求</b>：
+          屏幕上像是改了启用状态，服务端一无所知，刷新页面又变回去。
+          这正是把那一列改成只读之后<b>它看起来仍然能点</b>的全部原因。
 
-        //初始化过期时间
-        async function setExpiryTime()
-        {
-            try
-            {
-                const now = new Date();
-                const nowString = now.toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false });
-
-                const [date, time] = nowString.split(', ');
-                const [month, day, year] = date.split('/');
-                const [hours, minutes] = time.split(':');
-                const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
-
-                document.getElementById('expiryTime').value = formattedDate;
-            }
-            catch (error)
-            {
-                console.error('Error setting expiry time:', error);
-            }
-        }        
-
-        //新增账号
-        document.getElementById('AccountInfo').addEventListener('submit', async (e) =>
-        {
-            e.preventDefault();
-
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const isEnable = document.getElementById('isEnable').checked;
-            const isExpiry = document.getElementById('isExpiry').checked;
-            const expiryTime = document.getElementById('expiryTime').value;
-
-            const newAccount =
-            {
-                UserName: username,
-                PassWord: password,
-                IsEnable: isEnable,
-                IsExpiry: isExpiry,
-                ExpiryTime: expiryTime
-            };
-
-            try {
-                const response = await fetch('./ProxyAccount/AddProxyAccount',
-                    {
-                        method: 'POST',
-
-                        headers:
-                        {
-                            'Content-Type': 'application/json'
-                        },
-
-                        body: JSON.stringify(newAccount)
-                    });
-
-                if (response.ok)
-                {
-                    const OKData = await response.json();
-                    alert(OKData);
-
-                    document.getElementById('isEnable').checked = false;
-                    document.getElementById('username').value = '';
-                    document.getElementById('password').value = '';
-                    document.getElementById('isExpiry').checked = false;
-
-                    setExpiryTime()
-                    fetchData();
-                }
-                else
-                {
-                    const errorData = await response.json();
-                    alert(errorData.Message);
-                }
-            }
-            catch (error)
-            {
-                alert(error.Message);
-            }
+          判据用<b>元素语义</b>（是不是按钮）而不是一个否定 class（:not(.ro)）：
+          以后再加任何非按钮的 .chk 变体都自动是安全的。
+        */
+        document.addEventListener('click', function (e) {
+            var c = e.target.closest('button.chk');
+            if (c) c.classList.toggle('on');
         });
 
-        //删除账号
-        async function deleteAccount(AID)
-        {
-            try
-            {
-                const response = await fetch('./ProxyAccount/DeleteProxyAccount',
-                    {
-                        method: 'POST',
-                        headers:
-                        {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(AID)
-                    });
+        /* ── 列表 ── */
 
-                if (response.ok)
-                {
-                    fetchData();
-                }
-                else
-                {
-                    const errorData = await response.json();
-                    alert(errorData.Message);
-                }
-            }
-            catch (error)
-            {
-                alert(error.message);
+        function shown() {
+            var kw = document.getElementById('q').value.trim().toLowerCase();
+            return all.filter(function (a) {
+                if (onlineOnly && !a.IsOnLine) return false;
+                if (kw && String(a.UserName || '').toLowerCase().indexOf(kw) < 0) return false;
+                return true;
+            });
+        }
+
+        function render() {
+            var list = shown();
+            var body = document.getElementById('body');
+            body.textContent = '';
+
+            list.slice(0, MAX).forEach(function (a) {
+                var tr = el('tr', { class: a.IsEnable ? '' : 'off' });
+
+                /*
+                  启用状态是<b>只读标记，不是开关</b>。
+                  这一格原先能点着切换，但它在一张长表里、紧挨着「编辑 / 删除」，
+                  点错的代价是<b>某个客户端当场连不上</b>而且没有任何确认 ——
+                  远程管理台多半是在手机上用的，误触的机会比在程序里大得多。
+                  要改启用状态就进「编辑」，那条路有保存按钮兜着。
+
+                  ⚠️ 用 span 而不是 disabled 的 button：后者读屏会念成「按钮，已禁用」，
+                  让人以为是暂时不能点；而这里它<b>本来就不是控件</b>。
+                  role="img" + aria-label 才说得准 —— 一个表示状态的图形。
+                */
+                var tdE = el('td', { class: 'ck', 'data-k': '启用' });
+                var mark = el('span', {
+                    class: 'chk ro' + (a.IsEnable ? ' on' : ''),
+                    role: 'img',
+                    'aria-label': a.IsEnable ? '已启用' : '已停用',
+                    title: (a.IsEnable ? '已启用' : '已停用') + ' —— 在「编辑」里改',
+                });
+                // ⚠️ el() 的第三个参数是<b>文本</b>（走 textContent）——
+                //    把元素塞进去会被 String() 成 "[object HTMLElement]" 印在格子里。真踩过。
+                mark.appendChild(el('i'));
+                tdE.appendChild(mark);
+                tr.appendChild(tdE);
+
+                tr.appendChild(el('td', { class: 'user', 'data-k': '用户名' }, a.UserName));
+                tr.appendChild(el('td', { class: a.IsOnLine ? 'who' : 'num', 'data-k': '状态' },
+                    a.IsOnLine ? '在线' : '离线'));
+                tr.appendChild(el('td', { class: 't', 'data-k': '到期' },
+                    a.IsExpiry ? dateTime(a.ExpiryTime) : '不限'));
+                tr.appendChild(el('td', { class: 'num', 'data-k': '连接数' },
+                    a.IsLimitLinks ? num(a.LimitLinks) : '不限'));
+                tr.appendChild(el('td', { class: 'num', 'data-k': '设备数' },
+                    a.IsLimitDevices ? num(a.LimitDevices) : '不限'));
+
+                var ops = el('td', { class: 'ops', 'data-k': '操作' });
+                var bE = el('button', { class: 'btn', type: 'button' }, '编辑');
+                bE.addEventListener('click', function () { openEdit(a); });
+                var bD = el('button', { class: 'btn danger', type: 'button', style: 'margin-left:8px' }, '删除');
+                bD.addEventListener('click', function () { askDelete(a); });
+                ops.appendChild(bE);
+                ops.appendChild(bD);
+                tr.appendChild(ops);
+
+                body.appendChild(tr);
+            });
+
+            document.getElementById('empty').hidden = list.length > 0;
+            document.getElementById('cnt').textContent =
+                (list.length > MAX ? MAX + ' / ' : '') + list.length + ' 个'
+                + (all.length !== list.length ? '（共 ' + all.length + '）' : '');
+        }
+
+        function load() {
+            return api('ProxyAccount/GetProxyAccountList').then(function (d) {
+                all = Array.isArray(d) ? d : [];
+                render();
+            }).catch(function (e) { toast(errText(e, '取账号列表失败'), 'bad'); });
+        }
+
+        /* ── 写 ──
+           ⚠️ UpdateProxyAccount 内部会对收到的 Password 再加密一次，
+           所以必须回传<b>明文</b>；列表里的 Password 是密文，直接回传会被二次加密，
+           账号从此登录不上。先用 GetPassWordDecrypt 换回明文。 */
+
+        function plainPassword(a) {
+            if (!a.Password) return Promise.resolve('');
+            return fetch('./ProxyAccount/GetPassWordDecrypt?PassWord=' + encodeURIComponent(a.Password))
+                .then(function (r) {
+                    // 服务端应答了、只是这一条取不到 —— 那才轮得到「请用编辑重设一次」
+                    return r.ok ? r.json() : null;
+                })
+                .catch(function (e) {
+                    /*
+                      ⚠️ <b>连不上必须往上抛，不能吞成 null。</b>
+                      吞掉的话调用方会报「取不到该账号的密码，请用「编辑」重设一次」——
+                      把网络故障说成数据问题，而且指给用户一个此刻同样做不成的操作。
+                      （应答不是 JSON 会抛 SyntaxError，那条仍然走下面的 null。）
+                    */
+                    if (e && e.name === 'TypeError') { setLive(false); throw e; }
+                    return null;
+                });
+        }
+
+        /* ── 弹窗 ── */
+
+        function openEdit(a) {
+            editing = a || null;
+            document.getElementById('editTitle').textContent = a ? '编辑账号' : '新增账号';
+            document.getElementById('fErr').hidden = true;
+
+            document.getElementById('fUser').value = a ? (a.UserName || '') : '';
+            document.getElementById('fUser').disabled = !!a;   // 用户名是主键，改不了
+            document.getElementById('fPass').value = '';
+            chk('fEnable', a ? a.IsEnable : true);
+            chk('fExpiry', a ? a.IsExpiry : false);
+            document.getElementById('fExpiryAt').value = toLocalInput(a ? a.ExpiryTime : null);
+            chk('fLimitLinks', a ? a.IsLimitLinks : false);
+            document.getElementById('fLinks').value = (a && a.LimitLinks > 0) ? a.LimitLinks : 1;
+            chk('fLimitDevices', a ? a.IsLimitDevices : false);
+            document.getElementById('fDevices').value = (a && a.LimitDevices > 0) ? a.LimitDevices : 1;
+
+            document.getElementById('edit').hidden = false;
+
+            if (a) {
+                // 编辑时把明文填回去，用户不改密码也能保存
+                plainPassword(a).then(function (p) {
+                    if (p) document.getElementById('fPass').value = p;
+                }).catch(function (e) {
+                    // 连不上时把原因写出来，否则用户只看到一个空密码框，填完保存才知道存不了
+                    var err = document.getElementById('fErr');
+                    err.textContent = errText(e, '取不到原密码，保存前请重新填写');
+                    err.hidden = false;
+                });
             }
         }
 
-        //修改账号
-        function editAccount(AID)
-        {
-            const popup = window.open(`EditAccount.html?AID=${AID}`, 'Edit Account', 'width=500,height=500');            
-        }        
+        // 限制数量的下限是 1。勾了限制却填 0 的账号<b>一条连接都建不起来</b> ——
+        // 服务端判的是「当前连接数 >= 上限」，0 >= 0 在第一条就成立，而界面上只显示一个 0。
+        // C# 的 NormalizeLimit 也兜着这一条，这里夹是为了<b>当场回写输入框</b>：
+        // 悄悄存成 1 而屏幕上还写着 0，比不夹更让人费解。
+        // 没勾限制时不回写（那个值不参与判断，改它只会打扰用户），但仍然不把 0 发出去。
+        function limit(id, on) {
+            var el = document.getElementById(id);
+            var v = Math.floor(Number(el.value));
 
-        setExpiryTime();
-        fetchData();
+            if (!isFinite(v) || v < 1) { v = 1; }
+            if (on) { el.value = v; }
 
+            return v;
+        }
+
+        function save() {
+            var err = document.getElementById('fErr');
+            var user = document.getElementById('fUser').value.trim();
+            var pass = document.getElementById('fPass').value;
+
+            if (!user) { err.textContent = '请填写用户名'; err.hidden = false; return; }
+            if (!pass) { err.textContent = '请填写密码'; err.hidden = false; return; }
+            err.hidden = true;
+
+            var d = {
+                AID: editing ? editing.AID : '00000000-0000-0000-0000-000000000000',
+                UserName: user,
+                Password: pass,
+                IsEnable: chk('fEnable'),
+                IsExpiry: chk('fExpiry'),
+                ExpiryTime: new Date(document.getElementById('fExpiryAt').value || Date.now()).toISOString(),
+                IsLimitLinks: chk('fLimitLinks'),
+                LimitLinks: limit('fLinks', chk('fLimitLinks')),
+                IsLimitDevices: chk('fLimitDevices'),
+                LimitDevices: limit('fDevices', chk('fLimitDevices')),
+            };
+
+            var url = editing ? 'ProxyAccount/UpdateProxyAccount' : 'ProxyAccount/AddProxyAccount';
+            document.getElementById('fSave').disabled = true;
+
+            post(url, d).then(function (m) {
+                document.getElementById('edit').hidden = true;
+                toast(m || '已保存', 'ok');
+                return load();
+            }).catch(function (e) {
+                err.textContent = errText(e, '保存失败');
+                err.hidden = false;
+            }).then(function () {
+                document.getElementById('fSave').disabled = false;
+            });
+        }
+
+        function askDelete(a) {
+            pendingDel = a;
+            document.getElementById('delText').textContent = '确定删除账号「' + (a.UserName || '') + '」吗？';
+            document.getElementById('del').hidden = false;
+        }
+
+        /* ── 接线 ── */
+
+        document.getElementById('btnAdd').addEventListener('click', function () { openEdit(null); });
+        document.getElementById('btnRefresh').addEventListener('click', function () { load(); });
+        document.getElementById('q').addEventListener('input', render);
+
+        document.getElementById('btnOnline').addEventListener('click', function () {
+            onlineOnly = !onlineOnly;
+            this.classList.toggle('primary', onlineOnly);
+            this.textContent = onlineOnly ? '看全部' : '只看在线';
+            render();
+        });
+
+        document.getElementById('fSave').addEventListener('click', save);
+
+        document.getElementById('delOk').addEventListener('click', function () {
+            if (!pendingDel) return;
+            // DeleteProxyAccount 收的是 [FromBody] Guid —— body 就是一个 JSON 字符串
+            post('ProxyAccount/DeleteProxyAccount', pendingDel.AID).then(function (m) {
+                document.getElementById('del').hidden = true;
+                pendingDel = null;
+                toast(m || '已删除', 'ok');
+                return load();
+            }).catch(function (e) { toast(errText(e, '删除失败'), 'bad'); });
+        });
+
+        // 关闭：按钮、点遮罩、Esc
+        $$('[data-close]').forEach(function (b) {
+            b.addEventListener('click', function () { b.closest('.mask').hidden = true; });
+        });
+        $$('.mask').forEach(function (m) {
+            m.addEventListener('mousedown', function (e) { if (e.target === m) m.hidden = true; });
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') $$('.mask').forEach(function (m) { m.hidden = true; });
+        });
+
+        load();
     </script>
-
 </body>
+
 </html>

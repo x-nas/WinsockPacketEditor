@@ -75,7 +75,33 @@ namespace WinsockPacketEditor
                 var staticFileOptions = new StaticFileOptions
                 {
                     FileSystem = new PhysicalFileSystem(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Web")),
-                    ServeUnknownFileTypes = true
+                    ServeUnknownFileTypes = true,
+
+                    /*
+                        ⚠️ <b>必须显式给 Cache-Control，一个都不能少。</b>
+
+                        不给的话浏览器走「启发式缓存」：拿 Last-Modified 距今时间的约 10% 当新鲜期，
+                        在那段时间里<b>连条件请求都不发</b> —— 一个上个月改的文件能被缓存好几天。
+                        而这几个文件名里<b>没有版本号也没有内容哈希</b>（是手写的静态页，不过 Vite），
+                        于是「程序升级了、管理台还是旧界面」，且看不出任何异常。
+                        真撞到过：账号页的「启用」列改成只读之后，用户那边还是能点。
+
+                        外壳那边同一个病根是靠导航 URL 挂 ?b=&lt;exe 写入时间&gt; 解决的（见 BuildStamp），
+                        这里没有那个入口 —— 页面是用户直接敲地址打开的，只能从响应头上治。
+
+                        no-cache 不是「不缓存」：它照样存，只是<b>每次都回来用 ETag 校验一次</b>，
+                        没变就是一个 304（几十字节），变了立刻拿到新的。
+                        字体是例外 —— 那三个 woff2 的内容永不变，值得长缓存。
+                    */
+                    OnPrepareResponse = ctx =>
+                    {
+                        string path = ctx.OwinContext.Request.Path.Value ?? string.Empty;
+
+                        ctx.OwinContext.Response.Headers["Cache-Control"] =
+                            path.EndsWith(".woff2", StringComparison.OrdinalIgnoreCase)
+                                ? "public, max-age=31536000, immutable"
+                                : "no-cache";
+                    }
                 };
 
                 app.UseStaticFiles(staticFileOptions);

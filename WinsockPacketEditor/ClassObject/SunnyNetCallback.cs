@@ -11,18 +11,20 @@ namespace WinsockPacketEditor
         {
             try
             {
-                string ConnPort = "80";
                 Operate.ProxyConfig.Proxy.DomainType dtType = Operate.ProxyConfig.Proxy.DomainType.HTTP;
+                bool bHttps = Conn.URL().ToUpper().StartsWith("HTTPS");
 
-                if (Conn.URL().ToUpper().StartsWith("HTTPS"))
+                if (bHttps)
                 {
-                    ConnPort = "443";
                     dtType = Operate.ProxyConfig.Proxy.DomainType.HTTPS;
                 }
 
+                //「指定端口」按 URL 上的真实端口判：原先按 scheme 写死 80 / 443，8080 上的 HTTP 会被当成 80
+                int ConnPort = Operate.ProxyConfig.Proxy.PortOfUrl(Conn.URL(), bHttps);
+
                 switch (Conn.Type())
                 {
-                    case HTTPEvent.EventType_HTTP_Request:                        
+                    case HTTPEvent.EventType_HTTP_Request:
 
                         if (Operate.ProxyConfig.Proxy.MustTCP && Operate.ProxyConfig.Proxy.IsLoadDriver)
                         {
@@ -140,17 +142,18 @@ namespace WinsockPacketEditor
 
                 switch (Conn.Type())
                 {
+                    /*
+                        三个分支的判据必须是同一个：「这条连接转不转代理」= MustTCP && 驱动已装 && 端口在名单里。
+                        原先 Send / Receive 只看前两项、不看端口 —— 勾了「指定端口」之后，
+                        名单之外的 TCP 连接在 About 里没转代理，到 Send / Receive 又被无条件 return，
+                        既不转、也不进列表，静默消失。
+                    */
                     case TCPEvent.EventType_TCP_About:
 
-                        if (Operate.ProxyConfig.Proxy.MustTCP && Operate.ProxyConfig.Proxy.IsLoadDriver)
+                        if (MustProxy(Conn.RemoteAddr()))
                         {
-                            string ConnPort = Conn.RemoteAddr().Split(':')[1];
-
-                            if (Operate.ProxyConfig.Proxy.IsMustTCP_ByPort(ConnPort.ToString()))
-                            {
-                                Conn.SetProxy(Operate.SystemConfig.GetMustTCP(), 5000);
-                                return;
-                            }
+                            Conn.SetProxy(Operate.SystemConfig.GetMustTCP(), 5000);
+                            return;
                         }
 
                         break;
@@ -160,7 +163,8 @@ namespace WinsockPacketEditor
 
                     case TCPEvent.EventType_TCP_Send:
 
-                        if (Operate.ProxyConfig.Proxy.MustTCP && Operate.ProxyConfig.Proxy.IsLoadDriver)
+                        //转了代理的连接，字节会从 SOCKS5 那一路进列表（并过滤镜），这里不再记一遍
+                        if (MustProxy(Conn.RemoteAddr()))
                         {
                             return;
                         }
@@ -185,7 +189,7 @@ namespace WinsockPacketEditor
 
                     case TCPEvent.EventType_TCP_Receive:
 
-                        if (Operate.ProxyConfig.Proxy.MustTCP && Operate.ProxyConfig.Proxy.IsLoadDriver)
+                        if (MustProxy(Conn.RemoteAddr()))
                         {
                             return;
                         }
@@ -237,18 +241,14 @@ namespace WinsockPacketEditor
                 {
                     case UDPEvent.EventType_UDP_Send:
 
-                        if (Operate.ProxyConfig.Proxy.MustTCP && Operate.ProxyConfig.Proxy.IsLoadDriver)
+                        if (MustProxy(Conn.RemoteAddr()))
                         {
-                            string ConnPort = Conn.RemoteAddr().Split(':')[1];
+                            //Body 置空让 SunnyNet 不再直发，数据交给中继（MustTcpUdpRelay）经 SOCKS5 送出去
+                            byte[] bSendData = Conn.Body().Bytes;
+                            Conn.Body(null);
 
-                            if (Operate.ProxyConfig.Proxy.IsMustTCP_ByPort(ConnPort.ToString()))
-                            {
-                                byte[] bSendData = Conn.Body().Bytes;
-                                Conn.Body(null);
-
-                                Operate.ProxyConfig.Proxy.SetUDPProxy(Conn, bSendData);
-                                return;
-                            }
+                            Operate.ProxyConfig.Proxy.SetUDPProxy(Conn, bSendData);
+                            return;
                         }
 
                         _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
@@ -271,6 +271,12 @@ namespace WinsockPacketEditor
 
                     case UDPEvent.EventType_UDP_Receive:
 
+                        //转了代理的套接字，它收到的只可能是中继交回来的应答（请求根本没直发），SOCKS5 那一路已经记过了
+                        if (MustProxy(Conn.RemoteAddr()))
+                        {
+                            return;
+                        }
+
                         _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
                             DateTime.Now,
                             Operate.FilterConfig.Filter.FilterAction.None,
@@ -290,6 +296,9 @@ namespace WinsockPacketEditor
                         break;
 
                     case UDPEvent.EventType_UDP_Closed:
+
+                        //目标进程关了这个套接字 → 它那条 SOCKS5 UDP 关联也收掉（没这一句只能等 3 分钟静置回收）
+                        Operate.ProxyConfig.Proxy.CloseUDPProxy(TheologyID);
                         break;
                 }
             }
@@ -297,7 +306,26 @@ namespace WinsockPacketEditor
             {
                 Operate.DoLog(nameof(OnUdpCallback), ex);
             }
-        }        
+        }
+
+        #endregion
+
+        #region//这条连接转不转代理
+
+        /// <summary>
+        /// 「强制转代理」对这条连接生不生效：开关开着、驱动已装、远端端口在「指定端口」名单里（没勾名单则一律算在）。
+        /// TCP 的三个分支与 UDP 的两个分支都用它，判据只此一份。
+        /// 端口从 "ip:port" / "[v6]:port" 里取 —— 原先 Split(':')[1] 在 IPv6 上取到的是地址的一段。
+        /// </summary>
+        private static bool MustProxy(string RemoteAddr)
+        {
+            if (!Operate.ProxyConfig.Proxy.MustTCP || !Operate.ProxyConfig.Proxy.IsLoadDriver)
+            {
+                return false;
+            }
+
+            return Operate.ProxyConfig.Proxy.IsMustTCP_ByPort(Operate.ProxyConfig.Proxy.PortOfAddress(RemoteAddr));
+        }
 
         #endregion
 

@@ -124,15 +124,10 @@ namespace WinsockPacketEditor
                     return;
                 }
 
-                Operate.ProxyConfig.Proxy.MapProtocol ProtocolType_New = new Operate.ProxyConfig.Proxy.MapProtocol();
-                if (this.ddlProtocolType.SelectedIndex == 0)
-                {
-                    ProtocolType_New = Operate.ProxyConfig.Proxy.MapProtocol.Http;
-                }
-                else
-                {
-                    ProtocolType_New = Operate.ProxyConfig.Proxy.MapProtocol.Http;
-                }
+                //协议下拉只有 "http" 一项（见 Designer 的 Items.AddRange），原来那个
+                //if/else 两支赋的是同一个值，走不到也没有第二种取值。映射本来就只对
+                //HTTP 生效：运行期只有 DomainType.HTTP 那一支会查映射表。
+                Operate.ProxyConfig.Proxy.MapProtocol ProtocolType_New = Operate.ProxyConfig.Proxy.MapProtocol.Http;
 
                 int port_New = ((int)this.nudPort.Value);
                 string RemotePath_New = this.txtRemotePath.Text.Trim();

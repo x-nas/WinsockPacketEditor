@@ -46,7 +46,7 @@ async function save(): Promise<void> {
 </script>
 
 <template>
-  <SettingsModal :open="!!props.target" :title="title" subtitle="Controls/NoticeEdit" :busy="busy" :error="error"
+  <SettingsModal :open="!!props.target" :title="title" subtitle="Client Notice" :busy="busy" :error="error"
                  @update:open="!$event && emit('close')" @save="save">
     <div class="setf">
       <div class="row">

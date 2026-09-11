@@ -17,8 +17,9 @@ namespace WinsockPacketEditor.Ipc
     /// 于是 <c>Operate</c> 里那套逻辑一行不改就换了归宿。
     ///
     /// 【线程】
-    ///   · 钩子线程（目标自己的收发线程）—— 只入环，见 <see cref="OnPacket"/>
+    ///   · 钩子线程（目标自己的收发线程）—— 只计数 + 入环 / 入事件队列，见 <see cref="OnPacket"/>
     ///   · 写线程    —— 专用 Thread，解析地址 + 编码 + 写封包流
+    ///   · 事件线程  —— 专用 Thread，唯一写事件流的地方（日志 / 仓库 / 统计 / 丢包）
     ///   · 控制线程  —— 专用 Thread，读命令、执行、应答
     ///   · 心跳线程  —— 专用 Thread，1 秒一次；连续 3 次收不到外壳的 Ping 就自行卸钩休眠
     ///
@@ -52,11 +53,43 @@ namespace WinsockPacketEditor.Ipc
         */
         private readonly PacketRing _ring = new PacketRing(65536, 64L * 1024 * 1024);
 
+        /*
+            事件流也要一格缓冲，理由与封包环一模一样 —— 见 SendEvent 那段说明。
+            8192 条 / 16 MB：事件本来是低频的（日志、仓库、统计），
+            这个量只为「外壳卡住的那几秒」留余地，不是为了长期堆积。
+
+            ⚠️ 刻意<b>不复用 PacketRing</b>：那个环装的是 PendingPacket（要在写线程上解析地址、
+            按封包帧编码），而事件是已经编码好的整帧、类型也不同。硬套一个泛型进去
+            只会让两条路的「满了怎么办」纠缠在一起。这里就是一个队列 + 两个上限。
+        */
+        private readonly Queue<byte[]> _evtQueue = new Queue<byte[]>();
+        private readonly object _evtQueueGate = new object();
+        private readonly ManualResetEventSlim _evtSignal = new ManualResetEventSlim(false);
+        private long _evtQueueBytes;
+        private long _evtDroppedCount;
+
+        private const int EvtQueueMaxCount = 8192;
+        private const long EvtQueueMaxBytes = 16L * 1024 * 1024;
+
         private NamedPipeClientStream _ctl, _pkt, _evt;
-        private Thread _writerThread, _controlThread, _heartbeatThread;
+        private Thread _writerThread, _controlThread, _heartbeatThread, _eventThread;
 
         private volatile bool _running;
         private volatile bool _hookInstalled;
+
+        /// <summary>
+        /// 控制线程正在处理一条命令。
+        ///
+        /// 【为什么心跳要看它】外壳的 Ping 与请求<b>共用同一条控制通道、同一把 _ctlGate</b>：
+        /// 一条命令处理得久（<c>SendPacket</c> 撞上一个满的发送缓冲、<c>StartHook</c> 装 13 个钩子），
+        /// 外壳那边的 Ping 就排在它后面发不出来 —— 而目标这头只看「多久没收到 Ping」，
+        /// 于是<b>把正在替外壳干活当成了外壳已经没了</b>，3 秒一到自行卸钩。
+        /// 表现是「点一下发送，抓包就断了」，而且日志里只有一句心跳超时。
+        ///
+        /// 所以：收到任何一条命令都算活着（见 <see cref="ControlLoop"/> 里刷 _lastPingTick 那句），
+        /// 而处理过程中一律不判超时。
+        /// </summary>
+        private volatile bool _dispatching;
 
         /// <summary>目标是挂起启动创建的 —— 装钩之前要先把 winsock 拉进来，见 <see cref="DetectWinsock"/>。</summary>
         private bool _suspendedLaunch;
@@ -125,9 +158,30 @@ namespace WinsockPacketEditor.Ipc
             _pkt = new NamedPipeClientStream(".", IpcProtocol.PacketPipe(sessionId), PipeDirection.Out, PipeOptions.Asynchronous);
             _evt = new NamedPipeClientStream(".", IpcProtocol.EventPipe(sessionId), PipeDirection.Out, PipeOptions.Asynchronous);
 
-            _ctl.Connect(connectTimeoutMs);
-            _pkt.Connect(connectTimeoutMs);
-            _evt.Connect(connectTimeoutMs);
+            try
+            {
+                _ctl.Connect(connectTimeoutMs);
+                _pkt.Connect(connectTimeoutMs);
+                _evt.Connect(connectTimeoutMs);
+            }
+            catch
+            {
+                /*
+                    ⚠️ <b>连不上就必须把钩子收掉</b>，不能只是把异常抛出去。
+
+                    这一条只在「重新附加」那条路上要紧，但后果很重：上面几行已经
+                    StopThreads + ClosePipes 把<b>上一轮</b>拆了，而钩子是<b>没有</b>卸的
+                    （那是有意的 —— 外壳一连上就能接着看）。所以连接失败之后目标会停在：
+                    13 个钩子还在、<c>HookHost.Current</c> 还是这个核心、封包一路进环
+                    （满 64 MB 就丢最旧的），而<b>三条线程与心跳全没了，再也没有人来收拾</b>。
+                    表现是目标白白背着一套钩子和 64 MB 内存跑到进程退出为止。
+
+                    「目标永远不能因为外壳没了而留着钩子在里面」（方案第四节第 9 条）
+                    在这条路上同样成立。
+                */
+                SelfShutdown("连不上外壳的管道");
+                throw;
+            }
 
             //装配成 IHookHost：从这一句起，Operate 里所有的封包 / 日志 / 仓库出口都改道到管道。
             HookHost.Attach(this);
@@ -140,6 +194,7 @@ namespace WinsockPacketEditor.Ipc
             _writerThread = StartThread(WriterLoop, "WPE-IPC-Writer");
             _controlThread = StartThread(ControlLoop, "WPE-IPC-Control");
             _heartbeatThread = StartThread(HeartbeatLoop, "WPE-IPC-Heartbeat");
+            _eventThread = StartThread(EventLoop, "WPE-IPC-Event");
         }
 
         /// <summary>
@@ -182,6 +237,11 @@ namespace WinsockPacketEditor.Ipc
         public void Detach()
         {
             StopHookInternal();
+
+            //⚠️ 事件是异步发的，卸钩那条 HookState(false) 还在队列里 ——
+            //不冲一次就会被下面的 ClosePipes 一起带走，界面停在「拦截中」
+            FlushEvents(200);
+
             StopThreads();
             ClosePipes();
             _ring.Clear();
@@ -193,12 +253,14 @@ namespace WinsockPacketEditor.Ipc
         {
             _running = false;
             _ring.Wake();
+            _evtSignal.Set();
 
             //不 Join：控制线程正阻塞在管道 Read 上，要等到管道关掉才回得来。
-            //三条线程都是 IsBackground，进程退出时不会被它们拖住。
+            //四条线程都是 IsBackground，进程退出时不会被它们拖住。
             _writerThread = null;
             _controlThread = null;
             _heartbeatThread = null;
+            _eventThread = null;
         }
 
         private void ClosePipes()
@@ -239,7 +301,30 @@ namespace WinsockPacketEditor.Ipc
             if (filterAction == Operate.FilterConfig.Filter.FilterAction.NoModify_NoDisplay) { return; }
             if (filterAction != Operate.FilterConfig.Filter.FilterAction.Intercept && res <= 0) { return; }
 
-            //极速模式下 PacketInfo_ToQueue 本来就不入队（核过），这里对齐。
+            /*
+                ⚠️⚠️ <b>计数在这儿数，不在外壳。</b>
+
+                这一句的位置是照着进程内那条路摆的：<c>PacketInfo_ToQueue</c> 里
+                <c>CountPacketInfo</c> 就在<b>极速模式判断之前</b>、两道早退之后 ——
+                也就是说「极速模式」只关掉列表，<b>计数照数</b>。那正是这个开关的意义：
+                不建列表、只看吞吐。
+
+                原来这一句在外壳的 <c>ShellLink.Ingest</c> 里，于是注入模式下：
+                  · 打开极速模式 → 这里直接 return → 一帧都不发 → <b>统计格 13 个数字全是 0</b>，
+                    而用户开极速模式恰恰就是为了看那几个数；
+                  · 地址解析不出来的包（套接字已经关了）在写线程上被丢掉 → 也没计上，
+                    而进程内那条路是<b>数了</b>的。
+
+                改成目标自己数、随 1 Hz 的 Stats 报上去（与滤镜那六个全局计数同一条路数：
+                「执行的副产品，只有执行者知道真值」）。代价是外壳那份变成 1 秒一跳的镜像，
+                而那几个格子本来就是给人看的，不参与任何判断。
+
+                ⚠️ <b>FilterPacket_CNT 不在这里</b> —— 「已过滤」是外壳的 FlushToFeed 数的
+                （目标压根不碰它），报上去只会把外壳的真值冲成 0。
+            */
+            Operate.PacketConfig.Packet.CountPacketInfo(packetType, newBuffer == null ? 0 : newBuffer.Length);
+
+            //极速模式：只数不建列表（与 PacketInfo_ToQueue 里那个 if 同位置、同语义）
             if (Operate.SystemConfig.SpeedMode) { return; }
 
             _ring.Enqueue(new PendingPacket
@@ -308,21 +393,162 @@ namespace WinsockPacketEditor.Ipc
 
         #region//事件流
 
+        /*
+            ⚠️⚠️ <b>这个方法会在钩子线程上被调到</b>，所以它只许「入队 + 置位」。
+
+            【原来是同步写管道，那是个真问题】OnLog / OnFilterLog / OnStore 三条出口都汇到这儿，
+            而它们的调用点全在 DoFilter 里 ——<b>也就是目标进程的收发线程上</b>：
+
+              · 滤镜命中就 DoFilterLog 一次 → 命中率高的滤镜等于<b>每个包一次同步管道写</b>；
+              · 滤镜动作是「入库」就 OnStore 一次，载荷是<b>整包字节</b>；
+              · 钩子体里任何一次 catch 都会 DoLog。
+
+            管道的写缓冲是有限的（外壳侧 evt 管道 64 KB）。外壳的事件线程一旦慢下来
+            （UI 线程忙、归属地查询卡住、进程被挂起），缓冲一满 <c>Write</c> 就<b>阻塞</b> ——
+            阻塞的是目标的 send() / recv()，也就是<b>把目标游戏卡住</b>。
+            这正是方案第四节第 2 条与第 4 条明令禁止的那件事，而封包那条路一直守着，
+            事件这条路却漏了。
+
+            （所以「外壳整个挂起 5 秒、目标吞吐 100%」那次实测并不覆盖这里 ——
+             那一轮没有配任何会命中的滤镜，事件流是空的。）
+
+            现在与封包同构：有界队列 + 专用线程，满了<b>丢最旧的并计数</b>，永不阻塞。
+        */
         private void SendEvent(IpcWriter w)
         {
+            if (!_running) { return; }
+
+            byte[] frame = w.ToArray();
+
+            lock (_evtQueueGate)
+            {
+                _evtQueue.Enqueue(frame);
+                _evtQueueBytes += frame.Length;
+
+                //先入再挤，与 PacketRing 同一条口径：单条超大的也进得来
+                while ((_evtQueue.Count > EvtQueueMaxCount || _evtQueueBytes > EvtQueueMaxBytes)
+                       && _evtQueue.Count > 1)
+                {
+                    byte[] old = _evtQueue.Dequeue();
+                    _evtQueueBytes -= old.Length;
+                    _evtDroppedCount++;
+                }
+            }
+
+            _evtSignal.Set();
+        }
+
+        /// <summary>
+        /// 事件线程：队列 → 事件流。<b>唯一一个写 evt 管道的地方</b>。
+        /// </summary>
+        private void EventLoop()
+        {
+            while (_running)
+            {
+                List<byte[]> batch = TakeEvents(true);
+
+                if (batch.Count == 0) { continue; }
+
+                if (!WriteEvents(batch))
+                {
+                    //管道断了：停下来等心跳去收拾，不要在这里空转刷日志
+                    if (!_running) { return; }
+                    Thread.Sleep(200);
+                }
+            }
+        }
+
+        private bool EvtQueueEmpty()
+        {
+            lock (_evtQueueGate) { return _evtQueue.Count == 0; }
+        }
+
+        private List<byte[]> TakeEvents(bool wait)
+        {
+            if (wait && EvtQueueEmpty())
+            {
+                _evtSignal.Reset();
+
+                //Reset 与 Wait 之间可能刚好来了一条，所以 Reset 之后再看一眼 ——
+                //漏掉这一眼的后果是「明明有事件，事件线程却睡满 50ms」（同 PacketRing）
+                if (EvtQueueEmpty()) { _evtSignal.Wait(50); }
+            }
+
+            var batch = new List<byte[]>();
+
+            lock (_evtQueueGate)
+            {
+                while (_evtQueue.Count > 0)
+                {
+                    byte[] f = _evtQueue.Dequeue();
+                    _evtQueueBytes -= f.Length;
+                    batch.Add(f);
+                }
+            }
+
+            return batch;
+        }
+
+        /// <summary>把一批事件写出去。写不出去返回 false（管道断了）。</summary>
+        private bool WriteEvents(List<byte[]> batch)
+        {
             Stream s = _evt;
-            if (s == null || !_running) { return; }
+            if (s == null) { return false; }
 
             try
             {
-                lock (_evtGate) { IpcFrame.Write(s, w.ToArray()); }
+                lock (_evtGate)
+                {
+                    foreach (byte[] f in batch) { IpcFrame.Write(s, f); }
+
+                    /*
+                        ⚠️ 丢掉的事件要出声。无声丢日志 / 丢入库比阻塞更糟 ——
+                        用户会以为「这条滤镜没命中」而不是「那条记录被挤掉了」。
+                        与封包那边的「丢弃 N」是同一条规矩，只是这里没有专门的界面位置，
+                        所以补一条日志（它本身也走这条队列，写在这里不会递归：
+                        入队 → 下一批发出去）。
+                    */
+                    long dropped;
+                    lock (_evtQueueGate) { dropped = _evtDroppedCount; _evtDroppedCount = 0; }
+
+                    if (dropped > 0)
+                    {
+                        var w = new IpcWriter();
+                        w.U8((byte)IpcEvent.Log);
+                        w.Str("WpeCore.SendEvent");
+                        w.Str("事件流积压，丢弃了 " + dropped + " 条（日志 / 入库 / 统计）");
+                        IpcFrame.Write(s, w.ToArray());
+                    }
+                }
+
+                return true;
             }
             catch
             {
                 /*
-                    ⚠️ 这里绝对不能再调 Operate.DoLog —— 那会转回 OnLog、再写一次事件流、
-                    再抛一次，直接无限递归把栈打爆。管道断了本来就有心跳去处理。
+                    ⚠️ 这里绝对不能再调 Operate.DoLog —— 那会转回 OnLog、再入队、
+                    下一轮再抛一次。管道断了本来就有心跳去处理。
                 */
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 把队列里的事件尽量写完（收摊前用）。
+        ///
+        /// 【为什么需要它】<c>StopHookInternal</c> 发的那条 <c>HookState(false)</c> 与
+        /// <c>Detach</c> 关管道之间只隔几行 —— 事件改成异步之后，不冲一次的话
+        /// 那条状态永远到不了外壳，界面上会停在「拦截中」直到管道断开才更正。
+        /// </summary>
+        private void FlushEvents(int timeoutMs)
+        {
+            int deadline = unchecked(Environment.TickCount + timeoutMs);
+
+            while (unchecked(deadline - Environment.TickCount) > 0)
+            {
+                List<byte[]> batch = TakeEvents(false);
+                if (batch.Count == 0) { return; }
+                if (!WriteEvents(batch)) { return; }
             }
         }
 
@@ -412,7 +638,7 @@ namespace WinsockPacketEditor.Ipc
                 w.I64(filters[i].ExecutionCount);
             }
 
-            var sends = Operate.SendConfig.List.lstSendInfo;
+            var sends = Snapshot(Operate.SendConfig.List.lstSendInfo);
             w.I32(sends.Count);
             foreach (SendInfo si in sends)
             {
@@ -437,7 +663,7 @@ namespace WinsockPacketEditor.Ipc
             w.I64(Operate.FilterConfig.Filter.FilterDisplay_CNT);
             w.I64(Operate.FilterConfig.Filter.FilterNoDisplay_CNT);
 
-            var robots = Operate.RobotConfig.List.lstRobotInfo;
+            var robots = Snapshot(Operate.RobotConfig.List.lstRobotInfo);
             w.I32(robots.Count);
             foreach (RobotInfo ri in robots)
             {
@@ -445,7 +671,41 @@ namespace WinsockPacketEditor.Ipc
                 w.I64(ri.ExecutionCount);
             }
 
+            /*
+                封包计数那 11 个 —— 注入模式下它们在<b>目标</b>的钩子线程上递增
+                （见 OnPacket 里 CountPacketInfo 那段），外壳那份是镜像。
+                ⚠️ 顺序与 ShellLink.ApplyStats 里读的那一串必须逐个对上。
+                ⚠️ FilterPacket_CNT 不在其内（那是外壳 FlushToFeed 数的）。
+            */
+            w.I64(Operate.PacketConfig.Packet.TotalPackets);
+            w.I64(Operate.PacketConfig.Packet.Send_CNT);
+            w.I64(Operate.PacketConfig.Packet.SendTo_CNT);
+            w.I64(Operate.PacketConfig.Packet.Recv_CNT);
+            w.I64(Operate.PacketConfig.Packet.RecvFrom_CNT);
+            w.I64(Operate.PacketConfig.Packet.WSASend_CNT);
+            w.I64(Operate.PacketConfig.Packet.WSASendTo_CNT);
+            w.I64(Operate.PacketConfig.Packet.WSARecv_CNT);
+            w.I64(Operate.PacketConfig.Packet.WSARecvFrom_CNT);
+            w.I64(Operate.PacketConfig.Packet.Total_SendBytes);
+            w.I64(Operate.PacketConfig.Packet.Total_RecvBytes);
+
             SendEvent(w);
+        }
+
+        /// <summary>
+        /// 取一份定格的列表再遍历。
+        ///
+        /// ⚠️ <b>不能直接 foreach 那两个 BindingList</b>：<c>SetConfig</c> 会在<b>控制线程</b>上
+        /// 把它们整表 Clear + Add（见 ConfigSnapshot.ApplySends / ApplyRobots），
+        /// 而这一拍跑在心跳线程上 —— 撞上就抛「集合已修改」，整包统计静默丢掉。
+        ///
+        /// 拷贝本身也可能撞上（CopyTo 会读 Count 再拷），所以外面还有一层 try ——
+        /// 但把窗口从「整个遍历 + 序列化」缩到「一次 CopyTo」已经差了几个数量级。
+        /// </summary>
+        private static List<T> Snapshot<T>(System.ComponentModel.BindingList<T> list)
+        {
+            try { return new List<T>(list); }
+            catch { return new List<T>(); }
         }
 
         #endregion
@@ -488,9 +748,24 @@ namespace WinsockPacketEditor.Ipc
                     return;
                 }
 
+                /*
+                    ⚠️ <b>收到任何一条命令都算「外壳还活着」</b>，不只是 Ping。
+
+                    外壳那边 Ping 与请求<b>共用一条控制通道、同一把锁</b>（ShellLink._ctlGate）：
+                    一条命令处理得久一点，Ping 就排在它后面发不出来 —— 而这头原来只看
+                    「多久没收到 Ping」，于是把「正在替外壳干活」当成「外壳没了」，
+                    3 秒一到自行卸钩。表现是<b>点一下发送，抓包就断了</b>。
+
+                    所以刷一次时间戳，并在处理期间挂起超时判断（_dispatching）。
+                */
+                _lastPingTick = Environment.TickCount;
+
                 byte[] reply;
+
+                _dispatching = true;
                 try { reply = Dispatch(req); }
                 catch (Exception ex) { reply = Fail(ex.Message); }
+                finally { _dispatching = false; _lastPingTick = Environment.TickCount; }
 
                 try { IpcFrame.Write(_ctl, reply); }
                 catch { if (_running) { SelfShutdown("应答写不出去"); } return; }
@@ -522,8 +797,27 @@ namespace WinsockPacketEditor.Ipc
                         var w = new IpcWriter();
                         w.U8((byte)IpcStatus.Ok);
                         w.I32(IpcProtocol.Version);
-                        w.I32(System.Diagnostics.Process.GetCurrentProcess().Id);
+                        //⚠️ 目标进程里的每一个句柄都要还 —— Process 是 IDisposable，
+                        //不 Dispose 就是留一个进程句柄等终结器（这一条在<b>别人的进程</b>里更该守）
+                        using (var self = System.Diagnostics.Process.GetCurrentProcess()) { w.I32(self.Id); }
                         w.Bool(IntPtr.Size == 8);
+
+                        /*
+                            ⚠️ 附加成功就把「这个目标用的是哪套 WinSock」报上去，
+                            <b>不等用户点「开始拦截」</b>。
+
+                            那三个标志只随 HookState 事件走，而这个事件原来只在 StartHook /
+                            StopHook 时发 —— 于是刚附加上的那段时间界面上那块读数窗是空的，
+                            看着像「没探到」。它其实是目标进程的一个<b>静态事实</b>，
+                            与钩子装没装无关。
+
+                            ⚠️ `mayLoad: false` —— 握手这一次只看模块表，不拉模块进来。
+                            挂起启动的目标这时还没跑加载器，三个都会是 false；
+                            等 StartHook 那次会重新探一遍并再报一次，界面自己就更正了。
+                        */
+                        DetectWinsock(false);
+                        SendHookState(_hookInstalled);
+
                         return w.ToArray();
                     }
 
@@ -609,7 +903,16 @@ namespace WinsockPacketEditor.Ipc
 
                 case IpcCommand.ResetStats:
                     {
-                        Operate.SystemConfig.ResetFilterStats();
+                        /*
+                            掩码而不是「一个命令清所有」：界面上四个入口的语义各不相同，
+                            见 IpcProtocol.ResetWhat 上面那段。
+                        */
+                        var what = (ResetWhat)r.U8();
+
+                        if ((what & ResetWhat.FilterStats) != 0) { Operate.SystemConfig.ResetFilterStats(); }
+                        if ((what & ResetWhat.PacketCounters) != 0) { Operate.SystemConfig.ResetPacketCounters(true); }
+                        if ((what & ResetWhat.SendCounts) != 0) { Operate.SendConfig.List.InitSendList_Count(); }
+                        if ((what & ResetWhat.RobotCounts) != 0) { Operate.RobotConfig.List.InitRobotList_Count(); }
 
                         var w = new IpcWriter();
                         w.U8((byte)IpcStatus.Ok);
@@ -636,11 +939,14 @@ namespace WinsockPacketEditor.Ipc
                             w.Str(loc);
                         }
 
-                        var mods = System.Diagnostics.Process.GetCurrentProcess().Modules;
-                        w.I32(mods.Count);
-                        foreach (System.Diagnostics.ProcessModule m in mods)
+                        using (var self = System.Diagnostics.Process.GetCurrentProcess())
                         {
-                            try { w.Str(m.ModuleName); } catch { w.Str("(?)"); }
+                            var mods = self.Modules;
+                            w.I32(mods.Count);
+                            foreach (System.Diagnostics.ProcessModule m in mods)
+                            {
+                                try { w.Str(m.ModuleName); } catch { w.Str("(?)"); }
+                            }
                         }
 
                         return w.ToArray();
@@ -663,7 +969,8 @@ namespace WinsockPacketEditor.Ipc
                 */
 
                 case IpcCommand.StartSend:
-                    Operate.SendConfig.Send.DoSend(r.Guid_());
+                    //⚠️ 必须经 _Add 进表，否则 StopSendList 收不掉它（与代理模式的 DoSend_ByIndex 同形）
+                    Operate.SendConfig.List.SendExecute_Add(Operate.SendConfig.Send.DoSend(r.Guid_()));
                     return Ok();
 
                 case IpcCommand.StartSendList:
@@ -680,7 +987,8 @@ namespace WinsockPacketEditor.Ipc
                         int filterSocket = r.I32();
 
                         var parameters = new Dictionary<string, object> { { "FilterSocket", filterSocket } };
-                        Operate.RobotConfig.Robot.DoRobot(rid, parameters);
+                        //⚠️ 同上：不进表的话 StopRobotList 收不掉它
+                        Operate.RobotConfig.List.RobotExecute_Add(Operate.RobotConfig.Robot.DoRobot(rid, parameters));
                         return Ok();
                     }
 
@@ -738,11 +1046,16 @@ namespace WinsockPacketEditor.Ipc
         /// 【为什么已在跑的目标不硬塞】那会凭空给它多出一个本来没有的模块，
         /// 检测面比老路径还大。已在跑的目标只探测，与老路径逐字一致。
         /// </summary>
-        private void DetectWinsock()
+        private void DetectWinsock(bool mayLoad = true)
         {
             try
             {
-                if (_suspendedLaunch)
+                /*
+                    ⚠️ `mayLoad: false` 是<b>握手那一次</b>用的：那时只是想让界面上的
+                    「WinSock」有个值，不该顺手改变目标进程的模块表。
+                    真要装钩之前（StartHook）仍然按老样子拉一次，理由见上面那段。
+                */
+                if (mayLoad && _suspendedLaunch)
                 {
                     LoadLibrary("ws2_32.dll");
                     LoadLibrary("wsock32.dll");
@@ -751,12 +1064,15 @@ namespace WinsockPacketEditor.Ipc
 
                 bool ws1 = false, ws2 = false, msws = false;
 
-                foreach (System.Diagnostics.ProcessModule m in System.Diagnostics.Process.GetCurrentProcess().Modules)
+                using (var self = System.Diagnostics.Process.GetCurrentProcess())
                 {
-                    string name = m.ModuleName;
-                    if (string.Equals(name, WSock32.ModuleName, StringComparison.OrdinalIgnoreCase)) { ws1 = true; }
-                    if (string.Equals(name, WS2_32.ModuleName, StringComparison.OrdinalIgnoreCase)) { ws2 = true; }
-                    if (string.Equals(name, Mswsock.ModuleName, StringComparison.OrdinalIgnoreCase)) { msws = true; }
+                    foreach (System.Diagnostics.ProcessModule m in self.Modules)
+                    {
+                        string name = m.ModuleName;
+                        if (string.Equals(name, WSock32.ModuleName, StringComparison.OrdinalIgnoreCase)) { ws1 = true; }
+                        if (string.Equals(name, WS2_32.ModuleName, StringComparison.OrdinalIgnoreCase)) { ws2 = true; }
+                        if (string.Equals(name, Mswsock.ModuleName, StringComparison.OrdinalIgnoreCase)) { msws = true; }
+                    }
                 }
 
                 Operate.PacketConfig.Packet.Support_WS1 = ws1;
@@ -821,6 +1137,9 @@ namespace WinsockPacketEditor.Ipc
 
                 //统计顺带在这一拍发（本来就是 1 秒一次），不另起线程
                 try { SendStats(); } catch { /* 管道断了，下面的超时判断会收拾 */ }
+
+                //⚠️ 正在处理命令时不判超时 —— 那是「在替外壳干活」，不是「外壳没了」
+                if (_dispatching) { continue; }
 
                 int idle = unchecked(Environment.TickCount - _lastPingTick);
 

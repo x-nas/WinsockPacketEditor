@@ -569,10 +569,20 @@ defineExpose({ cur, nib, col, insertMode, hasSel, selCount, per, selectAll, sele
   flex-direction: column;
   overflow: hidden;
   outline: none;
-  cursor: text;
+  /* 只读时整块都是 default；可编辑时只有下面 .spacer 那片格子给 I 形 */
+  cursor: default;
 }
 
-.hexview.ro { cursor: default; }
+/*
+  ⚠️ <b>cursor 不能写在这一层</b>（它会一路继承到 .hx-scroll，而<b>滚动条吃的正是
+  滚动容器自己的 cursor</b>）—— 写在这儿的话，鼠标移到右边那条滚动条上仍是
+  「工」字形的文本光标。只读时看不出来（那时本来就是 default），
+  可编辑的封包编辑器里一眼就看得见。
+
+  所以 I 形只给<b>真的能落光标的那片格子</b>（.spacer 覆盖全部行）；
+  滚动条、内边距、列号表头一律 default。HexPanel 的文本视图是同一个病根、同一种分法。
+*/
+.hexview:not(.ro) .spacer { cursor: text; }
 /*
   不画焦点环：光标块本身已经说明「键入会落到这里」，再套一圈框只是多一道线（用户嫌丑，去掉了）。
   全局的绿色焦点环也要关掉，它画在盒子外沿、被外框裁得只剩上面一条。
@@ -587,7 +597,7 @@ defineExpose({ cur, nib, col, insertMode, hasSel, selCount, per, selectAll, sele
   position: relative;
   padding: 0 12px 10px;
   font-family: Consolas, 'Cascadia Mono', monospace;
-  font-size: 12px;
+  font-size: var(--fs-dense);
   line-height: 1.5;
 }
 
@@ -649,7 +659,7 @@ defineExpose({ cur, nib, col, insertMode, hasSel, selCount, per, selectAll, sele
   justify-content: center;
   color: var(--muted);
   font-family: var(--mono);
-  font-size: 12.5px;
+  font-size: var(--fs-body);
   pointer-events: none;
 }
 </style>

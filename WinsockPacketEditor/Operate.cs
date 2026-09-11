@@ -50,7 +50,29 @@ namespace WinsockPacketEditor
             public static string PATH = string.Empty;
             public static string WebSite_Tutorials_CN = "https://www.wpe64.com/tutorials.html";
             public static string WebSite_Tutorials_EN = "https://www.wpe64.com/tutorials_enUS.html";            
+            /*
+                上次注入的那一次，五个字段是一条记录 —— 界面上要显示，「快捷注入」要拿它重放。
+
+                ⚠️ LastInjection 原来是<b>孤零零一个进程名</b>，只够在启动页那张卡上显示一行。
+                要重放就不够了：按进程名找得到同名进程（方式 01 / 02），但方式 03 是
+                「挂起启动某个 exe」—— 没有完整路径与启动参数就重放不出同一件事。
+
+                ⚠️ 时间存 "o"（往返格式）。写当前区域的短格式，换台机器就解析不回来
+                （与 WPC 节点那两份 XML 同一条口径）。
+            */
             public static string LastInjection = string.Empty;
+
+            /// <summary>上次注入用的是哪种方式：0 选择进程 · 1 选择窗体 · 2 可执行文件。</summary>
+            public static int LastInjectMethod = 0;
+
+            /// <summary>上次注入目标的完整路径（方式 03 重放时要用它再启动一次）。</summary>
+            public static string LastInjectPath = string.Empty;
+
+            /// <summary>上次注入时给的启动参数，只有方式 03 有。</summary>
+            public static string LastInjectArgs = string.Empty;
+
+            /// <summary>上次注入的时刻，`DateTime.ToString("o")`；空串表示还没注入过。</summary>
+            public static string LastInjectTime = string.Empty;
             public static string WPE64_URL = "https://www.wpe64.com";
             public static string WPE64_IP = "http://101.132.222.195";
             public static string WPE64_Issuse = "https://github.com/x-nas/WinsockPacketEditor/issues";
@@ -2226,9 +2248,10 @@ namespace WinsockPacketEditor
             {
                 if (Operate.ProxyConfig.Proxy.MustTCP_Auth)
                 {
+                    //账号密码进 URL 的 userinfo 段要转义：密码里一个 @ 或 : 就会把地址切错
                     return string.Format("socket5://{0}:{1}@{2}:{3}",
-                        Operate.ProxyConfig.Proxy.MustTCP_UserName,
-                        Operate.ProxyConfig.Proxy.MustTCP_PassWord,
+                        Uri.EscapeDataString(Operate.ProxyConfig.Proxy.MustTCP_UserName ?? string.Empty),
+                        Uri.EscapeDataString(Operate.ProxyConfig.Proxy.MustTCP_PassWord ?? string.Empty),
                         Operate.ProxyConfig.Proxy.MustTCP_IP,
                         Operate.ProxyConfig.Proxy.MustTCP_Port);
                 }
@@ -3195,8 +3218,11 @@ namespace WinsockPacketEditor
                             }
                         }
 
+                        //⚠️ 这条路绕开了 AddProxyAccount，所以要自己夹一次下限
                         lstAccount.Add(new AccountInfo(Guid.NewGuid(), IsEnable, UserName, PassWord, AIPInfo,
-                            IsLimitLinks, LimitLinks, IsLimitDevices, LimitDevices, IsExpiry, ExpiryTime, CreateTime));
+                            IsLimitLinks, ProxyConfig.Account.NormalizeLimit(IsLimitLinks, LimitLinks, "连接数"),
+                            IsLimitDevices, ProxyConfig.Account.NormalizeLimit(IsLimitDevices, LimitDevices, "设备数"),
+                            IsExpiry, ExpiryTime, CreateTime));
                     }
                 }
                 catch (Exception ex)
@@ -3373,20 +3399,68 @@ namespace WinsockPacketEditor
 
             #region//支持取消的等待
 
-            public static void DoSleep(int MilliSecond, BackgroundWorker Worker)
+            /*
+                ══ 可中断的等待。机器人的「延迟」与发送列表的「循环间隔」都走它 ══
+
+                ⚠️⚠️ <b>剩余时间必须从 Stopwatch 读，不能按「假设睡了 interval」累加</b>（2026-09-09 修）。
+
+                原来是这么写的：
+
+                    while (elapsed < MilliSecond) { Thread.Sleep(Math.Min(10, ...)); elapsed += 10; }
+
+                问题不在这个循环本身，在 <b>Thread.Sleep 不会睡满你要的那个数</b> ——
+                它向上取整到系统时钟节拍（本机实测节拍 ~11ms，<b>Sleep(10) 实际 16.8ms</b>）。
+                切成 N/10 段就把这个取整误差<b>乘了 N/10 倍</b>，实测：
+
+                    请求 100ms  ->  168ms（+68%）        请求 1000ms  ->  1671ms（+67%）
+                    请求  50ms  ->   83ms（+66%）        请求   10ms  ->    17ms（+68%）
+
+                也就是整个机器人在按 0.6 倍速跑，而且<b>比例恒定</b>、时长越长绝对误差越大。
+
+                现在按 Stopwatch 算剩余：单次 Sleep 的取整照旧存在，但<b>不再累加</b>——
+                误差从「+67% 的比例误差」变成「一个时钟节拍的绝对误差」。实测：
+
+                    100ms -> 108（+8%）   500ms -> 511（+2%）   1000ms -> 1005（+1%）
+
+                ⚠️ <b>10ms 这一档仍然不准</b>（实测 18ms）——那是时钟节拍本身的下限，
+                这个写法治不了。真要卡到 ±0.2ms 得在最后 ~16ms 改用 SpinWait 自旋，
+                代价是每次延迟末尾烧掉一个核；那是一笔要单独点头的交易，没有默认打开。
+
+                ⚠️ 10ms 的分片<b>只为取消响应</b>（停止按钮最多等 10ms），与精度无关：
+                剩余时间是按真实时钟算的，分得多细都不会累加误差。
+
+                ⚠️⚠️ <b>2026-09-10 只换了「查什么」，等待写法一个字没动。</b>
+                试过把 Thread.Sleep 换成 Token.WaitHandle.WaitOne(片长)，实测<b>精度当场退化</b>：
+
+                    要等      切片+Sleep（现在）    切片+WaitOne
+                     50ms       50.9ms (+1.7%)      66.5ms (+33%)
+                    100ms      101.2ms (+1.2%)     115.2ms (+15.2%)
+                    200ms      214.3ms             214.0ms      打平
+                   1000ms     1014.6ms            1001.5ms      长时长 WaitOne 略好
+
+                WaitHandle.WaitOne 在小片长上比 Thread.Sleep 多向上取整一截；
+                换来的取消延迟只从 ~21ms 降到 ~10ms（三轮 21/14/31 对 10/15/1，全在噪声里）。
+                拿 50ms 档 33% 的精度去换那点延迟不划算 —— <b>别再试一次。</b>
+
+                ⚠️ 由此定下的分工，别搞混：
+                  · <b>要等准一段时长</b>（就是这里）        -> 切片 + Thread.Sleep + Stopwatch 算剩余
+                  · <b>等某件事做完</b>（排空 / 等一条跑完）  -> Token.WaitHandle.WaitOne(超时)
+                    那几处对时长没有任何精度要求，WaitOne 的好处是取消当场返回。
+            */
+            public static void DoSleep(int MilliSecond, CancellationToken Token)
             {
-                int elapsed = 0;
-                int interval = 10;
+                if (MilliSecond <= 0) { return; }
 
-                while (elapsed < MilliSecond)
+                Stopwatch sw = Stopwatch.StartNew();
+
+                while (true)
                 {
-                    if (Worker.CancellationPending)
-                    {
-                        break;
-                    }
+                    if (Token.IsCancellationRequested) { return; }
 
-                    Thread.Sleep(Math.Min(interval, MilliSecond - elapsed));
-                    elapsed += interval;
+                    long left = MilliSecond - sw.ElapsedMilliseconds;
+                    if (left <= 0) { return; }
+
+                    Thread.Sleep((int)Math.Min(10, left));
                 }
             }
 
@@ -3398,7 +3472,17 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    DataBase.UpdateTable_SystemConfig_LastInjection();
+                    /*
+                        ⚠️ 空表上的 UPDATE 是 no-op，不报错也不写 —— 而 SystemConfig 表
+                        <b>要等第一次保存设置才会有那一行</b>。也就是说「刚装好、什么都没设过
+                        就直接注入」的那一次，记录会静默丢掉，下次进来还是「还没有注入过」。
+
+                        所以改到 0 行就退回整表保存（那一路是删+插，会把行建出来）。
+                        跑测里第一组就是这么翻的：全新空库上 UPDATE 完读回来全是空。
+                    */
+                    if (DataBase.UpdateTable_SystemConfig_LastInjection() > 0) { return; }
+
+                    SaveSystemConfig_ToDB();
                 }
                 catch (Exception ex)
                 {
@@ -3438,6 +3522,10 @@ namespace WinsockPacketEditor
                         new XElement("ThemeFollowSystem", UI.Prefs.FollowSystemTheme),
                         new XElement("DefaultLanguage", UI.Prefs.Language),
                         new XElement("LastInjection", SystemConfig.LastInjection),
+                        new XElement("LastInjectMethod", SystemConfig.LastInjectMethod),
+                        new XElement("LastInjectPath", SystemConfig.LastInjectPath),
+                        new XElement("LastInjectArgs", SystemConfig.LastInjectArgs),
+                        new XElement("LastInjectTime", SystemConfig.LastInjectTime),
                         new XElement("Remote_IsEnable", SystemConfig.IsRemote),
                         new XElement("Remote_UserName", SystemConfig.Remote_UserName),
                         new XElement("Remote_PassWord", SystemConfig.Remote_PassWord),
@@ -3535,6 +3623,28 @@ namespace WinsockPacketEditor
                         
                         Lang = dtSystemConfig.Rows[0]["DefaultLanguage"].ToString();
                         SystemConfig.LastInjection = dtSystemConfig.Rows[0]["LastInjection"].ToString();
+
+                        //上次注入那条记录的另外四列是后加的：老库经 EnsureColumn 补过，
+                        //备份导入那条路仍可能塞进来一张没有它们的表，所以逐列兜一次
+                        if (dtSystemConfig.Columns.Contains("LastInjectMethod"))
+                        {
+                            SystemConfig.LastInjectMethod = Convert.ToInt32(dtSystemConfig.Rows[0]["LastInjectMethod"]);
+                        }
+
+                        if (dtSystemConfig.Columns.Contains("LastInjectPath"))
+                        {
+                            SystemConfig.LastInjectPath = dtSystemConfig.Rows[0]["LastInjectPath"].ToString();
+                        }
+
+                        if (dtSystemConfig.Columns.Contains("LastInjectArgs"))
+                        {
+                            SystemConfig.LastInjectArgs = dtSystemConfig.Rows[0]["LastInjectArgs"].ToString();
+                        }
+
+                        if (dtSystemConfig.Columns.Contains("LastInjectTime"))
+                        {
+                            SystemConfig.LastInjectTime = dtSystemConfig.Rows[0]["LastInjectTime"].ToString();
+                        }
                         SystemConfig.IsRemote = Convert.ToBoolean(dtSystemConfig.Rows[0]["Remote_IsEnable"]);
                         SystemConfig.Remote_UserName = dtSystemConfig.Rows[0]["Remote_UserName"].ToString();
                         SystemConfig.Remote_PassWord = dtSystemConfig.Rows[0]["Remote_PassWord"].ToString();
@@ -3628,6 +3738,14 @@ namespace WinsockPacketEditor
                         //仓库上限：与字段初值逐个对上（见 UiPrefs 那条同样的告诫）
                         WareHouseConfig.WareHouse.StoresLimit = true;
                         WareHouseConfig.WareHouse.StoresLimit_Value = 5000;
+
+                        //上次注入：新库里当然是「还没注入过」。不抹的话切库之后
+                        //选目标屏会举着<b>上一个库</b>那条记录，「快捷注入」还会真按它去注
+                        SystemConfig.LastInjection = string.Empty;
+                        SystemConfig.LastInjectMethod = 0;
+                        SystemConfig.LastInjectPath = string.Empty;
+                        SystemConfig.LastInjectArgs = string.Empty;
+                        SystemConfig.LastInjectTime = string.Empty;
                     }
 
                     UI.Prefs.Language = Lang;
@@ -3695,6 +3813,32 @@ namespace WinsockPacketEditor
                     if (xeLastInjection != null)
                     {
                         SystemConfig.LastInjection = xeLastInjection.Value;
+                    }
+
+                    //上次注入那条记录的另外四项（老备份里没有，读不到就保持内存里那份）
+                    XElement xeLastMethod = xeSystemConfig.Element("LastInjectMethod");
+                    if (xeLastMethod != null)
+                    {
+                        int m;
+                        if (int.TryParse(xeLastMethod.Value, out m)) { SystemConfig.LastInjectMethod = m; }
+                    }
+
+                    XElement xeLastPath = xeSystemConfig.Element("LastInjectPath");
+                    if (xeLastPath != null)
+                    {
+                        SystemConfig.LastInjectPath = xeLastPath.Value;
+                    }
+
+                    XElement xeLastArgs = xeSystemConfig.Element("LastInjectArgs");
+                    if (xeLastArgs != null)
+                    {
+                        SystemConfig.LastInjectArgs = xeLastArgs.Value;
+                    }
+
+                    XElement xeLastTime = xeSystemConfig.Element("LastInjectTime");
+                    if (xeLastTime != null)
+                    {
+                        SystemConfig.LastInjectTime = xeLastTime.Value;
                     }
 
                     XElement xeIsRemote = xeSystemConfig.Element("Remote_IsEnable");
@@ -4245,7 +4389,9 @@ namespace WinsockPacketEditor
                         new XElement("FireWall_AutoBlackList_UnSupport", ProxyConfig.Proxy.FireWall_AutoBlackList_UnSupport),
                         new XElement("FireWall_AutoBlackList_AuthFail", ProxyConfig.Proxy.FireWall_AutoBlackList_AuthFail),
                         new XElement("FireWall_AutoBlackList_Minutes", ProxyConfig.Proxy.FireWall_AutoBlackList_Minutes),
-                        new XElement("FireWall_AutoClear_Expiry", ProxyConfig.Proxy.FireWall_AutoClear_Expiry)
+                        new XElement("FireWall_AutoClear_Expiry", ProxyConfig.Proxy.FireWall_AutoClear_Expiry),
+                        new XElement("DriverType", ProxyConfig.Proxy.DriverType),
+                        new XElement("SelectProcessNames", ProxyConfig.Proxy.SerializeSelectProcessNames())
                         );
 
                     return xeProxyMode;
@@ -4306,6 +4452,18 @@ namespace WinsockPacketEditor
                         ProxyConfig.Proxy.FireWall_AutoBlackList_AuthFail = Convert.ToBoolean(ProxyMode.Rows[0]["FireWall_AutoBlackList_AuthFail"]);
                         ProxyConfig.Proxy.FireWall_AutoBlackList_Minutes = Convert.ToInt32(ProxyMode.Rows[0]["FireWall_AutoBlackList_Minutes"].ToString());
                         ProxyConfig.Proxy.FireWall_AutoClear_Expiry = Convert.ToBoolean(ProxyMode.Rows[0]["FireWall_AutoClear_Expiry"]);
+
+                        //备份导入那条路可能塞进来一张没有这两列的表，Columns.Contains 兜底
+                        if (ProxyMode.Columns.Contains("DriverType") && ProxyMode.Rows[0]["DriverType"] != DBNull.Value)
+                        {
+                            int dt = Convert.ToInt32(ProxyMode.Rows[0]["DriverType"]);
+                            ProxyConfig.Proxy.DriverType = dt >= 0 && dt <= 2 ? dt : 1;
+                        }
+
+                        if (ProxyMode.Columns.Contains("SelectProcessNames"))
+                        {
+                            ProxyConfig.Proxy.LoadSelectProcessNames(ProxyMode.Rows[0]["SelectProcessNames"] as string);
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -4532,6 +4690,18 @@ namespace WinsockPacketEditor
                     if (FireWall_AutoClear_Expiry != null)
                     {
                         ProxyConfig.Proxy.FireWall_AutoClear_Expiry = Convert.ToBoolean(FireWall_AutoClear_Expiry.Value);
+                    }
+
+                    XElement DriverType = xeProxyMode.Element("DriverType");
+                    if (DriverType != null && int.TryParse(DriverType.Value, out int dt) && dt >= 0 && dt <= 2)
+                    {
+                        ProxyConfig.Proxy.DriverType = dt;
+                    }
+
+                    XElement SelectProcessNames = xeProxyMode.Element("SelectProcessNames");
+                    if (SelectProcessNames != null)
+                    {
+                        ProxyConfig.Proxy.LoadSelectProcessNames(SelectProcessNames.Value);
                     }
                 }
                 catch (Exception ex)
@@ -5446,9 +5616,30 @@ namespace WinsockPacketEditor
             {
                 List<ProcessInfo> list = GetProcessList() ?? new List<ProcessInfo>();
 
-                var rows = new ProcessRow[list.Count];
-                for (int i = 0; i < list.Count; i++) { rows[i] = ProcessRow.From_(list[i]); }
-                return rows;
+                var rows = new List<ProcessRow>(list.Count);
+
+                for (int i = 0; i < list.Count; i++)
+                {
+                    ProcessInfo pi = list[i];
+                    if (pi == null) { continue; }
+
+                    /*
+                        ⚠️ <b>不出自己那一行。</b>
+
+                        注入自己 = 把 13 个 WinSock 钩子装进外壳进程本身：WebView2 与远程管理
+                        都在这个进程里收发，钩子一装就是自己钩自己；而 IPC 那三条管道的另一端
+                        也在同一个进程里，握手根本走不通。用户点了只会得到一个卡死的窗口。
+
+                        与「进程设置」那一屏同一条口径（ProxyConfig.Proxy.GetProcessRows 早就
+                        不出自己了，见 IsSelfProcess）—— 那边挡的是「勾了自己会成环」，
+                        这边挡的是「注入自己会把自己钩死」，两处都由业务层兜住，不靠界面自觉。
+                    */
+                    if (ProxyConfig.Proxy.IsSelfProcess(pi.ProcessID, pi.ModuleName)) { continue; }
+
+                    rows.Add(ProcessRow.From_(pi));
+                }
+
+                return rows.ToArray();
             }
 
             #endregion
@@ -5622,8 +5813,70 @@ namespace WinsockPacketEditor
                 public static bool MustTCP = true;
                 public static string MustTCP_IP = "127.0.0.1";
                 public static ushort MustTCP_Port = 1080;
-                public static string MustTCP_AppointPortContent = string.Empty, MustTCP_UserName = string.Empty, MustTCP_PassWord = string.Empty;
-                public static bool Enable_ExternalProxy = false, Enable_ExternalProxy_AppointPort = false, Enable_ExternalProxy_Auth = false;                
+                public static string MustTCP_UserName = string.Empty, MustTCP_PassWord = string.Empty;
+
+                /*
+                    「指定端口」的文本与它解析出来的集合。
+
+                    做成属性，是为了让<b>每一条</b>写入路径（保存 / 读库 / 备份导入 / WinForms 那份控件的赋值）
+                    都过同一个 setter：解析只在写入时做一次，连接线程上的 IsMustTCP_ByPort 只剩一次 HashSet 查找。
+                    原先是每条连接 Split(',') 一遍，而且不 Trim —— "80, 443" 里的 " 443" 永远匹配不上。
+                    解析规则见 ParseAppointPorts。
+                */
+                private static string mustTCP_AppointPortContent = string.Empty;
+                private static HashSet<int> mustTCP_AppointPorts = new HashSet<int>();
+
+                public static string MustTCP_AppointPortContent
+                {
+                    get { return mustTCP_AppointPortContent; }
+                    set
+                    {
+                        mustTCP_AppointPortContent = value ?? string.Empty;
+                        mustTCP_AppointPorts = ParseAppointPorts(mustTCP_AppointPortContent, out _);
+                    }
+                }
+
+                /// <summary>
+                /// 解析端口列表：逗号 / 分号 / 空白分隔（中文标点也认），只收 1~65535 的整数。
+                /// 认不出来的片段进 Invalid —— 保存时要报给用户，读库时直接丢掉。
+                /// </summary>
+                public static HashSet<int> ParseAppointPorts(string Text, out List<string> Invalid)
+                {
+                    var set = new HashSet<int>();
+                    Invalid = new List<string>();
+
+                    if (string.IsNullOrWhiteSpace(Text))
+                    {
+                        return set;
+                    }
+
+                    foreach (string raw in Text.Split(new[] { ',', '，', ';', '；', ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        string s = raw.Trim();
+                        if (s.Length == 0) { continue; }
+
+                        if (int.TryParse(s, out int p) && p >= 1 && p <= 65535)
+                        {
+                            set.Add(p);
+                        }
+                        else
+                        {
+                            Invalid.Add(s);
+                        }
+                    }
+
+                    return set;
+                }
+
+                /// <summary>把端口列表写回成规范文本（升序、逗号分隔，如 "80,443"）。保存时用它替换用户输入。</summary>
+                public static string NormalizeAppointPorts(string Text, out List<string> Invalid)
+                {
+                    var list = new List<int>(ParseAppointPorts(Text, out Invalid));
+                    list.Sort();
+                    return string.Join(",", list);
+                }
+
+                public static bool Enable_ExternalProxy = false, Enable_ExternalProxy_AppointPort = false, Enable_ExternalProxy_Auth = false;
                 public static string ExternalProxy_IP = "127.0.0.1";
                 public static ushort ExternalProxy_Port = 8889;
                 public static string ExternalProxy_AppointPort = "80,8080,443,8443", ExternalProxy_UserName, ExternalProxy_PassWord;
@@ -5653,6 +5906,15 @@ namespace WinsockPacketEditor
                         UserName = MustTCP_UserName ?? string.Empty,
                         PassWord = MustTCP_PassWord ?? string.Empty,
                         CheckedPids = lstSelectProcessID.ToArray(),
+
+                        //链路体检用的只读环境状态，见 ProcessSettingRow 上那段说明
+                        EnableHttp = Enable_HTTP,
+                        HttpPort = HTTP_Port,
+                        EnableSocks5 = Enable_SOCKS5,
+                        Socks5Port = SOCKS5_Port,
+                        EnableAuth = Enable_Auth,
+                        Running = IsRunning,
+                        IsAdmin = SystemConfig.IsAdministrator(),
                     };
                 }
 
@@ -5663,9 +5925,13 @@ namespace WinsockPacketEditor
                     {
                         lastProcessList = ProcessConfig.GetProcessList() ?? new List<ProcessInfo>();
                         var rows = new List<ProcessRow>();
+                        int self = SelfProcessId;
 
                         foreach (ProcessInfo pi in lastProcessList)
                         {
+                            //自己不进表：勾了自己，驱动会把 WPE 往目标发的连接也抓回来，成环
+                            if (pi.ProcessID == self) { continue; }
+
                             pi.IsCheck = lstSelectProcessID.Contains(pi.ProcessID);
                             rows.Add(ProcessRow.From_(pi));
                         }
@@ -5684,6 +5950,7 @@ namespace WinsockPacketEditor
                 {
                     ProcessInfo pi = lastProcessList.FirstOrDefault(x => x.ProcessID == Pid);
                     if (pi == null || string.IsNullOrEmpty(pi.ModuleName)) { return false; }
+                    if (IsSelfProcess(Pid, pi.ModuleName)) { return false; }
 
                     foreach (ProcessInfo x in lstSelectProcessName)
                     {
@@ -5693,6 +5960,52 @@ namespace WinsockPacketEditor
                     lstSelectProcessName.Add(pi);
                     return true;
                 }
+
+                #region//按名称拦截的进程表：落库与读回
+
+                /*
+                    这份名单原先只活在内存里，WPE 一重启就没了 —— 而它恰恰是「按名称」的那一份，
+                    存在的意义就是不随进程重启而失效。序列化成一行一条 "模块名|路径"（路径只给界面取图标用，可以为空）。
+                    Pid 那份刻意不存：进程编号本来就是一次性的。
+                */
+                public static string SerializeSelectProcessNames()
+                {
+                    var sb = new StringBuilder();
+
+                    foreach (ProcessInfo pi in lstSelectProcessName)
+                    {
+                        if (string.IsNullOrEmpty(pi.ModuleName)) { continue; }
+                        if (sb.Length > 0) { sb.Append('\n'); }
+                        sb.Append(pi.ModuleName.Replace('|', '_').Replace('\n', ' ')).Append('|').Append((pi.ProcessPath ?? string.Empty).Replace('\n', ' '));
+                    }
+
+                    return sb.ToString();
+                }
+
+                /// <summary>读回名单：先清再装，同名（不分大小写）只留一条，自身进程不收。</summary>
+                public static void LoadSelectProcessNames(string Text)
+                {
+                    lstSelectProcessName.Clear();
+                    if (string.IsNullOrWhiteSpace(Text)) { return; }
+
+                    var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+                    foreach (string line in Text.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        string l = line.Trim('\r', ' ', '\t');
+                        if (l.Length == 0) { continue; }
+
+                        int bar = l.IndexOf('|');
+                        string name = (bar < 0 ? l : l.Substring(0, bar)).Trim();
+                        string path = bar < 0 ? string.Empty : l.Substring(bar + 1).Trim();
+
+                        if (name.Length == 0 || !seen.Add(name) || IsSelfProcess(0, name)) { continue; }
+
+                        lstSelectProcessName.Add(new ProcessInfo(null, Path.GetFileNameWithoutExtension(name), 0, name, path));
+                    }
+                }
+
+                #endregion
 
                 public static bool RemoveSelectProcessName(string ModuleName)
                 {
@@ -5719,54 +6032,210 @@ namespace WinsockPacketEditor
                     catch (Exception ex) { Operate.DoLog(nameof(UninstallDriver_Dialog), ex); return false; }
                 }
 
+                #region//自身进程
+
+                private static int selfProcessId = -1;
+                private static string selfModuleName = null;
+
+                /// <summary>本进程的 Pid（外壳或主程序自己）。勾了自己，驱动会把 WPE 往目标发的连接也抓回来，成环。</summary>
+                public static int SelfProcessId
+                {
+                    get
+                    {
+                        if (selfProcessId < 0)
+                        {
+                            using (Process p = Process.GetCurrentProcess())
+                            {
+                                selfProcessId = p.Id;
+                                try { selfModuleName = p.MainModule?.ModuleName; } catch { selfModuleName = null; }
+                            }
+                        }
+                        return selfProcessId;
+                    }
+                }
+
+                public static bool IsSelfProcess(int Pid, string ModuleName)
+                {
+                    if (Pid == SelfProcessId) { return true; }
+                    return !string.IsNullOrEmpty(ModuleName) && string.Equals(ModuleName, selfModuleName, StringComparison.OrdinalIgnoreCase);
+                }
+
+                #endregion
+
                 /// <summary>
-                /// 保存进程设置，逐步照 WinForms 的 ProcessSetting.bSave_Click：校验 → 写字段 → 没装驱动就按选的类型装 →
-                /// 把勾选的 Pid 与名称表交给 SunnyNet → 落库。返回空串 = 成功。
+                /// 转代理地址指的是不是本机 —— 只有本机才谈得上「与自家 SOCKS5 / HTTP 端口撞上」那两条检查。
+                /// 刻意不调 GetLocalIPAddress（几十毫秒），只认回环、localhost 与进代理模式时填好的 ProxyServerIP。
                 /// </summary>
-                public static string SaveProcessSetting(int DriverTypeNew, bool MustTCPNew, string IP, int Port, bool AppointPort, string AppointPortContent, bool Auth, string UserName, string PassWord, IList<int> CheckedPids)
+                public static bool IsLocalProxyAddress(string IP)
+                {
+                    if (string.IsNullOrWhiteSpace(IP)) { return false; }
+                    IP = IP.Trim();
+
+                    if (string.Equals(IP, "localhost", StringComparison.OrdinalIgnoreCase)) { return true; }
+
+                    if (IPAddress.TryParse(IP, out IPAddress a))
+                    {
+                        if (IPAddress.IsLoopback(a) || a.Equals(IPAddress.Any)) { return true; }
+
+                        IPAddress[] mine = ProxyServerIP;
+                        if (mine != null)
+                        {
+                            foreach (IPAddress m in mine) { if (m.Equals(a)) { return true; } }
+                        }
+                    }
+
+                    return false;
+                }
+
+                /// <summary>
+                /// 保存前的校验 —— 纯函数、不碰驱动、不联网，跑测直接调它。返回空串 = 通过。
+                /// 通过时 NormalizedPorts 是规范化后的端口列表（"80,443"），保存要用它替换用户输入。
+                ///
+                /// 这里拦的都是「保存之后被拦截的进程会直接断网、而界面上看不出为什么」的情形：
+                ///   · HTTP 代理没开 —— 驱动把流量送进 SunnyNet，而 SunnyNet 是随 HTTP 代理起的；
+                ///   · 转代理端口是 SunnyNet 自己的端口 —— 成环；
+                ///   · 转到本机 SOCKS5，而它开着身份认证、这边却没勾「需要认证」—— 握手当场被拒。
+                /// 最后那一条正是默认配置（EnableAuth 默认 1、MustTCP_Auth 默认 0）会撞上的。
+                /// </summary>
+                public static string ValidateProcessSetting(bool MustTCPNew, string IP, int Port, bool AppointPort, string AppointPortContent, bool Auth, string UserName, string PassWord, out string NormalizedPorts)
+                {
+                    NormalizedPorts = (AppointPortContent ?? string.Empty).Trim();
+                    IP = (IP ?? string.Empty).Trim();
+                    UserName = (UserName ?? string.Empty).Trim();
+                    PassWord = (PassWord ?? string.Empty).Trim();
+
+                    if (!Enable_HTTP)
+                    {
+                        return UI.T("ProcessSetting.NeedHttpProxy", "拦截进程的数据要经过 HTTP 代理，请先在「代理设置」里启用 HTTP 代理");
+                    }
+
+                    if (AppointPort)
+                    {
+                        NormalizedPorts = NormalizeAppointPorts(AppointPortContent, out List<string> bad);
+
+                        if (bad.Count > 0)
+                        {
+                            return string.Format(UI.T("ProcessSetting.Port.Invalid", "指定端口里有认不出来的内容：{0}（只能是 1~65535 的数字，用逗号分隔）"), string.Join(" ", bad));
+                        }
+
+                        if (NormalizedPorts.Length == 0)
+                        {
+                            return UI.T("ProcessSetting.Port.Empty", "勾了「指定端口」就要填至少一个端口");
+                        }
+                    }
+
+                    if (!MustTCPNew)
+                    {
+                        return string.Empty;
+                    }
+
+                    if (IP.Length == 0)
+                    {
+                        return UI.T("ProcessSetting.IP.Empty", "转代理地址为空");
+                    }
+
+                    //IsValidDomain 要求至少一个点，"localhost" 会被它拒掉 —— 它是转到本机最常见的写法，单独放行
+                    AddressType at = GetAddressType_ByString(IP);
+                    if (at != AddressType.IPv4 && at != AddressType.Domain && !string.Equals(IP, "localhost", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return UI.T("ProcessSetting.IP.Error", "转代理地址错误（要 IPv4 地址或域名）");
+                    }
+
+                    if (Port < 1 || Port > 65535)
+                    {
+                        return UI.T("ProcessSetting.Port.Error", "转代理端口要在 1~65535 之间");
+                    }
+
+                    if (Auth && (UserName.Length == 0 || PassWord.Length == 0))
+                    {
+                        return UI.T("ProcessSetting.Auth.Empty", "勾了「需要认证」就要填账号和密码");
+                    }
+
+                    if (IsLocalProxyAddress(IP))
+                    {
+                        if (Port == HTTP_Port)
+                        {
+                            return string.Format(UI.T("ProcessSetting.Port.Loop", "转代理端口不能是 HTTP 代理自己的端口 {0}：那会把流量转回 SunnyNet 自己，成环"), HTTP_Port);
+                        }
+
+                        if (Port == SOCKS5_Port)
+                        {
+                            if (!Enable_SOCKS5)
+                            {
+                                return UI.T("ProcessSetting.Socks5.Off", "本机 SOCKS5 代理没有启用，转过去也没有人接");
+                            }
+
+                            if (Enable_Auth && !Auth)
+                            {
+                                return UI.T("ProcessSetting.Auth.Required", "本机 SOCKS5 代理开着身份认证，转代理必须勾选「需要认证」并填一个代理账号，否则被拦截的进程会直接断网");
+                            }
+                        }
+                    }
+
+                    return string.Empty;
+                }
+
+                /// <summary>
+                /// 保存进程设置，逐步照 WinForms 的 ProcessSetting.bSave_Click，前面多了两道：
+                /// 校验（ValidateProcessSetting）→ 真连一次转代理服务器 → 写字段 → 没装驱动就按选的类型装 →
+                /// 把勾选的 Pid 与名称表交给 SunnyNet → 落库。返回空串 = 成功。
+                ///
+                /// 装驱动那一段（首次要复制 sys 文件、起服务，几秒钟）走 UI.Busy 丢到后台，UI 线程不卡；
+                /// SunnyNet 的调用本来就是跨到 Go 侧的，UI.Toast 也自己 marshal，后台跑是安全的。
+                /// </summary>
+                public static async Task<string> SaveProcessSetting(int DriverTypeNew, bool MustTCPNew, string IP, int Port, bool AppointPort, string AppointPortContent, bool Auth, string UserName, string PassWord, IList<int> CheckedPids)
                 {
                     try
                     {
+                        string err = ValidateProcessSetting(MustTCPNew, IP, Port, AppointPort, AppointPortContent, Auth, UserName, PassWord, out string ports);
+                        if (!string.IsNullOrEmpty(err))
+                        {
+                            return err;
+                        }
+
                         IP = (IP ?? string.Empty).Trim();
                         UserName = (UserName ?? string.Empty).Trim();
                         PassWord = (PassWord ?? string.Empty).Trim();
 
-                        if (string.IsNullOrEmpty(IP) || (Auth && (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(PassWord))))
+                        /*
+                            真连一次：地址、端口、凭据三样对不对，只有握手才知道；原先只有用户主动点「检测代理」才会发现。
+                            本机 SOCKS5 还没起的时候跳过 —— 那时连不上不说明配置错，而认证那一条上面的静态检查已经拦了。
+                        */
+                        if (MustTCPNew && (IsRunning || !IsLocalProxyAddress(IP) || Port != SOCKS5_Port))
                         {
-                            return UI.T("ProcessSetting.Save.Error", "保存失败，请检查数据设置");
+                            string t = await TestSocksProxy(Auth, IP, Port, UserName, PassWord);
+                            if (!string.IsNullOrEmpty(t))
+                            {
+                                return string.Format(UI.T("ProcessSetting.Detect.Before", "转代理服务器连不上，没有保存：{0}"), t);
+                            }
                         }
 
                         MustTCP = MustTCPNew;
                         MustTCP_IP = IP;
                         MustTCP_Port = (ushort)Math.Max(1, Math.Min(65535, Port));
                         MustTCP_AppointPort = AppointPort;
-                        MustTCP_AppointPortContent = (AppointPortContent ?? string.Empty).Trim();
+                        MustTCP_AppointPortContent = ports;
                         MustTCP_Auth = Auth;
                         MustTCP_UserName = UserName;
                         MustTCP_PassWord = PassWord;
 
-                        if (!IsLoadDriver)
-                        {
-                            DriverType = DriverTypeNew >= 0 && DriverTypeNew <= 2 ? DriverTypeNew : 1;
-                            IsLoadDriver = syNet.LoadDriver(DriverType);
-                        }
-
-                        if (!IsLoadDriver)
-                        {
-                            return UI.T("ProcessSetting.LoadDriver.Error", "加载驱动失败, 请检查是否管理员权限运行");
-                        }
-
                         lstSelectProcessID.Clear();
-                        foreach (int pid in CheckedPids ?? new List<int>()) { if (!lstSelectProcessID.Contains(pid)) { lstSelectProcessID.Add(pid); } }
-
-                        syNet.RemoveAllProcesses();
-                        foreach (int pid in lstSelectProcessID) { syNet.AddProcessPid(pid); }
-                        foreach (ProcessInfo pi in lstSelectProcessName)
+                        foreach (int pid in CheckedPids ?? new List<int>())
                         {
-                            if (!string.IsNullOrEmpty(pi.ModuleName)) { syNet.AddProcessName(pi.ModuleName); }
+                            //自己不收：驱动会把 WPE 往目标发的连接也抓回来，成环（界面上已经不出这一行，这里是业务层的兜底）
+                            if (pid == SelfProcessId) { continue; }
+                            if (!lstSelectProcessID.Contains(pid)) { lstSelectProcessID.Add(pid); }
                         }
 
-                        SystemConfig.SaveProxyMode_ToDB();
+                        string applyErr = await UI.Busy(UI.T("Loading", "正在加载..."), () => ApplyProcessSetting(DriverTypeNew));
+                        if (!string.IsNullOrEmpty(applyErr))
+                        {
+                            return applyErr;
+                        }
+
+                        //换了转代理设置：已有的 UDP 关联收掉，下一个数据报按新设置重连
+                        CloseAllUDPProxy();
+
                         UI.Toast(UiIcon.Success, UI.T("ProcessSetting.Save.Success", "进程设置保存成功"));
                         return string.Empty;
                     }
@@ -5774,6 +6243,79 @@ namespace WinsockPacketEditor
                     {
                         Operate.DoLog(nameof(SaveProcessSetting), ex);
                         return ex.Message;
+                    }
+                }
+
+                /// <summary>装驱动 + 把进程交给驱动 + 落库。跑在 UI.Busy 的后台线程上，不碰界面。</summary>
+                private static string ApplyProcessSetting(int DriverTypeNew)
+                {
+                    if (!IsLoadDriver)
+                    {
+                        DriverType = DriverTypeNew >= 0 && DriverTypeNew <= 2 ? DriverTypeNew : 1;
+                        IsLoadDriver = syNet.LoadDriver(DriverType);
+                    }
+
+                    if (!IsLoadDriver)
+                    {
+                        return UI.T("ProcessSetting.LoadDriver.Error", "加载驱动失败, 请检查是否管理员权限运行");
+                    }
+
+                    ApplyProcessesToDriver();
+                    SystemConfig.SaveProxyMode_ToDB();
+                    return string.Empty;
+                }
+
+                /// <summary>
+                /// 把勾选的 Pid 与名称表交给驱动（先清再加）。
+                /// 保存时调；StartProxy 成功后也调一次 —— StopProxy 会把它们摘掉（见 ReleaseDriverProcesses），
+                /// 再启动时要装回去，否则「停了再开」之后进程不再被拦截。
+                /// </summary>
+                public static void ApplyProcessesToDriver()
+                {
+                    if (!IsLoadDriver)
+                    {
+                        return;
+                    }
+
+                    try
+                    {
+                        syNet.RemoveAllProcesses();
+
+                        foreach (int pid in lstSelectProcessID)
+                        {
+                            syNet.AddProcessPid(pid);
+                        }
+
+                        foreach (ProcessInfo pi in lstSelectProcessName)
+                        {
+                            if (!string.IsNullOrEmpty(pi.ModuleName)) { syNet.AddProcessName(pi.ModuleName); }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(ApplyProcessesToDriver), ex);
+                    }
+                }
+
+                /// <summary>
+                /// 停止代理 / 退出时把进程从驱动上摘掉。驱动本身留着（卸载会重启电脑），
+                /// 只是不再把这些进程的连接转到一个已经关掉的端口上 —— 否则 WPE 停了，目标进程也跟着断网。
+                /// 名单留在内存里，再启动时 ApplyProcessesToDriver 装回去。
+                /// </summary>
+                public static void ReleaseDriverProcesses()
+                {
+                    if (!IsLoadDriver)
+                    {
+                        return;
+                    }
+
+                    try
+                    {
+                        syNet.RemoveAllProcesses();
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(ReleaseDriverProcesses), ex);
                     }
                 }
 
@@ -5901,7 +6443,6 @@ namespace WinsockPacketEditor
                 public static BindingList<BlackListInfo> lstBlackList = new BindingList<BlackListInfo>();
                 public static BindingList<WhiteListInfo> lstWhiteList = new BindingList<WhiteListInfo>();
                 public static readonly ConcurrentDictionary<string, IPAddress> DnsCache = new ConcurrentDictionary<string, IPAddress>(StringComparer.OrdinalIgnoreCase);
-                public static ConcurrentDictionary<IPEndPoint, long> udpEndPointToTheologyId = new ConcurrentDictionary<IPEndPoint, long>();
                 private static QQWryOptions IPLib = new QQWryOptions()
                 {
                     DbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "IPLocation", "qqwry.dat")
@@ -6285,6 +6826,9 @@ namespace WinsockPacketEditor
                                 UI.T("ProxyModeForm.ProxyServerIP", "HTTP 代理地址 : {0}:{1}"),
                                 ProxyUDP_IP, HTTP_Port);
                             DoLog(nameof(InitHttpProxy), sProxyIP);
+
+                            //StopProxy 把进程从驱动上摘了（不摘的话 WPE 一停目标就断网），这里装回去
+                            ApplyProcessesToDriver();
                         }
                         else
                         {
@@ -6316,6 +6860,14 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
+                        /*
+                            先把进程从驱动上摘掉，再关端口。顺序反了会有一小段时间目标进程的连接被转到一个已经不存在的端口上。
+                            驱动本身不卸（卸载会重启电脑）；名单留在内存里，StartProxy 时 ApplyProcessesToDriver 装回去。
+                            UDP 那头的关联也一起收掉 —— 服务停了它们迟早会因控制连接断开而自己收掉，这里只是不等。
+                        */
+                        ReleaseDriverProcesses();
+                        CloseAllUDPProxy();
+
                         if (ProxyServer != null && ProxyServer.State == ServerState.Running)
                         {
                             ProxyServer.Stop();
@@ -6383,6 +6935,33 @@ namespace WinsockPacketEditor
                             UI.T("ProxyModeForm.ProxyBytesInfo", "请求 : {0}  响应 : {1}"),
                             SystemConfig.GetDisplayBytes(Total_Request, false),
                             SystemConfig.GetDisplayBytes(Total_Response, false));
+
+                        /*
+                            防火墙那两张名单：清过期 + 把命中次数推给界面。
+
+                            ⚠️ <b>放在这里是因为这一拍跑在 UI 线程上</b>（两套 UI 各有一个 1 秒定时器调
+                            RefreshStatInfo）。连接线程碰不得这两份 BindingList，理由见 MatchRule。
+                        */
+                        if (EnableFireWall)
+                        {
+                            if (SweepExpiredRules() > 0)
+                            {
+                                FeedPump.MarkDirty(FeedList.WhiteList);
+                                FeedPump.MarkDirty(FeedList.BlackList);
+                            }
+                            else
+                            {
+                                //只有真被命中过才推，闲着的时候一分钱不花
+                                long seq = Interlocked.Read(ref FireWallHitSeq);
+
+                                if (seq != lastFireWallHitSeq)
+                                {
+                                    lastFireWallHitSeq = seq;
+                                    FeedPump.MarkDirty(FeedList.WhiteList);
+                                    FeedPump.MarkDirty(FeedList.BlackList);
+                                }
+                            }
+                        }
 
                         //取走并清零：这两个计数器由收发路径累加，清零点必须与读取点在一起
                         int up = ProxySpeed_Uplink;
@@ -6941,6 +7520,9 @@ namespace WinsockPacketEditor
                     {
                         var now = DateTime.Now;
                         var UDPToRemove = new List<Guid>();
+
+                        //「强制转代理」那头的 UDP 关联也在这一拍回收（静置超过 UDPTimeout 的）
+                        udpRelay?.SweepIdle();
 
                         foreach (var pair in ProxyConfig.List.cdProxyUDP.ToList())
                         {
@@ -7756,57 +8338,78 @@ namespace WinsockPacketEditor
 
                 #region//设置 UDP 使用代理
 
-                public static async void SetUDPProxy(UDPEvent Conn, byte[] bSendData)
-                {
-                    IPEndPoint targetEndPoint = Operate.ProxyConfig.Proxy.ParseIPEndPoint(Conn.RemoteAddr());
-                    if (targetEndPoint == null)
-                    {
-                        return;
-                    }
-                    Operate.ProxyConfig.Proxy.udpEndPointToTheologyId[targetEndPoint] = Conn.TheologyID();
+                /*
+                    UDP 那一路的中继客户端（ClassObject/MustTcpUdpRelay.cs）：目标进程的一个 UDP 套接字对应一条 SOCKS5 UDP 关联，
+                    应答由关联自己交还给那个套接字。旧写法是每个数据报新开一条关联、发完就把 TCP 与 UdpClient 一起关掉，
+                    应答永远回不来 —— 详见那个文件头上的说明。
 
+                    懒建：第一个被截下来的 UDP 数据报到达时才建。代理地址与凭据每次建关联时现取，
+                    所以改了「强制转代理」的设置不必重建中继器；SaveProcessSetting 会 CloseAllUDPProxy 让已有关联按新设置重连。
+                */
+                private static MustTcpUdpRelay udpRelay = null;
+                private static readonly object udpRelayLock = new object();
+
+                public static MustTcpUdpRelay UdpRelay
+                {
+                    get
+                    {
+                        MustTcpUdpRelay r = udpRelay;
+                        if (r != null) { return r; }
+
+                        lock (udpRelayLock)
+                        {
+                            if (udpRelay == null)
+                            {
+                                udpRelay = new MustTcpUdpRelay(
+                                    () => new MustTcpUdpRelay.Target
+                                    {
+                                        Auth = MustTCP_Auth,
+                                        IP = MustTCP_IP,
+                                        Port = MustTCP_Port,
+                                        UserName = MustTCP_UserName,
+                                        PassWord = MustTCP_PassWord,
+                                    },
+                                    (theology, data) => SunnyNetlibray.Tools.UDPTools.SendMessage(SunnyNetlibray.Tools.UDPTools.SendToClient, theology, data),
+                                    (where, text) => SystemConfig.LogThrottled(where, text))
+                                {
+                                    IdleTimeout = UDPTimeout,
+                                };
+                            }
+
+                            return udpRelay;
+                        }
+                    }
+                }
+
+                /// <summary>被驱动截下来的一个 UDP 数据报：交给中继送出去。调用方已经把事件的 Body 置空，SunnyNet 不会再直发。</summary>
+                public static void SetUDPProxy(UDPEvent Conn, byte[] bSendData)
+                {
                     try
                     {
-                        using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+                        IPEndPoint targetEndPoint = ParseIPEndPoint(Conn.RemoteAddr());
+                        if (targetEndPoint == null || bSendData == null || bSendData.Length == 0)
                         {
-                            byte[] bCommand = new byte[]
-                            {
-                                0x05, // SOCKS version 5
-                                0x03, // UDP ASSOCIATE command
-                                0x00, // Reserved
-                                0x01, // IPv4 address type
-                                0x00, 0x00, 0x00, 0x00, // IP address (0.0.0.0)
-                                0x00, 0x00 // Port (0 = any port)
-                            };
-
-                            var Establish = await Operate.ProxyConfig.Proxy.EstablishSocksProxyServer(
-                                socket,
-                                Operate.ProxyConfig.Proxy.MustTCP_Auth,
-                                Operate.ProxyConfig.Proxy.MustTCP_IP,
-                                Operate.ProxyConfig.Proxy.MustTCP_Port,
-                                Operate.ProxyConfig.Proxy.MustTCP_UserName,
-                                Operate.ProxyConfig.Proxy.MustTCP_PassWord,
-                                bCommand);
-
-                            if (!Establish.Success)
-                            {
-                                return;
-                            }
-
-                            IPEndPoint udpProxyEndPoint = Operate.ProxyConfig.Proxy.ParseEstablishResponse(Establish.Response);
-                            if (udpProxyEndPoint == null)
-                            {
-                                return;
-                            }
-
-                            bool sendSuccess = await Operate.ProxyConfig.Proxy.SendUdpDataToProxy(bSendData, targetEndPoint, udpProxyEndPoint);
+                            return;
                         }
+
+                        _ = UdpRelay.SendAsync(Conn.TheologyID(), targetEndPoint, bSendData);
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SetUDPProxy), ex);
-                        ProxyConfig.Proxy.CleanupUdpAssociation(targetEndPoint);
+                        DoLog(nameof(SetUDPProxy), ex);
                     }
+                }
+
+                /// <summary>目标进程关了这个 UDP 套接字（UDP_Closed 事件），把它那条关联收掉。</summary>
+                public static void CloseUDPProxy(long TheologyID)
+                {
+                    udpRelay?.Close(TheologyID);
+                }
+
+                /// <summary>停止代理 / 换了转代理设置：全部收掉，下一个数据报会按当前设置重建。</summary>
+                public static void CloseAllUDPProxy()
+                {
+                    udpRelay?.CloseAll();
                 }
 
                 #endregion
@@ -8137,31 +8740,6 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//查找 UDP 中继关联
-
-                private static long FindTheologyIdByEndPoint(IPEndPoint targetEndPoint)
-                {
-                    if (targetEndPoint == null) return 0;
-
-                    if (Operate.ProxyConfig.Proxy.udpEndPointToTheologyId.TryGetValue(targetEndPoint, out long theologyId))
-                    {
-                        return theologyId;
-                    }
-
-                    return 0;
-                }
-
-                #endregion
-
-                #region//清理 UDP 中继关联
-
-                public static void CleanupUdpAssociation(IPEndPoint endPoint)
-                {
-                    Operate.ProxyConfig.Proxy.udpEndPointToTheologyId.TryRemove(endPoint, out _);
-                }
-
-                #endregion
-
                 #region//获取 SOCKS5 认证格式的封包
 
                 public static byte[] CreateSOCKS5AuthPacket(string username, string password)
@@ -8199,75 +8777,6 @@ namespace WinsockPacketEditor
                     Buffer.BlockCopy(passwordBytes, 0, packet, offset, passwordBytes.Length);
 
                     return packet;
-                }
-
-                #endregion                
-
-                #region//发送 UDP 数据到代理服务器
-
-                public static async Task<bool> SendUdpDataToProxy(byte[] bSendData, IPEndPoint targetEndPoint, IPEndPoint udpProxyEndPoint)
-                {
-                    try
-                    {
-                        using (UdpClient udpClient = new UdpClient(0))
-                        {
-                            byte[] UdpRequestData = Operate.ProxyConfig.Proxy.CreatSocks5UdpRequest(bSendData, targetEndPoint);
-                            if (UdpRequestData == null)
-                            {
-                                return false;
-                            }
-
-                            int bytesSent = await udpClient.SendAsync(UdpRequestData, UdpRequestData.Length, udpProxyEndPoint);
-
-                            _ = Task.Run(() => ReceiveUdpResponses(udpClient, udpProxyEndPoint));
-
-                            return bytesSent == UdpRequestData.Length;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(SendUdpDataToProxy), ex);
-                        return false;
-                    }
-                }
-
-                #endregion
-
-                #region//异步接收 UDP 中继的响应
-
-                public static async void ReceiveUdpResponses(UdpClient udpClient, IPEndPoint udpProxyEndPoint)
-                {
-                    try
-                    {
-                        while (true)
-                        {
-                            UdpReceiveResult result = await udpClient.ReceiveAsync();
-
-                            IPEndPoint remoteEndPoint = result.RemoteEndPoint;
-                            byte[] buffer = result.Buffer;
-
-                            if (remoteEndPoint.Address.Equals(udpProxyEndPoint.Address) && remoteEndPoint.Port == udpProxyEndPoint.Port)
-                            {
-                                var (data, targetEndPoint) = Operate.ProxyConfig.Proxy.ParseSocks5UdpResponse(buffer, buffer.Length);
-                                if (data != null && data.Length > 0)
-                                {
-                                    long theologyId = Operate.ProxyConfig.Proxy.FindTheologyIdByEndPoint(targetEndPoint);
-                                    if (theologyId != 0)
-                                    {
-                                        SunnyNetlibray.Tools.UDPTools.SendMessage(SunnyNetlibray.Tools.UDPTools.SendToClient, theologyId, data);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    catch (ObjectDisposedException)
-                    {
-                        // UdpClient 已关闭，正常退出
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(ReceiveUdpResponses), ex);
-                    }
                 }
 
                 #endregion                
@@ -8555,30 +9064,66 @@ namespace WinsockPacketEditor
 
                 #region//判断是否强制转代理
 
+                /// <summary>
+                /// 这条连接要不要转代理。没勾「指定端口」一律转；勾了就查端口集合 ——
+                /// 集合在 MustTCP_AppointPortContent 的 setter 里整体换引用，这里读一次用到底，不加锁。
+                /// </summary>
+                public static bool IsMustTCP_ByPort(int ConnPort)
+                {
+                    if (!MustTCP_AppointPort)
+                    {
+                        return true;
+                    }
+
+                    return ConnPort > 0 && mustTCP_AppointPorts.Contains(ConnPort);
+                }
+
                 public static bool IsMustTCP_ByPort(string ConnPort)
                 {
-                    try
+                    if (!MustTCP_AppointPort)
                     {
-                        if (!Operate.ProxyConfig.Proxy.MustTCP_AppointPort)
-                        {
-                            return true;
-                        }
-
-                        if (string.IsNullOrEmpty(ConnPort) || string.IsNullOrEmpty(Operate.ProxyConfig.Proxy.MustTCP_AppointPortContent))
-                        {
-                            return false;
-                        }
-
-                        HashSet<string> portSet = new HashSet<string>(Operate.ProxyConfig.Proxy.MustTCP_AppointPortContent.Split(','));
-
-                        return portSet.Contains(ConnPort);
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(IsMustTCP_ByPort), ex);
+                        return true;
                     }
 
-                    return false;
+                    return int.TryParse((ConnPort ?? string.Empty).Trim(), out int p) && IsMustTCP_ByPort(p);
+                }
+
+                /// <summary>
+                /// 从 "ip:port" / "[v6]:port" / "host:port" 里取端口，取不出来返回 -1。
+                /// SunnyNet 的 RemoteAddr() 就是这几种写法；原先各处 Split(':')[1] 在 IPv6 上取到的是地址的一段。
+                /// </summary>
+                public static int PortOfAddress(string Address)
+                {
+                    if (string.IsNullOrWhiteSpace(Address))
+                    {
+                        return -1;
+                    }
+
+                    IPEndPoint ep = ParseIPEndPoint(Address);
+                    if (ep != null)
+                    {
+                        return ep.Port;
+                    }
+
+                    //域名:端口 —— ParseIPEndPoint 只认 IP
+                    int i = Address.LastIndexOf(':');
+                    if (i > 0 && i < Address.Length - 1 && int.TryParse(Address.Substring(i + 1), out int p) && p >= 0 && p <= 65535)
+                    {
+                        return p;
+                    }
+
+                    return -1;
+                }
+
+                /// <summary>HTTP 事件的目标端口：从 URL 上取（显式写了就是那个，没写按 scheme 默认）。原先按 scheme 写死 80 / 443，8080 上的 HTTP 会被当成 80。</summary>
+                public static int PortOfUrl(string Url, bool IsHttps)
+                {
+                    if (!string.IsNullOrEmpty(Url) && Uri.TryCreate(Url, UriKind.Absolute, out Uri u) && u.Port > 0)
+                    {
+                        return u.Port;
+                    }
+
+                    return IsHttps ? 443 : 80;
                 }
 
                 #endregion
@@ -8958,7 +9503,7 @@ namespace WinsockPacketEditor
 
                         if (ip.Length == 0)
                         {
-                            return UI.T("FireWallSetting.IP.Error", "IP 地址不正确");
+                            return UI.T("FireWallSetting.IPAddress.Error", "IP 地址不正确");
                         }
 
                         //单个 IP 或 "起-止"，两段都要是合法 IPv4 —— 与 WhiteListEdit 的校验同一份规则
@@ -8966,8 +9511,21 @@ namespace WinsockPacketEditor
                         {
                             if (!SystemConfig.IsValidIPv4(part.Trim()))
                             {
-                                return UI.T("FireWallSetting.IP.Error", "IP 地址不正确");
+                                return UI.T("FireWallSetting.IPAddress.Error", "IP 地址不正确");
                             }
+                        }
+
+                        /*
+                            ⚠️ IP 段还要查<b>起 ≤ 止</b>。写反了的话 ContainsIp 恒为 false ——
+                            那条规则<b>躺在名单里却永远不生效</b>，界面上看不出任何异常，
+                            白名单模式下表现成「明明把这个网段加进去了还是连不上」。
+                            顺带也把 ParseIpRange 解不出来的（-1）挡在外面。
+                        */
+                        var Range = ProxyConfig.Proxy.ParseIpRange(ip);
+
+                        if (Range.StartIP == -1 || Range.EndIP == -1 || Range.StartIP > Range.EndIP)
+                        {
+                            return UI.T("FireWallSetting.IPAddress.Range", "IP 段的起始地址不能大于结束地址");
                         }
 
                         bool exists = Black
@@ -8977,7 +9535,7 @@ namespace WinsockPacketEditor
                         //改成一个已经存在的 IP，或新增一个重复的，都不行；改回自己不算重复
                         if (exists && !ip.Equals(old, StringComparison.OrdinalIgnoreCase))
                         {
-                            return UI.T("FireWallSetting.IP.Exists", "这个 IP 已经在名单里了");
+                            return UI.T("FireWallSetting.IPAddress.Exists", "这个 IP 已经在名单里了");
                         }
 
                         DateTime until;
@@ -9000,7 +9558,7 @@ namespace WinsockPacketEditor
                             BlackListInfo bli = ProxyConfig.Proxy.lstBlackList
                                 .FirstOrDefault(x => x.IPAddress.Equals(old, StringComparison.OrdinalIgnoreCase));
 
-                            if (bli == null) { return UI.T("FireWallSetting.IP.Gone", "这一条已经不在名单里了"); }
+                            if (bli == null) { return UI.T("FireWallSetting.IPAddress.Gone", "这一条已经不在名单里了"); }
 
                             ProxyConfig.Proxy.UpdateBlackList(bli, ip, IsExpiry, until);
                         }
@@ -9009,7 +9567,7 @@ namespace WinsockPacketEditor
                             WhiteListInfo wli = ProxyConfig.Proxy.lstWhiteList
                                 .FirstOrDefault(x => x.IPAddress.Equals(old, StringComparison.OrdinalIgnoreCase));
 
-                            if (wli == null) { return UI.T("FireWallSetting.IP.Gone", "这一条已经不在名单里了"); }
+                            if (wli == null) { return UI.T("FireWallSetting.IPAddress.Gone", "这一条已经不在名单里了"); }
 
                             ProxyConfig.Proxy.UpdateWhiteList(wli, ip, IsExpiry, until);
                         }
@@ -9525,34 +10083,77 @@ namespace WinsockPacketEditor
                     return null;
                 }
 
+                /*
+                    ⚠️⚠️ <b>这两个方法跑在 SuperSocket 的连接线程上</b>（IPConnectionFilter.AllowConnect），
+                    所以它们<b>一个字都不许往这两份 BindingList 里写</b>。2026-09-09 之前不是这样的：
+                    那时它们会就地 Remove 掉过期项、并用 EffectCount += 1 累加命中数 —— 两件事都是错的。
+
+                      ① <b>无锁遍历 + 无锁 Remove。</b> 另一条连接线程正在 AddToBlackList（它<b>持锁</b>，
+                         而这边不持），于是「遍历时集合被改」—— InvalidOperationException，
+                         一条真的崩溃路径。认证记录那边（IPInfo_ToAccount / GetAccountLogins_ById）
+                         踩过同一个坑，解法也是同一个：读写共用一把锁。
+
+                      ② <b>跨线程改绑定列表。</b> WinForms 那张防火墙名单表<b>直接绑着</b>这份 BindingList，
+                         Remove 与 EffectCount 的 OnPropertyChanged 都会冒到它身上。
+
+                    现在这里<b>只读</b>：命中就 HitOnce()（Interlocked 改字段、不发通知），
+                    过期的只判成不命中、<b>留在表里</b>，由 UI 线程的 1 秒统计拍去扫（见 SweepExpiredRules）。
+                */
                 public static bool IsIpInRanges(long ipValue, BindingList<WhiteListInfo> WhiteList)
                 {
-                    if (WhiteList == null || WhiteList.Count == 0)
+                    return MatchRule(ipValue, WhiteList, _whiteListLock);
+                }
+
+                public static bool IsIpInRanges(long ipValue, BindingList<BlackListInfo> BlackList)
+                {
+                    return MatchRule(ipValue, BlackList, _blackListLock);
+                }
+
+                /// <summary>
+                /// 白 / 黑名单的判定只有这一份实现 —— 两张表的逻辑本来就逐字相同。
+                /// ⚠️ 锁与 AddToWhiteList / AddToBlackList <b>共用同一把</b>：各拿各的锁等于没有锁。
+                /// </summary>
+                private static bool MatchRule<T>(long ipValue, BindingList<T> rules, object gate)
+                    where T : class, IIpRule
+                {
+                    if (rules == null || gate == null)
+                    {
                         return false;
+                    }
 
                     try
                     {
-                        var matchedItem = WhiteList.FirstOrDefault(wli => wli?.ContainsIp(ipValue) == true);
+                        T matched = null;
 
-                        if (matchedItem != null)
+                        lock (gate)
                         {
-                            bool isNotExpired = !matchedItem.IsExpiry || matchedItem.ExpiryTime > DateTime.Now;
+                            //锁里只做「找到哪一条」，别的都挪出去
+                            if (rules.Count == 0) { return false; }
 
-                            if (isNotExpired)
+                            for (int i = 0; i < rules.Count; i++)
                             {
-                                matchedItem.EffectCount += 1;
-                                return true;
-                            }
-                            else
-                            {
-                                if (Operate.ProxyConfig.Proxy.FireWall_AutoClear_Expiry)
+                                T rule = rules[i];
+
+                                if (rule != null && rule.ContainsIp(ipValue))
                                 {
-                                    WhiteList.Remove(matchedItem);
+                                    matched = rule;
+                                    break;
                                 }
-                                
-                                return false;
                             }
                         }
+
+                        if (matched == null) { return false; }
+
+                        //过期的算作没命中；<b>不在这里删</b>，删的时机见 SweepExpiredRules
+                        if (matched.IsExpiry && matched.ExpiryTime <= DateTime.Now)
+                        {
+                            return false;
+                        }
+
+                        matched.HitOnce();
+                        Interlocked.Increment(ref FireWallHitSeq);
+
+                        return true;
                     }
                     catch (Exception ex)
                     {
@@ -9562,41 +10163,82 @@ namespace WinsockPacketEditor
                     return false;
                 }
 
-                public static bool IsIpInRanges(long ipValue, BindingList<BlackListInfo> BlackList)
+                /*
+                    命中次数的「有没有变过」标记。
+
+                    HitOnce 只改模型的后备字段、不发 OnPropertyChanged（理由见 IIpRule），
+                    所以界面那一列不会自己刷新。1 秒统计拍比一下这个序号：变了才标脏推一次整表，
+                    没有连接进来时一分钱不花 —— 与发送 / 机器人列表「跑的时候才 MarkDirty」同一条路数。
+                */
+                public static long FireWallHitSeq = 0;
+                private static long lastFireWallHitSeq = 0;
+                private static DateTime lastSweepAt = DateTime.MinValue;
+
+                /// <summary>
+                /// 扫掉两张名单里已经过期的规则，返回删掉几条。
+                ///
+                /// <para>
+                /// ⚠️ <b>只能在 UI 线程调用</b>（现在的调用点是 1 秒统计拍）——
+                /// 它会改 BindingList，而 WinForms 那张表直接绑着它。
+                /// </para>
+                /// <para>
+                /// ⚠️ 这一改也让「自动清理已过期的 IP」这个开关<b>名副其实</b>了：原来只有
+                /// 「那个 IP 恰好又连了一次、而且正好命中这条过期规则」时才会被清掉 ——
+                /// 一条过期的规则完全可能永远躺在表里，而界面上写着「自动清理」。
+                /// </para>
+                /// </summary>
+                public static int SweepExpiredRules()
                 {
-                    if (BlackList == null || BlackList.Count == 0)
-                        return false;
+                    if (!FireWall_AutoClear_Expiry) { return 0; }
+
+                    //清理不必每秒做；30 秒一轮，名单几百条时也几乎不花钱
+                    DateTime now = DateTime.Now;
+
+                    if (lastSweepAt != DateTime.MinValue && (now - lastSweepAt).TotalSeconds < 30)
+                    {
+                        return 0;
+                    }
+
+                    lastSweepAt = now;
+
+                    int removed = 0;
 
                     try
                     {
-                        var matchedItem = BlackList.FirstOrDefault(bli => bli?.ContainsIp(ipValue) == true);
-
-                        if (matchedItem != null)
-                        {
-                            bool isNotExpired = !matchedItem.IsExpiry || matchedItem.ExpiryTime > DateTime.Now;
-
-                            if (isNotExpired)
-                            {
-                                matchedItem.EffectCount += 1;
-                                return true;
-                            }
-                            else
-                            {
-                                if (Operate.ProxyConfig.Proxy.FireWall_AutoClear_Expiry)
-                                {
-                                    BlackList.Remove(matchedItem);
-                                }
-                                
-                                return false;
-                            }
-                        }
+                        removed += SweepOne(lstWhiteList, _whiteListLock, now);
+                        removed += SweepOne(lstBlackList, _blackListLock, now);
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(IsIpInRanges), ex);
+                        Operate.DoLog(nameof(SweepExpiredRules), ex);
                     }
 
-                    return false;
+                    return removed;
+                }
+
+                private static int SweepOne<T>(BindingList<T> rules, object gate, DateTime now)
+                    where T : class, IIpRule
+                {
+                    if (rules == null || rules.Count == 0) { return 0; }
+
+                    int removed = 0;
+
+                    lock (gate)
+                    {
+                        //倒着走：删除会让后面的下标前移
+                        for (int i = rules.Count - 1; i >= 0; i--)
+                        {
+                            T rule = rules[i];
+
+                            if (rule != null && rule.IsExpiry && rule.ExpiryTime <= now)
+                            {
+                                rules.RemoveAt(i);
+                                removed++;
+                            }
+                        }
+                    }
+
+                    return removed;
                 }
 
                 #endregion
@@ -10587,6 +11229,25 @@ namespace WinsockPacketEditor
                             return 0;
                         }
 
+                        /*
+                            ⚠️ <b>只有 > 0 才算数</b>，与机器人那条「设置 - 系统套接字」指令
+                            （RobotExecute 里的 if (iSocket > 0)）对齐。
+
+                            SunnyNet 那条中间人路上产出的封包（HTTP / HTTPS / WebSocket）
+                            <b>套接字一律是 0</b> —— 它们靠会话号回发，压根没有套接字
+                            （SunnyNetCallback 里 8 个调用点传的都是字面量 0）。
+                            不拦的话对着这种封包点一下，界面弹「设置失败」，
+                            而这里已经把<b>原来设好的系统套接字抹成 0 了</b> —— 所有勾了
+                            「使用系统套接字」的发送就此静默失效。
+
+                            拦住之后 SystemSocket 只会 0 → 正数、不会退回去，
+                            「勾着 + 未设置」这个状态从此不可达（发送编辑那个勾选框依赖这条）。
+                        */
+                        if (picked[0].PacketSocket <= 0)
+                        {
+                            return 0;
+                        }
+
                         SystemConfig.SystemSocket = picked[0].PacketSocket;
                         return SystemConfig.SystemSocket;
                     }
@@ -11023,12 +11684,38 @@ namespace WinsockPacketEditor
 
                 #region//新增代理账号
 
+                /// <summary>
+                /// 把「限制数量」夹到最小 1。⚠️ <b>勾了限制却填 0，这个账号一条连接都建不起来</b> ——
+                /// CheckLimitLinks / CheckLimitDevices 判的是「当前 &gt;= 上限」，而 0 &gt;= 0 在第一条连接上
+                /// 就成立；界面上只显示一个「0」，看不出为什么连不上。
+                /// <para>
+                /// WinForms 那两个数字框的 Minimum 本来就是 1，但那只挡得住那一套界面 ——
+                /// 外壳、远程管理台、CCProxy 兼容接口都能把 0 送进来（管理台的输入框一度默认就是 0）。
+                /// 所以下限落在业务层：新增 / 编辑 / 批量调整 / 从库与备份读回来，四条路一起吃到。
+                /// </para>
+                /// ⚠️ <b>没勾限制时原样返回</b> —— 那个值根本不参与判断，界面显示的是「不限」，
+                /// 夹它只会让用户下次打开编辑框时看到一个自己没填过的数。
+                /// </summary>
+                public static int NormalizeLimit(bool IsLimit, int Value, string What)
+                {
+                    if (!IsLimit || Value >= 1) { return Value; }
+
+                    //同名 key 最多每 5 秒一条 —— 老库里若攒了一批 0，加载那一拍不该刷屏
+                    SystemConfig.LogThrottled("Account.LimitZero." + What,
+                        "代理账号的" + What + "限制填的是 " + Value + "，那样一条连接都建不起来，已按最小值 1 处理");
+
+                    return 1;
+                }
+
                 public static void AddProxyAccount(bool SaveToDB, AccountInfo ai)
                 {
                     try
                     {
                         if (!ProxyConfig.Account.CheckProxyAccount_Exist(ai.UserName))
                         {
+                            ai.LimitLinks = NormalizeLimit(ai.IsLimitLinks, ai.LimitLinks, "连接数");
+                            ai.LimitDevices = NormalizeLimit(ai.IsLimitDevices, ai.LimitDevices, "设备数");
+
                             ProxyConfig.Account.ProxyAccountToList(ai);
 
                             if (SaveToDB)
@@ -11064,6 +11751,9 @@ namespace WinsockPacketEditor
                         {
                             if (!ProxyConfig.Account.CheckProxyAccount_Exist(UserName))
                             {
+                                LimitLinks = NormalizeLimit(IsLimitLinks, LimitLinks, "连接数");
+                                LimitDevices = NormalizeLimit(IsLimitDevices, LimitDevices, "设备数");
+
                                 AccountInfo ai = new AccountInfo(
                                     AID,
                                     IsEnable,
@@ -11198,10 +11888,10 @@ namespace WinsockPacketEditor
                                 }
 
                                 ai.IsLimitLinks = IsLimitLinks;
-                                ai.LimitLinks = LimitLinks;
+                                ai.LimitLinks = NormalizeLimit(IsLimitLinks, LimitLinks, "连接数");
                                 ai.IsExpiry = IsExpiry;
                                 ai.IsLimitDevices = IsLimitDevices;
-                                ai.LimitDevices = LimitDevices;
+                                ai.LimitDevices = NormalizeLimit(IsLimitDevices, LimitDevices, "设备数");
                                 ai.ExpiryTime = ExpiryTime;
 
                                 DataBase.UpdateTable_ProxyAccount(ai);
@@ -11243,7 +11933,7 @@ namespace WinsockPacketEditor
                                 }
 
                                 ai.IsLimitLinks = IsLimitLinks;
-                                ai.LimitLinks = LimitLinks;
+                                ai.LimitLinks = NormalizeLimit(IsLimitLinks, LimitLinks, "连接数");
                                 ai.IsExpiry = IsExpiry;
                                 ai.ExpiryTime = ExpiryTime;
 
@@ -16969,6 +17659,25 @@ namespace WinsockPacketEditor
                             return 0;
                         }
 
+                        /*
+                            ⚠️ <b>只有 > 0 才算数</b>，与机器人那条「设置 - 系统套接字」指令
+                            （RobotExecute 里的 if (iSocket > 0)）对齐。
+
+                            SunnyNet 那条中间人路上产出的封包（HTTP / HTTPS / WebSocket）
+                            <b>套接字一律是 0</b> —— 它们靠会话号回发，压根没有套接字
+                            （SunnyNetCallback 里 8 个调用点传的都是字面量 0）。
+                            不拦的话对着这种封包点一下，界面弹「设置失败」，
+                            而这里已经把<b>原来设好的系统套接字抹成 0 了</b> —— 所有勾了
+                            「使用系统套接字」的发送就此静默失效。
+
+                            拦住之后 SystemSocket 只会 0 → 正数、不会退回去，
+                            「勾着 + 未设置」这个状态从此不可达（发送编辑那个勾选框依赖这条）。
+                        */
+                        if (picked[0].PacketSocket <= 0)
+                        {
+                            return 0;
+                        }
+
                         SystemConfig.SystemSocket = picked[0].PacketSocket;
                         return SystemConfig.SystemSocket;
                     }
@@ -17132,12 +17841,48 @@ namespace WinsockPacketEditor
                     try
                     {
                         List<PacketInfo> added = null;
+                        bool stored = false;   //这一拍有没有往仓库里放东西
                         int drained = 0;
 
                         while (drained < SystemConfig.FeedBatchMax
                                && PacketConfig.Queue.cqPacketInfo.TryDequeue(out PacketInfo pi))
                         {
                             drained++;
+
+                            /*
+                                入仓库（与代理那份逐条对应，改一处就要改另一处）。
+
+                                ⚠️⚠️ **这一段以前只有代理模式有**（`Enable_AutoStores` 全项目只在
+                                `ProxyConfig.List.FlushToFeed` 判一次）—— 于是注入模式下
+                                「自动入库」的总开关、规则表全都能开能填，<b>一条都不会命中</b>，
+                                而界面上没有任何东西说明这件事。两套 UI 都受影响。
+
+                                ⚠️ 位置在<b>过滤判断之前</b>：代理那份写的是「对每条出队数据都判一次，
+                                与是否显示无关」，而下面紧接着就是 continue。放到后面会让
+                                被「过滤设置」挡掉的封包不进仓库，两种模式就此分叉。
+                            */
+                            if (Operate.WareHouseConfig.WareHouse.Enable_AutoStores)
+                            {
+                                var packetBuffer = pi.PacketBuffer;
+                                var autoStoresList = Operate.WareHouseConfig.List.lstAutoStoresInfo;
+
+                                foreach (AutoStoresInfo asi in autoStoresList)
+                                {
+                                    if (asi.IsEnable)
+                                    {
+                                        bool IsMatch = Operate.FilterConfig.Filter.CheckPacket_IsMatch_AppointHeader(packetBuffer, asi.PacketHead);
+                                        if (IsMatch)
+                                        {
+                                            WareHouseInfo whi = Operate.WareHouseConfig.WareHouse.GetWareHouse_ByGuid(asi.WID);
+                                            if (whi != null)
+                                            {
+                                                Operate.WareHouseConfig.WareHouse.AddStores(whi.Stores, packetBuffer);
+                                                stored = true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
 
                             if (!PacketConfig.Packet.IsShowPacket_ByFilter(pi))
                             {
@@ -17171,6 +17916,16 @@ namespace WinsockPacketEditor
                                 for (int i = 0; i < added.Count; i++) { rows[i] = PacketRow.From_(added[i]); }
                                 UI.Feed.Append(FeedList.Packet, rows);
                             }
+                        }
+
+                        /*
+                            自动入库改的是 WareHouseInfo.Stores 这份<b>嵌套</b>列表，FeedPump 没订阅它，
+                            不标脏的话仓库列表「仓储数量」那一列会一直停在 0（代理那边真发生过）。
+                            一拍只标一次，不按条标 —— MarkDirty 要进锁。
+                        */
+                        if (stored)
+                        {
+                            FeedPump.MarkDirty(FeedList.WareHouse);
                         }
 
                         /*
@@ -18164,6 +18919,9 @@ namespace WinsockPacketEditor
                         Volatile.Write(ref sendOk, 0);
                         Volatile.Write(ref sendFail, 0);
 
+                        //上一次那个留着不放就是纯漏 —— 每按一次「发送」多一个
+                        if (sendCts != null) { sendCts.Dispose(); }
+
                         sendCts = new CancellationTokenSource();
                         CancellationToken token = sendCts.Token;
 
@@ -18171,6 +18929,45 @@ namespace WinsockPacketEditor
                         {
                             try
                             {
+                                /*
+                                    ⚠️⚠️ 间隔这一等<b>必须可取消</b>（2026-09-10 改）。
+
+                                    原来是 `Thread.Sleep(interval)` —— 取消标记是在<b>循环顶上</b>查的，
+                                    而这一觉睡满了才轮得到下一次查。界面上那个「间隔」的上限是
+                                    <b>999999 毫秒</b>，也就是说用户按下「停止」之后，按钮最坏
+                                    <b>16.7 分钟</b>一点反应都没有 —— 看着就是死了。
+
+                                    `token.WaitHandle.WaitOne(ms)` 一句同时办两件事：没取消就等满，
+                                    取消了当场返回 true。<b>不是轮询</b>，不用挑分片粒度，
+                                    也不像 DoSleep 那样需要 Stopwatch —— 它只等这一次，
+                                    误差就是一个时钟节拍，不累加。
+
+                                    ⚠️ 为什么这里与 SystemConfig.DoSleep 写法不同 —— 只因为取消信号
+                                    的形状不同：BackgroundWorker 那条路上能拿到的只有
+                                    CancellationPending，它是个裸 bool（CancelAsync 就是把它翻成
+                                    true），没有任何可阻塞等待的东西，所以只能切片轮询；
+                                    这边手上是 CancellationToken，它有真的 WaitHandle。
+
+                                    ⚠️⚠️ 这里原来写的是「等句柄更准也更省」，那句话是错的
+                                    （2026-09-10 复量订正）。实测下来正好相反：
+
+                                        要等     切片轮询    等句柄
+                                         50ms      54.0ms     62.3ms   ← 切片更准
+                                        100ms     104.3ms    109.9ms
+                                       1000ms    1005.3ms   1003.7ms   ← 长时长打平
+
+                                    切片每 10ms 重读一次 Stopwatch，能在越过目标的那一刻收手；
+                                    WaitOne 是把整段时长一次性向上取整到时钟节拍。
+                                    放进真实形态更明显：连续发送跑 20 秒，间隔 50ms 时
+                                    切片发出 354 个、等句柄只有 313 个（理论 400）—— 差 13%。
+
+                                    「更省」也量不出来：10 秒里 601 次唤醒烧掉的 CPU 低于
+                                    TotalProcessorTime 的分辨率（15.6ms），就是噪声。
+
+                                    所以 WaitOne 在这儿的唯一真实好处是一行、没有循环。
+                                    真要统一，该往切片那一头统一（DoSleep 收一个 Func<bool>
+                                    就能两边共用），不是往这一头。没做，记在这儿。
+                                */
                                 if (Continuous)
                                 {
                                     while (!token.IsCancellationRequested)
@@ -18178,7 +18975,7 @@ namespace WinsockPacketEditor
                                         DoSend(Socket, type, from, to, buf, theology, wsType,
                                             Progression, ProgressionPosition, ProgressionStep, Carry, CarryCount);
 
-                                        if (interval > 0) { Thread.Sleep(interval); }
+                                        if (interval > 0 && token.WaitHandle.WaitOne(interval)) { break; }
                                     }
                                 }
                                 else
@@ -18188,7 +18985,7 @@ namespace WinsockPacketEditor
                                         DoSend(Socket, type, from, to, buf, theology, wsType,
                                             Progression, ProgressionPosition, ProgressionStep, Carry, CarryCount);
 
-                                        if (interval > 0) { Thread.Sleep(interval); }
+                                        if (interval > 0 && token.WaitHandle.WaitOne(interval)) { break; }
                                     }
                                 }
                             }
@@ -22256,12 +23053,45 @@ namespace WinsockPacketEditor
                     }
                 }
 
+                /*
+                    ⚠️⚠️ <b>循环次数的下限落在这里，不在控件属性上</b>（2026-09-10 补）。
+
+                    「循环 0 次」的发送跑起来是 `for (i = 0; i < 0; i++)` —— <b>外层循环一次都不进</b>：
+                    一个包不发、三个计数全是 0、连「执行次数」都不加，而日志照写「执行完毕」。
+                    实测（改动前）：Total=0 OK=0 Fail=0 ExecCount=0。
+
+                    下限 1 原来<b>只写在两处控件上</b>：WinForms 的 nudLoopCNT.Minimum、
+                    外壳的 min="1"。而 <b>HTML 的 min 只在表单校验时生效，直接键入 0 照样进去</b>，
+                    另外三条写入路径（从库读回、备份导入、复制发送）更是一层都没有 ——
+                    这与账号那个「限制数量 0」是<b>同一个错</b>，见「控件属性不是约束」。
+
+                    所以夹在 AddSend / UpdateSend 这两个咽喉上，它俩覆盖：
+                    外壳保存 · WinForms 保存 · LoadSendList_FromDB · 备份导入 · 复制发送。
+
+                    ⚠️ 间隔（SLoopINT）只夹负数、<b>不夹 0</b> —— 0 是「不间隔、连着发」，
+                    是个正当取值（界面上 min 就是 0），而且它还兼着「要不要报进度」那个开关。
+                */
+                internal static int NormalizeLoopCount(int SLoopCNT, string SName)
+                {
+                    if (SLoopCNT >= 1) { return SLoopCNT; }
+
+                    SystemConfig.LogThrottled("SendLoopCNT." + SName, string.Format(
+                        UI.T("SendList.LoopCount.Fixed",
+                             "发送「{0}」的循环次数不正确（{1}），已按 1 次处理。"),
+                        SName, SLoopCNT));
+
+                    return 1;
+                }
+
                 public static void AddSend(bool IsEnable, Guid SID, string SName, bool SSystemSocket, int SLoopCNT, int SLoopINT, BindingList<PacketInfo> SCollection, string SNotes)
                 {
                     try
                     {
                         if (SID != Guid.Empty && !string.IsNullOrEmpty(SName))
                         {
+                            SLoopCNT = NormalizeLoopCount(SLoopCNT, SName);
+                            if (SLoopINT < 0) { SLoopINT = 0; }
+
                             SendInfo si = new SendInfo(IsEnable, SID, SName, SSystemSocket, SLoopCNT, SLoopINT, SCollection, SNotes);
                             SendConfig.List.SendToList(si);
                         }
@@ -22364,8 +23194,8 @@ namespace WinsockPacketEditor
                         {
                             ssi.SName = SName;
                             ssi.SSystemSocket = SSystemSocket;
-                            ssi.SLoopCNT = SLoopCNT;
-                            ssi.SLoopINT = SLoopINT;
+                            ssi.SLoopCNT = NormalizeLoopCount(SLoopCNT, SName);   //见 NormalizeLoopCount 上面那段
+                            ssi.SLoopINT = SLoopINT < 0 ? 0 : SLoopINT;
                             ssi.SCollection = new BindingList<PacketInfo>(SCollection.ToList());
                             ssi.SNotes = SNotes;
                         }
@@ -22582,7 +23412,7 @@ namespace WinsockPacketEditor
                             if (SendConfig.List.lstSendInfo[SendListIndex].IsEnable)
                             {
                                 Guid SID = SendConfig.List.lstSendInfo[SendListIndex].SID;
-                                Operate.SendConfig.List.lstSendExecute.Add(await DoSendAsync(SID));
+                                Operate.SendConfig.List.SendExecute_Add(await DoSendAsync(SID));
                             }                            
                         }
                     }
@@ -23396,9 +24226,60 @@ namespace WinsockPacketEditor
 
             public static class List
             {
+                /*
+                    ⚠️⚠️ 这份表<b>工作线程与 UI 线程同时在动</b>，而它是个裸 List<T>：
+
+                      SendList_DoWork（bgwSendList 的工作线程）  Add · ToList · Remove
+                      StopSendList   （UI 线程，用户点「停止」）  ToList · Remove
+                      DoSend_ByIndex （UI 线程，快捷键 9001~9010）Add
+
+                    「点停止」这条路<b>本来就会</b>让两条线程同时进来：UI 线程在遍历删，
+                    工作线程的排空循环也在遍历删。List&lt;T&gt; 的 ToList() 走的是
+                    Array.Copy —— 先读 _size 再拷数组，另一条线程正好在 Add 里扩容时
+                    可以拷到越界或半截。表现是偶发的一次崩溃，且没法稳定复现。
+
+                    锁只圈<b>对表本身的读写</b>：先在锁里取快照，出锁再去 StopSend()
+                    与查 IsBusy —— 那两个会阻塞，握着锁做必然招来死锁。
+                */
+                private static readonly object seLock = new object();
                 public static List<SendExecute> lstSendExecute = new List<SendExecute>();
+
+                internal static void SendExecute_Add(SendExecute se)
+                {
+                    if (se == null) { return; }
+                    lock (seLock) { lstSendExecute.Add(se); }
+                }
+
+                internal static void SendExecute_Remove(SendExecute se)
+                {
+                    lock (seLock) { lstSendExecute.Remove(se); }
+                }
+
+                internal static void SendExecute_Clear()
+                {
+                    lock (seLock) { lstSendExecute.Clear(); }
+                }
+
+                internal static int SendExecute_Count()
+                {
+                    lock (seLock) { return lstSendExecute.Count; }
+                }
+
+                /// <summary>取一份快照。⚠️ 拿到之后再去 StopSend / 查 IsBusy，别在锁里做。</summary>
+                internal static List<SendExecute> SendExecute_Snapshot()
+                {
+                    lock (seLock) { return new List<SendExecute>(lstSendExecute); }
+                }
                 public static BindingList<SendInfo> lstSendInfo = new BindingList<SendInfo>();
                 public static BackgroundWorker bgwSendList = new BackgroundWorker();
+
+                /*
+                    ⚠️ 列表级取消的<b>唯一真源</b>（2026-09-10）。与两个执行器那两处同一批。
+
+                    CancelAsync() 只有 StopSendList 一个调用点（grep 过，Controls/ 与 WpeCore
+                    都走 StopSendList），所以换成 CTS 不必动 Controls/ 那条线。
+                */
+                private static CancellationTokenSource sendListCts;
 
                 #region//发送列表索引项
 
@@ -23477,7 +24358,11 @@ namespace WinsockPacketEditor
                                     return;
                                 }
 
-                                Operate.SendConfig.List.lstSendExecute.Clear();
+                                //⚠️ 每轮一个新的：CTS 取消过就不能复位
+                                if (sendListCts != null) { sendListCts.Dispose(); }
+                                sendListCts = new CancellationTokenSource();
+
+                                Operate.SendConfig.List.SendExecute_Clear();
                                 Operate.SendConfig.List.bgwSendList.RunWorkerAsync();
                             }
                         }
@@ -23494,17 +24379,20 @@ namespace WinsockPacketEditor
                     {
                         if (Operate.SendConfig.List.bgwSendList.IsBusy)
                         {
-                            Operate.SendConfig.List.bgwSendList.CancelAsync();                            
+                            //⚠️ 只 Cancel token，不调 CancelAsync() —— 取消只能有一个真源
+                            CancellationTokenSource c = sendListCts;
+                            if (c != null) { c.Cancel(); }
                         }
 
-                        foreach (SendExecute se in Operate.SendConfig.List.lstSendExecute.ToList())
+                        //⚠️ 先在锁里取快照，出锁再 StopSend —— 那是个会阻塞的调用，握着锁做会死锁
+                        foreach (SendExecute se in Operate.SendConfig.List.SendExecute_Snapshot())
                         {
                             if (se.Worker.IsBusy)
                             {
-                                se.StopSend();                                
+                                se.StopSend();
                             }
 
-                            Operate.SendConfig.List.lstSendExecute.Remove(se);
+                            Operate.SendConfig.List.SendExecute_Remove(se);
                         }
                     }
                     catch (Exception ex)
@@ -23517,6 +24405,8 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
+                        CancellationToken token = sendListCts.Token;
+
                         for (int index = 0; index < Operate.SendConfig.List.lstSendInfo.Count; index++)
                         {
                             SendInfo si = Operate.SendConfig.List.lstSendInfo[index];
@@ -23527,43 +24417,77 @@ namespace WinsockPacketEditor
                                 {
                                     if (Operate.SystemConfig.ListExecute == Operate.SystemConfig.Execute.Together)
                                     {
-                                        Operate.SendConfig.List.lstSendExecute.Add(se);
+                                        Operate.SendConfig.List.SendExecute_Add(se);
                                     }
                                     else
                                     {
+                                        //⚠️ 「等某件事做完」用 WaitOne，取消当场返回（原来最坏还要睡满 10ms）
                                         while (se.Worker.IsBusy)
                                         {
-                                            if (bgwSendList.CancellationPending)
+                                            if (token.WaitHandle.WaitOne(10))
                                             {
                                                 se.StopSend();
 
                                                 e.Cancel = true;
                                                 return;
                                             }
-
-                                            Thread.Sleep(10);
                                         }
                                     }
                                 }
                             }
                         }
 
-                        while (Operate.SendConfig.List.lstSendExecute.Count > 0)
+                        /*
+                            ⚠️ 「同时执行」这一支原来<b>只调 StopSend、不设 e.Cancel</b>（2026-09-10 补）。
+
+                            ⚠️⚠️ <b>订正（2026-09-10 复查）</b>：当时把症状写成「完成回调仍走『执行完毕』」，
+                            那是错的 —— 查过四个列表级完成回调（SendList / RobotList / QuickList ×2），
+                            <b>它们只把三个按钮的 Enabled 翻回来，没有任何一个读 e.Cancelled 或 e.Error</b>。
+                            所以这个 e.Cancel <b>至今没有消费者</b>：语义上该设（取消了就该报取消），
+                            但它现在不改变任何可见行为。「执行完毕」那句提示在<b>每条发送自己的</b>
+                            SendExecute.Send_RunCompleted 里，那一处的 e.Cancel 才是一直有人读的。
+
+                            这正是 BackgroundWorker 的通病：e.Cancel / e.Error 是写进去就没声音的信号。
+                        */
+                        bool bCancelled = false;
+
+                        while (Operate.SendConfig.List.SendExecute_Count() > 0)
                         {
-                            foreach (SendExecute se in Operate.SendConfig.List.lstSendExecute.ToList())
+                            foreach (SendExecute se in Operate.SendConfig.List.SendExecute_Snapshot())
                             {
-                                if (bgwSendList.CancellationPending)
+                                if (token.IsCancellationRequested)
                                 {
+                                    bCancelled = true;
                                     se.StopSend();
                                 }
 
                                 if (!se.Worker.IsBusy)
                                 {
-                                    Operate.SendConfig.List.lstSendExecute.Remove(se);
+                                    Operate.SendConfig.List.SendExecute_Remove(se);
                                 }
                             }
 
-                            Thread.Sleep(100);
+                            /*
+                                ⚠️ 取消<b>之前</b>用 WaitOne：按下停止当场醒，不必先睡满 100ms
+                                才轮到调 StopSend —— 这是这个循环真正的收益。
+
+                                ⚠️⚠️ 取消<b>之后</b>必须换回 Sleep。token 已经是 signaled 的，
+                                WaitOne 会立刻返回，循环就成了<b>热自旋</b>（一直转到执行器
+                                自己结束为止）。这一步只是在等 IsBusy 翻掉，10ms 一探足够。
+                            */
+                            if (bCancelled)
+                            {
+                                Thread.Sleep(10);
+                            }
+                            else if (token.WaitHandle.WaitOne(100))
+                            {
+                                bCancelled = true;
+                            }
+                        }
+
+                        if (bCancelled)
+                        {
+                            e.Cancel = true;
                         }
                     }
                     catch (Exception ex)
@@ -23983,7 +24907,17 @@ namespace WinsockPacketEditor
                             Guid SID = Guid.Parse(dataRow["GUID"].ToString());
                             bool IsEnable = Convert.ToBoolean(dataRow["IsEnable"]);
                             string SName = dataRow["Name"].ToString();
-                            bool SSystemSocket = Convert.ToBoolean(dataRow["SystemSocket"]);
+                            /*
+                                ⚠️ 「使用系统套接字」<b>不从库里恢复，一律 false</b>。
+
+                                它依赖的 SystemConfig.SystemSocket 是<b>纯运行期字段</b>（Operate.cs 顶上那个
+                                static int，任何建表 / 读写配置里都没有它），每次启动必为 0。
+                                所以「上次勾过」这件事跨重启没有任何意义 —— 恢复出来只会得到
+                                「勾着 + 未设置」这种必然被 BlockedBySystemSocket 拦下的状态。
+
+                                列还留着（DEFAULT 0），只为不动表结构。写出去的也一律是 false。
+                            */
+                            bool SSystemSocket = false;
                             int SLoopCNT = Convert.ToInt32(dataRow["LoopCNT"]);
                             int SLoopINT = Convert.ToInt32(dataRow["LoopINT"]);
                             string SNotes = dataRow["Notes"].ToString();
@@ -24115,7 +25049,7 @@ namespace WinsockPacketEditor
                                 new XElement("IsEnable", si.IsEnable.ToString()),
                                 new XElement("ID", si.SID.ToString().ToUpper()),
                                 new XElement("Name", si.SName),
-                                new XElement("SystemSocket", si.SSystemSocket.ToString()),
+                                new XElement("SystemSocket", false.ToString()),   //不过库，见 LoadSendList_FromDB
                                 new XElement("LoopCNT", si.SLoopCNT),
                                 new XElement("LoopINT", si.SLoopINT),
                                 new XElement("Notes", si.SNotes)
@@ -24260,11 +25194,8 @@ namespace WinsockPacketEditor
                                 SName = xeSend.Element("Name").Value;
                             }
 
+                            //不从备份里恢复，理由同 LoadSendList_FromDB 里那段
                             bool SSystemSocket = false;
-                            if (xeSend.Element("SystemSocket") != null)
-                            {
-                                SSystemSocket = bool.Parse(xeSend.Element("SystemSocket").Value);
-                            }
 
                             int SLoopCNT = 1;
                             if (xeSend.Element("LoopCNT") != null)
@@ -25198,7 +26129,14 @@ namespace WinsockPacketEditor
                     {
                         lock (editLock)
                         {
-                            if (editTrail.Count < 5000) { editTrail.Add(e.ProgressPercentage); }
+                            /*
+                                ⚠️ 环形，不是「到顶就不记」（2026-09-09 改）。
+                                原来到 5000 条就<b>停更</b>，而循环多的机器人几秒就能撞到 ——
+                                之后轨迹再也不动，恰恰看不出「现在走到哪」，那正是这一栏唯一的用处。
+                                一次丢 1000 条摊薄 RemoveRange 的搬移成本，别逐条 RemoveAt(0)。
+                            */
+                            if (editTrail.Count >= 6000) { editTrail.RemoveRange(0, 1000); }
+                            editTrail.Add(e.ProgressPercentage);
                         }
                     };
 
@@ -25588,7 +26526,7 @@ namespace WinsockPacketEditor
                             if (RobotConfig.List.lstRobotInfo[RobotListIndex].IsEnable)
                             {
                                 Guid RID = RobotConfig.List.lstRobotInfo[RobotListIndex].RID;
-                                Operate.RobotConfig.List.lstRobotExecute.Add(await DoRobotAsync(RID, null));                                
+                                Operate.RobotConfig.List.RobotExecute_Add(await DoRobotAsync(RID, null));                                
                             }                            
                         }
                     }
@@ -25638,9 +26576,43 @@ namespace WinsockPacketEditor
 
             public static class List
             {
+                //⚠️ 与 lstSendExecute 同一个理由，见那边那段长注释
+                private static readonly object reLock = new object();
                 public static List<RobotExecute> lstRobotExecute = new List<RobotExecute>();
+
+                internal static void RobotExecute_Add(RobotExecute re)
+                {
+                    if (re == null) { return; }
+                    lock (reLock) { lstRobotExecute.Add(re); }
+                }
+
+                internal static void RobotExecute_Remove(RobotExecute re)
+                {
+                    lock (reLock) { lstRobotExecute.Remove(re); }
+                }
+
+                internal static void RobotExecute_Clear()
+                {
+                    lock (reLock) { lstRobotExecute.Clear(); }
+                }
+
+                internal static int RobotExecute_Count()
+                {
+                    lock (reLock) { return lstRobotExecute.Count; }
+                }
+
+                /// <summary>取一份快照。⚠️ 拿到之后再去 StopRobot / 查 IsBusy，别在锁里做。</summary>
+                internal static List<RobotExecute> RobotExecute_Snapshot()
+                {
+                    lock (reLock) { return new List<RobotExecute>(lstRobotExecute); }
+                }
                 public static BindingList<RobotInfo> lstRobotInfo = new BindingList<RobotInfo>();
                 public static BackgroundWorker bgwRobotList = new BackgroundWorker();
+
+                /*
+                    ⚠️ 列表级取消的<b>唯一真源</b>（2026-09-10）—— 与 sendListCts 同构，理由见那边。
+                */
+                private static CancellationTokenSource robotListCts;
 
                 #region//机器人入列表
 
@@ -25668,7 +26640,11 @@ namespace WinsockPacketEditor
                         {
                             if (!Operate.RobotConfig.List.bgwRobotList.IsBusy)
                             {
-                                Operate.RobotConfig.List.lstRobotExecute.Clear();
+                                //⚠️ 每轮一个新的：CTS 取消过就不能复位
+                                if (robotListCts != null) { robotListCts.Dispose(); }
+                                robotListCts = new CancellationTokenSource();
+
+                                Operate.RobotConfig.List.RobotExecute_Clear();
                                 Operate.RobotConfig.List.bgwRobotList.RunWorkerAsync();
                             }
                         }
@@ -25685,17 +26661,20 @@ namespace WinsockPacketEditor
                     {
                         if (Operate.RobotConfig.List.bgwRobotList.IsBusy)
                         {
-                            Operate.RobotConfig.List.bgwRobotList.CancelAsync();
+                            //⚠️ 只 Cancel token，不调 CancelAsync() —— 取消只能有一个真源
+                            CancellationTokenSource c = robotListCts;
+                            if (c != null) { c.Cancel(); }
                         }
 
-                        foreach (RobotExecute re in Operate.RobotConfig.List.lstRobotExecute.ToList())
+                        //⚠️ 快照 —— StopRobot 会阻塞，别在锁里调
+                        foreach (RobotExecute re in Operate.RobotConfig.List.RobotExecute_Snapshot())
                         {
                             if (re.Worker.IsBusy)
                             {
                                 re.StopRobot();
                             }
 
-                            Operate.RobotConfig.List.lstRobotExecute.Remove(re);
+                            Operate.RobotConfig.List.RobotExecute_Remove(re);
                         }
                     }
                     catch (Exception ex)
@@ -25708,6 +26687,8 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
+                        CancellationToken token = robotListCts.Token;
+
                         foreach (RobotInfo ri in Operate.RobotConfig.List.lstRobotInfo)
                         {
                             if (ri.IsEnable)
@@ -25717,43 +26698,70 @@ namespace WinsockPacketEditor
                                 {
                                     if (Operate.SystemConfig.ListExecute == Operate.SystemConfig.Execute.Together)
                                     {
-                                        Operate.RobotConfig.List.lstRobotExecute.Add(re);
+                                        Operate.RobotConfig.List.RobotExecute_Add(re);
                                     }
                                     else
                                     {
+                                        //⚠️ 「等某件事做完」用 WaitOne，取消当场返回（原来最坏还要睡满 100ms）
                                         while (re.Worker.IsBusy)
                                         {
-                                            if (bgwRobotList.CancellationPending)
+                                            if (token.WaitHandle.WaitOne(100))
                                             {
                                                 re.StopRobot();
 
                                                 e.Cancel = true;
                                                 return;
                                             }
-
-                                            Thread.Sleep(100);
                                         }
                                     }
                                 }
                             }
                         }
 
-                        while (Operate.RobotConfig.List.lstRobotExecute.Count > 0)
+                        /*
+                            ⚠️ 「同时执行」这一支原来<b>只调 StopRobot、不设 e.Cancel</b>（2026-09-09 补）。
+                            ⚠️⚠️ <b>订正</b>：症状描述当时写错了，这个 e.Cancel 至今没有消费者 ——
+                            详见 SendList_DoWork 里那段同款说明（四个列表级完成回调都不读 e.Cancelled）。
+                        */
+                        bool bCancelled = false;
+
+                        while (Operate.RobotConfig.List.RobotExecute_Count() > 0)
                         {
-                            foreach (RobotExecute re in Operate.RobotConfig.List.lstRobotExecute.ToList())
+                            foreach (RobotExecute re in Operate.RobotConfig.List.RobotExecute_Snapshot())
                             {
-                                if (bgwRobotList.CancellationPending)
+                                if (token.IsCancellationRequested)
                                 {
+                                    bCancelled = true;
                                     re.StopRobot();
                                 }
 
                                 if (!re.Worker.IsBusy)
                                 {
-                                    Operate.RobotConfig.List.lstRobotExecute.Remove(re);
+                                    Operate.RobotConfig.List.RobotExecute_Remove(re);
                                 }
                             }
 
-                            Thread.Sleep(100);
+                            /*
+                                ⚠️ 取消<b>之前</b>用 WaitOne：按下停止当场醒，不必先睡满 100ms
+                                才轮到调 StopSend —— 这是这个循环真正的收益。
+
+                                ⚠️⚠️ 取消<b>之后</b>必须换回 Sleep。token 已经是 signaled 的，
+                                WaitOne 会立刻返回，循环就成了<b>热自旋</b>（一直转到执行器
+                                自己结束为止）。这一步只是在等 IsBusy 翻掉，10ms 一探足够。
+                            */
+                            if (bCancelled)
+                            {
+                                Thread.Sleep(10);
+                            }
+                            else if (token.WaitHandle.WaitOne(100))
+                            {
+                                bCancelled = true;
+                            }
+                        }
+
+                        if (bCancelled)
+                        {
+                            e.Cancel = true;
                         }
                     }
                     catch (Exception ex)
@@ -30920,7 +31928,11 @@ namespace WinsockPacketEditor
                         sql += "IsTextRenderingHighQuality BOOLEAN DEFAULT 0,";//系统设置 - 启用文本渲染高质量
                         sql += "IsDark BOOLEAN DEFAULT 0,";//系统设置 - 启用深色主题
                         sql += "DefaultLanguage TEXT,";//系统设置 - 默认语言
-                        sql += "LastInjection TEXT,";//系统设置 - 上次注入进程名称
+                        sql += "LastInjection TEXT,";//系统设置 - 上次注入的目标名
+                        sql += "LastInjectMethod INTEGER DEFAULT 0,";//系统设置 - 上次注入的方式（0 进程 / 1 窗体 / 2 文件）
+                        sql += "LastInjectPath TEXT,";//系统设置 - 上次注入目标的完整路径
+                        sql += "LastInjectArgs TEXT,";//系统设置 - 上次注入时给的启动参数
+                        sql += "LastInjectTime TEXT,";//系统设置 - 上次注入的时刻（"o" 往返格式）
                         sql += "Remote_IsEnable BOOLEAN DEFAULT 0,";//系统设置 - 启用远程管理
                         sql += "Remote_UserName TEXT,";//系统设置 - 远程管理账号
                         sql += "Remote_PassWord TEXT,";//系统设置 - 远程管理密码
@@ -30991,6 +32003,10 @@ namespace WinsockPacketEditor
                             EnsureColumn(conn, "SystemConfig", "ScanLine", "BOOLEAN DEFAULT 1");
                             EnsureColumn(conn, "SystemConfig", "StoresLimit", "BOOLEAN DEFAULT 1");
                             EnsureColumn(conn, "SystemConfig", "StoresLimit_Value", "INTEGER DEFAULT 5000");
+                            EnsureColumn(conn, "SystemConfig", "LastInjectMethod", "INTEGER DEFAULT 0");
+                            EnsureColumn(conn, "SystemConfig", "LastInjectPath", "TEXT");
+                            EnsureColumn(conn, "SystemConfig", "LastInjectArgs", "TEXT");
+                            EnsureColumn(conn, "SystemConfig", "LastInjectTime", "TEXT");
                         }
                     }
 
@@ -31115,6 +32131,10 @@ namespace WinsockPacketEditor
                         sql += "IsDark,";
                         sql += "DefaultLanguage,";
                         sql += "LastInjection,";
+                        sql += "LastInjectMethod,";
+                        sql += "LastInjectPath,";
+                        sql += "LastInjectArgs,";
+                        sql += "LastInjectTime,";
                         sql += "Remote_IsEnable,";
                         sql += "Remote_UserName,";
                         sql += "Remote_PassWord,";
@@ -31177,6 +32197,10 @@ namespace WinsockPacketEditor
                         sql += "@IsDark,";
                         sql += "@DefaultLanguage,";
                         sql += "@LastInjection,";
+                        sql += "@LastInjectMethod,";
+                        sql += "@LastInjectPath,";
+                        sql += "@LastInjectArgs,";
+                        sql += "@LastInjectTime,";
                         sql += "@Remote_IsEnable,";
                         sql += "@Remote_UserName,";
                         sql += "@Remote_PassWord,";
@@ -31249,6 +32273,10 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@ThemeFollowSystem", UI.Prefs.FollowSystemTheme);
                             cmd.Parameters.AddWithValue("@DefaultLanguage", UI.Prefs.Language);
                             cmd.Parameters.AddWithValue("@LastInjection", SystemConfig.LastInjection);
+                            cmd.Parameters.AddWithValue("@LastInjectMethod", SystemConfig.LastInjectMethod);
+                            cmd.Parameters.AddWithValue("@LastInjectPath", SystemConfig.LastInjectPath);
+                            cmd.Parameters.AddWithValue("@LastInjectArgs", SystemConfig.LastInjectArgs);
+                            cmd.Parameters.AddWithValue("@LastInjectTime", SystemConfig.LastInjectTime);
                             cmd.Parameters.AddWithValue("@Remote_IsEnable", SystemConfig.IsRemote);
                             cmd.Parameters.AddWithValue("@Remote_UserName", SystemConfig.Remote_UserName);
                             cmd.Parameters.AddWithValue("@Remote_PassWord", SystemConfig.Remote_PassWord);
@@ -31313,20 +32341,39 @@ namespace WinsockPacketEditor
                 }
             }
 
-            public static void UpdateTable_SystemConfig_LastInjection()
+            /// <summary>改到了几行。0 = 表里还没有那一行，调用方要退回整表保存。</summary>
+            public static int UpdateTable_SystemConfig_LastInjection()
             {
                 try
                 {
                     using (SQLiteConnection conn = new SQLiteConnection(conStr))
                     {
-                        string sql = "UPDATE SystemConfig SET SystemConfig_LastInjection = @LastInjection;";
+                        /*
+                            ⚠️⚠️ 这条 SQL 原来写的是 `SET SystemConfig_LastInjection = …`，
+                            而 SystemConfig 表里根本<b>没有</b>这一列（列名就叫 LastInjection）——
+                            于是每次注入完这句都抛「no such column」，被 catch 吞进日志，
+                            <b>上次注入这条记录从来没有靠它存进去过</b>。
+
+                            那为什么界面上又显示得出来？因为 `SaveSystemConfig_ToDB`（整表删+插）
+                            会把全部列写一遍，包括这一列 —— 也就是说它能不能留下，取决于
+                            用户后来有没有碰过任何一处系统设置。看着像「有时候记得住有时候记不住」。
+                        */
+                        string sql = "UPDATE SystemConfig SET LastInjection = @LastInjection,"
+                            + " LastInjectMethod = @LastInjectMethod,"
+                            + " LastInjectPath = @LastInjectPath,"
+                            + " LastInjectArgs = @LastInjectArgs,"
+                            + " LastInjectTime = @LastInjectTime;";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                         {
                             cmd.Parameters.AddWithValue("@LastInjection", SystemConfig.LastInjection);
+                            cmd.Parameters.AddWithValue("@LastInjectMethod", SystemConfig.LastInjectMethod);
+                            cmd.Parameters.AddWithValue("@LastInjectPath", SystemConfig.LastInjectPath);
+                            cmd.Parameters.AddWithValue("@LastInjectArgs", SystemConfig.LastInjectArgs);
+                            cmd.Parameters.AddWithValue("@LastInjectTime", SystemConfig.LastInjectTime);
 
                             conn.Open();
-                            cmd.ExecuteNonQuery();
+                            return cmd.ExecuteNonQuery();
                         }
                     }
                 }
@@ -31334,6 +32381,9 @@ namespace WinsockPacketEditor
                 {
                     Operate.DoLog(nameof(UpdateTable_SystemConfig_LastInjection), ex);
                 }
+
+                //抛了就当没写成，让调用方去走整表保存那条路
+                return 0;
             }
 
             #endregion
@@ -31533,7 +32583,7 @@ namespace WinsockPacketEditor
                         sql += "ExternalProxy_PassWord TEXT,";//代理模式 - 外部代理密码
                         sql += "MustTCP BOOLEAN DEFAULT 1,";//代理模式 - 启用进程转代理
                         sql += "MustTCP_IP TEXT,";//代理模式 - 进程转代理IP
-                        sql += "MustTCP_Port INTEGER DEFAULT 1081,";//代理模式 - 进程转代理端口
+                        sql += "MustTCP_Port INTEGER DEFAULT 1080,";//代理模式 - 进程转代理端口（原来写的 1081 是 HTTP 代理自己的端口，真用上就成环；INSERT 一直带显式值，这个默认只在补列时才起作用）
                         sql += "MustTCP_Auth BOOLEAN DEFAULT 0,";//代理模式 - 进程转代理认证
                         sql += "MustTCP_UserName TEXT,";//代理模式 - 进程转代理用户名
                         sql += "MustTCP_PassWord TEXT,";//代理模式 - 进程转代理密码
@@ -31545,13 +32595,19 @@ namespace WinsockPacketEditor
                         sql += "FireWall_AutoBlackList_UnSupport BOOLEAN DEFAULT 0,";//代理模式 - 自动添加不支持的协议到黑名单
                         sql += "FireWall_AutoBlackList_AuthFail BOOLEAN DEFAULT 0,";//代理模式 - 自动添加认证失败的IP到黑名单
                         sql += "FireWall_AutoBlackList_Minutes INTEGER DEFAULT 30,";//代理模式 - 自动添加到黑名单的时间
-                        sql += "FireWall_AutoClear_Expiry BOOLEAN DEFAULT 0";//代理模式 - 自动清理过期的规则
+                        sql += "FireWall_AutoClear_Expiry BOOLEAN DEFAULT 0,";//代理模式 - 自动清理过期的规则
+                        sql += "DriverType INTEGER DEFAULT 1,";//代理模式 - 进程拦截的驱动类型（0 Proxifier · 1 NFAPI · 2 WinDivert）
+                        sql += "SelectProcessNames TEXT";//代理模式 - 按名称拦截的进程表（一行一条 "模块名|路径"，见 SerializeSelectProcessNames）
                         sql += ");";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                         {
                             conn.Open();
                             cmd.ExecuteNonQuery();
+
+                            //CREATE TABLE IF NOT EXISTS 对老库一列都不会加，这两列是 2026-09-10 加的
+                            EnsureColumn(conn, "ProxyMode", "DriverType", "INTEGER DEFAULT 1");
+                            EnsureColumn(conn, "ProxyMode", "SelectProcessNames", "TEXT");
                         }
                     }
 
@@ -31652,7 +32708,9 @@ namespace WinsockPacketEditor
                         sql += "FireWall_AutoBlackList_UnSupport,";
                         sql += "FireWall_AutoBlackList_AuthFail,";
                         sql += "FireWall_AutoBlackList_Minutes,";
-                        sql += "FireWall_AutoClear_Expiry";
+                        sql += "FireWall_AutoClear_Expiry,";
+                        sql += "DriverType,";
+                        sql += "SelectProcessNames";
                         sql += ") VALUES (";
                         sql += "@ProxyIP_Auto,";
                         sql += "@Enable_SOCKS5,";
@@ -31689,7 +32747,9 @@ namespace WinsockPacketEditor
                         sql += "@FireWall_AutoBlackList_UnSupport,";
                         sql += "@FireWall_AutoBlackList_AuthFail,";
                         sql += "@FireWall_AutoBlackList_Minutes,";
-                        sql += "@FireWall_AutoClear_Expiry";
+                        sql += "@FireWall_AutoClear_Expiry,";
+                        sql += "@DriverType,";
+                        sql += "@SelectProcessNames";
                         sql += ");";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
@@ -31730,6 +32790,8 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@FireWall_AutoBlackList_AuthFail", ProxyConfig.Proxy.FireWall_AutoBlackList_AuthFail);
                             cmd.Parameters.AddWithValue("@FireWall_AutoBlackList_Minutes", ProxyConfig.Proxy.FireWall_AutoBlackList_Minutes);
                             cmd.Parameters.AddWithValue("@FireWall_AutoClear_Expiry", ProxyConfig.Proxy.FireWall_AutoClear_Expiry);
+                            cmd.Parameters.AddWithValue("@DriverType", ProxyConfig.Proxy.DriverType);
+                            cmd.Parameters.AddWithValue("@SelectProcessNames", ProxyConfig.Proxy.SerializeSelectProcessNames());
 
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -32222,7 +33284,7 @@ namespace WinsockPacketEditor
                         cmd.Parameters.AddWithValue("@GUID", si.SID.ToString().ToUpper());
                         cmd.Parameters.AddWithValue("@IsEnable", si.IsEnable);
                         cmd.Parameters.AddWithValue("@Name", si.SName);
-                        cmd.Parameters.AddWithValue("@SystemSocket", si.SSystemSocket);
+                        cmd.Parameters.AddWithValue("@SystemSocket", false);   //不过库，见 LoadSendList_FromDB
                         cmd.Parameters.AddWithValue("@LoopCNT", si.SLoopCNT);
                         cmd.Parameters.AddWithValue("@LoopINT", si.SLoopINT);
                         cmd.Parameters.AddWithValue("@Notes", si.SNotes);

@@ -118,7 +118,7 @@ async function save(): Promise<void> {
   <SettingsModal
     :open="!!props.target"
     :title="title"
-    subtitle="Controls/WhiteListEdit"
+    subtitle="IP Rule"
     :busy="busy"
     :error="error"
     @update:open="!$event && emit('close')"

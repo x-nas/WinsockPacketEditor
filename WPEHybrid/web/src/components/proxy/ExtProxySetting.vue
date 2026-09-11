@@ -60,9 +60,10 @@ async function save(): Promise<void> {
 </script>
 
 <template>
-  <SettingsModal :open="props.open" :title="t('set.extproxy')" subtitle="Controls/EXTProxySetting" :busy="busy" :error="error"
+  <SettingsModal :open="props.open" :title="t('set.extproxy')" subtitle="Upstream Proxy" :busy="busy" :error="error"
                  @update:open="emit('update:open', $event)" @save="save">
     <div class="setf">
+      <div class="swb">
       <div class="row">
         <div class="k">{{ t('xp.enable') }}</div>
         <div class="v">
@@ -70,7 +71,9 @@ async function save(): Promise<void> {
         </div>
       </div>
       <p class="hint">{{ t('xp.hint') }}</p>
+      </div>
 
+      <section class="sec">
       <div class="grp">{{ t('xp.grp') }}</div>
       <div class="row" :class="{ off: !f.Enable }">
         <div class="k">{{ t('xp.addr') }}</div>
@@ -97,6 +100,7 @@ async function save(): Promise<void> {
           <input v-model="f.PassWord" class="inp sm" type="password" :disabled="!f.Enable || !f.Auth" :placeholder="t('ps.passPh')">
         </div>
       </div>
+      </section>
     </div>
   </SettingsModal>
 </template>

@@ -95,6 +95,10 @@ namespace WinsockPacketEditor
                 Operate.ProxyConfig.Proxy.DisableSystemProxy();
             }
 
+            //被驱动拦截的进程要摘掉，否则 WPE 关了目标进程也断网（与外壳的 OnFormClosing 对应）
+            Operate.ProxyConfig.Proxy.ReleaseDriverProcesses();
+            Operate.ProxyConfig.Proxy.CloseAllUDPProxy();
+
             Operate.SystemConfig.StopRemoteMGT();
             Operate.SystemConfig.SaveSystemConfig_ToDB();
             Operate.SystemConfig.SaveInjectMode_ToDB();

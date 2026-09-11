@@ -59,6 +59,19 @@ function onScroll(): void {
   if (el) scrollTop.value = el.scrollTop
 }
 
+/*
+  执行方式（Operate.SystemConfig.ListExecute）：0 = 同时执行，1 = 按顺序执行。
+  <b>发送列表与机器人列表共用这一个开关</b>，改它的入口在系统设置。
+
+  ⚠️ 它与滤镜的 FilterConfig.Filter.Execute 是<b>两个反着的</b>同名枚举
+  （那边 0 = 优先原则、1 = 按顺序），别照抄那边的 `=== 0` 判断。
+
+  ⚠️ 只在挂载时读一次 —— 与滤镜列表同一条口径。这一屏是 v-if 挂的，
+  从系统设置改完再切回来会重新挂载、跟着重取；开着这一屏改的话要切一次页才刷新。
+*/
+const execMode = ref(1)
+const isTogether = computed(() => execMode.value === 0)
+
 let ro: ResizeObserver | null = null
 
 onMounted(async () => {
@@ -70,9 +83,10 @@ onMounted(async () => {
   }
 
   try {
-    const r = await call<{ systemSocket: number; running: boolean }>('getSendMeta')
+    const r = await call<{ systemSocket: number; running: boolean; listExecute: number }>('getSendMeta')
     systemSocket.value = r?.systemSocket ?? 0
     running.value = !!r?.running
+    execMode.value = r?.listExecute ?? 1
   } catch (e) {
     console.error('[snd] 取元信息失败', e)
   }
@@ -266,9 +280,14 @@ async function onMenuPick(id: string): Promise<void> {
       </button>
     </div>
 
-    <!-- 顺序即执行顺序，界面上不说就没人知道 —— 与滤镜列表同一条提示口径 -->
-    <div v-if="rows.length > 1" class="hint">
-      <span class="tx">{{ t('snd.runHint') }}</span>
+    <!--
+      顺序即执行顺序 —— 但「顺序意味着什么」取决于执行方式，所以模式是<b>读出来的实际值</b>，
+      不是写死的一句通用话（与滤镜列表同一条口径）。样式在 style.css 的 .list-page .ordbar。
+    -->
+    <div v-if="rows.length > 1" class="ordbar" :class="{ alt: isTogether }">
+      <span class="mk">{{ isTogether ? t('set.exec.together') : t('set.exec.sequence') }}</span>
+      <span class="tx">{{ isTogether ? t('snd.mode.togetherHint') : t('snd.mode.sequenceHint') }}</span>
+      <span class="note">{{ t('lst.mode.note') }}</span>
     </div>
 
     <div ref="scroller" class="body" @scroll.passive="onScroll">
@@ -387,8 +406,6 @@ async function onMenuPick(id: string): Promise<void> {
   height: 11px;
   margin: -1px 0;
   flex: none;
-  position: relative;
-  top: -1px;   /* 按钮上内边距比下多 2px 是给字形的补偿，图标不需要，退回 1px */
 }
 
 .btn.run.on { border-color: rgb(var(--danger-rgb) / 30%); color: var(--danger); }
@@ -405,19 +422,6 @@ async function onMenuPick(id: string): Promise<void> {
 
 @media (prefers-reduced-motion: reduce) {
   .btn.run.on .ico { animation: none; }
-}
-
-.hint {
-  flex: none;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 5px 10px;
-  border: 1px solid var(--border);
-  border-left: 2px solid var(--dim);
-  background: rgb(var(--inset-rgb) / 20%);
-  font-size: 11.5px;
-  color: var(--dim2);
 }
 
 /*
@@ -457,7 +461,7 @@ async function onMenuPick(id: string): Promise<void> {
 
 .no { color: var(--dim); font-variant-numeric: tabular-nums; }
 .name { color: var(--gray); }
-.notes { color: var(--dim4); font-size: 12px; }
+.notes { color: var(--dim4); font-size: var(--fs-small); }
 
 .cnt { font-family: var(--mono); font-variant-numeric: tabular-nums; }
 
@@ -479,9 +483,9 @@ async function onMenuPick(id: string): Promise<void> {
 
 .tg {
   flex: none;
-  padding: 5px 6px 3px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
+  padding: 4px 6px 4px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
   border: 1px solid;
-  font-size: 10.5px;
+  font-size: var(--fs-label);
   /* 显式 1：默认行高会把行距全压在字的下面，字在框里偏上（与按钮同一个问题）*/
   line-height: 1;
   font-family: var(--share);

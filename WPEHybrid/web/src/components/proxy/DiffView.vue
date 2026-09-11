@@ -412,7 +412,7 @@ function side(r: Row, isA: boolean): Draw[] {
   visibility: hidden;
   white-space: pre;
   font-family: Consolas, 'Cascadia Mono', monospace;
-  font-size: 12px;
+  font-size: var(--fs-dense);
 }
 
 .dv-scroll { max-height: 100%; overflow: auto; }
@@ -425,7 +425,7 @@ function side(r: Row, isA: boolean): Draw[] {
   height: 18px;
   padding: 0 6px;
   font-family: Consolas, 'Cascadia Mono', monospace;
-  font-size: 12px;
+  font-size: var(--fs-dense);
   line-height: 18px;
   white-space: pre;
 }

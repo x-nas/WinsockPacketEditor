@@ -119,13 +119,13 @@ const ICON: Record<ToastLevel, string> = {
 
 .tt {
   font-family: var(--share);
-  font-size: 11px;
+  font-size: var(--fs-label);
   letter-spacing: .12em;
   text-transform: uppercase;
   margin-bottom: 3px;
 }
 
-.tx { font-size: 12.5px; line-height: 1.5; color: var(--gray); word-break: break-word; }
+.tx { font-size: var(--fs-body); line-height: 1.5; color: var(--gray); word-break: break-word; }
 
 /* 没有标题时正文就是主角，给它等级色 */
 .tx.solo { color: inherit; }

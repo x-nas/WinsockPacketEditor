@@ -20,13 +20,10 @@ defineProps<{ text?: string }>()
   <div class="busy" role="alert" aria-busy="true">
     <div class="box">
       <!--
-        两层反向旋转的方环，不是圆点 —— 与这套界面的方角语言一致。
-        纯 CSS，没有额外资源。
+        三格音量条 —— 与官网 WPEWeb.Cyber 的加载动画是<b>同一个</b>件，
+        取值逐字照抄 assets/css/cyber.css 的 .loader（见下面样式块的说明）。
       -->
-      <span class="ring">
-        <i class="a" />
-        <i class="b" />
-      </span>
+      <span class="loader"><i /><i /><i /></span>
 
       <span v-if="text" class="tx">{{ text }}</span>
     </div>
@@ -52,51 +49,58 @@ defineProps<{ text?: string }>()
   gap: 16px;
 }
 
-.ring {
-  position: relative;
-  width: 46px;
-  height: 46px;
-  display: block;
+/*
+  ⚠️ 这几条是<b>官网 WPEWeb.Cyber/assets/css/cyber.css 的 .loader 逐字搬过来的</b>
+  （宽 6 / 高 20 / 缝 5 / 1s ease-in-out / 三格错开 0 · .18s · .36s / 0 0 8px 辉光），
+  官网首页那四格统计的加载态就是它。改动这里等于让两边不一样，要改就两边一起改。
+
+  早先这里是「两层反向旋转的方环」，形态上没问题，但网站与程序各有一套加载动画
+  —— 同一个产品该只有一种「正在忙」的样子。
+
+  颜色走 currentColor（官网也是），所以由下面 .loader 那句 color 决定；
+  与文案同为 --green，两者是一组。
+*/
+.loader {
+  display: inline-flex;
+  gap: 5px;
+  align-items: flex-end;
+  height: 26px;
+  min-width: 44px;
+  color: var(--green);
 }
 
-.ring i {
-  position: absolute;
-  inset: 0;
-  border: 2px solid transparent;
-  display: block;
+.loader i {
+  width: 6px;
+  height: 20px;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+  transform-origin: bottom;
+  animation: eq 1s ease-in-out infinite;
 }
 
-/* 外环顺时针，只画两条对角边，转起来是一段追着一段的效果 */
-.ring .a {
-  border-top-color: var(--green);
-  border-bottom-color: var(--green);
-  animation: spin 1.1s linear infinite;
-}
+.loader i:nth-child(2) { animation-delay: .18s; }
+.loader i:nth-child(3) { animation-delay: .36s; }
 
-/* 内环反向且慢一点，两层错开才不像单调的匀速圆圈 */
-.ring .b {
-  inset: 8px;
-  border-left-color: var(--cyan);
-  border-right-color: var(--cyan);
-  animation: spin 1.6s linear infinite reverse;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
+@keyframes eq {
+  0%, 100% { transform: scaleY(.35); opacity: .45; }
+  50% { transform: scaleY(1); opacity: 1; }
 }
 
 .tx {
   font-family: var(--share);
-  font-size: 11px;
+  font-size: var(--fs-label);
   letter-spacing: .22em;
   text-transform: uppercase;
   color: var(--green);
   text-shadow: 0 0 10px rgb(var(--green-rgb) / 35%);
 }
 
-/* 关掉动效时不转，但要留下「正在忙」的静态形态 */
+/* 关掉动效时不动，但要留下「正在忙」的静态形态（这一条官网也有，取值相同）*/
 @media (prefers-reduced-motion: reduce) {
-  .ring .a,
-  .ring .b { animation: none; }
+  .loader i {
+    animation: none;
+    transform: scaleY(.7);
+    opacity: .7;
+  }
 }
 </style>

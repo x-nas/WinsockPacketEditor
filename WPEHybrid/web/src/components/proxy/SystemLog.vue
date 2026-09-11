@@ -22,6 +22,15 @@ import {
 
 type TabKey = 'sys' | 'filter' | 'proxy'
 
+/*
+  ⚠️ 注入模式不出「代理日志」那一页。
+
+  代理日志是 `lstProxyLogInfo`，只由 SOCKS5 服务器那条路产出（握手 / 认证 / 转发）——
+  而注入模式压根不起代理服务，那一页<b>恒为空</b>。
+  摆一个永远是空的页签，读出来是「日志丢了」而不是「本来就没有」。
+*/
+const props = withDefaults(defineProps<{ mode?: 'proxy' | 'inject' }>(), { mode: 'proxy' })
+
 const tab = ref<TabKey>('sys')
 /*
   跟不跟随底部。<b>没有开关，由「你现在在不在底部」自己决定</b>
@@ -105,11 +114,15 @@ async function commitKeep(): Promise<void> {
   }
 }
 
-const TABS: Array<{ key: TabKey; label: Key }> = [
+const ALL_TABS: Array<{ key: TabKey; label: Key }> = [
   { key: 'sys', label: 'log.sys' },
   { key: 'filter', label: 'log.filter' },
   { key: 'proxy', label: 'log.proxy' },
 ]
+
+const TABS = computed(() => (props.mode === 'inject'
+  ? ALL_TABS.filter((x) => x.key !== 'proxy')
+  : ALL_TABS))
 
 /** 当前这一路的总条数，标签上显示。 */
 const counts = computed(() => ({
@@ -339,38 +352,27 @@ async function doExport(): Promise<void> {
   background: transparent;
   border: 1px solid transparent;
   color: var(--muted);
-  font-size: 12.5px;
+  font-size: var(--fs-body);
   cursor: pointer;
 }
 
 .tb:hover { color: var(--gray); }
 .tb.on { color: var(--cyan); border-color: rgb(var(--cyan-rgb) / 40%); background: rgb(var(--cyan-rgb) / 8%); }
-.tb .n { font-family: var(--share); font-size: 10px; color: var(--dim); }
+.tb .n { font-family: var(--share); font-size: var(--fs-caption); color: var(--dim); }
 .tb.on .n { color: var(--cyan); }
 .tb:focus-visible { outline-offset: -2px; }
 
+/* 基样式在 style.css 的「勾选框 / 单选框」，这里只补工具条的字体与框线色 */
 .chk {
-  display: inline-flex;
-  align-items: center;
+  --chk-ring: var(--border);
   gap: 6px;
-  background: transparent;
-  border: 0;
-  padding: 0;
   font-family: var(--share);
   font-size: var(--btn-size);
   /* 显式 1：Share Tech Mono 在 line-height: normal 下会把行距全压在字的下面，字号一大就明显偏上（实测） */
   line-height: 1;
   letter-spacing: .12em;
   text-transform: uppercase;
-  color: var(--muted);
-  cursor: pointer;
-  white-space: nowrap;
 }
-
-.chk i { width: 12px; height: 12px; border: 1px solid var(--border); position: relative; }
-.chk.on { color: var(--green); }
-.chk.on i { border-color: var(--green); background: rgb(var(--green-rgb) / 18%); }
-.chk.on i::after { content: ""; position: absolute; inset: 2px; background: var(--green); }
 
 /*
   自动清理的条数框。宽度按「6 位数字 + 箭头」定死 —— 跟着内容伸缩的话，
@@ -381,7 +383,7 @@ async function doExport(): Promise<void> {
 */
 .keep {
   width: 86px;
-  padding: 6px 2px 4px 8px;
+  padding: 5px 2px 5px 8px;
   background: var(--panel);
   border: 1px solid var(--border);
   color: var(--gray);
@@ -399,7 +401,7 @@ async function doExport(): Promise<void> {
 .keep.bad { border-color: var(--danger); color: var(--danger); }
 
 .btn {
-  padding: 9px 13px 7px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
+  padding: 8px 13px 8px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
   background: transparent;
   border: 1px solid var(--border);
   color: var(--gray);
@@ -424,7 +426,7 @@ async function doExport(): Promise<void> {
   user-select: text;
 }
 
-.empty { padding: 30px 0; text-align: center; color: var(--muted); font-size: 12px; }
+.empty { padding: 30px 0; text-align: center; color: var(--muted); font-size: var(--fs-body); }
 
 /*
   三套列宽。时间列 96px 装得下 HH:mm:ss.fff（12 字符），
@@ -435,7 +437,7 @@ async function doExport(): Promise<void> {
   display: grid;
   gap: 16px;
   padding: 1px 14px;
-  font-size: 12.5px;
+  font-size: var(--fs-body);
   line-height: 1.6;
 }
 

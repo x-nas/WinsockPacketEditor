@@ -125,9 +125,8 @@ function short(u: string): string {
       <button v-if="tab === 'server'" class="btn primary" @click="serverEdit = 'add'">{{ t('wpc.addServer') }}</button>
       <button v-else class="btn primary" @click="noticeEdit = 'add'">{{ t('wpc.addNotice') }}</button>
 
-      <span class="lb">{{ tab === 'server' ? t('wpc.serverHint') : t('wpc.noticeHint') }}</span>
-
-      <span class="grow" />
+      <!-- 放不下就省略号，完整的在悬停提示里；它同时替掉了原来那个 .grow，把清空按钮顶到最右 -->
+      <span class="lb" :title="tab === 'server' ? t('wpc.serverHint') : t('wpc.noticeHint')">{{ tab === 'server' ? t('wpc.serverHint') : t('wpc.noticeHint') }}</span>
 
       <button class="btn danger" :disabled="tab === 'server' ? !servers.length : !notices.length" @click="clearAll">
         {{ tab === 'server' ? t('wpc.clearServers') : t('wpc.clearNotices') }}
@@ -234,11 +233,15 @@ function short(u: string): string {
 <style scoped>
 .page { flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column; gap: 8px; padding: 10px 12px 12px; }
 .sep { width: 1px; height: 16px; background: var(--border); flex: none; }
-.lb { font-size: 11.5px; color: var(--dim2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+/*
+  ⚠️ `flex: 1 1 0`：假想宽度为 0，这句提示永远不会让工具条折行 —— 放不下就省略号。
+  原来是默认的 `0 1 auto`，假想宽度 = 整句长度，125% 缩放下「清空所有服务器」被它挤到第二行（2026-09-11 改）。
+*/
+.lb { flex: 1 1 0; font-size: var(--fs-small); color: var(--dim2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 
 .seg { display: inline-flex; border: 1px solid var(--border); flex: none; }
-.sg { display: inline-flex; align-items: center; gap: 8px; padding: 9px 13px 7px; background: transparent; border: 0; color: var(--muted); font-family: var(--share); font-size: var(--btn-size); line-height: 1; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; }
-.sg b { font-family: var(--mono); font-weight: 400; font-size: 11px; color: var(--dim); }
+.sg { display: inline-flex; align-items: center; gap: 8px; padding: 8px 13px 8px; background: transparent; border: 0; color: var(--muted); font-family: var(--share); font-size: var(--btn-size); line-height: 1; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; }
+.sg b { font-family: var(--mono); font-weight: 400; font-size: var(--fs-small); color: var(--dim); }
 .sg + .sg { border-left: 1px solid var(--border); }
 .sg:hover { color: var(--gray); }
 .sg.on { background: rgb(var(--cyan-rgb) / 10%); color: var(--cyan); }
@@ -249,20 +252,25 @@ function short(u: string): string {
 
 .head > span { overflow: hidden; text-overflow: ellipsis; }
 .head > span, .row > span { text-align: center; }
-.head > span.name, .row > span.name, .head > span.title, .row > span.title, .head > span.url, .row > span.url, .head > span.more, .row > span.more { text-align: left; }
+/*
+  ⚠️ 只有<b>变长标识</b>那两列左对齐：服务器名称、公告标题。
+  其余全部居中 —— 含两张表的 URL 列（服务器的三列、公告的「更多」）：它们是等宽字体的短串
+  （short() 已去掉 scheme），一竖列扫下来居中最省力；左对齐反而与旁边居中的列错开一档。
+*/
+.head > span.name, .row > span.name, .head > span.title, .row > span.title { text-align: left; }
 .row > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .no { color: var(--dim); font-variant-numeric: tabular-nums; }
 .name, .title { color: var(--gray); }
-.addr { font-family: var(--mono); font-size: 12px; color: var(--cyan); }
+.addr { font-family: var(--mono); font-size: var(--fs-body); color: var(--cyan); }
 .addr i { font-style: normal; color: var(--dim); margin: 0 1px; }
-.url, .more { font-family: var(--mono); font-size: 12px; color: var(--dim3); }
+.url, .more { font-family: var(--mono); font-size: var(--fs-body); color: var(--dim3); }
 .rules { font-family: var(--mono); color: var(--green); font-variant-numeric: tabular-nums; }
 .rules.none { color: var(--dim); }
-.time { font-family: var(--mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.time { font-family: var(--mono); font-size: var(--fs-body); color: var(--muted); font-variant-numeric: tabular-nums; }
 
 /* 公告类型标签：配色照 WinForms 的 CellTag（活动情报蓝 / 维护说明黄 / 电竞赛事绿 / 限时商城紫 / 玩家社区蓝） */
-.nt { display: inline-block; padding: 4px 7px 2px; border: 1px solid; font-family: var(--share); font-size: 10.5px; line-height: 1; letter-spacing: .06em; font-style: normal; }
+.nt { display: inline-block; padding: 3px 7px 3px; border: 1px solid; font-family: var(--share); font-size: var(--fs-label); line-height: 1; letter-spacing: .06em; font-style: normal; }
 .nt.n1, .nt.n5 { color: var(--nt1); border-color: rgb(var(--nt1-rgb) / 40%); background: rgb(var(--nt1-rgb) / 10%); }
 .nt.n2 { color: var(--nt2); border-color: rgb(var(--nt2-rgb) / 40%); background: rgb(var(--nt2-rgb) / 10%); }
 .nt.n3 { color: var(--nt3); border-color: rgb(var(--nt3-rgb) / 40%); background: rgb(var(--nt3-rgb) / 10%); }

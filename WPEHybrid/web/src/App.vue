@@ -21,11 +21,12 @@
   <b>多开设置不受这条限制</b>：它不是模式，是启动页上的一屏设置
   （WinForms 那边是浮在 StartForm 上的弹窗），所以它照常能返回。
 */
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watchEffect } from 'vue'
 import { call, inHost, on } from './bridge'
 import { attachUiHost, busy, modalOpen } from './bridge/host'
+import { anyModalOpen } from './useModal'
 import { defOf, initLang, isEn, lang, t } from './i18n'
-import { injectHooked, injectTarget, proxyRunning, socks5Addr } from './stores/runtime'
+import { httpAddr, injectHooked, injectTarget, proxyRunning, socks5Addr } from './stores/runtime'
 import { initTheme } from './stores/theme'
 import StartView from './components/StartView.vue'
 import ProxyView from './components/ProxyView.vue'
@@ -80,6 +81,8 @@ onMounted(async () => {
     isBeta.value = s.isBeta
     dbInstance.value = s.dbInstance || ''
     socks5Addr.value = s.socks5Addr || ''
+    //空串 = HTTP 代理没启用，不是取不到
+    httpAddr.value = s.httpAddr || ''
     nativeDrag.value = s.nativeDrag !== false
   } catch (e) {
     console.error('[app] 取自检信息失败', e)
@@ -194,18 +197,36 @@ function open(url: string): void {
 function site(page: string): string {
   return 'https://www.wpe64.com/' + (isEn.value ? 'en/' : '') + page
 }
+/*
+  两个跟语言走的尺寸令牌，写在 <b>:root</b> 上而不是 .win 上。
+
+    --side-w   侧栏宽度。不加宽的话「Извлечение данных」这类词全靠省略号截断，
+               一屏四五处 …，很难扫。
+    --setf-kx  设置弹窗标签列的乘数。那几个宽度是按中文字数定的，
+               俄语标签会在列里折成两行、行高参差不齐。
+
+  ⚠️ <b>必须是 :root，不能挂在 .win 上</b>：弹窗现在一律 Teleport 到 body
+  （见 useModal.ts 里那段），挂在 .win 上的话它们就在继承链之外，
+  --setf-kx 会退回默认的 1 —— 表现是俄语 / 越南语下设置弹窗的标签列突然变窄。
+*/
+watchEffect(() => {
+  const r = document.documentElement.style
+  const wide = defOf(lang.value).wide
+  r.setProperty('--side-w', wide ? '228px' : '196px')
+  r.setProperty('--setf-kx', wide ? '1.3' : '1')
+})
 </script>
 
 <template>
   <!--
-    两个跟语言走的尺寸令牌，都放在最外层 —— 代理与注入两屏、八个设置弹窗都要用同一个值。
+    两个跟语言走的尺寸令牌写在 :root 上（见 script 里那段 watchEffect）—— 弹窗一律 Teleport 到 body，挂在 .win 上的话它们就在继承链之外。
 
       --side-w   侧栏宽度。不加宽的话「Извлечение данных」这类词全靠省略号截断，
                  一屏四五处 …，很难扫。
       --setf-kx  设置弹窗标签列的乘数。那几个宽度是按中文字数定的，
                  俄语标签会在列里折成两行、行高参差不齐。
   -->
-  <div class="win" :style="{ '--side-w': defOf(lang).wide ? '228px' : '196px', '--setf-kx': defOf(lang).wide ? 1.3 : 1 }">
+  <div class="win">
     <!--
       氛围层：网格底纹 + 游走亮带（四角标记在最上层，见文件末尾）。
 
@@ -221,7 +242,7 @@ function site(page: string): string {
       回车就把程序关了 —— 而 C# 那边还在 await 这个弹窗的答案。
       窗口真要强制关闭还有 Alt+F4（那走的是窗体，不经过页面）。
     -->
-    <div class="shell" :inert="modalOpen">
+    <div class="shell" :inert="modalOpen || anyModalOpen">
       <header class="titlebar" @mousedown="onTitlebarMouseDown">
         <div class="brand">
           <!-- 与官网侧栏 logo 逐项对齐：文本 WPE x64、紧字距、x64 更小更细且灰（cyber.css 的 .sb-logo）-->
@@ -271,18 +292,29 @@ function site(page: string): string {
 
           <span class="tbsep" />
 
-          <button class="wb" :title="t('win.min')"
+          <!--
+            ⚠️ 最小化 / 最大化 / 关闭这三个<b>不给悬停提示</b>：右上角这三个图标是所有人
+            都不用学的东西，弹一句「最小化」纯属打扰。旁边的齿轮与图钉<b>保留 title</b> ——
+            「软件设置」「窗口保持最前」并不是一眼就懂的。
+
+            ⚠️ <b>但不能直接把 title 删掉，要换成 aria-label。</b>
+            它们是纯图标按钮（里面只有一个 svg），title 原本是它们<b>唯一的可访问名</b> ——
+            删了读屏就只会念「按钮」。tooltip.ts 摘 title 时正是这么补的（见那一节），
+            这里等于把它要做的事提前写好。
+            aria-label 不进 tooltip.ts 的取值（它只认 title 与 data-tip），所以不会又弹出来。
+          -->
+          <button class="wb" :aria-label="t('win.min')"
                   @mousedown="armBtn" @click="fireBtn($event, () => call('minimizeWindow'))">
             <svg class="ico" viewBox="0 0 24 24"><path d="M5 12h14" /></svg>
           </button>
 
-          <button class="wb" :title="maximized ? t('win.restore') : t('win.max')"
+          <button class="wb" :aria-label="maximized ? t('win.restore') : t('win.max')"
                   @mousedown="armBtn" @click="fireBtn($event, toggleMax)">
             <svg v-if="!maximized" class="ico" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1" /></svg>
             <svg v-else class="ico" viewBox="0 0 24 24"><rect x="4" y="7" width="13" height="13" rx="1" /><path d="M8 7V4h12v12h-3" /></svg>
           </button>
 
-          <button class="wb close" :title="t('win.close')"
+          <button class="wb close" :aria-label="t('win.close')"
                   @mousedown="armBtn" @click="fireBtn($event, () => call('closeWindow'))">
             <svg class="ico" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg>
           </button>
@@ -471,7 +503,7 @@ function site(page: string): string {
   text-transform: uppercase;
   color: var(--amber);
   border: 1px solid rgb(var(--amber-rgb) / 40%);
-  padding: 4px 8px 2px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（与按钮同一处理）*/
+  padding: 3px 8px 3px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（与按钮同一处理）*/
   /* 原来挂在标题栏右侧、靠 margin-right 与窗口按钮拉开；
      现在跟在版本号后面，间距归 .brand 的 gap 管 */
   line-height: 1;

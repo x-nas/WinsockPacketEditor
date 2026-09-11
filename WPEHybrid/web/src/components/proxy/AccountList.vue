@@ -399,7 +399,7 @@ async function io(method: 'importAccounts' | 'exportAccounts'): Promise<void> {
 </script>
 
 <template>
-  <div class="page list-page">
+  <div class="page list-page acct">
     <div class="bar">
       <button class="btn primary" @click="editing = ''">{{ t('acct.add') }}</button>
       <button class="btn" @click="batch = true">{{ t('acct.batch') }}</button>
@@ -452,7 +452,7 @@ async function io(method: 'importAccounts' | 'exportAccounts'): Promise<void> {
         </button>
       </div>
 
-      <span class="grow" />
+      <!-- 原来这里有一个 .grow 撑开；现在搜索框自己吃掉剩余宽度，右边三颗按钮照样贴右 -->
 
       <button class="btn" @click="io('importAccounts')">{{ t('acct.import') }}</button>
       <button class="btn" :disabled="!rows.length" @click="io('exportAccounts')">{{ t('acct.export') }}</button>
@@ -553,14 +553,31 @@ async function io(method: 'importAccounts' | 'exportAccounts'): Promise<void> {
 }
 
 /*
-  整条工具条唯一可压缩的项：宽度够就 170px，不够一路让到 80px。
+  ⚠️ 这条工具条<b>尽量不折行</b>（2026-09-11 按要求）。
+  做法不是 nowrap，而是让搜索框的 flex-basis 为 0、只保一个 90px 的下限 ——
+  flex-wrap 按各项的「假想宽度」断行，搜索框只算 90，于是<b>只有它缩到底还装不下时才会折</b>。
+  原来它的基准是 170、右边还有一个 .grow，窗口稍窄「清空」就被甩到第二行。
+
+  ⚠️ 为什么不硬写 nowrap：实测（真机可用宽 = 视口 − 侧栏 − 24）
+    1280 宽：中 / 繁 / 英 / 日 / 韩 / 越 753~929 ≤ 1028~1060，一行；俄语要 1310，装不下
+    1024 宽（125% 缩放）：中 / 繁 753 ≤ 804 一行；英 / 日 / 韩 / 越 845~929 > 772~804
+  硬 nowrap 的话那几种会把右边的按钮<b>静默裁掉</b>（见 .modebar .ports 那次）；
+  折一行至少按钮都点得到。
+*/
+
+/* 到期区间与按钮都不缩 —— 该让位的只有搜索框 */
+.rng { flex: none; }
+
+/*
+  搜索框<b>按宽度自适应</b>：吃掉工具条上所有剩余的宽度（原来那个 .grow 撑开的空当），
+  窗口窄下来它先让，一路让到 90px（还装得下「搜索…」加清除叉）。
   伸缩性挂在外层的 .sw 上 —— 清除按钮要相对它绝对定位。
 */
 .sw {
   position: relative;
   display: flex;
-  flex: 0 1 170px;
-  min-width: 80px;
+  flex: 1 1 0;
+  min-width: 90px;
 }
 
 .sw .inp { flex: 1; min-width: 0; padding-right: 24px; }
@@ -588,7 +605,7 @@ async function io(method: 'importAccounts' | 'exportAccounts'): Promise<void> {
 
 .rng .lb {
   font-family: var(--share);
-  font-size: 10px;
+  font-size: var(--fs-caption);
   letter-spacing: .12em;
   text-transform: uppercase;
   color: var(--muted);
@@ -596,8 +613,8 @@ async function io(method: 'importAccounts' | 'exportAccounts'): Promise<void> {
 }
 
 .rng.on .lb { color: var(--cyan); }
-.rng .sep { color: var(--dim); font-size: 11px; }
-.rng .n { font-family: var(--share); font-size: 10px; color: var(--cyan); }
+.rng .sep { color: var(--dim); font-size: var(--fs-small); }
+.rng .n { font-family: var(--share); font-size: var(--fs-caption); color: var(--cyan); }
 
 /* 清除按钮：搜索框与到期区间共用一套外观，只有定位不同 */
 .x {
@@ -619,7 +636,7 @@ async function io(method: 'importAccounts' | 'exportAccounts'): Promise<void> {
   min-width: 0;
   height: 24px;
   padding: 0 6px;
-  font-size: 11.5px;
+  font-size: var(--fs-small);
   color: var(--muted);
 }
 
@@ -636,7 +653,7 @@ async function io(method: 'importAccounts' | 'exportAccounts'): Promise<void> {
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
-  font-size: 11.5px;
+  font-size: var(--fs-small);
   color: var(--dim);
 }
 
@@ -646,7 +663,7 @@ async function io(method: 'importAccounts' | 'exportAccounts'): Promise<void> {
   padding: 7px 12px;
   border: 1px solid rgb(var(--amber-rgb) / 32%);
   background: rgb(var(--amber-rgb) / 7%);
-  font-size: 12px;
+  font-size: var(--fs-small);
   color: var(--amber);
 }
 
@@ -681,7 +698,7 @@ async function io(method: 'importAccounts' | 'exportAccounts'): Promise<void> {
 .tm.bad { color: var(--danger); }
 
 /* 状态与操作是 flex 容器，text-align 管不到它们里面，得各自再居中一次 */
-.st { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 12px; }
+.st { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: var(--fs-body); }
 .st i { width: 6px; height: 6px; border-radius: 50%; flex: none; }
 .st.on { color: var(--green); }
 .st.on i { background: var(--green); box-shadow: 0 0 6px var(--green); }

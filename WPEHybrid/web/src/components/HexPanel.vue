@@ -310,7 +310,7 @@ watch(() => props.id, () => { asText.value = null })
       用 <pre> 是为了能<b>原生选中复制</b> —— style.css 里 body 是 user-select: none，
       只给 <pre> 放开了。HTTP 头这种东西，选中一段拷出去是最常做的事。
     -->
-    <pre v-if="detail && textMode" class="hx-text">{{ text }}</pre>
+    <pre v-if="detail && textMode" class="hx-text"><span class="hx-tx">{{ text }}</span></pre>
 
     <!-- 外框色传给 HexView，它的列号表头 sticky 时要拿这个色盖住滚过去的正文 -->
     <HexView
@@ -369,22 +369,46 @@ watch(() => props.id, () => { asText.value = null })
 /* .hx-seg / .hx-segb 在 style.css 里，两个数据页的查找框也在用 —— 别在这儿再抄一份 */
 
 /*
-  文本视图。等宽字 + 保留空白与换行，横向溢出自己滚（HTTP 头里有很长的单行）。
+  文本视图。等宽字 + 保留原有的空白与换行，<b>过长的行自动折到下一行</b>。
   user-select 显式打开：全局 body 是 none，这一块是特意放行的少数几处之一。
+
+  ⚠️ <b>不横向滚</b>（2026-09-09 改）。这块面板只有小半屏高、又是拿来<b>读</b>的：
+  一条 HTTP 头或一段解码出来的正文动辄几百字符，横着拖等于把刚看的那半句推走，
+  而且拖到右边之后其余各行的开头全都看不见了。WinForms 那边（txtText 是 AntdUI 的
+  多行 Input）本来就是换行的，这一处是移植时跟丢的。
+
+  ⚠️ 两个属性缺一不可：
+  · <b>pre-wrap</b> —— 保住原文里真实的换行与缩进（HTTP 头靠它分行），同时允许折行；
+    普通的 pre 只保不折。
+  · <b>overflow-wrap: anywhere</b> —— pre-wrap 只在<b>空白处</b>断行，而这一栏经常是
+    一整段没有空格的解码文本（二进制被当文本解出来就是那样），光有 pre-wrap 照样溢出。
+    ⚠️ 刻意<b>不用 word-break: break-all</b>：那个连能在空格处断的地方也一律拆词，
+    HTTP 头会被拦腰截断；anywhere 是"实在放不下才拆"。
+
+  ⚠️ <b>cursor 写在滚动容器上，滚动条也会吃这个值</b> —— 原来这里是 cursor: text，
+  于是鼠标移到滚动条上仍是「工」字形的文本光标，看着像还能选字。
+  正确的分法是：<b>容器 default、内容 text</b>，所以文字包了一层 .hx-tx。
+  （原生 textarea 不用管这件事，UA 的 cursor: auto 只在真有文字的地方才给 I 形。）
 */
 .hx-text {
   flex: 1;
   margin: 0;
   padding: 8px 12px;
-  overflow: auto;
+  /* 只留纵向。横向已经不会溢出了，写死 hidden 是防止某一版式下冒出半条来 */
+  overflow-y: auto;
+  overflow-x: hidden;
   font-family: Consolas, monospace;
-  font-size: 12px;
+  font-size: var(--fs-dense);
   line-height: 18px;
   color: var(--wpe-fg);
-  white-space: pre;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
   user-select: text;
-  cursor: text;
+  cursor: default;
 }
+
+/* display: block 才铺满整宽 —— 短行右边那片空白也该是能选中的文字区 */
+.hx-tx { display: block; cursor: text; }
 
 .hx-meta.dim { color: var(--wpe-muted); }
 .hx-meta.bad { color: #f48771; }

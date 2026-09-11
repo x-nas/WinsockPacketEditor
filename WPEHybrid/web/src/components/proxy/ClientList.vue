@@ -316,22 +316,28 @@ watch(rows, () => {
         <!-- 没选中时的提示只放正文那一处，标题栏不重复 -->
       </div>
 
+      <!--
+        没有表头的话这几列根本看不出是什么（源端口 / 目标 / 协议 / 实际出口），
+        尤其最后一列在绝大多数情况下与「目标」一模一样。
+
+        ⚠️ <b>表头在滚动容器外面</b>，与上半部那张表同一个做法 —— 它不需要 sticky，
+        配色也就能跟着用 --panel（与上半部的表头一致）。
+        这张表<b>列宽是固定 grid、不可拖、也不横向滚</b>，所以「表头必须与行同容器」
+        那条约束（封包列表 / 防火墙名单那种）在这里不成立。
+      -->
+      <div v-if="selectedIp && conns.length" class="chead">
+        <span>{{ t('cli.srcPort') }}</span>
+        <span />
+        <span>{{ t('cli.target') }}</span>
+        <span>{{ t('col.proto') }}</span>
+        <span :title="t('cli.viaHint')">{{ t('cli.via') }}</span>
+      </div>
+
       <div class="cbody">
         <div v-if="!selectedIp" class="empty sm">{{ t('cli.pickHint') }}</div>
         <div v-else-if="!conns.length" class="empty sm">{{ t('cli.noConn') }}</div>
 
-        <!--
-          没有表头的话这几列根本看不出是什么（源端口 / 目标 / 协议 / 实际出口），
-          尤其最后一列在绝大多数情况下与「目标」一模一样。
-        -->
         <template v-else>
-        <div class="chead">
-          <span>{{ t('cli.srcPort') }}</span>
-          <span />
-          <span>{{ t('cli.target') }}</span>
-          <span>{{ t('col.proto') }}</span>
-          <span :title="t('cli.viaHint')">{{ t('cli.via') }}</span>
-        </div>
 
         <div v-for="(c, i) in conns" :key="c.ClientPort + '|' + i" class="crow">
           <span class="cport">:{{ c.ClientPort }}</span>
@@ -362,7 +368,7 @@ watch(rows, () => {
 
 .cnt {
   font-family: var(--share);
-  font-size: 10px;
+  font-size: var(--fs-caption);
   letter-spacing: .1em;
   padding: 1px 8px;
   border: 1px solid var(--border);
@@ -385,7 +391,7 @@ watch(rows, () => {
   align-items: center;
   gap: 12px;
   padding: 0 14px;
-  font-size: 12.5px;
+  font-size: var(--fs-body);
 }
 
 .head {
@@ -393,6 +399,8 @@ watch(rows, () => {
   height: var(--th-h);
   background: var(--panel);
   border-bottom: 1px solid var(--border);
+  /* 与 .body 的 scrollbar-gutter 配对：14 + 10（滚动条宽），不补就宽出 10px */
+  padding-right: 24px;
   font-family: var(--share);
   font-size: var(--th-size);
   letter-spacing: .14em;
@@ -419,9 +427,10 @@ watch(rows, () => {
 .row > span:nth-child(3),
 .row > span:nth-child(4) { text-align: left; }
 
-.body { flex: 1; min-height: 0; overflow-y: auto; }
+/* ⚠️ scrollbar-gutter 的理由见下面 .cbody 那段 —— 表头在容器外，槽位必须恒定 */
+.body { flex: 1; min-height: 0; overflow-y: auto; scrollbar-gutter: stable; }
 
-.empty { padding: 40px 0; text-align: center; color: var(--muted); font-size: 12.5px; }
+.empty { padding: 40px 0; text-align: center; color: var(--muted); font-size: var(--fs-body); }
 
 .row { height: 34px; border-bottom: 1px solid rgb(var(--border-rgb) / 45%); color: var(--soft); cursor: pointer; }
 .row:hover { background: rgb(var(--tint-rgb) / 4%); }
@@ -477,17 +486,36 @@ watch(rows, () => {
 
 .ctl {
   font-family: var(--share);
-  font-size: 10.5px;
+  font-size: var(--fs-label);
   letter-spacing: .14em;
   text-transform: uppercase;
   color: var(--dim2);
 }
 
-.cip { font-family: var(--mono); font-size: 12px; color: var(--cyan); }
+.cip { font-family: var(--mono); font-size: var(--fs-body); color: var(--cyan); }
 
-.cbody { flex: 1; min-height: 0; overflow-y: auto; padding: 4px 0; }
+/*
+  ⚠️⚠️ <b>scrollbar-gutter: stable 是必须的，不是装饰。</b>
 
-.empty.sm { padding: 26px 0; font-size: 12px; }
+  表头在这个容器<b>外面</b>，而滚动条是 10px 且<b>占宽度</b>（不是 overlay，见 style.css
+  的 ::-webkit-scrollbar）—— 一出现滚动条，行的可用宽度就比表头少 10px，
+  两者的 grid 各自按自己的宽度算，<b>后面几列就错开了</b>。
+
+  实测上半部那张表（同样是表头在外面）：出现滚动条时后 5 列偏 5~10px，
+  表头 905 宽、行 895 宽。这一处 2026-09-09 才发现，两张表一起修的。
+
+  stable 让滚动条的槽位<b>一直</b>留着（没有滚动条时也留），宽度因此恒定；
+  表头再补上同样宽度的右内边距（见 .chead / .head 的 padding-right）就永远对得齐。
+*/
+.cbody {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  padding: 0 0 4px;
+}
+
+.empty.sm { padding: 26px 0; font-size: var(--fs-body); }
 
 /* 一条连接一行：源端口 → 目标，后面跟协议与出口 */
 .crow {
@@ -497,7 +525,7 @@ watch(rows, () => {
   gap: 10px;
   padding: 1px 14px;
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: var(--fs-body);
   line-height: 1.85;
 }
 
@@ -509,6 +537,17 @@ watch(rows, () => {
   gap: 10px;
   padding: 0 14px;
   height: var(--th-h);
+
+  /*
+    ⚠️ 配色与<b>上半部那张表的 .head 逐条一致</b>（--panel + 下边框）——
+    两张表上下并排，表头长得不一样一眼就看得出来。
+
+    ⚠️ <b>右内边距要多留一个滚动条的宽度</b>（14 + 10）：下面的 .cbody 用
+    scrollbar-gutter: stable 恒定留出 10px 槽位，表头在容器外面，不补就会宽出这 10px。
+  */
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  padding-right: 24px;
   /* 与全项目其它表头同一份（10px · .14em · var(--th-fg)），不因为是子表就小半号 */
   font-family: var(--share);
   font-size: var(--th-size);

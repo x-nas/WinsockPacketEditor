@@ -60,7 +60,7 @@ async function save(): Promise<void> {
 </script>
 
 <template>
-  <SettingsModal :open="!!props.target" :title="title" subtitle="Controls/MapLocalEdit" :busy="busy" :error="error"
+  <SettingsModal :open="!!props.target" :title="title" subtitle="Local Mapping" :busy="busy" :error="error"
                  @update:open="!$event && emit('close')" @save="save">
     <div class="setf">
       <div class="grp">{{ t('map.remoteAddr') }}</div>
@@ -91,5 +91,5 @@ async function save(): Promise<void> {
 </template>
 
 <style scoped>
-.proto, .colon { color: var(--dim); font-family: var(--mono); font-size: 12px; }
+.proto, .colon { color: var(--dim); font-family: var(--mono); font-size: var(--fs-body); }
 </style>

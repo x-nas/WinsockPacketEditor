@@ -759,6 +759,24 @@ namespace WinsockPacketEditor
         public string UserName = string.Empty;
         public string PassWord = string.Empty;
         public int[] CheckedPids = new int[0];
+
+        /*
+            2026-09-10 加的一组「环境状态」—— 界面上那条链路体检要读它们。
+
+            这一屏是「把某个进程的流量转进 WPE 改包」的总入口，但那条链路上只有前半截归它管
+            （驱动 + 进程 + 转代理）；后半截（SunnyNet 随 HTTP 代理起、SOCKS5 接住转过来的连接、
+            服务在不在跑）归<b>代理设置</b>与状态条。不把它们一起给出来，这一屏就只能说
+            「保存成功」，说不出「保存了也不会有数据」—— 而后者才是用户真正撞上的那件事。
+
+            ⚠️ 这些字段<b>只读</b>：SaveProcessSetting 一个都不写回去。要改得去代理设置。
+        */
+        public bool EnableHttp;         // SunnyNet 是随 HTTP 代理起的，关着就没人接驱动送来的流量
+        public int HttpPort;
+        public bool EnableSocks5;
+        public int Socks5Port;
+        public bool EnableAuth;         // 本机 SOCKS5 开着认证时，转代理必须填账号
+        public bool Running;            // 代理服务在不在跑
+        public bool IsAdmin;            // 装驱动要管理员权限
     }
 
     public sealed class ExtProxySettingRow

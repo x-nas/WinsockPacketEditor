@@ -1,0 +1,758 @@
+/*
+  远程管理台 —— 共用样式。
+
+  【它是什么】WPE x64 内嵌的 OWIN Web 服务（Operate.SystemConfig.StartRemoteMGT）
+  下发的三个页面：总览 / 日志 / 代理账号。手机、平板、桌面共用同一份，移动优先。
+
+  【零构建】这一族文件不进 Vite，也不引任何框架 —— 服务端是主工程的 OWIN，
+  文件由 csproj 的 Content 原样拷进输出目录的 Web/。改完直接刷新浏览器即可，
+  不需要 npm run build。（外壳那套 Vue 界面是另一回事，见 WPEHybrid/web/。）
+
+  【设计令牌不在这个文件里】配色令牌在 <b>tokens.css</b>，与外壳的 Vue 界面
+  <b>共用同一个源文件</b>（源头是 WPEHybrid/web/src/tokens.css，主工程的 csproj 用
+  <Content Include Link=…> 把它投影成输出目录里的 Web\tokens.css）。改配色改那一个文件。
+  三个页面都先 <link> tokens.css 再 <link> 这一份，顺序不能反。
+
+  ⚠️ 还剩一份真正的副本：官网 WPEWeb.Cyber 的 cyber.css —— 另一个仓库、另一套部署，
+  没法共享文件，改配色仍要连它一起改。
+
+  【为什么不带浅色模式】管理台是拿来盯状态的，深色底上荧光字在手机上更省电、
+  强光下也更容易读。外壳那边的三档主题在这儿没有对应的配置项，不做半套。
+*/
+
+/* ── 字体：与外壳、官网同一份 latin 子集可变字体（不含中文，中文走系统回退）── */
+@font-face {
+  font-family: "Orbitron";
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url("./fonts/orbitron.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Share Tech Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/sharetechmono.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("./fonts/jetbrainsmono.woff2") format("woff2");
+}
+
+:root {
+  /* 这一页独有的两个。其余令牌全部来自 tokens.css，别在这里再定义一份。 */
+  --top-h: 52px;
+
+  /*
+    横向内边距。⚠️ <b>顶栏与内容区必须用同一个值</b> —— 品牌名要与下面卡片的左沿对齐。
+
+    为什么是 24 而不是 12：四角标记是 6px 起、14px 宽，横跨 <b>6~20px</b>。
+    原来的 12px 让品牌与指示灯正好压在角标里面（实测品牌左沿 12 < 角标内沿 20），
+    看着就是「贴着边框」。24 之后离角标内沿还有 4px。
+  */
+  --pad: 24px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/*
+  ⚠️ 必须有这一条。hidden 属性靠 UA 样式表的 [hidden]{display:none} 生效，
+  那条规则的优先级只有 (0,0,1) —— 任何一条带类名的 display（比如 .mask{display:flex}）
+  都压得过它，结果就是「加了 hidden 却照样显示」。全项目靠 hidden 控显隐，所以在这里钉死。
+*/
+[hidden] { display: none !important; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  min-height: 100vh;
+  background: var(--black);
+  color: var(--gray);
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.5;
+  /* 刘海屏：内容不要钻到圆角和状态栏底下 */
+  padding: calc(var(--top-h) + env(safe-area-inset-top)) env(safe-area-inset-right)
+           calc(24px + env(safe-area-inset-bottom)) env(safe-area-inset-left);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 表单控件不继承字体 —— 这是 CSS 的老规矩，漏了就会退回系统 Arial */
+button, input, select, textarea { font-family: inherit; color: inherit; }
+
+/* ── 氛围：40px 网格底纹 + 四角标记 ───────────────────────
+   刻意<b>不做</b>外壳那条 10 秒游走的扫描亮带：那是一层全屏动画，
+   手机上一直跑着白费电，而这几页是拿来盯数字的，不是拿来看的。 */
+.pcb {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgb(var(--border-rgb) / 55%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--border-rgb) / 55%) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: .5;
+}
+
+.cn {
+  position: fixed;
+  width: 14px;
+  height: 14px;
+  z-index: 3000;
+  pointer-events: none;
+  border: 1px solid rgb(var(--cyan-rgb) / 45%);
+}
+
+.cn.tl { top: calc(6px + env(safe-area-inset-top)); left: 6px; border-right: 0; border-bottom: 0; }
+.cn.tr { top: calc(6px + env(safe-area-inset-top)); right: 6px; border-left: 0; border-bottom: 0; }
+.cn.bl { bottom: calc(6px + env(safe-area-inset-bottom)); left: 6px; border-right: 0; border-top: 0; }
+.cn.br { bottom: calc(6px + env(safe-area-inset-bottom)); right: 6px; border-left: 0; border-top: 0; }
+
+/* ── 顶栏 ─────────────────────────────────────────── */
+.top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: calc(var(--top-h) + env(safe-area-inset-top));
+  padding: env(safe-area-inset-top) var(--pad) 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--black);
+  border-bottom: 1px solid var(--border);
+}
+
+/*
+  品牌名 —— 与外壳标题栏的 .bname 逐项对齐（App.vue），那一份又照着官网侧栏的 .sb-logo。
+
+  写法上有两处不显然：
+  · <b>x64 不写 font-size</b>。靠 <small> 自带的 UA 默认 font-size: smaller（约 0.83x）；
+    写死 font-size 会把那个默认覆盖掉，两截就一样大了（外壳那边栽过一次）。
+  · <b>padding-top: 1px</b>。WPE 与 x64 按基线对齐，大的那截字形中心比小的高 1px，
+    整体下移 0.5px 让两者各偏半像素。
+*/
+.brand {
+  flex: none;
+  font-family: var(--orbit);
+  font-weight: 800;
+  font-size: 16px;
+  padding-top: 1px;
+  letter-spacing: -.02em;
+  color: var(--green);
+  text-shadow: 0 0 12px rgb(var(--green-rgb) / 35%);
+}
+
+/* 官网把型号那截压成次要信息：更小、更细、灰色，与前面的绿色主名分层 */
+.brand small {
+  font-weight: 500;
+  color: var(--muted);
+  text-shadow: none;
+}
+
+/* 导航：手机上横向可滑，不换行、不挤压 */
+.nav {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.nav::-webkit-scrollbar { display: none; }
+
+.nav a {
+  flex: none;
+  display: flex;
+  align-items: center;
+  height: 34px;
+  /*
+    ⚠️ 显式 line-height: 1，与 .btn 同一条既定写法。
+    默认行高（正文的 1.5）会让行盒比字大出一截，而那截行距压在字的下面 ——
+    实测导航文字的墨迹中心比容器中心<b>高 1.38px</b>，加上这一句收到 0.8px，
+    与 .btn 一致。剩下的 0.8px 是字形在 em 框里的天然位置，
+    <b>不要再补一层 padding 去追</b>（外壳那边为这件事补过第二遍，后来撤了）。
+  */
+  line-height: 1;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  color: var(--dim2);
+  font-family: var(--share);
+  font-size: 12px;
+  letter-spacing: .1em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nav a:hover { color: var(--gray); }
+
+.nav a.on {
+  color: var(--cyan);
+  border-color: rgb(var(--cyan-rgb) / 40%);
+  background: rgb(var(--cyan-rgb) / 8%);
+}
+
+/* 连接状态灯：接口调通是绿的，掉线转红 */
+.led {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--dim);
+}
+
+.led.ok { background: var(--green); box-shadow: 0 0 8px var(--green); }
+.led.bad { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
+
+/* ── 内容 ─────────────────────────────────────────── */
+.wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 14px var(--pad) 0;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  margin-bottom: 14px;
+}
+
+.card > .hd {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.card > .hd h2 {
+  font-family: var(--orbit);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: .08em;
+  color: var(--cyan);
+}
+
+.card > .hd .sub {
+  font-family: var(--share);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.card > .bd { padding: 12px 14px; }
+
+.grow { flex: 1; min-width: 0; }
+
+/* ── 统计格 ───────────────────────────────────────
+   auto-fit + minmax：手机 2 列、平板 3~4 列、桌面 5~6 列，不用写断点 */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+  /*
+    分隔线由每一格自己画右边和下边，容器只画上边和左边。
+    ⚠️ 不用「gap: 1px + 容器铺 --border 底色」那种画法：格子数是奇数时
+    末行会空出一格，那一格露出的就是网格底色，看着像少画了一块。
+    这样画的话空位与卡片同色，看不出来。
+  */
+  border: 1px solid var(--border);
+  border-width: 1px 0 0 1px;
+}
+
+.st {
+  padding: 10px 12px;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-width: 0 1px 1px 0;
+}
+
+.st .k {
+  font-family: var(--share);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--th-fg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.st .v {
+  margin-top: 3px;
+  font-family: var(--orbit);
+  font-weight: 800;
+  font-size: 17px;
+  color: var(--green);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/*
+  预格式化的长串（"发送 : 12.4 KB/s  接收 : 88.1 KB/s" 这种）单独一档：
+  它们一格 132px 装不下，而跟数字混在同一个网格里靠 span 撑，末行会空出一两格。
+  分成两个网格之后，两边各自填满。
+*/
+.stats.wide { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+
+.st.cy .v { color: var(--cyan); }
+.st.mg .v { color: var(--magenta); }
+.st.am .v { color: var(--amber); }
+.st .z { font-size: 11px; color: var(--dim4); font-family: var(--mono); }
+
+/* 占比条（CPU / 内存）*/
+.bar {
+  margin-top: 6px;
+  height: 3px;
+  background: rgb(var(--inset-rgb) / 45%);
+  overflow: hidden;
+}
+
+.bar i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  transition: width .3s;
+}
+
+.bar.cy i { background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+.bar.am i { background: var(--amber); box-shadow: 0 0 8px var(--amber); }
+.bar.dg i { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
+
+/* ── 控件 ────────────────────────────────────────── */
+.inp {
+  height: 36px;
+  padding: 0 10px;
+  background: rgb(var(--inset-rgb) / 34%);
+  border: 1px solid var(--border);
+  color: var(--gray);
+  font-family: var(--mono);
+  /* 与正文、表格同字号 —— 搜索框里敲的字和它筛的那些行看着要一样大 */
+  font-size: 13px;
+  outline: none;
+}
+
+/*
+  ⚠️ <b>触摸设备上输入框必须 ≥16px。</b>iOS Safari 在小于 16px 的输入框获得焦点时会
+  <b>自动放大整页</b>，而且不会自己缩回去，用户得手动双指缩小 —— 移动端最常见的一个坑。
+
+  ⚠️ 判据用的是 <b>pointer: coarse</b>，不是这份文件里别处那种 max-width：
+  会放大的是「iOS Safari」这件事，与视口宽度无关 —— iPad 横屏有 1024px，
+  按宽度判就漏了它。反过来，桌面浏览器窗口拖窄不该把字撑大。
+  尺寸与间距那些仍然按 max-width 判，那些确实是宽度问题。
+*/
+@media (hover: none) and (pointer: coarse) {
+  .inp { font-size: 16px; }
+}
+
+.inp:focus { border-color: var(--cyan); }
+.inp::placeholder { color: var(--dim); }
+.inp:disabled { opacity: .5; }
+
+select.inp { -webkit-appearance: none; appearance: none; padding-right: 26px; }
+
+/* 触摸目标 ≥ 40px：手指不是鼠标，10px 的按钮点不中 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 14px;
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--dim2);
+  font-family: var(--share);
+  font-size: 12px;
+  letter-spacing: .1em;
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); }
+.btn:disabled { opacity: .45; cursor: default; }
+
+.btn.primary { border-color: rgb(var(--green-rgb) / 45%); color: var(--green); }
+.btn.primary:hover:not(:disabled) { background: rgb(var(--green-rgb) / 10%); border-color: var(--green); color: var(--green); }
+.btn.danger { border-color: rgb(var(--danger-rgb) / 45%); color: var(--danger); }
+.btn.danger:hover:not(:disabled) { background: rgb(var(--danger-rgb) / 12%); border-color: var(--danger); color: var(--danger); }
+
+/* 分段按钮：日志的三路切换、账号的筛选 */
+.seg { display: inline-flex; border: 1px solid var(--border2); }
+
+.seg button {
+  min-height: 36px;
+  padding: 0 14px;
+  background: transparent;
+  border: 0;
+  border-right: 1px solid var(--border2);
+  color: var(--dim2);
+  font-family: var(--share);
+  font-size: 12px;
+  letter-spacing: .1em;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.seg button:last-child { border-right: 0; }
+.seg button.on { color: var(--cyan); background: rgb(var(--cyan-rgb) / 10%); }
+
+/*
+  勾选框 —— 与外壳同一套几何：盒 16px、内块 inset 4px。
+  ⚠️ inset <b>必须是 4 的倍数</b>：1px 的边在 125%/175% 缩放下计算值是 0.8px，
+  间距落在半个设备像素上就是取整平局，左右必然差 1px，而在 100% 的机器上完全看不出来。
+*/
+.chk {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  background: none;
+  border: 0;
+  color: var(--dim2);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.chk i {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--dim);
+  position: relative;
+}
+
+/*
+  只读的那种：账号表的「启用」列只是个状态标记，见 ProxyAccount.html 里的理由。
+  ⚠️ 几何与配色<b>一个像素都不变</b> —— 用户已经认得这个符号了，
+  改的只是「它响不响应鼠标」。
+*/
+.chk.ro { cursor: default; }
+
+.chk.on { color: var(--gray); }
+.chk.on i { border-color: rgb(var(--chk-on) / 1); background: rgb(var(--green-rgb) / 8%); }
+
+.chk.on i::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  background: var(--chk-on);
+}
+
+/* ── 表：宽屏是表，窄屏自动堆成卡片 ─────────────────── */
+.tbl { width: 100%; border-collapse: collapse; }
+
+.tbl th {
+  padding: 0 10px;
+  height: 30px;
+  text-align: left;
+  background: var(--panel);
+  color: var(--th-fg);
+  font-family: var(--share);
+  font-weight: 400;
+  font-size: 10.5px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.tbl td {
+  padding: 8px 10px;
+  border-top: 1px solid var(--border);
+  /*
+    ⚠️ <b>middle 不是 top。</b>账号表里同一行既有 36px 高的按钮/勾选框、也有纯文字，
+    top 会让文字贴在行顶、比按钮的中心高 8.5px（量出来的），一眼就看得出没对齐。
+    日志表在桌面宽度下三路全是单行（实测 36~37px，零多行），middle 与 top 等价；
+    窄屏下表已经拆成卡片布局（display: block），vertical-align 根本不参与。
+  */
+  vertical-align: middle;
+  word-break: break-word;
+}
+
+/*
+  停用的行整行压暗，⚠️ <b>但「启用」那一格除外</b>。
+  ⚠️ 理由在 2026-09-09 变了、结论没变：那一格<b>不再是「重新点亮这一行」的出口</b>
+  （它已改成只读标记），但它现在是<b>唯一说明这行为什么是暗的</b>那个符号 ——
+  空框在黑底上本来就只有一圈发丝线，再乘 50% 等于把这条信息一起抹掉。
+*/
+.tbl tr.off td:not(.ck) { opacity: .5; }
+.tbl .num { font-family: var(--share); color: var(--dim4); white-space: nowrap; }
+.tbl .t { color: var(--dim2); white-space: nowrap; }
+.tbl .mod { color: var(--cyan); white-space: nowrap; }
+.tbl .who { color: var(--amber); white-space: nowrap; }
+.tbl .ops { white-space: nowrap; text-align: right; }
+
+/*
+  ── 日志页的认证表：三个数字列（连接数 / 设备数 / 流量）表头与内容一起居中 ──
+  它们是短而齐的值，居中之后一竖列扫下来最省力；
+  左边那三列（时间 / IP / 归属地）是变长文本，左对齐才对得齐。
+  ⚠️ 限定 .tbl.log，别写成 .tbl .num —— 账号表也有 .num，那张表另有自己的一套。
+*/
+.tbl.log th.num,
+.tbl.log td.num { text-align: center; }
+
+/*
+  ── 代理账号表：除用户名外，表头与内容全部居中 ──────────────────
+  那几列都是<b>短而齐的值</b>（在线/离线、日期、数字、两颗按钮），居中之后
+  一竖列扫下来最省力；用户名是变长标识，左对齐才对得齐。
+  ⚠️ 表头与内容必须一起居中 —— 只居中一边比两边都左对齐更难看。
+  ⚠️ 特异度 (0,3,0) 压得过 .tbl .ops 的 right (0,2,0)，操作列跟着居中，这是要的。
+*/
+.tbl.acct th,
+.tbl.acct td { text-align: center; }
+
+.tbl.acct th.user,
+.tbl.acct td.user { text-align: left; }
+
+/*
+  ⚠️ 操作列靠右，不跟着居中。
+  它装的是两颗按钮而不是一个值 —— 靠右贴着表的边沿，一竖列扫下来才对得齐；
+  居中会让它随「编辑 / 删除」的宽度左右浮动（行宽一变就更明显）。
+*/
+.tbl.acct th:last-child,
+.tbl.acct td.ops { text-align: right; }
+
+.empty { padding: 26px 0; text-align: center; color: var(--muted); }
+
+/*
+  ⚠️ 窄屏把表拆成卡片，靠 td 的 data-k 属性做行内标签。
+  不用「横向滚动的表」：手机上左右拖着看日志是最难用的一种形态，
+  而这几张表的列本来就不多，堆成卡片反而一眼看得全。
+*/
+@media (max-width: 700px) {
+  .tbl, .tbl tbody, .tbl tr, .tbl td { display: block; width: 100%; }
+  .tbl thead { display: none; }
+
+  .tbl tr {
+    border-top: 1px solid var(--border);
+    padding: 8px 0;
+  }
+
+  .tbl td {
+    border: 0;
+    padding: 2px 12px;
+    display: flex;
+    gap: 10px;
+  }
+
+  .tbl td::before {
+    content: attr(data-k);
+    flex: none;
+    width: 74px;
+    color: var(--th-fg);
+    font-family: var(--share);
+    font-size: 10.5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding-top: 3px;
+  }
+
+  .tbl td.ops { text-align: left; justify-content: flex-start; }
+
+  /*
+    ⚠️ 装控件的两格按<b>中心</b>对齐，不按顶部。
+    行内标签（td::before）默认贴顶 + 3px，而勾选框/按钮在窄屏下是 40px 高的 ——
+    标签会比控件中心高 9.1px（量出来的），看着就是没对齐。
+    纯文字的格仍然贴顶：日志的「内容」列会折成多行，居中会把标签甩到第二行去。
+  */
+  .tbl td.ck, .tbl td.ops { align-items: center; }
+  .tbl td.ck::before, .tbl td.ops::before { padding-top: 0; }
+
+  /*
+    ⚠️ 卡片布局下值紧跟在行内标签右边，再居中或靠右会让它飘开、上下行对不齐。
+    `.ops` 要单独写一条：桌面那条 `.tbl.acct td.ops` 与它同特异度 (0,3,1)，
+    靠<b>写在后面</b>才赢 —— 这段媒体查询在文件里必须一直排在那组规则之后。
+  */
+  .tbl.acct td,
+  .tbl.acct td.ops,
+  .tbl.log td.num { text-align: left; }
+}
+
+/*
+  手机上把可点区域放大到 40px。桌面用鼠标，36px 点得中而且更紧凑；
+  手指不是鼠标 —— iOS 的人机界面指南建议 44pt，Material 建议 48dp，
+  这里取 40px 作折中（配合 8px 的间距，实际可点区域够）。
+*/
+@media (max-width: 700px) {
+  .btn, .seg button, .inp, .chk { min-height: 40px; }
+  .inp { height: 40px; }
+}
+
+/* ── 工具条 ───────────────────────────────────────
+   flex-wrap：手机上排不下就折行，不要把最后一颗按钮切掉半个字 */
+.bar-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  row-gap: 8px;
+}
+
+.bar-tools .inp { flex: 1 1 160px; min-width: 0; }
+
+/* ── 弹窗 ─────────────────────────────────────────
+   手机上从底部铺满，桌面上居中 —— 同一份标记两种形态 */
+.mask {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgb(0 0 0 / 72%);
+}
+
+.dlg {
+  width: 100%;
+  max-width: 520px;
+  max-height: 88vh;
+  overflow-y: auto;
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@media (min-width: 560px) {
+  .mask { align-items: center; padding: 20px; }
+}
+
+.dlg .hd {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--card);
+}
+
+.dlg .hd h3 {
+  font-family: var(--orbit);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: .06em;
+  color: var(--cyan);
+}
+
+/*
+  弹窗右上角的关闭。⚠️ <b>与外壳（SettingsModal.vue 的 .x）逐条同形</b> ——
+  从程序切到管理台，同一个动作就该长同一个样，不然像是两个软件。
+  用图标而不是「关闭」两个字：右上角的 X 是所有人都不用学的东西，
+  而一颗写着字的按钮会和页脚那两颗（取消 / 保存）读成同一级，让人以为有三个出口。
+*/
+.x {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.x:hover { color: var(--danger); }
+
+/* 它没有自己的边框，所以焦点走 outline 环（有边框的控件一律是「边框转青」，别混）*/
+.x:focus-visible { outline: 2px solid var(--danger); outline-offset: -2px; }
+
+.x .ico { width: 15px; height: 15px; stroke: currentColor; stroke-width: 2; fill: none; }
+
+/* 手指不是鼠标 —— 与这一页其它可点区域同一条口径 */
+@media (hover: none) and (pointer: coarse) {
+  .x { width: 40px; height: 40px; }
+  .x .ico { width: 17px; height: 17px; }
+}
+
+.dlg .bd { padding: 14px; display: grid; gap: 12px; }
+
+.dlg .ft {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 12px 14px;
+  border-top: 1px solid var(--border);
+}
+
+.fld { display: grid; gap: 5px; }
+
+.fld > label {
+  font-family: var(--share);
+  font-size: 10.5px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--th-fg);
+}
+
+.fld .two { display: flex; gap: 8px; align-items: center; }
+.fld .two .inp { flex: 1; min-width: 0; }
+
+.err { color: var(--danger); font-size: 12px; }
+.hint { color: var(--dim4); font-size: 11.5px; line-height: 1.5; }
+
+/* ── 轻提示 ───────────────────────────────────────
+   底部：手机上顶部常被系统状态栏和浏览器地址栏占着 */
+.toasts {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  z-index: 3000;
+  display: grid;
+  gap: 8px;
+  width: max-content;
+  max-width: calc(100vw - 24px);
+  pointer-events: none;
+}
+
+.toasts div {
+  padding: 9px 14px;
+  background: var(--panel);
+  border: 1px solid var(--border2);
+  border-left: 3px solid var(--cyan);
+  color: var(--gray);
+  font-size: 12.5px;
+}
+
+.toasts div.ok { border-left-color: var(--green); }
+.toasts div.bad { border-left-color: var(--danger); }
+
+/* ── 页脚 ─────────────────────────────────────────── */
+.foot {
+  position: relative;
+  z-index: 1;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 4px var(--pad) 20px;
+  color: var(--muted);
+  font-family: var(--share);
+  font-size: 10.5px;
+  letter-spacing: .1em;
+}
+
+/* 焦点环：键盘可达（外接键盘的平板、桌面浏览器）*/
+:focus-visible { outline: 2px solid var(--green); outline-offset: 1px; }
+.inp:focus, .inp:focus-visible { outline: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}

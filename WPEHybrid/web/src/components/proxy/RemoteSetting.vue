@@ -52,9 +52,10 @@ async function save(): Promise<void> {
 </script>
 
 <template>
-  <SettingsModal :open="props.open" :title="t('set.remote')" subtitle="Controls/RemoteMGTSetting" :busy="busy" :error="error"
+  <SettingsModal :open="props.open" :title="t('set.remote')" subtitle="Remote Console" :busy="busy" :error="error"
                  @update:open="emit('update:open', $event)" @save="save">
     <div class="setf">
+      <div class="swb">
       <div class="row">
         <div class="k">{{ t('rm.enable') }}</div>
         <div class="v">
@@ -63,7 +64,9 @@ async function save(): Promise<void> {
         </div>
       </div>
       <p class="hint">{{ t('rm.hint') }}</p>
+      </div>
 
+      <section class="sec">
       <div class="grp">{{ t('rm.grp') }}</div>
       <div class="row" :class="{ off: !f.IsRemote }">
         <div class="k">{{ t('rm.listen') }}</div>
@@ -85,6 +88,7 @@ async function save(): Promise<void> {
         <div class="v"><span class="link" @click="f.IsRemote && openUrl()">{{ url }}</span></div>
       </div>
       <p class="hint">{{ t('rm.saveHint') }}</p>
+      </section>
     </div>
   </SettingsModal>
 </template>

@@ -29,6 +29,7 @@ import { useRowPick } from '../../usePick'
 import ContextMenu from '../ContextMenu.vue'
 import { ICON, type MenuItem } from '../menu'
 import PacketEdit from './PacketEdit.vue'
+import { useModal } from '../../useModal'
 
 const props = defineProps<{ id: string | null }>()
 
@@ -65,11 +66,22 @@ const error = ref('')
 /* ── 打开 / 关闭 ────────────────────────────────────────────── */
 
 /*
-  ⚠️ poll 必须声明在下面那个 immediate 的 watch 之前：它第一次跑就会调 stopPoll()，
-  而 let 有暂时性死区 —— 声明在后面就是 "Cannot access poll before initialization"，
-  只因为回调是 async 才没崩成白屏（探针页的控制台抓到的）。与 PacketEdit 那个 TDZ 同一类。
+  ⚠️ <b>下面这四个必须声明在那个 immediate 的 watch 之前。</b>
+
+  watch 的回调虽然是 async，但它在第一个 await <b>之前</b>就同步动了 picked / prog / error，
+  而 const / let 有暂时性死区 —— 声明在后面就是
+  "Cannot access 'picked' before initialization"，与 PacketEdit 那个 TDZ 同一类。
+
+  ⚠️ <b>这条在真实用法里不发作，所以特别容易漏</b>：外壳里这个弹窗是一直挂着、
+  靠 id 从 null 变成非 null 打开的，首次 immediate 那一趟走的是 id === null 的早退分支。
+  只有<b>直接带着非空 id 挂载</b>（探针页 #send 就是）才会踩到。别因为「跑起来没事」就搬回去。
 */
 let poll = 0
+
+//单击 / Ctrl / Shift 多选，全项目一份实现，见 usePick.ts
+const { picked, onRowClick, selectAll, clear } = useRowPick(rows, (r) => r.Id)
+
+const prog = ref({ Running: false, Index: -1, Total: 0, Success: 0, Fail: 0 })
 
 watch(() => props.id, async (id) => {
   if (id === null) {
@@ -131,8 +143,6 @@ async function reload(): Promise<void> {
   }
 }
 
-//单击 / Ctrl / Shift 多选，全项目一份实现，见 usePick.ts
-const { picked, onRowClick, selectAll, clear } = useRowPick(rows, (r) => r.Id)
 
 /** 类别文案走 i18n 键，与封包列表同一份，不另起译法。 */
 const typeText = computed<Record<number, string>>(() => {
@@ -217,8 +227,6 @@ async function collectionCmd(method: string): Promise<void> {
 
 /* ── 执行 ───────────────────────────────────────────────────── */
 
-const prog = ref({ Running: false, Index: -1, Total: 0, Success: 0, Fail: 0 })
-
 function stopPoll(): void {
   if (poll) { clearInterval(poll); poll = 0 }
 }
@@ -295,10 +303,24 @@ async function save(): Promise<void> {
     busy.value = false
   }
 }
+
+/* 登记进模态栈：父窗体因此变 inert；自己被后开的弹窗盖住时也会 inert。见 useModal.ts */
+const { covered } = useModal(() => props.id !== null)
 </script>
 
 <template>
-  <div v-if="props.id !== null" class="editor-mask" @mousedown.self="close">
+  <!--
+    ⚠️ <b>Teleport 到 body</b> —— 不是为了好看，是必须的，两个理由都在 useModal.ts 里：
+    ① 代理模式的 .proxy 是 z-index: 10 的层叠上下文，弹窗留在里面时遮罩盖不住标题栏；
+    ② 出去了才不会被 .shell 的 inert 一起禁掉。
+
+    ⚠️ <b>刻意不换行、不重排缩进</b>：模板里有 white-space: pre 的块，
+    整体缩进一动，Vue 模板编译器的 condense 会连带改掉渲染结果。
+
+    ⚠️ <b>点遮罩不再关闭弹窗</b>：编辑器里都是填了一半的东西，点空白处就丢掉太容易误操作。
+    出口只留「取消 / 关闭」按钮与 Esc。
+  -->
+  <Teleport to="body"><div v-if="props.id !== null" class="editor-mask" :inert="covered">
     <div class="dlg" role="dialog" aria-modal="true" @keydown.esc="close">
       <span class="mk tl" /><span class="mk tr" /><span class="mk bl" /><span class="mk br" />
 
@@ -327,7 +349,20 @@ async function save(): Promise<void> {
         <div class="row" :class="{ off: prog.Running }">
           <div class="k">{{ t('col.socket') }}</div>
           <div class="v">
-            <button class="chk" :class="{ on: f.UseSystemSocket }" :disabled="prog.Running"
+            <!--
+              ⚠️ 系统套接字没设过时<b>不给勾</b>：勾上也只会在执行时被 C# 拦下
+              （`Send.BlockedBySystemSocket`），等于让人先做一个必然失败的选择。
+
+              这里<b>不需要「已勾着的留一条取消的退路」</b> —— 「勾着 + 未设置」这个状态
+              已经不可达，靠的是三条一起成立（少一条就得把退路加回来）：
+                ① 这个勾选框只在 SystemSocket > 0 时才点得开；
+                ② SSystemSocket <b>不过库</b>，每次启动一律 false（见 LoadSendList_FromDB）；
+                ③ SystemSocket <b>只增不减</b> —— 两个 SetSystemSocket_By*Id 与机器人那条指令
+                   都只在 > 0 时才赋值，没有任何路径能把它打回 0。
+            -->
+            <button class="chk" :class="{ on: f.UseSystemSocket }"
+                    :disabled="prog.Running || f.SystemSocket <= 0"
+                    :title="f.SystemSocket <= 0 ? t('snd.e.sysSocketNeed') : ''"
                     @click="f.UseSystemSocket = !f.UseSystemSocket">
               <i />{{ t('snd.e.useSysSocket') }}
             </button>
@@ -462,7 +497,7 @@ async function save(): Promise<void> {
       <!-- 封包编辑：改的是工作副本，保存后重取一遍发送集让预览 / 长度跟上 -->
       <PacketEdit :target="editTarget" @close="editTarget = null" @saved="reload" />
     </div>
-  </div>
+  </div></Teleport>
 </template>
 
 <style scoped>
@@ -477,8 +512,8 @@ async function save(): Promise<void> {
 }
 
 .tt { flex: 1; min-width: 0; display: flex; align-items: baseline; gap: 12px; }
-.tt .zh { font-family: var(--orbit); font-size: 14px; color: var(--gray); letter-spacing: .04em; }
-.tt .sub { font-family: var(--share); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
+.tt .zh { font-family: var(--orbit); font-weight: 700; font-size: var(--fs-title); color: var(--gray); letter-spacing: .04em; }
+.tt .sub { font-family: var(--share); font-size: var(--fs-caption); letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
 
 .x {
   display: inline-flex;
@@ -495,7 +530,7 @@ async function save(): Promise<void> {
 .x:hover { border-color: var(--danger); color: var(--danger); }
 .x .ico { width: 15px; height: 15px; stroke: currentColor; stroke-width: 2; fill: none; }
 
-.loading { padding: 60px 0; text-align: center; color: var(--muted); font-size: 12.5px; }
+.loading { padding: 60px 0; text-align: center; color: var(--muted); font-size: var(--fs-body); }
 
 /*
   原来是整块滚动（.bd 自己 overflow: auto）。改成 flex 列 ——
@@ -524,42 +559,26 @@ async function save(): Promise<void> {
   min-height: 30px;
 }
 
-.row > .k { font-size: 12.5px; color: var(--muted); }
+.row > .k { font-size: var(--fs-body); color: var(--muted); }
 .row > .v { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .row.off > .k { opacity: .45; }
 
-.k2 { font-size: 12.5px; color: var(--muted); }
-.tip { font-size: 11.5px; color: var(--dim2); }
+.k2 { font-size: var(--fs-body); color: var(--muted); }
+.tip { font-size: var(--fs-small); color: var(--dim2); }
 
 /* 基样式在 style.css 的 .inp，这里只补布局 */
 .inp { flex: 1; min-width: 0; }
 
 .inp.num { flex: none; width: 92px; text-align: center; }
 
-.chk {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 0;
-  background: transparent;
-  border: 0;
-  font-size: 12.5px;
-  color: var(--muted);
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.chk i { width: 13px; height: 13px; border: 1px solid var(--dim); position: relative; flex: none; }
-.chk.on { color: var(--green); }
-.chk.on i { border-color: var(--green); background: rgb(var(--green-rgb) / 18%); }
-.chk.on i::after { content: ""; position: absolute; inset: 2px; background: var(--green); }
+/* 基样式在 style.css 的「勾选框 / 单选框」，这一屏没有需要覆盖的 */
 
 .tg {
   flex: none;
-  padding: 5px 7px 3px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
+  padding: 4px 7px 4px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
   border: 1px solid;
   font-family: var(--share);
-  font-size: 10.5px;
+  font-size: var(--fs-label);
   /* 显式 1：默认行高会把行距全压在字的下面，字在框里偏上（与按钮同一个问题）*/
   line-height: 1;
   letter-spacing: .04em;
@@ -581,7 +600,7 @@ async function save(): Promise<void> {
 
 .grow { flex: 1; }
 
-.runbar .cnt { font-size: 12px; color: var(--muted); font-family: var(--share); letter-spacing: .06em; }
+.runbar .cnt { font-size: var(--fs-label); color: var(--muted); font-family: var(--share); letter-spacing: .06em; }
 .runbar .cnt b { font-family: var(--mono); font-variant-numeric: tabular-nums; }
 .runbar .cnt.run b { color: var(--cyan); }
 .runbar .cnt.ok b { color: var(--green); }
@@ -589,7 +608,7 @@ async function save(): Promise<void> {
 
 .btn {
   flex: none;
-  padding: 9px 13px 7px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
+  padding: 8px 13px 8px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
   background: transparent;
   border: 1px solid var(--border);
   color: var(--gray);
@@ -621,8 +640,6 @@ async function save(): Promise<void> {
   height: 11px;
   margin: -1px 0;
   flex: none;
-  position: relative;
-  top: -1px;   /* 按钮上内边距比下多 2px 是给字形的补偿，图标不需要，退回 1px */
 }
 .btn.run.on { border-color: rgb(var(--danger-rgb) / 30%); color: var(--danger); }
 
@@ -675,7 +692,7 @@ async function save(): Promise<void> {
 
     只留数据列一个 1fr —— 剩余宽度全给它。
   */
-  grid-template-columns: 36px 78px 68px 142px 142px 46px minmax(160px, 1fr) 64px;   /* 序号 36（三位数够用）、类型 78（「TCP 响应」四个汉字 + 余量）、操作 64（编辑 / 删除两个按钮）*/
+  grid-template-columns: 36px 78px 74px 142px 142px 78px minmax(160px, 1fr) 96px;   /* 序号 36、类型 78、套接字 74（ru Сокет 70）、地址 142、长度 78（ru Длина 73）、操作 96（ru Действия 90）—— 都从数据列的 480 余量里出 */
   align-items: center;
   gap: 8px;
   /*
@@ -685,7 +702,7 @@ async function save(): Promise<void> {
     于是表头 14px、数据行 10px，整条表头比内容右移 4px。
   */
   padding: 0 14px;
-  font-size: 12.5px;
+  font-size: var(--fs-body);
 }
 
 .row2 {
@@ -747,9 +764,9 @@ async function save(): Promise<void> {
 .no { color: var(--dim); font-variant-numeric: tabular-nums; }
 .ty { color: var(--acc-violet); }
 .so { color: var(--muted); font-variant-numeric: tabular-nums; }
-.ad { color: var(--dim3); font-family: var(--mono); font-size: 12px; }
+.ad { color: var(--dim3); font-family: var(--mono); font-size: var(--fs-body); }
 .len { color: var(--cyan); font-variant-numeric: tabular-nums; }
-.dt { color: var(--acc-green2); font-family: var(--mono); font-size: 12px; }
+.dt { color: var(--acc-green2); font-family: var(--mono); font-size: var(--fs-body); }
 
 .ft {
   flex: none;
@@ -761,5 +778,5 @@ async function save(): Promise<void> {
   background: var(--panel);
 }
 
-.err { font-size: 12px; color: var(--danger); }
+.err { font-size: var(--fs-small); color: var(--danger); }
 </style>

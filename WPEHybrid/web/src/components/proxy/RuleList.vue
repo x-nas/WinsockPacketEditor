@@ -169,7 +169,7 @@ const ACTION_LABEL = ['PROXY', 'REJECT', 'DIRECT']
 </script>
 
 <template>
-  <SettingsModal :open="!!props.server" :title="title" subtitle="Controls/RuleList" :busy="busy" :error="error" readonly :width="860"
+  <SettingsModal :open="!!props.server" :title="title" subtitle="Node Rules" :busy="busy" :error="error" readonly :width="860"
                  @update:open="!$event && close()">
     <div class="setf list-page rl">
       <!-- 编辑区 -->
@@ -177,9 +177,9 @@ const ACTION_LABEL = ['PROXY', 'REJECT', 'DIRECT']
       <div class="row">
         <div class="k">{{ t('wpc.ruleType') }}</div>
         <div class="v">
-          <CyberSelect v-model="f.type" :options="typeOptions" class="sel" />
+          <CyberSelect v-model="f.type" :options="typeOptions" class="dd" />
           <span class="lb">{{ t('wpc.ruleAction') }}</span>
-          <CyberSelect v-model="f.action" :options="ACTIONS" class="sel sm" />
+          <CyberSelect v-model="f.action" :options="ACTIONS" class="dd sm" />
           <button class="chk" :class="{ on: f.enable }" @click="f.enable = !f.enable"><i />{{ t('col.enable') }}</button>
         </div>
       </div>
@@ -239,10 +239,15 @@ const ACTION_LABEL = ['PROXY', 'REJECT', 'DIRECT']
 </template>
 
 <style scoped>
-.sel { width: 190px; }
-.sel.sm { width: 120px; }
-.lb { font-size: 12.5px; color: var(--muted); }
-.cnt { font-family: var(--share); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+/*
+  ⚠️ 两个下拉的宽度类叫 .dd 不叫 .sel —— 这张表的行选中态<b>也</b>是 .sel
+  （`style.css` 的 `.setf .tbl .tr.sel`）。写成裸 .sel 会同特异度命中那一行，
+  把整行压成 190px，参数列的 minmax(160px, 1fr) 塌回下限、后面几列一起左移。
+*/
+.dd { width: 190px; }
+.dd.sm { width: 120px; }
+.lb { font-size: var(--fs-body); color: var(--muted); }
+.cnt { font-family: var(--share); font-size: var(--fs-label); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 
 .rl .head, .rl .tr { grid-template-columns: 46px 50px 150px minmax(160px, 1fr) 80px 44px; }
 .rl .head > span, .rl .tr > span { text-align: center; }
@@ -250,9 +255,9 @@ const ACTION_LABEL = ['PROXY', 'REJECT', 'DIRECT']
 .rl .tbody { max-height: 320px; }
 
 .no { color: var(--dim); font-variant-numeric: tabular-nums; }
-.ty { font-family: var(--mono); font-size: 12px; color: var(--cyan); }
-.arg { font-family: var(--mono); font-size: 12px; color: var(--acc-green2); }
-.act { font-family: var(--share); font-size: 10.5px; letter-spacing: .08em; }
+.ty { font-family: var(--mono); font-size: var(--fs-body); color: var(--cyan); }
+.arg { font-family: var(--mono); font-size: var(--fs-body); color: var(--acc-green2); }
+.act { font-family: var(--share); font-size: var(--fs-label); letter-spacing: .08em; }
 .act.a0 { color: var(--cyan); }
 .act.a1 { color: var(--danger); }
 .act.a2 { color: var(--green); }

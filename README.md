@@ -20,19 +20,19 @@
 
 ## [📚] 软件简介
 
-WPE x64 是一款可以拦截并修改 WinSock 封包的 Windows 软件，自适应支持 32 位及 64 位的目标程序，软件支持 SOCKS 代理和进程注入两种模式，并且具有高级滤镜和自动化机器人等功能，开发中使用了 C# 的多线程和消息队列技术，测试拦截了 100 万+的封包不会卡死或退出，软件不定期会修复 Bug 和更新功能，每次启动的时候支持在线自动更新.
+WPE x64 是一款可以拦截并修改 WinSock 封包的 Windows 软件，自适应支持 32 位及 64 位的目标程序，软件支持 SOCKS 代理和进程注入两种模式，并且具有高级滤镜和自动化机器人等功能，开发中使用了 C# 的多线程和消息队列技术，测试拦截了 100 万+的封包不会卡死或退出，软件不定期会修复 Bug 和更新功能.
 
 WPE x64 支持直接注入 Windows 进程来拦截 Winsock 封包，也可以通过 SOCKS 代理模式来拦截 Winsock 封包.
 
-本软件使用了微软的 VS2022 集成开发环境，.NET Framework 4.8 开发框架，以及 ClickOnce 部署资源。每次版本更新后，都会在启动程序时自动下载最新版本。如果更新服务器不可用，也不会导致程序无法使用。当然，如果您不希望自动更新，也可以在启动时手动关闭自动更新，或者直接下载离线打包版使用。
+本软件使用微软 VS2022 集成开发环境与 .NET Framework 4.8 开发框架。发布形态是**绿色免安装版**：整个 Release 目录打成自解压包，双击后解压到 `wpe64\<版本号>\` 即可运行，不写注册表、不需要安装。升级请到[官方网站](https://www.wpe64.com)或本仓库的 [Releases](https://github.com/x-nas/WinsockPacketEditor/releases) 下载新版本。
 
 ## [📚] Introduction
 
-WPE x64 is a Windows software that can intercept and modify WinSock packets, with adaptive support for 32-bit and 64-bit target programs. The software supports two modes: SOCKS proxy and process injection, and has advanced filters and automated robots. It uses C# multi threading and message queue technology in development, and has intercepted over 1 million packets without freezing or exiting. The software fixes bugs and updates periodically, and supports online automatic updates every time it starts.
+WPE x64 is a Windows software that can intercept and modify WinSock packets, with adaptive support for 32-bit and 64-bit target programs. The software supports two modes: SOCKS proxy and process injection, and has advanced filters and automated robots. It uses C# multi threading and message queue technology in development, and has intercepted over 1 million packets without freezing or exiting. The software fixes bugs and adds features periodically.
 
 WPE x64 supports direct injection into Windows processes to intercept Winsock packets, and can also intercept Winsock packets through SOCKS proxy mode.
 
-This software uses Microsoft's VS2022 integrated development environment NET Framework 4.8 development framework, as well as GTK deployment resources. After each version update, the latest version will be automatically downloaded when the program is launched. If the update server is unavailable, it will not cause the program to be unusable. Of course, if you do not want automatic updates, you can manually turn off automatic updates at startup or download the offline packaged version directly for use.
+This software is built with Microsoft Visual Studio 2022 and .NET Framework 4.8. It ships as a **portable build**: the whole Release folder is packed into a self-extracting archive that unpacks to `wpe64\<version>\` and runs directly — no installer and no registry writes. To upgrade, download the newer build from the [official website](https://www.wpe64.com) or this repository's [Releases](https://github.com/x-nas/WinsockPacketEditor/releases) page.
 
 ## [🎖️] 软件特色
 
@@ -56,9 +56,8 @@ This software uses Microsoft's VS2022 integrated development environment NET Fra
 - [x] 支持多线程技术，处理封包时不会影响程序的正常操作.
 - [x] 拦截封包结束后会自动处理挂钩并释放资源，避免对程序运行产生影响.
 - [x] 不会使目标程序产生资源和内存泄露风险.
-- [x] 软件安装时会自动检测必须的组件和运行库，确保NET框架已安装.
-- [x] 采用微软 ClickOnce 发布技术，支持在线自动安装和更新.
-- [x] 支持多语言版本，方便不同国家和地区的用户使用.
+- [x] 绿色免安装，解压到任意目录即可运行，不写注册表（Windows 10 1903 及以上已自带 .NET Framework 4.8）.
+- [x] 支持七种界面语言（简体中文 / 繁體中文 / English / 日本語 / 한국어 / Tiếng Việt / Русский），并有深浅两套皮肤，可跟随系统.
 
 ## [🎖️] Features
 
@@ -82,9 +81,8 @@ This software uses Microsoft's VS2022 integrated development environment NET Fra
 - [x] Support multi-threaded technology, processing packets will not affect the normal operation of the program.
 - [x] After intercepting packets, hooks will be automatically processed and resources will be released to avoid any impact on program operation.
 - [x] Will not pose a risk of resource and memory leakage to the target program.
-- [x] During software installation, necessary components and runtime libraries will be automatically detected to ensure that the NET framework is installed.
-- [x] Adopting Microsoft ClickOnce release technology, supporting online automatic installation and updates.
-- [x] Supports multiple language versions, making it convenient for users from different countries and regions to use.
+- [x] Portable build: unzip anywhere and run, with no installer and no registry writes (Windows 10 1903 and later already ship .NET Framework 4.8).
+- [x] Seven UI languages (Simplified Chinese, Traditional Chinese, English, Japanese, Korean, Vietnamese, Russian) with both dark and light themes that can follow the system.
 
 ## [🖼️] 软件界面 Software UI
 

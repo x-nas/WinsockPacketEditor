@@ -29,6 +29,7 @@ import { computed, nextTick, onMounted, ref } from 'vue'
 import { call } from '../bridge'
 import { registerForm } from '../bridge/host'
 import { t } from '../i18n'
+import { useModal } from '../useModal'
 
 interface Ask {
   Title: string
@@ -141,10 +142,24 @@ async function submit(): Promise<void> {
 function onKey(e: KeyboardEvent): void {
   caps.value = e.getModifierState?.('CapsLock') ?? false
 }
+
+/* 登记进模态栈：父窗体因此变 inert；自己被后开的弹窗盖住时也会 inert。见 useModal.ts */
+const { covered } = useModal(() => mode.value !== null)
 </script>
 
 <template>
-  <div v-if="mode" class="mask" @mousedown.self="finish(null)">
+  <!--
+    ⚠️ <b>Teleport 到 body</b> —— 不是为了好看，是必须的，两个理由都在 useModal.ts 里：
+    ① 代理模式的 .proxy 是 z-index: 10 的层叠上下文，弹窗留在里面时遮罩盖不住标题栏；
+    ② 出去了才不会被 .shell 的 inert 一起禁掉。
+
+    ⚠️ <b>刻意不换行、不重排缩进</b>：模板里有 white-space: pre 的块，
+    整体缩进一动，Vue 模板编译器的 condense 会连带改掉渲染结果。
+
+    ⚠️ <b>点遮罩不再关闭弹窗</b>：编辑器里都是填了一半的东西，点空白处就丢掉太容易误操作。
+    出口只留「取消 / 关闭」按钮与 Esc。
+  -->
+  <Teleport to="body"><div v-if="mode" class="mask" :inert="covered">
     <div class="dlg" role="dialog" aria-modal="true" @keydown.esc="finish(null)">
       <span class="mk tl" /><span class="mk tr" />
       <span class="mk bl" /><span class="mk br" />
@@ -227,7 +242,7 @@ function onKey(e: KeyboardEvent): void {
         </button>
       </footer>
     </div>
-  </div>
+  </div></Teleport>
 </template>
 
 <style scoped>
@@ -268,14 +283,14 @@ function onKey(e: KeyboardEvent): void {
   stroke-linecap: round;
 }
 
-.hd .tt { font-size: 13.5px; color: var(--gray); }
+.hd .tt { font-family: var(--orbit); font-weight: 700; font-size: var(--fs-title); letter-spacing: .04em; color: var(--gray); }
 
 .bd { padding: 14px 20px 4px; }
 
-.lead { margin: 0 0 14px; font-size: 12px; line-height: 1.7; color: var(--muted); }
+.lead { margin: 0 0 14px; font-size: var(--fs-body); line-height: 1.7; color: var(--muted); }
 
 .fld { display: grid; grid-template-columns: 68px 1fr; align-items: center; gap: 12px; margin-bottom: 10px; }
-.fld .lb { font-size: 12.5px; color: var(--muted); }
+.fld .lb { font-size: var(--fs-body); color: var(--muted); }
 .wrap { position: relative; display: flex; }
 
 .inp {
@@ -287,7 +302,7 @@ function onKey(e: KeyboardEvent): void {
   border: 1px solid var(--border);
   color: var(--gray);
   font-family: var(--mono);
-  font-size: 13px;
+  font-size: var(--fs-lead);
   letter-spacing: .06em;
   outline: none;
   user-select: text;
@@ -310,15 +325,15 @@ function onKey(e: KeyboardEvent): void {
 .eye:hover { color: var(--cyan); }
 .eye .ico { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.5; }
 
-.caps { margin: 2px 0 0 80px; font-size: 11.5px; color: var(--amber); }
-.err { margin: 2px 0 0 80px; font-size: 11.5px; color: var(--danger); }
+.caps { margin: 2px 0 0 80px; font-size: var(--fs-small); color: var(--amber); }
+.err { margin: 2px 0 0 80px; font-size: var(--fs-small); color: var(--danger); }
 
 .ft { display: flex; align-items: center; gap: 10px; padding: 14px 20px 18px; }
 .ft .grow { flex: 1; }
 
 .btn {
   min-width: 84px;
-  padding: 11px 16px 9px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
+  padding: 10px 16px 10px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
   background: transparent;
   border: 1px solid var(--border);
   color: var(--gray);

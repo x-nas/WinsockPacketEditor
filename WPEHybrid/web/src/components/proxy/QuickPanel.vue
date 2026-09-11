@@ -3,7 +3,7 @@
   快捷面板 —— 对应 WinForms 的 Controls/QuickList（滤镜 / 发送 / 机器人 / 仓库四个标签）。
 
   它的用处是「抓包时不离开这一屏就能启停规则」：勾选框直接改 IsEnable。
-  完整的增删改在各自的列表页里做（那四页还没做 Vue 版）。
+  完整的增删改在各自的列表页里做（滤镜 / 发送 / 机器人 / 仓库四个列表页都已完成）。
 
   数据全部来自 B9d 的推送通道（FeedPump 订阅 ListChanged 整表 Replace），
   这里只读前端副本，不产生往返。
@@ -13,6 +13,7 @@ import { call, on } from '../../bridge'
 import { FeedList, ListAction, type FilterRow, type RobotRow, type SendRow, type WareHouseRow } from '../../bridge/types'
 import { t, type Key } from '../../i18n'
 import { useList } from '../../stores/lists'
+import { hotkeyCount, hotkeyType, refreshHotkey } from '../../stores/runtime'
 import { pushToast } from '../../stores/toast'
 import ContextMenu from '../ContextMenu.vue'
 import { ICON, type MenuItem } from '../menu'
@@ -22,6 +23,9 @@ import WareHouseEdit from './WareHouseEdit.vue'
 import RobotEdit from './RobotEdit.vue'
 
 type TabKey = 'filter' | 'send' | 'robot' | 'warehouse'
+
+//注入模式下滤镜编辑的「作用于哪些封包」要出 8 个 WinSock 函数类别而非代理的 4 个，见 FilterEdit
+const props = withDefaults(defineProps<{ mode?: 'proxy' | 'inject' }>(), { mode: 'proxy' })
 
 const tab = ref<TabKey>('filter')
 
@@ -148,7 +152,24 @@ let offRobot: (() => void) | null = null
 onMounted(() => {
   offSend = on('send:running', (v: boolean) => { sendRunning.value = !!v })
   offRobot = on('robot:running', (v: boolean) => { robotRunning.value = !!v })
+  void refreshHotkey()
 })
+
+/*
+  ── 全局快捷键作用在哪 ──────────────────────────────────
+
+  快捷键 1–10 按<b>列表下标</b>执行第 1–10 条、「执行 / 停止」启停整份列表 ——
+  而「整份」是发送列表还是机器人列表，由快捷键设置里那个二选一决定（HotKeyType）。
+  那个开关藏在设置弹窗里，抓包时按下快捷键之前根本看不出它会动哪一边；
+  这块面板正好就摆着这两份列表，所以在<b>它作用的那个页签标题旁边</b>挂一枚键盘图标，
+  悬停出完整说明。一个快捷键都没设时不挂 —— 那时说「作用在哪」没有意义。
+
+  （2026-09-11 先做过一版面板底部的一整条「全局快捷键 → 发送列表」，按要求改成了这枚图标：
+   不占列表的可见行，而且直接指着那个页签，比一句话再去对应更快。）
+*/
+const hkList = computed<TabKey | null>(() => (hotkeyCount.value ? (hotkeyType.value === 1 ? 'robot' : 'send') : null))
+const hkName = computed(() => t(hotkeyType.value === 1 ? 'rb.e.swRobot' : 'rb.e.swSend'))
+const hkTip = computed(() => t('quick.hkTip').split('{0}').join(hkName.value))
 
 onBeforeUnmount(() => { offSend?.(); offRobot?.() })
 
@@ -282,7 +303,19 @@ async function onMenuPick(id: string): Promise<void> {
         class="ptab"
         :class="{ on: tab === x.key }"
         @click="tab = x.key"
-      >{{ t(x.label) }}</button>
+      >
+        <span class="lb">{{ t(x.label) }}</span>
+        <!--
+          全局快捷键作用在这一页上。提示挂在图标上而不是整个页签上 ——
+          整个页签悬停就弹一大段说明，每次想切页都被它挡一下。
+        -->
+        <span v-if="hkList === x.key" class="hk" :title="hkTip">
+          <svg viewBox="0 0 24 24">
+            <rect x="2" y="6" width="20" height="12" rx="1.5" />
+            <path d="M6 10h1M10 10h1M14 10h1M18 10h1M7 14h10" />
+          </svg>
+        </span>
+      </button>
     </div>
 
     <!-- 空白处也能右键：那时只出「整份列表」那一组（新增 / 全部启停 / 执行） -->
@@ -318,7 +351,7 @@ async function onMenuPick(id: string): Promise<void> {
 
     <ContextMenu :at="menuAt" :items="menuItems" @pick="onMenuPick" @close="menuAt = null" />
 
-    <FilterEdit :id="editing" @close="editing = null" />
+    <FilterEdit :id="editing" :mode="props.mode" @close="editing = null" />
     <SendEdit :id="editingSend" @close="editingSend = null" />
     <WareHouseEdit :id="editingHouse" @close="editingHouse = null" />
     <RobotEdit :id="editingRobot" @close="editingRobot = null" />
@@ -343,7 +376,9 @@ async function onMenuPick(id: string): Promise<void> {
   flex: 0 1 auto;
   min-width: 0;
   overflow: hidden;
-  text-overflow: ellipsis;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   padding: 2px 11px 0;   /* 定高按钮：上 2 下 0，把偏上 1px 的字形压回中线 */
   background: transparent;
   border: 0;
@@ -363,9 +398,20 @@ async function onMenuPick(id: string): Promise<void> {
 .ptab.on { color: var(--green); border-bottom-color: var(--green); }
 .ptab:focus-visible { outline-offset: -2px; }
 
+/* 截断挪到文字那一格：页签收窄时省略号吃文字，键盘图标永远完整 */
+.ptab .lb { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+
+/*
+  全局快捷键图标。青色 —— 页签的选中态是绿、未选是灰，青与两者都分得开，
+  而且与「就绪 / 配置类」的色语一致（它说的是一条配置，不是在跑）。
+*/
+/* 页签是「上 2 下 0」的内边距（给字形偏上的补偿），几何图标不需要那 1px，退回去（实测改前低 1.2px）*/
+.ptab .hk { flex: none; display: flex; color: var(--cyan); position: relative; top: -1px; }
+.ptab .hk svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
+
 .pbody { flex: 1; min-height: 0; overflow-y: auto; padding: 6px 0; }
 
-.empty { padding: 22px 0; text-align: center; color: var(--muted); font-size: 12px; }
+.empty { padding: 22px 0; text-align: center; color: var(--muted); font-size: var(--fs-body); }
 
 /*
   整行<b>不再是按钮</b>，所以 cursor 保持默认 —— 手型会把「点一下就会怎样」
@@ -373,7 +419,7 @@ async function onMenuPick(id: string): Promise<void> {
   滤镜那栏可以双击开编辑，光标给 text 太弱、给 pointer 又是骗人，
   就交给行悬停的底色提示"这一行是可交互的"。
 */
-.qrow { display: flex; align-items: center; gap: 9px; padding: 3px 12px; font-size: 12px; }
+.qrow { display: flex; align-items: center; gap: 9px; padding: 3px 12px; font-size: var(--fs-body); }
 .qrow:hover { background: rgb(var(--tint-rgb) / 3%); }
 
 /* 只有滤镜那栏双击有反应，让它自己带上文字光标以外的提示 */
@@ -407,7 +453,7 @@ async function onMenuPick(id: string): Promise<void> {
   line-height: 1;
   letter-spacing: .12em;
   text-transform: uppercase;
-  padding: 4px 6px 2px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
+  padding: 3px 6px 3px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
   border: 1px solid var(--border2);
   color: var(--th-fg);
 }

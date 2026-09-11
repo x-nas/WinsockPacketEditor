@@ -29,14 +29,6 @@ namespace WinsockPacketEditor.Ipc
         private static FilterInfo[] _snapshot;
 
         /// <summary>
-        /// 当前快照；null 表示「没有无头核心，走 BindingList」。
-        /// </summary>
-        public static FilterInfo[] Snapshot
-        {
-            get { return Volatile.Read(ref _snapshot); }
-        }
-
-        /// <summary>
         /// 滤镜引擎该遍历的那一份表。
         ///
         /// ⚠️ <b>调用方必须把返回值存进局部变量再遍历</b>，不要写成
@@ -57,12 +49,6 @@ namespace WinsockPacketEditor.Ipc
         {
             var arr = new List<FilterInfo>(filters).ToArray();
             Volatile.Write(ref _snapshot, arr);
-        }
-
-        /// <summary>撤掉快照，回到「遍历 BindingList」。外壳侧本来就是这个状态。</summary>
-        public static void ClearSnapshot()
-        {
-            Volatile.Write(ref _snapshot, null);
         }
     }
 

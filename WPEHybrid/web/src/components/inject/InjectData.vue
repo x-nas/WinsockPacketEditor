@@ -27,21 +27,59 @@ import { ICON, type MenuItem } from '../menu'
 import PacketEdit from '../proxy/PacketEdit.vue'
 import PacketModification from '../proxy/PacketModification.vue'
 import QuickPanel from '../proxy/QuickPanel.vue'
+//图例上点色块开的配色弹窗 —— 与代理数据页同一个组件（滤镜配色是两种模式共用的）
+import ActionColor from '../proxy/ActionColor.vue'
 import InjectBar from './InjectBar.vue'
 import type { SettingKey } from '../proxy/settings'
 
 const emit = defineEmits<{
   (e: 'toggleHook'): void
   (e: 'clear'): void
-  (e: 'detach'): void
   (e: 'openSetting', key: SettingKey): void
 }>()
 
 const props = defineProps<{ busy: boolean }>()
 
 const prefs = ref<Prefs | null>(null)
+
+/*
+  正在改配色的那一组动作（工具条上那排色块点开的），null = 没开。
+  取当前值直接从 prefs 拿 —— 图例画的就是它，不必再往返一次。
+*/
+const colorEdit = ref<string | null>(null)
+
+async function reloadPrefs(): Promise<void> {
+  try {
+    //改完立刻重取：图例与列表的行配色都吃这份 prefs，重取就地生效
+    prefs.value = await call<Prefs>('getPrefs')
+  } catch (e) {
+    console.error('[inject] 重取界面偏好失败', e)
+  }
+}
+
+/*
+  行底色图例。四组与 PacketList 的 colorOf() 一一对应 ——
+  那里按 FilterAction 取 prefs.filter 的某一组打行内样式，这里就把同一组摊出来。
+
+  ⚠️ 与代理数据页<b>逐条相同</b>：滤镜是两种模式共用的（注入模式下它跑在目标进程里），
+  同一条规则命中之后行的底色也一样，图例没有理由只在一边有。
+
+  <b>没有「不显示」那一档</b>：NoModify_NoDisplay 的行根本不进列表，
+  给一个永远看不到的颜色配图例只会让人去找它。
+  colorOf 的 default 分支（未命中滤镜）也不列 —— 那是「没有底色」，不是一种底色。
+*/
+const ROW_LEGEND = computed(() => {
+  const f = prefs.value?.filter
+  if (!f) return []
+
+  return [
+    { key: 'replace', label: 'proxy.act.replace' as const, pair: f.replace },
+    { key: 'change', label: 'proxy.act.change' as const, pair: f.change },
+    { key: 'intercept', label: 'proxy.act.intercept' as const, pair: f.intercept },
+    { key: 'display', label: 'proxy.act.display' as const, pair: f.display },
+  ]
+})
 const rows = injectFeed.rows
-const stat = injectFeed.stat
 
 const selected = ref<PacketRow | null>(null)
 const selectedId = ref<number | null>(null)
@@ -152,28 +190,45 @@ const cells = computed(() => {
   const s = stats.value
   const st = injectFeed.stat.value
 
+  /*
+    ⚠️ **顺序照代理数据页的口径排**，两屏切过去眼睛不用重新找位置：
+
+    | 列 | 行 1 | 行 2 | 与代理的对应 |
+    |---|---|---|---|
+    | 1 | Total（封包总数）| Filter（滤镜执行）| 代理第 1 列也是 Total 那个「总计」|
+    | 2~5 | **发**的四类 | **收**的四类 | 代理第 2~5 列是 TCP/UDP 与它们的请求·响应 |
+    | 6 | Queue（待入列）| Filtered（已过滤）| 代理也是 Filtered / Queue 挨在 Bytes 前面 |
+    | 7 | **Bytes** | **Rate** | 代理正是 Bytes / Speed 各落在两行末尾（那边注释写着「视觉上成对」）|
+
+    第 2~5 列还多一层：上下<b>一一对应</b>（Send↔Recv · SendTo↔RecvFrom ·
+    WSASend↔WSARecv · WSASendTo↔WSARecvFrom），竖着看就是同一个 API 的收发两头。
+    ⚠️ 改这张表的顺序之前先想清楚破坏的是哪一条 —— 这四对是有意竖排的。
+  */
   return [
-    { k: 'Total', z: t('inject.st.total'), v: n(s?.total), tone: 'c' },
+    { k: 'Total', z: t('inject.st.total'), v: n(s?.total), tone: 'g' },
     { k: 'Send', z: t('pt.ws2Send'), v: n(s?.send), tone: 'g' },
     { k: 'SendTo', z: t('pt.ws2SendTo'), v: n(s?.sendTo), tone: 'g' },
-    { k: 'Recv', z: t('pt.ws2Recv'), v: n(s?.recv), tone: 'g' },
-    { k: 'RecvFrom', z: t('pt.ws2RecvFrom'), v: n(s?.recvFrom), tone: 'g' },
     { k: 'WSASend', z: t('pt.wsaSend'), v: n(s?.wsaSend), tone: 'g' },
     { k: 'WSASendTo', z: t('pt.wsaSendTo'), v: n(s?.wsaSendTo), tone: 'g' },
-
-    { k: 'WSARecv', z: t('pt.wsaRecv'), v: n(s?.wsaRecv), tone: 'g' },
-    { k: 'WSARecvFrom', z: t('pt.wsaRecvFrom'), v: n(s?.wsaRecvFrom), tone: 'g' },
-    //目标报上来的滤镜执行次数（引擎在那边跑）
-    { k: 'Filter', z: t('inject.st.filterExec'), v: n(s?.filterExecute), tone: 'a' },
-    //被「过滤设置」挡掉、没进列表的条数（外壳这边 FlushToFeed 数的）
-    { k: 'Filtered', z: t('inject.st.filtered'), v: n(s?.filterPacket), tone: 'a' },
     { k: 'Queue', z: t('inject.st.queue'), v: n(s?.queue), tone: (s?.queue || 0) > 5000 ? 'a' : 'g' },
+    /*
+      总流量这一格是双值的：大字给合计，小字给 ↑发 / ↓收 的拆分 —— 与代理那格同一种排法。
+    */
     {
       k: 'Bytes',
       z: '↑ ' + bytes(s?.totalSend) + ' · ↓ ' + bytes(s?.totalRecv),
       v: bytes((s?.totalSend || 0) + (s?.totalRecv || 0)),
       tone: 'c',
     },
+
+    //目标报上来的滤镜执行次数（引擎在那边跑）
+    { k: 'Filter', z: t('inject.st.filterExec'), v: n(s?.filterExecute), tone: 'a' },
+    { k: 'Recv', z: t('pt.ws2Recv'), v: n(s?.recv), tone: 'g' },
+    { k: 'RecvFrom', z: t('pt.ws2RecvFrom'), v: n(s?.recvFrom), tone: 'g' },
+    { k: 'WSARecv', z: t('pt.wsaRecv'), v: n(s?.wsaRecv), tone: 'g' },
+    { k: 'WSARecvFrom', z: t('pt.wsaRecvFrom'), v: n(s?.wsaRecvFrom), tone: 'g' },
+    //被「过滤设置」挡掉、没进列表的条数（外壳这边 FlushToFeed 数的）
+    { k: 'Filtered', z: t('inject.st.filtered'), v: n(s?.filterPacket), tone: 'a' },
     /*
       速率是前端自己按推送量算的（每 500ms 结算一次），与目标无关。
 
@@ -189,6 +244,7 @@ const cells = computed(() => {
       tone: 'a',
     },
   ]
+
 })
 
 /*
@@ -542,14 +598,11 @@ defineExpose({ onCleared })
 </script>
 
 <template>
-  <div class="page">
+  <div class="datapage">
     <InjectBar
       :busy="props.busy"
-      :rate="stat.rate"
-      :rows="rows.length"
       @toggle-hook="emit('toggleHook')"
       @clear="emit('clear')"
-      @detach="emit('detach')"
       @open-setting="emit('openSetting', $event)"
     />
 
@@ -589,6 +642,25 @@ defineExpose({ onCleared })
 
     <div class="grid">
       <div class="gtool">
+        <!--
+          行底色图例。位置与代理数据页一致：放在搜索框<b>之前</b>而不是表格下沿 ——
+          这一屏高度紧张，单独一条占掉的是封包能看见的行数，
+          而工具条这一行本来就有富余的横向空间。
+
+          <b>色块必须取自 prefs</b>（C# 的 UiPrefs，用户可改），不能写死十六进制。
+          点色块就地改这一组的配色 —— 挑颜色要看着它在表里的样子。
+        -->
+        <span v-if="prefs" class="plegend">
+          <button
+            v-for="x in ROW_LEGEND"
+            :key="x.key"
+            class="lg"
+            :style="{ background: x.pair.back, color: x.pair.fore }"
+            :title="t('set.colorTip')"
+            @click="colorEdit = x.key"
+          >{{ t(x.label) }}</button>
+        </span>
+
         <!--
           查找封包。Enter = 查找下一个，Esc = 清空；右边两个按钮是「文本 / 十六进制」与「从头查找」。
           没有独立的「向下搜索」单选 —— 主按钮本身就是向下找，找到末尾自己回头再来一圈。
@@ -660,6 +732,7 @@ defineExpose({ onCleared })
         :picked="picked"
         :follow="follow"
         @select="onSelect"
+      @open="(r: any) => (editTarget = { list: 'packet', id: r.Id })"
         @menu="onMenu"
       />
 
@@ -668,10 +741,19 @@ defineExpose({ onCleared })
       <!-- 封包编辑：保存后 C# 按行 UI.Feed.Update 推回来，这里不用做别的 -->
       <PacketEdit :target="editTarget" @close="editTarget = null" />
       <PacketModification :id="modifyId" list="packet" @close="modifyId = null" />
+
+      <!-- 图例上点色块开的配色弹窗，与代理数据页同一个组件 -->
+      <ActionColor
+        :action="colorEdit"
+        :fore="ROW_LEGEND.find((x) => x.key === colorEdit)?.pair.fore || '#ffffff'"
+        :back="ROW_LEGEND.find((x) => x.key === colorEdit)?.pair.back || '#000000'"
+        @close="colorEdit = null"
+        @saved="reloadPrefs"
+      />
     </div>
 
     <div class="lower">
-      <QuickPanel />
+      <QuickPanel mode="inject" />
       <!-- packetType 只用来决定默认按文本还是十六进制看（HTTP 那四类默认文本）-->
       <HexPanel :id="selectedId" list="packet" :packet-type="selected?.Type ?? null" :highlight="searchHit" />
     </div>
@@ -679,109 +761,24 @@ defineExpose({ onCleared })
 </template>
 
 <style scoped>
-.page {
-  flex: 1;
-  min-width: 0;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 10px 12px 12px;
-  /* 兜底：收到最紧还是装不下时能滚，别被裁掉。与代理数据页同一条 */
-  overflow-y: auto;
-}
+/*
+  这一屏的骨架与工具条都在 style.css 里（`.datapage` / `.gtool` 两族），
+  与代理数据页<b>共用同一份</b> —— 2026-09-10 收拢的，此前各抄一份、已经抄歪了
+  （`.st-c .z` 一个 10px 一个 10.5px、`.list` 少一句 border-radius、图例整块没有）。
 
-/* 统计：7 列 × 2 行，1px 发丝线分隔 —— 与代理数据页那块逐条对齐 */
-.stats {
-  flex: none;
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-}
+  这里只剩注入这一屏独有的一条。
+*/
 
-.st-c { background: var(--card); padding: 6px 11px; min-width: 0; }
-
-.st-c .k {
-  font-family: var(--share);
-  font-size: 9px;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--muted);
-  /* 与代理数据页同一条：标题长了截断，别把固定高度的统计格顶成两行 */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.st-c .v {
-  font-family: var(--orbit);
-  font-weight: 800;
-  font-size: 17px;
-  line-height: 1.25;
-  color: var(--green);
-  /* 数字每 500ms 变一次，等宽才不会让整格宽度抖动 */
-  font-variant-numeric: tabular-nums;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.st-c .v.c { color: var(--cyan); }
-.st-c .v.a { color: var(--amber); }
-
-.st-c .z {
-  font-size: 10.5px;
-  color: var(--muted);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
+/*
+  目标没了之后的提示条。
+  ⚠️ 数据仍留在列表里（那正是这时候要看的东西），所以是「提示」不是「清空」。
+*/
 .lostbar {
   flex: none;
   padding: 7px 14px 5px;
   background: rgb(var(--danger-rgb) / 8%);
   border: 1px solid rgb(var(--danger-rgb) / 30%);
   color: var(--danger);
-  font-size: 12px;
-}
-
-/* 与代理数据页同一套比例：表占上面 3 份、下半部 1 份，各自有地板 */
-.grid {
-  flex: 3 1 0;
-  min-height: 220px;
-  border: 1px solid var(--border);
-  background: var(--card);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.list { flex: 1; min-height: 0; border: 0; }
-
-/* 下半部：快捷面板 + 十六进制，与代理数据页同一套栅格与比例 */
-.lower {
-  flex: 1 1 0;
-  min-height: 180px;
-  display: grid;
-  grid-template-columns: minmax(300px, 22%) 1fr;
-  gap: 8px;
-}
-
-/*
-  矮窗口下的收缩 —— 与代理数据页那一份逐条对应，改一处就要改另一处。
-  理由与实测见 ProxyData.vue 里同名的那段注释（默认窗口是设备像素，
-  125% 缩放下这一屏只有约 564px 可用，而它要 626px）。
-*/
-@media (max-height: 760px) {
-  .grid { min-height: 150px; }
-  .lower { min-height: 140px; }
-}
-
-@media (max-height: 660px) {
-  .grid { min-height: 120px; }
-  .lower { min-height: 120px; }
+  font-size: var(--fs-small);
 }
 </style>

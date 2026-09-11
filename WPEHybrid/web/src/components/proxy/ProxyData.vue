@@ -8,7 +8,7 @@
     ③ 数据表           —— 定高虚拟滚动，B10 那个 PacketList 原样复用
     ④ 快捷面板 + 十六进制
 
-  【工具条上那几个 Dev 按钮是开发/验收工具，不是产品功能】
+  【「设置 ▾」菜单末尾那两个 Dev 项是开发/验收工具，不是产品功能】
   发布前整块删掉，见 CLAUDE.md「发布前必须清掉的东西」。
 */
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
@@ -129,6 +129,20 @@ const report = ref<string[]>([])
 const reportOpen = ref(false)
 const reportPass = ref<boolean | null>(null)
 const reportText = computed(() => report.value.join(String.fromCharCode(10)))
+
+/*
+  两个 Dev 入口挂在状态条「设置 ▾」菜单的末尾（2026-09-11 从封包表工具条上挪过来）：
+  它们原来独占工具条的第二行，125% 缩放下那一行直接吃掉封包列表一行半的可见高度。
+*/
+const devItems = computed<MenuItem[]>(() => [
+  { id: 'dev:lists', label: 'Dev · 列表通道' },
+  { id: 'dev:accept', label: accepting.value ? 'Dev · 跑测中…' : 'Dev · 验收跑测', disabled: accepting.value },
+])
+
+function onDev(id: string): void {
+  if (id === 'dev:lists') listsOpen.value = true
+  else if (id === 'dev:accept' && !accepting.value) void runAccept()
+}
 // ▲▲▲ Dev ▲▲▲
 
 let detach: (() => void) | null = null
@@ -670,8 +684,9 @@ async function runAccept(): Promise<void> {
 </script>
 
 <template>
-  <div class="page">
-    <RunBar @clear="clearAll" @open-setting="setting = $event" />
+  <div class="datapage">
+    <!-- extra-items / @extra 两处是 Dev，发布前随 devItems 一起删 -->
+    <RunBar :extra-items="devItems" @clear="clearAll" @open-setting="setting = $event" @extra="onDev" />
 
     <ProxySetting
       :open="setting === 'proxy'"
@@ -703,7 +718,8 @@ async function runAccept(): Promise<void> {
       @update:open="setting = $event ? 'system' : null"
     />
 
-    <ProcessSetting :open="setting === 'process'" @update:open="setting = $event ? 'process' : null" />
+    <!-- goto：进程设置第 4 步的「打开代理设置」—— 只是导航，那一屏不代管别人的配置 -->
+    <ProcessSetting :open="setting === 'process'" @update:open="setting = $event ? 'process' : null" @goto="setting = $event" />
     <MapSetting :open="setting === 'map'" @update:open="setting = $event ? 'map' : null" />
     <ExtProxySetting :open="setting === 'extproxy'" @update:open="setting = $event ? 'extproxy' : null" />
     <HotkeySetting :open="setting === 'hotkey'" @update:open="setting = $event ? 'hotkey' : null" />
@@ -833,15 +849,10 @@ async function runAccept(): Promise<void> {
           >
         </span>
 
-        <!-- ▼▼▼ Dev：发布前整条删掉 ▼▼▼ -->
         <!--
-          灌包按钮已去掉：代理服务能真跑之后，拿真实流量测比生成的假包更有意义。
+          Dev 那两个按钮（列表通道 / 验收跑测）已挪进状态条「设置 ▾」菜单的末尾，见 script 里的 devItems。
           C# 侧的 devGeneratePackets 仍要留着 —— 验收跑测的第 ③ 项（取字节 p95）在用它。
         -->
-        <span class="lbl">Dev</span>
-        <button class="tb" @click="listsOpen = true">列表通道</button>
-        <button class="tb" :disabled="accepting" @click="runAccept">{{ accepting ? '跑测中…' : '验收跑测' }}</button>
-        <!-- ▲▲▲ Dev ▲▲▲ -->
       </div>
 
       <PacketList
@@ -852,6 +863,7 @@ async function runAccept(): Promise<void> {
         :picked="picked"
         :follow="autoRoll"
         @select="onSelect"
+      @open="(r: any) => (editTarget = { list: 'proxy', id: r.Id })"
         @menu="onMenu"
       />
 
@@ -893,191 +905,18 @@ async function runAccept(): Promise<void> {
 
 <style scoped>
 /*
-  工具条那一套（.gtool / .search / .sinp / .chk / .num / .tb）已经收进
-  style.css —— 注入模式的封包页用的是同一套结构，抄第二份就会开始走样。
-  这里只留这一屏独有的：统计格、图例、下半部的栅格、以及 Dev 那几条。
+  这一屏的骨架（`.datapage` / `.stats` / `.st-c` / `.grid` / `.list` / `.lower` /
+  `.plegend` / 两档矮窗口收缩）与工具条那一套（`.gtool` / `.search` / `.chk` / `.num` / `.tb`）
+  都在 style.css 里 —— 注入模式的封包页用的是<b>同一份</b>，2026-09-10 收拢的。
+
+  这里只剩 Dev 那一条（验收报告的正文），它本来就要整块删掉。
 */
-.page {
-  flex: 1;
-  min-width: 0;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 10px 12px 12px;
-  /*
-    兜底：收到最紧还是装不下时让它能滚。
-    原来是 visible，装不下就被 body 的 overflow: hidden 裁掉 —— 那一截既看不见也滚不到。
-  */
-  overflow-y: auto;
-}
-
-/* 统计：7 列 × 2 行，1px 发丝线分隔 */
-.stats {
-  flex: none;
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-}
-
-.st-c { background: var(--card); padding: 6px 11px; min-width: 0; }
-
-.st-c .k {
-  font-family: var(--share);
-  font-size: 9px;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--muted);
-  /*
-    与 .v / .z 同样的兜底：格子只有七分之一屏宽，标题长了宁可截断 ——
-    折成两行会把整块统计格顶高一行，那是<b>固定高度</b>的一块，
-    顶高就直接吃掉封包列表的可见行数。
-  */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.st-c .v {
-  font-family: var(--orbit);
-  font-weight: 800;
-  font-size: 17px;
-  line-height: 1.25;
-  color: var(--green);
-  /* 数字每 500ms 变一次，等宽才不会让整格宽度抖动 */
-  font-variant-numeric: tabular-nums;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.st-c .v.c { color: var(--cyan); }
-.st-c .v.a { color: var(--amber); }
-.st-c .z {
-  font-size: 10px;
-  color: var(--muted);
-  line-height: 1.3;
-  /* 与 .v 同样的兜底：格子只有七分之一屏宽，宁可截断也不要把网格顶变形 */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/*
-  数据表。与下半部按 <b>3 : 1</b> 分高度 —— 窗口放大时两边一起长，
-  而不是像原来那样「封包列表独吞、下半部永远 208px」。
-
-  写 flex: 3 1 0 而不是 flex: 3（后者的 basis 是 0%，在这里等价，
-  但显式写出来才看得出比例是按<b>整个高度</b>分的，不是按剩余空间）。
-  min-height 是地板：窗口压到很矮时先保证表头 + 几行可见。
-*/
-.grid {
-  flex: 3 1 0;
-  min-height: 220px;
-  border: 1px solid var(--border);
-  background: var(--card);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-
-.list { flex: 1; min-height: 0; border: 0; border-radius: 0; }
-
-/*
-  行底色图例。贴在表格下沿、与表同宽，读的时候视线不用离开这张表。
-
-  色块<b>直接用行的配色画</b>（底色 + 文字色），而不是「小方块 + 说明文字」——
-  这样看到的就是行本身的样子，不用在脑子里再做一次映射。
-*/
-/*
-  行底色图例。工具条上一段，<b>不参与收缩</b>（flex: none）——
-  搜索框是 flex: 1，窗口一窄就该由它让位，图例被压扁会让色块变形、字被截断。
-*/
-.plegend { flex: none; display: flex; align-items: center; gap: 4px; }
-
-/* 色块是按钮：点开就改这一组的配色。边框清掉，只留纯色块 */
-.plegend .lg {
-  padding: 2px 8px;
-  border: 0;
-  cursor: pointer;
-  font-family: var(--share);
-  font-size: 9.5px;
-  letter-spacing: .1em;
-  white-space: nowrap;
-}
-
-/* 悬停给一道浅描边 —— 不动底色，底色本身就是要展示的东西 */
-.plegend .lg:hover { box-shadow: inset 0 0 0 1px rgb(var(--tint-rgb) / 45%); }
-.plegend .lg:focus-visible { outline-offset: 1px; }
-
-/*
-  下半部：快捷面板 + 十六进制。占上半部的 1/3（见 .grid 那段）。
-
-  原来是写死的 208px：窗口拉高时它一动不动，十六进制永远只看得见那么几行。
-  min-height 180 是地板 —— 再矮的话四个页签加上表头就没有内容区了。
-
-  横向：快捷面板从 360 收到 320 —— 它只放「勾选 + 规则名 + 标记」三段，320 绰绰有余，
-  省下的给十六进制（那边每行字节数是按宽度跳档的，多几十像素常常正好够跨过一档）。
-  改成 minmax(300px, 22%) 之后它也跟着窗口长，但涨得比十六进制慢，
-  宽屏下多出来的宽度主要还是给十六进制 —— 那才是真正吃宽度的一侧。
-*/
-.lower {
-  flex: 1 1 0;
-  min-height: 180px;
-  display: grid;
-  grid-template-columns: minmax(300px, 22%) 1fr;
-  gap: 8px;
-}
-
-
-/*
-  ── 矮窗口下的收缩 ───────────────────────────────────────────
-
-  这一屏是<b>四层竖着摞</b>的：状态条 54 + 统计格 126 + 封包表(min 220) + 下半部(min 180)，
-  加上间距与内边距一共要 <b>626px</b>。而窗口给的高度是 100vh − 46(标题栏) − 30(状态栏)。
-
-  ⚠️ <b>默认窗口 ClientSize 1280×800 是设备像素</b>，页面拿到的是 CSS 像素 = 设备像素 ÷ 缩放比：
-  100% 缩放下有 800、125% 只剩 640、150% 只剩 533 —— 再扣掉 76，
-  125% 下这一屏只有约 564px 可用，而它要 626px。
-  差的那 60px 原来<b>直接被裁掉</b>（.page 是 overflow: visible，body 又 hidden），
-  快捷面板与十六进制面板的下半截既看不见也滚不到。
-
-  两个动作：
-    ① 窗口矮下来时把两块地板和统计格一起收紧（下面两档）——
-       这一屏是「一眼看全」的，能收就别让它滚；
-    ② .page 补一个 overflow-y: auto 当<b>兜底</b>。收到最紧还是装不下时，
-       至少内容是<b>能滚到</b>的，而不是被裁掉。
-
-  为什么不是「直接上滚动条了事」：抓包时下半部的十六进制面板与封包表要<b>同时</b>看，
-  一滚就等于把正在看的那半屏推走了。滚动条只配当地板，不配当方案。
-*/
-@media (max-height: 760px) {
-  .grid { min-height: 150px; }
-  .lower { min-height: 140px; }
-}
-
-@media (max-height: 660px) {
-  .grid { min-height: 120px; }
-  .lower { min-height: 120px; }
-}
 
 /* ▼▼▼ Dev 样式：发布前一并删掉 ▼▼▼ */
-.gtool .lbl {
-  font-family: var(--share);
-  font-size: 10px;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--dim);
-}
-
-
 .rep {
   margin: 0;
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: var(--fs-body);
   line-height: 1.65;
   white-space: pre-wrap;
   word-break: break-all;

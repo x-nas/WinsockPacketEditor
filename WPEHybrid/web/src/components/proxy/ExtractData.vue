@@ -82,6 +82,16 @@ function toBase64(buf: ArrayBuffer): string {
   return btoa(s)
 }
 
+/*
+  ⚠️ `dragleave` 在<b>子元素之间移动</b>时也会冒上来 —— 直接 `over = false`
+  会让覆盖层在整页上疯狂闪。判一下鼠标是不是真的离开了这棵子树。
+*/
+function onDragLeave(e: DragEvent): void {
+  const to = e.relatedTarget as Node | null
+  if (to && (e.currentTarget as HTMLElement).contains(to)) { return }
+  over.value = false
+}
+
 async function onDrop(e: DragEvent): Promise<void> {
   over.value = false
   const f = e.dataTransfer?.files?.[0]
@@ -143,7 +153,21 @@ function clearAll(): void {
 </script>
 
 <template>
-  <div class="page list-page ex">
+  <!--
+    整页都能拖文件进来（原来是页面中间一块常驻的拖放区，按要求去掉了 ——
+    工具条第一颗就是「选择文件」，那一块占的是结果区的高度）。
+    ⚠️ 能力没丢：拖进浏览器的文件只有内容没有路径，仍走 base64 那条路。
+  -->
+  <div
+    class="page list-page ex"
+    :class="{ over }"
+    @dragover.prevent="over = true"
+    @dragleave="onDragLeave"
+    @drop.prevent="onDrop"
+  >
+    <div v-if="over" class="dropveil">
+      <span>{{ t('ex.drop') }} · {{ t('ex.in') }} <b>{{ cur.ext }}</b></span>
+    </div>
     <div class="bar">
       <button class="btn" :disabled="busy" @click="pick">{{ t('ex.pick') }}</button>
       <span class="grow" />
@@ -172,23 +196,6 @@ function clearAll(): void {
       </button>
     </div>
 
-    <!-- 拖放区：没有结果时占满，有结果时缩成一条，让位给文本 -->
-    <div
-      class="drop"
-      :class="{ over, slim: !!exText, busy }"
-      @dragover.prevent="over = true"
-      @dragleave="over = false"
-      @drop.prevent="onDrop"
-      @click="!exText && pick()"
-    >
-      <svg class="ico" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5" /><path d="M4 20h16" /></svg>
-      <div class="tx">
-        <div class="t1">{{ busy ? t('proxy.working') : (exText ? t('ex.dropAgain') : t('ex.drop')) }}</div>
-        <div class="t2">
-          {{ t('ex.in') }} <b>{{ cur.ext }}</b> · {{ t('ex.out') }} <b class="o">{{ cur.out }}</b>
-        </div>
-      </div>
-    </div>
 
     <div v-if="exText" class="res">
       <div class="ph">
@@ -244,55 +251,50 @@ function clearAll(): void {
   box-shadow: inset 3px 0 0 var(--cyan);
 }
 
-.kn { font-size: 12.5px; color: var(--gray); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.kn { font-size: var(--fs-body); color: var(--gray); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 .kd.on .kn { color: var(--cyan); }
 
-.kf { display: flex; align-items: baseline; gap: 6px; font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
+.kf { display: flex; align-items: baseline; gap: 6px; font-family: var(--mono); font-size: var(--fs-small); color: var(--muted); }
 .kf b { font-weight: 400; color: var(--soft); }
 .kf b.o { color: var(--green); }
 .kf i { font-style: normal; color: var(--dim); }
 
-.kdz { font-size: 11px; color: var(--dim2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.kdz { font-size: var(--fs-small); color: var(--dim2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 
 /* ── 拖放区 ── */
-.drop {
-  flex: 1;
-  min-height: 0;
+/*
+  拖文件进来时的覆盖层。原来那一大块常驻的拖放区已经去掉（工具条第一颗就是「选择文件」），
+  现在整页都能接文件，只在真的拖着东西悬停时才浮这一层。
+
+  ⚠️ **必须 `pointer-events: none`** —— 它盖在页面上，一旦吃事件，
+  盖住的那一刻就等于「拖出去了」，`dragleave` / `dragover` 会开始互相打架、整层闪个不停。
+*/
+.dropveil {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 14px;
-  padding: 24px;
-  border: 1px dashed var(--border2);
-  background:
-    linear-gradient(rgb(var(--cyan-rgb) / 3%), transparent),
-    repeating-linear-gradient(0deg, transparent 0 39px, rgb(var(--tint-rgb) / 2.5%) 39px 40px),
-    repeating-linear-gradient(90deg, transparent 0 39px, rgb(var(--tint-rgb) / 2.5%) 39px 40px);
-  color: var(--muted);
-  cursor: pointer;
-  transition: border-color .15s, background-color .15s;
+  pointer-events: none;
+  background: rgb(var(--scrim-rgb) / 55%);
+  border: 1px dashed var(--cyan);
+  color: var(--cyan);
+  font-size: var(--fs-lead);
+  letter-spacing: .04em;
 }
 
-.drop:hover { border-color: var(--dim); }
-.drop.over { border-color: var(--cyan); background-color: rgb(var(--cyan-rgb) / 5%); color: var(--cyan); }
-.drop.busy { pointer-events: none; opacity: .6; }
+.dropveil b { font-family: var(--mono); font-weight: 400; }
 
-.drop .ico { width: 34px; height: 34px; stroke: currentColor; stroke-width: 1.6; fill: none; opacity: .8; }
-.drop .tx { text-align: center; }
-.drop .t1 { font-size: 13px; color: var(--gray); }
-.drop .t2 { margin-top: 6px; font-size: 11.5px; color: var(--dim2); }
-.drop .t2 b { font-family: var(--mono); font-weight: 400; color: var(--cyan); }
-.drop .t2 b.o { color: var(--green); }
-
-/* 有结果之后收成一条横幅，仍然能接着拖 */
-.drop.slim { flex: none; flex-direction: row; justify-content: flex-start; gap: 12px; padding: 8px 14px; cursor: default; }
-.drop.slim .ico { width: 18px; height: 18px; }
-.drop.slim .tx { text-align: left; display: flex; align-items: baseline; gap: 12px; }
-.drop.slim .t1 { font-size: 12px; }
+/* 覆盖层是 absolute 的，容器要给它一个定位上下文 */
+.ex { position: relative; }
 .drop.slim .t2 { margin: 0; }
 
 /* ── 结果 ── */
+/* 里面的 .ta 没有自己的边框，焦点由这层容器表示 —— 与输入框同一种语言 */
+.res:focus-within { border-color: var(--cyan); }
+.ta:focus-visible { outline: none; }
+
 .res {
   flex: 1;
   min-height: 0;
@@ -323,7 +325,7 @@ function clearAll(): void {
 .ph .tt { color: var(--cyan); flex: none; }
 .ph .meta { color: var(--muted); letter-spacing: .06em; text-transform: none; flex: none; }
 .ph .meta b { font-family: var(--mono); color: var(--gray); font-weight: 400; }
-.ph .meta.big b { color: var(--green); font-size: 13px; }
+.ph .meta.big b { color: var(--green); font-size: var(--fs-lead); }
 .ph .meta.path { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--mono); letter-spacing: 0; }
 .ph .grow { flex: 1; }
 
@@ -339,10 +341,10 @@ function clearAll(): void {
   color: var(--acc-green2);
   caret-color: var(--cyan);
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: var(--fs-body);
   line-height: 18px;
   white-space: pre;
 }
 
-.ft { flex: none; padding: 6px 12px; border-top: 1px solid var(--border); font-size: 11px; color: var(--dim2); }
+.ft { flex: none; padding: 6px 12px; border-top: 1px solid var(--border); font-size: var(--fs-small); color: var(--dim2); }
 </style>

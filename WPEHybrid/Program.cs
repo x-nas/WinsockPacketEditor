@@ -24,6 +24,12 @@ namespace WPEHybrid
                     return;
                 }
 
+                /*
+                    ⚠️ 这一句在外壳里实际<b>不起作用</b>：app.manifest 已经声明了 PerMonitorV2，
+                    清单先生效，之后再调它只会失败返回。真正的 DPI 模式是 PerMonitorV2 ——
+                    窗口大小按所在显示器的缩放定，见 ShellForm.FitToDpi / OnDpiChanged。
+                    留着它只为清单万一没嵌进去时还有个系统级 DPI 感知兜底。
+                */
                 if (Environment.OSVersion.Version.Major >= 6)
                 {
                     User32.SetProcessDPIAware();

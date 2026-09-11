@@ -109,13 +109,14 @@ async function save(): Promise<void> {
   <SettingsModal
     :open="props.open"
     :title="t('set.list')"
-    subtitle="Controls/ListSetting"
+    subtitle="Packet Columns"
     :busy="busy"
     :error="error"
     @update:open="emit('update:open', $event)"
     @save="save"
   >    <div class="setf" style="--setf-k: 132px">
 
+    <section class="sec">
     <div class="grp">{{ t('set.grp.cols') }}</div>
     <p class="hint">{{ t('set.colsHint') }}</p>
 
@@ -129,6 +130,7 @@ async function save(): Promise<void> {
       ><i />{{ t(c.label) }}</button>
     </div>
 
+    </section>
     </div>
   </SettingsModal>
 </template>
@@ -142,13 +144,5 @@ async function save(): Promise<void> {
   gap: 8px 16px;
   padding: 0 20px 4px;
 }
-
-/*
-  ⚠️ 这行提示<b>要换行，不能省略号</b>。中文写得下的一句，换成俄语 / 越南语常常长一倍
-  （「100–500000. При достижении очищается весь список, а не только старые строки」），
-  nowrap + ellipsis 会把后半句直接吃掉，而那半句正是要紧的部分。
-  外面的 .setf .row > .v 已经是 flex-wrap: wrap，让它自己折下去即可。
-*/
-.tip { font-size: 11px; color: var(--dim); line-height: 1.5; flex: 1 1 100%; }
 
 </style>

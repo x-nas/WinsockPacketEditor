@@ -444,7 +444,8 @@ function pickCov(side: 'a' | 'b', segIndex: number): void {
 
       <span class="sep" />
 
-      <input v-model="tcRegex" class="inp rx" :class="{ bad: regexBad }" spellcheck="false" :placeholder="t('tc.regexPh')">
+      <!-- 提示文字只留两三个字（框在 125% 缩放下只剩 70 多像素），整句挂在悬停提示上 -->
+      <input v-model="tcRegex" class="inp rx" :class="{ bad: regexBad }" spellcheck="false" :placeholder="t('tc.regexPh')" :title="t('tc.regexTip')">
       <button class="btn" :disabled="!tcRegex" @click="leach">{{ t('tc.leach') }}</button>
 
       <template v-if="tcMode === 'dup'">
@@ -593,11 +594,21 @@ function pickCov(side: 'a' | 'b', segIndex: number): void {
 
 /* 基样式在 style.css 的 .inp，这一屏没有需要覆盖的 */
 
-.inp.rx { flex: 1; min-width: 160px; }
+/*
+  工具条上的输入框跟着同一行的按钮走（`--btn-size`），与数据页工具条的搜索框同一条口径 ——
+  12.5px 夹在一排 10.5px 的按钮与分段按钮中间，提示文字是全场最大的那个（2026-09-11 按要求改）。
+  框高仍是 .inp 那 28px，与按钮齐平。
+*/
+/*
+  ⚠️ 下限 160 → 96（2026-09-11）：flex-wrap 按项的「假想宽度」断行，而 flex: 1 的假想宽度就是这个下限 ——
+  125% 缩放的默认窗口（1024 CSS 宽）里 160 正好让「还原 / 清空」被甩到第二行。
+  96 还放得下「正则…」几个字的提示；宽度够时它照样把剩余空间全吃掉。
+*/
+.inp.rx { flex: 1; min-width: 96px; font-size: var(--btn-size); }
 .inp.rx.bad { border-color: var(--danger); color: var(--danger); }
 
 /* 「几位数字 + 上下箭头」的宽度；箭头是刻意留着的，见上面那段 */
-.inp.num { flex: none; width: 86px; padding: 0 0 0 8px; text-align: center; }
+.inp.num { flex: none; width: 86px; padding: 0 0 0 8px; text-align: center; font-size: var(--btn-size); }
 
 /* 差异导航 —— 那张几千行的结果表换成的就是它 */
 .nav {
@@ -608,7 +619,7 @@ function pickCov(side: 'a' | 'b', segIndex: number): void {
   padding: 0 4px;
   border: 1px solid var(--border);
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: var(--fs-small);
   color: var(--amber);
 }
 
@@ -621,7 +632,7 @@ function pickCov(side: 'a' | 'b', segIndex: number): void {
   background: transparent;
   border: 0;
   color: var(--muted);
-  font-size: 13px;
+  font-size: var(--fs-lead);
   line-height: 1;
   cursor: pointer;
 }
@@ -645,6 +656,8 @@ function pickCov(side: 'a' | 'b', segIndex: number): void {
 /* 编辑区 */
 .io { flex: none; display: flex; gap: 10px; height: 150px; }
 .iop { flex: 1; min-width: 0; display: flex; flex-direction: column; border: 1px solid var(--border); }
+/* 里面的 HiliteArea 没有自己的边框，焦点由这层容器表示 —— 与输入框同一种语言 */
+.iop:focus-within { border-color: var(--cyan); }
 
 .ph {
   flex: none;
@@ -658,7 +671,7 @@ function pickCov(side: 'a' | 'b', segIndex: number): void {
 }
 
 .ph .tt { font-family: var(--share); font-size: var(--th-size); letter-spacing: .14em; text-transform: uppercase; color: var(--th-fg); }
-.ph .meta { font-family: var(--mono); font-size: 11px; color: var(--dim); }
+.ph .meta { font-family: var(--mono); font-size: var(--fs-small); color: var(--dim); }
 .ph .meta b { color: var(--soft); font-weight: 400; }
 
 /* 结果区的两栏表头 —— 与下面 DiffView 的两半对齐（各占一半 + 中缝 38px） */
@@ -681,7 +694,7 @@ function pickCov(side: 'a' | 'b', segIndex: number): void {
   color: var(--th-fg);
 }
 
-.rh .rm { margin-left: 8px; font-family: var(--mono); font-size: 11px; color: var(--dim); }
+.rh .rm { margin-left: 8px; font-family: var(--mono); font-size: var(--fs-small); color: var(--dim); }
 .rhh { flex: 1; min-width: 0; display: flex; align-items: center; overflow: hidden; }
 .rhg { flex: none; width: 38px; }
 
@@ -696,7 +709,7 @@ function pickCov(side: 'a' | 'b', segIndex: number): void {
   background: var(--sink);
   color: var(--muted);
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: var(--fs-small);
   text-align: center;
 }
 
@@ -736,10 +749,10 @@ function pickCov(side: 'a' | 'b', segIndex: number): void {
   color: var(--th-fg);
 }
 
-.cov .cp { font-family: var(--mono); font-size: 11px; color: var(--cyan); text-align: right; min-width: 4ch; }
+.cov .cp { font-family: var(--mono); font-size: var(--fs-small); color: var(--cyan); text-align: right; min-width: 4ch; }
 
 /* 说明横跨三列、单独一行 */
-.cov .ch { grid-column: 1 / -1; margin-top: 2px; font-size: 11px; color: var(--dim); }
+.cov .ch { grid-column: 1 / -1; margin-top: 2px; font-size: var(--fs-small); color: var(--dim); }
 
 
 .head { position: sticky; top: 0; z-index: 1; height: var(--th-h); background: var(--panel); border-bottom: 1px solid var(--border); }
@@ -756,7 +769,7 @@ function pickCov(side: 'a' | 'b', segIndex: number): void {
   white-space: nowrap;
 }
 
-.row2 { height: 26px; border-bottom: 1px solid var(--wpe-rowline); cursor: pointer; font-family: var(--mono); font-size: 11.5px; color: var(--gray); }
+.row2 { height: 26px; border-bottom: 1px solid var(--wpe-rowline); cursor: pointer; font-family: var(--mono); font-size: var(--fs-small); color: var(--gray); }
 .row2:hover { background: rgb(var(--chrome-rgb) / 40%); }
 .row2.sel { background: rgb(var(--cyan-rgb) / 12%); }
 .row2 > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -770,5 +783,5 @@ function pickCov(side: 'a' | 'b', segIndex: number): void {
 .row2 .sh { color: var(--cyan); }
 .row2 .pos2 { color: var(--dim); }
 
-.empty { padding: 16px 14px; color: var(--muted); font-size: 12px; }
+.empty { padding: 16px 14px; color: var(--muted); font-size: var(--fs-body); }
 </style>

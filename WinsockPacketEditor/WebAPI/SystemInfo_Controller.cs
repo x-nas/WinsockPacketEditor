@@ -11,9 +11,20 @@ namespace WinsockPacketEditor
         [HttpGet]
         [Route("GetCPUAndMemory")]
 
+        /// <summary>
+        /// CPU / 内存占用。⚠️ 具名对象，理由同 SocketInfo_Controller.GetSocketInfo。
+        /// Operate.GetCPUAndMemory() 出的仍是 string[2]（WinForms 那边在用），这里只换个壳。
+        /// </summary>
         public IHttpActionResult GetCPUAndMemory()
         {
-            return Ok(Operate.SystemConfig.GetCPUAndMemory());
+            string[] v = Operate.SystemConfig.GetCPUAndMemory();
+
+            return Ok(new
+            {
+                //形如 "12.34%" / "61.4%"，带百分号
+                Cpu = v != null && v.Length > 0 ? v[0] : null,
+                Memory = v != null && v.Length > 1 ? v[1] : null,
+            });
         }
 
         #endregion

@@ -323,6 +323,16 @@ namespace WinsockPacketEditor.Ipc
                     packets.Add(pi);
                 }
 
+                /*
+                    ⚠️ 这条路<b>绕开 SendConfig.Send.AddSend</b>（那儿才是 NormalizeLoopCount 的咽喉），
+                    所以自己夹一次。正常情况下编码那侧读的已经是外壳夹过的值，这里只是防
+                    「协议对不上 / 编码侧被谁改坏」—— 目标进程里没有界面，坏值的表现会是
+                    「发送列表看着在跑、一个包都不发」，比在外壳里更难查。
+                    ⚠️ 这里<b>不记日志</b>：外壳夹的时候已经记过一条，目标里再记一条只是重复。
+                */
+                if (loopCnt < 1) { loopCnt = 1; }
+                if (loopInt < 0) { loopInt = 0; }
+
                 var si = new SendInfo(isEnable, sid, name, sysSocket, loopCnt, loopInt, packets, notes);
 
                 long[] keep;

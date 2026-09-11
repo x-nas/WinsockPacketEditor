@@ -44,12 +44,6 @@ namespace WinsockPacketEditor
             Attach(null);
         }
 
-        /// <summary>当前是否已经切到非默认实现（无头核心装配过）。</summary>
-        public static bool IsHeadless
-        {
-            get { return !(_current is InProcHookHost); }
-        }
-
         #endregion
     }
 

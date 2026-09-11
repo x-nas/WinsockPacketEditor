@@ -147,7 +147,7 @@ async function save(): Promise<void> {
   <SettingsModal
     :open="props.id !== null"
     :title="isNew ? t('acct.add') : t('acct.edit')"
-    subtitle="Controls/AccountEdit"
+    subtitle="Proxy Account"
     :busy="busy"
     :error="error"
     @update:open="emit('close')"
@@ -223,7 +223,7 @@ async function save(): Promise<void> {
 <style scoped>
 .grp {
   font-family: var(--share);
-  font-size: 9px;
+  font-size: var(--fs-caption);
   letter-spacing: .26em;
   text-transform: uppercase;
   color: var(--dim);
@@ -243,7 +243,7 @@ async function save(): Promise<void> {
   min-height: 32px;
 }
 
-.row > .k { font-size: 12.5px; color: var(--muted); }
+.row > .k { font-size: var(--fs-body); color: var(--muted); }
 .row > .v { display: flex; align-items: center; gap: 10px; min-width: 0; }
 
 /*
@@ -252,27 +252,11 @@ async function save(): Promise<void> {
   nowrap + ellipsis 会把后半句直接吃掉，而那半句正是要紧的部分。
   外面的 .setf .row > .v 已经是 flex-wrap: wrap，让它自己折下去即可。
 */
-.tip { font-size: 11px; color: var(--dim); line-height: 1.5; }
+.tip { font-size: var(--fs-small); color: var(--dim); line-height: 1.5; }
 
-.chk {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 0;
-  background: transparent;
-  border: 0;
-  font-size: 12.5px;
-  color: var(--muted);
-  cursor: pointer;
-  white-space: nowrap;
-}
-
+/* 基样式在 style.css 的「勾选框 / 单选框」，这里只覆盖框线色与布局 */
+.chk { --chk-ring: var(--border); }
 .chk.k { justify-self: start; }
-.chk i { width: 13px; height: 13px; border: 1px solid var(--border); position: relative; flex: none; }
-.chk.on { color: var(--green); }
-.chk.on i { border-color: var(--green); background: rgb(var(--green-rgb) / 18%); }
-.chk.on i::after { content: ""; position: absolute; inset: 2px; background: var(--green); }
-.chk:focus-visible { outline-offset: 2px; }
 
 /* 基样式在 style.css 的 .inp，这里只补布局 */
 .inp { flex: 1; min-width: 0; }

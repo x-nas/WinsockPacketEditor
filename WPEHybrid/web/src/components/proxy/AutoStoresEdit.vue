@@ -88,7 +88,7 @@ async function save(): Promise<void> {
   <SettingsModal
     :open="!!props.target"
     :title="title"
-    subtitle="Controls/AutoStoresEdit"
+    subtitle="Auto-Store Rule"
     :busy="busy"
     :error="error"
     @update:open="!$event && emit('close')"
@@ -125,10 +125,10 @@ async function save(): Promise<void> {
   min-height: 32px;
 }
 
-.row > .k { font-size: 12.5px; color: var(--muted); }
+.row > .k { font-size: var(--fs-body); color: var(--muted); }
 .row > .v { display: flex; align-items: center; gap: 10px; min-width: 0; }
 
-.hint { padding: 0 20px 0 124px; margin: 0 0 6px; font-size: 11.5px; color: var(--dim2); }
+.hint { padding: 0 20px 0 124px; margin: 0 0 6px; font-size: var(--fs-small); color: var(--dim2); }
 .hint.warn { color: var(--amber); padding-left: 20px; margin-top: 6px; }
 
 /* 基样式在 style.css 的 .inp。这里填的是包头十六进制，加一点字距好数字节 */

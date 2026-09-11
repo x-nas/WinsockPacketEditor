@@ -37,10 +37,27 @@ watch(() => props.open, async (on) => {
   catch (e) { console.error('[map] 读取映射设置失败', e) }
 }, { immediate: true })
 
-const PROTO = ['http', 'https']
 
-function urlOf(p: number, host: string, port: number, path: string): string {
-  return (PROTO[p] ?? 'http') + '://' + host + ':' + port + (path || '')
+// 协议一律是 http —— 运行期只有 DomainType.HTTP 那一支会查映射，见 MapRemoteEdit.vue 的文件头
+function urlOf(host: string, port: number, path: string): string {
+  return 'http://' + host + ':' + port + (path || '')
+}
+
+/*
+  同一个地址拆成「主机」与「路径」两段给界面。
+
+  ⚠️ 为什么不直接整串扔进一个 span：那样溢出时省略号切的是<b>尾部</b>，
+  而一条映射规则里最能区分彼此的恰恰是路径的尾巴 ——
+  `http://cdn.example.com:80/api/v1/config.j…` 等于什么都没说。
+  拆开之后主机不参与收缩、路径从<b>头</b>那边省略（见样式里的 direction: rtl），
+  于是长地址显示成 `http://cdn.example.com:80` + `…/v1/config.json`，两头都在。
+*/
+function hostOf(host: string, port: number): string {
+  return 'http://' + host + ':' + port
+}
+
+function pathOf(path: string): string {
+  return path || ''
 }
 
 async function toggle(remote: boolean, id: string, on: boolean): Promise<void> {
@@ -106,10 +123,17 @@ async function save(): Promise<void> {
 </script>
 
 <template>
-  <SettingsModal :open="props.open" :title="t('set.map')" subtitle="Controls/MapSetting" :busy="busy" :error="error" :width="900"
+  <SettingsModal :open="props.open" :title="t('set.map')" subtitle="Address Mapping" :busy="busy" :error="error" :width="900"
                  @update:open="emit('update:open', $event)" @save="save">
     <div class="setf list-page ms">
+      <!--
+        ⚠️ 这句要放在最上面。它是「用这个面板之前就该知道」的前提，
+        原先摆在底部，要滚过两张表才看得见 —— 而那两张表是会长的，行一多更看不到。
+      -->
+      <p class="hint warn top">{{ t('map.httpOnly') }}</p>
+
       <!-- 本地映射 -->
+      <section class="sec">
       <div class="grp">{{ t('map.local') }}</div>
       <div class="row">
         <div class="k">{{ t('col.enable') }}</div>
@@ -138,7 +162,7 @@ async function save(): Promise<void> {
           <div v-for="r in locals" v-else :key="r.Id" class="tr hl" :class="{ off: !r.IsEnable }"
                @contextmenu.prevent="openMenu($event, false, r.Id)" @dblclick="!($event.target as HTMLElement).closest('button') && (localEdit = r)">
             <span class="ck"><button class="chk" :class="{ on: r.IsEnable }" @click.stop="toggle(false, r.Id, !r.IsEnable)"><i /></button></span>
-            <span class="url" :title="urlOf(r.Protocol, r.Host, r.Port, r.RemotePath)">{{ urlOf(r.Protocol, r.Host, r.Port, r.RemotePath) }}</span>
+            <span class="url" :title="urlOf(r.Host, r.Port, r.RemotePath)"><bdi class="uh">{{ hostOf(r.Host, r.Port) }}</bdi><bdi class="up"><span dir="ltr">{{ pathOf(r.RemotePath) }}</span></bdi></span>
             <span class="file" :title="r.LocalPath">{{ r.LocalPath }}</span>
             <span class="ops">
               <button class="op" :title="t('acct.op.edit')" @click.stop="localEdit = r"><svg class="ico" viewBox="0 0 24 24"><path d="M4 20h4L20 8l-4-4L4 16z" /></svg></button>
@@ -147,8 +171,10 @@ async function save(): Promise<void> {
           </div>
         </div>
       </div>
+      </section>
 
       <!-- 远程映射 -->
+      <section class="sec">
       <div class="grp">{{ t('map.remote') }}</div>
       <div class="row">
         <div class="k">{{ t('col.enable') }}</div>
@@ -177,8 +203,8 @@ async function save(): Promise<void> {
           <div v-for="r in remotes" v-else :key="r.Id" class="tr hr" :class="{ off: !r.IsEnable }"
                @contextmenu.prevent="openMenu($event, true, r.Id)" @dblclick="!($event.target as HTMLElement).closest('button') && (remoteEdit = r)">
             <span class="ck"><button class="chk" :class="{ on: r.IsEnable }" @click.stop="toggle(true, r.Id, !r.IsEnable)"><i /></button></span>
-            <span class="url" :title="urlOf(r.ProtocolFrom, r.HostFrom, r.PortFrom, r.PathFrom)">{{ urlOf(r.ProtocolFrom, r.HostFrom, r.PortFrom, r.PathFrom) }}</span>
-            <span class="url to" :title="urlOf(r.ProtocolTo, r.HostTo, r.PortTo, r.PathTo)">{{ urlOf(r.ProtocolTo, r.HostTo, r.PortTo, r.PathTo) }}</span>
+            <span class="url" :title="urlOf(r.HostFrom, r.PortFrom, r.PathFrom)"><bdi class="uh">{{ hostOf(r.HostFrom, r.PortFrom) }}</bdi><bdi class="up"><span dir="ltr">{{ pathOf(r.PathFrom) }}</span></bdi></span>
+            <span class="url to" :title="urlOf(r.HostTo, r.PortTo, r.PathTo)"><bdi class="uh">{{ hostOf(r.HostTo, r.PortTo) }}</bdi><bdi class="up"><span dir="ltr">{{ pathOf(r.PathTo) }}</span></bdi></span>
             <span class="ops">
               <button class="op" :title="t('acct.op.edit')" @click.stop="remoteEdit = r"><svg class="ico" viewBox="0 0 24 24"><path d="M4 20h4L20 8l-4-4L4 16z" /></svg></button>
               <button class="op del" :title="t('acct.op.del')" @click.stop="action(true, r.Id, ListAction.Delete)"><svg class="ico" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg></button>
@@ -186,6 +212,7 @@ async function save(): Promise<void> {
           </div>
         </div>
       </div>
+      </section>
       <p class="hint">{{ t('map.saveHint') }}</p>
     </div>
 
@@ -196,14 +223,40 @@ async function save(): Promise<void> {
 </template>
 
 <style scoped>
-.lb { font-size: 11.5px; color: var(--dim2); }
-.cnt { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+/* 顶到面板第一行时，.setf .hint 那点 margin-top 不够，单独给一档 */
+.hint.top { margin: 12px 0 10px; }
+
+.lb { font-size: var(--fs-small); color: var(--dim2); }
+.cnt { font-family: var(--mono); font-size: var(--fs-small); color: var(--muted); }
 .tbl.dim .tbody { opacity: .55; }
 .ms .tbody { max-height: 190px; }
-.ms .head.hl, .ms .tr.hl { grid-template-columns: 50px minmax(200px, 1.2fr) minmax(200px, 1fr) 72px; }
-.ms .head.hr, .ms .tr.hr { grid-template-columns: 50px minmax(200px, 1fr) minmax(200px, 1fr) 72px; }
+/* ⚠️ 操作列 72 → 96：俄语的「Действия」实测要 92px，72 下会被省略号截掉（七种语言里只有它超） */
+.ms .head.hl, .ms .tr.hl { grid-template-columns: 50px minmax(200px, 1.2fr) minmax(200px, 1fr) 100px; }
+.ms .head.hr, .ms .tr.hr { grid-template-columns: 50px minmax(200px, 1fr) minmax(200px, 1fr) 100px; }
 .ms .head > span, .ms .tr > span { text-align: left; }
-.url { font-family: var(--mono); font-size: 12px; color: var(--cyan); }
+/*
+  ── 地址：主机不收缩，路径从头省略 ──────────────────
+
+  ⚠️ <b>.up 的 direction: rtl 是这套写法的关键</b>：它让省略号出现在<b>左</b>边，
+  于是被切掉的是路径的头、留下的是尾（`…/v1/config.json`）。
+  外面包 <bdi> 是必须的 —— 它把这一段隔离成独立的双向文本运行，
+  不然 rtl 会把结尾的标点（`/` `?` `=`）甩到字符串另一头去。
+
+  ⚠️ 主机那段 <b>flex: none</b>：宁可让路径少显示几个字符，也别把
+  `http://cdn.example.com:80` 截成 `http://cdn.exa…` —— 那样两条规则就分不出是不是同一台主机了。
+*/
+.url { display: flex; align-items: baseline; min-width: 0; font-family: var(--mono); font-size: var(--fs-body); color: var(--cyan); }
 .url.to { color: var(--acc-green2); }
-.file { font-family: var(--mono); font-size: 12px; color: var(--dim3); }
+.uh { flex: none; }
+.up { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; direction: rtl; }
+/*
+  ⚠️ 里面这层 <span dir="ltr"> 不能省。
+
+  光有 direction: rtl 的话，路径开头那个 <b>/</b> 是「中性字符」，会被双向算法
+  搬到字符串的<b>另一头</b> —— 实测显示成 `http://cdn.example.com:80config.json/`，
+  斜杠跑到末尾去了。把整段路径圈成一个 LTR 运行，字符顺序就锁住了，
+  而 rtl 只剩下它唯一的用处：让省略号出现在<b>左</b>边。
+*/
+.up > span { unicode-bidi: isolate; }
+.file { font-family: var(--mono); font-size: var(--fs-body); color: var(--dim3); }
 </style>

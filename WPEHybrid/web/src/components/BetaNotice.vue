@@ -11,6 +11,7 @@
 import { onMounted, ref } from 'vue'
 import { registerForm } from '../bridge/host'
 import { t } from '../i18n'
+import { useModal } from '../useModal'
 
 interface BetaArg {
   title: string
@@ -49,10 +50,13 @@ function acknowledge(): void {
 function lines(s: string): string[] {
   return (s || '').split(/\r?\n/)
 }
+
+/* 登记进模态栈，见 useModal.ts */
+const { covered } = useModal(() => open.value)
 </script>
 
 <template>
-  <div v-if="open" class="mask">
+  <div v-if="open" class="mask" :inert="covered">
     <div class="wip">
       <div class="wip-in">
         <span class="mk tl" /><span class="mk tr" /><span class="mk bl" /><span class="mk br" />
@@ -129,7 +133,7 @@ function lines(s: string): string[] {
   margin-bottom: 15px;
   border: 1px solid rgb(var(--amber-rgb) / 45%);
   font-family: var(--share);
-  font-size: 10px;
+  font-size: var(--fs-caption);
   letter-spacing: .2em;
   text-transform: uppercase;
   color: var(--amber);
@@ -141,21 +145,21 @@ function lines(s: string): string[] {
 
 .wip h3 {
   font-family: var(--orbit);
-  font-size: 20px;
+  font-size: var(--fs-num-lg);
   font-weight: 700;
   letter-spacing: .05em;
   color: var(--gray);
   margin-bottom: 12px;
 }
 
-.wip .lead { margin: 0 0 18px; font-size: 13.5px; color: var(--muted); }
+.wip .lead { margin: 0 0 18px; font-size: var(--fs-lead); color: var(--muted); }
 
 .wip-log {
   margin: 0 0 20px;
   padding: 13px 16px;
   border: 1px solid var(--border);
   background: rgb(var(--inset-rgb) / 34%);
-  font-size: 12.5px;
+  font-size: var(--fs-body);
   color: var(--muted);
 }
 
@@ -170,7 +174,7 @@ function lines(s: string): string[] {
   border: 2px solid var(--amber);
   color: var(--amber);
   font-family: var(--share);
-  font-size: 12px;   /* 刻意不走 --btn-size：这是整屏唯一的一个按钮，且要压得住上面 18px 的标题 */
+  font-size: var(--fs-label);   /* 刻意不走 --btn-size：这是整屏唯一的一个按钮，且要压得住上面 18px 的标题 */
   /* 显式 1：Share Tech Mono 在 line-height: normal 下会把行距全压在字的下面，字号一大就明显偏上（实测） */
   line-height: 1;
   letter-spacing: .2em;

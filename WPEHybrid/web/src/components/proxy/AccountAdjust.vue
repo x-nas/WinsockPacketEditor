@@ -47,9 +47,9 @@ const title = computed(() => {
 })
 
 const subtitle = computed(() => {
-  if (props.kind === 'expiry') return 'Controls/ExpiryTime'
-  if (props.kind === 'devices') return 'Controls/LimitDevices'
-  return 'Controls/LimitLinks'
+  if (props.kind === 'expiry') return 'Batch · Expiry'
+  if (props.kind === 'devices') return 'Batch · Devices'
+  return 'Batch · Links'
 })
 
 //每次打开都回到默认值：上一次调的是别的一批账号，留着容易误按
@@ -152,11 +152,11 @@ async function save(): Promise<void> {
 </template>
 
 <style scoped>
-.lead { margin: 14px 20px 0; font-size: 12.5px; color: var(--cyan); }
+.lead { margin: 14px 20px 0; font-size: var(--fs-body); color: var(--cyan); }
 
 .grp {
   font-family: var(--share);
-  font-size: 9px;
+  font-size: var(--fs-caption);
   letter-spacing: .26em;
   text-transform: uppercase;
   color: var(--dim);
@@ -164,7 +164,7 @@ async function save(): Promise<void> {
   margin: 16px 0 6px;
 }
 
-.hint { margin: 6px 20px 0; font-size: 11.5px; color: var(--dim); line-height: 1.6; }
+.hint { margin: 6px 20px 0; font-size: var(--fs-small); color: var(--dim); line-height: 1.6; }
 
 .row {
   display: grid;
@@ -175,51 +175,15 @@ async function save(): Promise<void> {
   min-height: 32px;
 }
 
-.row > .k { font-size: 12.5px; color: var(--muted); }
+.row > .k { font-size: var(--fs-body); color: var(--muted); }
 .row > .v { display: flex; align-items: center; gap: 14px; min-width: 0; }
 
 .modes { display: flex; gap: 22px; padding: 0 20px 4px; }
-.tip { font-size: 11px; color: var(--dim); }
+.tip { font-size: var(--fs-small); color: var(--dim); }
 
-.chk {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 0;
-  background: transparent;
-  border: 0;
-  font-size: 12.5px;
-  color: var(--muted);
-  cursor: pointer;
-  white-space: nowrap;
-}
-
+/* 基样式在 style.css 的「勾选框 / 单选框」，这里只覆盖框线色与布局 */
+.chk, .rd { --chk-ring: var(--border); }
 .chk.k { justify-self: start; }
-.chk i { width: 13px; height: 13px; border: 1px solid var(--border); position: relative; flex: none; }
-.chk.on { color: var(--green); }
-.chk.on i { border-color: var(--green); background: rgb(var(--green-rgb) / 18%); }
-.chk.on i::after { content: ""; position: absolute; inset: 2px; background: var(--green); }
-.chk:focus-visible { outline-offset: 2px; }
-
-/* 单选用圆形，与勾选框区分开 */
-.rd {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 0;
-  background: transparent;
-  border: 0;
-  font-size: 12.5px;
-  color: var(--muted);
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.rd i { width: 13px; height: 13px; border: 1px solid var(--border); border-radius: 50%; position: relative; flex: none; }
-.rd.on { color: var(--cyan); }
-.rd.on i { border-color: var(--cyan); }
-.rd.on i::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 5px var(--cyan); }
-.rd:focus-visible { outline-offset: 2px; outline-color: var(--cyan); }
 
 /* 基样式在 style.css 的 .inp，这一屏没有需要覆盖的 */
 

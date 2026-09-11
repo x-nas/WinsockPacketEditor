@@ -27,6 +27,7 @@ import { pushToast } from '../../stores/toast'
 import { useRowPick } from '../../usePick'
 import ContextMenu from '../ContextMenu.vue'
 import { ICON, type MenuItem } from '../menu'
+import { useModal } from '../../useModal'
 
 const props = defineProps<{ id: string | null }>()
 
@@ -309,10 +310,24 @@ async function save(): Promise<void> {
     busy.value = false
   }
 }
+
+/* 登记进模态栈：父窗体因此变 inert；自己被后开的弹窗盖住时也会 inert。见 useModal.ts */
+const { covered } = useModal(() => props.id !== null)
 </script>
 
 <template>
-  <div v-if="props.id !== null" class="editor-mask" @mousedown.self="close">
+  <!--
+    ⚠️ <b>Teleport 到 body</b> —— 不是为了好看，是必须的，两个理由都在 useModal.ts 里：
+    ① 代理模式的 .proxy 是 z-index: 10 的层叠上下文，弹窗留在里面时遮罩盖不住标题栏；
+    ② 出去了才不会被 .shell 的 inert 一起禁掉。
+
+    ⚠️ <b>刻意不换行、不重排缩进</b>：模板里有 white-space: pre 的块，
+    整体缩进一动，Vue 模板编译器的 condense 会连带改掉渲染结果。
+
+    ⚠️ <b>点遮罩不再关闭弹窗</b>：编辑器里都是填了一半的东西，点空白处就丢掉太容易误操作。
+    出口只留「取消 / 关闭」按钮与 Esc。
+  -->
+  <Teleport to="body"><div v-if="props.id !== null" class="editor-mask" :inert="covered">
     <div class="dlg" role="dialog" aria-modal="true" @keydown.esc="close">
       <span class="mk tl" /><span class="mk tr" /><span class="mk bl" /><span class="mk br" />
 
@@ -396,7 +411,7 @@ async function save(): Promise<void> {
 
       <ContextMenu :at="menuAt" :items="menuItems" @pick="onMenuPick" @close="menuAt = null" />
     </div>
-  </div>
+  </div></Teleport>
 </template>
 
 <style scoped>
@@ -411,8 +426,8 @@ async function save(): Promise<void> {
 }
 
 .tt { flex: 1; min-width: 0; display: flex; align-items: baseline; gap: 12px; }
-.tt .zh { font-family: var(--orbit); font-size: 14px; color: var(--gray); letter-spacing: .04em; }
-.tt .sub { font-family: var(--share); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
+.tt .zh { font-family: var(--orbit); font-weight: 700; font-size: var(--fs-title); color: var(--gray); letter-spacing: .04em; }
+.tt .sub { font-family: var(--share); font-size: var(--fs-caption); letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
 
 .x {
   display: inline-flex;
@@ -429,7 +444,7 @@ async function save(): Promise<void> {
 .x:hover { border-color: var(--danger); color: var(--danger); }
 .x .ico { width: 15px; height: 15px; stroke: currentColor; stroke-width: 2; fill: none; }
 
-.loading { padding: 60px 0; text-align: center; color: var(--muted); font-size: 12.5px; }
+.loading { padding: 60px 0; text-align: center; color: var(--muted); font-size: var(--fs-body); }
 
 /* 名称行与工具条定高，表与十六进制吃掉剩下的全部高度 */
 .bd {
@@ -454,7 +469,7 @@ async function save(): Promise<void> {
   min-height: 30px;
 }
 
-.row > .k { font-size: 12.5px; color: var(--muted); }
+.row > .k { font-size: var(--fs-body); color: var(--muted); }
 .row > .v { display: flex; align-items: center; gap: 12px; min-width: 0; }
 
 /* 基样式在 style.css 的 .inp，这里只补布局 */
@@ -473,12 +488,12 @@ async function save(): Promise<void> {
 .grow { flex: 1; }
 .sep { width: 1px; height: 16px; background: var(--border); }
 
-.runbar .cap { font-size: 12px; color: var(--muted); font-family: var(--share); letter-spacing: .06em; }
+.runbar .cap { font-size: var(--fs-label); color: var(--muted); font-family: var(--share); letter-spacing: .06em; }
 .runbar .cap b { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--cyan); }
 
 .btn {
   flex: none;
-  padding: 9px 13px 7px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
+  padding: 8px 13px 8px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
   background: transparent;
   border: 1px solid var(--border);
   color: var(--gray);
@@ -524,7 +539,7 @@ async function save(): Promise<void> {
   gap: 8px;
   /* ⚠️ 必须与 style.css 里 .list-page .head 的 14px 一致，否则表头比内容错 4px（发送编辑栽过）*/
   padding: 0 14px;
-  font-size: 12.5px;
+  font-size: var(--fs-body);
 }
 
 .row2 {
@@ -554,11 +569,11 @@ async function save(): Promise<void> {
 
 .no { color: var(--dim); font-variant-numeric: tabular-nums; }
 .len { color: var(--cyan); font-variant-numeric: tabular-nums; }
-.dt { color: var(--acc-green2); font-family: var(--mono); font-size: 12px; }
+.dt { color: var(--acc-green2); font-family: var(--mono); font-size: var(--fs-body); }
 
-.empty { padding: 40px 20px; text-align: center; color: var(--muted); font-size: 12.5px; line-height: 1.8; }
+.empty { padding: 40px 20px; text-align: center; color: var(--muted); font-size: var(--fs-body); line-height: 1.8; }
 
-.hint { margin: 8px 18px 0; font-size: 11.5px; color: var(--dim2); }
+.hint { margin: 8px 18px 0; font-size: var(--fs-small); color: var(--dim2); }
 
 .ft {
   flex: none;
@@ -570,5 +585,5 @@ async function save(): Promise<void> {
   background: var(--panel);
 }
 
-.err { font-size: 12px; color: var(--danger); }
+.err { font-size: var(--fs-small); color: var(--danger); }
 </style>

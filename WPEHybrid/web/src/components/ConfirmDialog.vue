@@ -21,6 +21,7 @@
 import { nextTick, ref, watch } from 'vue'
 import { confirmState, answerConfirm } from '../bridge/host'
 import { t } from '../i18n'
+import { useModal } from '../useModal'
 
 const cancelBtn = ref<HTMLElement | null>(null)
 
@@ -29,13 +30,16 @@ watch(() => confirmState.value, async (s) => {
   await nextTick()
   cancelBtn.value?.focus()
 })
+
+/* 登记进模态栈：底下那层编辑器因此也会 inert。见 useModal.ts */
+const { covered } = useModal(() => confirmState.value !== null)
 </script>
 
 <template>
   <div
     v-if="confirmState"
     class="mask"
-    @mousedown.self="answerConfirm(false)"
+    :inert="covered"
     @contextmenu.prevent
   >
     <div
@@ -126,7 +130,7 @@ watch(() => confirmState.value, async (s) => {
 
 .tt {
   font-family: var(--share);
-  font-size: 11px;
+  font-size: var(--fs-label);
   letter-spacing: .2em;
   text-transform: uppercase;
   color: var(--muted);
@@ -134,7 +138,7 @@ watch(() => confirmState.value, async (s) => {
 }
 
 .ct {
-  font-size: 13px;
+  font-size: var(--fs-lead);
   line-height: 1.7;
   color: var(--gray);
   white-space: pre-wrap;
@@ -152,7 +156,7 @@ watch(() => confirmState.value, async (s) => {
 
 .btn {
   min-width: 84px;
-  padding: 11px 16px 9px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
+  padding: 10px 16px 10px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
   background: transparent;
   border: 1px solid var(--border);
   color: var(--gray);

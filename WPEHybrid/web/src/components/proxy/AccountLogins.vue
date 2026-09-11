@@ -88,7 +88,7 @@ watch(() => props.row, async (r) => {
   align-items: center;
   gap: 12px;
   padding: 0 12px;
-  font-size: 12.5px;
+  font-size: var(--fs-body);
 }
 
 .head {
@@ -108,7 +108,7 @@ watch(() => props.row, async (r) => {
 .row { height: 30px; color: var(--soft); }
 .row:hover { background: rgb(var(--tint-rgb) / 4%); }
 
-.empty { padding: 30px 0; text-align: center; color: var(--muted); font-size: 12px; }
+.empty { padding: 30px 0; text-align: center; color: var(--muted); font-size: var(--fs-body); }
 
 .tm { color: var(--muted); font-variant-numeric: tabular-nums; }
 .ip { color: var(--cyan); font-variant-numeric: tabular-nums; }

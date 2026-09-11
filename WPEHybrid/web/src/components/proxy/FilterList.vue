@@ -37,6 +37,9 @@ import { ICON, type MenuItem } from '../menu'
 */
 const rows = useList<FilterRow>(FeedList.Filter)
 
+//注入模式下滤镜编辑的「作用于哪些封包」要出 8 个 WinSock 函数类别而非代理的 4 个，见 FilterEdit
+const props = withDefaults(defineProps<{ mode?: 'proxy' | 'inject' }>(), { mode: 'proxy' })
+
 /*
   ── 虚拟滚动 ───────────────────────────────────────────────────
   与账号列表同一套。滤镜通常几十条，远到不了两万，但这一份是后面三屏的模板，
@@ -302,7 +305,7 @@ async function onMenuPick(id: string): Promise<void> {
       顺序即执行顺序，而「顺序意味着什么」还取决于执行模式 —— 这两层界面上不说就没人知道。
       模式是读出来的实际值，不是写死的一句通用话。
     -->
-    <div v-if="rows.length > 1" class="hint" :class="{ pri: isPriority }">
+    <div v-if="rows.length > 1" class="ordbar" :class="{ alt: isPriority }">
       <span class="mk">{{ isPriority ? t('flt.mode.priority') : t('flt.mode.sequence') }}</span>
       <span class="tx">{{ isPriority ? t('flt.mode.priorityHint') : t('flt.mode.sequenceHint') }}</span>
       <span class="note">{{ t('flt.mode.stopNote') }}</span>
@@ -371,7 +374,7 @@ async function onMenuPick(id: string): Promise<void> {
 
     <ContextMenu :at="menuAt" :items="menuItems" @pick="onMenuPick" @close="menuAt = null" />
 
-    <FilterEdit :id="editing" @close="editing = null" />
+    <FilterEdit :id="editing" :mode="props.mode" @close="editing = null" />
   </div>
 </template>
 
@@ -385,41 +388,6 @@ async function onMenuPick(id: string): Promise<void> {
   gap: 8px;
   padding: 10px 12px 12px;
 }
-
-/*
-  执行模式说明条。两种模式给两种颜色 —— 「优先原则」是排他的，
-  一眼要看得出「后面那些滤镜其实不会跑」。
-*/
-.hint {
-  flex: none;
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 4px 10px;
-  margin: 0;
-  padding: 6px 12px;
-  border: 1px solid rgb(var(--cyan-rgb) / 22%);
-  background: rgb(var(--cyan-rgb) / 5%);
-  font-size: 11.5px;
-  color: var(--muted);
-}
-
-.hint.pri { border-color: rgb(var(--amber-rgb) / 30%); background: rgb(var(--amber-rgb) / 6%); }
-
-.hint .mk {
-  flex: none;
-  padding: 1px 7px;
-  border: 1px solid var(--cyan);
-  color: var(--cyan);
-  font-family: var(--share);
-  font-size: 10px;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-}
-
-.hint.pri .mk { border-color: var(--amber); color: var(--amber); }
-.hint .tx { color: var(--gray); }
-.hint .note { color: var(--dim); }
 
 /* 除滤镜名外全部居中；带 .row >/.head > 才压得过下面那条通则 */
 /* 九列。滤镜名给 1fr —— 它是唯一长度不可预知的字段 */
@@ -463,12 +431,12 @@ async function onMenuPick(id: string): Promise<void> {
 
 .tg {
   flex: none;
-  padding: 5px 6px 3px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
+  padding: 4px 6px 4px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
   border: 1px solid currentColor;
   /* 与发送列表的标签同一款字：上 +1 下 -1 那个补偿是按 Share Tech Mono 量的（上伸 9 / 下伸 3），
      JetBrains Mono 上伸 11，同样的补偿会让字低 1px（实测），所以字体必须跟着一起统一 */
   font-family: var(--share);
-  font-size: 10.5px;
+  font-size: var(--fs-label);
   letter-spacing: .04em;
   /* 显式 1：默认行高会把行距全压在字的下面，字在框里偏上（与按钮同一个问题）*/
   line-height: 1;
