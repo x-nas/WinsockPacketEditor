@@ -410,10 +410,18 @@ namespace WPEHybrid
                     （WinForms 侧那 60+ 个 UserControl 里很多都有）不受影响 —— 前端监听
                     contextmenu 自己画一个即可，不必再 preventDefault。
 
-                    代价：Debug 下右键「检查」没了。DevTools 仍可用 F12 打开
-                    （AreDevToolsEnabled 默认为 true，这里没关）。
+                    代价：Debug 下右键「检查」没了。DevTools 仍可用 F12 打开 —— 只在 Debug 下。
                 */
                 core.Settings.AreDefaultContextMenusEnabled = false;
+
+#if !DEBUG
+                /*
+                    发布版关掉 DevTools（F12 / Ctrl+Shift+I）。2.1.9 清开发工具时补的：
+                    它对用户没有用处，却能直接在控制台里调任何一个桥方法。
+                    Debug 构建保持默认（开着），排查前端问题照旧按 F12。
+                */
+                core.Settings.AreDevToolsEnabled = false;
+#endif
 
                 /*
                     顺带关掉状态栏浮层：鼠标悬到 <a> 上时 WebView2 会在左下角弹出一条
@@ -1061,9 +1069,7 @@ namespace WPEHybrid
         #endregion
 
         /// <summary>
-        /// 关窗时收尾。灌包线程是后台线程，进程退出时本来也会被干掉，
-        /// 但它还在往队列里塞而搬运定时器已经停了 —— 先停掉更干净，
-        /// 也避免关窗过程中 Operate 的静态状态被继续写。
+        /// 关窗时收尾：先停三个定时器，再关系统代理、断开注入、写回配置。
         /// </summary>
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
@@ -1072,7 +1078,6 @@ namespace WPEHybrid
                 this.timerFlush.Stop();
                 this.timerStat.Stop();
                 this.timerAutoSave.Stop();
-                this.StopLoad();
 
                 /*
                     ⚠️ 系统代理必须关掉再走，这是关窗收尾里唯一「不做会伤到用户」的一条。
@@ -5159,8 +5164,6 @@ namespace WPEHybrid
                 await this.OnUiReady();
                 return new { ok = true };
             });
-
-            this.RegisterLoadGenerator();
         }
 
         #region//窗口露脸
@@ -6515,231 +6518,6 @@ namespace WPEHybrid
             try { link.ResetStats(what); }
             catch (Exception ex) { Operate.DoLog(nameof(ResetCountsEverywhere), ex); }
         }
-
-        #region//验收跑测用的工具方法（B10e）
-
-        /*
-            以下全是<b>开发/验收工具，不是产品功能</b>，B10 验收结束后整个 region 删掉即可。
-
-            为什么要这些：
-            「≥3000 条/秒不掉帧」必须用<b>持续速率</b>去压。一次性把 5 万条倒进队列，
-            测到的是「队列排空得多快」（搬运定时器每拍 200 条，约 13000 条/秒），
-            那是突发排空速度，不是稳态吞吐 —— 两者的帧时间分布完全不同。
-
-            生成的封包走的是与 Hook 完全相同的下游路径（过滤 → 批量搬运 → DTO → 推送），
-            只绕开 PacketInfo_ToQueue：那里面的 IP 归属地异步查询是另一个瓶颈，
-            混进来会污染对管线本身的测量。
-        */
-
-        /// <summary>灌包线程的停止信号。null 表示没在灌。</summary>
-        private volatile bool loadRunning;
-
-        private Thread loadThread;
-
-        private void RegisterLoadGenerator()
-        {
-            //一次性灌指定条数。用于快速目测，不用于测吞吐。
-            this.bridge.Register("devGeneratePackets", args =>
-            {
-                int count = Clamp(args["count"] == null ? 1000 : (int)args["count"], 1, 200000);
-                int size = Clamp(args["size"] == null ? 512 : (int)args["size"], 1, 65536);
-
-                var rnd = new Random(count ^ size);
-                for (int i = 0; i < count; i++)
-                {
-                    Operate.ProxyConfig.Queue.qProxyInfo.Enqueue(MakePacket(i, size, rnd));
-                }
-
-                return new { queued = count, size = size };
-            });
-
-            //按<b>稳态速率</b>持续灌，直到 devStopLoad。
-            this.bridge.Register("devStartLoad", args =>
-            {
-                int rate = Clamp(args["rate"] == null ? 3000 : (int)args["rate"], 1, 100000);
-                int size = Clamp(args["size"] == null ? 512 : (int)args["size"], 1, 65536);
-
-                this.StopLoad();
-                this.loadRunning = true;
-
-                this.loadThread = new Thread(() => this.LoadLoop(rate, size))
-                {
-                    //刻意用后台线程：真实封包也来自后台的 Hook 线程，
-                    //放到 UI 线程上灌会和搬运定时器抢同一个线程，测出来的数不作数。
-                    IsBackground = true,
-                    Name = "WPE-LoadGen",
-                };
-                this.loadThread.Start();
-
-                return new { rate = rate, size = size };
-            });
-
-            this.bridge.Register("devStopLoad", args =>
-            {
-                this.StopLoad();
-                return new { stopped = true };
-            });
-
-            //验收时要让列表稳定停在 5000 行做滚动测试，得能临时关掉自动清理。
-            this.bridge.Register("devSetAutoClear", args =>
-            {
-                if (args["on"] != null)
-                {
-                    Operate.PacketConfig.List.AutoClear = (bool)args["on"];
-                }
-
-                if (args["value"] != null)
-                {
-                    Operate.PacketConfig.List.AutoClear_Value = (int)args["value"];
-                }
-
-                return new
-                {
-                    on = Operate.PacketConfig.List.AutoClear,
-                    value = (int)Operate.PacketConfig.List.AutoClear_Value,
-                };
-            });
-
-            //「内存稳定」要看的是整个进程，不只是 JS 堆。
-            this.bridge.Register("devMemory", args =>
-            {
-                using (var p = System.Diagnostics.Process.GetCurrentProcess())
-                {
-                    return new
-                    {
-                        //托管堆。false = 不强制 GC，避免测量动作本身改变被测对象
-                        managed = GC.GetTotalMemory(false),
-                        workingSet = p.WorkingSet64,
-                        privateBytes = p.PrivateMemorySize64,
-                        gc0 = GC.CollectionCount(0),
-                        gc1 = GC.CollectionCount(1),
-                        gc2 = GC.CollectionCount(2),
-                    };
-                }
-            });
-
-            //验收报告落盘，方便留档与比对历次结果。
-            this.bridge.Register("devWriteReport", args =>
-            {
-                string name = args["name"] == null ? "acceptance" : (string)args["name"];
-                string text = args["text"] == null ? string.Empty : (string)args["text"];
-
-                //只取文件名部分，防止前端传进来的字符串跑出目录
-                name = Path.GetFileNameWithoutExtension(name);
-                if (string.IsNullOrEmpty(name)) { name = "acceptance"; }
-
-                string dir = Path.GetDirectoryName(Application.ExecutablePath) ?? ".";
-                string path = Path.Combine(dir, name + ".txt");
-
-                File.WriteAllText(path, text, System.Text.Encoding.UTF8);
-                return new { path = path };
-            });
-        }
-
-        private static int Clamp(int V, int Lo, int Hi)
-        {
-            return V < Lo ? Lo : (V > Hi ? Hi : V);
-        }
-
-        private void StopLoad()
-        {
-            this.loadRunning = false;
-
-            Thread t = this.loadThread;
-            this.loadThread = null;
-
-            if (t != null && t.IsAlive)
-            {
-                t.Join(1000);
-            }
-        }
-
-        /// <summary>
-        /// 稳态灌包。
-        ///
-        /// 按「到此刻为止<b>累计</b>应该产出多少条」来补差，而不是「每拍固定产出 N 条」：
-        /// Thread.Sleep(1) 的实际睡眠受系统计时器精度影响（通常 1–15ms），
-        /// 按拍数乘法算会让实际速率随机偏低；按累计时间补差则无论怎么抖，
-        /// 平均速率都收敛到目标值。
-        /// </summary>
-        private void LoadLoop(int Rate, int Size)
-        {
-            try
-            {
-                var sw = System.Diagnostics.Stopwatch.StartNew();
-                var rnd = new Random(Rate ^ Size);
-                long produced = 0;
-                int i = 0;
-
-                while (this.loadRunning)
-                {
-                    long due = (long)(sw.Elapsed.TotalSeconds * Rate);
-                    int n = (int)(due - produced);
-
-                    //单次补差设个上限：万一线程被长时间挂起，别一口气灌出几十万条
-                    if (n > Rate) { n = Rate; }
-
-                    for (int k = 0; k < n; k++)
-                    {
-                        Operate.ProxyConfig.Queue.qProxyInfo.Enqueue(MakePacket(i++, Size, rnd));
-                    }
-
-                    produced += n;
-                    Thread.Sleep(1);
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(LoadLoop), ex);
-            }
-        }
-
-        /// <summary>
-        /// 造一条代理数据。
-        ///
-        /// 造的是 <b>ProxyInfo 而不是 PacketInfo</b>：外壳服务的是代理模式，
-        /// 它的主列表是 lstProxyInfo（对应 WinForms 的 Controls/ProxyList.cs）；
-        /// PacketInfo 那份是注入模式的，而注入模式不用 Vue 界面。
-        /// 灌错列表的话压测是自洽的（自己灌自己收），但测的是一条产品里用不到的路径。
-        /// </summary>
-        private static ProxyInfo MakePacket(int I, int Size, Random Rnd)
-        {
-            byte[] buf = new byte[Size];
-            Rnd.NextBytes(buf);
-
-            //掺进几种 FilterAction，让行着色这条路径也参与测量
-            Operate.FilterConfig.Filter.FilterAction action;
-            switch (I % 16)
-            {
-                case 3: action = Operate.FilterConfig.Filter.FilterAction.Replace; break;
-                case 7: action = Operate.FilterConfig.Filter.FilterAction.Intercept; break;
-                case 11: action = Operate.FilterConfig.Filter.FilterAction.Change; break;
-                default: action = Operate.FilterConfig.Filter.FilterAction.NoModify_Display; break;
-            }
-
-            return new ProxyInfo(
-                DateTime.Now,
-                1000 + (I % 16),
-                20000 + (I % 64),
-                (I % 2) == 0
-                    ? Operate.PacketConfig.Packet.PacketType.TCP_Req
-                    : Operate.PacketConfig.Packet.PacketType.TCP_Resp,
-                0,
-                "192.168.1.100:" + (10000 + (I % 100)),
-                "局域网",
-                "203.0.113." + (I % 255) + ":443",
-                "美国",
-                "cdn" + (I % 32) + ".example.com",
-                Operate.ProxyConfig.Proxy.DomainType.Socket,
-                buf,
-                buf,
-                Operate.PacketConfig.Packet.GetPacketData_Hex(
-                    buf, Operate.PacketConfig.Packet.PacketData_MaxLen),
-                Size,
-                action);
-        }
-
-        #endregion
 
         #endregion
 

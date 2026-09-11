@@ -19,7 +19,7 @@ const ALLOW = [
   ['components/proxy/StatData.vue', /^\.sep$/, '› 分隔字形'],
   ['components/proxy/AccountList.vue', /\.op \.n/, '图标角标，贴在 16px 图标上'],
   ['style.css', /\.gtool \.sx/, '× 清除字形'],
-  ['components/ListsPanel.vue', /./, '开发工具，发布前整块删除'],
+  ['reset.css', /./, '第三方全局 reset（ant-design-vue 4.2.6 原样搬来），不属于本项目的字号层级'],
 ]
 
 function walk(d, out) {

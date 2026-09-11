@@ -1,8 +1,6 @@
 // 十六进制渲染的共用件：每行放几个字节、列号表头、base64 → 文本。
 //
-// HexView 用的是前三个；dump 只剩验收跑测在用（面板早已换成 HexView 的格子模型，
-// 不再走整块文本）。当初抽成独立模块，是为了让跑测量到与面板<b>相同</b>的那份工作量
-// —— 那个前提现在只对「格式化本身」还成立，见 CLAUDE.md 的提醒。
+// HexView 用 perLineFor / headerLine / asciiOf；整块文本版的 dump 只服务于 B10 验收跑测，已随它删除（2.1.9）。
 
 /** 每行默认字节数。宽度算不出来时（首帧、面板被隐藏）退回它。 */
 export const DEFAULT_PER_LINE = 16
@@ -35,7 +33,7 @@ export function perLineFor(availChars: number, fixed = 11, min = 8): number {
 }
 
 /**
- * 列号表头，与 dump 的每一行逐字符对齐。
+ * 列号表头，与 HexView 每一行的格子逐列对齐。
  *
  * 前 10 个空格让出「偏移」那一栏（8 位偏移 + 2 空格），
  * 后面每字节一个两位列号 + 空格，正好压在下面对应的那一列上。
@@ -51,7 +49,7 @@ export function headerLine(perLine: number, label: string): string {
 
   /*
     ⚠️ 标签由调用方给（<b>要翻译</b>），hex.ts 本身不引 i18n —— 它是纯格式化，
-    验收跑测也在用，别给它挂上界面的依赖。
+    别给它挂上界面的依赖。
 
     这一栏叫什么改过两轮，两次都是被用户问出来的：
       ASCII    → 不对。它按 Latin-1 显示，0xA0..0xFF 是 ¶ ² Ç ã ÿ 这些，
@@ -96,37 +94,6 @@ export function headerLine(perLine: number, label: string): string {
 */
 export function asciiOf(b: number): string {
   return b > 0x1f && !(b > 0x7e && b < 0xa0) ? String.fromCharCode(b) : '.'
-}
-
-/** base64 → 十六进制 + 字符栏。 */
-export function dump(b64: string | null, perLine: number = DEFAULT_PER_LINE): string {
-  if (!b64) return ''
-
-  const n = perLine > 0 ? perLine : DEFAULT_PER_LINE
-  const bin = atob(b64)
-  const len = bin.length
-  const out: string[] = []
-
-  //十六进制那段的固定宽度，最后一行不满时靠它把字符栏对齐
-  const hexWidth = n * 3
-
-  for (let off = 0; off < len; off += n) {
-    const end = Math.min(off + n, len)
-    let hex = ''
-    let asc = ''
-
-    for (let i = off; i < end; i++) {
-      const c = bin.charCodeAt(i)
-      hex += c.toString(16).padStart(2, '0').toUpperCase() + ' '
-      asc += asciiOf(c)
-    }
-
-    out.push(
-      off.toString(16).padStart(8, '0').toUpperCase() + '  ' + hex.padEnd(hexWidth, ' ') + ' ' + asc,
-    )
-  }
-
-  return out.join('\n')
 }
 
 export function byteLen(b64: string | null): number {

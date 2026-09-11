@@ -105,8 +105,7 @@ namespace WinsockPacketEditor
         */
         public async void OnLog(string funcName, string content)
         {
-            //顺序是有意的：先写文件再入队。真要出事，文件里有就够了。
-            LogFile.Write(funcName, content);
+            //2.1.9 起不再同时写 Logs\wpe.log（调试期的 LogFile 已删），日志只进内存队列
             await Operate.LogConfig.Queue.LogToQueueAsync(funcName, content);
         }
 

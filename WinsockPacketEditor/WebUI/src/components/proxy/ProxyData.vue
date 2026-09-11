@@ -8,8 +8,8 @@
     ③ 数据表           —— 定高虚拟滚动，B10 那个 PacketList 原样复用
     ④ 快捷面板 + 十六进制
 
-  【「设置 ▾」菜单末尾那两个 Dev 项是开发/验收工具，不是产品功能】
-  发布前整块删掉，见 CLAUDE.md「发布前必须清掉的东西」。
+  这一屏的骨架（.datapage / .stats / .grid / .lower …）与工具条那一套（.gtool …）
+  都在 style.css 里 —— 注入模式的封包页用的是<b>同一份</b>，所以本文件没有 scoped 样式。
 */
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { call } from '../../bridge'
@@ -21,14 +21,12 @@ import { pushToast } from '../../stores/toast'
 import { useRowPick } from '../../usePick'
 import { gotoPage, listSetting, proxyRunning } from '../../stores/runtime'
 import { textA, textB } from '../../stores/tools'
-import { runAcceptance } from '../../accept'
 import PacketList from '../PacketList.vue'
 import ContextMenu from '../ContextMenu.vue'
 import { ICON, type MenuItem } from '../menu'
 import HexPanel from '../HexPanel.vue'
 import PacketEdit from './PacketEdit.vue'
 import PacketModification from './PacketModification.vue'
-import ListsPanel from '../ListsPanel.vue'
 import RunBar from './RunBar.vue'
 import QuickPanel from './QuickPanel.vue'
 import ProxySetting from './ProxySetting.vue'
@@ -121,29 +119,6 @@ async function commitKeep(): Promise<void> {
     keepBad.value = true
   }
 }
-
-// ▼▼▼ Dev：发布前整块删掉 ▼▼▼
-const listsOpen = ref(false)
-const accepting = ref(false)
-const report = ref<string[]>([])
-const reportOpen = ref(false)
-const reportPass = ref<boolean | null>(null)
-const reportText = computed(() => report.value.join(String.fromCharCode(10)))
-
-/*
-  两个 Dev 入口挂在状态条「设置 ▾」菜单的末尾（2026-09-11 从封包表工具条上挪过来）：
-  它们原来独占工具条的第二行，125% 缩放下那一行直接吃掉封包列表一行半的可见高度。
-*/
-const devItems = computed<MenuItem[]>(() => [
-  { id: 'dev:lists', label: 'Dev · 列表通道' },
-  { id: 'dev:accept', label: accepting.value ? 'Dev · 跑测中…' : 'Dev · 验收跑测', disabled: accepting.value },
-])
-
-function onDev(id: string): void {
-  if (id === 'dev:lists') listsOpen.value = true
-  else if (id === 'dev:accept' && !accepting.value) void runAccept()
-}
-// ▲▲▲ Dev ▲▲▲
 
 let detach: (() => void) | null = null
 let statsTimer = 0
@@ -703,30 +678,11 @@ const cells = computed(() => {
   ]
 })
 
-// ▼▼▼ Dev：发布前整块删掉 ▼▼▼
-async function runAccept(): Promise<void> {
-  accepting.value = true
-  reportOpen.value = true
-  reportPass.value = null
-  report.value = []
-
-  try {
-    const r = await runAcceptance((s) => report.value.push(s))
-    reportPass.value = r.pass
-  } catch (e) {
-    report.value.push(String(e))
-    reportPass.value = false
-  } finally {
-    accepting.value = false
-  }
-}
-// ▲▲▲ Dev ▲▲▲
 </script>
 
 <template>
   <div class="datapage">
-    <!-- extra-items / @extra 两处是 Dev，发布前随 devItems 一起删 -->
-    <RunBar :extra-items="devItems" @clear="clearAll" @open-setting="setting = $event" @extra="onDev" />
+    <RunBar @clear="clearAll" @open-setting="setting = $event" />
 
     <ProxySetting
       :open="setting === 'proxy'"
@@ -890,10 +846,6 @@ async function runAccept(): Promise<void> {
           >
         </span>
 
-        <!--
-          Dev 那两个按钮（列表通道 / 验收跑测）已挪进状态条「设置 ▾」菜单的末尾，见 script 里的 devItems。
-          C# 侧的 devGeneratePackets 仍要留着 —— 验收跑测的第 ③ 项（取字节 p95）在用它。
-        -->
       </div>
 
       <PacketList
@@ -922,46 +874,6 @@ async function runAccept(): Promise<void> {
       <HexPanel :id="selectedId" :packet-type="selected?.Type ?? null" :highlight="searchHit" />
     </div>
 
-    <!-- ▼▼▼ Dev：发布前整块删掉 ▼▼▼ -->
-    <ListsPanel v-model:open="listsOpen" />
-
-    <a-drawer
-      v-model:open="reportOpen"
-      title="B10 验收跑测"
-      placement="right"
-      :width="720"
-      :mask-closable="!accepting"
-      :closable="!accepting"
-    >
-      <template #extra>
-        <a-tag v-if="accepting" color="processing">跑测中 · 约 45 秒</a-tag>
-        <a-tag v-else-if="reportPass === true" color="success">全部通过</a-tag>
-        <a-tag v-else-if="reportPass === false" color="error">未通过</a-tag>
-      </template>
-      <pre class="rep">{{ reportText }}</pre>
-    </a-drawer>
-    <!-- ▲▲▲ Dev ▲▲▲ -->
   </div>
 </template>
 
-<style scoped>
-/*
-  这一屏的骨架（`.datapage` / `.stats` / `.st-c` / `.grid` / `.list` / `.lower` /
-  `.plegend` / 两档矮窗口收缩）与工具条那一套（`.gtool` / `.search` / `.chk` / `.num` / `.tb`）
-  都在 style.css 里 —— 注入模式的封包页用的是<b>同一份</b>，2026-09-10 收拢的。
-
-  这里只剩 Dev 那一条（验收报告的正文），它本来就要整块删掉。
-*/
-
-/* ▼▼▼ Dev 样式：发布前一并删掉 ▼▼▼ */
-.rep {
-  margin: 0;
-  font-family: var(--mono);
-  font-size: var(--fs-body);
-  line-height: 1.65;
-  white-space: pre-wrap;
-  word-break: break-all;
-  user-select: text;
-}
-/* ▲▲▲ Dev 样式 ▲▲▲ */
-</style>

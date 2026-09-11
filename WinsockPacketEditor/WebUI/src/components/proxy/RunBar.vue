@@ -17,14 +17,7 @@ import { SETTINGS, type SettingKey } from './settings'
 import ContextMenu from '../ContextMenu.vue'
 import type { MenuItem } from '../menu'
 
-/*
-  extraItems：调用方自己的菜单项，排在 12 项设置<b>后面</b>、隔一条分隔线，点了按 id 回 `extra` 事件。
-  现在只有代理数据页的两个 Dev 入口在用（列表通道 / 验收跑测）—— 它们原来占着封包表工具条的
-  第二行，挪进这个菜单之后工具条回到一行（2026-09-11）。与 HexView 的 extraItems 同一个路数。
-*/
-const props = withDefaults(defineProps<{ extraItems?: MenuItem[] }>(), { extraItems: () => [] })
-
-const emit = defineEmits<{ (e: 'clear'): void; (e: 'openSetting', key: SettingKey): void; (e: 'extra', id: string): void }>()
+const emit = defineEmits<{ (e: 'clear'): void; (e: 'openSetting', key: SettingKey): void }>()
 
 /*
   「设置 ▾」弹的是共用的 ContextMenu（锚定在按钮下方），不再自己画一份：
@@ -33,11 +26,7 @@ const emit = defineEmits<{ (e: 'clear'): void; (e: 'openSetting', key: SettingKe
 const menuAt = ref<{ x: number; y: number; anchor: { left: number; right: number; top: number; bottom: number } } | null>(null)
 const menuOpen = computed(() => menuAt.value !== null)
 
-const settingItems = computed<MenuItem[]>(() => {
-  const items: MenuItem[] = SETTINGS.map((x) => ({ id: x.key, label: t(x.label) }))
-  if (props.extraItems.length) items.push({ divider: true }, ...props.extraItems)
-  return items
-})
+const settingItems = computed<MenuItem[]>(() => SETTINGS.map((x) => ({ id: x.key, label: t(x.label) })))
 
 function openMenu(e: MouseEvent): void {
   if (menuAt.value) { menuAt.value = null; return }
@@ -46,7 +35,6 @@ function openMenu(e: MouseEvent): void {
 }
 
 function onPick(id: string): void {
-  if (props.extraItems.some((x) => x.id === id)) { emit('extra', id); return }
   emit('openSetting', id as SettingKey)
 }
 

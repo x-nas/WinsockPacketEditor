@@ -372,7 +372,7 @@ async function exportRows(): Promise<void> {
   /*
     表头字形偏上 2px（像素级实测：Share Tech Mono 10.5px 在 30px 表头里，中文 / 英文的墨迹中心都在盒中心上方约 2px）。
     格子是 grid / flex 项，内边距只在上面补 4px 就把内容框中心压下 2px，对文本与 flex 居中的格子都成立。
-    改字号 / 字体 / 表头高度后要重新量（dev-headers.html + SVG foreignObject 逐行扫像素那套）。
+    改字号 / 字体 / 表头高度后要重新量（SVG foreignObject 逐行扫像素那套；量尺页 dev-headers.html 已于 2.1.9 随开发工具删除，要用从 git 历史取回）。
   */
   padding-top: 4px;
   font-family: inherit;

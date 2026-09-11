@@ -9,7 +9,7 @@ namespace WPEHybrid
         #region//主函数
 
         /// <summary>
-        /// 程序入口：提权 → DPI → 崩溃留痕 → 运行时检测 → 发起 WebView2 环境预热 → 建库 → 读配置 → 建窗。
+        /// 程序入口：提权 → DPI → 未处理异常进系统日志 → 运行时检测 → 发起 WebView2 环境预热 → 建库 → 读配置 → 建窗。
         /// </summary>
         [STAThread]
         private static void Main()
@@ -38,25 +38,22 @@ namespace WPEHybrid
                 Application.SetCompatibleTextRenderingDefault(false);
 
                 /*
-                    崩溃留痕。
+                    未处理异常进「系统日志」，不弹 WinForms 那个默认的异常框、也不退出。
 
-                    「程序意外退出」以前不留任何东西 —— 运行日志只在内存里，
-                    进程一死就没了，事后完全查不出发生过什么（真栽过一次：
-                    账号表被清空，查不到是哪条路径干的）。
-                    这两个订阅让最后一口气也能写进 Logs\wpe.log。
+                    ⚠️ 2.1.9 起<b>不再落盘</b>：调试期那个把每条日志同时写进 exe 旁 Logs\wpe.log 的
+                    LogFile 已删。
+                    日志只在内存里，界面「系统日志」页可看、可导出。
 
-                    <b>必须早于 Application.Run</b>，也早于任何可能抛异常的初始化。
+                    <b>必须早于 Application.Run</b>。
                 */
-                AppDomain.CurrentDomain.UnhandledException += (s, e) =>
-                    LogFile.Crash("AppDomain", e.ExceptionObject);
 
                 //UI 线程上未捕获的异常走这条（async void 里 await 之后抛的就落在这）
                 Application.ThreadException += (s, e) =>
-                    LogFile.Crash("UIThread", e.Exception);
+                    Operate.DoLog("UIThread", e.Exception);
 
-                //谁都没 await 的 Task 异常。GC 回收时才报，所以时间点会滞后，但总比没有强
+                //谁都没 await 的 Task 异常。GC 回收时才报，时间点会滞后
                 System.Threading.Tasks.TaskScheduler.UnobservedTaskException += (s, e) =>
-                    LogFile.Crash("Task", e.Exception);
+                    Operate.DoLog("Task", e.Exception);
 
                 //WebView2 运行时缺失时引导用户去装（发布包不带运行时），而不是抛一个看不懂的 COM 异常
                 if (!ShellForm.HasWebView2Runtime())
@@ -79,11 +76,6 @@ namespace WPEHybrid
 
                 Operate.DataBase.InitDB();
                 Operate.SystemConfig.LoadSystemConfig_FromDB();
-
-                //一行分隔，事后翻日志时用它切分「这是哪一次运行、用的哪个库」
-                LogFile.BeginSession(
-                    typeof(Operate).Assembly.GetName().Version.ToString(),
-                    Operate.DataBase.dbPath);
 
                 Application.Run(new ShellForm());
             }
