@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using WindowsInput.Native;
 using static WinsockPacketEditor.Operate;
@@ -17,34 +18,29 @@ namespace WinsockPacketEditor
 
         private RobotInfo riSelect;
         private BindingList<InstructionInfo> RInstruction;
-        public BackgroundWorker Worker = new BackgroundWorker();
 
         /*
-            ⚠️⚠️ <b>取消的唯一真源</b>（2026-09-10）—— 与 SendExecute 那处逐字同构，理由见那边。
-            简版：CancellationPending 是裸 bool、只能轮询；token 有 WaitHandle，
-            「等某件事做完」那几处才改得成阻塞等待。StopRobot 里刻意不再调 CancelAsync()。
+            ⚠️ 2026-09-11：从 BackgroundWorker 换成 Task（BW → Task 第二步），与 SendExecute 逐条同构。
+              IsBusy         → Running
+              ReportProgress → Progressed 事件（执行轨迹的订阅者用它）+ 直接写 Instruction_Index
+              Completed      → Robot_OnDone continuation（记日志）+ Completed 事件（editResult 用它）
+            取消仍是唯一真源的 cts（第一步已在）；body 里 token.ThrowIfCancellationRequested()。
         */
         private CancellationTokenSource cts;
-        private readonly WindowsInput.InputSimulator sim = new WindowsInput.InputSimulator();        
+        private Task task;
+        private readonly WindowsInput.InputSimulator sim = new WindowsInput.InputSimulator();
 
-        #region//初始化
-
-        public RobotExecute()
-        {  
-            this.Worker.WorkerSupportsCancellation = true;
-            this.Worker.WorkerReportsProgress = true;
-
-            this.Worker.DoWork -= Robot_DoWork;
-            this.Worker.DoWork += Robot_DoWork;
-
-            this.Worker.ProgressChanged -= Robot_ProgressChanged;
-            this.Worker.ProgressChanged += Robot_ProgressChanged;
-
-            this.Worker.RunWorkerCompleted -= Robot_RunCompleted;
-            this.Worker.RunWorkerCompleted += Robot_RunCompleted;
+        /// <summary>正在跑没有（与 BW 的 IsBusy 同窗口：到 Robot_OnDone 跑完为止）。</summary>
+        public bool Running
+        {
+            get { Task t = this.task; return t != null && !t.IsCompleted; }
         }
 
-        #endregion
+        /// <summary>走到第几条指令（下标）。机器人编辑的执行轨迹订阅它。</summary>
+        public event Action<int> Progressed;
+
+        /// <summary>跑完了：参数是 "done" / "stopped" / "error:消息"。机器人编辑用它收 editResult。</summary>
+        public event Action<string> Completed;
 
         #region//启动机器人
 
@@ -54,7 +50,7 @@ namespace WinsockPacketEditor
             {
                 if (ri != null && ri.RInstruction.Count > 0)
                 {
-                    if (!this.Worker.IsBusy)
+                    if (!this.Running)
                     {
                         //⚠️ 每轮一个新的：CTS 取消过就不能复位
                         if (this.cts != null) { this.cts.Dispose(); }
@@ -83,7 +79,9 @@ namespace WinsockPacketEditor
                         }
                         else
                         {
-                            this.Worker.RunWorkerAsync();
+                            CancellationToken token = this.cts.Token;
+                            this.task = Task.Run(() => Robot_Body(token), token)
+                                .ContinueWith(Robot_OnDone, TaskScheduler.Default);
 
                             string sLog = string.Format(UI.T("System.Robot.Start", "启动机器人 [{0}]"), this.RobotName);
                             Operate.DoLog(nameof(StartRobot), sLog);
@@ -105,17 +103,9 @@ namespace WinsockPacketEditor
         {
             try
             {
-                if (this.Worker.IsBusy)
-                {
-                    /*
-                        ⚠️ 2026-09-09 这里删掉过一个「建了 CTS 却没人读 Token」的死写法，
-                        2026-09-10 把它<b>正着</b>加了回来 —— 这次 DoWork 与 DoSleep 查的都是它。
-
-                        <b>只 Cancel token，不调 Worker.CancelAsync()</b>：取消只能有一个真源。
-                    */
-                    CancellationTokenSource c = this.cts;
-                    if (c != null) { c.Cancel(); }
-                }                
+                //只 Cancel token（取消只能有一个真源）
+                CancellationTokenSource c = this.cts;
+                if (c != null) { c.Cancel(); }
             }
             catch (Exception ex)
             {
@@ -128,18 +118,16 @@ namespace WinsockPacketEditor
         #region//执行指令集
 
         /*
-            ⚠️ <b>这里不加 try/catch。</b> 加了的话异常被吞掉、e.Error 恒为 null，
-            RunWorkerCompleted 里「error:」那一支就成了死代码 ——
-            机器人炸在半路，界面弹的却是绿色的「执行完毕」（2026-09-09 修）。
+            ⚠️ <b>这里不加 try/catch。</b> 加了的话异常被吞掉、task.Exception 恒为 null，
+            Robot_OnDone 里「error:」那一支就成了死代码 ——
+            机器人炸在半路，界面弹的却是绿色的「执行完毕」。
 
-            BackgroundWorker 会把 DoWork 抛出的异常收进 e.Error，<b>不会崩进程</b>；
-            日志由 Robot_RunCompleted 统一记一处，外壳那边的 editResult 也才拿得到 "error:"。
+            取消走 token.ThrowIfCancellationRequested()：task.IsCanceled 变 true，
+            Robot_OnDone 据此报「已停止」、Completed 事件带回 "stopped"。
         */
-        private void Robot_DoWork(object sender, DoWorkEventArgs e)
+        private void Robot_Body(CancellationToken token)
         {
             {
-                CancellationToken token = this.cts.Token;
-
                 if (this.RInstruction.Count > 0)
                 {
                     Stack<int> sLoopStart = new Stack<int>();
@@ -147,14 +135,12 @@ namespace WinsockPacketEditor
 
                     for (int i = 0; i < this.RInstruction.Count; i++)
                     {
-                        if (token.IsCancellationRequested)
+                        token.ThrowIfCancellationRequested();
+
                         {
-                            e.Cancel = true;
-                            return;
-                        }
-                        else
-                        {
-                            Worker.ReportProgress(i);
+                            //进度：轮询读 Instruction_Index，执行轨迹订阅 Progressed（200ms 一拍会漏掉飞快的那几步）
+                            this.Instruction_Index = i;
+                            Progressed?.Invoke(i);
 
                             string sContent = RInstruction[i].InstContent;
                             switch (RInstruction[i].InstType)
@@ -174,14 +160,12 @@ namespace WinsockPacketEditor
                                                 （原来最坏 100ms 才看一眼取消标记）。
                                                 精度在这儿毫无意义，与 DoSleep 的取舍正好相反。
                                             */
-                                            while (ss.Worker.IsBusy)
+                                            while (ss.Running)
                                             {
                                                 if (token.WaitHandle.WaitOne(100))
                                                 {
                                                     ss.StopSend();
-
-                                                    e.Cancel = true;
-                                                    return;
+                                                    token.ThrowIfCancellationRequested();
                                                 }
                                             }
                                         }                                        
@@ -268,7 +252,7 @@ namespace WinsockPacketEditor
                                     int LoopCount;
                                     if (!int.TryParse(sContent, out LoopCount) || LoopCount < 1)
                                     {
-                                        Operate.SystemConfig.LogThrottled(nameof(Robot_DoWork),
+                                        Operate.SystemConfig.LogThrottled(nameof(Robot_Body),
                                             string.Format(UI.T("System.Robot.LoopCount",
                                                 "指令 {0} 的循环次数不正确（{1}），已按 1 次处理"), i + 1, sContent));
 
@@ -548,40 +532,40 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//汇报进度
-
-        private void Robot_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            this.Instruction_Index = e.ProgressPercentage;
-        }
-
-        #endregion
-
         #region//执行完毕
 
-        private void Robot_RunCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void Robot_OnDone(Task t)
         {
             try
             {
-                if (e.Cancelled)
+                string result;
+                string sLog;
+
+                if (t.IsCanceled)
                 {
-                    string sLog = string.Format(UI.T("Robot.Stop", "机器人 [{0}] 已停止"), this.RobotName);
-                    Operate.DoLog(nameof(Robot_RunCompleted), sLog);                    
+                    result = "stopped";
+                    sLog = string.Format(UI.T("Robot.Stop", "机器人 [{0}] 已停止"), this.RobotName);
                 }
-                else if (e.Error != null)
+                else if (t.Exception != null)
                 {
-                    string sLog = string.Format(UI.T("Robot.Error", "机器人 [{0}] 发生错误: {1}"), this.RobotName, e.Error.Message);
-                    Operate.DoLog(nameof(Robot_RunCompleted), sLog);
+                    Exception ex = t.Exception.InnerException ?? t.Exception;
+                    result = "error:" + ex.Message;
+                    sLog = string.Format(UI.T("Robot.Error", "机器人 [{0}] 发生错误: {1}"), this.RobotName, ex.Message);
                 }
                 else
                 {
-                    string sLog = string.Format(UI.T("Robot.Success", "机器人 [{0}] 执行完毕"), this.RobotName);
-                    Operate.DoLog(nameof(Robot_RunCompleted), sLog);
-                }              
+                    result = "done";
+                    sLog = string.Format(UI.T("Robot.Success", "机器人 [{0}] 执行完毕"), this.RobotName);
+                }
+
+                Operate.DoLog(nameof(Robot_OnDone), sLog);
+
+                //机器人编辑要拿这个结果收 editResult；列表执行没有订阅者，Invoke 空转
+                Completed?.Invoke(result);
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(Robot_RunCompleted), ex);
+                Operate.DoLog(nameof(Robot_OnDone), ex);
             }
         }
 

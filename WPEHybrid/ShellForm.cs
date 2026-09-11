@@ -767,7 +767,7 @@ namespace WPEHybrid
             {
                 int hotKeyId = m.WParam.ToInt32();
 
-                BeginInvoke(new Action(async () =>
+                BeginInvoke(new Action(() =>
                 {
                     try
                     {
@@ -778,8 +778,7 @@ namespace WPEHybrid
                         */
                         if (this.DispatchHotKeyToTarget(hotKeyId)) { return; }
 
-
-                        await Operate.SystemConfig.DoHotKey(hotKeyId);
+                        Operate.SystemConfig.DoHotKey(hotKeyId);
                     }
                     catch (Exception ex) { Operate.DoLog("WndProc.HotKey", ex); }
                 }));
@@ -6259,15 +6258,11 @@ namespace WPEHybrid
                 });
 
                 /*
-                    ⚠️ 发送列表 / 机器人列表的执行器要在这里挂上 DoWork。
-
-                    WinForms 侧是 ProxyModeForm 与 InjectModeForm 各调一次（那两处也是唯一的
-                    调用点），外壳一直漏了 —— 不调的后果不是报错，而是<b>点「开始」什么都不发生</b>：
-                    BackgroundWorker 照常跑起来又立刻结束，因为压根没有 DoWork 处理器。
+                    2026-09-11：发送 / 机器人列表从 BackgroundWorker 换成 Task 之后，
+                    不再需要在这里挂 DoWork（Task 自带 body）—— 原来那句 InitListExecute() 删了。
                 */
-                Operate.SystemConfig.InitListExecute();
 
-                //全局快捷键要挂在一个窗口句柄上，WinForms 是 ProxyModeForm_Load 里做的；派发在 WndProc 的 WM_HOTKEY 分支
+                //全局快捷键要挂在一个窗口句柄上；派发在 WndProc 的 WM_HOTKEY 分支
                 Operate.SystemConfig.InitHotKeys(this.Handle);
 
                 /*

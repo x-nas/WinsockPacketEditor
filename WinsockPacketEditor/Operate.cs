@@ -812,23 +812,6 @@ namespace WinsockPacketEditor
 
             #endregion
 
-            #region//初始化列表执行
-
-            public static void InitListExecute()
-            {
-                Operate.SendConfig.List.bgwSendList.WorkerSupportsCancellation = true;
-                Operate.SendConfig.List.bgwSendList.WorkerReportsProgress = false;
-                Operate.SendConfig.List.bgwSendList.DoWork -= Operate.SendConfig.List.SendList_DoWork;
-                Operate.SendConfig.List.bgwSendList.DoWork += Operate.SendConfig.List.SendList_DoWork;
-
-                Operate.RobotConfig.List.bgwRobotList.WorkerSupportsCancellation = true;
-                Operate.RobotConfig.List.bgwRobotList.WorkerReportsProgress = false;
-                Operate.RobotConfig.List.bgwRobotList.DoWork -= Operate.RobotConfig.List.RobotList_DoWork;
-                Operate.RobotConfig.List.bgwRobotList.DoWork += Operate.RobotConfig.List.RobotList_DoWork;
-            }
-
-            #endregion
-
             #region//设置页入口（WPEHybrid 用：快捷键 / 远程管理 / 统计数据）
 
             public static HotkeySettingRow GetHotkeySetting()
@@ -2243,7 +2226,8 @@ namespace WinsockPacketEditor
 
             #region//执行快捷键
 
-            public static async Task DoHotKey(int HotKeyID)
+            //快捷键 9001~9012 逐条派发。两个 ByIndex 与四个 Start/Stop 都是非阻塞的（内部各自起 Task），所以这里同步就够
+            public static void DoHotKey(int HotKeyID)
             {
                 try
                 {
@@ -2252,43 +2236,43 @@ namespace WinsockPacketEditor
                         switch (HotKeyID)
                         {
                             case 9001:
-                                await SendConfig.Send.DoSend_ByIndex(0);
+                                SendConfig.Send.DoSend_ByIndex(0);
                                 break;
 
                             case 9002:
-                                await SendConfig.Send.DoSend_ByIndex(1);
+                                SendConfig.Send.DoSend_ByIndex(1);
                                 break;
 
                             case 9003:
-                                await SendConfig.Send.DoSend_ByIndex(2);
+                                SendConfig.Send.DoSend_ByIndex(2);
                                 break;
 
                             case 9004:
-                                await SendConfig.Send.DoSend_ByIndex(3);
+                                SendConfig.Send.DoSend_ByIndex(3);
                                 break;
 
                             case 9005:
-                                await SendConfig.Send.DoSend_ByIndex(4);
+                                SendConfig.Send.DoSend_ByIndex(4);
                                 break;
 
                             case 9006:
-                                await SendConfig.Send.DoSend_ByIndex(5);
+                                SendConfig.Send.DoSend_ByIndex(5);
                                 break;
 
                             case 9007:
-                                await SendConfig.Send.DoSend_ByIndex(6);
+                                SendConfig.Send.DoSend_ByIndex(6);
                                 break;
 
                             case 9008:
-                                await SendConfig.Send.DoSend_ByIndex(7);
+                                SendConfig.Send.DoSend_ByIndex(7);
                                 break;
 
                             case 9009:
-                                await SendConfig.Send.DoSend_ByIndex(8);
+                                SendConfig.Send.DoSend_ByIndex(8);
                                 break;
 
                             case 9010:
-                                await SendConfig.Send.DoSend_ByIndex(9);
+                                SendConfig.Send.DoSend_ByIndex(9);
                                 break;
 
                             case 9011:
@@ -2305,43 +2289,43 @@ namespace WinsockPacketEditor
                         switch (HotKeyID)
                         {
                             case 9001:
-                                await RobotConfig.Robot.DoRobot_ByIndex(0);
+                                RobotConfig.Robot.DoRobot_ByIndex(0);
                                 break;
 
                             case 9002:
-                                await RobotConfig.Robot.DoRobot_ByIndex(1);
+                                RobotConfig.Robot.DoRobot_ByIndex(1);
                                 break;
 
                             case 9003:
-                                await RobotConfig.Robot.DoRobot_ByIndex(2);
+                                RobotConfig.Robot.DoRobot_ByIndex(2);
                                 break;
 
                             case 9004:
-                                await RobotConfig.Robot.DoRobot_ByIndex(3);
+                                RobotConfig.Robot.DoRobot_ByIndex(3);
                                 break;
 
                             case 9005:
-                                await RobotConfig.Robot.DoRobot_ByIndex(4);
+                                RobotConfig.Robot.DoRobot_ByIndex(4);
                                 break;
 
                             case 9006:
-                                await RobotConfig.Robot.DoRobot_ByIndex(5);
+                                RobotConfig.Robot.DoRobot_ByIndex(5);
                                 break;
 
                             case 9007:
-                                await RobotConfig.Robot.DoRobot_ByIndex(6);
+                                RobotConfig.Robot.DoRobot_ByIndex(6);
                                 break;
 
                             case 9008:
-                                await RobotConfig.Robot.DoRobot_ByIndex(7);
+                                RobotConfig.Robot.DoRobot_ByIndex(7);
                                 break;
 
                             case 9009:
-                                await RobotConfig.Robot.DoRobot_ByIndex(8);
+                                RobotConfig.Robot.DoRobot_ByIndex(8);
                                 break;
 
                             case 9010:
-                                await RobotConfig.Robot.DoRobot_ByIndex(9);
+                                RobotConfig.Robot.DoRobot_ByIndex(9);
                                 break;
 
                             case 9011:
@@ -22498,8 +22482,8 @@ namespace WinsockPacketEditor
                     发送编辑弹窗的「执行」早就有校验（StartSendEdit），另外三条链路没有：
                       · 发送列表的「开始发送」   StartSendList -> SendList_DoWork -> DoSend
                       · 机器人的「发送 - 发送列表」 RobotExecute      -> DoSend
-                      · 快捷键 9001~9010          DoSend_ByIndex    -> DoSendAsync
-                    三条最后都汇到 <b>DoSendAsync</b>，所以闸设在那儿一处就够，不必各写一遍。
+                      · 快捷键 9001~9010          DoSend_ByIndex    -> DoSend
+                    三条最后都汇到 <b>DoSend</b>，所以闸设在那儿一处就够，不必各写一遍。
 
                     SystemConfig.SystemSocket 是<b>纯运行期字段、不落库</b>，每次重启都回到 0，
                     所以这不是个稀罕情形 —— 设过一次、重启之后再点，就撞上了。
@@ -22539,15 +22523,50 @@ namespace WinsockPacketEditor
                     return true;
                 }
 
+                /// <summary>
+                /// 建一个执行器并启动它，返回那个执行器（没得跑就返回 null）。
+                ///
+                /// ⚠️ <b>三条链路唯一的咽喉</b>（BlockedBySystemSocket 就设在这里）：
+                /// 发送列表、机器人的「发送-发送列表」、快捷键 9001~9010 都汇到它。
+                ///
+                /// 【为什么是同步的】StartSend 现在只<b>启动</b>一个 Task 就返回（非阻塞），
+                /// 不再捕获任何同步上下文，所以不用像 BW 时代那样套一层
+                /// <c>Task.Run(...).GetAwaiter().GetResult()</c> 去躲开 UI 上下文了。
+                /// </summary>
                 public static SendExecute DoSend(Guid SID)
                 {
-                    return Task.Run(() => DoSendAsync(SID))
-                        .ConfigureAwait(false)
-                        .GetAwaiter()
-                        .GetResult();
+                    SendExecute seReturn = null;
+
+                    try
+                    {
+                        if (SID != Guid.Empty)
+                        {
+                            SendInfo si = SendConfig.List.lstSendInfo.Where(item => item.SID == SID).FirstOrDefault();
+
+                            if (si != null && si.IsEnable)
+                            {
+                                if (BlockedBySystemSocket(si))
+                                {
+                                    return null;
+                                }
+
+                                if (si.SCollection.Count > 0)
+                                {
+                                    seReturn = new SendExecute();
+                                    seReturn.StartSend(si);
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(DoSend), ex);
+                    }
+
+                    return seReturn;
                 }
 
-                public static async Task DoSend_ByIndex(int SendListIndex)
+                public static void DoSend_ByIndex(int SendListIndex)
                 {
                     try
                     {
@@ -22556,51 +22575,14 @@ namespace WinsockPacketEditor
                             if (SendConfig.List.lstSendInfo[SendListIndex].IsEnable)
                             {
                                 Guid SID = SendConfig.List.lstSendInfo[SendListIndex].SID;
-                                Operate.SendConfig.List.SendExecute_Add(await DoSendAsync(SID));
-                            }                            
+                                Operate.SendConfig.List.SendExecute_Add(DoSend(SID));
+                            }
                         }
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(DoSend_ByIndex), ex);
                     }
-                }
-
-                public static async Task<SendExecute> DoSendAsync(Guid SID)
-                {
-                    SendExecute seReturn = null;
-
-                    try
-                    {
-                        if (SID != null && SID != Guid.Empty)
-                        {
-                            SendInfo si = SendConfig.List.lstSendInfo.Where(item => item.SID == SID).FirstOrDefault();
-
-                            if (si != null)
-                            {
-                                if (si.IsEnable)
-                                {
-                                    //⚠️ 三条链路唯一的咽喉，见 SystemSocketMissing 上面那段
-                                    if (BlockedBySystemSocket(si))
-                                    {
-                                        return null;
-                                    }
-
-                                    if (si.SCollection.Count > 0)
-                                    {
-                                        seReturn = new SendExecute();
-                                        await Task.Run(() => seReturn.StartSend(si));
-                                    }
-                                }                                
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(DoSendAsync), ex);
-                    }
-
-                    return seReturn;
                 }
 
                 #endregion
@@ -23346,7 +23328,7 @@ namespace WinsockPacketEditor
                     {
                         return new SendProgressRow
                         {
-                            Running = editExecute.Worker.IsBusy,
+                            Running = editExecute.Running,
                             Index = editExecute.SendCollection_Index,
                             Total = editExecute.Total_Send,
                             Success = editExecute.Send_Success,
@@ -23373,7 +23355,7 @@ namespace WinsockPacketEditor
                 /*
                     ⚠️⚠️ 这份表<b>工作线程与 UI 线程同时在动</b>，而它是个裸 List<T>：
 
-                      SendList_DoWork（bgwSendList 的工作线程）  Add · ToList · Remove
+                      SendList_Body（发送列表的工作线程）  Add · ToList · Remove
                       StopSendList   （UI 线程，用户点「停止」）  ToList · Remove
                       DoSend_ByIndex （UI 线程，快捷键 9001~9010）Add
 
@@ -23415,15 +23397,19 @@ namespace WinsockPacketEditor
                     lock (seLock) { return new List<SendExecute>(lstSendExecute); }
                 }
                 public static BindingList<SendInfo> lstSendInfo = new BindingList<SendInfo>();
-                public static BackgroundWorker bgwSendList = new BackgroundWorker();
 
                 /*
-                    ⚠️ 列表级取消的<b>唯一真源</b>（2026-09-10）。与两个执行器那两处同一批。
+                    ⚠️ 2026-09-11：从 BackgroundWorker 换成 Task（BW → Task 第二步）。
 
-                    CancelAsync() 只有 StopSendList 一个调用点（grep 过，Controls/ 与 WpeCore
-                    都走 StopSendList），所以换成 CTS 不必动 Controls/ 那条线。
+                    <b>顺带修好一个真 bug</b>：BW 时代 DoWork 要靠 InitListExecute() 从外部挂上，
+                    而<b>只有外壳调过它</b>，注入模式的目标进程里从来没调 —— 于是「注入模式下
+                    开始发送整份列表什么都不做」（bgwSendList 空转一下就结束）。
+                    Task 自带 body，不用谁来挂，两处都好了。InitListExecute 已删。
+
+                    取消仍是唯一真源的 sendListCts（第一步已在）。
                 */
                 private static CancellationTokenSource sendListCts;
+                private static Task sendListTask;
 
                 #region//发送列表索引项
 
@@ -23462,12 +23448,12 @@ namespace WinsockPacketEditor
                 /*
                     「一条都跑不了」的预检。
 
-                    每条发送各自的拦截在 SendConfig.Send.DoSendAsync 里（那是三条链路的咽喉），
+                    每条发送各自的拦截在 SendConfig.Send.DoSend 里（那是三条链路的咽喉），
                     这里<b>多拦一次全军覆没的情形</b>：否则 worker 照样起来、界面亮起「发送中」、
                     一秒后自己结束，而计数一个都没动 —— 又是一次「点了没反应」。
 
                     只在<b>全都被拦</b>时才拦：只有一部分不能跑时，剩下的照跑，
-                    被拦的那几条各自会在 DoSendAsync 里报一次。
+                    被拦的那几条各自会在 DoSend 里报一次。
 
                     ⚠️ 做成 public 是给<b>注入模式</b>用的：那边 StartSendList 跑在<b>目标进程</b>里，
                     目标里没有 UI，提示弹不出来（只剩日志经 evt 管道回到外壳的系统日志）。
@@ -23495,7 +23481,7 @@ namespace WinsockPacketEditor
                     {
                         if (Operate.SendConfig.List.lstSendInfo.Count > 0)
                         {
-                            if (!Operate.SendConfig.List.bgwSendList.IsBusy)
+                            if (!IsSendListRunning)
                             {
                                 if (AllBlockedBySystemSocket())
                                 {
@@ -23507,7 +23493,9 @@ namespace WinsockPacketEditor
                                 sendListCts = new CancellationTokenSource();
 
                                 Operate.SendConfig.List.SendExecute_Clear();
-                                Operate.SendConfig.List.bgwSendList.RunWorkerAsync();
+
+                                CancellationToken token = sendListCts.Token;
+                                sendListTask = Task.Run(() => SendList_Body(token), token);
                             }
                         }
                     }
@@ -23521,17 +23509,14 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        if (Operate.SendConfig.List.bgwSendList.IsBusy)
-                        {
-                            //⚠️ 只 Cancel token，不调 CancelAsync() —— 取消只能有一个真源
-                            CancellationTokenSource c = sendListCts;
-                            if (c != null) { c.Cancel(); }
-                        }
+                        //⚠️ 只 Cancel token —— 取消只能有一个真源
+                        CancellationTokenSource c = sendListCts;
+                        if (c != null) { c.Cancel(); }
 
                         //⚠️ 先在锁里取快照，出锁再 StopSend —— 那是个会阻塞的调用，握着锁做会死锁
                         foreach (SendExecute se in Operate.SendConfig.List.SendExecute_Snapshot())
                         {
-                            if (se.Worker.IsBusy)
+                            if (se.Running)
                             {
                                 se.StopSend();
                             }
@@ -23545,12 +23530,15 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                public static void SendList_DoWork(object sender, DoWorkEventArgs e)
+                /*
+                    ⚠️ <b>这里保留 try/catch</b>（与两个执行器<b>不同</b>）：列表级 body 没有 continuation
+                    去接异常。任何异常记一条日志就好 —— 每条发送自己的结局由 SendExecute.Send_OnDone 报，
+                    这一层只是驱动。取消走 token（不再有 e.Cancel 那个没人读的信号）。
+                */
+                public static void SendList_Body(CancellationToken token)
                 {
                     try
                     {
-                        CancellationToken token = sendListCts.Token;
-
                         for (int index = 0; index < Operate.SendConfig.List.lstSendInfo.Count; index++)
                         {
                             SendInfo si = Operate.SendConfig.List.lstSendInfo[index];
@@ -23566,13 +23554,11 @@ namespace WinsockPacketEditor
                                     else
                                     {
                                         //⚠️ 「等某件事做完」用 WaitOne，取消当场返回（原来最坏还要睡满 10ms）
-                                        while (se.Worker.IsBusy)
+                                        while (se.Running)
                                         {
                                             if (token.WaitHandle.WaitOne(10))
                                             {
                                                 se.StopSend();
-
-                                                e.Cancel = true;
                                                 return;
                                             }
                                         }
@@ -23581,18 +23567,7 @@ namespace WinsockPacketEditor
                             }
                         }
 
-                        /*
-                            ⚠️ 「同时执行」这一支原来<b>只调 StopSend、不设 e.Cancel</b>（2026-09-10 补）。
-
-                            ⚠️⚠️ <b>订正（2026-09-10 复查）</b>：当时把症状写成「完成回调仍走『执行完毕』」，
-                            那是错的 —— 查过四个列表级完成回调（SendList / RobotList / QuickList ×2），
-                            <b>它们只把三个按钮的 Enabled 翻回来，没有任何一个读 e.Cancelled 或 e.Error</b>。
-                            所以这个 e.Cancel <b>至今没有消费者</b>：语义上该设（取消了就该报取消），
-                            但它现在不改变任何可见行为。「执行完毕」那句提示在<b>每条发送自己的</b>
-                            SendExecute.Send_RunCompleted 里，那一处的 e.Cancel 才是一直有人读的。
-
-                            这正是 BackgroundWorker 的通病：e.Cancel / e.Error 是写进去就没声音的信号。
-                        */
+                        //「同时执行」：等所有已启动的发送各自跑完；取消就把它们停掉再走
                         bool bCancelled = false;
 
                         while (Operate.SendConfig.List.SendExecute_Count() > 0)
@@ -23605,19 +23580,16 @@ namespace WinsockPacketEditor
                                     se.StopSend();
                                 }
 
-                                if (!se.Worker.IsBusy)
+                                if (!se.Running)
                                 {
                                     Operate.SendConfig.List.SendExecute_Remove(se);
                                 }
                             }
 
                             /*
-                                ⚠️ 取消<b>之前</b>用 WaitOne：按下停止当场醒，不必先睡满 100ms
-                                才轮到调 StopSend —— 这是这个循环真正的收益。
-
-                                ⚠️⚠️ 取消<b>之后</b>必须换回 Sleep。token 已经是 signaled 的，
-                                WaitOne 会立刻返回，循环就成了<b>热自旋</b>（一直转到执行器
-                                自己结束为止）。这一步只是在等 IsBusy 翻掉，10ms 一探足够。
+                                ⚠️ 取消<b>之前</b>用 WaitOne：按下停止当场醒，不必先睡满 100ms 才轮到调 StopSend。
+                                ⚠️⚠️ 取消<b>之后</b>必须换回 Sleep：token 已 signaled，WaitOne 会立刻返回，
+                                循环就成了<b>热自旋</b>。这一步只是在等各条发送翻成不 Running，10ms 一探足够。
                             */
                             if (bCancelled)
                             {
@@ -23628,15 +23600,10 @@ namespace WinsockPacketEditor
                                 bCancelled = true;
                             }
                         }
-
-                        if (bCancelled)
-                        {
-                            e.Cancel = true;
-                        }
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SendList_DoWork), ex);
+                        Operate.DoLog(nameof(SendList_Body), ex);
                     }
                 }
 
@@ -23970,7 +23937,7 @@ namespace WinsockPacketEditor
                 /// <summary>
                 /// 发送列表正在跑没有。
                 ///
-                /// 出 bool 而不是把 <c>bgwSendList</c> 给出去：BackgroundWorker 外壳本来引用得到，
+                /// 出 bool 而不是把内部的 Task 给出去：
                 /// 但把执行器暴露出去等于让界面直接操纵它，启停的前置条件（列表非空、没在跑）
                 /// 就会散成两份。启停一律走 StartSendList / StopSendList。
                 /// </summary>
@@ -23978,7 +23945,7 @@ namespace WinsockPacketEditor
                 {
                     get
                     {
-                        try { return SendConfig.List.bgwSendList.IsBusy; }
+                        try { return SendConfig.List.sendListTask != null && !SendConfig.List.sendListTask.IsCompleted; }
                         catch (Exception ex) { Operate.DoLog(nameof(IsSendListRunning), ex); return false; }
                     }
                 }
@@ -25184,7 +25151,7 @@ namespace WinsockPacketEditor
                     editHooked = true;
 
                     //轨迹在这里攒，不让前端从轮询里拼 —— 200ms 一拍会漏掉飞快的那几步
-                    editExecute.Worker.ProgressChanged += (s, e) =>
+                    editExecute.Progressed += index =>
                     {
                         lock (editLock)
                         {
@@ -25195,15 +25162,16 @@ namespace WinsockPacketEditor
                                 一次丢 1000 条摊薄 RemoveRange 的搬移成本，别逐条 RemoveAt(0)。
                             */
                             if (editTrail.Count >= 6000) { editTrail.RemoveRange(0, 1000); }
-                            editTrail.Add(e.ProgressPercentage);
+                            editTrail.Add(index);
                         }
                     };
 
-                    editExecute.Worker.RunWorkerCompleted += (s, e) =>
+                    editExecute.Completed += result =>
                     {
                         lock (editLock)
                         {
-                            editResult = e.Cancelled ? "stopped" : (e.Error != null ? "error:" + e.Error.Message : "done");
+                            //result 已经是 "done" / "stopped" / "error:消息"
+                            editResult = result;
                         }
                     };
                 }
@@ -25510,7 +25478,7 @@ namespace WinsockPacketEditor
                     try
                     {
                         if (editInstruction == null || editInstruction.Count == 0) { return UI.T("RobotEditForm.INST.Empty", "指令集是空的"); }
-                        if (editExecute.Worker.IsBusy) { return UI.T("RobotEditForm.Robot.Busy", "机器人正在执行"); }
+                        if (editExecute.Running) { return UI.T("RobotEditForm.Robot.Busy", "机器人正在执行"); }
 
                         string err = SaveRobotEdit(Name);
                         if (!string.IsNullOrEmpty(err)) { return err; }
@@ -25522,7 +25490,7 @@ namespace WinsockPacketEditor
                         editExecute.StartRobot(ri, null);
 
                         //StartRobot 自己校验没过时只记日志不抛，这里把它变成看得见的错误
-                        if (!editExecute.Worker.IsBusy) { return UI.T("RobotEditForm.Robot.StartFail", "机器人没有启动，请检查系统日志"); }
+                        if (!editExecute.Running) { return UI.T("RobotEditForm.Robot.StartFail", "机器人没有启动，请检查系统日志"); }
 
                         return string.Empty;
                     }
@@ -25546,7 +25514,7 @@ namespace WinsockPacketEditor
 
                     try
                     {
-                        p.Running = editExecute.Worker.IsBusy;
+                        p.Running = editExecute.Running;
                         p.Index = editExecute.Instruction_Index;
                         p.Total = editExecute.Total_Instruction;
 
@@ -25568,34 +25536,11 @@ namespace WinsockPacketEditor
 
                 #region//执行机器人            
 
+                /// <summary>
+                /// 建一个执行器并启动它，返回那个执行器（没得跑就返回 null）。
+                /// StartRobot 非阻塞（只启动 Task），所以这里同步就够 —— 见 DoSend 上面那段。
+                /// </summary>
                 public static RobotExecute DoRobot(Guid RID, Dictionary<string, object> parameters)
-                {
-                    return Task.Run(() => DoRobotAsync(RID, parameters))
-                        .ConfigureAwait(false)
-                        .GetAwaiter()
-                        .GetResult();
-                }
-
-                public static async Task DoRobot_ByIndex(int RobotListIndex)
-                {
-                    try
-                    {
-                        if (RobotListIndex > -1 && RobotListIndex < RobotConfig.List.lstRobotInfo.Count)
-                        {
-                            if (RobotConfig.List.lstRobotInfo[RobotListIndex].IsEnable)
-                            {
-                                Guid RID = RobotConfig.List.lstRobotInfo[RobotListIndex].RID;
-                                Operate.RobotConfig.List.RobotExecute_Add(await DoRobotAsync(RID, null));                                
-                            }                            
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(DoRobot_ByIndex), ex);
-                    }
-                }
-
-                private static async Task<RobotExecute> DoRobotAsync(Guid RID, Dictionary<string, object> parameters)
                 {
                     RobotExecute reReturn = null;
 
@@ -25605,25 +25550,38 @@ namespace WinsockPacketEditor
                         {
                             RobotInfo ri = RobotConfig.List.lstRobotInfo.Where(item => item.RID == RID).FirstOrDefault();
 
-                            if (ri != null)
+                            if (ri != null && ri.IsEnable && ri.RInstruction.Count > 0)
                             {
-                                if (ri.IsEnable)
-                                {
-                                    if (ri.RInstruction.Count > 0)
-                                    {
-                                        reReturn = new RobotExecute();
-                                        await Task.Run(() => reReturn.StartRobot(ri, parameters));
-                                    }
-                                }                                
+                                reReturn = new RobotExecute();
+                                reReturn.StartRobot(ri, parameters);
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(DoRobotAsync), ex);
+                        Operate.DoLog(nameof(DoRobot), ex);
                     }
 
                     return reReturn;
+                }
+
+                public static void DoRobot_ByIndex(int RobotListIndex)
+                {
+                    try
+                    {
+                        if (RobotListIndex > -1 && RobotListIndex < RobotConfig.List.lstRobotInfo.Count)
+                        {
+                            if (RobotConfig.List.lstRobotInfo[RobotListIndex].IsEnable)
+                            {
+                                Guid RID = RobotConfig.List.lstRobotInfo[RobotListIndex].RID;
+                                Operate.RobotConfig.List.RobotExecute_Add(DoRobot(RID, null));
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(DoRobot_ByIndex), ex);
+                    }
                 }
 
                 #endregion
@@ -25666,12 +25624,10 @@ namespace WinsockPacketEditor
                     lock (reLock) { return new List<RobotExecute>(lstRobotExecute); }
                 }
                 public static BindingList<RobotInfo> lstRobotInfo = new BindingList<RobotInfo>();
-                public static BackgroundWorker bgwRobotList = new BackgroundWorker();
 
-                /*
-                    ⚠️ 列表级取消的<b>唯一真源</b>（2026-09-10）—— 与 sendListCts 同构，理由见那边。
-                */
+                //⚠️ 2026-09-11：BW → Task，与 sendListTask 同构（也修好了「注入模式下整份列表不跑」）
                 private static CancellationTokenSource robotListCts;
+                private static Task robotListTask;
 
                 #region//机器人入列表
 
@@ -25697,14 +25653,16 @@ namespace WinsockPacketEditor
                     {
                         if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
                         {
-                            if (!Operate.RobotConfig.List.bgwRobotList.IsBusy)
+                            if (!IsRobotListRunning)
                             {
                                 //⚠️ 每轮一个新的：CTS 取消过就不能复位
                                 if (robotListCts != null) { robotListCts.Dispose(); }
                                 robotListCts = new CancellationTokenSource();
 
                                 Operate.RobotConfig.List.RobotExecute_Clear();
-                                Operate.RobotConfig.List.bgwRobotList.RunWorkerAsync();
+
+                                CancellationToken token = robotListCts.Token;
+                                robotListTask = Task.Run(() => RobotList_Body(token), token);
                             }
                         }
                     }
@@ -25718,17 +25676,14 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        if (Operate.RobotConfig.List.bgwRobotList.IsBusy)
-                        {
-                            //⚠️ 只 Cancel token，不调 CancelAsync() —— 取消只能有一个真源
-                            CancellationTokenSource c = robotListCts;
-                            if (c != null) { c.Cancel(); }
-                        }
+                        //⚠️ 只 Cancel token —— 取消只能有一个真源
+                        CancellationTokenSource c = robotListCts;
+                        if (c != null) { c.Cancel(); }
 
                         //⚠️ 快照 —— StopRobot 会阻塞，别在锁里调
                         foreach (RobotExecute re in Operate.RobotConfig.List.RobotExecute_Snapshot())
                         {
-                            if (re.Worker.IsBusy)
+                            if (re.Running)
                             {
                                 re.StopRobot();
                             }
@@ -25742,12 +25697,11 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                public static void RobotList_DoWork(object sender, DoWorkEventArgs e)
+                //⚠️ 保留 try/catch，与 SendList_Body 同理（列表级 body 没有 continuation 接异常）
+                public static void RobotList_Body(CancellationToken token)
                 {
                     try
                     {
-                        CancellationToken token = robotListCts.Token;
-
                         foreach (RobotInfo ri in Operate.RobotConfig.List.lstRobotInfo)
                         {
                             if (ri.IsEnable)
@@ -25762,13 +25716,11 @@ namespace WinsockPacketEditor
                                     else
                                     {
                                         //⚠️ 「等某件事做完」用 WaitOne，取消当场返回（原来最坏还要睡满 100ms）
-                                        while (re.Worker.IsBusy)
+                                        while (re.Running)
                                         {
                                             if (token.WaitHandle.WaitOne(100))
                                             {
                                                 re.StopRobot();
-
-                                                e.Cancel = true;
                                                 return;
                                             }
                                         }
@@ -25777,11 +25729,7 @@ namespace WinsockPacketEditor
                             }
                         }
 
-                        /*
-                            ⚠️ 「同时执行」这一支原来<b>只调 StopRobot、不设 e.Cancel</b>（2026-09-09 补）。
-                            ⚠️⚠️ <b>订正</b>：症状描述当时写错了，这个 e.Cancel 至今没有消费者 ——
-                            详见 SendList_DoWork 里那段同款说明（四个列表级完成回调都不读 e.Cancelled）。
-                        */
+                        //「同时执行」：等所有已启动的机器人各自跑完；取消就停掉再走
                         bool bCancelled = false;
 
                         while (Operate.RobotConfig.List.RobotExecute_Count() > 0)
@@ -25794,20 +25742,13 @@ namespace WinsockPacketEditor
                                     re.StopRobot();
                                 }
 
-                                if (!re.Worker.IsBusy)
+                                if (!re.Running)
                                 {
                                     Operate.RobotConfig.List.RobotExecute_Remove(re);
                                 }
                             }
 
-                            /*
-                                ⚠️ 取消<b>之前</b>用 WaitOne：按下停止当场醒，不必先睡满 100ms
-                                才轮到调 StopSend —— 这是这个循环真正的收益。
-
-                                ⚠️⚠️ 取消<b>之后</b>必须换回 Sleep。token 已经是 signaled 的，
-                                WaitOne 会立刻返回，循环就成了<b>热自旋</b>（一直转到执行器
-                                自己结束为止）。这一步只是在等 IsBusy 翻掉，10ms 一探足够。
-                            */
+                            //取消之前 WaitOne（当场醒）、取消之后 Sleep（避免热自旋），见 SendList_Body 同款说明
                             if (bCancelled)
                             {
                                 Thread.Sleep(10);
@@ -25817,15 +25758,10 @@ namespace WinsockPacketEditor
                                 bCancelled = true;
                             }
                         }
-
-                        if (bCancelled)
-                        {
-                            e.Cancel = true;
-                        }
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(RobotList_DoWork), ex);
+                        Operate.DoLog(nameof(RobotList_Body), ex);
                     }
                 }
 
@@ -26101,14 +26037,14 @@ namespace WinsockPacketEditor
                 }
 
                 /// <summary>
-                /// 机器人列表正在跑没有。出 bool 而不是把 <c>bgwRobotList</c> 给出去（理由同 IsSendListRunning）。
+                /// 机器人列表正在跑没有。出 bool 而不是把内部的 Task 给出去（理由同 IsSendListRunning）。
                 /// 「同时执行」模式下 worker 会等所有机器人跑完才结束，所以这一个值就够。
                 /// </summary>
                 public static bool IsRobotListRunning
                 {
                     get
                     {
-                        try { return RobotConfig.List.bgwRobotList.IsBusy; }
+                        try { return RobotConfig.List.robotListTask != null && !RobotConfig.List.robotListTask.IsCompleted; }
                         catch (Exception ex) { Operate.DoLog(nameof(IsRobotListRunning), ex); return false; }
                     }
                 }

@@ -342,10 +342,25 @@ namespace WPEHookTest
 
             try
             {
-                //一条什么都不发的发送（发送集为空），只验命令与状态回报这条链路。
-                //同样走按 Id 的入口（SendInfo 也继承 NotifyProperty）。
+                /*
+                    一条<b>真的会跑</b>的发送：一个包、套接字故意给个无效值（奇数，不可能是合法句柄），
+                    1000 轮 × 间隔 50ms —— SendPacket 立刻失败、计一次失败，然后睡 50ms，
+                    所以它能稳定地「跑着」几十秒，失败计数一直涨。
+
+                    ⚠️ 原来这里的发送集是<b>空的</b>，worker 立刻跑完，「启动后 false」被当成对的 ——
+                    于是它从来没验到「整份列表在目标里到底跑没跑」。实际上目标进程里
+                    <b>从来没人调 InitListExecute()</b>（只有外壳调），列表的 BackgroundWorker 没挂 DoWork，
+                    注入模式下「开始发送」整份列表什么都不做（2026-09-11 换 Task 时查出来的）。
+                */
                 Operate.SendConfig.List.lstSendInfo.Clear();
-                Operate.SendConfig.List.AddSend_New_ById();
+                var coll = new System.ComponentModel.BindingList<PacketInfo>
+                {
+                    new PacketInfo(DateTime.Now, 12345, Operate.PacketConfig.Packet.PacketType.WS2_Send,
+                        "127.0.0.1:1", "", "127.0.0.1:" + port, "",
+                        Encoding.ASCII.GetBytes("PING"), Encoding.ASCII.GetBytes("PING"), "PING", 4,
+                        Operate.FilterConfig.Filter.FilterAction.None),
+                };
+                Operate.SendConfig.Send.AddSend(true, Guid.NewGuid(), "执行器测试", false, 1000, 50, coll, "");
 
                 target = StartTarget2(port, 30);
                 link.Attach(target.Id, null, 15000);
@@ -355,28 +370,28 @@ namespace WPEHookTest
                 bool before = link.SendListRunning;
 
                 link.StartSendList();
-                Thread.Sleep(1500);
-                bool duringOrDone = link.SendListRunning;
+                Thread.Sleep(2500);
+                bool during = link.SendListRunning;
+                long fails = Operate.SendConfig.List.lstSendInfo[0].ExecutionFail;
+                long runs = Operate.SendConfig.List.lstSendInfo[0].ExecutionCount;
 
                 link.StopSendList();
                 Thread.Sleep(1500);
                 bool after = link.SendListRunning;
 
-                rep.AppendLine("- 下发 StartSendList / StopSendList，命令都得到了应答（没抛异常）");
+                rep.AppendLine("- 发送集 1 个包（无效套接字）× 1000 轮 × 间隔 50ms，下发 StartSendList / StopSendList");
                 rep.AppendLine("- 「在跑」状态由目标随 1 Hz 的 Stats 事件报上来：");
-                rep.AppendLine("  启动前 " + before + " → 启动后 " + duringOrDone + " → 停止后 " + after);
-                rep.AppendLine("  （发送集是空的，worker 会立刻跑完，所以「启动后」为 false 也是对的 ——");
-                rep.AppendLine("   这一项验的是命令与状态回报这条链路通不通）");
+                rep.AppendLine("  启动前 " + before + " → 启动 2.5 秒后 " + during + " → 停止后 " + after + "（应为 False → True → False）");
+                rep.AppendLine("- 启动 2.5 秒后外壳侧回填的计数：执行 " + runs + " 次、失败 " + fails + " 次（都应 > 0）");
 
-                //统计包本身有没有到：滤镜表是空的，看发送表的计数有没有被回填
-                bool statsArrived = after == false;
+                bool ok = !before && during && !after && runs > 0 && fails > 0;
 
                 link.Detach();
 
                 rep.AppendLine();
-                rep.AppendLine(statsArrived ? "→ ok" : "→ FAIL");
+                rep.AppendLine(ok ? "→ ok（整份发送列表确实在目标进程里跑起来了，也停得下来）" : "→ FAIL");
                 rep.AppendLine();
-                return statsArrived;
+                return ok;
             }
             catch (Exception ex)
             {
