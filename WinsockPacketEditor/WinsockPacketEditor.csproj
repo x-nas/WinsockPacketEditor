@@ -1,399 +1,181 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    WPE x64 的产品工程：单一 WinsockPacketEditor.exe（WebView2 外壳 + Vue 前端 + 全部业务逻辑）。
+
+    2026-09-11 从老式工程（packages.config + 逐个 Compile Include）升级成 SDK 式，目标框架仍是 net48。
+    收益：.cs 自动包含（不必再「补 Compile Include」）、PackageReference（WebView2 的原生 loader
+    由包自带的 targets 按 runtimes\win-*\native\ 布局拷，不用手工列）、工程文件从 400 行缩到这些。
+
+    入口是原外壳的 Program.Main（命名空间仍是 WPEHybrid，只是并进同一个程序集）。
+    前端源在 WebUI\（Vite 工程，与管理台 Web\ 在 Windows 上大小写撞名才改的名），产物在 wwwroot\。
+
+    ⚠️ 构建请从解决方案走，并带上还原：
+       MSBuild.exe WinSockPacketEditor.sln -restore -p:Configuration=Debug
+    WPEHook 引用本工程（方向是反的），本工程不能 ProjectReference 它，
+    WPEHook.dll 靠它自己的 post-build 拷进这里的 bin\<配置>\ —— 只编本工程不会带上它。
+  -->
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B5ED16ED-ABD5-438B-A589-E8ACC2377432}</ProjectGuid>
-    <!--
-      合并 WPEHybrid 之后：产品是单一 WinsockPacketEditor.exe（不再是 exe + dll 两个程序集）。
-      入口是原外壳的 Program.Main（命名空间仍是 WPEHybrid，只是并进同一个程序集）。
-      WebView2 外壳 + Vue 前端一并进来，源在 Program.cs / ShellForm.cs / Bridge\，
-      前端源在 WebUI\（原 WPEHybrid\web\，因与管理台 Web\ 在 Windows 上大小写撞名而改名），产物在 wwwroot\。
-    -->
     <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>WinsockPacketEditor</RootNamespace>
     <AssemblyName>WinsockPacketEditor</AssemblyName>
+    <ProjectGuid>{B5ED16ED-ABD5-438B-A589-E8ACC2377432}</ProjectGuid>
     <StartupObject>WPEHybrid.Program</StartupObject>
+    <!-- 与老式工程一致：C# 7.3（代码里有几处写法按 7.3 的限制取舍过，见 CLAUDE.md 的 HexToBytes） -->
+    <LangVersion>7.3</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!--
+      必须显式写死：SDK 会给 net48 的 exe 默认 PlatformTarget=x86（_UsingDefaultPlatformTarget），
+      那样产品被编成 32 位进程 —— SQLite.Interop / SunnyNet 的原生 DLL 位数对不上，
+      WebView2 的 targets 也只拷 x86 那一份 loader。置成 AnyCPU 才走 IsManagedPlatformAnyCpu 那支，三种架构都拷。
+    -->
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+    <!--
+      输出仍是 bin\<配置>\，不要 net48 子目录：WPEHook 的 post-build、反射跑测（tools\tests）、
+      发布打包（WinRAR 打 bin\Release\）、文档都按这个路径写的。
+    -->
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <!-- 版本号等在 Properties\AssemblyInfo.cs 里手写，别让 SDK 再生成一份（会报重复特性） -->
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Deterministic>false</Deterministic>
     <!-- 清单声明 asInvoker + PerMonitorV2，提权在 Program.Main 里靠 RestartAsAdmin 做 -->
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>wpe.ico</ApplicationIcon>
-    <!-- binding redirects：与 WPEHybrid 一致，自动生成到 .exe.config（靠 App.config 打底）-->
+    <!-- binding redirects 自动生成到 .exe.config（靠 App.config 打底） -->
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
     <!-- WebView2 包同时含 WinForms/WPF 两套，压掉 WPF 引入的版本冲突噪声 -->
     <MSBuildWarningsAsMessages>MSB3277</MSBuildWarningsAsMessages>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>false</Deterministic>
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <!--
+      默认通配（**\*）要排掉前端的依赖目录：node_modules 有上万个文件，吞进工程会拖慢每次加载。
+      WebUI\ 下的源码仍然可见。
+    -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);WebUI\node_modules\**;WebUI\dist\**</DefaultItemExcludes>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
+
+  <!-- 调试信息的格式照老式工程：Debug 用 full、Release 用 pdbonly -->
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="EasyHook, Version=2.7.7097.0, Culture=neutral, PublicKeyToken=4b580fca19d0b0c5, processorArchitecture=MSIL">
-      <HintPath>..\packages\EasyHook.2.7.7097\lib\net40\EasyHook.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin, Version=4.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.4.2.2\lib\net45\Microsoft.Owin.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.FileSystems, Version=4.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.FileSystems.4.2.2\lib\net45\Microsoft.Owin.FileSystems.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Host.HttpListener, Version=4.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Host.HttpListener.4.2.2\lib\net45\Microsoft.Owin.Host.HttpListener.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Hosting, Version=4.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Hosting.4.2.2\lib\net45\Microsoft.Owin.Hosting.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.StaticFiles, Version=4.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.StaticFiles.4.2.2\lib\net45\Microsoft.Owin.StaticFiles.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json.Bson, Version=1.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.Bson.1.0.3\lib\net45\Newtonsoft.Json.Bson.dll</HintPath>
-    </Reference>
-    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
-      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
-    </Reference>
-    <Reference Include="QQWry, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\QQWry.1.3.1\lib\net45\QQWry.dll</HintPath>
-    </Reference>
-    <Reference Include="SuperSocket.Common, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
-      <HintPath>..\packages\SuperSocket.1.6.6.1\lib\net45\SuperSocket.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="SuperSocket.Facility, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
-      <HintPath>..\packages\SuperSocket.1.6.6.1\lib\net45\SuperSocket.Facility.dll</HintPath>
-    </Reference>
-    <Reference Include="SuperSocket.SocketBase, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
-      <HintPath>..\packages\SuperSocket.1.6.6.1\lib\net45\SuperSocket.SocketBase.dll</HintPath>
-    </Reference>
-    <Reference Include="SuperSocket.SocketEngine, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
-      <HintPath>..\packages\SuperSocket.Engine.1.6.6.1\lib\net45\SuperSocket.SocketEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="SuperSocket.SocketService, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
-      <HintPath>..\packages\SuperSocket.Engine.1.6.6.1\lib\net45\SuperSocket.SocketService.exe</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Buffers, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.6.1\lib\net462\System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.SQLite, Version=1.0.119.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.119.0\lib\net46\System.Data.SQLite.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Management" />
-    <Reference Include="System.Memory, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Memory.4.6.3\lib\net462\System.Memory.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Formatting, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.6.0.0\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Numerics.Vectors.4.6.1\lib\net462\System.Numerics.Vectors.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.1.2\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.4.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.6.3\lib\net462\System.Threading.Tasks.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web" />
-    <Reference Include="System.Web.Http, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.3.0\lib\net45\System.Web.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http.Owin, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Owin.5.3.0\lib\net45\System.Web.Http.Owin.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
+    <!-- SDK 的隐式框架引用之外，本工程还用到的这几个 -->
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsInput, Version=1.0.4.0, Culture=neutral, PublicKeyToken=9b287f7dc5073cad, processorArchitecture=MSIL">
-      <HintPath>..\packages\InputSimulator.1.0.4.0\lib\net20\WindowsInput.dll</HintPath>
-    </Reference>
-    <!-- WebView2（外壳承载 Vue 前端）。原生 loader 在下面的 Content 里按 runtimes\win-*\native 布局显式列出。 -->
-    <Reference Include="Microsoft.Web.WebView2.Core">
-      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.4129.50\lib\net462\Microsoft.Web.WebView2.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Web.WebView2.WinForms">
-      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.4129.50\lib\net462\Microsoft.Web.WebView2.WinForms.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Web.WebView2.Wpf">
-      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.4129.50\lib\net462\Microsoft.Web.WebView2.Wpf.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Web" />
   </ItemGroup>
+
+  <!--
+    NuGet 包：与原 packages.config 逐条一一对应、版本不变（连 packages.config 里平铺出来的传递依赖一起
+    显式列出，把版本钉死，不让还原按依赖范围自己挑）。
+  -->
   <ItemGroup>
-    <Compile Include="ClassObject\AccountInfo.cs" />
-    <Compile Include="ClassObject\AccountIPInfo.cs" />
-    <Compile Include="ClassObject\AuthInfo.cs" />
-    <Compile Include="ClassObject\AutoStoresInfo.cs" />
-    <Compile Include="ClassObject\CountryCodes.cs" />
-    <Compile Include="ClassObject\BlackListInfo.cs" />
-    <Compile Include="ClassObject\DataInfo.cs" />
-    <Compile Include="ClassObject\FilterInfo.cs" />
-    <Compile Include="ClassObject\FilterLogInfo.cs" />
-    <Compile Include="ClassObject\FindOptions.cs" />
-    <Compile Include="ClassObject\InstructionInfo.cs" />
-    <Compile Include="ClassObject\IIpRule.cs" />
-    <Compile Include="ClassObject\IPConnectionFilter.cs" />
-    <Compile Include="ClassObject\L10n\L10n.cs" />
-    <Compile Include="ClassObject\L10n\L10nEn.cs" />
-    <Compile Include="ClassObject\L10n\L10nJa.cs" />
-    <Compile Include="ClassObject\L10n\L10nKo.cs" />
-    <Compile Include="ClassObject\L10n\L10nRu.cs" />
-    <Compile Include="ClassObject\L10n\L10nTw.cs" />
-    <Compile Include="ClassObject\L10n\L10nVi.cs" />
-    <Compile Include="ClassObject\LogInfo.cs" />
-    <Compile Include="ClassObject\MapLocal.cs" />
-    <Compile Include="ClassObject\MapRemote.cs" />
-    <Compile Include="ClassObject\NoticeInfo.cs" />
-    <Compile Include="ClassObject\PacketInfo.cs" />
-    <Compile Include="ClassObject\ProcessInfo.cs" />
-    <Compile Include="ClassObject\ProxyAppServer.cs" />
-    <Compile Include="ClassObject\ProxyLogInfo.cs" />
-    <Compile Include="ClassObject\ProxyInfo.cs" />
-    <Compile Include="ClassObject\ProxySession.cs" />
-    <Compile Include="ClassObject\ProxyUDP.cs" />
-    <Compile Include="ClassObject\MustTcpUdpRelay.cs" />
-    <Compile Include="ClassObject\RobotExecute.cs" />
-    <Compile Include="ClassObject\RobotInfo.cs" />
-    <Compile Include="ClassObject\RuleInfo.cs" />
-    <Compile Include="ClassObject\SendExecute.cs" />
-    <Compile Include="ClassObject\SendInfo.cs" />
-    <Compile Include="ClassObject\ServerInfo.cs" />
-    <Compile Include="ClassObject\Socks5ProxyReceiveFilter.cs" />
-    <Compile Include="ClassObject\SocksProxyReceiveFilterFactory.cs" />
-    <Compile Include="ClassObject\SocksProxyServer.cs" />
-    <Compile Include="ClassObject\WpeLogFactory.cs" />
-    <Compile Include="ClassObject\SocksSwitchReceiveFilter.cs" />
-    <Compile Include="ClassObject\SunnyNetCallback.cs" />
-    <Compile Include="ClassObject\WareHouseInfo.cs" />
-    <Compile Include="ClassObject\WhiteListInfo.cs" />
-    <Compile Include="ClassObject\WinSockHook.cs" />
-    <Compile Include="ClassObject\FeedPump.cs" />
-    <Compile Include="ClassObject\LogFile.cs" />
-    <Compile Include="ClassObject\Core\HookHost.cs" />
-    <Compile Include="ClassObject\Core\NotifyProperty.cs" />
-    <Compile Include="ClassObject\Core\Ipc\ConfigSnapshot.cs" />
-    <Compile Include="ClassObject\Core\Ipc\FilterEngine.cs" />
-    <Compile Include="ClassObject\Core\Ipc\IpcProtocol.cs" />
-    <Compile Include="ClassObject\Core\Ipc\PacketFrame.cs" />
-    <Compile Include="ClassObject\Core\Ipc\PacketRing.cs" />
-    <Compile Include="ClassObject\Core\Ipc\ShellLink.cs" />
-    <Compile Include="ClassObject\Core\Ipc\WpeCore.cs" />
-    <Compile Include="ClassObject\Core\IHookHost.cs" />
-    <Compile Include="ClassObject\Ui\FeedRows.cs" />
-    <Compile Include="ClassObject\Ui\IL10n.cs" />
-    <Compile Include="ClassObject\Ui\IUiFeed.cs" />
-    <Compile Include="ClassObject\Ui\IUiHost.cs" />
-    <Compile Include="ClassObject\Ui\PasswordResult.cs" />
-    <Compile Include="ClassObject\Ui\RgbColor.cs" />
-    <Compile Include="ClassObject\Ui\UI.cs" />
-    <Compile Include="ClassObject\Ui\UiPrefs.cs" />
-    <Compile Include="NativeMethods\Kernel32.cs" />
-    <Compile Include="NativeMethods\Mswsock.cs" />
-    <Compile Include="NativeMethods\User32.cs" />
-    <Compile Include="NativeMethods\Wininet.cs" />
-    <Compile Include="NativeMethods\WS2_32.cs" />
-    <Compile Include="NativeMethods\WSock32.cs" />
-    <Compile Include="Operate.cs" />
-    <!-- 原 WPEHybrid 外壳（WebView2 宿主 + 桥）。命名空间仍是 WPEHybrid。 -->
-    <Compile Include="Program.cs" />
-    <Compile Include="ShellForm.cs" />
-    <Compile Include="Bridge\RpcMessage.cs" />
-    <Compile Include="Bridge\WebBridge.cs" />
-    <Compile Include="Bridge\BridgeUiHost.cs" />
-    <Compile Include="Bridge\BridgeUiFeed.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
+    <!-- EasyHook 自带的原生件（EasyHook32/64 + Svc + EasyLoad）走下面工程目录里那六份，不用包里的 contentFiles —— 两份字节相同，
+         用工程里的那份是为了让 WPEHookTest 经 ProjectReference 也拿得到（包的 contentFiles 不向引用方传递）。 -->
+    <PackageReference Include="EasyHook" Version="2.7.7097" ExcludeAssets="contentFiles" />
+    <PackageReference Include="InputSimulator" Version="1.0.4.0" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.3.0" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Owin" Version="5.3.0" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.OwinSelfHost" Version="5.3.0" />
+    <PackageReference Include="Microsoft.Owin" Version="4.2.2" />
+    <PackageReference Include="Microsoft.Owin.FileSystems" Version="4.2.2" />
+    <!--
+      ⚠️ Microsoft.Owin.Host.HttpListener 与 SuperSocket.Engine 里的 SuperSocket.SocketEngine 都是<b>运行期</b>按名字加载的
+      （WebApp.Start 按约定探测宿主程序集；AppServerBase.SetupBasic 里 Type.GetType("SuperSocket.SocketEngine…")），
+      编译期没有任何引用。本工程直接引用这两个包，所以它们照样被拷进输出目录；
+      漏了的症状是「开始代理 / 启动远程管理」当场 FileNotFoundException —— 改包引用时先想这一条。
+    -->
+    <PackageReference Include="Microsoft.Owin.Host.HttpListener" Version="4.2.2" />
+    <PackageReference Include="Microsoft.Owin.Hosting" Version="4.2.2" />
+    <PackageReference Include="Microsoft.Owin.StaticFiles" Version="4.2.2" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4129.50" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.3" />
+    <PackageReference Include="Owin" Version="1.0.0" />
+    <PackageReference Include="QQWry" Version="1.3.1" />
+    <PackageReference Include="Stub.System.Data.SQLite.Core.NetFramework" Version="1.0.119.0" />
+    <PackageReference Include="SuperSocket" Version="1.6.6.1" />
+    <PackageReference Include="SuperSocket.Engine" Version="1.6.6.1" />
+    <!--
+      SuperSocket 1.6.6.1 在 nuspec 里依赖 log4net 2.0.3，而 WPE 从来不用它（SuperSocket 的日志由 WpeLogFactory 转给 Operate.DoLog，
+      见 CLAUDE.md「SuperSocket 的日志出口必须自己给」）。packages.config 时代它早被删了，这里把它的资产整个排掉，
+      免得 PackageReference 顺着依赖又把 log4net.dll 带回输出目录。
+    -->
+    <PackageReference Include="log4net" Version="2.0.3" ExcludeAssets="all" PrivateAssets="all" />
+    <!-- 它只在依赖图里、不进输出目录，这两条漏洞通告与本程序无关，别让它们每次构建都刷警告 -->
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-2cwj-8chv-9pp9" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-4f7c-pmjv-c25w" />
+    <PackageReference Include="System.Buffers" Version="4.6.1" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.119.0" />
+    <PackageReference Include="System.Memory" Version="4.6.3" />
+    <PackageReference Include="System.Numerics.Vectors" Version="4.6.1" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.6.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SunnyNetlibray\CertManager.cs" />
-    <Compile Include="SunnyNetlibray\Event\HTTPEvent.cs" />
-    <Compile Include="SunnyNetlibray\Event\TCPClientEvent.cs" />
-    <Compile Include="SunnyNetlibray\Event\TCPEvent.cs" />
-    <Compile Include="SunnyNetlibray\Event\UDPEvent.cs" />
-    <Compile Include="SunnyNetlibray\Event\WebsocketClientEvent.cs" />
-    <Compile Include="SunnyNetlibray\Event\WebSocketEvent.cs" />
-    <Compile Include="SunnyNetlibray\HTTPClient.cs" />
-    <Compile Include="SunnyNetlibray\interface\RedisClient.cs" />
-    <Compile Include="SunnyNetlibray\interface\SunnyNet.cs" />
-    <Compile Include="SunnyNetlibray\interface\TCPClient.cs" />
-    <Compile Include="SunnyNetlibray\interface\WebsocketClient.cs" />
-    <Compile Include="SunnyNetlibray\Internal\api.cs" />
-    <Compile Include="SunnyNetlibray\Internal\Bridge.cs" />
-    <Compile Include="SunnyNetlibray\Internal\Const.cs" />
-    <Compile Include="SunnyNetlibray\Internal\Tool.cs" />
-    <Compile Include="SunnyNetlibray\KeyTable.cs" />
-    <Compile Include="SunnyNetlibray\Queue.cs" />
-    <Compile Include="SunnyNetlibray\RedisClient.cs" />
-    <Compile Include="SunnyNetlibray\SunnyNet.cs" />
-    <Compile Include="SunnyNetlibray\TCPClient.cs" />
-    <Compile Include="SunnyNetlibray\Tools\Compress.cs" />
-    <Compile Include="SunnyNetlibray\Tools\TCPTools.cs" />
-    <Compile Include="SunnyNetlibray\Tools\UDPTools.cs" />
-    <Compile Include="SunnyNetlibray\Tools\WebSocketTools.cs" />
-    <Compile Include="SunnyNetlibray\WSClient.cs" />
-    <Compile Include="WebAPI\CCProxy_Controller.cs" />
-    <Compile Include="WebAPI\ProxyAccount_Controller.cs" />
-    <Compile Include="WebAPI\ProxyCap_Controller.cs" />
-    <Compile Include="WebAPI\ProxyInfo_Controller.cs" />
-    <Compile Include="WebAPI\SocketInfo_Controller.cs" />
-    <Compile Include="WebAPI\Socket_Web.cs" />
-    <Compile Include="WebAPI\SystemInfo_Controller.cs" />
-    <Content Include="x86\SunnyNet.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <EmbeddedResource Include="Properties\Resources.resx">
+    <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="IPLocation\qqwry.dat">
+  </ItemGroup>
+
+  <!--
+    随程序发布的非托管文件与数据。这些文件本来就在默认 None 通配里，这里只补「拷到输出目录」这一条。
+    写成 None 而不是 Content：两者都会经 ProjectReference 传给 WPEHookTest（跑测要它们），None 不会在工程里多出一份重复项。
+  -->
+  <ItemGroup>
+    <None Update="EasyHook32.dll;EasyHook32Svc.exe;EasyHook64.dll;EasyHook64Svc.exe;EasyLoad32.dll;EasyLoad64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="x86\SunnyNet.dll;x64\SunnyNet64.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
-    <None Include="App.config" />
-    <None Include="app.manifest" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="EasyHook32.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="EasyHook32Svc.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="EasyHook64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="EasyHook64Svc.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="EasyLoad32.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="EasyLoad64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Web\CCProxy\cn_acclistadmin.htm">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Web\index.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Web\SystemLog.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Web\ProxyAccount.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <!--
-      设计令牌：<b>直接引外壳工程里那个源文件</b>，Link 把它投影成输出目录的 Web\tokens.css。
-      这样管理台与 Vue 界面共用同一份令牌，不是各抄一份（改配色只改那一个文件）。
+      SQLite.Interop 两份：Stub.System.Data.SQLite.Core.NetFramework 的 targets 也会往 x86\ / x64\ 拷同一对文件
+      （字节完全相同，2026-09-11 核过哈希），老式工程时代也是两路并存。留着工程里这一对，是因为包的 build 资产
+      不向引用方传递 —— 去掉它们，WPEHookTest 的输出目录里就没有 SQLite.Interop 了。
     -->
-    <Content Include="WebUI\src\tokens.css">
+    <None Update="x86\SQLite.Interop.dll;x64\SQLite.Interop.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="IPLocation\qqwry.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <!-- 远程管理台（手写静态页，零构建）：整个 Web\ 目录照原样发布，新增文件不用再回来改工程 -->
+    <None Update="Web\**">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <!--
+      设计令牌：<b>直接引前端工程里那个源文件</b>，Link 把它投影成输出目录的 Web\tokens.css。
+      管理台与 Vue 界面共用同一份令牌，不是各抄一份（改配色只改那一个文件）。
+    -->
+    <None Update="WebUI\src\tokens.css">
       <Link>Web\tokens.css</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Web\wpe.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <!-- 站点图标：../wpe.ico 的子集（只留 16/32/48 三层），见 Web/index.html 的说明 -->
-    <Content Include="Web\wpe.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Web\wpe.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Web\fonts\jetbrainsmono.woff2">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Web\fonts\orbitron.woff2">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Web\fonts\sharetechmono.woff2">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Web\fonts\OFL.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <!--
-      WebView2 原生 loader（AnyCPU：三种架构各一份放进 runtimes\win-*\native\，
-      运行期按进程位数挑）。刻意显式列出、不靠 WebView2 的 .targets 自动拷 ——
-      老式工程 + packages.config 复现不出 PackageReference 那套 runtimes 布局。
-    -->
-    <Content Include="..\packages\Microsoft.Web.WebView2.1.0.4129.50\runtimes\win-x86\native\WebView2Loader.dll">
-      <Link>runtimes\win-x86\native\WebView2Loader.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\packages\Microsoft.Web.WebView2.1.0.4129.50\runtimes\win-x64\native\WebView2Loader.dll">
-      <Link>runtimes\win-x64\native\WebView2Loader.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\packages\Microsoft.Web.WebView2.1.0.4129.50\runtimes\win-arm64\native\WebView2Loader.dll">
-      <Link>runtimes\win-arm64\native\WebView2Loader.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="x64\SQLite.Interop.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="x64\SunnyNet64.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="x86\SQLite.Interop.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.119.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.119.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets'))" />
-  </Target>
-  <Import Project="..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.119.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets" Condition="Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.119.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" />
+
   <!--
     前端产物 wwwroot 整目录镜像进输出目录。刻意不用 Content Include（Vite 哈希文件名 +
-    Content 求值期展开会漏新文件 / 留死文件）；清理与拷贝在同一个 target 成对做。
-    详见原 WPEHybrid.csproj 的说明（此段照搬）。WebUI\node_modules 不会被碰 ——
-    老式工程没有默认通配，只有这里显式 glob 的 wwwroot\**\*。
+    求值期展开会漏新文件 / 留死文件）；清理与拷贝在同一个 target 里成对做 ——
+    只清不拷的话 .CopyComplete 标记还在，下次构建判定「已是最新」直接跳过，产出一个没有前端的输出目录。
   -->
   <Target Name="StageWwwroot" AfterTargets="Build">
     <ItemGroup>
@@ -403,4 +185,5 @@
     <Copy SourceFiles="@(WwwrootFile)"
           DestinationFiles="@(WwwrootFile->'$(OutDir)wwwroot\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
+
 </Project>
