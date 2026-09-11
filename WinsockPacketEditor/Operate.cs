@@ -206,22 +206,16 @@ namespace WinsockPacketEditor
 
             #region//注入参数
 
+            /// <summary>
+            /// 外壳交给 EasyHook、由它序列化进目标进程的注入参数（<c>WPEHook.Hook.Run</c> 收）。
+            ///
+            /// ⚠️ 它跨进程走 EasyHook 的序列化，外壳与目标两端的 <c>WPEHook.dll</c> / 本程序集
+            /// 必须是同一次构建的 —— 字段对不上的话 Run 根本进不来。
+            /// （曾经还有 Mode / DataBasePath 两个字段，服务于进程内 WinForms 那条老路径，已随它删除。）
+            /// </summary>
             [Serializable]
-
             public class InjectionParameters
             {
-                /// <summary>老路径（进程内 WinForms）用它在目标里打开数据库。无头路径不用。</summary>
-                public string DataBasePath { get; set; }
-
-                /// <summary>
-                /// 【B-IPC 阶段 1】目标进程里跑哪一套。
-                ///
-                /// <c>Hook.Run</c> 按它分岔：<b>老的 WinForms 进程内路径一行不动</b>，
-                /// 新的无头路径并排长出来，两条并存到新路径过完验证矩阵为止。
-                /// 这是「避免因 IPC 导致注入不稳定」最实在的保障 —— 出了问题随时切回。
-                /// </summary>
-                public InjectMode Mode { get; set; }
-
                 /// <summary>
                 /// 无头路径用的会话 id，管道名由它拼出来（WPE64-{id}-ctl 等）。
                 ///
@@ -236,32 +230,9 @@ namespace WinsockPacketEditor
                 /// 无头核心据此决定装钩之前要不要先 LoadLibrary 三个 winsock DLL：
                 /// 挂起的进程连加载器都没跑过，ws2_32 都还不在，13 个钩子一个也装不上；
                 /// 而对<b>已经在跑</b>的目标就不该硬塞 —— 那会凭空多出一个它本来没有的模块，
-                /// 检测面比老路径还大。已在跑的目标只做探测，与老路径的
-                /// GetInjectWinsockInfo 一致。
+                /// 平白多一处检测面。已在跑的目标只做探测。
                 /// </summary>
                 public bool SuspendedLaunch { get; set; }
-
-                public InjectionParameters()
-                {
-                    //
-                }
-
-                public InjectionParameters(string DBPath)
-                {
-                    DataBasePath = DBPath;
-                    Mode = InjectMode.WinFormsInProc;
-                }
-            }
-
-            /// <summary>注入到目标之后跑哪一套。</summary>
-            [Serializable]
-            public enum InjectMode
-            {
-                /// <summary>改造前的行为：在目标进程里开库、初始化 AntdUI、跑 InjectModeForm。</summary>
-                WinFormsInProc = 0,
-
-                /// <summary>无头核心：只装钩子 + 连管道，界面与数据都在外壳。</summary>
-                Headless = 1,
             }
 
             #endregion

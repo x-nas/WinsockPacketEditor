@@ -114,9 +114,7 @@ namespace WinsockPacketEditor.Ipc
 
             var ip = new Operate.SystemConfig.InjectionParameters
             {
-                Mode = Operate.SystemConfig.InjectMode.Headless,
                 SessionId = _sessionId,
-                DataBasePath = null,       //无头路径不开库
                 SuspendedLaunch = pid < 0, //挂起启动的目标要先把 winsock 拉进来才装得上钩
             };
 

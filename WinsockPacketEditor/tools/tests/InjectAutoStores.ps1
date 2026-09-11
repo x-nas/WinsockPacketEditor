@@ -24,15 +24,15 @@ $ErrorActionPreference = 'Stop'
 
 $bin = Join-Path $PSScriptRoot ('..\..\bin\' + $Config)
 $bin = [System.IO.Path]::GetFullPath($bin)
-if (-not (Test-Path (Join-Path $bin 'WinsockPacketEditor.exe'))) {
-    throw "找不到 $bin\WinsockPacketEditor.exe —— 先用 VS 的 MSBuild 编一次 Debug"
+if (-not (Test-Path (Join-Path $bin 'WinsockPacketEditor.dll'))) {
+    throw "找不到 $bin\WinsockPacketEditor.dll —— 先用 VS 的 MSBuild 编一次 Debug"
 }
 
 # ⚠️ Set-Location 不改 .NET 侧的工作目录，两句都要写
 Set-Location $bin
 [Environment]::CurrentDirectory = $bin
 
-$asm = [Reflection.Assembly]::LoadFrom((Join-Path $bin 'WinsockPacketEditor.exe'))
+$asm = [Reflection.Assembly]::LoadFrom((Join-Path $bin 'WinsockPacketEditor.dll'))
 $op = $asm.GetType('WinsockPacketEditor.Operate')
 
 $B = [Reflection.BindingFlags]'Public,NonPublic,Static'

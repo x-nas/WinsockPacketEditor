@@ -37,9 +37,9 @@
     -->
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Prefer32Bit>false</Prefer32Bit>
-    <!-- 与主工程一致：清单用 asInvoker，提权在 Program.Main 里靠 RestartAsAdmin 做 -->
+    <!-- 清单用 asInvoker，提权在 Program.Main 里靠 RestartAsAdmin 做 -->
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <ApplicationIcon>..\WinsockPacketEditor\wpe.ico</ApplicationIcon>
+    <ApplicationIcon>wpe.ico</ApplicationIcon>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
     <!-- WebView2 包同时含 WinForms/WPF 两套，压掉 WPF 引入的版本冲突噪声 -->

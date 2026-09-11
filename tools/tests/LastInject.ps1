@@ -3,7 +3,7 @@ $bin = 'C:\Users\Gary\Desktop\程序源代码\x-nas\WinsockPacketEditor\WPEHybri
 Set-Location $bin
 [Environment]::CurrentDirectory = $bin
 
-$asm = [Reflection.Assembly]::LoadFrom((Join-Path $bin 'WinsockPacketEditor.exe'))
+$asm = [Reflection.Assembly]::LoadFrom((Join-Path $bin 'WinsockPacketEditor.dll'))
 $op  = $asm.GetType('WinsockPacketEditor.Operate')
 $sc  = $op.GetNestedType('SystemConfig')
 $db  = $op.GetNestedType('DataBase')
