@@ -665,7 +665,7 @@ function pickCov(side: 'a' | 'b', segIndex: number): void {
   align-items: center;
   gap: 10px;
   height: var(--th-h);
-  padding: 4px 10px 0;
+  padding: 2px 10px 0;   /* 原 4px 在字体度量覆写之后偏低 1~1.5px（2026-09-13 字体度量覆写后按 100% 缩放实测重调） */
   background: var(--panel);
   border-bottom: 1px solid var(--border);
 }

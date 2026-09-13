@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Generic;
 using System.Web.Http;
 
 namespace WinsockPacketEditor
@@ -28,7 +27,8 @@ namespace WinsockPacketEditor
                 TCP = tcp,
                 UDP = udp,
                 Queue = Operate.ProxyConfig.Queue.qProxyInfo.Count,
-                Links = Operate.ProxyConfig.Proxy.ProxyServer?.GetAllSessions().Count() ?? 0,
+                //用现成的计数，不再 GetAllSessions().Count() 把全部会话枚举一遍
+                Links = Operate.ProxyConfig.Proxy.SessionCount,
                 //下面三个已经是拼好给人看的串，前端原样显示
                 OnLine = Operate.ProxyConfig.Proxy.ProxyOnLineInfo,
                 Speed = Operate.ProxyConfig.Proxy.ProxySpeedInfo,
@@ -40,12 +40,16 @@ namespace WinsockPacketEditor
 
         #region//获取认证日志
 
+        /// <summary>
+        /// 认证列表：RefreshAuthList 每秒在界面线程上把它<b>整表清空再重填</b>，
+        /// 所以一定要切到界面线程上取拷贝（见 WebUi.cs）。
+        /// </summary>
         [HttpGet]
         [Route("GetProxyAuthList")]
 
         public IEnumerable<AuthInfo> GetProxyAuthList(int take = 0)
         {
-            return SocketInfo_Controller.Tail(Operate.ProxyConfig.Account.lstAuthInfo, take);
+            return WebUi.OnUi(() => WebUi.Tail(Operate.ProxyConfig.Account.lstAuthInfo, take));
         }
 
         #endregion
@@ -65,7 +69,7 @@ namespace WinsockPacketEditor
 
         public IEnumerable<LogInfo> GetProxyLogList(int take = 0)
         {
-            return SocketInfo_Controller.Tail(Operate.LogConfig.List.lstLogInfo, take);
+            return WebUi.OnUi(() => WebUi.Tail(Operate.LogConfig.List.lstLogInfo, take));
         }
 
         #endregion

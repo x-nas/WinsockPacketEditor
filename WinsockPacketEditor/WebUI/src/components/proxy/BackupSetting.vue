@@ -190,8 +190,8 @@ async function importBackup(): Promise<void> {
   align-items 跟着从 center 改成 flex-start，否则真折了行勾选框会跑到两行的正中间。
 */
 .groups.two .gb .chk { align-items: flex-start; white-space: normal; text-align: left; }
-/* 勾选框 16px 高，跟首行文字的中心对齐：12.5px × 1.4 行高 ≈ 17.5，(17.5 − 16) ÷ 2 ≈ 1 */
-.groups.two .gb .chk i { margin-top: 1px; }
+/* 勾选框 12px 高，跟首行文字的中心对齐：12.5px × 1.4 行高 ≈ 17.5，(17.5 − 12) ÷ 2 ≈ 2.75 */
+.groups.two .gb .chk i { margin-top: 2.75px; }
 .acts { display: flex; align-items: center; gap: 8px; padding: 11px 20px 4px; }   /* 上边距是量着定的：日语最长的那几条差 1px 就会出滚动条 */
 .acts .grow { flex: 1; }
 

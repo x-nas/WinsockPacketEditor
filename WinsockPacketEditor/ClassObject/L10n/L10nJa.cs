@@ -80,7 +80,12 @@ namespace WinsockPacketEditor
             d["Password.Incorrect"] = "パスワードが違います";
             d["BatchSuccess"] = "一括調整が完了しました";
             d["MGT.Enabled"] = "リモート管理を開始しました: {0}";
-            d["MGT.Error"] = "リモート管理の起動に失敗しました：{0} を管理者権限で起動してみてください";
+            d["MGT.Incomplete"] = "リモート管理を起動しませんでした：待ち受けアドレス、管理者アカウント、またはパスワードが空です";
+            d["MGT.BadAddress"] = "リモート管理の起動に失敗しました：{0} はこのマシンのアドレスではありません（ネットワークが変わった可能性があります）。待ち受けアドレスを選び直してください";
+            d["MGT.PortBusy"] = "リモート管理の起動に失敗しました：ポート {0} は他のプログラムが使用中です。別のポートを指定してください";
+            d["MGT.AccessDenied"] = "リモート管理の起動に失敗しました：{0} で待ち受ける権限がありません";
+            d["MGT.StartFailed"] = "リモート管理の起動に失敗しました：{0}";
+            d["MGT.AuthLocked"] = "リモート管理：{0} がログインに {1} 回連続で失敗したため、{2} 秒間リクエストを受け付けません";
             d["ProcessInfo"] = "{0} ハンドル: {1}";
             d["SOCKS.Unsupport"] = "未対応の SOCKS プロトコル: {0} [ {1} ]";
             d["Command.Unsupported"] = "{0} - 未対応のコマンド: {1}";
@@ -90,6 +95,11 @@ namespace WinsockPacketEditor
             d["ProxyAccountListFile"] = "プロキシアカウント一覧ファイル";
             d["MapLocalFile"] = "ローカルマッピングファイル";
             d["MapRemoteFile"] = "リモートマッピングファイル";
+            d["StoresFile"] = "保存データファイル";
+            d["BackupFile"] = "バックアップファイル";
+            d["FileAssoc.Registered"] = "{0} 種類の WPE データファイルにアイコンを登録しました（{1}）";
+            d["FileAssoc.Cleared"] = "WPE データファイルのアイコン関連付けを解除しました（{0} 種類）";
+            d["FileAssoc.NoIcon"] = "データファイルのアイコンが見つかりません：{0}";
             d["ExportMapLocal"] = "ローカルマッピングの書き出し";
             d["ExportMapRemote"] = "リモートマッピングの書き出し";
             d["ImportMapLocal"] = "ローカルマッピングの読み込み";

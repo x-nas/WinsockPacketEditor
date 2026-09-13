@@ -80,7 +80,12 @@ namespace WinsockPacketEditor
             d["Password.Incorrect"] = "비밀번호가 틀립니다";
             d["BatchSuccess"] = "일괄 조정을 마쳤습니다";
             d["MGT.Enabled"] = "원격 관리를 시작했습니다: {0}";
-            d["MGT.Error"] = "원격 관리를 시작하지 못했습니다: {0} 을(를) 관리자 권한으로 실행해 보세요";
+            d["MGT.Incomplete"] = "원격 관리를 시작하지 않았습니다: 수신 주소, 관리자 계정 또는 비밀번호가 비어 있습니다";
+            d["MGT.BadAddress"] = "원격 관리를 시작하지 못했습니다: {0}은(는) 이 컴퓨터의 주소가 아닙니다(네트워크가 바뀌었을 수 있음). 수신 주소를 다시 선택하세요";
+            d["MGT.PortBusy"] = "원격 관리를 시작하지 못했습니다: 포트 {0}을(를) 다른 프로그램이 사용 중입니다. 다른 포트를 지정하세요";
+            d["MGT.AccessDenied"] = "원격 관리를 시작하지 못했습니다: {0}에서 수신할 권한이 없습니다";
+            d["MGT.StartFailed"] = "원격 관리를 시작하지 못했습니다: {0}";
+            d["MGT.AuthLocked"] = "원격 관리: {0}에서 로그인이 {1}회 연속 실패하여 {2}초 동안 요청을 받지 않습니다";
             d["ProcessInfo"] = "{0} 핸들: {1}";
             d["SOCKS.Unsupport"] = "지원하지 않는 SOCKS 프로토콜: {0} [ {1} ]";
             d["Command.Unsupported"] = "{0} - 지원하지 않는 명령: {1}";
@@ -90,6 +95,11 @@ namespace WinsockPacketEditor
             d["ProxyAccountListFile"] = "프록시 계정 목록 파일";
             d["MapLocalFile"] = "로컬 매핑 파일";
             d["MapRemoteFile"] = "원격 매핑 파일";
+            d["StoresFile"] = "저장 데이터 파일";
+            d["BackupFile"] = "백업 파일";
+            d["FileAssoc.Registered"] = "WPE 데이터 파일 {0}종에 아이콘을 등록했습니다({1})";
+            d["FileAssoc.Cleared"] = "WPE 데이터 파일의 아이콘 연결을 해제했습니다({0}종)";
+            d["FileAssoc.NoIcon"] = "데이터 파일 아이콘을 찾을 수 없습니다: {0}";
             d["ExportMapLocal"] = "로컬 매핑 내보내기";
             d["ExportMapRemote"] = "원격 매핑 내보내기";
             d["ImportMapLocal"] = "로컬 매핑 가져오기";

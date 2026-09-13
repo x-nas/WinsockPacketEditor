@@ -808,6 +808,7 @@ namespace WinsockPacketEditor
         public string UserName = string.Empty;
         public string PassWord = string.Empty;
         public bool Running;
+        public bool IPMissing;      //保存的地址不在本机网卡上（IP 就是那个地址，已放在 IPs 最前面）
     }
 
     public sealed class HotkeySettingRow

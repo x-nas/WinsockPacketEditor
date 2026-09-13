@@ -483,7 +483,7 @@ async function onMenuPick(id: string): Promise<void> {
 
 .tg {
   flex: none;
-  padding: 4px 6px 4px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
+  padding: 4px 6px 4px;
   border: 1px solid;
   font-size: var(--fs-label);
   /* 显式 1：默认行高会把行距全压在字的下面，字在框里偏上（与按钮同一个问题）*/

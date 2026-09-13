@@ -339,7 +339,31 @@ namespace WinsockPacketEditor
                 });
             }
 
+            private static readonly object cpuMemGate = new object();
+            private static string[] cpuMemLast;
+            private static int cpuMemTick;
+
+            /// <summary>
+            /// CPU / 内存占用率。<b>一秒内的重复调用返回上一次的结果</b>（2026-09-11 加）：
+            /// CPU 计数器的 NextValue 算的是「距上一次调用」这段时间的平均值 —— 管理台开着几个页面同时轮询时，
+            /// 它们互相把间隔切碎，读数忽高忽低。
+            /// </summary>
             public static string[] GetCPUAndMemory()
+            {
+                lock (cpuMemGate)
+                {
+                    if (cpuMemLast != null && unchecked(Environment.TickCount - cpuMemTick) < 1000)
+                    {
+                        return (string[])cpuMemLast.Clone();
+                    }
+
+                    cpuMemLast = ReadCPUAndMemory();
+                    cpuMemTick = Environment.TickCount;
+                    return (string[])cpuMemLast.Clone();
+                }
+            }
+
+            private static string[] ReadCPUAndMemory()
             {
                 string[] sReturn = new string[2];
 
@@ -369,7 +393,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(GetCPUAndMemory), ex);
+                    Operate.DoLog(nameof(ReadCPUAndMemory), ex);
                 }
 
                 return sReturn;
@@ -884,8 +908,19 @@ namespace WinsockPacketEditor
                     foreach (IPAddress ip in GetLocalIPAddress() ?? new IPAddress[0]) { ips.Add(ip.ToString()); }
                     if (ips.Count == 0) { ips.Add("127.0.0.1"); }
 
+                    /*
+                        ⚠️ 显示<b>实际保存的</b>地址（2026-09-11 改）。原来它不在本机网卡列表里时（换了网络 / DHCP 重新分配）
+                        悄悄显示第一个网卡的 IP —— 而服务仍按旧地址去绑，于是起不来，设置页上看着却一切正常。
+                        现在把它原样放在列表最前面、标出 IPMissing，由设置页提示用户换一个。
+                    */
+                    if (!string.IsNullOrEmpty(Remote_IP) && !ips.Contains(Remote_IP))
+                    {
+                        ips.Insert(0, Remote_IP);
+                        r.IPMissing = true;
+                    }
+
                     r.IPs = ips.ToArray();
-                    r.IP = !string.IsNullOrEmpty(Remote_IP) && ips.Contains(Remote_IP) ? Remote_IP : ips[0];
+                    r.IP = string.IsNullOrEmpty(Remote_IP) ? ips[0] : Remote_IP;
                     r.IsRemote = IsRemote;
                     r.Port = Remote_Port;
                     r.UserName = Remote_UserName ?? string.Empty;
@@ -920,11 +955,14 @@ namespace WinsockPacketEditor
                     Remote_UserName = UserName;
                     Remote_PassWord = PassWord;
 
-                    if (IsRemote) { StartRemoteMGT(); }
+                    string error = string.Empty;
+
+                    if (IsRemote) { error = StartRemoteMGT(); }
                     else { StopRemoteMGT(); }
 
+                    //起不来也照样保存（用户下一步多半就是改端口）；原因交回设置弹窗显示，弹窗不关
                     SaveSystemConfig_ToDB();
-                    return string.Empty;
+                    return error;
                 }
                 catch (Exception ex)
                 {
@@ -1020,46 +1058,110 @@ namespace WinsockPacketEditor
 
             #region//启动远程管理
 
-            public static void StartRemoteMGT()
+            /// <summary>
+            /// 按当前配置起远程管理。返回空串 = 起来了（或本来就没开）；否则是给人看的失败原因。
+            ///
+            /// ⚠️ 失败原因要<b>说实话</b>（2026-09-11 改）：原来一律提示「请尝试使用管理员权限启动」——
+            /// 而 WPE 本来就以管理员身份运行，真正的原因（端口被占用 / 地址不在本机…）被 catch 吞掉，日志里也没有。
+            /// </summary>
+            public static string StartRemoteMGT()
             {
                 try
                 {
-                    if (Operate.SystemConfig.IsRemote)
+                    if (!Operate.SystemConfig.IsRemote) { return string.Empty; }
+
+                    //重启里的那一次停止不弹「已关闭」—— 保存设置时原来先弹一个「已关闭」再弹「已启用」
+                    Operate.SystemConfig.StopRemoteMGT(true);
+
+                    string msg;
+
+                    if (string.IsNullOrEmpty(Operate.SystemConfig.Remote_IP) ||
+                        string.IsNullOrEmpty(Operate.SystemConfig.Remote_UserName) ||
+                        string.IsNullOrEmpty(Operate.SystemConfig.Remote_PassWord))
                     {
-                        Operate.SystemConfig.StopRemoteMGT();
+                        msg = UI.T("MGT.Incomplete", "远程管理没有启动：监听地址、管理员账号或密码为空");
+                        Operate.DoLog(nameof(StartRemoteMGT), msg);
+                        return msg;
+                    }
 
-                        if (!string.IsNullOrEmpty(Operate.SystemConfig.Remote_IP) &&
-                            !string.IsNullOrEmpty(Operate.SystemConfig.Remote_UserName) &&
-                            !string.IsNullOrEmpty(Operate.SystemConfig.Remote_PassWord))
-                        {
-                            string sLog = string.Empty;
-                            string Remote_URL = SystemConfig.GetRemoteMGT_URL(Operate.SystemConfig.Remote_IP, Operate.SystemConfig.Remote_Port.ToString());
+                    string Remote_URL = SystemConfig.GetRemoteMGT_URL(Operate.SystemConfig.Remote_IP, Operate.SystemConfig.Remote_Port.ToString());
 
-                            try
-                            {
-                                Operate.SystemConfig.WebServer = WebApp.Start<Socket_Web>(Remote_URL);
-                                ProxyConfig.Proxy.InitCCProxy_HTML();
+                    //地址不在本机网卡上（换了网络 / DHCP 重新分配）时 HttpListener 的报错看不懂，先自己查一遍
+                    IPAddress bind;
+                    if (IPAddress.TryParse(Operate.SystemConfig.Remote_IP, out bind) && !IPAddress.IsLoopback(bind) && !IsLocalAddress(bind))
+                    {
+                        msg = string.Format(UI.T("MGT.BadAddress", "远程管理启动失败：{0} 不是本机的地址（可能换了网络），请重新选择监听地址"), Operate.SystemConfig.Remote_IP);
+                        UI.Toast(UiIcon.Error, msg);
+                        Operate.DoLog(nameof(StartRemoteMGT), msg);
+                        return msg;
+                    }
 
-                                sLog = string.Format(UI.T("MGT.Enabled", "远程管理已启用：{0}"), Remote_URL);
-                                UI.Toast(UiIcon.Success, sLog);
-                            }
-                            catch
-                            {
-                                sLog = string.Format(UI.T("MGT.Error", "远程管理启动失败: 请尝试使用管理员权限启动 {0}"), Process.GetCurrentProcess().ProcessName);
-                                UI.Toast(UiIcon.Error, sLog);
-                            }
+                    try
+                    {
+                        Operate.SystemConfig.WebServer = WebApp.Start<Socket_Web>(Remote_URL);
+                        ProxyConfig.Proxy.InitCCProxy_HTML();
 
-                            Operate.DoLog(nameof(StartRemoteMGT), sLog);
-                        }
+                        msg = string.Format(UI.T("MGT.Enabled", "远程管理已启用：{0}"), Remote_URL);
+                        UI.Toast(UiIcon.Success, msg);
+                        Operate.DoLog(nameof(StartRemoteMGT), msg);
+                        return string.Empty;
+                    }
+                    catch (Exception ex)
+                    {
+                        msg = DescribeRemoteStartError(ex, Remote_URL);
+                        UI.Toast(UiIcon.Error, msg);
+                        Operate.DoLog(nameof(StartRemoteMGT), msg);
+                        Operate.DoLog(nameof(StartRemoteMGT), ex);
+                        return msg;
                     }
                 }
                 catch (Exception ex)
                 {
                     Operate.DoLog(nameof(StartRemoteMGT), ex);
+                    return ex.Message;
                 }
             }
 
-            public static void StopRemoteMGT()
+            private static bool IsLocalAddress(IPAddress Ip)
+            {
+                foreach (IPAddress a in GetLocalIPAddress() ?? new IPAddress[0])
+                {
+                    if (a.Equals(Ip)) { return true; }
+                }
+
+                return false;
+            }
+
+            /// <summary>把 WebApp.Start 抛的异常翻成人话。HttpListenerException 常被 TargetInvocationException 包着，要往里剥。</summary>
+            private static string DescribeRemoteStartError(Exception Ex, string Url)
+            {
+                Exception inner = Ex;
+                HttpListenerException hle = null;
+
+                for (Exception e = Ex; e != null; e = e.InnerException)
+                {
+                    inner = e;
+                    if (e is HttpListenerException h) { hle = h; break; }
+                }
+
+                if (hle != null)
+                {
+                    switch (hle.ErrorCode)
+                    {
+                        case 32:     //ERROR_SHARING_VIOLATION：端口被别的程序（普通套接字）占着
+                        case 183:    //ERROR_ALREADY_EXISTS：同一个地址已被别的 HTTP 服务注册
+                            return string.Format(UI.T("MGT.PortBusy", "远程管理启动失败：端口 {0} 已被其他程序占用，请换一个端口"), Operate.SystemConfig.Remote_Port);
+
+                        case 5:      //ERROR_ACCESS_DENIED
+                            return string.Format(UI.T("MGT.AccessDenied", "远程管理启动失败：没有权限监听 {0}"), Url);
+                    }
+                }
+
+                return string.Format(UI.T("MGT.StartFailed", "远程管理启动失败：{0}"), inner.Message);
+            }
+
+            /// <param name="Quiet">true = 不弹「远程管理已关闭」（重启与关窗时用）</param>
+            public static void StopRemoteMGT(bool Quiet = false)
             {
                 try
                 {
@@ -1068,7 +1170,8 @@ namespace WinsockPacketEditor
                         Operate.SystemConfig.WebServer.Dispose();
                         Operate.SystemConfig.WebServer = null;   //置空才能拿它当「在跑没在跑」的判据
 
-                        UI.Toast(UiIcon.Error, UI.T("RemoteMGTSetting.RemoteDisable", "远程管理已关闭"));
+                        //是用户关的，不是出错 —— 原来用的是红色的错误图标
+                        if (!Quiet) { UI.Toast(UiIcon.Info, UI.T("RemoteMGTSetting.RemoteDisable", "远程管理已关闭")); }
                     }
                 }
                 catch (Exception ex)
@@ -11584,7 +11687,7 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        if (AID != null)
+                        if (AID != Guid.Empty)
                         {
                             AccountInfo ai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(account => account.AID == AID);
 
@@ -11698,7 +11801,7 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        if (AID != null)
+                        if (AID != Guid.Empty)
                         {
                             AccountInfo ai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(account => account.AID == AID);
 
@@ -11800,6 +11903,21 @@ namespace WinsockPacketEditor
                     }
 
                     return rows;
+                }
+
+                /// <summary>
+                /// 登录记录的一份拷贝（远程管理的 GetProxyAccountByID 用）。
+                /// 在 <see cref="aipLock"/> 里复制 —— 这份嵌套列表是 SOCKS5 会话线程在锁里改的，
+                /// 直接把原列表交给 JSON 序列化会撞上「集合已修改」。
+                /// </summary>
+                internal static AccountIPInfo[] CopyLogins(AccountInfo ai)
+                {
+                    if (ai == null || ai.AIPInfo == null) { return new AccountIPInfo[0]; }
+
+                    lock (aipLock)
+                    {
+                        return ai.AIPInfo.Select(x => new AccountIPInfo(x.LoginTime, x.LoginIP, x.IPLocation)).ToArray();
+                    }
                 }
 
                 /*
@@ -11958,8 +12076,11 @@ namespace WinsockPacketEditor
                     return ProxyConfig.Account.FindAccount_ById(AID.ToString());
                 }
 
-                /// <summary>把这一行的最新样子推给桥。纯 WinForms 运行时是空转。</summary>
-                private static void PushAccountRow(AccountInfo Src)
+                /// <summary>
+                /// 把这一行的最新样子推给桥。没有界面（跑测 / 目标进程）时是空转。
+                /// internal：远程管理的「更新账号」也要调 —— 就地改属性不触发 ListChanged，不推的话程序界面停在旧值。
+                /// </summary>
+                internal static void PushAccountRow(AccountInfo Src)
                 {
                     if (Src != null && UI.Feed.NeedsRows)
                     {
@@ -12386,7 +12507,7 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        if (AID != null)
+                        if (AID != Guid.Empty)
                         {
                             AccountInfo pai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(account => account.AID == AID);
 
@@ -12408,7 +12529,7 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        if (AID != null)
+                        if (AID != Guid.Empty)
                         {
                             AccountInfo pai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(account => account.AID == AID);
 
@@ -13038,23 +13159,42 @@ namespace WinsockPacketEditor
 
                 #region//验证远程管理的账号密码
 
+                /// <summary>
+                /// 远程管理的管理员账号校验。
+                ///
+                /// 用<b>定长时间</b>的比较（按 UTF-8 字节逐个异或、不提前返回）：普通的 Equals 在第一个不同的字符就返回，
+                /// 理论上可以从响应时间一位一位猜。隔着网络抖动这很难利用，但换成定长比较没有任何代价。
+                /// 两个都要比完再合并结果 —— 用户名错了就不比密码的话，照样泄露「用户名对不对」。
+                /// </summary>
                 public static bool IsValidAdmin(string username, string password)
                 {
-                    bool bReturn = false;
-
                     try
                     {
-                        if (SystemConfig.Remote_UserName.Equals(username) && SystemConfig.Remote_PassWord.Equals(password))
-                        {
-                            bReturn = true;
-                        }
+                        if (string.IsNullOrEmpty(SystemConfig.Remote_UserName) || string.IsNullOrEmpty(SystemConfig.Remote_PassWord)) { return false; }
+
+                        bool u = FixedTimeEquals(SystemConfig.Remote_UserName, username);
+                        bool p = FixedTimeEquals(SystemConfig.Remote_PassWord, password);
+                        return u & p;
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(IsValidAdmin), ex);
+                        return false;
+                    }
+                }
+
+                private static bool FixedTimeEquals(string Expected, string Actual)
+                {
+                    byte[] a = Encoding.UTF8.GetBytes(Expected ?? string.Empty);
+                    byte[] b = Encoding.UTF8.GetBytes(Actual ?? string.Empty);
+
+                    int diff = a.Length ^ b.Length;
+                    for (int i = 0; i < a.Length; i++)
+                    {
+                        diff |= a[i] ^ (i < b.Length ? b[i] : 0);
                     }
 
-                    return bReturn;
+                    return diff == 0;
                 }
 
                 #endregion

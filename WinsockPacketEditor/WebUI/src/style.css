@@ -19,12 +19,22 @@
   src: url("./assets/fonts/orbitron.woff2") format("woff2");
 }
 
+/*
+  ⚠️ ascent / descent 覆写（2026-09-13，100% 缩放实测定的）：
+  Share Tech Mono 自带的度量是上伸 885 / 下伸 242，而大写高 703、中文墨迹 844 ~ -78 ——
+  上下不对称，任何用它的文字在框里都<b>天生偏上</b>（10.5px 中文实测高 1.5px、英文 1px，
+  以前全靠各处零碎的 padding-top / top 补偿，缩放一变就不准）。
+  两者之和保持 112.7% 不变（line-height: normal 的行高不变），只把基线往下挪 0.046em。
+  另外两款（JetBrains Mono / Orbitron）实测本来就居中，不用动。
+*/
 @font-face {
   font-family: "Share Tech Mono";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
   src: url("./assets/fonts/sharetechmono.woff2") format("woff2");
+  ascent-override: 93.1%;
+  descent-override: 19.6%;
 }
 
 @font-face {
@@ -33,6 +43,39 @@
   font-weight: 400 700;
   font-display: swap;
   src: url("./assets/fonts/jetbrainsmono.woff2") format("woff2");
+  /*
+    同 Share Tech Mono 那条（2026-09-13 实测）：自带上伸 1020 / 下伸 300，正文 12.5px 的中文与大写
+    在固定行高里实测都高 1px；覆写成 105% / 27%（和不变）后两者落到中线，数字低约半像素。
+  */
+  ascent-override: 105%;
+  descent-override: 27%;
+}
+
+/*
+  内嵌中文字体：更纱等宽 SC（Sarasa Mono SC v1.0.41，SIL OFL 1.1，2026-09-13 加）。
+  上面三款拉丁字体都不含中文，以前中文全靠系统回退，WebView2 与别的 Chromium 会挑到不同的字体，
+  居中补偿量不准。现在中日韩 / 西里尔 / 越南文都从这里取，任何机器上字形与度量一致。
+  ⚠️ 名字叫 WPE Sarasa 而不是 Sarasa Mono SC：避免与用户机器上装的同名字体混用。
+  ⚠️ unicode-range 刻意不含基本拉丁（U+0000–007F）：英文与数字仍走上面三款。
+  ⚠️ 只带 Regular + Bold 两个文件，按字重区间分：100–599 用 Regular、600–1000 用 Bold，不做合成粗体。
+  来源与裁剪范围见 assets/fonts/Sarasa-OFL.txt。
+*/
+@font-face {
+  font-family: "WPE Sarasa";
+  font-style: normal;
+  font-weight: 100 599;
+  font-display: swap;
+  src: url("./assets/fonts/sarasa-regular.woff2") format("woff2");
+  unicode-range: U+A0-24F, U+300-36F, U+370-3FF, U+400-52F, U+1100-11FF, U+1E00-1EFF, U+2000-206F, U+2100-218F, U+2190-21FF, U+2460-24FF, U+2500-25FF, U+3000-303F, U+3040-30FF, U+3100-312F, U+3130-318F, U+31F0-31FF, U+3200-33FF, U+3400-4DBF, U+4E00-9FFF, U+AC00-D7AF, U+F900-FAFF, U+FE30-FE4F, U+FF00-FFEF;
+}
+
+@font-face {
+  font-family: "WPE Sarasa";
+  font-style: normal;
+  font-weight: 600 1000;
+  font-display: swap;
+  src: url("./assets/fonts/sarasa-bold.woff2") format("woff2");
+  unicode-range: U+A0-24F, U+300-36F, U+370-3FF, U+400-52F, U+1100-11FF, U+1E00-1EFF, U+2000-206F, U+2100-218F, U+2190-21FF, U+2460-24FF, U+2500-25FF, U+3000-303F, U+3040-30FF, U+3100-312F, U+3130-318F, U+31F0-31FF, U+3200-33FF, U+3400-4DBF, U+4E00-9FFF, U+AC00-D7AF, U+F900-FAFF, U+FE30-FE4F, U+FF00-FFEF;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -66,7 +109,8 @@ body {
   color: var(--gray);
   font-family: var(--mono);
   font-size: var(--fs-body);
-  line-height: 1.7;
+  /* 1.68 而不是 1.7：12.5px 时正好 21px 整数行高，文字竖直位置不再落在小数像素上 —— 100% 缩放下行内的中文 / 标签实测从偏高 1px 回到中线（2026-09-13 字体度量覆写后按 100% 缩放实测重调） */
+  line-height: 1.68;
   /* 抓包列表刷得很快，选中文本几乎总是误操作 */
   user-select: none;
   overflow: hidden;
@@ -245,6 +289,9 @@ body.col-resizing * {
 }
 
 .scrn .eyebrow .lbl {
+  /* top .3px：--fs-caption 9.5 → 10.5（2026-09-13）后重量，偏高 −0.29 → ≈0；只动绘制不动布局 */
+  position: relative;
+  top: .3px;
   font-family: var(--share);
   font-size: var(--fs-caption);
   letter-spacing: .3em;
@@ -337,7 +384,7 @@ body.col-resizing * {
 */
 .scrn .term-bar .lbl {
   position: relative;
-  top: .2px;
+  top: .6px;   /* 9.5px 时 .2px；10.5px（2026-09-13）重量：.2 时 −0.41，.6 时 ≈0 */
   margin-left: 8px;
   font-family: var(--share);
   font-size: var(--fs-caption);
@@ -498,7 +545,8 @@ body.col-resizing * {
   font-size: var(--fs-caption);
   /* 行高 1 + 上补 1px：Share Tech Mono 的字形在 em 框里偏上，实测这一档补 1 就落在中线上 */
   line-height: 1;
-  padding-top: 1.3px;   /* 10 → 9.5px 后重量：1px 时 −0.36，1.3px 时 −0.21 */
+  /* 9.5px 时是 1.3px（−0.21）；10.5px（2026-09-13）重量：1.3px 时 +0.51 偏低，去掉后 −0.14 */
+  padding-top: 0;
   letter-spacing: .14em;
   font-weight: 400;
   color: var(--dim3);
@@ -546,7 +594,7 @@ body.col-resizing * {
 */
 .modebar .tb {
   flex: none;
-  padding: 10px 12px 10px;   /* 上下<b>对称</b>：line-height: 1 已经把字形偏上治好了，再补 1px 是补第二遍。左右 15 → 12 见 .modebar 那段 */
+  padding: 10.5px 12px 9.5px;   /* 上多半像素：100% 缩放下「开始代理 / 清空」实测偏高 1px（2026-09-13 字体度量覆写后按 100% 缩放实测重调）。   /* 上下<b>对称</b>：line-height: 1 已经把字形偏上治好了，再补 1px 是补第二遍。左右 15 → 12 见 .modebar 那段 */
   background: transparent;
   border: 1px solid var(--border);
   color: var(--gray);
@@ -705,15 +753,23 @@ body.col-resizing * {
   这样看到的就是行本身的样子，不用在脑子里再做一次映射。
   ⚠️ 配色必须取自 `getPrefs`（那 4 组是用户可配的），不能写死十六进制。
 */
-.datapage .plegend { flex: none; display: flex; align-items: center; gap: 4px; }
+.datapage .plegend { flex: none; display: flex; align-items: center; gap: 6px; }
 
 /* 色块是按钮：点开就改这一组的配色。边框清掉，只留纯色块 */
 .datapage .plegend .lg {
-  padding: 2px 8px;
+  /*
+    ⚠️ 行高要显式写 1：原来继承 normal，而 normal 行高会把<b>中文回退字体（更纱）</b>的上下伸也算进行盒，
+    基线被挤得偏上，100% 缩放下「替换 / 拦截」这几个字实测高 1.2px。
+    2026-09-13 按要求放大：17 → 24px 高、字号 10.5 → 11.5。上 5.75 / 下 6.75 与左 11 / 右 10 都是量出来的 ——
+    上下对称时 11.5px 的字在 100% 缩放下偏低 1.7px；右边少 1px 抵掉 letter-spacing 在最后一个字后面留的尾隙。
+    100% 与 125% 缩放下实测竖直偏差 ≤0.78px、水平 ≤0.47px。
+  */
+  padding: 5.75px 10px 6.75px 11px;
+  line-height: 1;
   border: 0;
   cursor: pointer;
   font-family: var(--share);
-  font-size: var(--fs-caption);
+  font-size: var(--fs-small);
   letter-spacing: .1em;
   white-space: nowrap;
 }
@@ -854,7 +910,8 @@ body.col-resizing * {
 
 .list-page .btn {
   flex: none;
-  padding: 8px 13px 8px;   /* 上下<b>对称</b>：line-height: 1 已经把字形偏上治好了，再补 1px 是补第二遍（2026-09-09 撤过 34 处）*/
+  /* 上 8.25 / 下 7.75：高度不变、文字下移四分之一像素 —— 100% 缩放下原来偏高约 1px，8.5 / 7.5 又会让 125% 缩放偏低 1px，取中间（2026-09-13 字体度量覆写后按 100% 缩放实测重调） */
+  padding: 8.25px 13px 7.75px;   /* 上下<b>对称</b>：line-height: 1 已经把字形偏上治好了，再补 1px 是补第二遍（2026-09-09 撤过 34 处）*/
   background: transparent;
   border: 1px solid var(--border);
   color: var(--gray);
@@ -974,7 +1031,7 @@ body.col-resizing * {
     <b>排版是对称的</b>），可墨迹在尾隙之前就结束了，于是真实文字比盒中心偏左 0.5px。
     右边收 1px 正好把盒中心左移 0.5px 与之对齐。字号 / 字距一改就要回来重算这 1px。
   */
-  padding: 4.8px 6px 3.2px 7px;   /* 10px 时是 4.4 / 3.6；9.5px 下重量，简体 −0.13 */
+  padding: 4.5px 6px 3.5px 7px;   /* 9.5px 时 4.8 / 3.2；10.5px 雅黑时 4.05 / 3.95；换成内嵌更纱等宽 SC 后（2026-09-13）重量：4.05/3.95 偏高约 0.46px。上下之和不变 */
   border: 1px solid var(--cyan);
   color: var(--cyan);
   font-family: var(--share);
@@ -1319,7 +1376,8 @@ body.col-resizing * {
   content: counter(sec, decimal-leading-zero);
   flex: none;
   min-width: 21px;
-  padding: 3px 4px 2px;
+  /* 上 2.2 / 下 2.8：--fs-caption 提到 10.5px（2026-09-13）后重排，原 3 / 2 下数字偏低约 0.7px；上下之和不变 */
+  padding: 2.2px 4px 2.8px;
   border: 1px solid rgb(var(--cyan-rgb) / 40%);
   font-family: var(--share);
   font-size: var(--fs-caption);
@@ -1402,7 +1460,12 @@ body.col-resizing * {
 /* ══════════════════════════════════════════════════════════════
    勾选框 / 单选框（.chk / .rd）—— 全项目一份
 
-   ⚠️ <b>盒子 16px 与 inset 4px 是一对，别单独改。</b>
+   ⚠️ <b>盒子 12px 与 inset 2px 是一对，别单独改。</b>
+
+   2026-09-13 恢复成原来的 12px：字体度量覆写、行高改成整数之后，用无界面 Edge 在真实页面上
+   把两个程序里全部勾选框 / 单选框（47~74 个）红框绿心逐个量了质心偏差 ——
+   12px / inset 2 在 100% 与 150% 缩放下最大 0.01 / 0.18 设备像素，125% 下平均 0.09，
+   与 16px / inset 4 同一档。下面这段是 2026-09-09 当时的推演与实测，留作换尺寸时的参考：
 
    内块（那个绿方块）用 `inset` 从<b>内边距盒</b>起算，所以它到盒子外沿的距离
    是「边框的计算宽度 + inset」。而<b>边框的计算宽度会随缩放变</b> ——
@@ -1447,16 +1510,16 @@ body.col-resizing * {
   white-space: nowrap;
 }
 
-.chk i, .rd i { width: 16px; height: 16px; border: 1px solid var(--chk-ring); position: relative; flex: none; }
+.chk i, .rd i { width: 12px; height: 12px; border: 1px solid var(--chk-ring); position: relative; flex: none; }
 
 .chk.on { color: var(--chk-fill); }
 .chk.on i { border-color: var(--chk-fill); background: rgb(var(--chk-fill-rgb) / var(--chk-tint)); }
-.chk.on i::after { content: ""; position: absolute; inset: 4px; background: var(--chk-fill); }
+.chk.on i::after { content: ""; position: absolute; inset: 2px; background: var(--chk-fill); }
 
 .rd i { border-radius: 50%; }
 .rd.on { color: var(--cyan); }
 .rd.on i { border-color: var(--cyan); }
-.rd.on i::after { content: ""; position: absolute; inset: 4px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 5px var(--cyan); }
+.rd.on i::after { content: ""; position: absolute; inset: 2px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 5px var(--cyan); }
 
 .chk:disabled, .rd:disabled { cursor: default; opacity: .5; }
 .chk:focus-visible, .rd:focus-visible { outline-offset: 2px; }
@@ -1598,7 +1661,7 @@ body.col-resizing * {
 .hx-seg.right { margin-left: auto; }
 
 .hx-segb {
-  padding: 6px 10px 6px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
+  padding: 6.5px 10px 5.5px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
   background: transparent;
   border: 0;
   font-family: var(--share);

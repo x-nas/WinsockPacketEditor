@@ -503,6 +503,8 @@ watch(rows, () => {
 }
 
 .ctl {
+  position: relative;
+  top: 1px;   /* 实测偏高 1.3px（2026-09-13 字体度量覆写后按 100% 缩放实测重调） */
   font-family: var(--share);
   font-size: var(--fs-label);
   letter-spacing: .14em;

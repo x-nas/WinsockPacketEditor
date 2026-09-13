@@ -26,8 +26,10 @@
   改成保存制之后它更要紧了。
 */
 import { computed, ref, watch } from 'vue'
+import { call } from '../bridge'
 import { LANGS, defOf, lang, setLang, t, type Lang } from '../i18n'
 import { scanLine, setScan, setTheme, systemIsDark, theme, type Theme } from '../stores/theme'
+import { pushToast } from '../stores/toast'
 import CyberSelect from './CyberSelect.vue'
 import SettingsModal from './proxy/SettingsModal.vue'
 
@@ -70,6 +72,73 @@ watch(() => props.open, (on) => {
   draftLang.value = lang.value
   draftTheme.value = theme.value
   draftScan.value = scanLine.value
+  void loadAssoc()
+})
+
+/*
+  文件图标关联（C# 的 ClassObject/FileAssociation.cs）。
+
+  ⚠️ 与上面三组<b>不同</b>：它是<b>立即生效的动作</b>，不是草稿 —— 改的是注册表，不是一个配置项，
+  「取消」也撤不回来。所以按钮单独走 setFileAssoc，不进 onSave；提示语里写明了这一点。
+  清除之后 C# 会记一个标记，启动时不再自动注册，直到这里点「重新关联」。
+*/
+interface AssocStatus {
+  ok: boolean
+  enabled: boolean
+  claimed: string[]
+  foreign: string[]
+  owners: string[]
+  iconMissing: boolean
+  total: number
+  icon: string | null
+  error?: string
+}
+
+const assoc = ref<AssocStatus | null>(null)
+const assocIcon = ref<string | null>(null)
+const assocBusy = ref(false)
+
+async function loadAssoc(): Promise<void> {
+  try {
+    const r = await call<AssocStatus>('getFileAssoc')
+    assoc.value = r
+    if (r.icon) { assocIcon.value = r.icon }
+  } catch {
+    assoc.value = null
+  }
+}
+
+async function toggleAssoc(): Promise<void> {
+  if (!assoc.value || assocBusy.value) return
+  const on = !assoc.value.enabled
+  assocBusy.value = true
+
+  try {
+    const r = await call<AssocStatus>('setFileAssoc', { on })
+    if (!r.ok) {
+      pushToast('error', r.error || '')
+      return
+    }
+    assoc.value = r
+    pushToast('success', t(on ? 'set.app.assocDone' : 'set.app.assocCleared'))
+  } catch (e) {
+    pushToast('error', e instanceof Error ? e.message : String(e))
+  } finally {
+    assocBusy.value = false
+  }
+}
+
+//「.sc、.pas 已被其他程序占用」；悬停看是谁占的（ProgID）
+const assocForeignText = computed(() => {
+  const a = assoc.value
+  if (!a || !a.enabled || !a.foreign.length) return ''
+  return t('set.app.assocForeign').replace('{0}', a.foreign.join(' '))
+})
+
+const assocForeignTip = computed(() => {
+  const a = assoc.value
+  if (!a) return ''
+  return a.foreign.map((e, i) => e + ' → ' + (a.owners[i] || '?')).join('\n')
 })
 
 const busy = ref(false)
@@ -198,6 +267,37 @@ async function onSave(): Promise<void> {
         </button>
       </div>
       <p class="tip">{{ t('set.app.scanHint') }}</p>
+
+      <div class="grp">{{ t('set.app.assoc') }}</div>
+
+      <!--
+        文件图标：左边就是那枚图标本身（C# 从程序目录的 wpe-data.ico 取 32px 那层），
+        中间是现在的状态，右边一颗<b>立即生效</b>的按钮（清除 / 重新关联）。
+      -->
+      <div class="one fa">
+        <img v-if="assocIcon" class="fa-ico" :src="'data:image/png;base64,' + assocIcon" alt="" />
+        <span class="fa-st" :class="{ off: assoc && !assoc.enabled, bad: assoc && assoc.iconMissing }">
+          <template v-if="!assoc">…</template>
+          <template v-else-if="assoc.iconMissing">{{ t('set.app.assocMissing') }}</template>
+          <template v-else-if="assoc.enabled">
+            {{ t('set.app.assocOn').replace('{0}', String(assoc.claimed.length)).replace('{1}', String(assoc.total)) }}
+          </template>
+          <template v-else>{{ t('set.app.assocOff') }}</template>
+        </span>
+        <button
+          v-if="assoc"
+          class="mini"
+          :class="{ danger: assoc.enabled }"
+          :disabled="assocBusy || (assoc.iconMissing && !assoc.enabled)"
+          @click="toggleAssoc"
+        >
+          {{ t(assoc.enabled ? 'set.app.assocClear' : 'set.app.assocRedo') }}
+        </button>
+      </div>
+      <p class="tip">
+        {{ t('set.app.assocHint') }}
+        <b v-if="assocForeignText" class="fa-fx" :title="assocForeignTip">{{ assocForeignText }}</b>
+      </p>
     </div>
   </SettingsModal>
 </template>
@@ -260,7 +360,15 @@ async function onSave(): Promise<void> {
 .opt.th .nm { flex: none; }
 .opt.th .tick { position: absolute; right: 9px; bottom: 11px; }
 
-.cult { font-family: var(--mono); font-size: var(--fs-small); color: var(--dim2); font-style: normal; margin-left: 6px; }
+.cult { position: relative; top: 1px; font-family: var(--mono); font-size: var(--fs-small); color: var(--dim2); font-style: normal; margin-left: 6px; }   /* 小一号、与下拉排一行，100% / 125% 缩放实测都偏高 1.1~1.4px（2026-09-13 字体度量覆写后按 100% 缩放实测重调） */
+
+/* 文件图标那一行：图标 · 状态（撑开）· 按钮 */
+.fa-ico { flex: none; width: 32px; height: 32px; }
+.fa-st { flex: 1; min-width: 0; font-size: var(--fs-body); color: var(--gray); }
+.fa-st.off { color: var(--dim2); }
+.fa-st.bad { color: var(--danger); }
+/* 被别的程序占用的后缀：接在提示语后面，琥珀色 —— 不是错误，只是没动它们 */
+.fa-fx { display: block; margin-top: 2px; color: var(--amber); font-weight: 400; }
 
 /* 说明是整句，截断了就没意义 —— 与列表设置那几处同一条口径 */
 .tip { margin: 0; padding: 0 20px 10px; font-size: var(--fs-small); line-height: 1.6; color: var(--dim2); }

@@ -506,6 +506,9 @@ onMounted(async () => {
 }
 
 .cd .num {
+  /* top .4px：--fs-caption 提到 10.5px（2026-09-13）后重量，−0.61 → −0.21 */
+  position: relative;
+  top: .4px;
   font-family: var(--share);
   font-size: var(--fs-caption);
   letter-spacing: .18em;
@@ -636,6 +639,9 @@ onMounted(async () => {
 
 .cd .last .k {
   flex: none;
+  /* top .4px：--fs-caption 提到 10.5px（2026-09-13）后重量，−0.62 → −0.22 */
+  position: relative;
+  top: .4px;
   font-family: var(--share);
   font-size: var(--fs-caption);
   letter-spacing: .14em;

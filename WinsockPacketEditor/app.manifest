@@ -6,10 +6,13 @@
     <security>
       <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
         <!--
-          与主程序保持一致：清单声明 asInvoker，
-          真正的提权在 Program.Main 里靠 Operate.SystemConfig.RestartAsAdmin() 完成。
+          2026-09-13 从 asInvoker 改成 requireAdministrator（与 WPC 一致）：
+          代理模式要装系统代理、开监听端口，注入模式要往别的进程里装钩子，本来就必须管理员。
+          清单声明之后 Windows 在双击前就弹 UAC，exe 与快捷方式图标上也会带盾牌；
+          不再「先以普通权限起一个进程、再 RestartAsAdmin 重启自己」。
+          Program.Main 里那段 RestartAsAdmin 留作兜底（清单万一没嵌进去时仍能提权）。
         -->
-        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+        <requestedExecutionLevel level="requireAdministrator" uiAccess="false" />
       </requestedPrivileges>
     </security>
   </trustInfo>

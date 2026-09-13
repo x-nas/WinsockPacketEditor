@@ -349,7 +349,7 @@ const anything = computed(() => xorSrc.value.length > 0 || xorB.value.length > 0
 }
 
 .hx-title {
-  padding-top: 4px;
+  padding-top: 2px;   /* 原 4px 在字体度量覆写之后补过头 1px（2026-09-13 字体度量覆写后按 100% 缩放实测重调） */
   font-family: var(--share);
   font-size: var(--th-size);
   letter-spacing: .14em;

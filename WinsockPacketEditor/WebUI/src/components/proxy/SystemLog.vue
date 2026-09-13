@@ -359,6 +359,8 @@ async function doExport(): Promise<void> {
 .tb:hover { color: var(--gray); }
 .tb.on { color: var(--cyan); border-color: rgb(var(--cyan-rgb) / 40%); background: rgb(var(--cyan-rgb) / 8%); }
 .tb .n { font-family: var(--share); font-size: var(--fs-caption); color: var(--dim); }
+/* 没有计数时整个去掉：空 span 仍占着 6px 的 gap，页签文字会被挤得偏左 3px（100% 缩放实测） */
+.tb .n:empty { display: none; }
 .tb.on .n { color: var(--cyan); }
 .tb:focus-visible { outline-offset: -2px; }
 

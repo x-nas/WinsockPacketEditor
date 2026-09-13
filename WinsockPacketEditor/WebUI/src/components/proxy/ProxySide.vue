@@ -154,6 +154,9 @@ function fmt(n: number | undefined): string {
 .sb-item .t { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .sb-item .n {
+  /* 计数比条目名小一号，行内居中后仍偏高 1px（2026-09-13 字体度量覆写后按 100% 缩放实测重调） */
+  position: relative;
+  top: 1px;
   font-family: var(--share);
   font-size: var(--fs-caption);
   color: var(--dim);

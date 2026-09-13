@@ -479,7 +479,7 @@ const { covered } = useModal(() => !!props.target)
 .k2 { font-size: var(--fs-body); color: var(--muted); white-space: nowrap; }
 .tip { margin: 0; font-size: var(--fs-small); color: var(--dim2); line-height: 1.5; }
 
-.cnts .cnt { font-size: var(--fs-label); color: var(--muted); font-family: var(--share); letter-spacing: .06em; }
+.cnts .cnt { font-size: var(--fs-label); color: var(--muted); font-family: var(--share); letter-spacing: .06em; position: relative; top: 1px; }   /* 与大一号的数字排在一行，实测偏高 1.3px（2026-09-13 字体度量覆写后按 100% 缩放实测重调） */
 .cnts .cnt b { font-family: var(--mono); font-variant-numeric: tabular-nums; }
 .cnts .cnt.run b { color: var(--cyan); }
 .cnts .cnt.ok b { color: var(--green); }
@@ -547,7 +547,7 @@ const { covered } = useModal(() => !!props.target)
 }
 
 .hx-title {
-  padding-top: 4px;   /* 字形偏上 2px（像素实测），与各表表头同一份补偿 */
+  padding-top: 2px;   /* 同 HexPanel：原来的 4px 在字体度量覆写之后补过头 1px（2026-09-13 字体度量覆写后按 100% 缩放实测重调） */
   font-family: var(--share);
   font-size: var(--th-size);
   letter-spacing: .14em;

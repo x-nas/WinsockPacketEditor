@@ -86,7 +86,12 @@ namespace WinsockPacketEditor
             d["Password.Incorrect"] = "密碼錯誤";
             d["BatchSuccess"] = "批次調整成功";
             d["MGT.Enabled"] = "遠端管理已啟用：{0}";
-            d["MGT.Error"] = "遠端管理啟動失敗: 請嘗試使用管理員許可權啟動 {0}";
+            d["MGT.Incomplete"] = "遠端管理沒有啟動：監聽位址、管理員帳號或密碼為空";
+            d["MGT.BadAddress"] = "遠端管理啟動失敗：{0} 不是本機的位址（可能換了網路），請重新選擇監聽位址";
+            d["MGT.PortBusy"] = "遠端管理啟動失敗：連接埠 {0} 已被其他程式佔用，請換一個連接埠";
+            d["MGT.AccessDenied"] = "遠端管理啟動失敗：沒有權限監聽 {0}";
+            d["MGT.StartFailed"] = "遠端管理啟動失敗：{0}";
+            d["MGT.AuthLocked"] = "遠端管理：{0} 連續 {1} 次登入失敗，暫停接受它的請求 {2} 秒";
             d["ProcessInfo"] = "{0} 控制代碼: {1}";
             d["SOCKS.Unsupport"] = "不支援的 Socks 協議: {0} [ {1} ]";
             d["Command.Unsupported"] = "{0} - 不支援的命令: {1}";
@@ -96,6 +101,11 @@ namespace WinsockPacketEditor
             d["ProxyAccountListFile"] = "代理賬號列表檔案";
             d["MapLocalFile"] = "本地對映檔案";
             d["MapRemoteFile"] = "遠端對映檔案";
+            d["StoresFile"] = "倉儲資料檔案";
+            d["BackupFile"] = "備份檔案";
+            d["FileAssoc.Registered"] = "已為 {0} 種 WPE 資料檔案註冊圖示（{1}）";
+            d["FileAssoc.Cleared"] = "已清除 WPE 資料檔案的圖示關聯（{0} 種）";
+            d["FileAssoc.NoIcon"] = "找不到資料檔案圖示：{0}";
             d["ExportMapLocal"] = "匯出本地對映";
             d["ExportMapRemote"] = "匯出遠端對映";
             d["ImportMapLocal"] = "匯入本地對映";

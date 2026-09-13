@@ -13,7 +13,7 @@ import SettingsModal from './SettingsModal.vue'
 const props = defineProps<{ open: boolean }>()
 const emit = defineEmits<{ (e: 'update:open', v: boolean): void }>()
 
-interface Setting { IsRemote: boolean; IP: string; IPs: string[]; Port: number; UserName: string; PassWord: string; Running: boolean }
+interface Setting { IsRemote: boolean; IP: string; IPs: string[]; Port: number; UserName: string; PassWord: string; Running: boolean; IPMissing?: boolean }
 
 const busy = ref(false)
 const error = ref('')
@@ -26,6 +26,14 @@ watch(() => props.open, async (on) => {
   catch (e) { console.error('[rm] 读取远程管理设置失败', e) }
 }, { immediate: true })
 
+/*
+  保存的地址不在本机网卡上（换了网络 / DHCP 重新分配）时，C# 把它原样放在 IPs 最前面并标 IPMissing。
+  原来是悄悄换成第一个网卡的 IP 显示 —— 服务却仍按旧地址去绑，于是起不来，这里看着却一切正常。
+  现在照实显示，并在下面给一句提示；用户选一个别的地址再保存即可。
+*/
+const missingIp = computed(() => (f.value.IPMissing ? f.value.IPs[0] : ''))
+
+//下拉里不加标注：200px 宽放不下（会截成「（不在…」），下面那句提示已经点了名
 const ipOptions = computed(() => f.value.IPs.map((ip) => ({ value: ip, label: ip })))
 const url = computed(() => 'http://' + f.value.IP + ':' + Math.trunc(f.value.Port || 0))
 
@@ -87,6 +95,7 @@ async function save(): Promise<void> {
         <div class="k">{{ t('rm.url') }}</div>
         <div class="v"><span class="link" @click="f.IsRemote && openUrl()">{{ url }}</span></div>
       </div>
+      <p v-if="missingIp && f.IP === missingIp" class="hint warn">{{ t('rm.ipMissing').replace('{0}', missingIp) }}</p>
       <p class="hint">{{ t('rm.saveHint') }}</p>
       </section>
     </div>

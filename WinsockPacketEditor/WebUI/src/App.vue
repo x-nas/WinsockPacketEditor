@@ -487,7 +487,7 @@ watchEffect(() => {
   font-size: var(--label-size);
   /* 行高收到 1 + 顶部 2px：默认行高把行距压在字下面、字形本身又偏上，实测两者合计高 2.4px；顶部 3px 让盒子长 3、居中后内容下移 1.5，正好补回 */
   line-height: 1;
-  padding-top: 3px;
+  padding-top: 0;   /* 原 3px 是给字形偏上的补偿，字体度量覆写之后偏低 1.5px（2026-09-13 字体度量覆写后按 100% 缩放实测重调） */
   letter-spacing: .16em;
   color: var(--muted);
   border-left: 1px solid var(--border);

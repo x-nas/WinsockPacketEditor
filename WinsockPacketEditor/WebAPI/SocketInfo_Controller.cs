@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Generic;
 using System.Web.Http;
 
 namespace WinsockPacketEditor
@@ -45,28 +44,15 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        /// <summary>
-        /// 取列表<b>末尾</b>的 take 条（也就是最近的那些）。take &lt;= 0 返回整份。
-        ///
-        /// 【为什么要有它】这几个接口原来一律返回整份列表（日志默认上限 5000 条）。
-        /// 一条 LogInfo 序列化出来约 152 字节，5000 条就是 742KB；
-        /// 管理台 3 秒一拍，挂一小时约 870MB，而页面只画最近 300 条 ——
-        /// 传过去的九成多当场丢掉。手机用流量看日志时这一笔很贵。
-        ///
-        /// ⚠️ 默认值刻意是 0（整份），<b>不改变任何已有调用方的行为</b>；
-        /// 省流量要调用方自己传 ?take=300。
-        ///
-        /// ⚠️ 取的是<b>末尾</b>不是开头：这几份列表都是追加序，末尾才是最新的。
-        /// </summary>
-        internal static IEnumerable<T> Tail<T>(IList<T> list, int take)
-        {
-            if (list == null) { return new List<T>(); }
-            if (take <= 0 || take >= list.Count) { return list; }
+        /*
+            下面几个日志接口都支持 ?take=N，取<b>末尾</b> N 条（最近的那些）；不传就是整份（默认上限 5000 条）。
 
-            //ToList 是必要的：直接返回 Skip 的惰性序列，序列化时列表可能已经被
-            //搬运拍改过了，会抛「集合已修改」
-            return list.Skip(list.Count - take).ToList();
-        }
+            【为什么要有 take】一条 LogInfo 序列化出来约 152 字节，5000 条就是 742KB；
+            管理台 3 秒一拍，挂一小时约 870MB，而页面只画最近 300 条 —— 传过去的九成多当场丢掉。
+            ⚠️ 默认值刻意是 0（整份），不改变任何已有调用方的行为；省流量要调用方自己传 ?take=300。
+
+            【为什么要切到界面线程】日志列表是界面线程上的搬运拍在改的，见 WebUi.cs。
+        */
 
         #region//获取系统日志
 
@@ -75,7 +61,7 @@ namespace WinsockPacketEditor
 
         public IEnumerable<LogInfo> GetSocketLogList(int take = 0)
         {
-            return Tail(Operate.LogConfig.List.lstLogInfo, take);
+            return WebUi.OnUi(() => WebUi.Tail(Operate.LogConfig.List.lstLogInfo, take));
         }
 
         #endregion
@@ -87,7 +73,7 @@ namespace WinsockPacketEditor
 
         public IEnumerable<ProxyLogInfo> GetProxyLogList(int take = 0)
         {
-            return Tail(Operate.LogConfig.List.lstProxyLogInfo, take);
+            return WebUi.OnUi(() => WebUi.Tail(Operate.LogConfig.List.lstProxyLogInfo, take));
         }
 
         #endregion

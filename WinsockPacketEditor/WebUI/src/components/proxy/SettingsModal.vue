@@ -213,18 +213,28 @@ const { covered } = useModal(() => props.open)
 
 .ft .grow { flex: 1; }
 
+/*
+  ⚠️ 错误文字可以很长（比如「远程管理启动失败：… 不是本机的地址（可能换了网络），请重新选择监听地址」），
+  它要<b>自己折行</b>，不能去挤右边的按钮 —— 原来按钮没写 flex: none，一句长错误就把「取消 / 保存」
+  压成竖排的两个字（2026-09-11 远程管理那一轮实测撞到）。所以这里 min-width: 0 允许收缩、按钮那边 flex: none。
+*/
 .err {
   display: inline-flex;
   align-items: center;
   gap: 7px;
+  flex: 0 1 auto;
+  min-width: 0;
   font-size: var(--fs-small);
+  line-height: 1.5;
   color: var(--danger);
 }
 
 .err .ico { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2; fill: none; flex: none; }
 
 .btn {
-  padding: 11px 20px 11px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
+  flex: none;                /* 页脚的错误文字再长也不许挤压按钮（见 .err） */
+  white-space: nowrap;
+  padding: 11.25px 20px 10.75px;   /* 上多四分之一像素、高度不变：原来 100% 缩放下「保存 / 取消」偏高 1px，11.5 / 10.5 又让 125% 偏低 1px，取中间（2026-09-13 字体度量覆写后按 100% 缩放实测重调） */
   background: transparent;
   border: 1px solid var(--border);
   color: var(--gray);

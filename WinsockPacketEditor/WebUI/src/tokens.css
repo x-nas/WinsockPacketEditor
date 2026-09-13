@@ -17,10 +17,13 @@
 */
 
 :root {
-  /* ── 字号规范：九层，新写字号只许用这九个（2026-09-11 定，见 CLAUDE.md「字号规范」）──
-     正文往下是 1px 一级的梯子（9.5 · 10.5 · 11.5 · 12.5 · 13.5），同一种字体里相邻两级至少差 1px；
+  /* ── 字号规范（2026-09-11 定九层，见 CLAUDE.md「字号规范」）──
+     ⚠️ 2026-09-13 按要求把最小一档 --fs-caption 从 9.5 提到 10.5（与 WPE Proxy Cap 一致）：
+     这一档的中文走系统回退字体，9.5px 下笔画发虚。现在它与 --fs-label 同为 10.5px，实际只剩八档；
+     两个令牌名仍分开留着（用途不同），以后要再拉开只改这一行。
+     这一档上所有量出来的居中补偿都按 10.5px 重量过。
      唯一的半像素间隔是 Consolas 12 对 JetBrains Mono 12.5 —— 跨字体，前者 x 高小，读起来一样大。 */
-  --fs-caption: 9.5px;   /* 微标   Share Tech Mono 大写：分组小标 / 统计格标题 / 计数徽标 / eyebrow / 弹窗副标题 */
+  --fs-caption: 10.5px;  /* 微标   Share Tech Mono 大写：分组小标 / 统计格标题 / 计数徽标 / eyebrow / 弹窗副标题 */
   --fs-label: 10.5px;    /* 标签   Share Tech Mono 大写：按钮 / 表头 / 页签 / 胶囊 / 状态栏 */
   --fs-small: 11.5px;    /* 辅助   JetBrains Mono：提示 / 警告 / 错误 / 附注 / 计数 / 右键菜单 */
   --fs-dense: 12px;      /* 密集数据 只给 Consolas：封包表 / 十六进制 / 对比视图 */
@@ -158,9 +161,14 @@
   */
   --corner-arm: 10px;
 
-  --orbit: "Orbitron", sans-serif;
-  --mono: "JetBrains Mono", "Microsoft YaHei UI", monospace;
-  --share: "Share Tech Mono", monospace;
+  --orbit: "Orbitron", "WPE Sarasa", "Microsoft YaHei UI", sans-serif;
+  --mono: "JetBrains Mono", "WPE Sarasa", "Microsoft YaHei UI", monospace;
+  /* ⚠️ 中文必须走内嵌字体（2026-09-13）：Share Tech Mono 不含中文，只写 monospace 时
+     WebView2 与别的 Chromium 会各自挑回退字体（实测一边是微软雅黑、一边是新宋体），
+     两者字形与度量都不同，量出来的居中补偿就对不上。
+     现在三个字体栈都是「拉丁字体 → WPE Sarasa（内嵌的更纱等宽 SC，见 style.css）→ 微软雅黑 UI」，
+     微软雅黑只在内嵌字体还没载入 / 远程管理台（没有这份 @font-face）时兜底。 */
+  --share: "Share Tech Mono", "WPE Sarasa", "Microsoft YaHei UI", monospace;
 
   /*
     ── 旧的 --wpe-* 语义令牌，现在映射到官网配色 ─────────

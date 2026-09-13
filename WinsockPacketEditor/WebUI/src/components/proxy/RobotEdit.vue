@@ -893,7 +893,7 @@ const { covered } = useModal(() => props.id !== null)
 */
 .btn {
   flex: none;
-  padding: 8px 13px;
+  padding: 8.5px 13px 7.5px;   /* 上多半像素、高度不变：100% 缩放下实测偏高 1px（2026-09-13 字体度量覆写后按 100% 缩放实测重调） */
   background: transparent;
   border: 1px solid var(--border);
   color: var(--gray);

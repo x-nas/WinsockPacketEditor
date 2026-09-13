@@ -895,6 +895,9 @@ const TAG: Record<St, Key> = { ok: 'ps.ok', todo: 'ps.todo', warn: 'ps.warn', ba
 
 .ci .cs {
   flex: none;
+  /* top -1px：换成内嵌更纱等宽 SC 后（2026-09-13）放大实测，.4px 时墨迹比所在行中线低约 1.4px（雅黑时 .4px 正好居中） */
+  position: relative;
+  top: -1px;
   font-family: var(--share);
   font-size: var(--fs-caption);
   letter-spacing: .08em;
@@ -913,7 +916,7 @@ const TAG: Record<St, Key> = { ok: 'ps.ok', todo: 'ps.todo', warn: 'ps.warn', ba
 
 /* ─────────────── 两张进程表 ─────────────── */
 
-.cap { font-family: var(--share); font-size: var(--fs-label); letter-spacing: .12em; text-transform: uppercase; color: var(--cyan); white-space: nowrap; }
+.cap { position: relative; top: 1px; font-family: var(--share); font-size: var(--fs-label); letter-spacing: .12em; text-transform: uppercase; color: var(--cyan); white-space: nowrap; }   /* 实测偏高 1.7px（2026-09-13 字体度量覆写后按 100% 缩放实测重调） */
 .cnt { font-family: var(--mono); font-size: var(--fs-small); color: var(--muted); }
 
 .two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }

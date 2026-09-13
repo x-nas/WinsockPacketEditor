@@ -16,7 +16,8 @@ namespace WPEHybrid
         {
             try
             {
-                //代理模式要装系统代理、开监听端口，注入模式要往别的进程里装钩子 —— 都要管理员权限
+                //代理模式要装系统代理、开监听端口，注入模式要往别的进程里装钩子 —— 都要管理员权限。
+                //2026-09-13 起 app.manifest 声明 requireAdministrator，正常走不到这里；留作清单没嵌进去时的兜底
                 if (!Operate.SystemConfig.IsAdministrator())
                 {
                     Operate.SystemConfig.RestartAsAdmin();

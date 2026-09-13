@@ -194,6 +194,16 @@ export const DICT = {
   'set.app.scanHint': { zh: '整块屏幕上缓慢游走的一条亮带，10 秒一趟。关掉之后其余氛围（网格底纹、四角标记）不受影响', en: 'A faint band that drifts across the whole window every 10 seconds. Turning it off leaves the rest of the ambience (grid, corner marks) untouched' },
   'set.app.themeHint': { zh: '同一套版式换一组配色，与主程序共用这个设置。跟随系统时随操作系统的深浅设置一起变。', en: 'Same layout, different palette. Shared with the main program. “Follow system” tracks the OS light/dark setting.' },
   'set.app.now': { zh: '当前', en: 'Current' },
+  'set.app.assoc': { zh: '文件图标', en: 'File icons' },
+  'set.app.assocOn': { zh: '已关联 {0} / {1} 种', en: '{0} of {1} associated' },
+  'set.app.assocOff': { zh: '未关联 · 启动时不会再自动关联', en: 'Not associated · will not re-associate at startup' },
+  'set.app.assocClear': { zh: '清除文件关联', en: 'Remove association' },
+  'set.app.assocRedo': { zh: '重新关联', en: 'Associate again' },
+  'set.app.assocHint': { zh: 'WPE 导出的备份、滤镜、发送、机器人、仓库、账号、名单、映射等 13 种文件，在资源管理器里显示这个图标。只改当前用户的设置，不注册打开方式。按钮立即生效，不用按「保存」。', en: 'The 13 kinds of files WPE exports (backup, filters, send, robot, warehouse, accounts, lists, mappings…) show this icon in File Explorer. Only the current user is affected and no “open with” is registered. The button applies immediately — no need to press Save.' },
+  'set.app.assocForeign': { zh: '{0} 已被其他程序占用，保留原样', en: '{0} already belong to another program and were left alone' },
+  'set.app.assocMissing': { zh: '程序目录里缺少 wpe-data.ico，无法关联', en: 'wpe-data.ico is missing from the program folder, so nothing can be associated' },
+  'set.app.assocDone': { zh: '已关联文件图标', en: 'File icons associated' },
+  'set.app.assocCleared': { zh: '已清除文件关联，启动时不会再自动关联', en: 'File association removed; it will not be restored at startup' },
   'set.system': { zh: '系统设置', en: 'System Settings' },
   'set.lockedHint': {
     zh: '代理服务正在运行 —— 监听相关的设置只在服务启动时读取一次，现在改了不会生效。要修改请先停止服务。',
@@ -1344,7 +1354,8 @@ export const DICT = {
   'rm.admin': { zh: '管理员', en: 'Admin' },
   'rm.userPh': { zh: '请输入管理员账号', en: 'Admin user name' },
   'rm.url': { zh: '访问地址', en: 'URL' },
-  'rm.saveHint': { zh: '管理台用 HTTP 基本认证；WPC 服务端接口对客户端免认证开放。', en: 'The console uses HTTP basic auth; the WPC server API is open to clients without auth.' },
+  'rm.saveHint': { zh: '管理台用 HTTP 基本认证，同一个 IP 连续登录失败会被暂停一段时间；WPC 服务端接口对客户端免认证开放。', en: 'The console uses HTTP basic auth, and an IP that keeps failing to sign in is paused for a while; the WPC server API is open to clients without auth.' },
+  'rm.ipMissing': { zh: '保存的地址 {0} 不在本机的网卡上（可能换了网络），远程管理起不来 —— 换一个地址再保存。', en: 'The saved address {0} is not on any network adapter of this PC (the network may have changed), so remote management cannot start. Pick another address and save.' },
 
   // ── 代理模式：机器人列表 ────────────────────────────
   'rb.add': { zh: '新增机器人', en: 'Add Robot' },

@@ -42,7 +42,7 @@
     <!-- 版本号等在 Properties\AssemblyInfo.cs 里手写，别让 SDK 再生成一份（会报重复特性） -->
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Deterministic>false</Deterministic>
-    <!-- 清单声明 asInvoker + PerMonitorV2，提权在 Program.Main 里靠 RestartAsAdmin 做 -->
+    <!-- 清单声明 requireAdministrator + PerMonitorV2（2026-09-13 起；Program.Main 的 RestartAsAdmin 只是兜底） -->
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>wpe.ico</ApplicationIcon>
     <!-- binding redirects 自动生成到 .exe.config（靠 App.config 打底） -->
@@ -76,8 +76,12 @@
   </ItemGroup>
 
   <!--
-    NuGet 包：与原 packages.config 逐条一一对应、版本不变（连 packages.config 里平铺出来的传递依赖一起
+    NuGet 包：与原 packages.config 逐条一一对应（连 packages.config 里平铺出来的传递依赖一起
     显式列出，把版本钉死，不让还原按依赖范围自己挑）。
+
+    2026-09-11 升过一轮：Microsoft.Owin 全家 4.2.2 → 4.2.3（加固 cookie 解析）、WebView2 SDK 1.0.4129.50 → 1.0.4191.47、
+    log4net 的钉 2.0.3 → 3.4.0（见下）。⚠️ SuperSocket 刻意停在 1.6.6.1：2.x 只有 net6+ 目标，没有 net48，
+    见 CLAUDE.md「为什么不用 .NET 8」。
   -->
   <ItemGroup>
     <!-- EasyHook 自带的原生件（EasyHook32/64 + Svc + EasyLoad）走下面工程目录里那六份，不用包里的 contentFiles —— 两份字节相同，
@@ -88,18 +92,18 @@
     <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.3.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Owin" Version="5.3.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.OwinSelfHost" Version="5.3.0" />
-    <PackageReference Include="Microsoft.Owin" Version="4.2.2" />
-    <PackageReference Include="Microsoft.Owin.FileSystems" Version="4.2.2" />
+    <PackageReference Include="Microsoft.Owin" Version="4.2.3" />
+    <PackageReference Include="Microsoft.Owin.FileSystems" Version="4.2.3" />
     <!--
       ⚠️ Microsoft.Owin.Host.HttpListener 与 SuperSocket.Engine 里的 SuperSocket.SocketEngine 都是<b>运行期</b>按名字加载的
       （WebApp.Start 按约定探测宿主程序集；AppServerBase.SetupBasic 里 Type.GetType("SuperSocket.SocketEngine…")），
       编译期没有任何引用。本工程直接引用这两个包，所以它们照样被拷进输出目录；
       漏了的症状是「开始代理 / 启动远程管理」当场 FileNotFoundException —— 改包引用时先想这一条。
     -->
-    <PackageReference Include="Microsoft.Owin.Host.HttpListener" Version="4.2.2" />
-    <PackageReference Include="Microsoft.Owin.Hosting" Version="4.2.2" />
-    <PackageReference Include="Microsoft.Owin.StaticFiles" Version="4.2.2" />
-    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4129.50" />
+    <PackageReference Include="Microsoft.Owin.Host.HttpListener" Version="4.2.3" />
+    <PackageReference Include="Microsoft.Owin.Hosting" Version="4.2.3" />
+    <PackageReference Include="Microsoft.Owin.StaticFiles" Version="4.2.3" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4191.47" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.3" />
     <PackageReference Include="Owin" Version="1.0.0" />
@@ -111,11 +115,11 @@
       SuperSocket 1.6.6.1 在 nuspec 里依赖 log4net 2.0.3，而 WPE 从来不用它（SuperSocket 的日志由 WpeLogFactory 转给 Operate.DoLog，
       见 CLAUDE.md「SuperSocket 的日志出口必须自己给」）。packages.config 时代它早被删了，这里把它的资产整个排掉，
       免得 PackageReference 顺着依赖又把 log4net.dll 带回输出目录。
+      钉的是 3.4.0 而不是 nuspec 里的下限 2.0.3：资产照样一个都不进输出，但依赖图里不再挂着 2.0.3 那两条
+      漏洞通告（GHSA-2cwj-8chv-9pp9 / GHSA-4f7c-pmjv-c25w），原先那两句 NuGetAuditSuppress 也就不用了。
+      3.4.0 的 .NETFramework4.6.2 组没有任何依赖，不会顺带拉进别的包。
     -->
-    <PackageReference Include="log4net" Version="2.0.3" ExcludeAssets="all" PrivateAssets="all" />
-    <!-- 它只在依赖图里、不进输出目录，这两条漏洞通告与本程序无关，别让它们每次构建都刷警告 -->
-    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-2cwj-8chv-9pp9" />
-    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-4f7c-pmjv-c25w" />
+    <PackageReference Include="log4net" Version="3.4.0" ExcludeAssets="all" PrivateAssets="all" />
     <PackageReference Include="System.Buffers" Version="4.6.1" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.119.0" />
     <PackageReference Include="System.Memory" Version="4.6.3" />
@@ -157,6 +161,13 @@
     </None>
     <None Update="IPLocation\qqwry.dat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <!--
+      WPE 数据文件（.sb / .fp …）在资源管理器里的图标。ClassObject\FileAssociation 启动时把它拷到
+      %LOCALAPPDATA%\WPE64\Icons 再注册。它是 wpe.ico 的派生产物：换了主图标要重跑 tools\icons\DataIcon.cs。
+    -->
+    <None Update="wpe-data.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <!-- 远程管理台（手写静态页，零构建）：整个 Web\ 目录照原样发布，新增文件不用再回来改工程 -->
     <None Update="Web\**">

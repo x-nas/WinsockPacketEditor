@@ -35,6 +35,9 @@
   font-weight: 400;
   font-display: swap;
   src: url("./fonts/sharetechmono.woff2") format("woff2");
+  /* 自带度量上下不对称、文字天生偏上，覆写成对称（与外壳 WebUI/src/style.css 同一组值）*/
+  ascent-override: 93.1%;
+  descent-override: 19.6%;
 }
 
 @font-face {
@@ -43,6 +46,9 @@
   font-weight: 400 700;
   font-display: swap;
   src: url("./fonts/jetbrainsmono.woff2") format("woff2");
+  /* 同上：正文中文 / 大写在固定行高里偏上 1px，覆写成对称（与外壳同一组值）*/
+  ascent-override: 105%;
+  descent-override: 27%;
 }
 
 :root {

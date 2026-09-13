@@ -379,7 +379,7 @@ async function onMenuPick(id: string): Promise<void> {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 2px 11px 0;   /* 定高按钮：上 2 下 0，把偏上 1px 的字形压回中线 */
+  padding: 2px 11px 0;   /* 上 2 下 0：与底边那条 2px 的选中下划线对称，文字落在整个 30px 页签的中线上 */
   background: transparent;
   border: 0;
   border-bottom: 2px solid transparent;
@@ -399,7 +399,12 @@ async function onMenuPick(id: string): Promise<void> {
 .ptab:focus-visible { outline-offset: -2px; }
 
 /* 截断挪到文字那一格：页签收窄时省略号吃文字，键盘图标永远完整 */
-.ptab .lb { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+/*
+  ⚠️ line-height 要比 1 高：这一格为了省略号是 overflow: hidden，而页签整体是 line-height: 1 ——
+  盒子只有 10.5px 高，中文字形比它高，100% 缩放下<b>字的顶和底都被切掉一行像素</b>（真机报的）。
+  放高到 1.5 只是让裁切框装得下字形，页签是 flex 居中的，文字位置不变。
+*/
+.ptab .lb { min-width: 0; overflow: hidden; text-overflow: ellipsis; line-height: 1.5; }
 
 /*
   全局快捷键图标。青色 —— 页签的选中态是绿、未选是灰，青与两者都分得开，

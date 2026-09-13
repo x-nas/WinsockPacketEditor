@@ -321,7 +321,7 @@ function clearAll(): void {
   min-width: 0;
 }
 
-.ph > span { padding-top: 4px; }
+.ph > span { padding-top: 2px; }   /* 原 4px 在字体度量覆写之后偏低 1px（2026-09-13 字体度量覆写后按 100% 缩放实测重调） */
 .ph .tt { color: var(--cyan); flex: none; }
 .ph .meta { color: var(--muted); letter-spacing: .06em; text-transform: none; flex: none; }
 .ph .meta b { font-family: var(--mono); color: var(--gray); font-weight: 400; }

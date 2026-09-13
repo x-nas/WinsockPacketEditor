@@ -460,6 +460,13 @@ namespace WPEHybrid
                 //必须在 AttachFeed 之后 —— FeedPump.Attach 会先看 UI.Feed.NeedsRows
                 FeedPump.Attach();
 
+                /*
+                    WPE 数据文件（.sb / .fp / .sp …）的图标关联，见 ClassObject/FileAssociation.cs。
+                    放在 UI.Attach 之后：类型名要按当前界面语言取；丢后台线程：它要读写注册表、
+                    拷图标、通知资源管理器，没必要挡着首屏。用户在「软件设置」里清除过就什么都不做。
+                */
+                _ = Task.Run(() => FileAssociation.Sync());
+
                 //Operate 里的跨线程回 UI 用它；WinForms 两个模式窗体也是这么设的
                 Operate.SystemConfig.InvokeAction = action =>
                 {
@@ -1109,7 +1116,7 @@ namespace WPEHybrid
                 Operate.ProxyConfig.Proxy.CloseAllUDPProxy();
 
                 //远程管理与启动时的 StartRemoteMGT 成对（在 EnsureProxyConfigLoaded 里）
-                Operate.SystemConfig.StopRemoteMGT();
+                Operate.SystemConfig.StopRemoteMGT(true);
 
                 //关窗前存一次，对应 ProxyModeForm 关闭时的那一串 Save*_ToDB
                 this.SaveProxyState();
@@ -1604,7 +1611,34 @@ namespace WPEHybrid
                 UI.Prefs.Language = lang;
                 Operate.SystemConfig.SaveSystemConfig_ToDB();
 
+                //资源管理器「类型」列里那 13 个类型名也跟着换（值没变的键不会重写）
+                _ = Task.Run(() => FileAssociation.Sync());
+
                 return new { language = lang };
+            });
+
+            /*
+                WPE 数据文件的图标关联（软件设置 → 文件图标）。见 ClassObject/FileAssociation.cs。
+
+                setFileAssoc 是<b>立即生效</b>的动作，不走设置弹窗的「保存」：它改的是注册表，
+                不是一个配置项。清除之后 FileAssociation 会记一个标记，下次启动不再自动注册。
+            */
+            this.bridge.Register("getFileAssoc", async args =>
+                FileAssocDto(await Task.Run(() => FileAssociation.GetStatus()), true));
+
+            this.bridge.Register("setFileAssoc", async args =>
+            {
+                bool on = args["on"] != null && (bool)args["on"];
+
+                try
+                {
+                    return FileAssocDto(await Task.Run(() => FileAssociation.SetEnabled(on)), false);
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog("setFileAssoc", ex);
+                    return (object)new { ok = false, error = ex.Message };
+                }
             });
 
             /*
@@ -5617,6 +5651,24 @@ namespace WPEHybrid
             if (UI.Prefs.FollowSystemTheme) { return "system"; }
 
             return UI.Prefs.IsDark ? "dark" : "light";
+        }
+
+        /// <summary>
+        /// 文件图标关联的状态 → 前端。withIcon 时顺带一枚 32px 的预览（PNG base64，只在打开设置时取一次）。
+        /// </summary>
+        private static object FileAssocDto(FileAssociation.Status s, bool withIcon)
+        {
+            return new
+            {
+                ok = true,
+                enabled = s.Enabled,
+                claimed = s.Claimed,
+                foreign = s.Foreign,
+                owners = s.Owners,
+                iconMissing = s.IconMissing,
+                total = FileAssociation.Types.Length,
+                icon = withIcon ? FileAssociation.PreviewPng() : null,
+            };
         }
 
         /// <summary>

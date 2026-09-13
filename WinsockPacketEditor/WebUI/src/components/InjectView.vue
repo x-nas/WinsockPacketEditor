@@ -1195,7 +1195,8 @@ async function clearList(): Promise<void> {
   margin-bottom: var(--cd-ry);
 }
 
-.cd .num { font-family: var(--share); font-size: var(--fs-caption); letter-spacing: .18em; color: var(--muted); }
+/* top .4px：--fs-caption 提到 10.5px（2026-09-13）后重量，−0.61 → −0.21（恢复 9.5px 时的位置） */
+.cd .num { position: relative; top: .4px; font-family: var(--share); font-size: var(--fs-caption); letter-spacing: .18em; color: var(--muted); }
 
 /*
   ⚠️⚠️ **这个类不能叫 `.st`。**
@@ -1314,7 +1315,7 @@ async function clearList(): Promise<void> {
   display: flex;
   align-items: baseline;
   gap: 8px;
-  padding: 5px 9px 4px;
+  padding: 4px 9px 5px;   /* 原 5/4 在字体度量覆写之后偏低 1.3px（2026-09-13 字体度量覆写后按 100% 缩放实测重调） */
   border: 1px solid rgb(var(--border-rgb) / 70%);
   background: rgb(var(--inset-rgb) / 30%);
 }

@@ -80,7 +80,12 @@ namespace WinsockPacketEditor
             d["Password.Incorrect"] = "Sai mật khẩu";
             d["BatchSuccess"] = "Điều chỉnh hàng loạt thành công";
             d["MGT.Enabled"] = "Đã bật quản trị từ xa: {0}";
-            d["MGT.Error"] = "Không bật được quản trị từ xa: hãy thử chạy {0} với quyền quản trị";
+            d["MGT.Incomplete"] = "Chưa bật quản trị từ xa: địa chỉ lắng nghe, tài khoản hoặc mật khẩu quản trị đang trống";
+            d["MGT.BadAddress"] = "Không bật được quản trị từ xa: {0} không phải địa chỉ của máy này (có thể đã đổi mạng). Hãy chọn lại địa chỉ lắng nghe";
+            d["MGT.PortBusy"] = "Không bật được quản trị từ xa: cổng {0} đang bị chương trình khác dùng. Hãy chọn cổng khác";
+            d["MGT.AccessDenied"] = "Không bật được quản trị từ xa: không có quyền lắng nghe {0}";
+            d["MGT.StartFailed"] = "Không bật được quản trị từ xa: {0}";
+            d["MGT.AuthLocked"] = "Quản trị từ xa: {0} đăng nhập sai {1} lần liên tiếp, tạm từ chối yêu cầu của nó trong {2} giây";
             d["ProcessInfo"] = "{0} Handle: {1}";
             d["SOCKS.Unsupport"] = "Giao thức SOCKS không hỗ trợ: {0} [ {1} ]";
             d["Command.Unsupported"] = "{0} - Lệnh không hỗ trợ: {1}";
@@ -90,6 +95,11 @@ namespace WinsockPacketEditor
             d["ProxyAccountListFile"] = "Tệp danh sách tài khoản proxy";
             d["MapLocalFile"] = "Tệp ánh xạ cục bộ";
             d["MapRemoteFile"] = "Tệp ánh xạ từ xa";
+            d["StoresFile"] = "Tệp dữ liệu kho";
+            d["BackupFile"] = "Tệp sao lưu";
+            d["FileAssoc.Registered"] = "Đã đăng ký biểu tượng cho {0} loại tệp dữ liệu WPE ({1})";
+            d["FileAssoc.Cleared"] = "Đã gỡ liên kết biểu tượng của tệp dữ liệu WPE ({0} loại)";
+            d["FileAssoc.NoIcon"] = "Không tìm thấy biểu tượng tệp dữ liệu: {0}";
             d["ExportMapLocal"] = "Xuất ánh xạ cục bộ";
             d["ExportMapRemote"] = "Xuất ánh xạ từ xa";
             d["ImportMapLocal"] = "Nhập ánh xạ cục bộ";

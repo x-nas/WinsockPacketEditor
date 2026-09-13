@@ -600,7 +600,7 @@ const { covered } = useModal(() => props.id !== null)
 
 .grow { flex: 1; }
 
-.runbar .cnt { font-size: var(--fs-label); color: var(--muted); font-family: var(--share); letter-spacing: .06em; }
+.runbar .cnt { font-size: var(--fs-label); color: var(--muted); font-family: var(--share); letter-spacing: .06em; position: relative; top: 1px; }   /* 与大一号的数字排在一行，实测偏高 1.25px（2026-09-13 字体度量覆写后按 100% 缩放实测重调） */
 .runbar .cnt b { font-family: var(--mono); font-variant-numeric: tabular-nums; }
 .runbar .cnt.run b { color: var(--cyan); }
 .runbar .cnt.ok b { color: var(--green); }

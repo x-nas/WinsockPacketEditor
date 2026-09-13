@@ -80,7 +80,12 @@ namespace WinsockPacketEditor
             d["Password.Incorrect"] = "Incorrect password";
             d["BatchSuccess"] = "Batch adjustment successful";
             d["MGT.Enabled"] = "Remote MGT Enabled: {0}";
-            d["MGT.Error"] = "Remote MGT startup failed: Please try use administrator to start {0}";
+            d["MGT.Incomplete"] = "Remote management was not started: listen address, admin user name or password is empty";
+            d["MGT.BadAddress"] = "Remote management failed to start: {0} is not an address of this machine (the network may have changed). Please pick the listen address again";
+            d["MGT.PortBusy"] = "Remote management failed to start: port {0} is already used by another program. Please choose another port";
+            d["MGT.AccessDenied"] = "Remote management failed to start: no permission to listen on {0}";
+            d["MGT.StartFailed"] = "Remote management failed to start: {0}";
+            d["MGT.AuthLocked"] = "Remote management: {0} failed to sign in {1} times in a row; its requests are refused for {2} seconds";
             d["ProcessInfo"] = "{0} Handle: {1}";
             d["SOCKS.Unsupport"] = "Unsupported Socks protocol: {0} [ {1} ]";
             d["Command.Unsupported"] = "{0} - Unsupported command: {1}";
@@ -90,6 +95,11 @@ namespace WinsockPacketEditor
             d["ProxyAccountListFile"] = "Proxy Account List File";
             d["MapLocalFile"] = "Map Local File";
             d["MapRemoteFile"] = "Map Remote File";
+            d["StoresFile"] = "Stores Data File";
+            d["BackupFile"] = "Backup File";
+            d["FileAssoc.Registered"] = "Registered icons for {0} kinds of WPE data files ({1})";
+            d["FileAssoc.Cleared"] = "Removed the icon associations for WPE data files ({0} kinds)";
+            d["FileAssoc.NoIcon"] = "Data file icon not found: {0}";
             d["ExportMapLocal"] = "Export Map Local";
             d["ExportMapRemote"] = "Export Map Remote";
             d["ImportMapLocal"] = "Import Map Local";

@@ -350,7 +350,7 @@ watch(() => props.id, () => { asText.value = null })
 
 .hx-title {
   /* 与各表表头同一份字样：--th-size · Share Tech Mono · 大写 · var(--th-fg) */
-  padding-top: 4px;   /* 字形偏上 2px（像素实测），与各表表头同一份补偿 */
+  padding-top: 2px;   /* 原来的 4px 是给字形偏上的补偿，字体度量覆写之后补过头 1px（2026-09-13 字体度量覆写后按 100% 缩放实测重调） */
   font-family: var(--share);
   font-size: var(--th-size);
   letter-spacing: .14em;

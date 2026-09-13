@@ -604,6 +604,10 @@ async function io(method: 'importAccounts' | 'exportAccounts'): Promise<void> {
 .rng.on { border-color: rgb(var(--cyan-rgb) / 32%); background: rgb(var(--cyan-rgb) / 6%); }
 
 .rng .lb {
+  /* top .9px：--fs-caption 提到 10.5px 且 --share 显式回退到微软雅黑 UI 之后（2026-09-13）放大实测，
+     .4px 时墨迹比所在行中线高约 0.5px，.9px 落在中线上 */
+  position: relative;
+  top: .9px;
   font-family: var(--share);
   font-size: var(--fs-caption);
   letter-spacing: .12em;

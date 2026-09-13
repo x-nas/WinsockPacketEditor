@@ -260,11 +260,13 @@
         /* ── 写 ──
            ⚠️ UpdateProxyAccount 内部会对收到的 Password 再加密一次，
            所以必须回传<b>明文</b>；列表里的 Password 是密文，直接回传会被二次加密，
-           账号从此登录不上。先用 GetPassWordDecrypt 换回明文。 */
+           账号从此登录不上。先用 GetPlainPassword 换回明文。
+           ⚠️ 按账号 Id 取，<b>URL 里只有 Id</b> —— 原来调的是 GetPassWordDecrypt?PassWord=<编码串>，
+           而那个「加密」只是逐字符替换，编码串约等于明文，放进查询串就留在了浏览器历史里。 */
 
         function plainPassword(a) {
             if (!a.Password) return Promise.resolve('');
-            return fetch('./ProxyAccount/GetPassWordDecrypt?PassWord=' + encodeURIComponent(a.Password))
+            return fetch('./ProxyAccount/GetPlainPassword?AID=' + encodeURIComponent(a.AID))
                 .then(function (r) {
                     // 服务端应答了、只是这一条取不到 —— 那才轮得到「请用编辑重设一次」
                     return r.ok ? r.json() : null;
