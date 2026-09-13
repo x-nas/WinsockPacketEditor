@@ -1,98 +1,175 @@
 <div align="center">
-<p><img src="https://www.wpe64.com/assets/img/wpe.ico" height="150"></p>
 
-# Winsock Packet Editor（WPE x64）
+<img src="https://www.wpe64.com/assets/img/wpe.ico" height="110" alt="WPE x64">
 
-<img src="https://img.shields.io/github/license/x-nas/WinsockPacketEditor" alt="License"></img>
-[![Visitors](https://visitor-badge.laobi.icu/badge?page_id=x-nas.WinsockPacketEditor&title=Visitors)](https://github.com/x-nas/WinsockPacketEditor)
-![GitHub Repo stars](https://img.shields.io/github/stars/x-nas/WinsockPacketEditor?style=dark)
-![GitHub Repo forks](https://img.shields.io/github/forks/x-nas/WinsockPacketEditor?style=dark)
-[![Release](https://img.shields.io/github/v/release/x-nas/WinsockPacketEditor?sort=semver)](https://github.com/x-nas/WinsockPacketEditor/releases)
+# WPE x64
 
-&bull; <a href="https://www.wpe64.com">官方网站</a>
-&bull; <a href="https://www.wpe64.com">Official website</a>
+**看清、改写并重放程序的网络封包**
+*See, edit and replay the network packets a program sends and receives*
+
+<img src="https://img.shields.io/badge/version-2.1.9-00c853?style=flat-square" alt="version">&nbsp;
+<img src="https://img.shields.io/badge/platform-Windows%2010%20%2F%2011-2a2a3a?style=flat-square" alt="platform">&nbsp;
+<img src="https://img.shields.io/badge/languages-7-2a2a3a?style=flat-square" alt="languages">&nbsp;
+<img src="https://img.shields.io/github/stars/x-nas/WinsockPacketEditor?style=flat-square&color=00c853" alt="stars">
+
+**[中文说明](#-中文)** · **[English](#-english)** · [官网 Website](https://www.wpe64.com) · [使用教程 Tutorial](https://www.wpe64.com/tutorial.html) · [下载 Download](https://www.wpe64.com/downloads.html)
 
 </div>
 
-## [📚] 软件简介
+---
 
-WPE x64 是一款可以拦截并修改 WinSock 封包的 Windows 软件，自适应支持 32 位及 64 位的目标程序，软件支持 SOCKS 代理和进程注入两种模式，并且具有高级滤镜和自动化机器人等功能，开发中使用了 C# 的多线程和消息队列技术，测试拦截了 100 万+的封包不会卡死或退出.
+## 🟢 中文
 
-WPE x64 支持直接注入 Windows 进程来拦截 Winsock 封包，也可以通过 SOCKS 代理模式来拦截 Winsock 封包.
+一款 Windows 上的**网络封包拦截与编辑工具**。它能把某个程序收发的每一条网络封包实时列出来，让你**看清里面的内容、改写它、再发一遍**——协议调试、接口审计、协议学习、模拟器与手游分析都用得上。界面是深色赛博风格，支持**七种语言**与**深 / 浅主题**。
 
-## [📚] Introduction
+<div align="center">
+<img src="docs/screenshots/wpe-proxy-data.png" width="860" alt="实时抓包主界面"><br>
+<sub>实时抓包主界面 —— 每一条封包实时进列表，命中规则的行按颜色区分</sub>
+</div>
 
-WPE x64 is a Windows software that can intercept and modify WinSock packets, with adaptive support for 32-bit and 64-bit target programs. The software supports two modes: SOCKS proxy and process injection, and has advanced filters and automated robots. It uses C# multi threading and message queue technology in development, and has intercepted over 1 million packets without freezing or exiting. 
+<br>
 
-WPE x64 supports direct injection into Windows processes to intercept Winsock packets, and can also intercept Winsock packets through SOCKS proxy mode.
+### ✨ 它能做什么
 
-## [🎖️] 软件特色
+- 📡 **实时抓包**：把目标程序收发的封包一条条列出来，随时暂停、搜索、导出。
+- ✏️ **改写封包**：十六进制并排编辑，改完可以立即再发一遍。
+- 🎨 **规则自动改**：设好「滤镜」，符合条件的封包自动替换 / 拦截 / 改长度，命中的行按颜色标出来。
+- 🤖 **自动化**：用「机器人」把一串动作（发包、延迟、循环、模拟键鼠）排成流程自动跑。
+- 🔍 **对比与查找**：并排看改写前后、按字节或按行找不同，列表支持文本 / 十六进制 / 正则搜索。
+- 🔒 **看清加密流量**：代理模式下连 **HTTPS** 这类加密内容也能以明文呈现。
+- 🌍 **随身即用**：免安装，单个文件双击就能跑，退出时自己收拾干净。
 
-- [x] 支持 SOCKS 代理和进程注入两种模式，确保在各种情况下都可以拦截到 Winsock 封包.
-- [x] 代理模式下支持多种主流代理协议和 SSL 安全协议，并具有端口映射和断点调试等功能.
-- [x] 具备自动化的可编程机器人功能，可在满足触发条件的情况下执行预定义的指令集.
-- [x] 消息队列缓存模式，所有的封包依次排队进入 MQ 队列，无需等待缓存结束后再显示封包.
-- [x] 您可以自定义需要拦截的封包类型，已包含 WinSock 1.1 和 2.0 的 APIs.
-- [x] 注入器和封包编辑器相对独立，可一次注入多个软件后，分别获取不同程序的网络封包.
-- [x] 您可以通过选择一个尚未运行的程序注入后，从启动阶段即开始获取程序的所有封包数据.
-- [x] 直观的封包对比功能，支持多种数据格式之间快速切换.
-- [x] 您可以方便的对封包内容进行搜索，支持多种数据格式的快速搜索定位.
-- [x] 支持批量发送封包，您可以自定义发送的顺序和循环次数，并支持导入导出和备注功能.
-- [x] 强大的滤镜功能，支持高级滤镜，并且可以自定义修改封包的长度和修改次数.
-- [x] 支持注入 Winsock 代理程序后，再获取目标程序的网络封包.
-- [x] 您可以直接注入各类模拟器，并直接获取模拟器以及运行的程序的网络封包.
-- [x] 您对系统的各种配置都会及时的进行保存，下次启动软件时会自动带出上一次的设置.
-- [x] 软件运行期间会实时记录运行日志并支持导出，方便定位问题和提交处理.
-- [x] 支持 64 位的 Windows 操作系统和 64 位的目标程序，并且会根据目标进程的类型来自动调用 32 位或 64 位的动态库注入目标程序.
-- [x] 软件使用的 .NET 程序集不需要在全局程序集缓存（GAC）中注册，大大简化了使用和二次开发.
-- [x] 支持多线程技术，处理封包时不会影响程序的正常操作.
-- [x] 拦截封包结束后会自动处理挂钩并释放资源，避免对程序运行产生影响.
-- [x] 不会使目标程序产生资源和内存泄露风险.
-- [x] 绿色免安装，解压到任意目录即可运行，不写注册表（Windows 10 1903 及以上已自带 .NET Framework 4.8）.
-- [x] 支持七种界面语言（简体中文 / 繁體中文 / English / 日本語 / 한국어 / Tiếng Việt / Русский），并有深浅两套皮肤，可跟随系统.
+### 🎯 两种工作方式，按场景选
 
-## [🎖️] Features
+| | 适合 | 说明 |
+|---|---|---|
+| 🎯 **注入模式** | 单个程序、模拟器、手游 | 附着到目标程序上，从内部把它的封包读出来；对模拟器尤其好用，连启动瞬间的封包都抓得到。 |
+| 🌐 **代理模式** | 手机、另一台电脑、要看 HTTPS 明文 | 让程序（或整台设备）把流量经过 WPE 转发，途中就能看到、改写；加密的 HTTPS 也能解开看。 |
 
-- [x] Supports both SOCKS proxy and process injection modes to ensure that Winsock packets can be intercepted in various situations.
-- [x] In proxy mode, it supports multiple mainstream proxy protocols and SSL security protocols, and has functions such as port mapping and breakpoint debugging.
-- [x] Equipped with automated programmable robot functionality, capable of executing pre-defined instruction sets under triggering conditions.
-- [x] Message queue caching mode, where all packets are queued in sequence to enter the MQ queue and processed according to the first in, first out rule, without waiting for the cache to finish before displaying the packets.
-- [x] You can customize the packet types that need to be intercepted, which already include APIs for WinSock 1.1 and 2.0.
-- [x] The injector and packet editor are relatively independent, and can inject multiple software at once to obtain network packets from different programs separately.
-- [x] You can inject a program that has not yet been run and start obtaining all packet data of the program from the startup phase.
-- [x] Intuitive packet comparison function, supporting quick switching between multiple data formats.
-- [x] You can easily search the contents of the package and support fast search and location of multiple data formats.
-- [x] Support batch sending of packets, you can customize the order and number of cycles of sending, and support import/export and remark functions.
-- [x] Powerful filter function, supports advanced filters, and can customize the length and modification times of the package.
-- [x] Support injecting Winsock proxy program and then obtaining network packets of the target program.
-- [x] You can directly inject various simulators and obtain network packets of simulators and running programs directly.
-- [x] You will save various configurations of the system in a timely manner, and the next time you start the software, the previous settings will be automatically brought up.
-- [x] During software operation, real-time running logs will be recorded and exported, making it easy to locate problems and submit for processing.
-- [x] Supports 64 bit Windows operating system and 64 bit target programs, and automatically calls 32-bit or 64 bit dynamic libraries to inject target programs based on the type of target process.
-- [x] The NET assembly used by the software does not need to be registered in the Global Assembly Cache (GAC), greatly simplifying usage and secondary development.
-- [x] Support multi-threaded technology, processing packets will not affect the normal operation of the program.
-- [x] After intercepting packets, hooks will be automatically processed and resources will be released to avoid any impact on program operation.
-- [x] Will not pose a risk of resource and memory leakage to the target program.
-- [x] Portable build: unzip anywhere and run, with no installer and no registry writes (Windows 10 1903 and later already ship .NET Framework 4.8).
-- [x] Seven UI languages (Simplified Chinese, Traditional Chinese, English, Japanese, Korean, Vietnamese, Russian) with both dark and light themes that can follow the system.
+### 🧰 主要功能一览
 
-## [🖼️] 软件界面 Software UI
+<table>
+<tr>
+<td width="50%" valign="top">
+<img src="docs/screenshots/wpe-filter-edit.png" alt="滤镜编辑"><br>
+<sub><b>滤镜</b>：设定「符合什么条件、怎么改」，抓到就自动执行。</sub>
+</td>
+<td width="50%" valign="top">
+<img src="docs/screenshots/wpe-robot-edit.png" alt="机器人编辑"><br>
+<sub><b>机器人</b>：把发包、延迟、循环、键鼠排成一条可视化流程。</sub>
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+<img src="docs/screenshots/wpe-modify.png" alt="查看数据修改"><br>
+<sub><b>改写前后对比</b>：并排看原始字节和改写后的字节。</sub>
+</td>
+<td width="50%" valign="top">
+<img src="docs/screenshots/wpe-appset.png" alt="软件设置"><br>
+<sub><b>七种语言 + 深 / 浅主题</b>：随时切换，可跟随系统。</sub>
+</td>
+</tr>
+</table>
 
-<img width="1200" height="750" alt="Home" src="https://github.com/user-attachments/assets/fbdaba92-edf8-486c-905a-a92ebb523ea2" />
+### 💡 典型用途
 
-<img width="1450" height="802" alt="PacketList" src="https://github.com/user-attachments/assets/59f26b9d-e6df-4ccd-b3a4-9807d7db5ba8" />
+- **协议调试**：自己写的客户端 / 服务端对不上时，直接看线上真实的字节，比两端加日志快得多。
+- **接口审计**（需已获授权）：构造异常数据检验目标的处理，或核对敏感信息有没有明文外传。
+- **协议学习**：拿到一个没有文档的私有协议，靠对照实验一个字段一个字段推出它的结构。
+- **模拟器 / 手游分析**：安卓模拟器直接注入；真机把 WPE 当成局域网里的代理接进来。
 
-<img width="1450" height="802" alt="Statistical" src="https://github.com/user-attachments/assets/9e5f5330-ebe0-4b3f-92eb-c13ec6329a78" />
+> ⚠️ 请只在**你自己的软件、测试环境或已获授权的目标**上使用。在带反作弊的网络游戏里使用抓包 / 改包工具可能导致封号。
 
-<img width="1450" height="802" alt="Robot" src="https://github.com/user-attachments/assets/b7eb16b7-fee1-4381-8b7f-0ab6e49287a4" />
+### ⬇️ 下载与运行
 
-![111](https://github.com/user-attachments/assets/e33412c1-3a9f-41f8-b23e-aada6a1bb104)
+1. 到 **[下载中心](https://www.wpe64.com/downloads.html)** 取最新版（一个 `WPE64 2.1.9.exe`，约 62 MB，**免安装**）。
+2. 在下载到的文件上右键「属性 → 解除锁定 → 应用」——**运行前先做这一步**。
+3. 双击运行，在权限提示上选「是」即可（需要管理员权限）。
 
-![222](https://github.com/user-attachments/assets/6c9f6fa8-94a9-4aea-8119-2ebe152ff7c2)
+**系统要求**：Windows 10 / 11（或 Server 2019 / 2022）· 64 位。首次打开若是白屏，是缺少界面运行时，程序会弹出一键安装引导，装完重开即可。
 
-## [👏] 特别说明 Special Note
+### 🔗 更多
 
-本项目已加入 [DotNetGuide](https://github.com/YSGStudyHards/DotNetGuide)  列表。<br/>
-本项目已加入 [dotNET China](https://gitee.com/dotnetchina)  组织。<br/>
+📖 **[完整使用教程](https://www.wpe64.com/tutorial.html)** · ❓ **[常见问题](https://www.wpe64.com/faq.html)** · 🌐 **[官网 www.wpe64.com](https://www.wpe64.com)**
 
-![dotnetchina](https://images.gitee.com/uploads/images/2021/0324/120117_2da9922c_416720.png "132645_21007ea0_974299.png")
+---
+
+## 🟢 English
+
+A **network packet capture-and-edit tool** for Windows. It lists every packet a program sends and receives in real time, so you can **see what's inside, change it, and send it again** — handy for protocol debugging, interface auditing, learning an undocumented protocol, and analyzing emulators and mobile games. The interface is a dark, cyber-styled UI available in **seven languages** with **dark / light themes**.
+
+<div align="center">
+<img src="docs/screenshots/wpe-proxy-data-en.png" width="860" alt="Live capture"><br>
+<sub>Live capture — every packet streams into the list, and rows matched by a rule are color-coded</sub>
+</div>
+
+<br>
+
+### ✨ What it does
+
+- 📡 **Live capture** — list every packet the target sends and receives; pause, search and export any time.
+- ✏️ **Edit packets** — a side-by-side hex editor; replay a packet the moment you're done.
+- 🎨 **Rewrite by rule** — set up a *filter* and matching packets are replaced / blocked / resized automatically, with matched rows color-coded.
+- 🤖 **Automation** — a *robot* runs a sequence of steps (send, delay, loop, simulate keyboard and mouse) for you.
+- 🔍 **Compare & search** — view before/after side by side, diff by byte or by line; search the list as text, hex or regex.
+- 🔒 **See encrypted traffic** — in proxy mode even **HTTPS** shows up in the clear.
+- 🌍 **Portable** — no installer; one file, double-click to run, and it cleans up after itself on exit.
+
+### 🎯 Two ways to work, pick per situation
+
+| | Best for | How it works |
+|---|---|---|
+| 🎯 **Inject Mode** | a single program, emulators, mobile games | Attaches to the target and reads its packets from the inside; great with emulators, and it even catches the packets sent the instant it launches. |
+| 🌐 **Proxy Mode** | phones, another PC, seeing HTTPS in the clear | Routes the program's (or a whole device's) traffic through WPE, where you can watch and rewrite it; encrypted HTTPS is decrypted for you. |
+
+### 🧰 Feature tour
+
+<table>
+<tr>
+<td width="50%" valign="top">
+<img src="docs/screenshots/wpe-filter-edit-en.png" alt="Filter editor"><br>
+<sub><b>Filters</b> — set "match this, change it that way" and it runs automatically on capture.</sub>
+</td>
+<td width="50%" valign="top">
+<img src="docs/screenshots/wpe-robot-edit-en.png" alt="Robot editor"><br>
+<sub><b>Robots</b> — arrange send, delay, loop and key/mouse steps into a visual flow.</sub>
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+<img src="docs/screenshots/wpe-modify-en.png" alt="View data changes"><br>
+<sub><b>Before / after</b> — see the original bytes next to the rewritten ones.</sub>
+</td>
+<td width="50%" valign="top">
+<img src="docs/screenshots/wpe-appset-en.png" alt="Preferences"><br>
+<sub><b>Seven languages + dark / light themes</b> — switch any time, or follow the system.</sub>
+</td>
+</tr>
+</table>
+
+### 💡 Typical uses
+
+- **Protocol debugging** — when your own client and server don't agree, read the real bytes on the wire instead of adding logs on both ends.
+- **Interface auditing** (with authorization) — feed the target unusual data to test how it copes, or check that nothing sensitive leaves in the clear.
+- **Learning a protocol** — take an undocumented private protocol and work out its structure field by field through experiment.
+- **Emulator / mobile analysis** — inject an Android emulator directly, or point a real phone at WPE as a proxy on your LAN.
+
+> ⚠️ Use it only on **your own software, test environments, or targets you are authorized to touch**. Using a capture / packet-editing tool in an online game with anti-cheat can get your account banned.
+
+### ⬇️ Download & run
+
+1. Get the latest build from the **[download center](https://www.wpe64.com/en/downloads.html)** (a single `WPE64 2.1.9.exe`, about 62 MB, **no installer**).
+2. Right-click the downloaded file → Properties → **Unblock** → Apply — **do this before running it**.
+3. Double-click and choose Yes at the prompt (administrator rights are required).
+
+**Requirements**: Windows 10 / 11 (or Server 2019 / 2022), 64-bit. If the first launch is blank, the interface runtime is missing — the program shows a one-click installer; install it and reopen.
+
+### 🔗 More
+
+📖 **[Full tutorial](https://www.wpe64.com/en/tutorial.html)** · ❓ **[FAQ](https://www.wpe64.com/en/faq.html)** · 🌐 **[www.wpe64.com](https://www.wpe64.com/en/)**
+
+---
+
+<div align="center">
+<sub>© 2026 Winsock Packet Editor · <a href="https://www.wpe64.com">www.wpe64.com</a></sub>
+</div>
