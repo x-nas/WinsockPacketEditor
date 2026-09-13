@@ -25,7 +25,7 @@
   保存时先校验、真连一次转代理服务器，再装驱动、把勾选的 Pid 与名称交给 SunnyNet，全在 C#（SaveProcessSetting）。
   按名称拦截的名单与驱动类型会随「代理设置」落库，WPE 重启后还在；Pid 那份刻意不存。
 */
-import { computed, ref, shallowRef, watch } from 'vue'
+import { computed, onBeforeUnmount, ref, shallowRef, watch } from 'vue'
 import { call } from '../../bridge'
 import { FeedList, type ProcessRow } from '../../bridge/types'
 import { t, type Key } from '../../i18n'
@@ -269,6 +269,8 @@ function toggle(p: ProcessRow): void {
   第 2 次 click 的 detail 是 2，直接忽略。勾选框本身（.chk，@click.stop）仍是即时的。
 */
 let rowClickTimer = 0
+//单击后 220ms 内关掉弹窗的话，那一下延迟的勾选不该再落到已卸载的表上
+onBeforeUnmount(() => window.clearTimeout(rowClickTimer))
 
 function onRowClick(p: ProcessRow, e: MouseEvent): void {
   if (e.detail > 1) return

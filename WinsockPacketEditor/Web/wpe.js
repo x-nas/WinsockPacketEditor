@@ -214,7 +214,7 @@ function poll(fn, ms) {
 
     document.addEventListener('visibilitychange', function () {
         if (document.hidden) stop();
-        else { fn(); start(); }
+        else { if (!paused) fn(); start(); }   //暂停着的页面切回来不该偷偷刷一次
     });
 
     fn();

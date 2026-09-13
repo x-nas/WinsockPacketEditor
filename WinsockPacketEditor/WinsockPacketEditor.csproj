@@ -67,12 +67,8 @@
 
   <ItemGroup>
     <!-- SDK 的隐式框架引用之外，本工程还用到的这几个 -->
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Management" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Web" />
   </ItemGroup>
 
   <!--

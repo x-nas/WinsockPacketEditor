@@ -362,3 +362,6 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /WinsockPacketEditor/Resources/Thumbs.db
+
+# 单文件打包产物（tools/pack/Pack.ps1）
+dist/

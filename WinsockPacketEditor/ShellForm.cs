@@ -1319,16 +1319,6 @@ namespace WPEHybrid
         /// </summary>
         private void RegisterMethods()
         {
-            //宿主信息：验证 JS → C# 这一方向通了
-            this.bridge.Register("getAppInfo", args => new
-            {
-                app = "WPE x64",
-                mode = "Proxy",
-                is64Bit = Environment.Is64BitProcess,
-                clr = Environment.Version.ToString(),
-                os = Environment.OSVersion.VersionString,
-                batchMax = Operate.SystemConfig.FeedBatchMax,
-            });
 
             //按 Id 取封包完整字节，滤镜改写前后一并给。
             //一次往返拿两份：十六进制面板本来就要并排显示，分两次调只是多一次延迟。
@@ -6022,24 +6012,6 @@ namespace WPEHybrid
             //（这个方法在 1 秒一次的 InjectStatus() 里）。隔壁 SafeWindowTitle 一直是对的。
             try { using (var proc = System.Diagnostics.Process.GetProcessById(pid)) { return proc.ProcessName; } }
             catch { return "(" + pid + ")"; }
-        }
-
-        /// <summary>
-        /// 目标的主窗口标题，没有标题就退回主模块名（照 WinForms 的 GetInjectModuleName）。
-        /// 同样一条都不能抛。
-        /// </summary>
-        private string SafeWindowTitle(int pid)
-        {
-            try
-            {
-                using (var proc = System.Diagnostics.Process.GetProcessById(pid))
-                {
-                    if (!string.IsNullOrEmpty(proc.MainWindowTitle)) { return proc.MainWindowTitle; }
-
-                    try { return proc.MainModule.ModuleName; } catch { return string.Empty; }
-                }
-            }
-            catch { return string.Empty; }
         }
 
         /// <summary>链路状态变了就推给前端（状态条要即时反映「目标没了」）。</summary>

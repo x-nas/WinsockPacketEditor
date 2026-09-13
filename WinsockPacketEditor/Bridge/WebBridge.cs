@@ -235,12 +235,16 @@ namespace WPEHybrid
 
         private void FailAllPending(string Reason)
         {
-            foreach (var kv in this.pending)
+            //逐个 TryRemove 再应答，不整表 Clear：遍历与 Clear 之间新登记的提问会被一起清掉却没人应答，
+            //它的调用方要白等满 5 分钟超时
+            foreach (string key in this.pending.Keys)
             {
-                kv.Value.TrySetResult(null);
+                TaskCompletionSource<JToken> tcs;
+                if (this.pending.TryRemove(key, out tcs))
+                {
+                    tcs.TrySetResult(null);
+                }
             }
-
-            this.pending.Clear();
             Operate.DoLog(nameof(FailAllPending), Reason);
         }
 

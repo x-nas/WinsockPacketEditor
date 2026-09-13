@@ -1601,7 +1601,6 @@ body.col-resizing * {
 .setf .tg.ok { border-color: rgb(var(--green-rgb) / 35%); color: var(--green); }
 .setf .tg.bad { border-color: rgb(var(--danger-rgb) / 30%); color: var(--danger); }
 .setf .tg.dim { border-color: var(--border); color: var(--dim); }
-.setf .tg.amber { border-color: rgb(var(--amber-rgb) / 40%); color: var(--amber); }
 .setf .link { color: var(--cyan); font-family: var(--mono); font-size: var(--fs-body); cursor: pointer; text-decoration: underline dotted; }
 .setf .link:hover { color: var(--green); }
 

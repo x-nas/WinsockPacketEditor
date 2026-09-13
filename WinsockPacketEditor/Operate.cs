@@ -369,25 +369,25 @@ namespace WinsockPacketEditor
 
                 try
                 {
+                    // 获取CPU使用率（性能计数器坏掉的机器上 cpuCounter 是 null，只缺这一项）
                     if (Operate.SystemConfig.cpuCounter != null)
                     {
-                        // 获取CPU使用率
                         float cpuUsage = Operate.SystemConfig.cpuCounter.NextValue();
                         sReturn[0] = $"{cpuUsage:F2}%";
+                    }
 
-                        // 获取内存使用率
-                        string query = "SELECT TotalVisibleMemorySize, FreePhysicalMemory FROM Win32_OperatingSystem";
-                        using (ManagementObjectSearcher searcher = new ManagementObjectSearcher(query))
+                    // 获取内存使用率 —— 走 WMI，与 CPU 计数器无关，不能跟着它一起缺
+                    string query = "SELECT TotalVisibleMemorySize, FreePhysicalMemory FROM Win32_OperatingSystem";
+                    using (ManagementObjectSearcher searcher = new ManagementObjectSearcher(query))
+                    {
+                        foreach (ManagementObject obj in searcher.Get())
                         {
-                            foreach (ManagementObject obj in searcher.Get())
-                            {
-                                ulong totalMemory = Convert.ToUInt64(obj["TotalVisibleMemorySize"]) / 1024; // MB
-                                ulong freeMemory = Convert.ToUInt64(obj["FreePhysicalMemory"]) / 1024; // MB
-                                ulong usedMemory = totalMemory - freeMemory;
-                                float memoryUsagePercent = (float)usedMemory / totalMemory * 100;
+                            ulong totalMemory = Convert.ToUInt64(obj["TotalVisibleMemorySize"]) / 1024; // MB
+                            ulong freeMemory = Convert.ToUInt64(obj["FreePhysicalMemory"]) / 1024; // MB
+                            ulong usedMemory = totalMemory - freeMemory;
+                            float memoryUsagePercent = (float)usedMemory / totalMemory * 100;
 
-                                sReturn[1] = $"{memoryUsagePercent:F1}%";
-                            }
+                            sReturn[1] = $"{memoryUsagePercent:F1}%";
                         }
                     }
                 }
@@ -1548,24 +1548,6 @@ namespace WinsockPacketEditor
                 return dReturn;
             }
 
-            public static Dictionary<int, int> SortDictionaryByValue(Dictionary<int, int> dictionary, bool ascending = true)
-            {
-                Dictionary<int, int> dReturn = new Dictionary<int, int>();
-
-                try
-                {
-                    dReturn = ascending
-                    ? dictionary.OrderBy(pair => pair.Value).ToDictionary(pair => pair.Key, pair => pair.Value)
-                    : dictionary.OrderByDescending(pair => pair.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(SortDictionaryByValue), ex);
-                }
-
-                return dReturn;
-            }
-
             #endregion
 
             #region//字符串转byte[]
@@ -1911,14 +1893,6 @@ namespace WinsockPacketEditor
             #endregion
 
             #region//返还 Byte[] 占用的内存
-
-            public static void ReturnBuffer(byte[] buffer)
-            {
-                if (buffer != null)
-                {
-                    ArrayPool<byte>.Shared.Return(buffer);
-                }
-            }
 
             #endregion
 
@@ -2281,50 +2255,6 @@ namespace WinsockPacketEditor
                 catch (Exception ex)
                 {
                     Operate.DoLog(nameof(ParseHotkeyString), ex);
-                }
-
-                return result;
-            }
-
-            public static string ConvertHotkeyToString(Keys key)
-            {
-                string result = "";
-
-                try
-                {
-                    if ((key & Keys.Control) == Keys.Control)
-                    {
-                        result += "Ctrl + ";
-                    }
-
-                    if ((key & Keys.Alt) == Keys.Alt)
-                    {
-                        result += "Alt + ";
-                    }
-
-                    if ((key & Keys.Shift) == Keys.Shift)
-                    {
-                        result += "Shift + ";
-                    }
-
-                    Keys mainKey = key & Keys.KeyCode;
-
-                    if (mainKey >= Keys.D0 && mainKey <= Keys.D9)
-                    {
-                        result += ((char)('0' + (mainKey - Keys.D0))).ToString();
-                    }
-                    else if (mainKey >= Keys.NumPad0 && mainKey <= Keys.NumPad9)
-                    {
-                        result += "NumPad" + (mainKey - Keys.NumPad0);
-                    }
-                    else
-                    {
-                        result += mainKey.ToString();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(ConvertHotkeyToString), ex);
                 }
 
                 return result;
@@ -5475,122 +5405,13 @@ namespace WinsockPacketEditor
 
             #region//获取注入的进程的名称
 
-            public static string GetInjectProcessName()
-            {
-                string sReturn = string.Empty;
-
-                try
-                {
-                    Process pProcess = Process.GetCurrentProcess();
-                    PacketConfig.Packet.InjectProcess = string.Format("{0} [{1}]", pProcess.ProcessName, pProcess.Id);
-                    sReturn = PacketConfig.Packet.InjectProcess;
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(GetInjectProcessName), ex);
-                }
-
-                return sReturn;
-            }
-
             #endregion
 
             #region//获取注入的模块名称        
 
-            public static string GetInjectModuleName()
-            {
-                string sReturn = string.Empty;
-
-                try
-                {
-                    Process pProcess = Process.GetCurrentProcess();
-
-                    if (pProcess.MainWindowHandle != IntPtr.Zero)
-                    {
-                        if (string.IsNullOrEmpty(pProcess.MainWindowTitle))
-                        {
-                            sReturn = string.Format(UI.T("ProcessInfo", "{0} 句柄: {1}"), pProcess.MainModule.ModuleName, pProcess.MainWindowHandle.ToString());
-                        }
-                        else
-                        {
-                            sReturn = string.Format(UI.T("ProcessInfo", "{0} 句柄: {1}"), pProcess.MainWindowTitle, pProcess.MainWindowHandle.ToString());
-                        }
-                    }
-                    else
-                    {
-                        if (string.IsNullOrEmpty(pProcess.MainWindowTitle))
-                        {
-                            sReturn = pProcess.MainModule.ModuleName;
-                        }
-                        else
-                        {
-                            sReturn = pProcess.MainWindowTitle;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(GetInjectModuleName), ex);
-                }
-
-                return sReturn;
-            }
-
             #endregion
 
             #region//获取注入的进程的 Winsock 版本信息
-
-            public static string GetInjectWinsockInfo()
-            {
-                string sReturn = "WinSock";
-
-                try
-                {
-                    Operate.PacketConfig.Packet.Support_WS1 = false;
-                    Operate.PacketConfig.Packet.Support_WS2 = false;
-
-                    foreach (ProcessModule module in Process.GetCurrentProcess().Modules)
-                    {
-                        string sModuleName = module.ModuleName;
-
-                        if (sModuleName.Equals(WSock32.ModuleName, StringComparison.CurrentCultureIgnoreCase))
-                        {
-                            Operate.PacketConfig.Packet.Support_WS1 = true;
-                        }
-
-                        if (sModuleName.Equals(WS2_32.ModuleName, StringComparison.CurrentCultureIgnoreCase))
-                        {
-                            Operate.PacketConfig.Packet.Support_WS2 = true;
-                        }
-
-                        if (sModuleName.Equals(Mswsock.ModuleName, StringComparison.CurrentCultureIgnoreCase))
-                        {
-                            Operate.PacketConfig.Packet.Support_MsWS = true;
-                        }
-                    }
-
-                    if (Operate.PacketConfig.Packet.Support_WS1)
-                    {
-                        sReturn += " 1.1";
-                    }
-
-                    if (Operate.PacketConfig.Packet.Support_WS2)
-                    {
-                        sReturn += " 2.0";
-                    }
-
-                    if (Operate.PacketConfig.Packet.Support_MsWS)
-                    {
-                        sReturn += " Microsoft";
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(GetInjectWinsockInfo), ex);
-                }
-
-                return sReturn;
-            }
 
             #endregion
         }
@@ -9167,22 +8988,25 @@ namespace WinsockPacketEditor
                         string IPLocation = await SystemConfig.GetIPLocation(IPToCheck);
                         WhiteListInfo wli = new WhiteListInfo(ipOrRange, IPLocation, IsExpiry, ExpiryTime, CreateTime);
 
-                        lock (_whiteListLock)
+                        //⚠️ 锁要在界面线程上拿：握着锁去 Invoke 会与界面线程上扫过期项（它也拿这把锁）互相等死
+                        Action add = () =>
                         {
-                            if (!ProxyConfig.Proxy.IsExistsInWhiteList(ipOrRange))
+                            lock (_whiteListLock)
                             {
-                                if (Operate.SystemConfig.InvokeAction != null)
-                                {
-                                    Operate.SystemConfig.InvokeAction(() =>
-                                    {
-                                        Operate.ProxyConfig.Proxy.lstWhiteList.Add(wli);
-                                    });
-                                }
-                                else
+                                if (!ProxyConfig.Proxy.IsExistsInWhiteList(ipOrRange))
                                 {
                                     Operate.ProxyConfig.Proxy.lstWhiteList.Add(wli);
-                                }                                
+                                }
                             }
+                        };
+
+                        if (Operate.SystemConfig.InvokeAction != null)
+                        {
+                            Operate.SystemConfig.InvokeAction(add);
+                        }
+                        else
+                        {
+                            add();
                         }
                     }
                     catch (Exception ex)
@@ -9236,24 +9060,6 @@ namespace WinsockPacketEditor
                 #endregion
 
                 #region//删除白名单（对话框）
-
-                public static async Task DeleteWhiteList_Dialog(WhiteListInfo wli)
-                {
-                    try
-                    {
-                        if (await UI.Confirm(UI.T("FireWallSetting.WhiteList", "白名单"), UI.T("SureToDelete", "确定删除数据吗?")))
-                        {
-                            if (wli != null)
-                            {
-                                ProxyConfig.Proxy.lstWhiteList.Remove(wli);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(DeleteWhiteList_Dialog), ex);
-                    }
-                }
 
                 #endregion
 
@@ -9606,22 +9412,25 @@ namespace WinsockPacketEditor
                         string IPLocation = await SystemConfig.GetIPLocation(IPToCheck);
                         BlackListInfo bli = new BlackListInfo(ipOrRange, IPLocation, IsExpiry, ExpiryTime, CreateTime);
 
-                        lock (_blackListLock)
+                        //⚠️ 同白名单：锁在界面线程上拿，不能握着锁去 Invoke
+                        Action add = () =>
                         {
-                            if (!ProxyConfig.Proxy.IsExistsInBlackList(ipOrRange))
+                            lock (_blackListLock)
                             {
-                                if (Operate.SystemConfig.InvokeAction != null)
-                                {
-                                    Operate.SystemConfig.InvokeAction(() =>
-                                    {
-                                        Operate.ProxyConfig.Proxy.lstBlackList.Add(bli);
-                                    });
-                                }
-                                else
+                                if (!ProxyConfig.Proxy.IsExistsInBlackList(ipOrRange))
                                 {
                                     Operate.ProxyConfig.Proxy.lstBlackList.Add(bli);
-                                }                                
+                                }
                             }
+                        };
+
+                        if (Operate.SystemConfig.InvokeAction != null)
+                        {
+                            Operate.SystemConfig.InvokeAction(add);
+                        }
+                        else
+                        {
+                            add();
                         }
                     }
                     catch (Exception ex)
@@ -9675,24 +9484,6 @@ namespace WinsockPacketEditor
                 #endregion
 
                 #region//删除黑名单（对话框）
-
-                public static async Task DeleteBlackList_Dialog(BlackListInfo bli)
-                {
-                    try
-                    {
-                        if (await UI.Confirm(UI.T("FireWallSetting.BlackList", "黑名单"), UI.T("SureToDelete", "确定删除数据吗?")))
-                        {
-                            if (bli != null)
-                            {
-                                ProxyConfig.Proxy.lstBlackList.Remove(bli);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(DeleteBlackList_Dialog), ex);
-                    }
-                }
 
                 #endregion
 
@@ -12547,132 +12338,6 @@ namespace WinsockPacketEditor
                     return null;
                 }
 
-                public static BindingList<AccountInfo> GetAccount_ByUserName(string UserName)
-                {
-                    try
-                    {
-                        if (!string.IsNullOrEmpty(UserName))
-                        {
-                            BindingList<AccountInfo> pai = new BindingList<AccountInfo>
-                                (ProxyConfig.Account.lstAccountInfo.Where(account => account.UserName.Contains(UserName)).ToList());
-
-                            return pai;
-                        }
-                        else
-                        {
-                            return ProxyConfig.Account.lstAccountInfo;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(GetAccount_ByUserName), ex);
-                    }
-
-                    return null;
-                }
-
-                public static BindingList<AccountInfo> GetProxyAccount_ByIsEnable(bool IsEnable)
-                {
-                    try
-                    {
-                        BindingList<AccountInfo> pai = new BindingList<AccountInfo>
-                            (ProxyConfig.Account.lstAccountInfo.Where(account => account.IsEnable == IsEnable).ToList());
-
-                        return pai;
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(GetProxyAccount_ByIsEnable), ex);
-                    }
-
-                    return null;
-                }
-
-                public static BindingList<AccountInfo> GetProxyAccount_ByIsOnLine(bool IsOnLine)
-                {
-                    try
-                    {
-                        BindingList<AccountInfo> pai = new BindingList<AccountInfo>
-                            (ProxyConfig.Account.lstAccountInfo.Where(account => account.IsOnLine == IsOnLine).ToList());
-
-                        return pai;
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(GetProxyAccount_ByIsOnLine), ex);
-                    }
-
-                    return null;
-                }
-
-                public static BindingList<AccountInfo> GetProxyAccount_ByIsExpiry(bool IsExpiry)
-                {
-                    try
-                    {
-                        BindingList<AccountInfo> pai = new BindingList<AccountInfo>
-                            (ProxyConfig.Account.lstAccountInfo.Where(account => account.IsExpiry == IsExpiry).ToList());
-
-                        return pai;
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(GetProxyAccount_ByIsExpiry), ex);
-                    }
-
-                    return null;
-                }
-
-                public static BindingList<AccountInfo> GetProxyAccount_ByIsLimitLinks(bool IsLimitLinks)
-                {
-                    try
-                    {
-                        BindingList<AccountInfo> pai = new BindingList<AccountInfo>
-                            (ProxyConfig.Account.lstAccountInfo.Where(account => account.IsLimitLinks == IsLimitLinks).ToList());
-
-                        return pai;
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(GetProxyAccount_ByIsLimitLinks), ex);
-                    }
-
-                    return null;
-                }
-
-                public static BindingList<AccountInfo> GetProxyAccount_ByIsLimitDevices(bool IsLimitDevices)
-                {
-                    try
-                    {
-                        BindingList<AccountInfo> pai = new BindingList<AccountInfo>
-                            (ProxyConfig.Account.lstAccountInfo.Where(account => account.IsLimitDevices == IsLimitDevices).ToList());
-
-                        return pai;
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(GetProxyAccount_ByIsLimitDevices), ex);
-                    }
-
-                    return null;
-                }
-
-                public static BindingList<AccountInfo> GetProxyAccount_ByExpireTime(DateTime dtFrom, DateTime dtTo)
-                {
-                    try
-                    {
-                        BindingList<AccountInfo> pai = new BindingList<AccountInfo>
-                            (ProxyConfig.Account.lstAccountInfo.Where(account => account.ExpiryTime >= dtFrom && account.ExpiryTime <= dtTo).ToList());
-
-                        return pai;
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(GetProxyAccount_ByExpireTime), ex);
-                    }
-
-                    return null;
-                }
-
                 #endregion
 
                 #region//代理账号入列表
@@ -13555,25 +13220,6 @@ namespace WinsockPacketEditor
                 #endregion
 
                 #region//从数据库加载账号IP信息
-
-                public static DataTable LoadAccountIPInfo_FromDB(Guid AID)
-                {
-                    DataTable dtReturn = null;
-
-                    try
-                    {
-                        if (AID != Guid.Empty)
-                        {
-                            dtReturn = DataBase.SelectTable_ProxyAccountIPInfo(AID);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(LoadAccountIPInfo_FromDB), ex);
-                    }
-
-                    return dtReturn;
-                }
 
                 #endregion                
 
@@ -15933,25 +15579,6 @@ namespace WinsockPacketEditor
 
                 #region//获取封包收发速率
 
-                public static string GetPacketSpeedInfo()
-                {
-                    string sReturn = string.Empty;
-
-                    try
-                    {
-                        string sTotal_SendBytes = Operate.SystemConfig.GetDisplayBytes(Operate.PacketConfig.Packet.Total_SendBytes, false);
-                        string sTotal_RecvBytes = Operate.SystemConfig.GetDisplayBytes(Operate.PacketConfig.Packet.Total_RecvBytes, false);
-                        string sSpeedInfo = UI.T("InjectModeForm.SpeedInfo", "发送 : {0}  接收 : {1}");
-                        sReturn = string.Format(sSpeedInfo, sTotal_SendBytes, sTotal_RecvBytes);
-                    }
-                    catch (Exception ex)
-                    {
-                        DoLog(nameof(GetPacketSpeedInfo), ex);
-                    }
-
-                    return sReturn;
-                }
-
                 #endregion
 
                 #region//获取封包类型
@@ -16001,92 +15628,6 @@ namespace WinsockPacketEditor
                     public static string HTTPS_Resp => UI.T("HookSettingsForm.HTTPS_Resp", "HTTPS 响应");
                     public static string WebSocket_Req => UI.T("HookSettingsForm.WebSocket_Req", "WebSocket 请求");
                     public static string WebSocket_Resp => UI.T("HookSettingsForm.WebSocket_Resp", "WebSocket 响应");
-                }
-
-                public static string GetName_ByPacketType(PacketType socketType)
-                {
-                    try
-                    {
-                        switch (socketType)
-                        {
-                            case PacketType.WS1_Send:
-                                return PacketTypeNames.WS1_Send;
-
-                            case PacketType.WS2_Send:
-                                return PacketTypeNames.WS2_Send;
-
-                            case PacketType.WS1_Recv:
-                                return PacketTypeNames.WS1_Recv;
-
-                            case PacketType.WS2_Recv:
-                                return PacketTypeNames.WS2_Recv;
-
-                            case PacketType.WS1_SendTo:
-                                return PacketTypeNames.WS1_SendTo;
-
-                            case PacketType.WS2_SendTo:
-                                return PacketTypeNames.WS2_SendTo;
-
-                            case PacketType.WS1_RecvFrom:
-                                return PacketTypeNames.WS1_RecvFrom;
-
-                            case PacketType.WS2_RecvFrom:
-                                return PacketTypeNames.WS2_RecvFrom;
-
-                            case PacketType.WSASend:
-                                return PacketTypeNames.WSASend;
-
-                            case PacketType.WSARecv:
-                                return PacketTypeNames.WSARecv;
-
-                            case PacketType.WSARecvEx:
-                                return PacketTypeNames.WSARecvEx;
-
-                            case PacketType.WSASendTo:
-                                return PacketTypeNames.WSASendTo;
-
-                            case PacketType.WSARecvFrom:
-                                return PacketTypeNames.WSARecvFrom;
-
-                            case PacketType.TCP_Req:
-                                return PacketTypeNames.TCP_Req;
-
-                            case PacketType.UDP_Req:
-                                return PacketTypeNames.UDP_Req;
-
-                            case PacketType.TCP_Resp:
-                                return PacketTypeNames.TCP_Resp;
-
-                            case PacketType.UDP_Resp:
-                                return PacketTypeNames.UDP_Resp;
-
-                            case PacketType.HTTP_Req:
-                                return PacketTypeNames.HTTP_Req;
-
-                            case PacketType.HTTP_Resp:
-                                return PacketTypeNames.HTTP_Resp;
-
-                            case PacketType.HTTPS_Req:
-                                return PacketTypeNames.HTTPS_Req;
-
-                            case PacketType.HTTPS_Resp:
-                                return PacketTypeNames.HTTPS_Resp;
-
-                            case PacketType.WebSocket_Req:
-                                return PacketTypeNames.WebSocket_Req;
-
-                            case PacketType.WebSocket_Resp:
-                                return PacketTypeNames.WebSocket_Resp;
-
-                            default:
-                                return string.Empty;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(GetName_ByPacketType), ex);
-                        return string.Empty;
-                    }
                 }
 
                 #endregion
@@ -17634,90 +17175,6 @@ namespace WinsockPacketEditor
 
                 #region//封包列表统计
 
-                public static DataTable StatisticalSocketList_ByPacketLen()
-                {
-                    DataTable dtReturn = new DataTable();
-                    dtReturn.Columns.Add("PacketLength", typeof(int));
-                    dtReturn.Columns.Add("Number", typeof(int));
-
-                    try
-                    {
-                        Dictionary<int, int> packetLenCount = new Dictionary<int, int>();
-
-                        foreach (PacketInfo packetInfo in lstPacketInfo)
-                        {
-                            int packetLen = packetInfo.PacketLen;
-
-                            if (packetLenCount.ContainsKey(packetLen))
-                            {
-                                packetLenCount[packetLen]++;
-                            }
-                            else
-                            {
-                                packetLenCount.Add(packetLen, 1);
-                            }
-                        }
-
-                        Dictionary<int, int> sortedByKeyAsc = SystemConfig.SortDictionaryByKey(packetLenCount, ascending: true);
-
-                        foreach (KeyValuePair<int, int> kvp in sortedByKeyAsc)
-                        {
-                            DataRow row = dtReturn.NewRow();
-                            row[0] = kvp.Key;
-                            row[1] = kvp.Value;
-                            dtReturn.Rows.Add(row);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(StatisticalSocketList_ByPacketLen), ex);
-                    }
-
-                    return dtReturn;
-                }
-
-                public static DataTable StatisticalSocketList_ByPacketSocket()
-                {
-                    DataTable dtReturn = new DataTable();
-                    dtReturn.Columns.Add("PacketSocket", typeof(int));
-                    dtReturn.Columns.Add("Number", typeof(int));
-
-                    try
-                    {
-                        Dictionary<int, int> packetLenCount = new Dictionary<int, int>();
-
-                        foreach (PacketInfo packetInfo in lstPacketInfo)
-                        {
-                            int packetLen = packetInfo.PacketSocket;
-
-                            if (packetLenCount.ContainsKey(packetLen))
-                            {
-                                packetLenCount[packetLen]++;
-                            }
-                            else
-                            {
-                                packetLenCount.Add(packetLen, 1);
-                            }
-                        }
-
-                        Dictionary<int, int> sortedByKeyAsc = SystemConfig.SortDictionaryByKey(packetLenCount, ascending: true);
-
-                        foreach (KeyValuePair<int, int> kvp in sortedByKeyAsc)
-                        {
-                            DataRow row = dtReturn.NewRow();
-                            row[0] = kvp.Key;
-                            row[1] = kvp.Value;
-                            dtReturn.Rows.Add(row);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(StatisticalSocketList_ByPacketSocket), ex);
-                    }
-
-                    return dtReturn;
-                }                
-
                 #endregion
 
                 #region//发送封包列表中当前选中的封包
@@ -18769,73 +18226,6 @@ namespace WinsockPacketEditor
 
                 #region//更新滤镜
 
-                public static void UpdateFilter(
-                    FilterInfo fi,
-                    string FName,
-                    bool AppointHeader,
-                    string HeaderContent,
-                    bool AppointSocket,
-                    string SocketContent,
-                    bool AppointLength,
-                    string LengthContent,
-                    bool AppointPort,
-                    string PortContent,
-                    FilterConfig.Filter.FilterMode FilterMode,
-                    FilterConfig.Filter.FilterAction FilterAction,
-                    bool IsExecute,
-                    Operate.FilterConfig.Filter.FilterExecuteType FEType,
-                    Guid Execute_GUID,
-                    FilterConfig.Filter.FilterFunction FilterFunction,
-                    FilterConfig.Filter.FilterStartFrom FilterStartFrom,
-                    bool IsProgressionContinuous,
-                    int ProgressionStep,
-                    bool IsProgressionCarry,
-                    int ProgressionCarryNumber,
-                    string ProgressionPosition,
-                    int ProgressionCount,
-                    string ExcludePosition,
-                    string RandomPosition,
-                    string FSearch,
-                    string FModify)
-                {
-                    try
-                    {
-                        if (fi != null)
-                        {
-                            fi.FName = FName;
-                            fi.AppointHeader = AppointHeader;
-                            fi.HeaderContent = HeaderContent;
-                            fi.AppointSocket = AppointSocket;
-                            fi.SocketContent = SocketContent;
-                            fi.AppointLength = AppointLength;
-                            fi.LengthContent = LengthContent;
-                            fi.AppointPort = AppointPort;
-                            fi.PortContent = PortContent;
-                            fi.FMode = FilterMode;
-                            fi.FAction = FilterAction;
-                            fi.IsExecute = IsExecute;
-                            fi.FEType = FEType;
-                            fi.Execute_GUID = Execute_GUID;
-                            fi.FFunction = FilterFunction;
-                            fi.FStartFrom = FilterStartFrom;
-                            fi.IsProgressionContinuous = IsProgressionContinuous;
-                            fi.ProgressionStep = ProgressionStep;
-                            fi.IsProgressionCarry = IsProgressionCarry;
-                            fi.ProgressionCarryNumber = ProgressionCarryNumber;
-                            fi.ProgressionPosition = ProgressionPosition;
-                            fi.ProgressionCount = ProgressionCount;
-                            fi.ExcludePosition = ExcludePosition;
-                            fi.RandomPosition = RandomPosition;
-                            fi.FSearch = FSearch;
-                            fi.FModify = FModify;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(UpdateFilter), ex);
-                    }
-                }
-
                 #endregion
 
                 #region//删除滤镜（对话框）
@@ -19096,38 +18486,6 @@ namespace WinsockPacketEditor
                 #endregion
 
                 #region//获取滤镜动作对应的名称
-
-                public static string GetName_ByFilterAction(FilterConfig.Filter.FilterAction filterAction)
-                {
-                    try
-                    {
-                        switch (filterAction)
-                        {
-                            case FilterConfig.Filter.FilterAction.Replace:
-                                return UI.T("Replace", "替换");
-
-                            case FilterConfig.Filter.FilterAction.Intercept:
-                                return UI.T("Intercept", "拦截");
-
-                            case FilterConfig.Filter.FilterAction.Change:
-                                return UI.T("Change", "换包");
-
-                            case FilterConfig.Filter.FilterAction.NoModify_Display:
-                                return UI.T("NoModifyDisplay", "不修改-只显示");
-
-                            case FilterConfig.Filter.FilterAction.NoModify_NoDisplay:
-                                return UI.T("NoModifyNoDisplay", "不修改-不显示");
-
-                            default:
-                                return string.Empty;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(GetName_ByFilterAction), ex);
-                        return string.Empty;
-                    }
-                }
 
                 #endregion
 
@@ -22589,31 +21947,6 @@ namespace WinsockPacketEditor
                 #endregion
 
                 #region//获取发送集
-
-                public static BindingList<PacketInfo> GetSendCollection_ByGuid(Guid SID)
-                {
-                    BindingList<PacketInfo> sscReturn = null;
-
-                    try
-                    {
-                        if (SID != null && SID != Guid.Empty)
-                        {
-                            foreach (SendInfo ssi in SendConfig.List.lstSendInfo)
-                            {
-                                if (ssi.SID == SID)
-                                {
-                                    return ssi.SCollection;
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(GetSendCollection_ByGuid), ex);
-                    }
-
-                    return sscReturn;
-                }
 
                 #endregion
 
@@ -26648,27 +25981,6 @@ namespace WinsockPacketEditor
 
                 #region//获取仓库名称
 
-                public static string GetWareHouseName_ByGuid(Guid WID)
-                {
-                    try
-                    {
-                        if (WID != null && WID != Guid.Empty)
-                        {
-                            WareHouseInfo wsi = WareHouseConfig.WareHouse.GetWareHouse_ByGuid(WID);
-                            if (wsi != null)
-                            {
-                                return wsi.WName;
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(GetWareHouseName_ByGuid), ex);
-                    }
-
-                    return string.Empty;
-                }
-
                 #endregion
 
                 #region//获取仓库
@@ -29174,28 +28486,6 @@ namespace WinsockPacketEditor
                 #endregion
 
                 #region//获取启用的规则列表
-
-                public static List<RuleInfo> GetEnabledRulesByServerID(Guid SID)
-                {
-                    try
-                    {
-                        if (SID != Guid.Empty)
-                        {
-                            ServerInfo si = WPCConfig.ServerList.lstServerInfo.FirstOrDefault(server => server.SID == SID);
-
-                            if (si != null && si.ServerRInfo != null)
-                            {
-                                return si.ServerRInfo.Where(r => r.IsEnable).ToList();
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(GetEnabledRulesByServerID), ex);
-                    }
-
-                    return new List<RuleInfo>();
-                }
 
                 #endregion
 
@@ -31799,27 +31089,6 @@ namespace WinsockPacketEditor
                 return dtReturn;
             }
 
-            public static void DeleteTable_Filter()
-            {
-                try
-                {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
-                    {
-                        string sql = "DELETE FROM Filter;";
-
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
-                        {
-                            conn.Open();
-                            cmd.ExecuteNonQuery();
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(DeleteTable_Filter), ex);
-                }
-            }
-
             /// <summary>插一条滤镜，自己开连接、自动提交。单条新增时用这个。</summary>
             public static void InsertTable_Filter(FilterInfo fi)
             {
@@ -32141,28 +31410,6 @@ namespace WinsockPacketEditor
                 return dtReturn;
             }
 
-            public static void DeleteTable_Send()
-            {
-                try
-                {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
-                    {
-                        string sql = "DELETE FROM SendCollection;";
-                        sql += "DELETE FROM Send;";
-
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
-                        {
-                            conn.Open();
-                            cmd.ExecuteNonQuery();
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(DeleteTable_Send), ex);
-                }
-            }
-
             public static void InsertTable_Send(SendInfo si)
             {
                 try
@@ -32396,28 +31643,6 @@ namespace WinsockPacketEditor
                 }
 
                 return dtReturn;
-            }
-
-            public static void DeleteTable_Robot()
-            {
-                try
-                {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
-                    {
-                        string sql = "DELETE FROM RobotInstruction;";
-                        sql += "DELETE FROM Robot;";
-
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
-                        {
-                            conn.Open();
-                            cmd.ExecuteNonQuery();
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(DeleteTable_Robot), ex);
-                }
             }
 
             public static void InsertTable_Robot(RobotInfo ri)
@@ -32665,77 +31890,6 @@ namespace WinsockPacketEditor
                 return dtReturn;
             }
 
-            public static void DeleteTable_WareHouse()
-            {
-                try
-                {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
-                    {
-                        string sql = "DELETE FROM WareHouseData;";
-                        sql += "DELETE FROM WareHouse;";
-
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
-                        {
-                            conn.Open();
-                            cmd.ExecuteNonQuery();
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(DeleteTable_WareHouse), ex);
-                }
-            }
-
-            public static bool DeleteTable_WareHouse(Guid guid)
-            {
-                bool bReturn = false;
-
-                try
-                {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
-                    {
-                        conn.Open();
-
-                        using (SQLiteTransaction transaction = conn.BeginTransaction())
-                        {
-                            string sqlData = "DELETE FROM WareHouseData WHERE GUID = @GUID;";
-                            string sqlWareHouse = "DELETE FROM WareHouse WHERE GUID = @GUID;";
-
-                            using (SQLiteCommand cmdData = new SQLiteCommand(sqlData, conn, transaction))
-                            using (SQLiteCommand cmdWareHouse = new SQLiteCommand(sqlWareHouse, conn, transaction))
-                            {
-                                cmdData.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
-                                cmdWareHouse.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
-
-                                string guidStr = guid.ToString().ToUpper();
-                                cmdData.Parameters["@GUID"].Value = guidStr;
-                                cmdWareHouse.Parameters["@GUID"].Value = guidStr;
-
-                                cmdData.ExecuteNonQuery();
-
-                                int rowsAffected = cmdWareHouse.ExecuteNonQuery();
-                                if (rowsAffected > 0)
-                                {
-                                    transaction.Commit();
-                                    bReturn = true;
-                                }
-                                else
-                                {
-                                    transaction.Rollback();
-                                }
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(DeleteTable_WareHouse), ex);
-                }
-
-                return bReturn;
-            }
-
             public static bool InsertTable_WareHouse(WareHouseInfo whi)
             {
                 return InsertTable_WareHouse(whi, null, null);
@@ -32893,92 +32047,6 @@ namespace WinsockPacketEditor
                 return iReturn;
             }
 
-            public static bool UpdateTable_WareHouse(WareHouseInfo whi)
-            {
-                bool bReturn = false;
-
-                try
-                {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
-                    {
-                        conn.Open();
-
-                        using (SQLiteTransaction transaction = conn.BeginTransaction())
-                        {
-                            string sqlWareHouse = @"
-                                UPDATE WareHouse 
-                                SET Name = @Name
-                                WHERE GUID = @GUID;";
-
-                            string sqlDeleteData = @"
-                                DELETE FROM WareHouseData 
-                                WHERE GUID = @GUID;";
-
-                            string sqlInsertData = @"
-                                INSERT INTO WareHouseData (
-                                    GUID, Buffer
-                                ) VALUES (
-                                    @GUID, @Buffer
-                                );";
-
-                            using (SQLiteCommand cmdWareHouse = new SQLiteCommand(sqlWareHouse, conn, transaction))
-                            using (SQLiteCommand cmdDeleteData = new SQLiteCommand(sqlDeleteData, conn, transaction))
-                            using (SQLiteCommand cmdInsertData = new SQLiteCommand(sqlInsertData, conn, transaction))
-                            {
-                                cmdWareHouse.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
-                                cmdWareHouse.Parameters.Add(new SQLiteParameter("@Name", DbType.String));
-
-                                cmdDeleteData.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
-
-                                cmdInsertData.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
-                                cmdInsertData.Parameters.Add(new SQLiteParameter("@Buffer", DbType.Binary));
-
-                                string guid = whi.WID.ToString().ToUpper();
-
-                                cmdWareHouse.Parameters["@GUID"].Value = guid;
-                                cmdWareHouse.Parameters["@Name"].Value = whi.WName;
-
-                                cmdDeleteData.Parameters["@GUID"].Value = guid;
-
-                                // 更新仓库基本信息
-                                int rowsAffected = cmdWareHouse.ExecuteNonQuery();
-
-                                if (rowsAffected > 0)
-                                {
-                                    // 删除原有数据
-                                    cmdDeleteData.ExecuteNonQuery();
-
-                                    // 插入新数据
-                                    if (whi.Stores != null && whi.Stores.Count > 0)
-                                    {
-                                        foreach (DataInfo di in whi.Stores)
-                                        {
-                                            cmdInsertData.Parameters["@GUID"].Value = guid;
-                                            cmdInsertData.Parameters["@Buffer"].Value = di.PacketBuffer;
-
-                                            cmdInsertData.ExecuteNonQuery();
-                                        }
-                                    }
-
-                                    transaction.Commit();
-                                    bReturn = true;
-                                }
-                                else
-                                {
-                                    transaction.Rollback();
-                                }
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(UpdateTable_WareHouse), ex);
-                }
-
-                return bReturn;
-            }
-
             #endregion
 
             #region//自动入库配置
@@ -33036,27 +32104,6 @@ namespace WinsockPacketEditor
                 }
 
                 return dtReturn;
-            }
-
-            public static void DeleteTable_AutoStores()
-            {
-                try
-                {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
-                    {
-                        string sql = "DELETE FROM AutoStores;";
-
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
-                        {
-                            conn.Open();
-                            cmd.ExecuteNonQuery();
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(DeleteTable_AutoStores), ex);
-                }
             }
 
             public static bool InsertTable_AutoStores(AutoStoresInfo asi)
@@ -33188,58 +32235,6 @@ namespace WinsockPacketEditor
                 }
 
                 return iReturn;
-            }
-
-            public static bool UpdateTable_AutoStores(AutoStoresInfo asi)
-            {
-                bool bReturn = false;
-
-                try
-                {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
-                    {
-                        conn.Open();
-
-                        using (SQLiteTransaction transaction = conn.BeginTransaction())
-                        {
-                            string sqlUpdate = @"
-                                UPDATE AutoStores 
-                                SET 
-                                    IsEnable = @IsEnable,
-                                    WID = @WID
-                                WHERE PacketHead = @PacketHead;";
-
-                            using (SQLiteCommand cmdUpdate = new SQLiteCommand(sqlUpdate, conn, transaction))
-                            {
-                                cmdUpdate.Parameters.Add(new SQLiteParameter("@IsEnable", DbType.Boolean));
-                                cmdUpdate.Parameters.Add(new SQLiteParameter("@WID", DbType.String));
-                                cmdUpdate.Parameters.Add(new SQLiteParameter("@PacketHead", DbType.String));
-
-                                cmdUpdate.Parameters["@IsEnable"].Value = asi.IsEnable;
-                                cmdUpdate.Parameters["@WID"].Value = asi.WID.ToString().ToUpper();
-                                cmdUpdate.Parameters["@PacketHead"].Value = asi.PacketHead;
-
-                                int rowsAffected = cmdUpdate.ExecuteNonQuery();
-
-                                if (rowsAffected > 0)
-                                {
-                                    transaction.Commit();
-                                    bReturn = true;
-                                }
-                                else
-                                {
-                                    transaction.Rollback();
-                                }
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(UpdateTable_AutoStores), ex);
-                }
-
-                return bReturn;
             }
 
             #endregion
@@ -33903,27 +32898,6 @@ namespace WinsockPacketEditor
                 return dtReturn;
             }
 
-            public static void DeleteTable_ProxyMapLocal()
-            {
-                try
-                {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
-                    {
-                        string sql = "DELETE FROM ProxyMapLocal;";
-
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
-                        {
-                            conn.Open();
-                            cmd.ExecuteNonQuery();
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(DeleteTable_ProxyMapLocal), ex);
-                }
-            }
-
             public static void InsertTable_ProxyMapLocal()
             {
                 try
@@ -34070,27 +33044,6 @@ namespace WinsockPacketEditor
                 }
 
                 return dtReturn;
-            }
-
-            public static void DeleteTable_ProxyMapRemote()
-            {
-                try
-                {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
-                    {
-                        string sql = "DELETE FROM ProxyMapRemote;";
-
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
-                        {
-                            conn.Open();
-                            cmd.ExecuteNonQuery();
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(DeleteTable_ProxyMapRemote), ex);
-                }
             }
 
             public static void InsertTable_ProxyMapRemote()
@@ -34244,27 +33197,6 @@ namespace WinsockPacketEditor
                 return dtReturn;
             }
 
-            public static void DeleteTable_WhiteList()
-            {
-                try
-                {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
-                    {
-                        string sql = "DELETE FROM WhiteList;";
-
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
-                        {
-                            conn.Open();
-                            cmd.ExecuteNonQuery();
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(DeleteTable_WhiteList), ex);
-                }
-            }
-
             public static void InsertTable_WhiteList()
             {
                 try
@@ -34408,27 +33340,6 @@ namespace WinsockPacketEditor
                 }
 
                 return dtReturn;
-            }
-
-            public static void DeleteTable_BlackList()
-            {
-                try
-                {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
-                    {
-                        string sql = "DELETE FROM BlackList;";
-
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
-                        {
-                            conn.Open();
-                            cmd.ExecuteNonQuery();
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(DeleteTable_BlackList), ex);
-                }
             }
 
             public static void InsertTable_BlackList()
@@ -34588,33 +33499,6 @@ namespace WinsockPacketEditor
                 return dtReturn;
             }
 
-            public static DataTable SelectTable_ServerInfoBySID(Guid sid)
-            {
-                DataTable dtReturn = new DataTable();
-
-                try
-                {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
-                    {
-                        string sql = "SELECT * FROM ServerInfo WHERE SID = @SID;";
-
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
-                        {
-                            cmd.Parameters.AddWithValue("@SID", sid.ToString().ToUpper());
-
-                            SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
-                            adapter.Fill(dtReturn);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(SelectTable_ServerInfoBySID), ex);
-                }
-
-                return dtReturn;
-            }
-
             /// <summary>
             /// 整张 ServerRuleInfo 表一次读完，配合 <see cref="GroupRowsBy"/> 用。
             ///
@@ -34673,146 +33557,6 @@ namespace WinsockPacketEditor
                 }
 
                 return dtReturn;
-            }
-
-            public static bool DeleteTable_ServerInfo(Guid sid)
-            {
-                bool bReturn = false;
-
-                try
-                {
-                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
-                    {
-                        conn.Open();
-
-                        using (SQLiteTransaction transaction = conn.BeginTransaction())
-                        {
-                            string sqlDeleteRules = "DELETE FROM ServerRuleInfo WHERE SID = @SID;";
-                            string sqlDeleteServer = "DELETE FROM ServerInfo WHERE SID = @SID;";
-
-                            using (SQLiteCommand cmdDeleteRules = new SQLiteCommand(sqlDeleteRules, conn, transaction))
-                            using (SQLiteCommand cmdDeleteServer = new SQLiteCommand(sqlDeleteServer, conn, transaction))
-                            {
-                                string formattedSid = sid.ToString().ToUpper();
-                                cmdDeleteRules.Parameters.AddWithValue("@SID", formattedSid);
-                                cmdDeleteServer.Parameters.AddWithValue("@SID", formattedSid);
-
-                                cmdDeleteRules.ExecuteNonQuery();
-                                int rowsAffected = cmdDeleteServer.ExecuteNonQuery();
-
-                                if (rowsAffected > 0)
-                                {
-                                    transaction.Commit();
-                                    bReturn = true;
-                                }
-                                else
-                                {
-                                    transaction.Rollback();
-                                }
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(DeleteTable_ServerInfo), ex);
-                }
-
-                return bReturn;
-            }
-
-            public static bool DeleteTable_ServerInfo()
-            {
-                bool bReturn = false;
-
-                try
-                {
-                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
-                    {
-                        conn.Open();
-
-                        using (SQLiteTransaction transaction = conn.BeginTransaction())
-                        {
-                            string sqlDeleteRules = "DELETE FROM ServerRuleInfo;";
-                            string sqlDeleteServer = "DELETE FROM ServerInfo;";
-
-                            using (SQLiteCommand cmdDeleteRules = new SQLiteCommand(sqlDeleteRules, conn, transaction))
-                            using (SQLiteCommand cmdDeleteServer = new SQLiteCommand(sqlDeleteServer, conn, transaction))
-                            {
-                                cmdDeleteRules.ExecuteNonQuery();
-                                cmdDeleteServer.ExecuteNonQuery();
-                                transaction.Commit();
-                                bReturn = true;
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(DeleteTable_ServerInfo), ex);
-                }
-
-                return bReturn;
-            }
-
-            public static bool DeleteTable_ServerRuleInfo(Guid rid)
-            {
-                bool bReturn = false;
-
-                try
-                {
-                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
-                    {
-                        string sql = "DELETE FROM ServerRuleInfo WHERE RID = @RID;";
-
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
-                        {
-                            cmd.Parameters.AddWithValue("@RID", rid.ToString().ToUpper());
-
-                            conn.Open();
-                            int rowsAffected = cmd.ExecuteNonQuery();
-
-                            if (rowsAffected > 0)
-                            {
-                                bReturn = true;
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(DeleteTable_ServerRuleInfo), ex);
-                }
-
-                return bReturn;
-            }
-
-            public static bool DeleteTable_ServerRuleInfoBySID(Guid sid)
-            {
-                bool bReturn = false;
-
-                try
-                {
-                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
-                    {
-                        string sql = "DELETE FROM ServerRuleInfo WHERE SID = @SID;";
-
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
-                        {
-                            cmd.Parameters.AddWithValue("@SID", sid.ToString().ToUpper());
-
-                            conn.Open();
-                            cmd.ExecuteNonQuery();
-                            bReturn = true;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(DeleteTable_ServerRuleInfoBySID), ex);
-                }
-
-                return bReturn;
             }
 
             public static bool InsertTable_ServerInfo(ServerInfo si)
@@ -34987,127 +33731,6 @@ namespace WinsockPacketEditor
                 }
             }
 
-            public static bool UpdateTable_ServerInfo(ServerInfo si)
-            {
-                bool bReturn = false;
-
-                try
-                {
-                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
-                    {
-                        conn.Open();
-
-                        using (SQLiteTransaction transaction = conn.BeginTransaction())
-                        {
-                            string sql = @"
-                                UPDATE ServerInfo 
-                                SET 
-                                    IsEnable = @IsEnable,
-                                    ServerName = @ServerName,
-                                    ServerIP = @ServerIP,
-                                    ServerPort = @ServerPort,
-                                    ForgotURL = @ForgotURL,
-                                    RegisterURL = @RegisterURL,
-                                    VerifyURL = @VerifyURL
-                                WHERE SID = @SID;";
-
-                            using (SQLiteCommand cmd = new SQLiteCommand(sql, conn, transaction))
-                            {
-                                string sid = si.SID.ToString().ToUpper();
-                                cmd.Parameters.AddWithValue("@SID", sid);
-                                cmd.Parameters.AddWithValue("@IsEnable", si.IsEnable);
-                                cmd.Parameters.AddWithValue("@ServerName", si.ServerName);
-                                cmd.Parameters.AddWithValue("@ServerIP", si.ServerIP);
-                                cmd.Parameters.AddWithValue("@ServerPort", si.ServerPort);
-                                cmd.Parameters.AddWithValue("@ForgotURL", string.IsNullOrEmpty(si.ForgotURL) ? "" : si.ForgotURL);
-                                cmd.Parameters.AddWithValue("@RegisterURL", string.IsNullOrEmpty(si.RegisterURL) ? "" : si.RegisterURL);
-                                cmd.Parameters.AddWithValue("@VerifyURL", string.IsNullOrEmpty(si.VerifyURL) ? "" : si.VerifyURL);
-
-                                int rowsAffected = cmd.ExecuteNonQuery();
-
-                                if (rowsAffected > 0)
-                                {
-                                    if (si.ServerRInfo != null)
-                                    {
-                                        string sqlDeleteRules = "DELETE FROM ServerRuleInfo WHERE SID = @SID;";
-                                        using (SQLiteCommand cmdDelete = new SQLiteCommand(sqlDeleteRules, conn, transaction))
-                                        {
-                                            cmdDelete.Parameters.AddWithValue("@SID", sid);
-                                            cmdDelete.ExecuteNonQuery();
-                                        }
-
-                                        foreach (RuleInfo rule in si.ServerRInfo)
-                                        {
-                                            if (!DataBase.InsertTable_ServerRuleInfo(sid, rule, transaction))
-                                            {
-                                                transaction.Rollback();
-                                                return false;
-                                            }
-                                        }
-                                    }
-
-                                    transaction.Commit();
-                                    bReturn = true;
-                                }
-                                else
-                                {
-                                    transaction.Rollback();
-                                }
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(UpdateTable_ServerInfo), ex);
-                }
-
-                return bReturn;
-            }
-
-            public static bool UpdateTable_ServerRuleInfo(Guid rid, RuleInfo rule)
-            {
-                bool bReturn = false;
-
-                try
-                {
-                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
-                    {
-                        string sql = @"
-                            UPDATE ServerRuleInfo 
-                            SET 
-                                IsEnable = @IsEnable,
-                                RuleType = @RuleType,
-                                RuleArgument = @RuleArgument,
-                                RuleAction = @RuleAction
-                            WHERE RID = @RID;";
-
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
-                        {
-                            cmd.Parameters.AddWithValue("@RID", rid.ToString().ToUpper());
-                            cmd.Parameters.AddWithValue("@IsEnable", rule.IsEnable);
-                            cmd.Parameters.AddWithValue("@RuleType", (int)rule.RType);
-                            cmd.Parameters.AddWithValue("@RuleArgument", rule.RArgument);
-                            cmd.Parameters.AddWithValue("@RuleAction", (int)rule.RAction);
-
-                            conn.Open();
-                            int rowsAffected = cmd.ExecuteNonQuery();
-
-                            if (rowsAffected > 0)
-                            {
-                                bReturn = true;
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(UpdateTable_ServerRuleInfo), ex);
-                }
-
-                return bReturn;
-            }
-
             #endregion
 
             #region//公告列表
@@ -35168,91 +33791,6 @@ namespace WinsockPacketEditor
                 }
 
                 return dtReturn;
-            }
-
-            public static DataTable SelectTable_NoticeInfoByNID(Guid nid)
-            {
-                DataTable dtReturn = new DataTable();
-
-                try
-                {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
-                    {
-                        string sql = "SELECT * FROM NoticeInfo WHERE NID = @NID;";
-
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
-                        {
-                            cmd.Parameters.AddWithValue("@NID", nid.ToString().ToUpper());
-
-                            SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
-                            adapter.Fill(dtReturn);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(SelectTable_NoticeInfoByNID), ex);
-                }
-
-                return dtReturn;
-            }
-
-            public static bool DeleteTable_NoticeInfo(Guid nid)
-            {
-                bool bReturn = false;
-
-                try
-                {
-                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
-                    {
-                        string sql = "DELETE FROM NoticeInfo WHERE NID = @NID;";
-
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
-                        {
-                            cmd.Parameters.AddWithValue("@NID", nid.ToString().ToUpper());
-
-                            conn.Open();
-                            int rowsAffected = cmd.ExecuteNonQuery();
-
-                            if (rowsAffected > 0)
-                            {
-                                bReturn = true;
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(DeleteTable_NoticeInfo), ex);
-                }
-
-                return bReturn;
-            }
-
-            public static bool DeleteTable_NoticeInfo()
-            {
-                bool bReturn = false;
-
-                try
-                {
-                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
-                    {
-                        string sql = "DELETE FROM NoticeInfo;";
-
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
-                        {
-                            conn.Open();
-                            cmd.ExecuteNonQuery();
-                            bReturn = true;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(DeleteTable_NoticeInfo), ex);
-                }
-
-                return bReturn;
             }
 
             public static bool InsertTable_NoticeInfo(NoticeInfo ni)
@@ -35348,51 +33886,6 @@ namespace WinsockPacketEditor
                     Operate.DoLog(nameof(SaveTable_NoticeInfo), ex);
                     return -1;
                 }
-            }
-
-            public static bool UpdateTable_NoticeInfo(NoticeInfo ni)
-            {
-                bool bReturn = false;
-
-                try
-                {
-                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
-                    {
-                        string sql = @"
-                            UPDATE NoticeInfo 
-                            SET 
-                                NoticeType = @NoticeType,
-                                NoticeTitle = @NoticeTitle,
-                                NoticeContent = @NoticeContent,
-                                NoticeMore = @NoticeMore,
-                                NoticeTime = @NoticeTime
-                            WHERE NID = @NID;";
-
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
-                        {
-                            cmd.Parameters.AddWithValue("@NID", ni.NID.ToString().ToUpper());
-                            cmd.Parameters.AddWithValue("@NoticeType", ni.NoticeType);
-                            cmd.Parameters.AddWithValue("@NoticeTitle", ni.NoticeTitle);
-                            cmd.Parameters.AddWithValue("@NoticeContent", ni.NoticeContent);
-                            cmd.Parameters.AddWithValue("@NoticeMore", string.IsNullOrEmpty(ni.NoticeMore) ? "" : ni.NoticeMore);
-                            cmd.Parameters.AddWithValue("@NoticeTime", ni.NoticeTime);
-
-                            conn.Open();
-                            int rowsAffected = cmd.ExecuteNonQuery();
-
-                            if (rowsAffected > 0)
-                            {
-                                bReturn = true;
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(UpdateTable_NoticeInfo), ex);
-                }
-
-                return bReturn;
             }
 
             #endregion

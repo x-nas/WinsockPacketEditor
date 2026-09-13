@@ -122,20 +122,42 @@ namespace WinsockPacketEditor
 
         #region//修改代理账号
 
-        public static bool UserUpdate(AccountInfo pai)
+        /// <summary>
+        /// 改账号。<paramref name="Apply"/> 只写表单里<b>真的带了</b>的字段 ——
+        /// 从现有账号出发再覆盖，没带的字段（连接数限制、到期时间、启用）保持原样，而不是被默认值洗掉。
+        /// </summary>
+        public static bool UserUpdate(string UserName, Action<AccountInfo> Apply)
         {
             try
             {
-                if (pai == null || string.IsNullOrEmpty(pai.UserName))
+                if (string.IsNullOrEmpty(UserName) || Apply == null)
                 {
                     return false;
                 }
 
-                //空密码 = 不改密码
-                string password = string.IsNullOrEmpty(pai.Password) ? pai.Password : Operate.SystemConfig.PassWord_Encrypt(pai.Password);
-
                 return WebUi.OnUi(() =>
                 {
+                    AccountInfo old = Operate.ProxyConfig.Account.lstAccountInfo.FirstOrDefault(a => a != null && a.UserName == UserName);
+                    if (old == null)
+                    {
+                        return false;
+                    }
+
+                    AccountInfo pai = new AccountInfo
+                    {
+                        UserName = UserName,
+                        IsEnable = old.IsEnable,
+                        Password = string.Empty,
+                        IsLimitLinks = old.IsLimitLinks,
+                        LimitLinks = old.LimitLinks,
+                        IsExpiry = old.IsExpiry,
+                        ExpiryTime = old.ExpiryTime,
+                    };
+                    Apply(pai);
+
+                    //空密码 = 不改密码
+                    string password = string.IsNullOrEmpty(pai.Password) ? pai.Password : Operate.SystemConfig.PassWord_Encrypt(pai.Password);
+
                     bool ok = Operate.ProxyConfig.Account.UpdateProxyAccount_ByCCProxy(
                         pai.UserName,
                         pai.IsEnable,

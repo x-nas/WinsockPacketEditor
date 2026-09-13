@@ -13,7 +13,7 @@
   【名单不走桥读】lstWhiteList / lstBlackList 已在 FeedPump 的推送流里，
   这里只读前端副本；桥只提供改的入口（saveIPRule / deleteIPRule / ipRuleAction）。
 */
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
 import { call } from '../../bridge'
 import { FeedList, type IPRuleRow } from '../../bridge/types'
 import { flagSrc } from '../../flags'
@@ -121,6 +121,9 @@ function onDragUp(): void {
   window.removeEventListener('mouseup', onDragUp)
   document.body.classList.remove('col-resizing')
 }
+
+//拖着列宽时按 Esc 关掉弹窗：监听与整页的 col-resizing 不收掉就一直挂着
+onBeforeUnmount(() => { if (drag) onDragUp() })
 
 function startResize(e: MouseEvent, key: string): void {
   drag = { key, x: e.clientX, w: colW[key] }

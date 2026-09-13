@@ -312,6 +312,9 @@ function onDragUp(): void {
   document.body.classList.remove('col-resizing')
 }
 
+//拖到一半组件被卸载（切页 / 关弹窗）时，监听与整页的 col-resizing 要一起收掉
+onBeforeUnmount(() => { if (drag) onDragUp() })
+
 function startResize(e: MouseEvent, c: { key: string; w: number }): void {
   drag = { key: c.key, startX: e.clientX, startW: baseWidth(c) }
 

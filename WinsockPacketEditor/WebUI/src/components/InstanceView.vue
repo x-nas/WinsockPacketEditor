@@ -12,7 +12,7 @@
 
   【主色用洋红】启动页那张卡就是 .cd.mg，一路跟过来，与代理模式的青色分开。
 */
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { call } from '../bridge'
 import { lang, normalize, t } from '../i18n'
 import { httpAddr, socks5Addr } from '../stores/runtime'
@@ -72,6 +72,8 @@ onMounted(async () => {
   文件系统调用），但仍要防抖 —— 连打十几个字符会发十几次往返，最后一次才作数。
 */
 let probeTimer = 0
+//改完路径 160ms 内离开这一屏的话，防抖那一下不该再去问 C#、往一个已卸载的组件里写
+onBeforeUnmount(() => window.clearTimeout(probeTimer))
 
 watch(path, () => {
   window.clearTimeout(probeTimer)

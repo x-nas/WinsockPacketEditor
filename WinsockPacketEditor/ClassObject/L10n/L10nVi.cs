@@ -15,7 +15,7 @@ namespace WinsockPacketEditor
     {
         internal static Dictionary<string, string> Build()
         {
-            var d = new Dictionary<string, string>(324);
+            var d = new Dictionary<string, string>(335);
             d["ID"] = "vi-VN";
             d["Target"] = "Đích: {0}";
             d["Search"] = "TÌM";

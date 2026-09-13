@@ -243,19 +243,6 @@ namespace WinsockPacketEditor
 
         #region//退出
 
-        public void ExitHook()
-        {
-            try
-            {
-                this.StopHook();
-                LocalHook.Release();
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(ExitHook), ex);
-            }
-        }
-
         #endregion                
 
         #region//Send_Hook

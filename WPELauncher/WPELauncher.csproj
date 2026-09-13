@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    WPE x64 的单文件启动器（方案 B）。
+
+    产品本体仍是 WinsockPacketEditor\bin\Release 那个多文件目录 —— 注入要按路径把 WPEHook.dll /
+    EasyHook*.dll 交给目标进程、WebView2 要按文件夹映射 wwwroot、SunnyNet / SQLite.Interop 是原生库，
+    这些都必须是硬盘上的真实文件，所以不做「内存里运行」，而是：
+      把整个目录压成 zip 嵌进本 exe → 第一次运行（或版本变了、文件被删了）解压到
+      %LOCALAPPDATA%\WPE64\app\<版本>-<哈希>\ → 之后每次只核对文件、直接启动。
+
+    ⚠️ 不进 WinSockPacketEditor.sln：没有载荷的启动器没有用处。
+       由 New-LauncherPackage.ps1 先打好 payload.zip 再单独构建本工程。
+       两个产品共用：WPE x64 的 tools\pack\Pack.ps1、WPE Proxy Cap 的 tools\pack\Pack.ps1
+       都只是给它传参数（Name / Title / Exe / 图标 / 排除规则）。
+  -->
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <AssemblyName>WPE64</AssemblyName>
+    <RootNamespace>WPELauncher</RootNamespace>
+    <LangVersion>7.3</LangVersion>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!-- 打包脚本用 -p:LauncherIcon=... 换成各产品自己的图标；不传就是 WPE x64 那枚 -->
+    <LauncherIcon Condition="'$(LauncherIcon)' == ''">$(MSBuildProjectDirectory)\..\WinsockPacketEditor\wpe.ico</LauncherIcon>
+    <ApplicationIcon>$(LauncherIcon)</ApplicationIcon>
+    <DebugType>none</DebugType>
+    <Product>WPE x64</Product>
+    <AssemblyTitle>WPE x64</AssemblyTitle>
+    <Company>WPE64</Company>
+    <Copyright>https://www.wpe64.com</Copyright>
+
+    <!-- 载荷目录：Pack.ps1 用 -p:PayloadDir=... 传进来 -->
+    <PayloadDir Condition="'$(PayloadDir)' == ''">$(MSBuildProjectDirectory)\..\dist\payload\</PayloadDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+
+  <!-- 载荷不存在时照样能编（得到一个只会报「没有打包程序文件」的空壳），方便单独调试启动器本身 -->
+  <ItemGroup Condition="Exists('$(PayloadDir)payload.zip') And Exists('$(PayloadDir)payload.txt')">
+    <EmbeddedResource Include="$(PayloadDir)payload.zip" LogicalName="WPE64.payload.zip" />
+    <EmbeddedResource Include="$(PayloadDir)payload.txt" LogicalName="WPE64.payload.txt" />
+  </ItemGroup>
+
+</Project>

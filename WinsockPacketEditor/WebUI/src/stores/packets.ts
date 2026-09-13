@@ -193,9 +193,7 @@ export function createPacketFeed<T extends { Id: number }>(list: FeedList): Pack
 const proxyFeed = createPacketFeed<ProxyRow>(FeedList.Proxy)
 
 export const rows = proxyFeed.rows
-export const stat = proxyFeed.stat
 export const attachPacketFeed = proxyFeed.attach
-export const clearLocal = proxyFeed.clearLocal
 export const resetStat = proxyFeed.resetStat
 export const onProxyTrimmed = proxyFeed.onTrimmed
 

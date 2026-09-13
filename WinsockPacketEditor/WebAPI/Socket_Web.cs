@@ -401,17 +401,22 @@ namespace WinsockPacketEditor
             bool IsDel = body["delete"] != null && Operate.SystemConfig.StringToBool(body["delete"]);
             bool IsEdit = body["edit"] != null && Operate.SystemConfig.StringToBool(body["edit"]);
 
-            AccountInfo pai = new AccountInfo();
-
-            if (body["enable"] != null) { pai.IsEnable = Operate.SystemConfig.StringToBool(body["enable"]); }
-            if (body["username"] != null) { pai.UserName = body["username"]; }
-            if (body["password"] != null) { pai.Password = body["password"]; }
-            if (body["autodisable"] != null) { pai.IsExpiry = Operate.SystemConfig.StringToBool(body["autodisable"]); }
-
-            if (body["disabledate"] != null && body["disabletime"] != null)
+            //只写表单里带了的字段：新增时其余取默认值，修改时其余保持账号原样
+            Action<AccountInfo> apply = a =>
             {
-                pai.ExpiryTime = Operate.SystemConfig.StringToDateTime(body["disabledate"], body["disabletime"]);
-            }
+                if (body["enable"] != null) { a.IsEnable = Operate.SystemConfig.StringToBool(body["enable"]); }
+                if (body["username"] != null) { a.UserName = body["username"]; }
+                if (body["password"] != null) { a.Password = body["password"]; }
+                if (body["autodisable"] != null) { a.IsExpiry = Operate.SystemConfig.StringToBool(body["autodisable"]); }
+
+                if (body["disabledate"] != null && body["disabletime"] != null)
+                {
+                    a.ExpiryTime = Operate.SystemConfig.StringToDateTime(body["disabledate"], body["disabletime"]);
+                }
+            };
+
+            AccountInfo pai = new AccountInfo();
+            apply(pai);
 
             if (IsAdd && CCProxy_Controller.AddUser(pai))
             {
@@ -423,7 +428,7 @@ namespace WinsockPacketEditor
                 await context.Response.WriteAsync("1");
             }
 
-            if (IsEdit && CCProxy_Controller.UserUpdate(pai))
+            if (IsEdit && CCProxy_Controller.UserUpdate(body["username"], apply))
             {
                 await context.Response.WriteAsync("1");
             }

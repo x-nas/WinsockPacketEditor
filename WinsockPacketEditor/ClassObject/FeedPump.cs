@@ -267,6 +267,9 @@ namespace WinsockPacketEditor
             catch (Exception ex)
             {
                 Operate.DoLog(nameof(Push), ex);
+
+                //脏标记在进来之前已经清掉了 —— 不补回去的话界面那份副本要等下一次列表变动才会刷新
+                MarkDirty(Which);
             }
 
             //推给界面失败也要通知订阅者：目标那份快照与界面那份是两条独立的路
