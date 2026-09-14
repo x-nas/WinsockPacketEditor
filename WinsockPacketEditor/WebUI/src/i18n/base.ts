@@ -903,9 +903,9 @@ export const DICT = {
   'col.toLoc': { zh: '远端所属地', en: 'Remote Loc.' },
 
   'col.client': { zh: '客户端', en: 'Client' },
-  'col.clientLoc': { zh: '客户端地', en: 'Client Loc.' },
+  'col.clientLoc': { zh: '客户端地', en: 'Client Geo' },
   'col.server': { zh: '服务端', en: 'Server' },
-  'col.serverLoc': { zh: '服务端地', en: 'Server Loc.' },
+  'col.serverLoc': { zh: '服务端地', en: 'Server Geo' },
   'col.domain': { zh: '域名', en: 'Domain' },
   'col.len': { zh: '长度', en: 'Length' },
   'col.data': { zh: '数据', en: 'Data' },

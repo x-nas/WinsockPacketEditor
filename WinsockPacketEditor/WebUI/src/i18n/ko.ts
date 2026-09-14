@@ -619,7 +619,7 @@ export const ko: Record<Key, string> = {
   'col.to': '원격 주소',
   'col.toLoc': '원격 위치',
   'col.client': '클라이언트',
-  'col.clientLoc': '클라이언트 위치',
+  'col.clientLoc': '접속 위치',
   'col.server': '서버',
   'col.serverLoc': '서버 위치',
   'col.domain': '도메인',
