@@ -12,7 +12,7 @@
 <img src="https://img.shields.io/badge/languages-7-2a2a3a?style=flat-square" alt="languages">&nbsp;
 <img src="https://img.shields.io/github/stars/x-nas/WinsockPacketEditor?style=flat-square&color=00c853" alt="stars">
 
-**[中文说明](#-中文)** · **[English](#-english)** · [官网 Website](https://www.wpe64.com) · [使用教程 Tutorial](https://www.wpe64.com/tutorial.html) · [下载 Download](https://www.wpe64.com/downloads.html)
+**[中文说明](#-中文)** · **[English](#-english)** · [官网 Website](https://www.wpe64.com) · [使用教程 Tutorial](https://www.wpe64.com/tutorial.html) · [下载 Download](https://www.wpe64.com/downloads.html) · [爱发电 Sponsor](https://ifdian.net/a/WPE64)
 
 </div>
 
@@ -94,6 +94,8 @@
 
 📖 **[完整使用教程](https://www.wpe64.com/tutorial.html)** · ❓ **[常见问题](https://www.wpe64.com/faq.html)** · 🌐 **[官网 www.wpe64.com](https://www.wpe64.com)**
 
+☕ 觉得好用？欢迎在 **[爱发电](https://ifdian.net/a/WPE64)** 支持一下，帮助项目持续更新。
+
 ---
 
 ## 🟢 English
@@ -171,6 +173,8 @@ A **network packet capture-and-edit tool** for Windows. It lists every packet a 
 ### 🔗 More
 
 📖 **[Full tutorial](https://www.wpe64.com/en/tutorial.html)** · ❓ **[FAQ](https://www.wpe64.com/en/faq.html)** · 🌐 **[www.wpe64.com](https://www.wpe64.com/en/)**
+
+☕ Find it useful? Support the project on **[Afdian (爱发电)](https://ifdian.net/a/WPE64)** to help keep it updated.
 
 ---
 
