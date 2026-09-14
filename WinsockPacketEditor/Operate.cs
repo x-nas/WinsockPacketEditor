@@ -45,7 +45,7 @@ namespace WinsockPacketEditor
                 ⚠️ 它也进了库文件名（DataBase.dbName ＝ AssemblyVersion + ".db"）：
                 2.1.9 正式版是「2.1.9.db」，测过的「2.1.9 Beta.db」不会被读到 —— 要带过去用备份导出 / 导入。
             */
-            public static bool IsBeta = false;
+            public static bool IsBeta = true;
             public static int PID = -1;
             public static int AutoSaveINT = 600000;
             /*
