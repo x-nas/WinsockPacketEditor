@@ -365,3 +365,6 @@ FodyWeavers.xsd
 
 # 单文件打包产物（tools/pack/Pack.ps1）
 dist/
+
+# 截图用的假宿主探针页（开发工具，不进仓库）
+WinsockPacketEditor/WebUI/dev-probe.html

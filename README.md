@@ -7,7 +7,7 @@
 **看清、改写并重放程序的网络封包**
 *See, edit and replay the network packets a program sends and receives*
 
-<img src="https://img.shields.io/badge/version-2.1.9-00c853?style=flat-square" alt="version">&nbsp;
+<img src="https://img.shields.io/badge/version-2.2-00c853?style=flat-square" alt="version">&nbsp;
 <img src="https://img.shields.io/badge/platform-Windows%2010%20%2F%2011-2a2a3a?style=flat-square" alt="platform">&nbsp;
 <img src="https://img.shields.io/badge/languages-7-2a2a3a?style=flat-square" alt="languages">&nbsp;
 <img src="https://img.shields.io/github/stars/x-nas/WinsockPacketEditor?style=flat-square&color=00c853" alt="stars">
@@ -82,7 +82,7 @@
 
 ### ⬇️ 下载与运行
 
-1. 到 **[下载中心](https://www.wpe64.com/downloads.html)** 取最新版（一个 `WPE64 2.1.9.exe`，约 62 MB，**免安装**）。
+1. 到 **[下载中心](https://www.wpe64.com/downloads.html)** 取最新版（一个 `WPE64 2.2.exe`，约 62 MB，**免安装**）。
 2. 在下载到的文件上右键「属性 → 解除锁定 → 应用」——**运行前先做这一步**。
 3. 双击运行，在权限提示上选「是」即可（需要管理员权限）。
 
@@ -158,7 +158,7 @@ A **network packet capture-and-edit tool** for Windows. It lists every packet a 
 
 ### ⬇️ Download & run
 
-1. Get the latest build from the **[download center](https://www.wpe64.com/en/downloads.html)** (a single `WPE64 2.1.9.exe`, about 62 MB, **no installer**).
+1. Get the latest build from the **[download center](https://www.wpe64.com/en/downloads.html)** (a single `WPE64 2.2.exe`, about 62 MB, **no installer**).
 2. Right-click the downloaded file → Properties → **Unblock** → Apply — **do this before running it**.
 3. Double-click and choose Yes at the prompt (administrator rights are required).
 

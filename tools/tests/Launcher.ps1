@@ -33,6 +33,13 @@ public sealed class ProgressSink : IProgress<int>
 }
 '@
 
+# 与 New-LauncherPackage.ps1 同一条口径：去掉末尾为 0 的段，至少留两段
+function ShortVer([string]$v) {
+    $p = @($v.Split('.'))
+    while ($p.Count -gt 2 -and $p[-1] -eq '0') { $p = @($p[0..($p.Count - 2)]) }
+    return ($p -join '.')
+}
+
 $pass = 0; $fail = 0
 function Check([string]$name, [bool]$ok, [string]$detail = '') {
     if ($ok) { $script:pass++; Write-Host "  PASS  $name  $detail" -ForegroundColor Green }
@@ -71,9 +78,9 @@ try {
     Write-Host '== ① 载荷说明与 exe 自身'
     $info = Call 'ReadInfo' @()
     Check '读到 payload.txt' ($null -ne $info)
-    Check '版本与主程序一致' ($info.Version -eq [Diagnostics.FileVersionInfo]::GetVersionInfo((Join-Path $Bin $info.Exe)).FileVersion) "$($info.Title) $($info.Version) · $($info.Exe)"
+    Check '版本与主程序一致' ($info.Version -eq (ShortVer ([Diagnostics.FileVersionInfo]::GetVersionInfo((Join-Path $Bin $info.Exe)).FileVersion))) "$($info.Title) $($info.Version) · $($info.Exe)"
     Check '解压根目录名' ($info.Name.Length -gt 0 -and $info.Name.IndexOfAny([IO.Path]::GetInvalidFileNameChars()) -lt 0) $info.Name
-    Check '启动器文件版本 = 载荷版本' ([Diagnostics.FileVersionInfo]::GetVersionInfo($Exe).FileVersion -eq $info.Version)
+    Check '启动器文件版本 = 载荷版本' ((ShortVer ([Diagnostics.FileVersionInfo]::GetVersionInfo($Exe).FileVersion)) -eq $info.Version)
     # 清单在 .rsrc 节里，排在几十 MB 的托管资源（载荷）之后 —— 要读整个文件
     $raw = [Text.Encoding]::ASCII.GetString([IO.File]::ReadAllBytes($Exe))
     Check '清单是 requireAdministrator' ($raw.Contains('level="requireAdministrator"'))

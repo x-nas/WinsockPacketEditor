@@ -5143,7 +5143,7 @@ namespace WPEHybrid
                         AssemblyInfo 里（当前 2.1.9）。
                         用 typeof(Operate).Assembly 定位，比写死程序集名更抗重构。
                     */
-                    version = typeof(Operate).Assembly.GetName().Version.ToString(3),
+                    version = TwoPartVersion(typeof(Operate).Assembly.GetName().Version),
                     isBeta = Operate.SystemConfig.IsBeta,
                     //界面语言的初值。前端拿它决定首屏用哪份字典，切换后走 setLanguage 写回
                     language = UI.Prefs.Language ?? "zh-CN",
@@ -5628,6 +5628,12 @@ namespace WPEHybrid
                 ws2 = link.SupportWS2,
                 msws = link.SupportMsWS,
             };
+        }
+
+        /// <summary>界面上显示的版本号：两段式（2.2 起），修订号为 0 时只写「主.次」。与 SystemConfig.AssemblyVersion 同一条口径，但不带 Beta（前端另有 isBeta）。</summary>
+        private static string TwoPartVersion(Version v)
+        {
+            return v.Build > 0 ? v.ToString(3) : v.ToString(2);
         }
 
         /// <summary>

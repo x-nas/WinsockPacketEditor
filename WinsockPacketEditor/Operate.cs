@@ -257,7 +257,8 @@ namespace WinsockPacketEditor
                 {
                     Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
 
-                    string sReturn = $"{version.Major}.{version.Minor}.{version.Build}";
+                    //两段式版本号（2.2 起）：修订号为 0 时不显示，非 0 才带上第三段
+                    string sReturn = version.Build > 0 ? $"{version.Major}.{version.Minor}.{version.Build}" : $"{version.Major}.{version.Minor}";
                     if (Operate.SystemConfig.IsBeta)
                     { 
                         sReturn += " Beta";

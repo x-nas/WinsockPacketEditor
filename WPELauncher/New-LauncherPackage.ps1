@@ -51,8 +51,14 @@ if (-not (Test-Path -LiteralPath $MainExe)) { throw "没有 $MainExe，先构建
 $Version = [Diagnostics.FileVersionInfo]::GetVersionInfo($MainExe).FileVersion
 if ([string]::IsNullOrEmpty($Version)) { throw "$Exe 没有文件版本" }
 
+# 两段式版本号（WPE 2.2 / WPC 1.0 起）：去掉末尾为 0 的段，但至少留「主.次」—— 2.2.0.0 → 2.2、1.0.0.0 → 1.0、2.2.1.0 → 2.2.1
+# 输出文件名、进度窗标题、解压目录（<版本>-<哈希12>）都用它；启动器自己的文件版本仍写四段的 $Version
+$parts = @($Version.Split('.'))
+while ($parts.Count -gt 2 -and $parts[-1] -eq '0') { $parts = @($parts[0..($parts.Count - 2)]) }
+$short = $parts -join '.'
+
 #region 挑文件 · 打 payload.zip
-Step "打 payload.zip · $Title $Version"
+Step "打 payload.zip · $Title $short"
 
 $AllowedExe = @($AllowedExe + $Exe | Select-Object -Unique)
 $prefix = $SourceDir + '\'
@@ -110,7 +116,7 @@ $Hash = (Get-FileHash -LiteralPath $ZipPath -Algorithm SHA256).Hash.ToLowerInvar
 $zipLen = (Get-Item -LiteralPath $ZipPath).Length
 
 $info = @(
-    "Version=$Version",
+    "Version=$short",
     "Hash=$Hash",
     "Exe=$Exe",
     "Name=$Name",
@@ -140,7 +146,6 @@ Step '输出'
 $built = Join-Path $LauncherOut "$LauncherAssembly.exe"
 if (-not (Test-Path -LiteralPath $built)) { throw "没有 $built" }
 
-$short = $Version -replace '^(\d+\.\d+\.\d+)\.0$', '$1'
 $OutExe = Join-Path $DistDir "$OutBaseName $short.exe"
 Copy-Item -LiteralPath $built -Destination $OutExe -Force
 
