@@ -690,16 +690,24 @@ namespace WinsockPacketEditor
 
             #region//获取IP的所属地
 
+            /*
+                IP 归属地。IPString 可以是 "ip"、"ip:port"、"[v6]:port"。
+
+                纯真库（qqwry.dat）只有 IPv4：IPv6 和域名交给它会在库里抛 IndexOutOfRangeException，
+                一次约 18 µs（正常查询约 1.6 µs），而且结果本来就是空。所以先在这里判掉，
+                IPv4 映射的 IPv6（::ffff:1.2.3.4）还原成 IPv4 再查。
+            */
             public static async Task<string> GetIPLocation(string IPString)
             {
                 try
                 {
-                    if (string.IsNullOrEmpty(IPString))
+                    IPAddress ip = IPv4OfAddress(IPString);
+                    if (ip == null)
                     {
                         return string.Empty;
                     }
 
-                    var IPSearch = await ProxyConfig.Proxy.ipSearch.GetIpLocationAsync(IPString);
+                    var IPSearch = await ProxyConfig.Proxy.ipSearch.GetIpLocationAsync(ip.ToString());
                     if (IPSearch == null)
                     {
                         return string.Empty;
@@ -720,6 +728,62 @@ namespace WinsockPacketEditor
                 }
 
                 return string.Empty;
+            }
+
+            /// <summary>
+            /// 从 "ip" / "ip:port" / "[v6]:port" / "v6:port" 里取出 IPv4 地址；IPv6（非映射）、域名、空串返回 null。
+            /// </summary>
+            private static IPAddress IPv4OfAddress(string Address)
+            {
+                if (string.IsNullOrWhiteSpace(Address))
+                {
+                    return null;
+                }
+
+                string s = Address.Trim();
+
+                if (s.StartsWith("["))
+                {
+                    int end = s.IndexOf(']');
+                    if (end < 1)
+                    {
+                        return null;
+                    }
+
+                    s = s.Substring(1, end - 1);
+                }
+                else
+                {
+                    //只有一个冒号 = IPv4（或域名）带端口
+                    int c = s.IndexOf(':');
+                    if (c >= 0 && s.IndexOf(':', c + 1) < 0)
+                    {
+                        s = s.Substring(0, c);
+                    }
+                }
+
+                if (!IPAddress.TryParse(s, out IPAddress ip))
+                {
+                    //插值拼出来的「v6:port」（如 2001:db8::1:443 以外的非法写法）：去掉最后一段再试
+                    int last = s.LastIndexOf(':');
+                    if (last <= 0 || !IPAddress.TryParse(s.Substring(0, last), out ip))
+                    {
+                        return null;
+                    }
+                }
+
+                if (ip.AddressFamily == AddressFamily.InterNetworkV6 && ip.IsIPv4MappedToIPv6)
+                {
+                    return ip.MapToIPv4();
+                }
+
+                if (ip.AddressFamily != AddressFamily.InterNetwork)
+                {
+                    return null;
+                }
+
+                //IPAddress.TryParse 会把 "2001"、"10.1" 这种当成整数 / 简写的 IPv4 —— 那不是真实地址
+                return s.Split('.').Length == 4 ? ip : null;
             }
 
             #endregion
@@ -6116,6 +6180,25 @@ namespace WinsockPacketEditor
                     }
                 }
 
+                /// <summary>
+                /// 启动时在后台把归属地库读进内存（27 MB，实测 56–84 ms）。
+                /// 不预热的话由第一个封包的查询去加载，那个包要多等这几十毫秒。库内部有初始化锁，与界面上读条目数同时发生也安全。
+                /// </summary>
+                public static void WarmUpGeoDb()
+                {
+                    Task.Run(() =>
+                    {
+                        try
+                        {
+                            ipSearch.Init();
+                        }
+                        catch (Exception ex)
+                        {
+                            Operate.DoLog(nameof(WarmUpGeoDb), ex);
+                        }
+                    });
+                }
+
                 #region//定义结构                
 
                 public enum ProxyType
@@ -10557,8 +10640,8 @@ namespace WinsockPacketEditor
                                     PacketData = PacketConfig.Packet.GetPacketData_Hex(bBuffer, PacketConfig.Packet.PacketData_MaxLen);
                                 }
 
-                                string ClientLocation = await SystemConfig.GetIPLocation(ClientAddr.Split(':')[0]);
-                                string ServerLocation = await SystemConfig.GetIPLocation(ServerAddr.Split(':')[0]);
+                                string ClientLocation = await SystemConfig.GetIPLocation(ClientAddr);
+                                string ServerLocation = await SystemConfig.GetIPLocation(ServerAddr);
 
                                 ProxyInfo pi = new ProxyInfo(
                                     dtNow,
@@ -16265,8 +16348,8 @@ namespace WinsockPacketEditor
                                 string[] ipParts = sPacketIP.Split('|');
                                 string sIPFrom = ipParts[0];
                                 string sIPTo = ipParts[1];
-                                string sFromLocation = await SystemConfig.GetIPLocation(sIPFrom.Split(':')[0]);
-                                string sToLocation = await SystemConfig.GetIPLocation(sIPTo.Split(':')[0]);
+                                string sFromLocation = await SystemConfig.GetIPLocation(sIPFrom);
+                                string sToLocation = await SystemConfig.GetIPLocation(sIPTo);
 
                                 if (string.IsNullOrEmpty(PacketData))
                                 {
