@@ -29,8 +29,15 @@ import { pushToast } from '../../stores/toast'
 import ContextMenu from '../ContextMenu.vue'
 import { ICON, type MenuItem } from '../menu'
 import { ipKey, timeKey, useSort } from '../../useSort'
+import { useScrollGutter } from '../../useScrollGutter'
 
 const rows = useList<AuthRow>(FeedList.Auth)
+
+/* 表头在滚动容器外，右内边距按实测的滚动条槽位补（WebView2 的覆盖式滚动条下是 0，写死 10 就会错位 10px） */
+const bodyEl = ref<HTMLElement | null>(null)
+const gutter = useScrollGutter(bodyEl)
+const cbodyEl = ref<HTMLElement | null>(null)
+const cgutter = useScrollGutter(cbodyEl)
 
 /*
   表头排序。WinForms 那张表的八列里有六列带 SortMode，这里照着给同样六列
@@ -266,7 +273,7 @@ watch(rows, () => {
       「右键可加入名单」也不值得占一整行 —— 表格直接顶到上边。
     -->
     <!-- 带 .so 的这几格可点排序；所属地与在线分钟不排（一个是附属信息、一个跟着认证时间走）-->
-    <div class="head">
+    <div class="head" :style="{ paddingRight: (14 + gutter) + 'px' }">
       <span class="so" :class="{ on: sort.active('time') }" @click="sort.toggle('time')">{{ t('cli.authTime') }}<i class="ar">{{ sort.mark('time') }}</i></span>
       <span class="so" :class="{ on: sort.active('user') }" @click="sort.toggle('user')">{{ t('col.user') }}<i class="ar">{{ sort.mark('user') }}</i></span>
       <span class="so" :class="{ on: sort.active('ip') }" @click="sort.toggle('ip')">{{ t('cli.ip') }}<i class="ar">{{ sort.mark('ip') }}</i></span>
@@ -275,9 +282,10 @@ watch(rows, () => {
       <span class="so" :class="{ on: sort.active('devices') }" @click="sort.toggle('devices')">{{ t('cli.devices') }}<i class="ar">{{ sort.mark('devices') }}</i></span>
       <span class="so" :class="{ on: sort.active('traffic') }" @click="sort.toggle('traffic')">{{ t('cli.traffic') }}<i class="ar">{{ sort.mark('traffic') }}</i></span>
       <span>{{ t('cli.online') }}</span>
+      <span>{{ t('cli.device') }}</span>
     </div>
 
-    <div class="body">
+    <div ref="bodyEl" class="body">
       <div v-if="!rows.length" class="empty">{{ t('cli.empty') }}</div>
 
       <div
@@ -306,6 +314,11 @@ watch(rows, () => {
         <span class="num">{{ r.DevicesNumber }}</span>
         <span class="num">{{ bytes(r.TrafficStatistics) }}</span>
         <span class="num">{{ onlineMinutes(r) }}</span>
+        <!--
+          设备标识只有 WPC 有，普通 SOCKS5 客户端是「—」—— 这一格不是「—」就是 WPC，所以不另设「客户端」列。
+          WPC 的版本（C# 的 Client 字段，"WPC 1.0"）放在悬停提示里，与指纹全文一起。
+        -->
+        <span class="dev" :class="{ wpc: r.DeviceId }" :title="r.DeviceId ? r.Client + ' · ' + r.DeviceId : ''">{{ r.DeviceId || '—' }}</span>
       </div>
     </div>
 
@@ -330,7 +343,7 @@ watch(rows, () => {
         这张表<b>列宽是固定 grid、不可拖、也不横向滚</b>，所以「表头必须与行同容器」
         那条约束（封包列表 / 防火墙名单那种）在这里不成立。
       -->
-      <div v-if="selectedIp && conns.length" class="chead">
+      <div v-if="selectedIp && conns.length" class="chead" :style="{ paddingRight: (14 + cgutter) + 'px' }">
         <span>{{ t('cli.srcPort') }}</span>
         <span />
         <span>{{ t('cli.target') }}</span>
@@ -338,7 +351,7 @@ watch(rows, () => {
         <span :title="t('cli.viaHint')">{{ t('cli.via') }}</span>
       </div>
 
-      <div class="cbody">
+      <div ref="cbodyEl" class="cbody">
         <div v-if="!selectedIp" class="empty sm">{{ t('cli.pickHint') }}</div>
         <div v-else-if="!conns.length" class="empty sm">{{ t('cli.noConn') }}</div>
 
@@ -405,7 +418,12 @@ watch(rows, () => {
 .head,
 .row {
   display: grid;
-  grid-template-columns: 78px 120px minmax(150px, 1.2fr) minmax(110px, 1fr) 64px 64px 92px 90px;
+  /*
+    九列。1280 窗口下内容区约 1036 CSS 宽，定宽 + 弹性列下限 + 间距要压在这个数以内：
+    72+116+56+56+88+88 = 476，弹性下限 130+96+110 = 336，间距 8×12 = 96，内边距 38 → 946。
+    「在线 (分钟)」那格 88px 是按表头字体（10px + .14em 字距）量的，再窄表头就被截。
+  */
+  grid-template-columns: 72px 116px minmax(130px, 1.2fr) minmax(96px, 1fr) 56px 56px 88px 88px minmax(110px, .9fr);
   align-items: center;
   gap: 12px;
   padding: 0 14px;
@@ -417,7 +435,7 @@ watch(rows, () => {
   height: var(--th-h);
   background: var(--panel);
   border-bottom: 1px solid var(--border);
-  /* 与 .body 的 scrollbar-gutter 配对：14 + 10（滚动条宽），不补就宽出 10px */
+  /* 右内边距由模板按实测的滚动条槽位宽度补（useScrollGutter），这里只是没量到之前的兜底 */
   padding-right: 24px;
   font-family: var(--share);
   font-size: var(--th-size);
@@ -462,6 +480,8 @@ watch(rows, () => {
 /* 国旗与文字同格：省一列，滚动时图和文永远对得上（与封包列表同一个理由）*/
 .loc { display: flex; align-items: center; gap: 6px; color: var(--dim3); }
 .num { color: var(--dim3); font-variant-numeric: tabular-nums; }
+.dev { color: var(--muted); font-family: var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dev.wpc { color: var(--green); }
 
 .ip { color: var(--cyan); }
 
@@ -562,8 +582,9 @@ watch(rows, () => {
     ⚠️ 配色与<b>上半部那张表的 .head 逐条一致</b>（--panel + 下边框）——
     两张表上下并排，表头长得不一样一眼就看得出来。
 
-    ⚠️ <b>右内边距要多留一个滚动条的宽度</b>（14 + 10）：下面的 .cbody 用
-    scrollbar-gutter: stable 恒定留出 10px 槽位，表头在容器外面，不补就会宽出这 10px。
+    ⚠️ <b>右内边距要多留一个滚动条的宽度</b>：下面的 .cbody 用 scrollbar-gutter: stable 留槽位，
+    表头在容器外面，不补就会宽出那么多。槽位到底几像素由模板按实测补（useScrollGutter）——
+    WebView2 开着覆盖式滚动条时是 0，写死 10 反而错位 10px；这里的 24 只是兜底。
   */
   background: var(--panel);
   border-bottom: 1px solid var(--border);

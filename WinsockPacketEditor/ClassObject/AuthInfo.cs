@@ -38,6 +38,38 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//设备与客户端（2026-09-14）
+
+        string _DeviceId = string.Empty;
+
+        /// <summary>WPC 报上来的设备指纹；普通 SOCKS5 客户端为空。</summary>
+        public string DeviceId
+        {
+            get => _DeviceId;
+            set
+            {
+                if (_DeviceId == value) return;
+                _DeviceId = value;
+                OnPropertyChanged();
+            }
+        }
+
+        string _Client = string.Empty;
+
+        /// <summary>"WPC 1.0" 或 "SOCKS5"。</summary>
+        public string Client
+        {
+            get => _Client;
+            set
+            {
+                if (_Client == value) return;
+                _Client = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
         #region//IP所属地
 
         string _IPLocation;

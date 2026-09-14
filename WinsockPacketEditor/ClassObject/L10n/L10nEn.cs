@@ -147,6 +147,12 @@ namespace WinsockPacketEditor
             d["ProxyModeForm.StartSocks5Proxy"] = "Start Socks5 Proxy";
             d["ProxyModeForm.StartSocks5Proxy.Fail"] = "Failed to Start Socks5 Proxy";
             d["ProxyModeForm.SetupSocks5Proxy.Fail"] = "Failed to Setup Socks5 Proxy";
+            d["ProxyModeForm.MaxConnection.Capped"] = "Max connections {0} exceeds what this machine can reserve ({1}, {2} KB per connection); starting with {1}";
+            d["ProxyModeForm.MaxConnection.Fallback"] = "Failed to start with max connections {0} (probably not enough memory to reserve buffers); retrying with the default {1}";
+            d["ProxySettingsForm.MaxConnection.Error"] = "Max connections must be between 1 and {0} ({1} KB reserved per connection, this machine has {2} GB)";
+            d["ProxySettingsForm.OnlyWpc.NeedAuth"] = "\"WPC clients only\" requires authentication to be enabled first";
+            d["WPC.OnlyWpc.Reject"] = "\"WPC clients only\" is on; rejected a regular SOCKS5 client [ {0} ]";
+            d["WPC.Register.Log"] = "WPC device registered: {0} [ {1} ] device {2} version {3}";
             d["ProxyModeForm.StopProxy"] = "Stop SOCKS5 Proxy";
             d["ProxyModeForm.ProxyServerIP"] = "Proxy Server IP : TCP [ {0} ] UDP [ {1} ]";
             d["ProxyModeForm.ProxyServer.Auth"] = "Proxy service authentication enabled";

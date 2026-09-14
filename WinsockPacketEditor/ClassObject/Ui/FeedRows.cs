@@ -417,6 +417,10 @@ namespace WinsockPacketEditor
         public long TrafficStatistics;
         public bool AuthResult;
         public string AuthTime;
+        /// <summary>WPC 的设备指纹；普通客户端为空串。</summary>
+        public string DeviceId;
+        /// <summary>"WPC 1.0" / "SOCKS5"。</summary>
+        public string Client;
 
         public static AuthRow From_(AuthInfo Src)
         {
@@ -428,6 +432,8 @@ namespace WinsockPacketEditor
                 UserName = Operate.ProxyConfig.Account.GetUserName_ByAccountID(Src.AID),
                 AuthIP = Src.AuthIP,
                 IPLocation = Src.IPLocation,
+                DeviceId = Src.DeviceId ?? string.Empty,
+                Client = Src.Client ?? string.Empty,
                 LinksNumber = Src.LinksNumber,
                 DevicesNumber = Src.DevicesNumber,
                 TrafficStatistics = Src.TrafficStatistics,

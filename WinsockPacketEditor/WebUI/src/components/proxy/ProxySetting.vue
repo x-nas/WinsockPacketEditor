@@ -30,7 +30,15 @@ interface Setting {
   enableSocks5: boolean
   socks5Port: number
   enableAuth: boolean
+  /** 只允许 WPC 客户端连接：普通 SOCKS5 客户端即使账号密码正确也被拒；要求 enableAuth */
+  onlyWpc: boolean
   maxConnection: number
+  /** 本机允许的最大连接数上限（= 可预留内存 ÷ 每连接缓冲），由 C# 按物理内存算 */
+  maxConnectionCap: number
+  maxConnectionDefault: number
+  /** 每个连接预留多少 KB（SuperSocket 启动时按 连接数 × 这个值 一次性分配） */
+  connBufferKB: number
+  memoryGB: number
   enableHttp: boolean
   httpPort: number
   enableSystemProxy: boolean
@@ -40,6 +48,21 @@ interface Setting {
 const s = ref<Setting | null>(null)
 const busy = ref(false)
 const error = ref('')
+
+/*
+  最大连接数不是随手填的数字：服务启动时按「连接数 × 每连接缓冲」一次性预留内存。
+  这里把估算与本机上限直接写在输入框旁边，超了保存时 C# 会拒绝（ProxySettingsForm.MaxConnection.Error）。
+*/
+const maxConnHint = computed(() => {
+  if (!s.value) return ''
+  const n = Number(s.value.maxConnection) || 0
+  const mb = Math.round((n * s.value.connBufferKB) / 1024)
+  return t('set.maxConnHint')
+    .replace('{kb}', String(s.value.connBufferKB))
+    .replace('{mb}', String(mb))
+    .replace('{gb}', String(s.value.memoryGB))
+    .replace('{cap}', String(s.value.maxConnectionCap))
+})
 
 /** 证书格式，顺序与 C# 的 SaveCertToFile_Dialog 的 CerType 严格对应（0..5）。 */
 const CERTS = [
@@ -81,6 +104,7 @@ async function save(): Promise<void> {
       enableSocks5: s.value.enableSocks5,
       socks5Port: Number(s.value.socks5Port),
       enableAuth: s.value.enableAuth,
+      onlyWpc: s.value.enableAuth && s.value.onlyWpc,
       maxConnection: Number(s.value.maxConnection),
       enableHttp: s.value.enableHttp,
       httpPort: Number(s.value.httpPort),
@@ -193,10 +217,24 @@ async function exportCert(): Promise<void> {
         </div>
       </div>
 
+      <!--
+        只允许 WPC 客户端。WPC 经 SOCKS5 端口上的私有方法注册设备后拿令牌连接，
+        普通 SOCKS5 客户端拿着正确的账号密码也进不来。它依赖账号认证，认证关着时置灰。
+      -->
+      <div class="row">
+        <div class="k">{{ t('set.onlyWpc') }}</div>
+        <div class="v">
+          <button class="chk" :class="{ on: s.enableAuth && s.onlyWpc }" :disabled="!s.enableAuth || locked"
+                  @click="s.onlyWpc = !s.onlyWpc"><i />WPC</button>
+          <span class="tip">{{ t('set.onlyWpcHint') }}</span>
+        </div>
+      </div>
+
       <div class="row">
         <div class="k">{{ t('set.maxConn') }}</div>
         <div class="v">
-          <input v-model.number="s.maxConnection" class="inp num" type="number" min="1" :disabled="locked">
+          <input v-model.number="s.maxConnection" class="inp num" type="number" min="1" :max="s.maxConnectionCap" :disabled="locked">
+          <span class="tip" :class="{ warn: Number(s.maxConnection) > s.maxConnectionCap }">{{ maxConnHint }}</span>
         </div>
       </div>
 

@@ -147,6 +147,12 @@ namespace WinsockPacketEditor
             d["ProxyModeForm.StartSocks5Proxy"] = "Запустить прокси Socks5";
             d["ProxyModeForm.StartSocks5Proxy.Fail"] = "Не удалось запустить прокси Socks5";
             d["ProxyModeForm.SetupSocks5Proxy.Fail"] = "Не удалось настроить прокси Socks5";
+            d["ProxyModeForm.MaxConnection.Capped"] = "Макс. соединений {0} превышает предел, который может зарезервировать эта машина ({1}, по {2} КБ на соединение); запуск с {1}";
+            d["ProxyModeForm.MaxConnection.Fallback"] = "Не удалось запустить с макс. соединений {0} (вероятно, не хватает памяти под буферы); повтор со значением по умолчанию {1}";
+            d["ProxySettingsForm.MaxConnection.Error"] = "Макс. соединений должно быть от 1 до {0} (по {1} КБ на соединение, на этой машине {2} ГБ памяти)";
+            d["ProxySettingsForm.OnlyWpc.NeedAuth"] = "«Только клиенты WPC» требует сначала включить аутентификацию";
+            d["WPC.OnlyWpc.Reject"] = "Включено «Только клиенты WPC»; обычный клиент SOCKS5 отклонён [ {0} ]";
+            d["WPC.Register.Log"] = "Устройство WPC зарегистрировано: {0} [ {1} ] устройство {2} версия {3}";
             d["ProxyModeForm.StopProxy"] = "Остановить прокси SOCKS5";
             d["ProxyModeForm.ProxyServerIP"] = "IP прокси-сервера : TCP [ {0} ] UDP [ {1} ]";
             d["ProxyModeForm.ProxyServer.Auth"] = "Авторизация прокси включена";

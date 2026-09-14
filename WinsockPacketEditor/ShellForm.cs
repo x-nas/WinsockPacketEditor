@@ -2011,7 +2011,13 @@ namespace WPEHybrid
                     enableSocks5 = ProxyCfg.Enable_SOCKS5,
                     socks5Port = (int)ProxyCfg.SOCKS5_Port,
                     enableAuth = ProxyCfg.Enable_Auth,
+                    onlyWpc = ProxyCfg.Only_WPC_Client,
                     maxConnection = ProxyCfg.MaxConnectionNumber,
+                    //最大连接数的口径：每连接预留多少、本机上限多少、机器有多少内存 —— 界面据此显示估算与上限
+                    maxConnectionCap = ProxyCfg.MaxConnectionCap(),
+                    maxConnectionDefault = Operate.ProxyConfig.Proxy.DefaultMaxConnectionNumber,
+                    connBufferKB = Operate.ProxyConfig.Proxy.ProxyReceiveBufferBytes / 1024,
+                    memoryGB = Math.Round(Kernel32.TotalPhysicalMemory() / 1073741824.0, 1),
                     enableHttp = ProxyCfg.Enable_HTTP,
                     httpPort = (int)ProxyCfg.HTTP_Port,
                     enableSystemProxy = ProxyCfg.Enable_SystemProxy,
@@ -2075,6 +2081,34 @@ namespace WPEHybrid
                     };
                 }
 
+                /*
+                    最大连接数按本机内存封顶（Operate.ProxyConfig.Proxy.MaxConnectionCap）：
+                    SuperSocket 启动时按「每连接缓冲 × 最大连接数」一次性预分配，填大了服务起不来。
+                    这里拒绝而不是静默收窄 —— 用户填的数字得到明确的回答。
+                */
+                //「只允许 WPC 客户端」靠账号注册设备，认证没开它无从生效
+                bool enableAuth = args["enableAuth"] != null && (bool)args["enableAuth"];
+                bool onlyWpc = args["onlyWpc"] != null && (bool)args["onlyWpc"];
+                if (onlyWpc && !enableAuth)
+                {
+                    return new { ok = false, error = UI.T("ProxySettingsForm.OnlyWpc.NeedAuth", "「只允许 WPC 客户端连接」需要先启用身份认证") };
+                }
+
+                int maxConnection = args["maxConnection"] == null ? Operate.ProxyConfig.Proxy.DefaultMaxConnectionNumber : (int)args["maxConnection"];
+                int maxConnectionCap = ProxyCfg.MaxConnectionCap();
+                if (maxConnection < 1 || maxConnection > maxConnectionCap)
+                {
+                    return new
+                    {
+                        ok = false,
+                        error = string.Format(
+                            UI.T("ProxySettingsForm.MaxConnection.Error", "最大连接数必须在 1 ~ {0} 之间（每个连接预留 {1} KB，本机内存 {2} GB）"),
+                            maxConnectionCap,
+                            Operate.ProxyConfig.Proxy.ProxyReceiveBufferBytes / 1024,
+                            Math.Round(Kernel32.TotalPhysicalMemory() / 1073741824.0, 1)),
+                    };
+                }
+
                 try
                 {
 
@@ -2082,8 +2116,9 @@ namespace WPEHybrid
                     ProxyCfg.ProxyIP = proxyIp;
                     ProxyCfg.Enable_SOCKS5 = enableSocks5;
                     ProxyCfg.SOCKS5_Port = (ushort)socks5Port;
-                    ProxyCfg.Enable_Auth = args["enableAuth"] != null && (bool)args["enableAuth"];
-                    ProxyCfg.MaxConnectionNumber = args["maxConnection"] == null ? 20000 : (int)args["maxConnection"];
+                    ProxyCfg.Enable_Auth = enableAuth;
+                    ProxyCfg.Only_WPC_Client = onlyWpc;
+                    ProxyCfg.MaxConnectionNumber = maxConnection;
                     ProxyCfg.Enable_HTTP = enableHttp;
                     ProxyCfg.HTTP_Port = (ushort)httpPort;
 
