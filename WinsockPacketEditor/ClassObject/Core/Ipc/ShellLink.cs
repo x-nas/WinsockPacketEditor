@@ -507,8 +507,8 @@ namespace WinsockPacketEditor.Ipc
         /// 【切口就在这一个方法】进了队列之后，<c>FlushToFeed</c> / DTO / <c>PacketRow</c> /
         /// 前端 <c>stores/packets.ts</c> <b>一行都不用改</b> —— 与代理数据页走的是同一条下游。
         ///
-        /// 归属地在这里查（方案：QQWry 留在外壳）。<c>GetIPLocation</c> 是异步且带记忆化的，
-        /// 26 MB 的库与每包一次查询从此不再占目标进程的线程池（解决 R8）。
+        /// 归属地在这里查（方案：QQWry 留在外壳）。<c>GetIPLocation</c> 不带缓存（IPv4 单次约 1.6 µs，用不着），
+        /// 27 MB 的库与每包两次查询从此不再占目标进程的线程池（解决 R8）。
         /// </summary>
         private async void Ingest(PacketFrame.Decoded d)
         {
@@ -528,8 +528,8 @@ namespace WinsockPacketEditor.Ipc
                     现在计数在目标的 OnPacket 里数、随 1 Hz 的 Stats 报上来，
                     与滤镜那六个全局计数同一条路数。详见 WpeCore.OnPacket 那段说明。
                 */
-                string fromLoc = await Operate.SystemConfig.GetIPLocation(d.From.Split(':')[0]);
-                string toLoc = await Operate.SystemConfig.GetIPLocation(d.To.Split(':')[0]);
+                string fromLoc = await Operate.SystemConfig.GetIPLocation(d.From);
+                string toLoc = await Operate.SystemConfig.GetIPLocation(d.To);
 
                 var pi = new PacketInfo(
                     new DateTime(d.TimeTicks),

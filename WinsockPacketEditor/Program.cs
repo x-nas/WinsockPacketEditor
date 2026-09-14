@@ -75,6 +75,9 @@ namespace WPEHybrid
                 */
                 ShellForm.BeginCreateEnvironment();
 
+                //IP 归属地库同样在后台先读进内存，别让第一个封包去等它
+                Operate.ProxyConfig.Proxy.WarmUpGeoDb();
+
                 Operate.DataBase.InitDB();
                 Operate.SystemConfig.LoadSystemConfig_FromDB();
 

@@ -484,8 +484,8 @@ async function doExport(): Promise<void> {
     1 时间 · 2 滤镜名称   左   —— 一个是定宽的时间戳、一个是长短不一的名字，
                               两列都是"从左边起读"的东西，居中反而让起点上下乱跳
     3 动作 · 4 匹配数 · 5 类型  居中 —— 都是短标签
-    6 长度               内容右、表头居中 —— 数字右对齐便于比大小
-                              （与封包列表那条一样），表头居中好跟两侧看齐
+    6 长度               表头与内容都靠右 —— 数字右对齐便于比大小；
+                              表头若居中，会和右对齐的数字错开半列
 
   三条规则各自命中不同的列，不靠源码顺序赢平局：
   居中那条 (0,2,1)，左对齐与右对齐两条都带一个 nth/last-child、是 (0,3,1)。
@@ -497,6 +497,8 @@ async function doExport(): Promise<void> {
 .head.flt > span:nth-child(-n+2),
 .row.flt > span:nth-child(-n+2) { text-align: left; }
 
+/* 最后一列（长度）表头与内容都靠右 */
+.head.flt > span:last-child,
 .row.flt > span:last-child { text-align: right; }
 
 .row.bad .ct { color: var(--danger); }
