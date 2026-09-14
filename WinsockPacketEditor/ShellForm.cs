@@ -23,7 +23,7 @@ namespace WPEHybrid
     /// 业务逻辑仍在主工程的 Operate 里，两者将来通过 WebBridge（JSON-RPC over postMessage）通信。
     ///
     /// 【前端来源】只加载内置 wwwroot，<b>不开远程加载</b>。
-    /// WPEProxyCap.Hybrid 支持「远程优先 + 本地兜底」，但那是订阅制客户端；
+    /// WPEProxyCap 支持「远程优先 + 本地兜底」，但那是订阅制客户端；
     /// WPE x64 是本地抓包工具，依赖远程服务器会引入离线不可用与中间人风险。
     /// Debug 下例外：连 Vite dev server 以获得热更新。
     /// </summary>
@@ -1233,6 +1233,7 @@ namespace WPEHybrid
             {
                 Operate.ProxyConfig.Proxy.RefreshStatInfo();
                 Operate.ProxyConfig.Proxy.CloseUDPTimeOut();
+                Operate.WPCConfig.Device.SweepControlSessions(DateTime.Now);
 
                 /*
                     发送列表在跑时，三个计数是在后台线程上就地累加的 ——

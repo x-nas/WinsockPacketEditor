@@ -9,6 +9,10 @@
 //   ⑧ 关掉会话快照后 GetAllSessions 立刻能看到新会话（老代码要等 5 秒一拍）
 //   ⑨ 不钩响应（HookTCP_Resp=false）时目标的后续数据仍然转发（老代码只转第一块）
 //   ⑩ 问候与认证粘在一个报文里也能过（既有行为，别改坏）
+//   ㉑ WPC 注册带 os：客户端列表显示「WPC 版本 · 系统」，控制字符被滤掉（2026-09-14）
+//   ㉒ 控制连接的空闲清理：5 分钟内收到过帧就替它续命，超过就关掉并注销（2026-09-14）
+//   ㉓ UDP ASSOCIATE：BND.ADDR 取监听地址；回包头里是目标服务器的地址而不是客户端自己的；
+//      目标负载以 00 00 00 开头也按回包处理（2026-09-14 修，老代码三条都会失败）
 //
 // 编译进产品输出目录运行（依赖按目录解析）：
 //   set VS=<vswhere -latest -property installationPath>
@@ -571,6 +575,114 @@ static class T
             Check("⑲ 数据连接也关了：设备槽为 0、账号离线",
                 Operate.ProxyConfig.Account.Devices.Count(Operate.ProxyConfig.Account.lstAccountInfo.First(a => a.UserName == "cap").AID) == 0
                 && !Operate.ProxyConfig.Account.lstAccountInfo.First(a => a.UserName == "cap").IsOnLine);
+
+            //———————————— 2026-09-14 第四组：手机版 WPC 配套 ————————————
+
+            //㉑ 带 os 注册 → 客户端标签「WPC 1.0 · Android 14」；控制字符（\u0007）被滤掉
+            using (TcpClient c = Dial())
+            {
+                NetworkStream s = c.GetStream();
+                Write(s, 0x05, 0x02, 0x02, 0x80);
+                ReadN(s, 2);
+                WriteFrame(s, 0x01, "{\"user\":\"cap\",\"pass\":\"pw\",\"device\":\"android-dev-0001\",\"version\":\"1.0\",\"client\":\"WPC\",\"os\":\"Android 14\\u0007\"}");
+                byte[] body = ReadFrame(s, out byte type21);
+                Check("㉑ 带 os 注册成功", type21 == 0x81 && Field(Encoding.UTF8.GetString(body), "code") == "0", Encoding.UTF8.GetString(body));
+
+                Thread.Sleep(100);
+                Operate.ProxyConfig.Account.RefreshAuthList().GetAwaiter().GetResult();
+                AuthInfo row21 = Operate.ProxyConfig.Account.lstAuthInfo.ToList().FirstOrDefault(a => a.DeviceId == "android-dev-0001");
+                Check("㉑ 客户端标签 = WPC 1.0 · Android 14", row21 != null && row21.Client == "WPC 1.0 · Android 14", row21 == null ? "no row" : row21.Client);
+                Check("㉑ 没报 os 时标签仍是 WPC 1.0", Operate.WPCConfig.Device.ClientLabel("1.0", "") == "WPC 1.0" && Operate.WPCConfig.Device.ClientLabel("1.0", null) == "WPC 1.0");
+
+                //㉒ 空闲清理：先把 SuperSocket 看到的活跃时间拨回 10 分钟前，最后一帧还是刚才 —— 该续命、不该关
+                ProxySession ctl22 = Operate.ProxyConfig.Proxy.ProxyServer.GetAllSessions().FirstOrDefault(x => x.IsWpcControl && x.DeviceId == "android-dev-0001");
+                Check("㉒ 找到控制连接会话", ctl22 != null);
+                if (ctl22 != null)
+                {
+                    Check("㉒ 空闲判死阈值 ≥ 5 分钟", Operate.WPCConfig.Device.ControlIdleTimeout >= TimeSpan.FromMinutes(5), Operate.WPCConfig.Device.ControlIdleTimeout.ToString());
+
+                    ctl22.LastActiveTime = DateTime.Now.AddMinutes(-10);
+                    int closedA = Operate.WPCConfig.Device.SweepControlSessions(DateTime.Now);
+                    Check("㉒ 5 分钟内收到过帧：不关，并刷新 LastActiveTime", closedA == 0 && ctl22.Connected && ctl22.LastActiveTime > DateTime.Now.AddMinutes(-1),
+                        closedA + " / " + ctl22.LastActiveTime.ToString("HH:mm:ss"));
+
+                    ctl22.WpcLastFrame = DateTime.Now.AddMinutes(-6);
+                    int closedB = Operate.WPCConfig.Device.SweepControlSessions(DateTime.Now);
+                    for (int i = 0; i < 40 && Operate.WPCConfig.Device.Count > 0; i++) { Thread.Sleep(50); }
+                    Check("㉒ 超过 5 分钟没收到帧：关掉并注销", closedB == 1 && Operate.WPCConfig.Device.Count == 0,
+                        closedB + " / count=" + Operate.WPCConfig.Device.Count);
+                }
+            }
+
+            //㉓ UDP ASSOCIATE 与回包地址
+            Check("㉓ ReplyBindAddress：0.0.0.0 与 IPv6 监听回 0.0.0.0，IPv4 原样",
+                Operate.ProxyConfig.Proxy.ReplyBindAddress(IPAddress.Any).SequenceEqual(new byte[4])
+                && Operate.ProxyConfig.Proxy.ReplyBindAddress(IPAddress.IPv6Any).SequenceEqual(new byte[4])
+                && Operate.ProxyConfig.Proxy.ReplyBindAddress(null).SequenceEqual(new byte[4])
+                && Operate.ProxyConfig.Proxy.ReplyBindAddress(IPAddress.Loopback).SequenceEqual(new byte[] { 127, 0, 0, 1 }));
+
+            //目标放在 127.0.0.2：与客户端（127.0.0.1）不同 IP，才能验「按来源分辨请求 / 回包」
+            using (UdpClient echoUdp = new UdpClient(new IPEndPoint(IPAddress.Parse("127.0.0.2"), 0)))
+            using (UdpClient cli = new UdpClient(new IPEndPoint(IPAddress.Loopback, 0)))
+            using (TcpClient c = Dial())
+            {
+                IPEndPoint echoEp = (IPEndPoint)echoUdp.Client.LocalEndPoint;
+                Task.Run(() =>
+                {
+                    try
+                    {
+                        while (true)
+                        {
+                            IPEndPoint from = null;
+                            byte[] d = echoUdp.Receive(ref from);
+                            echoUdp.Send(d, d.Length, from);
+                        }
+                    }
+                    catch { }
+                });
+
+                NetworkStream s = c.GetStream();
+                Write(s, 0x05, 0x01, 0x02);
+                ReadN(s, 2);
+                byte[] auth = AuthPacket("wpe", "s3cret");
+                s.Write(auth, 0, auth.Length);
+                ReadN(s, 2);
+                Write(s, 0x05, 0x03, 0x00, 0x01, 0, 0, 0, 0, 0, 0);
+                byte[] rep = ReadN(s, 10);
+                int relayPort = (rep[8] << 8) | rep[9];
+                Check("㉓ UDP ASSOCIATE 成功，BND.ADDR = 监听地址 127.0.0.1", rep[1] == 0x00 && rep[3] == 0x01 && rep[4] == 127 && rep[5] == 0 && rep[6] == 0 && rep[7] == 1 && relayPort > 0, BitConverter.ToString(rep));
+
+                cli.Client.ReceiveTimeout = 5000;
+                IPEndPoint relayEp = new IPEndPoint(IPAddress.Loopback, relayPort);
+
+                byte[][] payloads = { Pattern(64, 11), new byte[] { 0, 0, 0, 1, 2, 3, 4, 5, 6, 7 } };
+                string[] names = { "普通负载", "负载以 00 00 00 开头" };
+
+                for (int k = 0; k < payloads.Length; k++)
+                {
+                    List<byte> dgram = new List<byte> { 0, 0, 0, 0x01 };
+                    dgram.AddRange(echoEp.Address.GetAddressBytes());
+                    dgram.Add((byte)(echoEp.Port >> 8)); dgram.Add((byte)(echoEp.Port & 0xFF));
+                    dgram.AddRange(payloads[k]);
+                    cli.Send(dgram.ToArray(), dgram.Count, relayEp);
+
+                    try
+                    {
+                        IPEndPoint from = null;
+                        byte[] back = cli.Receive(ref from);
+                        bool headOk = back.Length >= 10 && back[0] == 0 && back[1] == 0 && back[2] == 0 && back[3] == 0x01
+                            && back[4] == 127 && back[5] == 0 && back[6] == 0 && back[7] == 2
+                            && ((back[8] << 8) | back[9]) == echoEp.Port;
+                        bool bodyOk = back.Length == 10 + payloads[k].Length && back.Skip(10).SequenceEqual(payloads[k]);
+                        Check("㉓ " + names[k] + "：回包头是目标地址 127.0.0.2:" + echoEp.Port + "，负载原样", headOk && bodyOk,
+                            BitConverter.ToString(back, 0, Math.Min(back.Length, 12)));
+                    }
+                    catch (Exception ex)
+                    {
+                        Check("㉓ " + names[k] + "：回包头是目标地址，负载原样", false, ex.Message);
+                    }
+                }
+            }
 
             //⑳ 认证关着时不选 0x80（WPC 会退回普通模式）
             Operate.ProxyConfig.Proxy.Enable_Auth = false;

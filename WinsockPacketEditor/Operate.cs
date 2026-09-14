@@ -7069,6 +7069,7 @@ namespace WinsockPacketEditor
                                     deviceKey = dev.DeviceId;
                                     psSession.DeviceId = dev.DeviceId;
                                     psSession.WpcVersion = dev.Version;
+                                    psSession.WpcOs = dev.Os;
                                 }
                             }
                             else if (Operate.ProxyConfig.Proxy.Only_WPC_Client)
@@ -7331,14 +7332,20 @@ namespace WinsockPacketEditor
                         {
                             case ProtocolType.Tcp:
 
-                                bServerIP = Operate.ProxyConfig.Proxy.ProxyTCP_IP.GetAddressBytes();
+                                bServerIP = ReplyBindAddress(Operate.ProxyConfig.Proxy.ProxyTCP_IP);
                                 bServerPort = BitConverter.GetBytes(Operate.ProxyConfig.Proxy.SOCKS5_Port);
 
                                 break;
 
                             case ProtocolType.Udp:
 
-                                bServerIP = Operate.ProxyConfig.Proxy.ProxyUDP_IP.GetAddressBytes();
+                                /*
+                                    UDP 中继套接字绑在 ProxyTCP_IP 上（见 CreateNewUDP）。自动监听时那是 0.0.0.0，
+                                    应答里就照实回 0.0.0.0 —— mihomo / sing-box / 本程序的 MustTcpUdpRelay 都约定把它
+                                    换成「连进来的那个服务器地址」。以前回的是本机网卡地址（ProxyUDP_IP）：WPE 在 NAT 或云主机后面时
+                                    那是个内网地址，外网客户端的 UDP 全发到内网地址上丢掉（2026-09-14 改）。
+                                */
+                                bServerIP = ReplyBindAddress(Operate.ProxyConfig.Proxy.ProxyTCP_IP);
                                 bServerPort = BitConverter.GetBytes(UDPPort);
 
                                 break;
@@ -7359,6 +7366,16 @@ namespace WinsockPacketEditor
                     {
                         Operate.DoLog(nameof(SendCommandResponse), ex);
                     }
+                }
+
+                /// <summary>
+                /// SOCKS5 应答里的 BND.ADDR（本服务只回 IPv4 形式）：IPv4 地址原样；0.0.0.0、IPv6 监听或空都回 0.0.0.0，
+                /// 由客户端换成它连进来的地址。以前 IPv6 监听时把 16 字节往 4 字节里拷，应答直接抛异常发不出去。
+                /// </summary>
+                public static byte[] ReplyBindAddress(IPAddress ip)
+                {
+                    if (ip != null && ip.AddressFamily == AddressFamily.InterNetwork) { return ip.GetAddressBytes(); }
+                    return new byte[4];
                 }
 
                 #endregion
@@ -7730,8 +7747,14 @@ namespace WinsockPacketEditor
                             return;
                         }
 
-                        ReadOnlySpan<byte> bIP = pu.ClientEndPoint.Address.GetAddressBytes();
-                        ushort port = ((ushort)pu.ClientEndPoint.Port);
+                        /*
+                            RFC 1928 第 7 节：UDP 应答头里的 DST.ADDR / DST.PORT 是「这个数据报从哪儿来」—— 目标服务器的地址。
+                            以前写成了客户端自己的地址：mihomo 把它当回包的源地址写回 TUN，
+                            游戏里 connect 过的 UDP 套接字对不上来源，回包全被丢掉（2026-09-14 修）。
+                        */
+                        IPAddress origin = epRemote.Address.IsIPv4MappedToIPv6 ? epRemote.Address.MapToIPv4() : epRemote.Address;
+                        ReadOnlySpan<byte> bIP = origin.GetAddressBytes();
+                        ushort port = ((ushort)epRemote.Port);
                         ReadOnlySpan<byte> bPort = stackalloc byte[2] { (byte)(port >> 8), (byte)port };
 
                         byte[] responseBuffer = ArrayPool<byte>.Shared.Rent(4 + bIP.Length + bPort.Length + bData.Length);
@@ -7740,7 +7763,7 @@ namespace WinsockPacketEditor
                         bResponseData[0] = 0x00;
                         bResponseData[1] = 0x00;
                         bResponseData[2] = 0x00;
-                        bResponseData[3] = (byte)Operate.ProxyConfig.Proxy.AddressType.IPv4;
+                        bResponseData[3] = (byte)(bIP.Length == 16 ? Operate.ProxyConfig.Proxy.AddressType.IPv6 : Operate.ProxyConfig.Proxy.AddressType.IPv4);
                         bIP.CopyTo(bResponseData.Slice(4, bIP.Length));
                         bPort.CopyTo(bResponseData.Slice(4 + bIP.Length, bPort.Length));
                         bData.CopyTo(bResponseData.Slice(4 + bIP.Length + bPort.Length, bData.Length));
@@ -13080,7 +13103,7 @@ namespace WinsockPacketEditor
                             int DevicesNumber = devicesByAccount.ContainsKey(AID) ? devicesByAccount[AID] : 0;
                             string DeviceId = latest.DeviceId ?? string.Empty;
                             //只有 WPC 有「客户端」可写（带版本）；普通 SOCKS5 客户端留空，界面显示「—」—— 能连上来的本来就都是 SOCKS5，写出来没有信息量
-                            string Client = DeviceId.Length > 0 ? ("WPC " + (latest.WpcVersion ?? string.Empty)).TrimEnd() : string.Empty;
+                            string Client = DeviceId.Length > 0 ? WPCConfig.Device.ClientLabel(latest.WpcVersion, latest.WpcOs) : string.Empty;
 
                             return new { AID, AuthIP, IPLocation, AuthTime, LinksNumber, DevicesNumber, DeviceId, Client };
                         }).ToList();
@@ -28501,6 +28524,8 @@ namespace WinsockPacketEditor
                     public string DeviceId;
                     public string ClientIP;
                     public string Version;
+                    /// <summary>客户端自报的系统（"Android 14" / "Windows 11 Pro x64"），只用于显示；可空。</summary>
+                    public string Os;
                     public DateTime RegisteredAt;
                     public ProxySession Control;
                 }
@@ -28544,6 +28569,9 @@ namespace WinsockPacketEditor
                             Session.Close(SuperSocket.SocketBase.CloseReason.ProtocolError);
                             return;
                         }
+
+                        //任何一帧都算活着（Ping 也是）：SweepControlSessions 按它判控制连接有没有断
+                        Session.WpcLastFrame = DateTime.Now;
 
                         switch (type)
                         {
@@ -28611,6 +28639,7 @@ namespace WinsockPacketEditor
                     string device = ((string)req["device"] ?? string.Empty).Trim();
                     string version = ((string)req["version"] ?? string.Empty).Trim();
                     if (version.Length > 32) { version = version.Substring(0, 32); }
+                    string os = CleanLabel((string)req["os"], 48);
 
                     if (user.Length == 0 || !IsValidDeviceId(device)) { return (RegisterCode.BadRequest, null, "user / device"); }
                     if (!ProxyConfig.Proxy.Enable_Auth) { return (RegisterCode.AuthOff, null, "auth off"); }
@@ -28642,6 +28671,7 @@ namespace WinsockPacketEditor
                         DeviceId = device,
                         ClientIP = Session.ClientIP,
                         Version = version,
+                        Os = os,
                         RegisteredAt = DateTime.Now,
                         Control = Session,
                     };
@@ -28651,6 +28681,7 @@ namespace WinsockPacketEditor
                     Session.DeviceId = device;
                     Session.DeviceKey = device;
                     Session.WpcVersion = version;
+                    Session.WpcOs = os;
                     Session.WpcToken = token;
 
                     byToken[token] = dev;
@@ -28697,6 +28728,75 @@ namespace WinsockPacketEditor
                     var pairs = (ICollection<KeyValuePair<string, WpcDevice>>)byAccountDevice;
                     pairs.Remove(new KeyValuePair<string, WpcDevice>(PairKey(dev.AID, dev.DeviceId), dev));
                     ProxyConfig.Account.Devices.Remove(dev.AID, dev.DeviceId);
+                }
+
+                /// <summary>客户端列表里「客户端」那一格：WPC 版本，带上自报的系统（有的话）。例："WPC 1.0 · Android 14"。</summary>
+                public static string ClientLabel(string Version, string Os)
+                {
+                    string s = ("WPC " + (Version ?? string.Empty)).TrimEnd();
+                    if (!string.IsNullOrEmpty(Os)) { s += " · " + Os; }
+                    return s;
+                }
+
+                /// <summary>客户端自报的显示文字：去掉控制字符、截到 Max 个字符。</summary>
+                private static string CleanLabel(string Value, int Max)
+                {
+                    if (string.IsNullOrEmpty(Value)) { return string.Empty; }
+                    StringBuilder sb = new StringBuilder(Math.Min(Value.Length, Max));
+                    foreach (char c in Value)
+                    {
+                        if (sb.Length >= Max) { break; }
+                        if (c < 0x20 || c == 0x7F) { continue; }
+                        sb.Append(c);
+                    }
+                    return sb.ToString().Trim();
+                }
+
+                /// <summary>
+                /// 控制连接多久收不到任何帧就判死：至少 5 分钟，且不短于普通连接的空闲超时。
+                /// WPC 每 30 秒 Ping 一次；手机被系统短暂冻结时 Ping 会迟到，按普通连接的 3 分钟算太紧。
+                /// </summary>
+                public static TimeSpan ControlIdleTimeout
+                {
+                    get
+                    {
+                        TimeSpan min = TimeSpan.FromMinutes(5);
+                        return ProxyConfig.Proxy.TCPTimeout > min ? ProxyConfig.Proxy.TCPTimeout : min;
+                    }
+                }
+
+                /// <summary>
+                /// 每秒一拍（ShellForm.OnStatTick）：控制连接在 ControlIdleTimeout 内收到过帧，就替它刷新 LastActiveTime，
+                /// 免得被 SuperSocket 按普通连接的空闲超时清掉；超过的主动关掉（半开连接 / 客户端已经不在了），关闭时自动注销。
+                /// 返回这一拍关掉的条数。
+                /// </summary>
+                public static int SweepControlSessions(DateTime Now)
+                {
+                    int closed = 0;
+                    try
+                    {
+                        TimeSpan limit = ControlIdleTimeout;
+                        foreach (WpcDevice dev in byToken.Values.ToList())
+                        {
+                            ProxySession s = dev.Control;
+                            if (s == null || !s.Connected) { continue; }
+
+                            if (Now - s.WpcLastFrame > limit)
+                            {
+                                try { s.Close(SuperSocket.SocketBase.CloseReason.TimeOut); } catch { }
+                                closed++;
+                            }
+                            else
+                            {
+                                s.LastActiveTime = Now;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        DoLog(nameof(SweepControlSessions), ex);
+                    }
+                    return closed;
                 }
 
                 public static void Clear()

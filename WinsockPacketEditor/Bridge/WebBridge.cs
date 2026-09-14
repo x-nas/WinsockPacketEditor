@@ -16,7 +16,7 @@ namespace WPEHybrid
     /// JSON-RPC over postMessage（B10b）。本类只做「消息路由 + 序列化 + 线程切换」，不含业务逻辑。
     ///
     /// 【双向请求】
-    /// 与 WPEProxyCap.Hybrid 的桥不同，这里两个方向都能发起请求：
+    /// 与 WPEProxyCap 的桥不同，这里两个方向都能发起请求：
     ///   JS  → C#  前端调 Operate 的方法（取封包字节、启停代理…）
     ///   C# → JS   IUiHost 的弹窗 / 文件框 / 表单，Operate 在 await 前端的回答
     /// 后者是 WPE 特有的：B0–B8 把 96 处弹窗收口到 IUiHost，它们全是要等结果的。

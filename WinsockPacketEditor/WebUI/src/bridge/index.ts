@@ -1,6 +1,6 @@
 // JS 侧 JSON-RPC 客户端：封装与 C# WebBridge 的通信。
 //
-// 与 WPEProxyCap.Hybrid 的 bridge.ts 相比多了一个方向：
+// 与 WPEProxyCap 的 bridge.ts 相比多了一个方向：
 //   call(m, a)   JS → C#   调 Operate 的方法，等结果
 //   on(n, cb)    C# → JS   单向推送（封包批次、通知、遮罩…）
 //   onAsk(m, h)  C# → JS   C# 发起提问、等前端回答 ← Hybrid 没有这一路

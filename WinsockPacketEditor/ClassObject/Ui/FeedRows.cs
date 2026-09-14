@@ -419,7 +419,7 @@ namespace WinsockPacketEditor
         public string AuthTime;
         /// <summary>WPC 的设备指纹；普通客户端为空串。</summary>
         public string DeviceId;
-        /// <summary>"WPC 1.0" / "SOCKS5"。</summary>
+        /// <summary>WPC 版本 + 自报系统，如 "WPC 1.0 · Android 14"；普通客户端为空串。</summary>
         public string Client;
 
         public static AuthRow From_(AuthInfo Src)

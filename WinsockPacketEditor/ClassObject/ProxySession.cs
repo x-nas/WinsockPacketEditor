@@ -23,12 +23,15 @@ namespace WinsockPacketEditor
             设备身份（2026-09-14）。
             DeviceKey：认证成功后占的设备槽的键 —— WPC 连接是设备指纹，普通连接是 "ip:" + 源 IP；
                        null 表示还没认证。OnSessionClosed 按它释放。
-            DeviceId / WpcVersion：只有 WPC 连接有（令牌认证的数据连接、或控制连接本身）。
+            DeviceId / WpcVersion / WpcOs：只有 WPC 连接有（令牌认证的数据连接、或控制连接本身）。
+            WpcLastFrame：控制连接最后一次收到帧的时间，WPCConfig.Device.SweepControlSessions 按它判活。
             IsWpcControl / WpcToken：这条连接是 WPC 的控制连接（私有方法 0x80），令牌由 WPCConfig.Device 签发。
         */
         public string DeviceKey = null;
         public string DeviceId = null;
         public string WpcVersion = null;
+        public string WpcOs = null;
+        public DateTime WpcLastFrame = DateTime.MinValue;
         public bool IsWpcControl = false;
         public string WpcToken = null;
 
@@ -520,7 +523,17 @@ namespace WinsockPacketEditor
 
                 Span<byte> bData = e.Buffer.AsSpan(e.Offset, e.BytesTransferred);
 
-                if (bData[0] == 0 && bData[1] == 0 && bData[2] == 0)
+                /*
+                    分辨「客户端发来的请求」与「目标服务器发回的应答」。
+                    以前只看前三个字节是不是 00 00 00：目标的负载恰好以三个 0 开头时（游戏协议里不少见）会被当成请求再转出去。
+                    现在认过客户端之后按来源比：端点对得上就是客户端；同一个 IP 换了端口（手机网络 NAT 重新映射）
+                    且带着 SOCKS5 UDP 头的也算客户端。还没认过客户端时（第一包）照旧看包头（2026-09-14）。
+                */
+                bool zeroHeader = bData.Length >= 3 && bData[0] == 0 && bData[1] == 0 && bData[2] == 0;
+                IPEndPoint known = pu.ClientEndPoint;
+                bool fromClient = known == null ? zeroHeader : (epRemote.Equals(known) || (zeroHeader && epRemote.Address.Equals(known.Address)));
+
+                if (fromClient)
                 {
                     Operate.ProxyConfig.Proxy.ProcessUdpRequest(this, pu, epRemote, bData);
                 }
