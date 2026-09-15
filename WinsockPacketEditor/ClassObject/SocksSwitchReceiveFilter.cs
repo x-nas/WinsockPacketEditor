@@ -67,7 +67,8 @@ namespace WinsockPacketEditor
 
         public void Reset()
         {
-            throw new NotImplementedException();
+            //SuperSocket 1.6 不会调它（AppSession 里没有 Reset 调用），留个空实现比抛 NotImplemented 稳妥
+            this.State = FilterState.Normal;
         }
 
         public FilterState State { get; private set; }

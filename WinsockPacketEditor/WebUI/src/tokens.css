@@ -8,7 +8,7 @@
   ② 那一份不是副本 —— 主工程的 csproj 用 <Content Include Link=…> 把<b>这个文件</b>
   投影到输出目录的 Web\tokens.css。改这里，两边一起变。
 
-  ⚠️ 还剩一份真正的副本：官网 WPEWeb.Cyber/assets/css/cyber.css 的 :root。
+  ⚠️ 还剩一份真正的副本：官网 WPEWeb/assets/css/cyber.css 的 :root。
   那是另一个仓库、另一套部署（IIS 发静态站），没法共享文件 —— 改配色仍要两处一起改。
 
   ⚠️ 引用这个文件时 @import 必须排在<b>所有其它规则之前</b>（@charset / @layer 除外）。

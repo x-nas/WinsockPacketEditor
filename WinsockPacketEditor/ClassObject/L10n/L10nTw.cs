@@ -153,6 +153,12 @@ namespace WinsockPacketEditor
             d["ProxyModeForm.StartSocks5Proxy"] = "開始 SOCKS5 代理";
             d["ProxyModeForm.StartSocks5Proxy.Fail"] = "啟動 SOCKS5 代理失敗";
             d["ProxyModeForm.SetupSocks5Proxy.Fail"] = "設定 SOCKS5 代理失敗";
+            d["ProxyModeForm.MaxConnection.Capped"] = "最大連線數 {0} 超過本機可預留的上限 {1}（每個連線 {2} KB），本次按 {1} 啟動";
+            d["ProxyModeForm.MaxConnection.Fallback"] = "按最大連線數 {0} 啟動失敗（可能是記憶體不足以預留緩衝），改回預設值 {1} 重試";
+            d["ProxySettingsForm.MaxConnection.Error"] = "最大連線數必須在 1 ~ {0} 之間（每個連線預留 {1} KB，本機記憶體 {2} GB）";
+            d["ProxySettingsForm.OnlyWpc.NeedAuth"] = "「只允許 WPC 用戶端連線」需要先啟用身分認證";
+            d["WPC.OnlyWpc.Reject"] = "已開啟「只允許 WPC 用戶端連線」，拒絕普通 SOCKS5 用戶端 [ {0} ]";
+            d["WPC.Register.Log"] = "WPC 裝置註冊: {0} [ {1} ] 裝置 {2} 版本 {3}";
             d["ProxyModeForm.StopProxy"] = "停止 SOCKS5 代理";
             d["ProxyModeForm.ProxyServerIP"] = "SOCKS5 代理地址 : TCP [ {0}:{2} ] UDP [ {1}:{2} ]";
             d["ProxyModeForm.ProxyServer.Auth"] = "已啟用 SOCKS5 代理服務身份認證";

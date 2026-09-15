@@ -7,7 +7,7 @@ namespace WPEHybrid
 
     /*
         桥上跑四种消息，用 type 字段区分。两个方向都能发起请求，这一点和
-        WPEProxyCap.Hybrid 不同 —— 那边只有「JS 发起、C# 应答」加上「C# 单向推事件」。
+        WPEProxyCap 不同 —— 那边只有「JS 发起、C# 应答」加上「C# 单向推事件」。
 
         WPE 这边必须支持反方向：IUiHost.ConfirmAsync / PickSaveAsync / PromptAsync 都是
         C# 问、前端答，Operate 在 await 它们的结果。

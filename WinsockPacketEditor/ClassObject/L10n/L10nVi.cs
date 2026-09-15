@@ -147,6 +147,12 @@ namespace WinsockPacketEditor
             d["ProxyModeForm.StartSocks5Proxy"] = "Bật proxy Socks5";
             d["ProxyModeForm.StartSocks5Proxy.Fail"] = "Không bật được proxy Socks5";
             d["ProxyModeForm.SetupSocks5Proxy.Fail"] = "Không khởi tạo được proxy Socks5";
+            d["ProxyModeForm.MaxConnection.Capped"] = "Số kết nối tối đa {0} vượt quá mức máy này có thể dành trước ({1}, mỗi kết nối {2} KB); lần này khởi động với {1}";
+            d["ProxyModeForm.MaxConnection.Fallback"] = "Khởi động với số kết nối tối đa {0} thất bại (có thể không đủ bộ nhớ để dành bộ đệm); thử lại với giá trị mặc định {1}";
+            d["ProxySettingsForm.MaxConnection.Error"] = "Số kết nối tối đa phải từ 1 đến {0} (mỗi kết nối dành trước {1} KB, máy này có {2} GB bộ nhớ)";
+            d["ProxySettingsForm.OnlyWpc.NeedAuth"] = "\"Chỉ cho phép máy khách WPC\" cần bật xác thực trước";
+            d["WPC.OnlyWpc.Reject"] = "Đang bật \"Chỉ cho phép máy khách WPC\", đã từ chối máy khách SOCKS5 thường [ {0} ]";
+            d["WPC.Register.Log"] = "Đã đăng ký thiết bị WPC: {0} [ {1} ] thiết bị {2} phiên bản {3}";
             d["ProxyModeForm.StopProxy"] = "Dừng proxy SOCKS5";
             d["ProxyModeForm.ProxyServerIP"] = "IP máy chủ proxy : TCP [ {0} ] UDP [ {1} ]";
             d["ProxyModeForm.ProxyServer.Auth"] = "Đã bật xác thực cho dịch vụ proxy";

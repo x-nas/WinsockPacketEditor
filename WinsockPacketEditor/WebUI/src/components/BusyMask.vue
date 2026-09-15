@@ -20,7 +20,7 @@ defineProps<{ text?: string }>()
   <div class="busy" role="alert" aria-busy="true">
     <div class="box">
       <!--
-        三格音量条 —— 与官网 WPEWeb.Cyber 的加载动画是<b>同一个</b>件，
+        三格音量条 —— 与官网 WPEWeb 的加载动画是<b>同一个</b>件，
         取值逐字照抄 assets/css/cyber.css 的 .loader（见下面样式块的说明）。
       -->
       <span class="loader"><i /><i /><i /></span>
@@ -51,7 +51,7 @@ defineProps<{ text?: string }>()
 }
 
 /*
-  ⚠️ 这几条是<b>官网 WPEWeb.Cyber/assets/css/cyber.css 的 .loader 逐字搬过来的</b>
+  ⚠️ 这几条是<b>官网 WPEWeb/assets/css/cyber.css 的 .loader 逐字搬过来的</b>
   （宽 6 / 高 20 / 缝 5 / 1s ease-in-out / 三格错开 0 · .18s · .36s / 0 0 8px 辉光），
   官网首页那四格统计的加载态就是它。改动这里等于让两边不一样，要改就两边一起改。
 

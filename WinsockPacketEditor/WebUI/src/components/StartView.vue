@@ -2,7 +2,7 @@
 /*
   启动页（模式选择）—— 对应 WinForms 的 Forms/StartForm.cs。
 
-  风格取自官网 WPEWeb.Cyber：glitch 标题、eyebrow、发丝分隔的卡片网格、终端自检块。
+  风格取自官网 WPEWeb：glitch 标题、eyebrow、发丝分隔的卡片网格、终端自检块。
   配色令牌在 style.css 里，与 cyber.css 的 :root 逐个对应。
 
   【卡片网格里只有「模式」】

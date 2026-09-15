@@ -4197,6 +4197,7 @@ namespace WinsockPacketEditor
                         new XElement("MustTCP_AppointPort", ProxyConfig.Proxy.MustTCP_AppointPort),
                         new XElement("MustTCP_AppointPortContent", ProxyConfig.Proxy.MustTCP_AppointPortContent),
                         new XElement("EnableFireWall", ProxyConfig.Proxy.EnableFireWall),
+                        new XElement("Only_WPC_Client", ProxyConfig.Proxy.Only_WPC_Client),
                         new XElement("WhiteListMode", ProxyConfig.Proxy.WhiteListMode),
                         new XElement("FireWall_AutoWhiteList_AuthSuccess", ProxyConfig.Proxy.FireWall_AutoWhiteList_AuthSuccess),
                         new XElement("FireWall_AutoBlackList_UnSupport", ProxyConfig.Proxy.FireWall_AutoBlackList_UnSupport),
@@ -4259,6 +4260,9 @@ namespace WinsockPacketEditor
                         ProxyConfig.Proxy.MustTCP_AppointPort = Convert.ToBoolean(ProxyMode.Rows[0]["MustTCP_AppointPort"]);
                         ProxyConfig.Proxy.MustTCP_AppointPortContent = ProxyMode.Rows[0]["MustTCP_AppointPortContent"].ToString();
                         ProxyConfig.Proxy.EnableFireWall = Convert.ToBoolean(ProxyMode.Rows[0]["EnableFireWall"]);
+                        //2026-09-14 加的列：老库靠 EnsureColumn 补，读取端再兜一层
+                        ProxyConfig.Proxy.Only_WPC_Client = ProxyMode.Columns.Contains("Only_WPC_Client") && ProxyMode.Rows[0]["Only_WPC_Client"] != DBNull.Value
+                            && Convert.ToBoolean(ProxyMode.Rows[0]["Only_WPC_Client"]);
                         ProxyConfig.Proxy.WhiteListMode = Convert.ToBoolean(ProxyMode.Rows[0]["WhiteListMode"]);
                         ProxyConfig.Proxy.FireWall_AutoWhiteList_AuthSuccess = Convert.ToBoolean(ProxyMode.Rows[0]["FireWall_AutoWhiteList_AuthSuccess"]);
                         ProxyConfig.Proxy.FireWall_AutoBlackList_UnSupport = Convert.ToBoolean(ProxyMode.Rows[0]["FireWall_AutoBlackList_UnSupport"]);
@@ -4467,6 +4471,12 @@ namespace WinsockPacketEditor
                     if (EnableFireWall != null)
                     {
                         ProxyConfig.Proxy.EnableFireWall = Convert.ToBoolean(EnableFireWall.Value);
+                    }
+
+                    XElement Only_WPC_Client = xeProxyMode.Element("Only_WPC_Client");
+                    if (Only_WPC_Client != null)
+                    {
+                        ProxyConfig.Proxy.Only_WPC_Client = Convert.ToBoolean(Only_WPC_Client.Value);
                     }
 
                     XElement WhiteListMode = xeProxyMode.Element("WhiteListMode");
@@ -6108,7 +6118,7 @@ namespace WinsockPacketEditor
                 public static string ProxyIP = string.Empty;
                 public static ushort SOCKS5_Port = 1080;
                 public static ushort HTTP_Port = 1081;
-                public static int MaxConnectionNumber = 20000;
+                public static int MaxConnectionNumber = DefaultMaxConnectionNumber;
                 public static long Total_Request = 0;
                 public static long Total_Response = 0;
                 /*
@@ -6128,6 +6138,12 @@ namespace WinsockPacketEditor
                 public static readonly TimeSpan TCPTimeout = TimeSpan.FromMinutes(3);
                 public static readonly TimeSpan UDPTimeout = TimeSpan.FromMinutes(3);
                 public static readonly TimeSpan CacheExpiration = TimeSpan.FromMinutes(5);
+                /*
+                    只允许 WPC 客户端连接（2026-09-14）。
+                    开着时 SOCKS5 认证只接受 WPC 经控制通道（私有方法 0x80，见 WPCConfig.Device）注册后拿到的令牌，
+                    普通客户端即使账号密码正确也被拒。必须先开账号认证（saveProxySetting 校验）。
+                */
+                public static bool Only_WPC_Client = false;
                 public static bool EnableFireWall = false;
                 public static bool WhiteListMode = false;
                 public static bool FireWall_AutoWhiteList_AuthSuccess = false;
@@ -6138,7 +6154,22 @@ namespace WinsockPacketEditor
                 public static bool Enable_UnPack = false;
                 public static string UnPack_Head = "01 00 00", UnPack_Length = "4-5";
                 private static ArrayPool<byte> ProxyBufferPool = ArrayPool<byte>.Shared;
-                public static int ProxyReceiveBufferSize = 65535;
+                /*
+                    每条 TCP 连接的接收缓冲。<b>两头共用同一个值</b>：
+                      · SuperSocket 那头（客户端 → WPE）：ServerConfig.ReceiveBufferSize，
+                        它会在 Start() 时按 ReceiveBufferSize × MaxConnectionNumber 一次性分配成
+                        <b>一个</b> byte[]，并预建同样多的 SocketAsyncEventArgs；
+                      · 目标那头（目标 → WPE）：ProxySession 连上目标时从 ArrayPool 租的那块。
+
+                    2026-09-14 从 65535 降到 16 KB：老值配上默认 20000 个连接是 1.3 GB 的预分配
+                    （实测私有提交 +1379 MB），而游戏包很小，吞吐靠 IOCP 的完成频率不靠单次大小。
+                    ProxyReceiveBufferSize 由 ProxyAppServer.Setup 按实际生效的配置回写，两头永远一致。
+                */
+                public const int ProxyReceiveBufferBytes = 16 * 1024;
+                public static int ProxyReceiveBufferSize = ProxyReceiveBufferBytes;
+
+                /// <summary>最大连接数默认值（也是启动失败时的回落值）。</summary>
+                public const int DefaultMaxConnectionNumber = 5000;
                 public static BindingList<BlackListInfo> lstBlackList = new BindingList<BlackListInfo>();
                 public static BindingList<WhiteListInfo> lstWhiteList = new BindingList<WhiteListInfo>();
                 public static readonly ConcurrentDictionary<string, IPAddress> DnsCache = new ConcurrentDictionary<string, IPAddress>(StringComparer.OrdinalIgnoreCase);
@@ -6215,6 +6246,8 @@ namespace WinsockPacketEditor
                     AuthUserName = 1,
                     Command = 2,
                     ForwardData = 3,
+                    /// <summary>WPC 控制连接：握手选了私有方法 0x80 之后，这条连接只走控制帧（WPCConfig.Device）。</summary>
+                    WpcControl = 4,
                 }
 
                 public enum AuthType : byte
@@ -6222,6 +6255,8 @@ namespace WinsockPacketEditor
                     None = 0,
                     GSSAPI = 1,
                     UserName = 2,
+                    /// <summary>RFC 1928 留给私有方法的区间；WPC 用它开控制通道。</summary>
+                    Wpc = 0x80,
                 }
 
                 public enum AddressType : byte
@@ -6412,6 +6447,58 @@ namespace WinsockPacketEditor
                     return false;
                 }
 
+                #region//最大连接数的封顶（按本机内存）
+
+                /*
+                    SuperSocket 1.6 在 Start() 里按 ReceiveBufferSize × MaxConnectionNumber
+                    <b>一次性</b>分配一个 byte[] 当接收缓冲池，所以最大连接数不是一个随手填的数字，
+                    它直接决定启动时要提交多少内存，填大了 Start() 直接失败（OutOfMemory）。
+
+                    封顶规则（2026-09-14 定）：
+                      · 64 位进程：min(物理内存 × 50%, 1.5 GB)。1.5 GB 是留给 .NET 单个数组
+                        不到 2 GB 那条天花板的余量；机器 ≥ 4 GB 时起作用的都是这条。
+                      · 32 位进程：256 MB（地址空间只有 2 到 3 GB）。
+                      · 取不到内存大小时按 512 MB。
+
+                    校验做两次：保存设置时按本机算一次（saveProxySetting）；启动时再算一次 ——
+                    配置库会随「备份设置」搬到别的机器上，那台机器可能装不下。
+                */
+                public static long MaxConnectionPreallocCap()
+                {
+                    const long GB = 1024L * 1024 * 1024;
+
+                    if (!Environment.Is64BitProcess) { return 256L * 1024 * 1024; }
+
+                    ulong phys = Kernel32.TotalPhysicalMemory();
+                    if (phys == 0) { return 512L * 1024 * 1024; }
+
+                    long half = (long)(phys / 2);
+                    long ceiling = (long)(1.5 * GB);
+                    return Math.Min(half, ceiling);
+                }
+
+                /// <summary>本机允许的最大连接数上限（= 预留内存封顶 ÷ 每连接缓冲）。</summary>
+                public static int MaxConnectionCap()
+                {
+                    long cap = MaxConnectionPreallocCap() / ProxyReceiveBufferBytes;
+                    return (int)Math.Max(1, Math.Min(int.MaxValue, cap));
+                }
+
+                /// <summary>把最大连接数收进 [1, 本机上限]；非法值回默认。</summary>
+                public static int NormalizeMaxConnection(int Value)
+                {
+                    if (Value < 1) { return DefaultMaxConnectionNumber; }
+                    return Math.Min(Value, MaxConnectionCap());
+                }
+
+                /// <summary>给定连接数在启动时会预留多少字节。</summary>
+                public static long PreallocBytes(int Connections)
+                {
+                    return (long)Math.Max(0, Connections) * ProxyReceiveBufferBytes;
+                }
+
+                #endregion
+
                 private static bool InitSocks5Proxy()
                 {
                     try
@@ -6428,6 +6515,22 @@ namespace WinsockPacketEditor
 
                         if (ProxyServer.State != ServerState.Running)
                         {
+                            /*
+                                启动前再按本机内存收一次最大连接数（见 MaxConnectionPreallocCap 的注释）。
+                                收过了就记一条日志，让用户知道为什么跟设置页填的不一样。
+                            */
+                            int wanted = MaxConnectionNumber;
+                            int cap = MaxConnectionCap();
+                            if (wanted > cap || wanted < 1)
+                            {
+                                MaxConnectionNumber = NormalizeMaxConnection(wanted);
+                                string sCap = string.Format(
+                                    UI.T("ProxyModeForm.MaxConnection.Capped", "最大连接数 {0} 超过本机可预留的上限 {1}（每个连接 {2} KB），本次按 {1} 启动"),
+                                    wanted, MaxConnectionNumber, ProxyReceiveBufferBytes / 1024);
+                                DoLog(nameof(InitSocks5Proxy), sCap);
+                                UI.Toast(UiIcon.Warn, sCap);
+                            }
+
                             ServerConfig config = new ServerConfig
                             {
                                 Ip = ProxyTCP_IP.ToString(),
@@ -6439,8 +6542,8 @@ namespace WinsockPacketEditor
                                 MaxConnectionNumber = MaxConnectionNumber,
                                 ListenBacklog = 1000,
 
-                                // 缓冲区设置
-                                ReceiveBufferSize = 65535,
+                                // 缓冲区设置（每连接 16 KB，见 ProxyReceiveBufferBytes 的注释）
+                                ReceiveBufferSize = ProxyReceiveBufferBytes,
                                 MaxRequestLength = 1024 * 1024 * 10,
                                 SendingQueueSize = 100,
 
@@ -6448,6 +6551,15 @@ namespace WinsockPacketEditor
                                 ClearIdleSession = true,
                                 ClearIdleSessionInterval = 60,
                                 IdleSessionTimeOut = ((int)TCPTimeout.TotalSeconds),
+
+                                /*
+                                    关掉会话快照。默认开着时 GetAllSessions() 返回的是
+                                    SessionSnapshotInterval（5 秒）一拍的旧表，而 RefreshAuthList
+                                    每秒读它算连接数 / 设备数 / 在线，最多滞后 5 秒，
+                                    5 秒内突发的连接全看到旧计数，连接数与设备数限制形同虚设。
+                                    关掉后每次 GetAllSessions() 是 m_SessionDict.ToArray()，1 Hz 没有压力。
+                                */
+                                DisableSessionSnapshot = true,
                             };
 
                             List<IConnectionFilter> connectionFilters = new List<IConnectionFilter>
@@ -6503,6 +6615,25 @@ namespace WinsockPacketEditor
                                     //下次进来又会在这个半死的实例上重新 Setup
                                     ProxyServer.Dispose();
                                     ProxyServer = null;
+
+                                    /*
+                                        Start() 失败最常见的原因有两个：端口被占，或者预分配的缓冲池装不下
+                                        （SuperSocket 自己会记「Failed to allocate buffer … please decrease
+                                        maxConnectionNumber」）。后者只在最大连接数高于默认值时才可能发生，
+                                        这时回落到默认值再试<b>一次</b>；端口被占的话第二次照样失败，
+                                        不会无限重试。
+                                    */
+                                    if (MaxConnectionNumber > DefaultMaxConnectionNumber)
+                                    {
+                                        string sFall = string.Format(
+                                            UI.T("ProxyModeForm.MaxConnection.Fallback", "按最大连接数 {0} 启动失败（可能是内存不足以预留缓冲），改回默认值 {1} 重试"),
+                                            MaxConnectionNumber, DefaultMaxConnectionNumber);
+                                        DoLog(nameof(InitSocks5Proxy), sFall);
+                                        UI.Toast(UiIcon.Warn, sFall);
+
+                                        MaxConnectionNumber = DefaultMaxConnectionNumber;
+                                        return InitSocks5Proxy();
+                                    }
 
                                     UI.Toast(UiIcon.Error, UI.T("ProxyModeForm.StartSocks5Proxy.Fail", "启动 SOCKS5 代理失败"));
                                     return false;
@@ -6591,6 +6722,10 @@ namespace WinsockPacketEditor
                             ProxyServer.Stop();
                             ProxyServer.Dispose();
                             ProxyServer = null;
+
+                            //会话全没了，设备槽与 WPC 令牌表一起清（Stop 不一定给每条会话都跑 OnSessionClosed）
+                            ProxyConfig.Account.Devices.Clear();
+                            WPCConfig.Device.Clear();
 
                             UI.Toast(UiIcon.Warn, UI.T("ProxyModeForm.StopProxy", "停止 SOCKS5 代理"));
                         }
@@ -6832,54 +6967,45 @@ namespace WinsockPacketEditor
 
                         if (ptType == Operate.ProxyConfig.Proxy.ProxyType.Socket5)
                         {
-                            bool bSupportAuthType = false;
+                            /*
+                                选方法的规则只有一份（SelectAuthMethod）：接收过滤器也用它决定下一帧按什么切，
+                                两边必须一致，否则过滤器切出来的帧与这里的应答对不上。
+                                粘在问候后面的认证报文不用在这里处理了 —— 过滤器按帧长切，多出来的字节它自己会当下一帧送来。
+                            */
+                            byte method = Operate.ProxyConfig.Proxy.SelectAuthMethod(bData);
 
-                            Operate.ProxyConfig.Proxy.AuthType atServer = Operate.ProxyConfig.Proxy.Enable_Auth
-                                ? Operate.ProxyConfig.Proxy.AuthType.UserName
-                                : Operate.ProxyConfig.Proxy.AuthType.None;
-
-                            int iMETHODS_COUNT = bData[1];
-                            byte[] bMETHODS = new byte[iMETHODS_COUNT];
-                            Array.Copy(bData, 2, bMETHODS, 0, iMETHODS_COUNT);
-
-                            foreach (byte method in bMETHODS)
+                            if (method != 0xFF)
                             {
-                                Operate.ProxyConfig.Proxy.AuthType atClient = (Operate.ProxyConfig.Proxy.AuthType)method;
+                                Operate.ProxyConfig.Proxy.AuthType atServer = (Operate.ProxyConfig.Proxy.AuthType)method;
 
-                                if (atServer == atClient)
-                                {
-                                    bSupportAuthType = true;
-                                    break;
-                                }
-                            }
-
-                            if (bSupportAuthType)
-                            {
                                 byte[] bAuth = new byte[2];
                                 bAuth[0] = (byte)Operate.ProxyConfig.Proxy.ProxyType.Socket5;
-                                bAuth[1] = (byte)atServer;
+                                bAuth[1] = method;
                                 psSession.TrySend(bAuth, 0, bAuth.Length);
 
-                                if (atServer == Operate.ProxyConfig.Proxy.AuthType.UserName)
+                                switch (atServer)
                                 {
-                                    psSession.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.AuthUserName;
-
-                                    if (bData.Length > iMETHODS_COUNT + 2)
-                                    {
-                                        byte[] bAuthDate = new byte[bData.Length - (iMETHODS_COUNT + 2)];
-                                        Array.Copy(bData, iMETHODS_COUNT + 2, bAuthDate, 0, bAuthDate.Length);
-
-                                        bool bIsMatch = Operate.ProxyConfig.Proxy.CheckDataIsMatchProxyStep(bAuthDate, Operate.ProxyConfig.Proxy.ProxyStep.AuthUserName);
-                                        if (bIsMatch)
-                                        {
-                                            await Operate.ProxyConfig.Proxy.AuthUserName(psSession, bAuthDate);
-                                        }
-                                    }
+                                    case Operate.ProxyConfig.Proxy.AuthType.UserName:
+                                        psSession.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.AuthUserName;
+                                        break;
+                                    case Operate.ProxyConfig.Proxy.AuthType.Wpc:
+                                        psSession.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.WpcControl;
+                                        psSession.IsWpcControl = true;
+                                        break;
+                                    default:
+                                        psSession.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.Command;
+                                        break;
                                 }
-                                else
-                                {
-                                    psSession.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.Command;
-                                }
+                            }
+                            else
+                            {
+                                /*
+                                    RFC 1928：没有一个方法能接受时回 05 FF，客户端据此立刻关闭。
+                                    以前这里什么都不回，连接就挂到 IdleSessionTimeOut（3 分钟）才被清，
+                                    客户端那边表现成「连上了但没反应」。
+                                */
+                                psSession.TrySend(new byte[] { (byte)Operate.ProxyConfig.Proxy.ProxyType.Socket5, 0xFF }, 0, 2);
+                                psSession.Close(SuperSocket.SocketBase.CloseReason.ProtocolError);
                             }
                         }
                         else
@@ -6922,8 +7048,40 @@ namespace WinsockPacketEditor
                             byte[] bAuth = new byte[2];
                             bAuth[0] = 0x01;
 
-                            // 第一步：先验证账号密码
-                            var (bAuthOK, AccountID) = Operate.ProxyConfig.Account.CheckUserNameAndPassWord(sUserName, sPassWord);
+                            /*
+                                第一步：验证身份。两条路：
+                                  · 密码是 WPC 令牌（wpc1.…）：查控制通道的注册表，令牌对得上就是那台已注册的设备，
+                                    设备槽由它的控制连接占着，<b>不再数设备</b>；
+                                  · 普通账号密码：老路。但「只允许 WPC 客户端」开着时这条路整个封掉。
+                                设备键：WPC 连接用设备指纹，普通连接用 "ip:" + 源 IP（与以前「一个 IP 一台设备」的口径一致）。
+                            */
+                            bool bAuthOK = false;
+                            Guid AccountID = Guid.Empty;
+                            string deviceKey = null;
+                            bool viaToken = sPassWord.StartsWith(Operate.WPCConfig.Device.TokenPrefix, StringComparison.Ordinal);
+
+                            if (viaToken)
+                            {
+                                if (Operate.WPCConfig.Device.TryAuthToken(sUserName, sPassWord, out Operate.WPCConfig.Device.WpcDevice dev))
+                                {
+                                    bAuthOK = true;
+                                    AccountID = dev.AID;
+                                    deviceKey = dev.DeviceId;
+                                    psSession.DeviceId = dev.DeviceId;
+                                    psSession.WpcVersion = dev.Version;
+                                    psSession.WpcOs = dev.Os;
+                                }
+                            }
+                            else if (Operate.ProxyConfig.Proxy.Only_WPC_Client)
+                            {
+                                Operate.DoLog(nameof(AuthUserName), string.Format(UI.T("WPC.OnlyWpc.Reject", "已开启「只允许 WPC 客户端连接」，拒绝普通 SOCKS5 客户端 [ {0} ]"), psSession.ClientIP));
+                            }
+                            else
+                            {
+                                (bAuthOK, AccountID) = Operate.ProxyConfig.Account.CheckUserNameAndPassWord(sUserName, sPassWord);
+                                deviceKey = "ip:" + psSession.ClientIP;
+                            }
+
                             if (bAuthOK)
                             {
                                 if (Operate.ProxyConfig.Proxy.EnableFireWall && Operate.ProxyConfig.Proxy.FireWall_AutoWhiteList_AuthSuccess)
@@ -6933,7 +7091,7 @@ namespace WinsockPacketEditor
                                         false,
                                         SystemConfig.MaxDateTime,
                                         DateTime.Now);
-                                }                                
+                                }
                             }
                             else
                             {
@@ -6964,8 +7122,8 @@ namespace WinsockPacketEditor
                                 return;
                             }
 
-                            // 第三步：检查设备数限制
-                            bool isOverDevices = Operate.ProxyConfig.Account.CheckLimitDevices(AccountID, psSession.ClientIP);
+                            // 第三步：检查设备数限制（令牌那条路不数：设备槽由控制连接占着）
+                            bool isOverDevices = !viaToken && Operate.ProxyConfig.Account.CheckLimitDevices(AccountID, deviceKey);
                             if (isOverDevices)
                             {
                                 bAuth[1] = (byte)0x01;
@@ -6975,9 +7133,11 @@ namespace WinsockPacketEditor
                                 return;
                             }
 
-                            // 最终允许登录
+                            // 最终允许登录：先占设备槽再回应答，OnSessionClosed 会按 DeviceKey 释放
                             await Operate.ProxyConfig.Account.IPInfo_ToAccount(AccountID, psSession.ClientIP);
                             psSession.AID = AccountID;
+                            psSession.DeviceKey = deviceKey;
+                            Operate.ProxyConfig.Account.Devices.Add(AccountID, deviceKey);
                             psSession.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.Command;
                             psSession.TrySend(bAuth, 0, bAuth.Length);
                         }
@@ -7172,14 +7332,20 @@ namespace WinsockPacketEditor
                         {
                             case ProtocolType.Tcp:
 
-                                bServerIP = Operate.ProxyConfig.Proxy.ProxyTCP_IP.GetAddressBytes();
+                                bServerIP = ReplyBindAddress(Operate.ProxyConfig.Proxy.ProxyTCP_IP);
                                 bServerPort = BitConverter.GetBytes(Operate.ProxyConfig.Proxy.SOCKS5_Port);
 
                                 break;
 
                             case ProtocolType.Udp:
 
-                                bServerIP = Operate.ProxyConfig.Proxy.ProxyUDP_IP.GetAddressBytes();
+                                /*
+                                    UDP 中继套接字绑在 ProxyTCP_IP 上（见 CreateNewUDP）。自动监听时那是 0.0.0.0，
+                                    应答里就照实回 0.0.0.0 —— mihomo / sing-box / 本程序的 MustTcpUdpRelay 都约定把它
+                                    换成「连进来的那个服务器地址」。以前回的是本机网卡地址（ProxyUDP_IP）：WPE 在 NAT 或云主机后面时
+                                    那是个内网地址，外网客户端的 UDP 全发到内网地址上丢掉（2026-09-14 改）。
+                                */
+                                bServerIP = ReplyBindAddress(Operate.ProxyConfig.Proxy.ProxyTCP_IP);
                                 bServerPort = BitConverter.GetBytes(UDPPort);
 
                                 break;
@@ -7200,6 +7366,16 @@ namespace WinsockPacketEditor
                     {
                         Operate.DoLog(nameof(SendCommandResponse), ex);
                     }
+                }
+
+                /// <summary>
+                /// SOCKS5 应答里的 BND.ADDR（本服务只回 IPv4 形式）：IPv4 地址原样；0.0.0.0、IPv6 监听或空都回 0.0.0.0，
+                /// 由客户端换成它连进来的地址。以前 IPv6 监听时把 16 字节往 4 字节里拷，应答直接抛异常发不出去。
+                /// </summary>
+                public static byte[] ReplyBindAddress(IPAddress ip)
+                {
+                    if (ip != null && ip.AddressFamily == AddressFamily.InterNetwork) { return ip.GetAddressBytes(); }
+                    return new byte[4];
                 }
 
                 #endregion
@@ -7317,10 +7493,10 @@ namespace WinsockPacketEditor
 
                                                             byte[] headerBytes = Encoding.UTF8.GetBytes(response);
 
-                                                            psSession.TrySend(headerBytes, 0, headerBytes.Length);
+                                                            psSession.SendToClient(headerBytes, 0, headerBytes.Length);
                                                             Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Resp, headerBytes, false);
 
-                                                            psSession.TrySend(fileBytes, 0, fileBytes.Length);
+                                                            psSession.SendToClient(fileBytes, 0, fileBytes.Length);
                                                             Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Resp, fileBytes, false);
 
                                                             return;
@@ -7328,7 +7504,7 @@ namespace WinsockPacketEditor
                                                         else
                                                         {
                                                             byte[] b404 = Operate.ProxyConfig.Proxy.Get404Response();
-                                                            psSession.TrySend(b404, 0, b404.Length);
+                                                            psSession.SendToClient(b404, 0, b404.Length);
                                                             Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Resp, b404, false);
 
                                                             return;
@@ -7448,30 +7624,113 @@ namespace WinsockPacketEditor
                             pu.ClientEndPoint = epRemote;
                             byte[] bADDRESS = bData.Slice(4, bData.Length - 4).ToArray();
 
-                            var (targetEndPoint, AddressString) = Operate.ProxyConfig.Proxy.GetIPEndPoint_ByAddressType(addressType, bADDRESS).ConfigureAwait(false).GetAwaiter().GetResult(); ;
-                            if (targetEndPoint != null)
+                            /*
+                                目标地址能同步定下来（IP 字面量、或域名已在缓存里）就直接转；
+                                只有「第一次见到的域名」要查 DNS，那一包拷一份出来异步解析后再转 ——
+                                以前是 GetAwaiter().GetResult() 同步等 DNS，把 UDP 接收的 IOCP 线程卡住几十到几百毫秒。
+                                bData 指向的是 SocketAsyncEventArgs 的缓冲，返回后就会被下一次接收复用，所以异步那条路必须先拷贝。
+                            */
+                            if (Operate.ProxyConfig.Proxy.TryGetIPEndPoint_Sync(addressType, bADDRESS, out IPEndPoint targetEndPoint))
                             {
-                                Span<byte> bRequestData = Operate.ProxyConfig.Proxy.GetUDPData_ByAddressType(addressType, bData);
-                                if (!bRequestData.IsEmpty)
-                                {
-                                    if (Operate.ProxyConfig.Proxy.HookUDP_Req)
-                                    {
-                                        Operate.FilterConfig.Filter.DoFilter_SOCKS_UDP(psSession, pu, targetEndPoint, bRequestData, Operate.PacketConfig.Packet.PacketType.UDP_Req);
-                                        Operate.ProxyConfig.Account.AddTraffic(psSession.AID, psSession.ClientIP, bRequestData.Length);
-                                    }
-                                    else
-                                    {
-                                        psSession.SendUdpData(pu.ClientSocket, bRequestData, targetEndPoint);
-                                    }
-                                    
-                                    pu.UpdateActivity();
-                                }
+                                RelayUdpRequest(psSession, pu, targetEndPoint, addressType, bData);
+                                return;
                             }
+
+                            byte[] copy = bData.ToArray();
+                            _ = Task.Run(async () =>
+                            {
+                                try
+                                {
+                                    var (ep, _) = await Operate.ProxyConfig.Proxy.GetIPEndPoint_ByAddressType(addressType, bADDRESS);
+                                    if (ep != null && pu.IsActive)
+                                    {
+                                        RelayUdpRequest(psSession, pu, ep, addressType, copy);
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    Operate.DoLog(nameof(ProcessUdpRequest), ex);
+                                }
+                            });
                         }
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(ProcessUdpRequest), ex);
+                    }
+                }
+
+                private static void RelayUdpRequest(ProxySession psSession, ProxyUDP pu, IPEndPoint targetEndPoint, Operate.ProxyConfig.Proxy.AddressType addressType, Span<byte> bData)
+                {
+                    Span<byte> bRequestData = Operate.ProxyConfig.Proxy.GetUDPData_ByAddressType(addressType, bData);
+                    if (bRequestData.IsEmpty) { return; }
+
+                    if (Operate.ProxyConfig.Proxy.HookUDP_Req)
+                    {
+                        Operate.FilterConfig.Filter.DoFilter_SOCKS_UDP(psSession, pu, targetEndPoint, bRequestData, Operate.PacketConfig.Packet.PacketType.UDP_Req);
+                        Operate.ProxyConfig.Account.AddTraffic(psSession.AID, psSession.ClientIP, bRequestData.Length);
+                    }
+                    else
+                    {
+                        psSession.SendUdpData(pu.ClientSocket, bRequestData, targetEndPoint);
+                    }
+
+                    pu.UpdateActivity();
+                }
+
+                /// <summary>
+                /// 不查网络地把 SOCKS5 地址字段变成端点：IP 字面量直接出，域名只看 DNS 缓存。
+                /// 拿不到返回 false，调用方再走异步的 GetIPEndPoint_ByAddressType。
+                /// </summary>
+                public static bool TryGetIPEndPoint_Sync(Operate.ProxyConfig.Proxy.AddressType addressType, byte[] bData, out IPEndPoint EndPoint)
+                {
+                    EndPoint = null;
+
+                    try
+                    {
+                        IPAddress ip = null;
+                        int portPosition;
+
+                        switch (addressType)
+                        {
+                            case Operate.ProxyConfig.Proxy.AddressType.IPv4:
+                                if (bData.Length < 6) { return false; }
+                                ip = new IPAddress(bData.AsSpan(0, 4).ToArray());
+                                portPosition = 4;
+                                break;
+
+                            case Operate.ProxyConfig.Proxy.AddressType.IPv6:
+                                if (bData.Length < 18) { return false; }
+                                ip = new IPAddress(bData.AsSpan(0, 16).ToArray());
+                                portPosition = 16;
+                                break;
+
+                            case Operate.ProxyConfig.Proxy.AddressType.Domain:
+                                {
+                                    if (bData.Length < 1) { return false; }
+                                    int length = bData[0];
+                                    if (bData.Length < 1 + length + 2) { return false; }
+                                    string host = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF8, bData.AsSpan(1, length).ToArray());
+                                    if (IPAddress.TryParse(host, out IPAddress literal)) { ip = literal; }
+                                    else if (!Operate.ProxyConfig.Proxy.DnsCache.TryGetValue(host, out ip)) { return false; }
+                                    portPosition = 1 + length;
+                                }
+                                break;
+
+                            default:
+                                return false;
+                        }
+
+                        if (ip == null) { return false; }
+
+                        ushort port = Operate.SystemConfig.ByteArrayToInt16BigEndian(bData.AsSpan(portPosition, 2).ToArray());
+                        EndPoint = new IPEndPoint(ip, port);
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        DoLog(nameof(TryGetIPEndPoint_Sync), ex);
+                        return false;
                     }
                 }
 
@@ -7488,8 +7747,14 @@ namespace WinsockPacketEditor
                             return;
                         }
 
-                        ReadOnlySpan<byte> bIP = pu.ClientEndPoint.Address.GetAddressBytes();
-                        ushort port = ((ushort)pu.ClientEndPoint.Port);
+                        /*
+                            RFC 1928 第 7 节：UDP 应答头里的 DST.ADDR / DST.PORT 是「这个数据报从哪儿来」—— 目标服务器的地址。
+                            以前写成了客户端自己的地址：mihomo 把它当回包的源地址写回 TUN，
+                            游戏里 connect 过的 UDP 套接字对不上来源，回包全被丢掉（2026-09-14 修）。
+                        */
+                        IPAddress origin = epRemote.Address.IsIPv4MappedToIPv6 ? epRemote.Address.MapToIPv4() : epRemote.Address;
+                        ReadOnlySpan<byte> bIP = origin.GetAddressBytes();
+                        ushort port = ((ushort)epRemote.Port);
                         ReadOnlySpan<byte> bPort = stackalloc byte[2] { (byte)(port >> 8), (byte)port };
 
                         byte[] responseBuffer = ArrayPool<byte>.Shared.Rent(4 + bIP.Length + bPort.Length + bData.Length);
@@ -7498,7 +7763,7 @@ namespace WinsockPacketEditor
                         bResponseData[0] = 0x00;
                         bResponseData[1] = 0x00;
                         bResponseData[2] = 0x00;
-                        bResponseData[3] = (byte)Operate.ProxyConfig.Proxy.AddressType.IPv4;
+                        bResponseData[3] = (byte)(bIP.Length == 16 ? Operate.ProxyConfig.Proxy.AddressType.IPv6 : Operate.ProxyConfig.Proxy.AddressType.IPv4);
                         bIP.CopyTo(bResponseData.Slice(4, bIP.Length));
                         bPort.CopyTo(bResponseData.Slice(4 + bIP.Length, bPort.Length));
                         bData.CopyTo(bResponseData.Slice(4 + bIP.Length + bPort.Length, bData.Length));
@@ -7888,108 +8153,96 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//判断接收的数据是否匹配代理步骤
+                #region//SOCKS5 的方法选择与帧长判定（握手与接收过滤器共用）
 
-                public static bool CheckDataIsMatchProxyStep(ReadOnlySpan<byte> bData, Operate.ProxyConfig.Proxy.ProxyStep proxyStep)
+                /// <summary>
+                /// 按服务端配置从客户端的问候报文里选一个认证方法。
+                /// 返回方法字节（0x00 无认证 / 0x02 用户名密码），一个都不接受返回 0xFF（RFC 1928）。
+                /// <b>握手应答与接收过滤器的下一步都以它为准</b>，两处不能各写一份。
+                /// </summary>
+                public static byte SelectAuthMethod(ReadOnlySpan<byte> Greeting)
                 {
-                    bool bReturn = false;
+                    if (Greeting.Length < 2 || Greeting[0] != (byte)ProxyType.Socket5) { return 0xFF; }
 
-                    try
+                    byte want = Enable_Auth ? (byte)AuthType.UserName : (byte)AuthType.None;
+                    int count = Greeting[1];
+                    int end = Math.Min(Greeting.Length, 2 + count);
+
+                    /*
+                        WPC 的控制通道用 RFC 1928 留给私有方法的 0x80：只要客户端报了它、服务端又开着账号认证，
+                        就优先选它（控制通道要用账号注册设备）。认证没开时不选，WPC 会退回普通模式。
+                    */
+                    bool haveWant = false, haveWpc = false;
+                    for (int i = 2; i < end; i++)
                     {
-                        byte VERSION = bData[0];
-
-                        switch (proxyStep)
-                        {
-                            case Operate.ProxyConfig.Proxy.ProxyStep.Handshake:
-
-                                if (VERSION == ((byte)Operate.ProxyConfig.Proxy.ProxyType.Socket5))
-                                {
-                                    if (bData.Length > 2)
-                                    {
-                                        byte METHODS_COUNT = bData[1];
-
-                                        if (bData.Length >= METHODS_COUNT + 2)
-                                        {
-                                            bReturn = true;
-                                        }
-                                    }
-                                }
-
-                                break;
-
-                            case Operate.ProxyConfig.Proxy.ProxyStep.AuthUserName:
-
-                                if (VERSION == 0x01)
-                                {
-                                    if (bData.Length > 2)
-                                    {
-                                        byte USERNAME_LENGTH = bData[1];
-
-                                        if (bData.Length > USERNAME_LENGTH + 2)
-                                        {
-                                            byte PASSWORD_LENGTH = bData[USERNAME_LENGTH + 2];
-
-                                            if (bData.Length == USERNAME_LENGTH + PASSWORD_LENGTH + 3)
-                                            {
-                                                bReturn = true;
-                                            }
-                                        }
-                                    }
-                                }
-
-                                break;
-
-                            case Operate.ProxyConfig.Proxy.ProxyStep.Command:
-
-                                if (VERSION == ((byte)Operate.ProxyConfig.Proxy.ProxyType.Socket5))
-                                {
-                                    if (bData.Length > 4)
-                                    {
-                                        byte ADDRESS_TYPE = bData[3];
-                                        Operate.ProxyConfig.Proxy.AddressType AddressType = (Operate.ProxyConfig.Proxy.AddressType)ADDRESS_TYPE;
-
-                                        int DST_ADDR = 0;
-                                        switch (AddressType)
-                                        {
-                                            case Operate.ProxyConfig.Proxy.AddressType.IPv4:
-                                                DST_ADDR = 4;
-                                                break;
-
-                                            case Operate.ProxyConfig.Proxy.AddressType.IPv6:
-                                                DST_ADDR = 16;
-                                                break;
-
-                                            case Operate.ProxyConfig.Proxy.AddressType.Domain:
-                                                byte DST_LENGTH = bData[4];
-                                                DST_ADDR = DST_LENGTH + 1;
-                                                break;
-                                        }
-
-                                        if (bData.Length == DST_ADDR + 6)
-                                        {
-                                            bReturn = true;
-                                        }
-                                    }
-                                }
-
-                                break;
-
-                            case Operate.ProxyConfig.Proxy.ProxyStep.ForwardData:
-
-                                bReturn = true;
-
-                                break;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        DoLog(nameof(CheckDataIsMatchProxyStep), ex);
+                        if (Greeting[i] == want) { haveWant = true; }
+                        if (Greeting[i] == (byte)AuthType.Wpc) { haveWpc = true; }
                     }
 
-                    return bReturn;
+                    if (haveWpc && Enable_Auth) { return (byte)AuthType.Wpc; }
+                    return haveWant ? want : (byte)0xFF;
                 }
 
-                #endregion                
+                /// <summary>
+                /// 某一步的一帧应有多长。
+                /// 返回帧长；数据还不够判断返回 -1；报文格式本身就不对（版本号 / 地址类型）时 <paramref name="Bad"/> 为 true。
+                /// 只管握手 / 认证 / 命令三步 —— 转发阶段没有帧的概念，过滤器直接放行。
+                /// </summary>
+                public static int Socks5FrameLength(ProxyStep Step, ReadOnlySpan<byte> Data, out bool Bad)
+                {
+                    Bad = false;
+                    if (Data.Length == 0) { return -1; }
+
+                    switch (Step)
+                    {
+                        case ProxyStep.Handshake:
+                            if (Data[0] != (byte)ProxyType.Socket5) { Bad = true; return -1; }
+                            if (Data.Length < 2) { return -1; }
+                            return 2 + Data[1];
+
+                        case ProxyStep.AuthUserName:
+                            if (Data[0] != 0x01) { Bad = true; return -1; }
+                            if (Data.Length < 2) { return -1; }
+                            {
+                                int ulen = Data[1];
+                                if (Data.Length < 3 + ulen) { return -1; }
+                                int plen = Data[2 + ulen];
+                                return 3 + ulen + plen;
+                            }
+
+                        case ProxyStep.Command:
+                            if (Data[0] != (byte)ProxyType.Socket5) { Bad = true; return -1; }
+                            if (Data.Length < 5) { return -1; }
+                            {
+                                int addr;
+                                switch ((AddressType)Data[3])
+                                {
+                                    case AddressType.IPv4: addr = 4; break;
+                                    case AddressType.IPv6: addr = 16; break;
+                                    case AddressType.Domain: addr = 1 + Data[4]; break;
+                                    default: Bad = true; return -1;
+                                }
+                                return 4 + addr + 2;
+                            }
+
+                        case ProxyStep.WpcControl:
+                            //'W' 0x01 type len(hi) len(lo) payload —— 见 WPCConfig.Device
+                            if (Data[0] != WPCConfig.Device.FrameMagic) { Bad = true; return -1; }
+                            if (Data.Length < 2) { return -1; }
+                            if (Data[1] != WPCConfig.Device.FrameVersion) { Bad = true; return -1; }
+                            if (Data.Length < 5) { return -1; }
+                            {
+                                int len = (Data[3] << 8) | Data[4];
+                                if (len > WPCConfig.Device.MaxFrameBytes - 5) { Bad = true; return -1; }
+                                return 5 + len;
+                            }
+
+                        default:
+                            return Data.Length;
+                    }
+                }
+
+                #endregion
 
                 #region//初始化 CCProxy 模板
 
@@ -11368,6 +11621,61 @@ namespace WinsockPacketEditor
 
                 public static BindingList<AccountInfo> lstAccountInfo = new BindingList<AccountInfo>();
                 public static BindingList<AuthInfo> lstAuthInfo = new BindingList<AuthInfo>();
+
+                #region//在线设备表（账号 → 设备键 → 持有该设备的会话数）
+
+                /*
+                    「设备」的真源。每条认证成功的会话按 (账号, 设备键) 加一次引用，关闭时减一次；
+                    WPC 的控制连接在注册成功时占一份（WPCConfig.Device.Register），断开时释放。
+                    设备数 = 键的个数。O(1)、精确、不依赖任何定时快照。
+                    设备键：WPC 连接是设备指纹（32 位十六进制），普通连接是 "ip:" + 源 IP。
+                */
+                public static class Devices
+                {
+                    private static readonly ConcurrentDictionary<Guid, ConcurrentDictionary<string, int>> table =
+                        new ConcurrentDictionary<Guid, ConcurrentDictionary<string, int>>();
+
+                    public static void Add(Guid AID, string Key)
+                    {
+                        if (AID == Guid.Empty || string.IsNullOrEmpty(Key)) { return; }
+                        var d = table.GetOrAdd(AID, _ => new ConcurrentDictionary<string, int>(StringComparer.Ordinal));
+                        d.AddOrUpdate(Key, 1, (_, n) => n + 1);
+                    }
+
+                    public static void Remove(Guid AID, string Key)
+                    {
+                        if (AID == Guid.Empty || string.IsNullOrEmpty(Key)) { return; }
+                        if (!table.TryGetValue(AID, out var d)) { return; }
+
+                        while (true)
+                        {
+                            if (!d.TryGetValue(Key, out int n)) { return; }
+                            if (n <= 1)
+                            {
+                                //按「键 + 当前值」删，别把另一个线程刚 +1 的那份删掉
+                                if (((ICollection<KeyValuePair<string, int>>)d).Remove(new KeyValuePair<string, int>(Key, n))) { return; }
+                            }
+                            else if (d.TryUpdate(Key, n - 1, n)) { return; }
+                        }
+                    }
+
+                    public static int Count(Guid AID)
+                    {
+                        return table.TryGetValue(AID, out var d) ? d.Count : 0;
+                    }
+
+                    public static bool Has(Guid AID, string Key)
+                    {
+                        return !string.IsNullOrEmpty(Key) && table.TryGetValue(AID, out var d) && d.ContainsKey(Key);
+                    }
+
+                    public static void Clear()
+                    {
+                        table.Clear();
+                    }
+                }
+
+                #endregion
                 public static ConcurrentDictionary<(Guid AID, string ClientIP), long> TrafficStats = new ConcurrentDictionary<(Guid AID, string ClientIP), long>();
 
                 #region//新增代理账号
@@ -12765,18 +13073,20 @@ namespace WinsockPacketEditor
                         var sessions = server.GetAllSessions();
                         var SessionList = sessions?.ToList() ?? new List<ProxySession>();
 
+                        /*
+                            一行 = 一个账号在一台设备上。设备键：WPC 连接是设备指纹（同一台机器换了 IP 还是同一行），
+                            普通连接是 "ip:" + 源 IP（与以前一个 IP 一行的口径一致）。
+                            WPC 的控制连接也在会话表里：它让设备在线（哪怕游戏一条连接都没开），但不算一条「链接」。
+                        */
                         var groupedSessions = SessionList
                             .Where(session => session.CommandType != ProxyConfig.Proxy.CommandType.Bind)
-                            .GroupBy(session => new { session.AID, session.ClientIP })
+                            .GroupBy(session => new { session.AID, Key = session.DeviceKey ?? ("ip:" + session.ClientIP) })
                             .ToList();
 
-                        var devicesByAccount = SessionList
-                            .Where(session => session.CommandType != ProxyConfig.Proxy.CommandType.Bind && session.AID != Guid.Empty)
-                            .GroupBy(session => session.AID)
-                            .ToDictionary(
-                                g => g.Key,
-                                g => g.Select(s => s.ClientIP).Distinct().Count()
-                            );
+                        var devicesByAccount = groupedSessions
+                            .Where(g => g.Key.AID != Guid.Empty)
+                            .GroupBy(g => g.Key.AID)
+                            .ToDictionary(g => g.Key, g => g.Count());
 
                         var currentActiveAIDs = groupedSessions.Select(g => g.Key.AID).Distinct().ToHashSet();
 
@@ -12784,13 +13094,18 @@ namespace WinsockPacketEditor
                         {
                             DateTime AuthTime = group.Min(session => session.StartTime);
                             Guid AID = group.Key.AID;
-                            string AuthIP = group.Key.ClientIP;
+                            //同一台设备可能先后从不同 IP 来（换网络），显示最近那条连接的 IP
+                            ProxySession latest = group.OrderByDescending(session => session.StartTime).First();
+                            string AuthIP = latest.ClientIP;
 
                             string IPLocation = await SystemConfig.GetIPLocation(AuthIP);
-                            int LinksNumber = group.Count();
+                            int LinksNumber = group.Count(session => !session.IsWpcControl);
                             int DevicesNumber = devicesByAccount.ContainsKey(AID) ? devicesByAccount[AID] : 0;
+                            string DeviceId = latest.DeviceId ?? string.Empty;
+                            //只有 WPC 有「客户端」可写（带版本）；普通 SOCKS5 客户端留空，界面显示「—」—— 能连上来的本来就都是 SOCKS5，写出来没有信息量
+                            string Client = DeviceId.Length > 0 ? WPCConfig.Device.ClientLabel(latest.WpcVersion, latest.WpcOs) : string.Empty;
 
-                            return new { AID, AuthIP, IPLocation, AuthTime, LinksNumber, DevicesNumber };
+                            return new { AID, AuthIP, IPLocation, AuthTime, LinksNumber, DevicesNumber, DeviceId, Client };
                         }).ToList();
 
                         var results = await Task.WhenAll(locationTasks);
@@ -12803,6 +13118,8 @@ namespace WinsockPacketEditor
                             ai.LinksNumber = result.LinksNumber;
                             ai.DevicesNumber = result.DevicesNumber;
                             ai.TrafficStatistics = ProxyConfig.Account.GetTraffic(result.AID, result.AuthIP);
+                            ai.DeviceId = result.DeviceId;
+                            ai.Client = result.Client;
                             newAuthInfo.Add(ai);
                         }
 
@@ -13031,28 +13348,26 @@ namespace WinsockPacketEditor
 
                 #region//检测是否已超过限制设备数
 
-                public static bool CheckLimitDevices(Guid AID, string ClientIP)
+                /*
+                    设备数判定读的是 Devices 表（认证成功 +1、会话关闭 −1 的精确计数），不再读每秒一拍的 lstAuthInfo 快照 ——
+                    快照最多滞后一秒（以前是五秒），一秒内并发登录全看到旧计数，限制形同虚设。
+                    <paramref name="DeviceKey"/>：WPC 连接是设备指纹，普通连接是 "ip:" + 源 IP。已占槽的设备再连不算新设备。
+                */
+                public static bool CheckLimitDevices(Guid AID, string DeviceKey)
                 {
                     try
                     {
-                        if (AID == Guid.Empty || string.IsNullOrEmpty(ClientIP))
+                        if (AID == Guid.Empty || string.IsNullOrEmpty(DeviceKey))
                             return false;
 
-                        AccountInfo ai = ProxyConfig.Account.GetProxyAccount_ByAccountID(AID);                   
+                        AccountInfo ai = ProxyConfig.Account.GetProxyAccount_ByAccountID(AID);
                         if (ai == null || !ai.IsLimitDevices)
                             return false;
 
-                        int currentDevices = ProxyConfig.Account.GetDevicesNumber_ByAccountID(AID);
-                        int limitDevices = ai.LimitDevices;
-
-                        if (currentDevices < limitDevices)
+                        if (ProxyConfig.Account.Devices.Has(AID, DeviceKey))
                             return false;
 
-                        if (currentDevices > limitDevices)
-                            return true;
-
-                        AuthInfo existingAuth = ProxyConfig.Account.FindAuthInfo(AID, ClientIP);
-                        return existingAuth == null;
+                        return ProxyConfig.Account.Devices.Count(AID) >= ai.LimitDevices;
                     }
                     catch (Exception ex)
                     {
@@ -19619,7 +19934,7 @@ namespace WinsockPacketEditor
                                     break;
 
                                 case Operate.PacketConfig.Packet.PacketType.TCP_Resp:
-                                    psSession.TrySend(bNewBuffer, 0, bNewBuffer.Length);
+                                    psSession.SendToClient(bNewBuffer, 0, bNewBuffer.Length);
                                     break;
                             }
                         }
@@ -28176,6 +28491,325 @@ namespace WinsockPacketEditor
 
         public static class WPCConfig
         {
+            #region//WPC 设备注册（SOCKS5 端口上的控制通道）
+
+            /*
+                WPC 客户端与 WPE 的私有通道，跑在 SOCKS5 端口上：
+                  问候里报私有方法 0x80（RFC 1928 留给私有用途的区间）→ 服务端回 05 80 → 之后这条连接只走下面的帧：
+                    'W'(0x57) 0x01 type len(u16 大端) payload(UTF-8 JSON)
+                  客户端 → 服务端：0x01 Register { user, pass, device, version, client, os }、0x02 Ping
+                  服务端 → 客户端：0x81 RegisterResult { code, token, message }、0x82 Pong
+                注册成功发一个令牌（wpc1.…），WPC 把它当 SOCKS5 密码写进 mihomo 配置；数据连接用令牌认证时就知道来自哪台设备。
+                <b>这条控制连接本身就是在线状态</b>：它在，设备在线；它断，令牌立刻作废、设备槽释放。
+                令牌只在内存里，WPE 重启全部清空，WPC 断线重连会重新注册。
+            */
+            public static class Device
+            {
+                public const string TokenPrefix = "wpc1.";
+                public const byte FrameMagic = 0x57;
+                public const byte FrameVersion = 0x01;
+                public const int MaxFrameBytes = 4096;
+
+                public const byte TypeRegister = 0x01;
+                public const byte TypePing = 0x02;
+                public const byte TypeRegisterResult = 0x81;
+                public const byte TypePong = 0x82;
+
+                public enum RegisterCode { OK = 0, BadCredential = 1, Expired = 2, Disabled = 3, DeviceLimit = 4, BadRequest = 5, AuthOff = 6 }
+
+                public sealed class WpcDevice
+                {
+                    public string Token;
+                    public Guid AID;
+                    public string DeviceId;
+                    public string ClientIP;
+                    public string Version;
+                    /// <summary>客户端自报的系统（"Android 14" / "Windows 11 Pro x64"），只用于显示；可空。</summary>
+                    public string Os;
+                    public DateTime RegisteredAt;
+                    public ProxySession Control;
+                }
+
+                private static readonly ConcurrentDictionary<string, WpcDevice> byToken = new ConcurrentDictionary<string, WpcDevice>(StringComparer.Ordinal);
+                private static readonly ConcurrentDictionary<string, WpcDevice> byAccountDevice = new ConcurrentDictionary<string, WpcDevice>(StringComparer.Ordinal);
+
+                /// <summary>已注册（控制连接在线）的设备数。</summary>
+                public static int Count { get { return byToken.Count; } }
+
+                private static string PairKey(Guid AID, string DeviceId) { return AID.ToString("N") + "|" + DeviceId; }
+
+                /// <summary>设备 ID 只认 8 到 64 个 [A-Za-z0-9._-]，其它一律当格式错误。</summary>
+                public static bool IsValidDeviceId(string DeviceId)
+                {
+                    if (string.IsNullOrEmpty(DeviceId) || DeviceId.Length < 8 || DeviceId.Length > 64) { return false; }
+                    foreach (char c in DeviceId)
+                    {
+                        bool ok = (c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '.' || c == '_' || c == '-';
+                        if (!ok) { return false; }
+                    }
+                    return true;
+                }
+
+                #region//控制帧
+
+                public static async Task HandleControlFrame(ProxySession Session, byte[] Frame)
+                {
+                    try
+                    {
+                        if (Frame == null || Frame.Length < 5 || Frame[0] != FrameMagic || Frame[1] != FrameVersion)
+                        {
+                            Session.Close(SuperSocket.SocketBase.CloseReason.ProtocolError);
+                            return;
+                        }
+
+                        byte type = Frame[2];
+                        int len = (Frame[3] << 8) | Frame[4];
+                        if (Frame.Length != 5 + len)
+                        {
+                            Session.Close(SuperSocket.SocketBase.CloseReason.ProtocolError);
+                            return;
+                        }
+
+                        //任何一帧都算活着（Ping 也是）：SweepControlSessions 按它判控制连接有没有断
+                        Session.WpcLastFrame = DateTime.Now;
+
+                        switch (type)
+                        {
+                            case TypeRegister:
+                                {
+                                    string json = Encoding.UTF8.GetString(Frame, 5, len);
+                                    var (code, token, message) = await Register(Session, json);
+
+                                    var reply = new Newtonsoft.Json.Linq.JObject
+                                    {
+                                        ["code"] = (int)code,
+                                        ["token"] = token ?? string.Empty,
+                                        ["message"] = message ?? string.Empty,
+                                    };
+                                    Reply(Session, TypeRegisterResult, reply.ToString(Newtonsoft.Json.Formatting.None));
+
+                                    if (code != RegisterCode.OK)
+                                    {
+                                        Session.Close(SuperSocket.SocketBase.CloseReason.ServerClosing);
+                                    }
+                                    break;
+                                }
+
+                            case TypePing:
+                                Reply(Session, TypePong, "{}");
+                                break;
+
+                            default:
+                                Session.Close(SuperSocket.SocketBase.CloseReason.ProtocolError);
+                                break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        DoLog(nameof(HandleControlFrame), ex);
+                        Session.Close(SuperSocket.SocketBase.CloseReason.ProtocolError);
+                    }
+                }
+
+                private static void Reply(ProxySession Session, byte Type, string Json)
+                {
+                    byte[] payload = Encoding.UTF8.GetBytes(Json ?? string.Empty);
+                    byte[] frame = new byte[5 + payload.Length];
+                    frame[0] = FrameMagic;
+                    frame[1] = FrameVersion;
+                    frame[2] = Type;
+                    frame[3] = (byte)(payload.Length >> 8);
+                    frame[4] = (byte)(payload.Length & 0xFF);
+                    Buffer.BlockCopy(payload, 0, frame, 5, payload.Length);
+                    Session.TrySend(frame, 0, frame.Length);
+                }
+
+                #endregion
+
+                #region//注册 / 令牌 / 注销
+
+                private static async Task<(RegisterCode Code, string Token, string Message)> Register(ProxySession Session, string Json)
+                {
+                    Newtonsoft.Json.Linq.JObject req;
+                    try { req = Newtonsoft.Json.Linq.JObject.Parse(Json); }
+                    catch { return (RegisterCode.BadRequest, null, "bad json"); }
+
+                    string user = (string)req["user"] ?? string.Empty;
+                    string pass = (string)req["pass"] ?? string.Empty;
+                    string device = ((string)req["device"] ?? string.Empty).Trim();
+                    string version = ((string)req["version"] ?? string.Empty).Trim();
+                    if (version.Length > 32) { version = version.Substring(0, 32); }
+                    string os = CleanLabel((string)req["os"], 48);
+
+                    if (user.Length == 0 || !IsValidDeviceId(device)) { return (RegisterCode.BadRequest, null, "user / device"); }
+                    if (!ProxyConfig.Proxy.Enable_Auth) { return (RegisterCode.AuthOff, null, "auth off"); }
+
+                    //账号：分清「不存在 / 密码错」「已禁用」「已过期」，WPC 那边要分别提示
+                    AccountInfo ai = ProxyConfig.Account.lstAccountInfo.ToList().FirstOrDefault(a => a != null && a.UserName == user);
+                    if (ai == null) { return (RegisterCode.BadCredential, null, null); }
+                    if (!ai.IsEnable) { return (RegisterCode.Disabled, null, null); }
+                    if (!ai.Password.Equals(SystemConfig.PassWord_Encrypt(pass))) { return (RegisterCode.BadCredential, null, null); }
+                    if (ai.IsExpiry && ai.ExpiryTime <= DateTime.Now) { return (RegisterCode.Expired, null, null); }
+
+                    //设备数：这台设备已经占着槽（重复注册 / 断线重连）不算新设备
+                    string pair = PairKey(ai.AID, device);
+                    byAccountDevice.TryGetValue(pair, out WpcDevice old);
+                    if (old == null && ai.IsLimitDevices && !ProxyConfig.Account.Devices.Has(ai.AID, device)
+                        && ProxyConfig.Account.Devices.Count(ai.AID) >= ai.LimitDevices)
+                    {
+                        return (RegisterCode.DeviceLimit, null, null);
+                    }
+
+                    byte[] rnd = new byte[32];
+                    using (var rng = System.Security.Cryptography.RandomNumberGenerator.Create()) { rng.GetBytes(rnd); }
+                    string token = TokenPrefix + Convert.ToBase64String(rnd).TrimEnd('=').Replace('+', '-').Replace('/', '_');
+
+                    WpcDevice dev = new WpcDevice
+                    {
+                        Token = token,
+                        AID = ai.AID,
+                        DeviceId = device,
+                        ClientIP = Session.ClientIP,
+                        Version = version,
+                        Os = os,
+                        RegisteredAt = DateTime.Now,
+                        Control = Session,
+                    };
+
+                    Session.IsWpcControl = true;
+                    Session.AID = ai.AID;
+                    Session.DeviceId = device;
+                    Session.DeviceKey = device;
+                    Session.WpcVersion = version;
+                    Session.WpcOs = os;
+                    Session.WpcToken = token;
+
+                    byToken[token] = dev;
+                    byAccountDevice[pair] = dev;
+                    ProxyConfig.Account.Devices.Add(ai.AID, device);
+
+                    //同一台设备的旧控制连接（WPC 崩了又起、或前一次没断干净）：换新的，旧的关掉；它关闭时按自己的令牌注销，不会碰新的
+                    if (old != null && !ReferenceEquals(old.Control, Session))
+                    {
+                        byToken.TryRemove(old.Token, out _);
+                        ProxyConfig.Account.Devices.Remove(ai.AID, device);
+                        try { old.Control?.Close(SuperSocket.SocketBase.CloseReason.ServerClosing); } catch { }
+                    }
+
+                    await ProxyConfig.Account.IPInfo_ToAccount(ai.AID, Session.ClientIP);
+
+                    DoLog(nameof(Register), string.Format(UI.T("WPC.Register.Log", "WPC 设备注册: {0} [ {1} ] 设备 {2} 版本 {3}"), user, Session.ClientIP, device, version));
+                    return (RegisterCode.OK, token, null);
+                }
+
+                /// <summary>数据连接拿令牌来认证：令牌在表里、控制连接还活着、账号名对得上。</summary>
+                public static bool TryAuthToken(string UserName, string Token, out WpcDevice Device)
+                {
+                    Device = null;
+                    if (string.IsNullOrEmpty(Token) || !byToken.TryGetValue(Token, out WpcDevice dev)) { return false; }
+                    if (dev.Control == null || !dev.Control.Connected) { return false; }
+
+                    string owner = ProxyConfig.Account.GetUserName_ByAccountID(dev.AID);
+                    if (!string.Equals(owner, UserName, StringComparison.Ordinal)) { return false; }
+
+                    Device = dev;
+                    return true;
+                }
+
+                /// <summary>控制连接关闭时调：令牌作废、设备槽释放。只删「自己这一份」，同设备的新注册不受影响。</summary>
+                public static void Unregister(ProxySession Session)
+                {
+                    string token = Session?.WpcToken;
+                    if (string.IsNullOrEmpty(token)) { return; }
+                    Session.WpcToken = null;
+
+                    if (!byToken.TryRemove(token, out WpcDevice dev)) { return; }
+
+                    var pairs = (ICollection<KeyValuePair<string, WpcDevice>>)byAccountDevice;
+                    pairs.Remove(new KeyValuePair<string, WpcDevice>(PairKey(dev.AID, dev.DeviceId), dev));
+                    ProxyConfig.Account.Devices.Remove(dev.AID, dev.DeviceId);
+                }
+
+                /// <summary>客户端列表里「客户端」那一格：WPC 版本，带上自报的系统（有的话）。例："WPC 1.0 · Android 14"。</summary>
+                public static string ClientLabel(string Version, string Os)
+                {
+                    string s = ("WPC " + (Version ?? string.Empty)).TrimEnd();
+                    if (!string.IsNullOrEmpty(Os)) { s += " · " + Os; }
+                    return s;
+                }
+
+                /// <summary>客户端自报的显示文字：去掉控制字符、截到 Max 个字符。</summary>
+                private static string CleanLabel(string Value, int Max)
+                {
+                    if (string.IsNullOrEmpty(Value)) { return string.Empty; }
+                    StringBuilder sb = new StringBuilder(Math.Min(Value.Length, Max));
+                    foreach (char c in Value)
+                    {
+                        if (sb.Length >= Max) { break; }
+                        if (c < 0x20 || c == 0x7F) { continue; }
+                        sb.Append(c);
+                    }
+                    return sb.ToString().Trim();
+                }
+
+                /// <summary>
+                /// 控制连接多久收不到任何帧就判死：至少 5 分钟，且不短于普通连接的空闲超时。
+                /// WPC 每 30 秒 Ping 一次；手机被系统短暂冻结时 Ping 会迟到，按普通连接的 3 分钟算太紧。
+                /// </summary>
+                public static TimeSpan ControlIdleTimeout
+                {
+                    get
+                    {
+                        TimeSpan min = TimeSpan.FromMinutes(5);
+                        return ProxyConfig.Proxy.TCPTimeout > min ? ProxyConfig.Proxy.TCPTimeout : min;
+                    }
+                }
+
+                /// <summary>
+                /// 每秒一拍（ShellForm.OnStatTick）：控制连接在 ControlIdleTimeout 内收到过帧，就替它刷新 LastActiveTime，
+                /// 免得被 SuperSocket 按普通连接的空闲超时清掉；超过的主动关掉（半开连接 / 客户端已经不在了），关闭时自动注销。
+                /// 返回这一拍关掉的条数。
+                /// </summary>
+                public static int SweepControlSessions(DateTime Now)
+                {
+                    int closed = 0;
+                    try
+                    {
+                        TimeSpan limit = ControlIdleTimeout;
+                        foreach (WpcDevice dev in byToken.Values.ToList())
+                        {
+                            ProxySession s = dev.Control;
+                            if (s == null || !s.Connected) { continue; }
+
+                            if (Now - s.WpcLastFrame > limit)
+                            {
+                                try { s.Close(SuperSocket.SocketBase.CloseReason.TimeOut); } catch { }
+                                closed++;
+                            }
+                            else
+                            {
+                                s.LastActiveTime = Now;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        DoLog(nameof(SweepControlSessions), ex);
+                    }
+                    return closed;
+                }
+
+                public static void Clear()
+                {
+                    byToken.Clear();
+                    byAccountDevice.Clear();
+                }
+
+                #endregion
+            }
+
+            #endregion
+
             #region//服务器列表
 
             public static class ServerList
@@ -30883,7 +31517,8 @@ namespace WinsockPacketEditor
                         sql += "FireWall_AutoBlackList_Minutes INTEGER DEFAULT 30,";//代理模式 - 自动添加到黑名单的时间
                         sql += "FireWall_AutoClear_Expiry BOOLEAN DEFAULT 0,";//代理模式 - 自动清理过期的规则
                         sql += "DriverType INTEGER DEFAULT 1,";//代理模式 - 进程拦截的驱动类型（0 Proxifier · 1 NFAPI · 2 WinDivert）
-                        sql += "SelectProcessNames TEXT";//代理模式 - 按名称拦截的进程表（一行一条 "模块名|路径"，见 SerializeSelectProcessNames）
+                        sql += "SelectProcessNames TEXT,";//代理模式 - 按名称拦截的进程表（一行一条 "模块名|路径"，见 SerializeSelectProcessNames）
+                        sql += "Only_WPC_Client BOOLEAN DEFAULT 0";//代理模式 - 只允许 WPC 客户端连接（2026-09-14）
                         sql += ");";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
@@ -30891,9 +31526,10 @@ namespace WinsockPacketEditor
                             conn.Open();
                             cmd.ExecuteNonQuery();
 
-                            //CREATE TABLE IF NOT EXISTS 对老库一列都不会加，这两列是 2026-09-10 加的
+                            //CREATE TABLE IF NOT EXISTS 对老库一列都不会加，这几列是后来加的
                             EnsureColumn(conn, "ProxyMode", "DriverType", "INTEGER DEFAULT 1");
                             EnsureColumn(conn, "ProxyMode", "SelectProcessNames", "TEXT");
+                            EnsureColumn(conn, "ProxyMode", "Only_WPC_Client", "BOOLEAN DEFAULT 0");
                         }
                     }
 
@@ -30989,6 +31625,7 @@ namespace WinsockPacketEditor
                         sql += "MustTCP_AppointPort,";
                         sql += "MustTCP_AppointPortContent,";
                         sql += "EnableFireWall,";
+                        sql += "Only_WPC_Client,";
                         sql += "WhiteListMode,";
                         sql += "FireWall_AutoWhiteList_AuthSuccess,";
                         sql += "FireWall_AutoBlackList_UnSupport,";
@@ -31028,6 +31665,7 @@ namespace WinsockPacketEditor
                         sql += "@MustTCP_AppointPort,";
                         sql += "@MustTCP_AppointPortContent,";
                         sql += "@EnableFireWall,";
+                        sql += "@Only_WPC_Client,";
                         sql += "@WhiteListMode,";
                         sql += "@FireWall_AutoWhiteList_AuthSuccess,";
                         sql += "@FireWall_AutoBlackList_UnSupport,";
@@ -31070,6 +31708,7 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@MustTCP_AppointPort", ProxyConfig.Proxy.MustTCP_AppointPort);
                             cmd.Parameters.AddWithValue("@MustTCP_AppointPortContent", ProxyConfig.Proxy.MustTCP_AppointPortContent);
                             cmd.Parameters.AddWithValue("@EnableFireWall", ProxyConfig.Proxy.EnableFireWall);
+                            cmd.Parameters.AddWithValue("@Only_WPC_Client", ProxyConfig.Proxy.Only_WPC_Client);
                             cmd.Parameters.AddWithValue("@WhiteListMode", ProxyConfig.Proxy.WhiteListMode);
                             cmd.Parameters.AddWithValue("@FireWall_AutoWhiteList_AuthSuccess", ProxyConfig.Proxy.FireWall_AutoWhiteList_AuthSuccess);
                             cmd.Parameters.AddWithValue("@FireWall_AutoBlackList_UnSupport", ProxyConfig.Proxy.FireWall_AutoBlackList_UnSupport);

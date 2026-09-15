@@ -147,6 +147,12 @@ namespace WinsockPacketEditor
             d["ProxyModeForm.StartSocks5Proxy"] = "Socks5 프록시 시작";
             d["ProxyModeForm.StartSocks5Proxy.Fail"] = "Socks5 프록시를 시작하지 못했습니다";
             d["ProxyModeForm.SetupSocks5Proxy.Fail"] = "Socks5 프록시를 초기화하지 못했습니다";
+            d["ProxyModeForm.MaxConnection.Capped"] = "최대 연결 수 {0}이(가) 이 컴퓨터에서 예약할 수 있는 상한 {1}(연결당 {2} KB)을 초과합니다. 이번에는 {1}로 시작합니다";
+            d["ProxyModeForm.MaxConnection.Fallback"] = "최대 연결 수 {0}으로 시작하지 못했습니다(버퍼 예약 메모리 부족 가능성). 기본값 {1}로 다시 시도합니다";
+            d["ProxySettingsForm.MaxConnection.Error"] = "최대 연결 수는 1 ~ {0} 사이여야 합니다(연결당 {1} KB 예약, 이 컴퓨터 메모리 {2} GB)";
+            d["ProxySettingsForm.OnlyWpc.NeedAuth"] = "\"WPC 클라이언트만 허용\"은 먼저 인증을 켜야 합니다";
+            d["WPC.OnlyWpc.Reject"] = "\"WPC 클라이언트만 허용\"이 켜져 있어 일반 SOCKS5 클라이언트를 거부했습니다 [ {0} ]";
+            d["WPC.Register.Log"] = "WPC 기기 등록: {0} [ {1} ] 기기 {2} 버전 {3}";
             d["ProxyModeForm.StopProxy"] = "SOCKS5 프록시 중지";
             d["ProxyModeForm.ProxyServerIP"] = "프록시 서버 IP : TCP [ {0} ] UDP [ {1} ]";
             d["ProxyModeForm.ProxyServer.Auth"] = "프록시 인증을 켰습니다";

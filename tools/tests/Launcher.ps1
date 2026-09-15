@@ -10,7 +10,7 @@
 [CmdletBinding()]
 param(
     # 默认验 WPE x64 的包；验 WPE Proxy Cap 的包时传：
-    #   -Exe ..\WPEProxyCap.Hybrid\dist\launcher\WPCLauncher.exe -Bin ..\WPEProxyCap.Hybrid\App\publish
+    #   -Exe ..\WPEProxyCap\dist\launcher\WPCLauncher.exe -Bin ..\WPEProxyCap\App\publish
     [string]$Exe,
     [string]$Bin
 )

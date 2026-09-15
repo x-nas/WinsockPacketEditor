@@ -3,7 +3,7 @@
   代理模式的外壳 —— 对应 WinForms 的 Forms/ProxyModeForm。
 
   那边是「一个 119px 的 Menu（14 项）+ 一个 Tabs（14 页）」两套同步的导航；
-  这里只保留侧栏一套，与官网 WPEWeb.Cyber 的 .sidebar 一致。
+  这里只保留侧栏一套，与官网 WPEWeb 的 .sidebar 一致。
   页面定义（顺序 / 分组 / 图标）集中在 proxy/pages.ts，与注入模式共用一份。
 */
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'

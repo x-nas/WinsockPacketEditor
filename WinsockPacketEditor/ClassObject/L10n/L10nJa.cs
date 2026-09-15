@@ -147,6 +147,12 @@ namespace WinsockPacketEditor
             d["ProxyModeForm.StartSocks5Proxy"] = "Socks5 プロキシを開始";
             d["ProxyModeForm.StartSocks5Proxy.Fail"] = "Socks5 プロキシの開始に失敗しました";
             d["ProxyModeForm.SetupSocks5Proxy.Fail"] = "Socks5 プロキシの初期化に失敗しました";
+            d["ProxyModeForm.MaxConnection.Capped"] = "最大接続数 {0} はこのマシンで確保できる上限 {1}（1 接続あたり {2} KB）を超えています。今回は {1} で起動します";
+            d["ProxyModeForm.MaxConnection.Fallback"] = "最大接続数 {0} での起動に失敗しました（バッファ確保のメモリ不足の可能性）。既定値 {1} で再試行します";
+            d["ProxySettingsForm.MaxConnection.Error"] = "最大接続数は 1 ～ {0} の範囲で指定してください（1 接続あたり {1} KB を確保、このマシンのメモリ {2} GB）";
+            d["ProxySettingsForm.OnlyWpc.NeedAuth"] = "「WPC クライアントのみ許可」には先に認証を有効にする必要があります";
+            d["WPC.OnlyWpc.Reject"] = "「WPC クライアントのみ許可」が有効のため、通常の SOCKS5 クライアントを拒否しました [ {0} ]";
+            d["WPC.Register.Log"] = "WPC 端末を登録: {0} [ {1} ] 端末 {2} バージョン {3}";
             d["ProxyModeForm.StopProxy"] = "SOCKS5 プロキシを停止";
             d["ProxyModeForm.ProxyServerIP"] = "プロキシサーバー IP : TCP [ {0} ] UDP [ {1} ]";
             d["ProxyModeForm.ProxyServer.Auth"] = "プロキシの認証を有効にしました";

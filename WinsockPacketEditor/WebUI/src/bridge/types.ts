@@ -217,6 +217,10 @@ export interface AuthRow {
   AccountId: string; UserName: string; AuthIP: string; IPLocation: string
   LinksNumber: number; DevicesNumber: number; TrafficStatistics: number
   AuthResult: boolean; AuthTime: string
+  /** WPC 报上来的设备指纹；普通 SOCKS5 客户端为空串 */
+  DeviceId: string
+  /** "WPC 1.0" / "SOCKS5" */
+  Client: string
 }
 
 /** 本地端口映射。 */

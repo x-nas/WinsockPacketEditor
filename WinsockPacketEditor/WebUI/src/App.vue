@@ -191,7 +191,7 @@ function open(url: string): void {
 /**
  * 官网页面地址，按当前语言分流。
  *
- * 官网 15 个中文页在根目录、同名英文页在 en/ 下（见 WPEWeb.Cyber 第 4.8 节），
+ * 官网 15 个中文页在根目录、同名英文页在 en/ 下（见 WPEWeb 第 4.8 节），
  * 所以只是加个前缀。首页不走这里 —— 那条链接指的是站点本身。
  */
 function site(page: string): string {
