@@ -245,6 +245,8 @@ interface ConnRow {
   ServerAddress: string
   /** SOCKS5 UDP ASSOCIATE 的那条控制连接（C# 的 ClientConnRow.Udp）。 */
   Udp?: boolean
+  /** WPC 的控制连接（C# 的 ClientConnRow.Wpc）：常驻、不连任何目标，所以目标与出口都是空的。 */
+  Wpc?: boolean
 }
 
 /** DomainType 的 0 —— 端口认不出应用层协议的普通 TCP（C# 的 DomainType.Socket）。 */
@@ -419,6 +421,16 @@ watch(rows, () => {
         <div v-for="(c, i) in conns" :key="c.ClientPort + '|' + i" class="crow">
           <span class="cport">:{{ c.ClientPort }}</span>
           <span class="carrow">→</span>
+          <!--
+            WPC 控制连接：目标、协议、出口三格都写明它是什么，而不是「— · 套接字 · —」——
+            那样看着像一条坏掉的连接（2026-09-15 用户问过）。
+          -->
+          <template v-if="c.Wpc">
+            <span class="ctarget wpc" :title="t('cli.wpcCtlTip')">{{ t('cli.wpcCtl') }}</span>
+            <span class="cproto wpc" :title="t('cli.wpcCtlTip')">WPC</span>
+            <span class="csrv same">—</span>
+          </template>
+          <template v-else>
           <span class="ctarget">{{ c.Target || '—' }}</span>
           <!--
             UDP 关联（SOCKS5 UDP ASSOCIATE）单独写「UDP」：它的 DomainType 是按端口猜的
@@ -443,6 +455,7 @@ watch(rows, () => {
           <span v-else class="csrv" :class="{ same: !diffVia(c) }">
             {{ diffVia(c) ? c.ServerAddress : (c.ServerAddress ? t('cli.direct') : '—') }}
           </span>
+          </template>
         </div>
         </template>
       </div>
@@ -495,8 +508,8 @@ watch(rows, () => {
   height: var(--th-h);
   background: var(--panel);
   border-bottom: 1px solid var(--border);
-  /* 右内边距由模板按实测的滚动条槽位宽度补（useScrollGutter），这里只是没量到之前的兜底 */
-  padding-right: 24px;
+  /* 右内边距由模板按实测的滚动条宽度补（useScrollGutter，没有滚动条时是 0），这里只是没量到之前的兜底 */
+  padding-right: 14px;
   font-family: var(--share);
   font-size: var(--th-size);
   letter-spacing: .14em;
@@ -523,8 +536,12 @@ watch(rows, () => {
 .row > span:nth-child(3),
 .row > span:nth-child(4) { text-align: left; }
 
-/* ⚠️ scrollbar-gutter 的理由见下面 .cbody 那段 —— 表头在容器外，槽位必须恒定 */
-.body { flex: 1; min-height: 0; overflow-y: auto; scrollbar-gutter: stable; }
+/*
+  ⚠️ <b>不写 scrollbar-gutter: stable</b>（2026-09-15 去掉）：它在没有滚动条时也在右边留一条空槽，
+  行（连同选中的底色）停在槽位前、表头却因为补了 gutter 铺到最右，看着就是「行没铺满」。
+  表头的右内边距由 useScrollGutter 实测补：滚动条出现时内容框变窄、ResizeObserver 触发重量，两边照样对得齐。
+*/
+.body { flex: 1; min-height: 0; overflow-y: auto; }
 
 .empty { padding: 40px 0; text-align: center; color: var(--muted); font-size: var(--fs-body); }
 
@@ -624,23 +641,18 @@ watch(rows, () => {
 .cip { font-family: var(--mono); font-size: var(--fs-body); color: var(--cyan); }
 
 /*
-  ⚠️⚠️ <b>scrollbar-gutter: stable 是必须的，不是装饰。</b>
+  表头在这个容器<b>外面</b>：一出现滚动条，行的可用宽度就比表头少一个槽位，
+  两边的 grid 各按各的宽度算，后面几列就错开（2026-09-09 两张表都撞过）。
 
-  表头在这个容器<b>外面</b>，而滚动条是 10px 且<b>占宽度</b>（不是 overlay，见 style.css
-  的 ::-webkit-scrollbar）—— 一出现滚动条，行的可用宽度就比表头少 10px，
-  两者的 grid 各自按自己的宽度算，<b>后面几列就错开了</b>。
-
-  实测上半部那张表（同样是表头在外面）：出现滚动条时后 5 列偏 5~10px，
-  表头 905 宽、行 895 宽。这一处 2026-09-09 才发现，两张表一起修的。
-
-  stable 让滚动条的槽位<b>一直</b>留着（没有滚动条时也留），宽度因此恒定；
-  表头再补上同样宽度的右内边距（见 .chead / .head 的 padding-right）就永远对得齐。
+  以前靠 scrollbar-gutter: stable 恒留槽位 + 表头写死同宽的右内边距；
+  2026-09-15 起改成<b>不留槽位</b>、表头右内边距按 useScrollGutter 实测补 ——
+  恒留槽位会让没有滚动条时的行停在槽位前，看着像没铺满（原因同上面的 .body）。
+  滚动条出现 / 消失时内容框变宽变窄，ResizeObserver 触发重量，照样对得齐。
 */
 .cbody {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  scrollbar-gutter: stable;
   padding: 0 0 4px;
 }
 
@@ -671,13 +683,12 @@ watch(rows, () => {
     ⚠️ 配色与<b>上半部那张表的 .head 逐条一致</b>（--panel + 下边框）——
     两张表上下并排，表头长得不一样一眼就看得出来。
 
-    ⚠️ <b>右内边距要多留一个滚动条的宽度</b>：下面的 .cbody 用 scrollbar-gutter: stable 留槽位，
-    表头在容器外面，不补就会宽出那么多。槽位到底几像素由模板按实测补（useScrollGutter）——
-    WebView2 开着覆盖式滚动条时是 0，写死 10 反而错位 10px；这里的 24 只是兜底。
+    ⚠️ <b>右内边距要补上滚动条占掉的宽度</b>：表头在 .cbody 外面，滚动条出现时不补就比行宽。
+    补多少由模板按实测给（useScrollGutter，没有滚动条或覆盖式滚动条时是 0）；这里的 14 只是挂载前的兜底。
   */
   background: var(--panel);
   border-bottom: 1px solid var(--border);
-  padding-right: 24px;
+  padding-right: 14px;
   /* 与全项目其它表头同一份（10px · .14em · var(--th-fg)），不因为是子表就小半号 */
   font-family: var(--share);
   font-size: var(--th-size);
@@ -721,6 +732,10 @@ watch(rows, () => {
   （请求 / 响应是最值得一眼分辨的语义），协议本身不承担那个作用。
 */
 .cproto { text-align: center; color: var(--muted); }
+
+/* WPC 控制连接：绿色，与上半部「设备标识」那一格是 WPC 时同一个颜色 */
+.ctarget.wpc,
+.cproto.wpc { color: var(--green); }
 
 /*
   两张表共用。

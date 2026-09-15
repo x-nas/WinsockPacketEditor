@@ -13043,6 +13043,7 @@ namespace WinsockPacketEditor
                                 DomainType = (int)s.DomainType,
                                 ServerAddress = s.ServerAddress,
                                 Udp = s.CommandType == ProxyConfig.Proxy.CommandType.UDP,
+                                Wpc = s.IsWpcControl,
                             });
                         }
                     }

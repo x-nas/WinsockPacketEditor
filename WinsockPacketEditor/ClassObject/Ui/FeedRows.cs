@@ -394,6 +394,14 @@ namespace WinsockPacketEditor
             「协议：套接字 · 实际出口：—」，看不出它其实是一路 UDP（多半是 DNS）。
         */
         public bool Udp;
+
+        /*
+            这条会话是 WPC 的<b>控制连接</b>（SOCKS5 私有方法 0x80，ProxySession.IsWpcControl）：
+            注册设备、收发心跳，常驻 = 设备在线。它从不发 CONNECT，所以目标与实际出口都是空的，
+            DomainType 停在默认的 Socket —— 不标出来的话界面上就是「目标：— · 协议：套接字 · 出口：—」，
+            看着像一条坏掉的连接（2026-09-15 用户问过）。
+        */
+        public bool Wpc;
     }
 
     public sealed class AuthRow
