@@ -59,6 +59,58 @@ const sort = useSort<AuthRow>(rows, {
 const shown = sort.sorted
 
 /*
+  「客户端地」列宽可拖（2026-09-15 用户报：长地址看不全）。做法照防火墙名单 / 封包列表：
+  手柄挂在表头格右边界、监听挂 window（快拖时鼠标会跑出那条 7px 窄条）、双击恢复默认，<b>不持久化</b>。
+
+  其余列维持原来的 grid：IP 与设备标识仍是弹性列，拖宽时由它们让出空间。
+  这张表的表头在滚动容器外面、不横向滚，所以上限按表头实际宽度算 ——
+  固定列 476 + 两根弹性列下限 130 + 60 + 8 条 12px 间隙 + 左右内边距（右边含滚动条槽位），
+  超过就会把整行撑出容器、表头与行错位。
+  设备标识的下限只给 60：这一格不是「—」就是截断的指纹（全文在悬停提示里），
+  原来的 110 让「客户端地」在 1280 窗口里最多只能拖到 234px，长地址照样看不全。
+*/
+const LOC_DEF = 150
+const LOC_MIN = 80
+const locW = ref(LOC_DEF)
+const headEl = ref<HTMLElement | null>(null)
+
+const gridCols = computed(
+  () => `72px 116px minmax(130px, 1.2fr) ${locW.value}px 56px 56px 88px 88px minmax(60px, .9fr)`)
+
+function locMax(): number {
+  const w = headEl.value?.clientWidth ?? 0
+  return Math.max(LOC_MIN, w - 14 - (14 + gutter.value) - 8 * 12 - 476 - (130 + 60))
+}
+
+let drag: { x: number; w: number } | null = null
+
+function onDragMove(e: MouseEvent): void {
+  if (!drag) return
+  locW.value = Math.min(locMax(), Math.max(LOC_MIN, Math.round(drag.w + e.clientX - drag.x)))
+}
+
+function onDragUp(): void {
+  drag = null
+  window.removeEventListener('mousemove', onDragMove)
+  window.removeEventListener('mouseup', onDragUp)
+  document.body.classList.remove('col-resizing')
+}
+
+function startResize(e: MouseEvent): void {
+  drag = { x: e.clientX, w: locW.value }
+  //整页禁选 + 统一光标，否则拖动会把表头文字刷成选中态
+  document.body.classList.add('col-resizing')
+  window.addEventListener('mousemove', onDragMove)
+  window.addEventListener('mouseup', onDragUp)
+}
+
+/** 双击手柄恢复默认宽度 —— 拖乱了不必去猜原来是多少。 */
+function resetLoc(): void { locW.value = LOC_DEF }
+
+//拖着列宽时切走这一页：监听与整页的 col-resizing 不收掉就一直挂着
+onBeforeUnmount(() => { if (drag) onDragUp() })
+
+/*
   「在线多久」是<b>算出来的</b>，不是推过来的（AuthRow 只有认证时刻）。
   推送只在认证列表本身变化时发生，所以要自己走表 —— 20 秒一拍：
   这一列的单位是分钟，再密没有意义，而每一拍都会让整张表重算一次。
@@ -273,11 +325,16 @@ watch(rows, () => {
       「右键可加入名单」也不值得占一整行 —— 表格直接顶到上边。
     -->
     <!-- 带 .so 的这几格可点排序；所属地与在线分钟不排（一个是附属信息、一个跟着认证时间走）-->
-    <div class="head" :style="{ paddingRight: (14 + gutter) + 'px' }">
+    <div ref="headEl" class="head" :style="{ paddingRight: (14 + gutter) + 'px', gridTemplateColumns: gridCols }">
       <span class="so" :class="{ on: sort.active('time') }" @click="sort.toggle('time')">{{ t('cli.authTime') }}<i class="ar">{{ sort.mark('time') }}</i></span>
       <span class="so" :class="{ on: sort.active('user') }" @click="sort.toggle('user')">{{ t('col.user') }}<i class="ar">{{ sort.mark('user') }}</i></span>
       <span class="so" :class="{ on: sort.active('ip') }" @click="sort.toggle('ip')">{{ t('cli.ip') }}<i class="ar">{{ sort.mark('ip') }}</i></span>
-      <span>{{ t('col.clientLoc') }}</span>
+      <span class="rz">
+        {{ t('col.clientLoc') }}
+        <i class="grip" :title="t('col.resizeHint')"
+           @mousedown.prevent.stop="startResize($event)"
+           @dblclick.prevent.stop="resetLoc()" />
+      </span>
       <span class="so" :class="{ on: sort.active('links') }" @click="sort.toggle('links')">{{ t('cli.links') }}<i class="ar">{{ sort.mark('links') }}</i></span>
       <span class="so" :class="{ on: sort.active('devices') }" @click="sort.toggle('devices')">{{ t('cli.devices') }}<i class="ar">{{ sort.mark('devices') }}</i></span>
       <span class="so" :class="{ on: sort.active('traffic') }" @click="sort.toggle('traffic')">{{ t('cli.traffic') }}<i class="ar">{{ sort.mark('traffic') }}</i></span>
@@ -294,6 +351,7 @@ watch(rows, () => {
         :key="r.AccountId + '|' + r.AuthIP + '|' + i"
         class="row"
         :class="{ sel: r.AuthIP === selectedIp }"
+        :style="{ gridTemplateColumns: gridCols }"
         @click="pick(r)"
         @contextmenu.prevent="openMenu(r, $event)"
       >
@@ -305,10 +363,11 @@ watch(rows, () => {
           （那边 flag: true 也是挂在 ClientLocation / ServerLocation 两列上）。
           它描述的本来就是"这个地址属于哪儿"，挂在 IP 上是我这一页搞反了。
         -->
-        <span class="loc">
+        <!-- 省略号挂在内层 .t：.loc 是 flex 容器，text-overflow 对它本身不起作用；拖不够宽时悬停看全文 -->
+        <span class="loc" :title="r.IPLocation">
           <img class="flag" :src="flagSrc(r.IPLocation)" alt="" width="16" height="16"
                loading="eager" decoding="sync">
-          {{ r.IPLocation }}
+          <span class="t">{{ r.IPLocation }}</span>
         </span>
         <span class="num">{{ r.LinksNumber }}</span>
         <span class="num">{{ r.DevicesNumber }}</span>
@@ -423,7 +482,8 @@ watch(rows, () => {
     72+116+56+56+88+88 = 476，弹性下限 130+96+110 = 336，间距 8×12 = 96，内边距 38 → 946。
     「在线 (分钟)」那格 88px 是按表头字体（10px + .14em 字距）量的，再窄表头就被截。
   */
-  grid-template-columns: 72px 116px minmax(130px, 1.2fr) minmax(96px, 1fr) 56px 56px 88px 88px minmax(110px, .9fr);
+  /* 兜底值；实际列宽由模板里的 gridCols 内联给（「客户端地」可拖，见脚本里的 locW） */
+  grid-template-columns: 72px 116px minmax(130px, 1.2fr) 150px 56px 56px 88px 88px minmax(60px, .9fr);
   align-items: center;
   gap: 12px;
   padding: 0 14px;
@@ -479,6 +539,35 @@ watch(rows, () => {
 .user { color: var(--gray); }
 /* 国旗与文字同格：省一列，滚动时图和文永远对得上（与封包列表同一个理由）*/
 .loc { display: flex; align-items: center; gap: 6px; color: var(--dim3); }
+.loc .t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+
+/* 可拖宽的那一格：手柄贴在格子右边界上，格子要能定位；不能 overflow: hidden，否则伸进间隙的半条手柄被裁掉 */
+.head > span.rz { position: relative; overflow: visible; }
+
+/*
+  手柄与防火墙名单同一个样子：宽 7px（1px 的靶子点不中），跨在列与列的间隙里，
+  hover 时显一条青线给反馈。
+*/
+.grip {
+  position: absolute;
+  top: 0;
+  right: -9px;
+  width: 7px;
+  height: 100%;
+  cursor: col-resize;
+  z-index: 3;
+}
+
+.grip:hover::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 3px;
+  width: 1px;
+  background: var(--cyan);
+  box-shadow: 0 0 4px var(--cyan);
+}
 .num { color: var(--dim3); font-variant-numeric: tabular-nums; }
 .dev { color: var(--muted); font-family: var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .dev.wpc { color: var(--green); }
@@ -654,4 +743,10 @@ watch(rows, () => {
   text-transform: inherit;
   color: inherit;
 }
+
+/*
+  上面那条 color: inherit 是 (0,2,1)，把 style.css 的 .so.on（0,2,0）盖掉了 ——
+  排序中的那一列一直没点亮，只剩一个箭头。这里再抬一级把青色还回来。
+*/
+.head > span.so.on { color: var(--cyan); }
 </style>

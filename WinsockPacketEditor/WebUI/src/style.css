@@ -1153,7 +1153,15 @@ body.col-resizing * {
   display: inline-block;
   width: 1em;
   margin-left: 2px;
-  font-family: var(--mono);   /* Share Tech Mono 没有 ↑↓ 这两个字形，会掉到别的字体上、基线对不齐 */
+  /*
+    ⚠️ 箭头字形<b>不走 --mono / --share</b>（2026-09-15 用户报「排序箭头变形了」）：
+    Share Tech Mono 没有 ↑↓，而内嵌的 WPE Sarasa 的 unicode-range 含 U+2190–21FF，
+    于是箭头落到等宽中文字体上 —— 那一套箭头是全角比例，缩到 10px 表头里又瘦又长。
+    WPE 只跑在 Windows 上，Segoe UI Symbol 必有，比例正常。
+  */
+  font-family: "Segoe UI Symbol", "Segoe UI", sans-serif;
+  /* ⚠️ 箭头挂在 <i> 上，浏览器默认 italic；Segoe UI Symbol 没有斜体字形，于是被合成斜体硬掰成歪的 —— 这才是「变形」的主因 */
+  font-style: normal;
   letter-spacing: 0;
 }
 
