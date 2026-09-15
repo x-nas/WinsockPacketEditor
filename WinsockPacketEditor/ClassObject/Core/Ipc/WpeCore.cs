@@ -331,6 +331,7 @@ namespace WinsockPacketEditor.Ipc
             {
                 Id = Interlocked.Increment(ref _packetSeq),
                 TimeTicks = packetTime.Ticks,
+                TimeKind = packetTime.Kind,
                 Socket = socket,
                 PacketType = packetType,
                 FilterAction = filterAction,
@@ -588,7 +589,8 @@ namespace WinsockPacketEditor.Ipc
                         string[] parts = ipPair.Split('|');
 
                         byte[] frame = PacketFrame.Encode(
-                            p.Id, p.TimeTicks, p.Socket,
+                            p.Id, p.TimeKind == DateTimeKind.Utc
+                                ? new DateTime(p.TimeTicks, DateTimeKind.Utc).ToLocalTime().Ticks : p.TimeTicks, p.Socket,
                             (byte)p.PacketType, (byte)p.FilterAction,
                             parts[0], parts[1],
                             p.Raw, p.Modified);
@@ -848,7 +850,8 @@ namespace WinsockPacketEditor.Ipc
                     {
                         DetectWinsock();
                         _hook.StartHook();
-                        _hookInstalled = true;
+                        _hookInstalled = _hook.InstalledCount > 0;
+                        if (!_hookInstalled) { return Fail("没有成功安装任何 WinSock 钩子"); }
 
                         /*
                             ⚠️ <b>唤醒挂起的目标不在这里做，在外壳侧</b>（ShellLink.StartHook）。

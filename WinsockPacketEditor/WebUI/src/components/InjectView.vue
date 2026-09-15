@@ -785,6 +785,7 @@ async function clearList(): Promise<void> {
         v-show="page === 'packet'"
         ref="dataRef"
         :busy="busy"
+        :visible="page === 'packet'"
         @toggle-hook="toggleHook"
         @clear="clearList"
         @open-setting="setting = $event"

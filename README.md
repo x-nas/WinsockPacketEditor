@@ -31,7 +31,7 @@
 
 ### ✨ 它能做什么
 
-- 📡 **实时抓包**：把目标程序收发的封包一条条列出来，随时暂停、搜索、导出。
+- 📡 **实时抓包**：把目标程序收发的封包一条条列出来，随时暂停、搜索、导出；切换页面后列表会稳定恢复显示。
 - ✏️ **改写封包**：十六进制并排编辑，改完可以立即再发一遍。
 - 🎨 **规则自动改**：设好「滤镜」，符合条件的封包自动替换 / 拦截 / 改长度，命中的行按颜色标出来。
 - 🤖 **自动化**：用「机器人」把一串动作（发包、延迟、循环、模拟键鼠）排成流程自动跑。
@@ -111,7 +111,7 @@ A **network packet capture-and-edit tool** for Windows. It lists every packet a 
 
 ### ✨ What it does
 
-- 📡 **Live capture** — list every packet the target sends and receives; pause, search and export any time.
+- 📡 **Live capture** — list every packet the target sends and receives; pause, search and export any time, with the list restoring reliably after switching pages.
 - ✏️ **Edit packets** — a side-by-side hex editor; replay a packet the moment you're done.
 - 🎨 **Rewrite by rule** — set up a *filter* and matching packets are replaced / blocked / resized automatically, with matched rows color-coded.
 - 🤖 **Automation** — a *robot* runs a sequence of steps (send, delay, loop, simulate keyboard and mouse) for you.

@@ -71,7 +71,7 @@ onBeforeUnmount(() => detach?.())
       保活是必须的：切走再切回来若重新挂载，PacketList 的滚动位置、
       选中行、以及 attachPacketFeed 的订阅都会重来一遍。
     -->
-    <ProxyData v-show="page === 'data'" />
+    <ProxyData v-show="page === 'data'" :visible="page === 'data'" />
 
     <!--
       日志页也保活：它自己维护一份 2000 条的环形缓冲，切走再切回来若重新挂载，

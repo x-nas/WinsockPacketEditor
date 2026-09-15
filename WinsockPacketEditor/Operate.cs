@@ -2186,14 +2186,12 @@ namespace WinsockPacketEditor
 
             public static byte GetRandomHexByte(byte excludeByte)
             {
-                byte result;
-
-                do
+                lock (rdHex)
                 {
-                    result = (byte)rdHex.Next(256);
-                } while (result == excludeByte);
-
-                return result;
+                    // Select uniformly from the other 255 values without retrying.
+                    int value = rdHex.Next(255);
+                    return (byte)(value >= excludeByte ? value + 1 : value);
+                }
             }
 
             #endregion
@@ -15921,7 +15919,7 @@ namespace WinsockPacketEditor
                             {
                                 case Operate.PacketConfig.Packet.PacketType.WS1_Send:
                                 case Operate.PacketConfig.Packet.PacketType.WS1_Recv:
-                                    res = WSock32.send(Socket, ipSend, bSendBuffer.Length, SocketFlags.None);
+                                    res = SendAll(Socket, ipSend, bSendBuffer.Length, true);
                                     break;
                                 case Operate.PacketConfig.Packet.PacketType.WS2_Send:
                                 case Operate.PacketConfig.Packet.PacketType.WS2_Recv:
@@ -15930,7 +15928,7 @@ namespace WinsockPacketEditor
                                 case Operate.PacketConfig.Packet.PacketType.WSARecvEx:
                                 case Operate.PacketConfig.Packet.PacketType.TCP_Req:
                                 case Operate.PacketConfig.Packet.PacketType.TCP_Resp:
-                                    res = WS2_32.send(Socket, ipSend, bSendBuffer.Length, SocketFlags.None);
+                                    res = SendAll(Socket, ipSend, bSendBuffer.Length, false);
                                     break;
                                 case Operate.PacketConfig.Packet.PacketType.WS1_SendTo:
                                 case Operate.PacketConfig.Packet.PacketType.WS1_RecvFrom:
@@ -15954,7 +15952,7 @@ namespace WinsockPacketEditor
                                     break;
                             }
 
-                            if (res > 0)
+                            if (res == bSendBuffer.Length)
                             {
                                 bReturn = true;
                             }
@@ -15978,6 +15976,30 @@ namespace WinsockPacketEditor
                 #endregion
 
                 #region//获取封包收发速率
+
+                private static int SendAll(int socket, IntPtr buffer, int length, bool winsock1)
+                {
+                    int offset = 0;
+                    var idle = System.Diagnostics.Stopwatch.StartNew();
+                    while (offset < length)
+                    {
+                        int n = winsock1
+                            ? WSock32.send(socket, IntPtr.Add(buffer, offset), length - offset, SocketFlags.None)
+                            : WS2_32.send(socket, IntPtr.Add(buffer, offset), length - offset, SocketFlags.None);
+                        if (n > 0)
+                        {
+                            if (n > length - offset) { return -1; }
+                            offset += n;
+                            idle.Restart();
+                        }
+                        else if (n < 0 && WS2_32.WSAGetLastError() == SocketError.WouldBlock && idle.ElapsedMilliseconds < 5000)
+                        {
+                            Thread.Sleep(1);
+                        }
+                        else { return -1; }
+                    }
+                    return offset;
+                }
 
                 #endregion
 
@@ -19085,30 +19107,7 @@ namespace WinsockPacketEditor
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public static bool CheckPacket_IsMatch_AppointSocket(Int32 iSocket, string socketContent)
                 {
-                    if (string.IsNullOrEmpty(socketContent))
-                        return false;
-
-                    try
-                    {
-                        string[] parts = socketContent.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-
-                        foreach (string part in parts)
-                        {
-                            if (int.TryParse(part.Trim(), out int currentValue))
-                            {
-                                if (currentValue == iSocket)
-                                {
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(CheckPacket_IsMatch_AppointSocket), ex);                        
-                    }
-
-                    return false;
+                    return !string.IsNullOrEmpty(socketContent) && socketRuleCache.Get(socketContent).Contains(iSocket);
                 }
 
                 #endregion
@@ -19118,47 +19117,7 @@ namespace WinsockPacketEditor
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public static bool CheckPacket_IsMatch_AppointLength(int len, string lengthContent)
                 {
-                    if (string.IsNullOrEmpty(lengthContent))
-                        return false;
-
-                    try
-                    {
-                        string[] parts = lengthContent.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-
-                        foreach (string part in parts)
-                        {
-                            string trimmedPart = part.Trim();
-                            int dashIndex = trimmedPart.IndexOf('-');
-
-                            if (dashIndex >= 0)
-                            {
-                                string fromStr = trimmedPart.Substring(0, dashIndex).Trim();
-                                string toStr = trimmedPart.Substring(dashIndex + 1).Trim();
-
-                                if (int.TryParse(fromStr, out int lenFrom) &&
-                                    int.TryParse(toStr, out int lenTo) &&
-                                    len >= lenFrom &&
-                                    len <= lenTo)
-                                {
-                                    return true;
-                                }
-                            }
-                            else
-                            {
-                                if (int.TryParse(trimmedPart, out int exactLen) && len == exactLen)
-                                {
-                                    return true;
-                                }
-                            }
-                        }
-
-                        return false;
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(CheckPacket_IsMatch_AppointLength), ex);
-                        return false;
-                    }
+                    return !string.IsNullOrEmpty(lengthContent) && InRanges(len, lengthContent);
                 }
 
                 #endregion
@@ -19175,6 +19134,13 @@ namespace WinsockPacketEditor
                 {
                     if (string.IsNullOrEmpty(portContent))
                         return false;
+
+                    if ((int)ptType <= (int)PacketConfig.Packet.PacketType.WSARecvFrom)
+                    {
+                        int local, remote;
+                        Ipc.HookPorts.Get(iSocket, ptType, sAddr, out local, out remote);
+                        return (local >= 0 && InRanges(local, portContent)) || (remote >= 0 && InRanges(remote, portContent));
+                    }
 
                     try
                     {
@@ -19224,34 +19190,7 @@ namespace WinsockPacketEditor
 
                 private static bool CheckPortMatch(string portContent, int actualPort)
                 {
-                    string[] parts = portContent.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-
-                    foreach (string part in parts)
-                    {
-                        string trimmedPart = part.Trim();
-
-                        int dashIndex = trimmedPart.IndexOf('-');
-                        if (dashIndex > 0)
-                        {
-                            string fromStr = trimmedPart.Substring(0, dashIndex).Trim();
-                            string toStr = trimmedPart.Substring(dashIndex + 1).Trim();
-
-                            if (int.TryParse(fromStr, out int minPort) &&
-                                int.TryParse(toStr, out int maxPort) &&
-                                actualPort >= minPort && actualPort <= maxPort)
-                            {
-                                return true;
-                            }
-                            continue;
-                        }
-
-                        if (int.TryParse(trimmedPart, out int port) && actualPort == port)
-                        {
-                            return true;
-                        }
-                    }
-
-                    return false;
+                    return InRanges(actualPort, portContent);
                 }
 
                 #endregion
@@ -19340,9 +19279,103 @@ namespace WinsockPacketEditor
 
                 #region//检查滤镜辅助方法
 
+                // Strings are immutable. Weak keys keep parsed rules alive exactly as long
+                // as their configuration; editing a rule cannot reuse a stale parse.
+                private sealed class RuleCache<T> where T : class
+                {
+                    private readonly ConditionalWeakTable<string, T> entries = new ConditionalWeakTable<string, T>();
+                    private readonly ConditionalWeakTable<string, T>.CreateValueCallback create;
+                    internal RuleCache(Func<string, T> parse) { create = key => parse(key); }
+                    internal T Get(string key) { return entries.GetValue(key ?? string.Empty, create); }
+                }
+
+                private sealed class NormalSearch
+                {
+                    internal bool Valid = true;
+                    internal readonly List<SearchCondition> Conditions = new List<SearchCondition>();
+                }
+
+                private static readonly RuleCache<HashSet<int>> excludeRuleCache = new RuleCache<HashSet<int>>(ParseExcludePositionsCore);
+                private static readonly RuleCache<List<SearchCondition>> searchRuleCache = new RuleCache<List<SearchCondition>>(ParseSearchConditionsCore);
+                private static readonly RuleCache<List<Modification>> modificationRuleCache = new RuleCache<List<Modification>>(ParseModificationsCore);
+                private static readonly RuleCache<NormalSearch> normalRuleCache = new RuleCache<NormalSearch>(CompileNormalSearch);
+                private static readonly RuleCache<int[]> positionRuleCache = new RuleCache<int[]>(CompilePositions);
+                private static readonly RuleCache<HashSet<int>> socketRuleCache = new RuleCache<HashSet<int>>(text =>
+                    new HashSet<int>(text.Split(';').Select(s => { int n; return int.TryParse(s.Trim(), out n) ? (int?)n : null; })
+                        .Where(n => n.HasValue).Select(n => n.Value)));
+                private static readonly RuleCache<int[][]> rangeRuleCache = new RuleCache<int[][]>(CompileRanges);
+
+                private static NormalSearch CompileNormalSearch(string text)
+                {
+                    var result = new NormalSearch();
+                    foreach (string part in text.Split(','))
+                    {
+                        if (string.IsNullOrWhiteSpace(part)) { continue; }
+                        int pipe = part.IndexOf('|'), index;
+                        byte value, mask;
+                        if (pipe <= 0 || pipe >= part.Length - 1 ||
+                            !TryParseNonNegativeInt(part.AsSpan(0, pipe).Trim(), out index) ||
+                            !HexCharsWithWildcardToByte(part.AsSpan(pipe + 1).Trim(), out value, out mask))
+                        { result.Valid = false; break; }
+                        result.Conditions.Add(new SearchCondition { RelativePosition = index, Value = value, Mask = mask });
+                    }
+                    return result;
+                }
+
+                private static int[] CompilePositions(string text)
+                {
+                    var result = new List<int>();
+                    foreach (string part in text.Split(','))
+                    { int n; if (int.TryParse(part, out n)) { result.Add(n); } }
+                    return result.ToArray();
+                }
+
+                private static int[][] CompileRanges(string text)
+                {
+                    var result = new List<int[]>();
+                    foreach (string entry in text.Split(';'))
+                    {
+                        string part = entry.Trim();
+                        int dash = part.IndexOf('-'), lo, hi;
+                        if (dash >= 0)
+                        {
+                            if (int.TryParse(part.Substring(0, dash).Trim(), out lo) &&
+                                int.TryParse(part.Substring(dash + 1).Trim(), out hi)) { result.Add(new[] { lo, hi }); }
+                        }
+                        else if (int.TryParse(part, out lo)) { result.Add(new[] { lo, lo }); }
+                    }
+                    return result.ToArray();
+                }
+
+                private static bool InRanges(int value, string text)
+                {
+                    foreach (int[] range in rangeRuleCache.Get(text))
+                        if (value >= range[0] && value <= range[1]) { return true; }
+                    return false;
+                }
+
+                internal static void WarmRules(FilterInfo filter)
+                {
+                    normalRuleCache.Get(filter.FSearch);
+                    searchRuleCache.Get(filter.FSearch);
+                    modificationRuleCache.Get(filter.FModify);
+                    excludeRuleCache.Get(filter.ExcludePosition);
+                    positionRuleCache.Get(filter.ProgressionPosition);
+                    positionRuleCache.Get(filter.RandomPosition);
+                    socketRuleCache.Get(filter.SocketContent);
+                    rangeRuleCache.Get(filter.LengthContent);
+                    rangeRuleCache.Get(filter.PortContent);
+                    if (!string.IsNullOrEmpty(filter.HeaderContent)) { HeaderBytes(filter.HeaderContent); }
+                }
+
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
 
                 private static HashSet<int> ParseExcludePositions(string excludeString)
+                {
+                    return excludeRuleCache.Get(excludeString);
+                }
+
+                private static HashSet<int> ParseExcludePositionsCore(string excludeString)
                 {
                     var positions = new HashSet<int>();
 
@@ -19459,73 +19492,17 @@ namespace WinsockPacketEditor
 
                 public static bool CheckFilter_IsMatch_Normal(FilterInfo sfi, ReadOnlySpan<byte> bufferSpan)
                 {
-                    if (string.IsNullOrEmpty(sfi.FSearch) || bufferSpan.IsEmpty)
-                        return false;
-
-                    try
+                    if (string.IsNullOrEmpty(sfi.FSearch) || bufferSpan.IsEmpty) { return false; }
+                    var rule = normalRuleCache.Get(sfi.FSearch);
+                    if (!rule.Valid) { return false; }
+                    var excluded = excludeRuleCache.Get(sfi.ExcludePosition);
+                    foreach (var condition in rule.Conditions)
                     {
-                        HashSet<int> excludePositions = null;
-                        if (!string.IsNullOrEmpty(sfi.ExcludePosition))
-                        {
-                            excludePositions = ParseExcludePositions(sfi.ExcludePosition);
-                        }
-
-                        var searchParts = sfi.FSearch.AsSpan();
-
-                        while (!searchParts.IsEmpty)
-                        {
-                            int commaIndex = searchParts.IndexOf(',');
-                            ReadOnlySpan<char> partSpan = commaIndex >= 0
-                                ? searchParts.Slice(0, commaIndex)
-                                : searchParts;
-
-                            searchParts = commaIndex >= 0
-                                ? searchParts.Slice(commaIndex + 1)
-                                : ReadOnlySpan<char>.Empty;
-
-                            if (partSpan.IsEmpty || partSpan.IsWhiteSpace())
-                                continue;
-
-                            int pipeIndex = partSpan.IndexOf('|');
-                            if (pipeIndex <= 0 || pipeIndex >= partSpan.Length - 1)
-                                return false;
-
-                            var indexSpan = partSpan.Slice(0, pipeIndex).Trim();
-                            if (!TryParseNonNegativeInt(indexSpan, out int index) ||
-                                index >= bufferSpan.Length)
-                            {
-                                return false;
-                            }
-
-                            var hexSpan = partSpan.Slice(pipeIndex + 1).Trim();
-                            if (!HexCharsWithWildcardToByte(hexSpan, out byte expected, out byte mask))
-                                return false;
-
-                            bool isExcludePosition = excludePositions != null && excludePositions.Contains(index);
-
-                            if (isExcludePosition)
-                            {
-                                byte actualValue = bufferSpan[index];
-                                if ((actualValue & mask) == (expected & mask))
-                                {
-                                    return false;
-                                }
-                            }
-                            else
-                            {
-                                if ((bufferSpan[index] & mask) != (expected & mask))
-                                {
-                                    return false;
-                                }
-                            }
-                        }
+                        int index = condition.RelativePosition;
+                        if (index >= bufferSpan.Length) { return false; }
+                        bool equal = (bufferSpan[index] & condition.Mask) == (condition.Value & condition.Mask);
+                        if (equal == excluded.Contains(index)) { return false; }
                     }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(CheckFilter_IsMatch_Normal), ex);
-                        return false;
-                    }
-
                     return true;
                 }
 
@@ -19559,7 +19536,7 @@ namespace WinsockPacketEditor
 
                         for (int i = 0; i < bufferSpan.Length; i++)
                         {
-                            if (bufferSpan[i] == firstValue)
+                            if ((bufferSpan[i] & firstCondition.Mask) == (firstValue & firstCondition.Mask))
                             {
                                 bool isMatch = true;
                                 int lastCheckedIndex = i;
@@ -19636,6 +19613,11 @@ namespace WinsockPacketEditor
 
                 private static List<SearchCondition> ParseSearchConditions(string searchPattern)
                 {
+                    return searchRuleCache.Get(searchPattern);
+                }
+
+                private static List<SearchCondition> ParseSearchConditionsCore(string searchPattern)
+                {
                     var conditions = new List<SearchCondition>();
                     string[] parts = searchPattern.Split(',');
 
@@ -19693,7 +19675,76 @@ namespace WinsockPacketEditor
 
                 #region//执行滤镜
 
+                [ThreadStatic]
+                private static HashSet<Guid> activeFilters;
+
+                private static readonly AsyncLocal<bool> filterExecutorContext = new AsyncLocal<bool>();
+                private static readonly object filterExecutorGate = new object();
+                private static readonly Dictionary<Guid, SendExecute> filterSends = new Dictionary<Guid, SendExecute>();
+                private static readonly Dictionary<Guid, RobotExecute> filterRobots = new Dictionary<Guid, RobotExecute>();
+
+                private static void StartFilterExecutor(FilterInfo fi, int socket)
+                {
+                    // ExecutionContext flows into Task.Run: traffic from an action must
+                    // not launch another copy of that action (or a cycle of actions).
+                    if (filterExecutorContext.Value) { return; }
+                    lock (filterExecutorGate)
+                    {
+                        filterExecutorContext.Value = true;
+                        try
+                        {
+                            foreach (Guid id in filterSends.Where(x => !x.Value.Running).Select(x => x.Key).ToArray())
+                                filterSends.Remove(id);
+                            foreach (Guid id in filterRobots.Where(x => !x.Value.Running).Select(x => x.Key).ToArray())
+                                filterRobots.Remove(id);
+
+                            if (fi.FEType == FilterExecuteType.Send && !filterSends.ContainsKey(fi.Execute_GUID))
+                            {
+                                var executor = SendConfig.Send.DoSend(fi.Execute_GUID);
+                                if (executor != null)
+                                {
+                                    SendConfig.List.SendExecute_Add(executor);
+                                    filterSends[fi.Execute_GUID] = executor;
+                                }
+                            }
+                            else if (fi.FEType == FilterExecuteType.Robot && !filterRobots.ContainsKey(fi.Execute_GUID))
+                            {
+                                var executor = RobotConfig.Robot.DoRobot(fi.Execute_GUID,
+                                    new Dictionary<string, object> { { "FilterSocket", socket } });
+                                if (executor != null)
+                                {
+                                    RobotConfig.List.RobotExecute_Add(executor);
+                                    filterRobots[fi.Execute_GUID] = executor;
+                                }
+                            }
+                        }
+                        finally { filterExecutorContext.Value = false; }
+                    }
+                }
+
                 public static FilterConfig.Filter.FilterAction DoFilter(
+                    FilterInfo fi,
+                    Int32 iSocket,
+                    Span<byte> bufferSpan,
+                    out byte[] bNewBuffer,
+                    PacketConfig.Packet.PacketType ptType,
+                    PacketConfig.Packet.SockAddr sAddr)
+                {
+                    bNewBuffer = null;
+                    if (fi == null) { return FilterAction.None; }
+                    var active = activeFilters ?? (activeFilters = new HashSet<Guid>());
+                    if (active.Count >= 64 || !active.Add(fi.FID))
+                    {
+                        return FilterAction.None;
+                    }
+                    try
+                    {
+                        return DoFilterCore(fi, iSocket, bufferSpan, out bNewBuffer, ptType, sAddr);
+                    }
+                    finally { active.Remove(fi.FID); }
+                }
+
+                private static FilterConfig.Filter.FilterAction DoFilterCore(
                     FilterInfo fi,
                     Int32 iSocket,
                     Span<byte> bufferSpan,
@@ -19732,6 +19783,10 @@ namespace WinsockPacketEditor
 
                         byte[] tempBuffer = null;
 
+                        // Only serialize this filter's byte transformation. Nested actions run
+                        // outside this lock, so two filters cannot deadlock each other.
+                        lock (fi.State)
+                        {
                         switch (fi.FAction)
                         {
                             case FilterConfig.Filter.FilterAction.Replace:
@@ -19784,27 +19839,21 @@ namespace WinsockPacketEditor
                                 break;
                         }
 
+                        }
+
                         if (fi.IsExecute && fi.Execute_GUID != null && fi.Execute_GUID != Guid.Empty)
                         {
                             switch (fi.FEType)
                             {
                                 case FilterConfig.Filter.FilterExecuteType.Send:
 
-                                    SendConfig.Send.DoSend(fi.Execute_GUID);
+                                    StartFilterExecutor(fi, iSocket);
 
                                     break;
 
                                 case FilterConfig.Filter.FilterExecuteType.Robot:
 
-                                    Dictionary<string, object> parameters = new Dictionary<string, object>
-                                    {
-                                        { 
-                                            "FilterSocket", 
-                                            iSocket 
-                                        }
-                                    };
-
-                                    RobotConfig.Robot.DoRobot(fi.Execute_GUID, parameters);
+                                    StartFilterExecutor(fi, iSocket);
 
                                     break;
 
@@ -19833,7 +19882,7 @@ namespace WinsockPacketEditor
                         if (bDoFilter)
                         {
                             faReturn = fi.FAction;
-                            fi.ExecutionCount++;
+                            fi.IncrementExecutionCount();
 
                             switch (fi.FAction)
                             {
@@ -20080,27 +20129,12 @@ namespace WinsockPacketEditor
                 private static bool ProcessModifications(FilterInfo fi, Span<byte> bufferSpan)
                 {
                     bool modified = false;
-                    string[] modifications = fi.FModify.Split(',');
-
-                    foreach (string modification in modifications)
+                    foreach (var modification in ParseModifications(fi.FModify))
                     {
-                        if (string.IsNullOrEmpty(modification))
-                            continue;
-
-                        string[] parts = modification.Split('|');
-                        if (parts.Length != 2)
-                            continue;
-
-                        if (int.TryParse(parts[0], out int index) &&
-                            index >= 0 &&
-                            index < bufferSpan.Length &&
-                            byte.TryParse(parts[1], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte value))
-                        {
-                            bufferSpan[index] = value;
-                            modified = true;
-                        }
+                        if (modification.Index < 0 || modification.Index >= bufferSpan.Length) { continue; }
+                        bufferSpan[modification.Index] = modification.Value;
+                        modified = true;
                     }
-
                     return modified;
                 }
 
@@ -20111,12 +20145,12 @@ namespace WinsockPacketEditor
                     bool modified = false;
                     int carryCount = 0;
                     int step = (int)fi.ProgressionStep;
-                    string[] positions = fi.ProgressionPosition.Split(',');
+                    int[] positions = positionRuleCache.Get(fi.ProgressionPosition);
 
-                    foreach (string position in positions)
+                    foreach (int position in positions)
                     {
-                        if (string.IsNullOrEmpty(position) ||
-                            !int.TryParse(position, out int index) ||
+                        int index = position;
+                        if (
                             index < 0 ||
                             index >= bufferSpan.Length)
                         {
@@ -20156,12 +20190,12 @@ namespace WinsockPacketEditor
                 private static bool ProcessRandoms(FilterInfo fi, Span<byte> bufferSpan)
                 {
                     bool modified = false;
-                    string[] positions = fi.RandomPosition.Split(',');
+                    int[] positions = positionRuleCache.Get(fi.RandomPosition);
 
-                    foreach (string position in positions)
+                    foreach (int position in positions)
                     {
-                        if (string.IsNullOrEmpty(position) ||
-                            !int.TryParse(position, out int index) ||
+                        int index = position;
+                        if (
                             index < 0 ||
                             index >= bufferSpan.Length)
                         {
@@ -20235,52 +20269,14 @@ namespace WinsockPacketEditor
                     FilterConfig.Filter.FilterStartFrom startFrom)
                 {
                     bool modified = false;
-                    string[] modifications = fi.FModify.Split(',');
-
-                    foreach (string modification in modifications)
+                    foreach (var modification in ParseModifications(fi.FModify))
                     {
-                        if (string.IsNullOrEmpty(modification))
-                            continue;
-
-                        string[] parts = modification.Split('|');
-                        if (parts.Length != 2)
-                            continue;
-
-                        if (!int.TryParse(parts[0], out int index))
-                            continue;
-
-                        if (startFrom == FilterConfig.Filter.FilterStartFrom.Position)
-                        {
-                            index += matchIndex;
-                        }
-
-                        if (index < 0 || index >= bufferSpan.Length)
-                            continue;
-
-                        if (byte.TryParse(parts[1], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte value))
-                        {
-                            /*
-                                <b>写了就算命中，不比较新旧值是否相同。</b>
-
-                                这里原本有一道 `if (bufferSpan[index] != value)` ——
-                                改成同一个值时 modified 保持 false，于是 Replace_Advanced 返回 false、
-                                DoFilter 返回 None，这条滤镜的执行次数不加、日志不记、统计不计，
-                                在界面上看就是「滤镜启用了却完全没反应」。
-
-                                它是六条改写路径里<b>唯一</b>带这道守卫的：
-                                普通模式的 修改 / 递进 / 随机、高级模式的 递进 / 随机，
-                                全都是写进去就置 modified —— 所以这不是设计，是它自己不一致。
-
-                                语义上也该按「匹配成功」算：滤镜命不命中由查找条件决定，
-                                跟改写后的字节碰巧等于原值没有关系。
-                                「把这一位钉成 17」本来就是一次有效的改写，
-                                只是这个包原来就是 17。
-                            */
-                            bufferSpan[index] = value;
-                            modified = true;
-                        }
+                        int index = modification.Index;
+                        if (startFrom == FilterStartFrom.Position) { index += matchIndex; }
+                        if (index < 0 || index >= bufferSpan.Length) { continue; }
+                        bufferSpan[index] = modification.Value;
+                        modified = true;
                     }
-
                     return modified;
                 }
 
@@ -20295,12 +20291,11 @@ namespace WinsockPacketEditor
                     bool modified = false;
                     int carryCount = 0;
                     int step = (int)fi.ProgressionStep;
-                    string[] positions = fi.ProgressionPosition.Split(',');
+                    int[] positions = positionRuleCache.Get(fi.ProgressionPosition);
 
-                    foreach (string position in positions)
+                    foreach (int position in positions)
                     {
-                        if (string.IsNullOrEmpty(position) || !int.TryParse(position, out int index))
-                            continue;
+                        int index = position;
 
                         if (startFrom == FilterConfig.Filter.FilterStartFrom.Position)
                         {
@@ -20334,12 +20329,11 @@ namespace WinsockPacketEditor
                     FilterConfig.Filter.FilterStartFrom startFrom)
                 {
                     bool modified = false;
-                    string[] positions = fi.RandomPosition.Split(',');
+                    int[] positions = positionRuleCache.Get(fi.RandomPosition);
 
-                    foreach (string position in positions)
+                    foreach (int position in positions)
                     {
-                        if (string.IsNullOrEmpty(position) || !int.TryParse(position, out int index))
-                            continue;
+                        int index = position;
 
                         if (startFrom == FilterConfig.Filter.FilterStartFrom.Position)
                         {
@@ -20412,6 +20406,11 @@ namespace WinsockPacketEditor
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 private static List<FilterConfig.Filter.Modification> ParseModifications(string modifyString)
                 {
+                    return modificationRuleCache.Get(modifyString);
+                }
+
+                private static List<FilterConfig.Filter.Modification> ParseModificationsCore(string modifyString)
+                {
                     var modifications = new List<FilterConfig.Filter.Modification>();
                     string[] parts = modifyString.Split(',');
 
@@ -20451,12 +20450,12 @@ namespace WinsockPacketEditor
                 {
                     int carryCount = 0;
                     int step = (int)sfi.ProgressionStep;
-                    string[] positions = sfi.ProgressionPosition.Split(',');
+                    int[] positions = positionRuleCache.Get(sfi.ProgressionPosition);
 
-                    foreach (string position in positions)
+                    foreach (int position in positions)
                     {
-                        if (string.IsNullOrEmpty(position) ||
-                            !int.TryParse(position, out int index) ||
+                        int index = position;
+                        if (
                             index < 0 ||
                             index >= buffer.Length)
                         {
@@ -20519,7 +20518,7 @@ namespace WinsockPacketEditor
                                 ptType, 
                                 sockaddr, 
                                 filterAction, 
-                                packetTime);
+                                packetTime.Kind == DateTimeKind.Utc ? packetTime.ToLocalTime() : packetTime);
                         }
                         catch (Exception ex)
                         {
@@ -21496,11 +21495,43 @@ namespace WinsockPacketEditor
                 #region//执行滤镜列表
 
                 public static FilterConfig.Filter.FilterAction DoFilterList(
+                    Int32 iSocket, Span<byte> bufferSpan, out byte[] bNewBuffer,
+                    PacketConfig.Packet.PacketType ptType, PacketConfig.Packet.SockAddr sAddr)
+                {
+                    using (Ipc.HookPorts.Enter())
+                        return DoFilterListCore(iSocket, bufferSpan, out bNewBuffer, ptType, sAddr, Ipc.FilterEngine.Filters, null);
+                }
+
+                internal static FilterConfig.Filter.FilterAction FilterHookPacket(
+                    int socket, byte[] raw, out byte[] modified,
+                    PacketConfig.Packet.PacketType type, PacketConfig.Packet.SockAddr address)
+                {
+                    var filters = Ipc.FilterEngine.Filters;
+                    modified = raw;
+                    if (filters.Count == 0) { return Filter.FilterAction.None; }
+                    bool writesInput = false;
+                    for (int i = 0; i < filters.Count; i++)
+                    {
+                        var filter = filters[i];
+                        if (filter.IsEnable && (filter.FAction == Filter.FilterAction.Replace ||
+                            (filter.IsExecute && filter.FEType == Filter.FilterExecuteType.Filter)))
+                        { writesInput = true; break; }
+                    }
+                    byte[] work = writesInput ? (byte[])raw.Clone() : raw;
+                    Filter.FilterAction action;
+                    using (Ipc.HookPorts.Enter())
+                        action = DoFilterListCore(socket, work, out modified, type, address, filters, work);
+                    if (!ReferenceEquals(raw, modified) && raw.AsSpan().SequenceEqual(modified)) { modified = raw; }
+                    return action;
+                }
+
+                private static FilterConfig.Filter.FilterAction DoFilterListCore(
                     Int32 iSocket, 
                     Span<byte> bufferSpan, 
                     out byte[] bNewBuffer, 
                     PacketConfig.Packet.PacketType ptType, 
-                    PacketConfig.Packet.SockAddr sAddr)
+                    PacketConfig.Packet.SockAddr sAddr,
+                    IList<FilterInfo> filters, byte[] ownedBuffer)
                 {
                     FilterConfig.Filter.FilterAction faReturn = FilterConfig.Filter.FilterAction.None;
                     bNewBuffer = null;
@@ -21510,7 +21541,6 @@ namespace WinsockPacketEditor
                         //【B-IPC 阶段 1】取一次引用用到底。
                         //无头核心下会拿到一份不可变数组（Volatile 换引用，见 Ipc/FilterEngine），
                         //外壳 / WinForms 下就是 lstFilterInfo 本身，行为与改造前一致。
-                        var filters = Ipc.FilterEngine.Filters;
                         for (int i = 0; i < filters.Count; i++)
                         {
                             FilterConfig.Filter.FilterAction faDoFilter = FilterConfig.Filter.DoFilter(filters[i], iSocket, bufferSpan, out bNewBuffer, ptType, sAddr);
@@ -21527,7 +21557,7 @@ namespace WinsockPacketEditor
                                 {
                                     if (bNewBuffer == null)
                                     {
-                                        bNewBuffer = bufferSpan.ToArray();
+                                        bNewBuffer = ownedBuffer ?? bufferSpan.ToArray();
                                     }
 
                                     return faReturn;
@@ -21542,7 +21572,7 @@ namespace WinsockPacketEditor
 
                     if (bNewBuffer == null)
                     {
-                        bNewBuffer = bufferSpan.ToArray();
+                        bNewBuffer = ownedBuffer ?? bufferSpan.ToArray();
                     }                    
 
                     return faReturn;

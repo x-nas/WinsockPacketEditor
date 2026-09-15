@@ -4,6 +4,20 @@ namespace WinsockPacketEditor
 {
     public class FilterInfo : NotifyProperty
     {
+        internal sealed class ExecutionState
+        {
+            internal long Count;
+            internal int Progression;
+            internal bool ProgressionDone;
+        }
+
+        internal ExecutionState State = new ExecutionState();
+
+        internal void IncrementExecutionCount()
+        {
+            System.Threading.Interlocked.Increment(ref State.Count);
+            OnPropertyChanged(nameof(ExecutionCount));
+        }
         #region//是否启用        
 
         bool _IsEnable;
@@ -57,15 +71,13 @@ namespace WinsockPacketEditor
 
         #region//滤镜已执行次数
 
-        long _ExecutionCount;
 
         public long ExecutionCount
         {
-            get => _ExecutionCount;
+            get => System.Threading.Interlocked.Read(ref State.Count);
             set
             {
-                if (_ExecutionCount == value) return;
-                _ExecutionCount = value;
+                if (System.Threading.Interlocked.Exchange(ref State.Count, value) == value) return;
                 OnPropertyChanged();
             }
         }
@@ -312,15 +324,14 @@ namespace WinsockPacketEditor
 
         #region//是否递进完成
 
-        bool _IsProgressionDone;
 
         public bool IsProgressionDone
         {
-            get => _IsProgressionDone;
+            get => State.ProgressionDone;
             set
             {
-                if (_IsProgressionDone == value) return;
-                _IsProgressionDone = value;
+                if (State.ProgressionDone == value) return;
+                State.ProgressionDone = value;
                 OnPropertyChanged();
             }
         }
@@ -414,15 +425,13 @@ namespace WinsockPacketEditor
 
         #region//递进已执行次数
 
-        int _ProgressionCount;
 
         public int ProgressionCount
         {
-            get => _ProgressionCount;
+            get => System.Threading.Volatile.Read(ref State.Progression);
             set
             {
-                if (_ProgressionCount == value) return;
-                _ProgressionCount = value;
+                if (System.Threading.Interlocked.Exchange(ref State.Progression, value) == value) return;
                 OnPropertyChanged();
             }
         }
@@ -548,18 +557,18 @@ namespace WinsockPacketEditor
             this._Execute_GUID = Execute_GUID;
             this._FFunction = FFunction;
             this._FStartFrom = FStartFrom;
-            this._IsProgressionDone = IsProgressionDone;
+            this.State.ProgressionDone = IsProgressionDone;
             this._IsProgressionContinuous = IsProgressionContinuous;
             this._ProgressionStep = ProgressionStep;
             this._IsProgressionCarry = IsProgressionCarry;
             this._ProgressionCarryNumber = ProgressionCarryNumber;
             this._ProgressionPosition = ProgressionPosition;
-            this._ProgressionCount = ProgressionCount;
+            this.State.Progression = ProgressionCount;
             this._ExcludePosition = ExcludePosition;
             this._RandomPosition = RandomPosition;
             this._FSearch = FSearch;          
             this._FModify = FModify;            
-            this._ExecutionCount = 0;            
+            this.State.Count = 0;
         }
 
         #endregion
