@@ -13,7 +13,7 @@
   <Content Include Link=…> 把它投影成输出目录里的 Web\tokens.css）。改配色改那一个文件。
   三个页面都先 <link> tokens.css 再 <link> 这一份，顺序不能反。
 
-  ⚠️ 还剩一份真正的副本：官网 WPEWeb.Cyber 的 cyber.css —— 另一个仓库、另一套部署，
+  ⚠️ 还剩一份真正的副本：官网 WPEWeb 的 cyber.css —— 另一个仓库、另一套部署，
   没法共享文件，改配色仍要连它一起改。
 
   【为什么不带浅色模式】管理台是拿来盯状态的，深色底上荧光字在手机上更省电、

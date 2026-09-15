@@ -3,8 +3,8 @@
 @import './tokens.css';
 
 /*
-  外壳配色：与官网 WPEWeb.Cyber 一致（深黑底 + 三霓虹色 + 科技等宽字体）。
-  令牌逐个抄自 WPEWeb.Cyber/assets/css/cyber.css 的 :root，改配色只需要改这一处。
+  外壳配色：与官网 WPEWeb 一致（深黑底 + 三霓虹色 + 科技等宽字体）。
+  令牌逐个抄自 WPEWeb/assets/css/cyber.css 的 :root，改配色只需要改这一处。
 
   【字体】三个字族都是从官网搬过来的 latin 子集可变字体（assets/fonts/，SIL OFL 1.1，
   许可证一并带着）。它们不含中文字形，中文走系统回退 —— 官网上本来就是这个表现。

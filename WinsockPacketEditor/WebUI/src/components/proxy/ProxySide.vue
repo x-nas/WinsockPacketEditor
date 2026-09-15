@@ -5,7 +5,7 @@
   【为什么是一套而不是两套】
   WinForms 的 ProxyModeForm 里有一个 119px 的 AntdUI.Menu（14 项）**和**一个
   AntdUI.Tabs（14 页），两者同步联动 —— 同一件事画了两遍。这里只保留侧栏，
-  与官网 WPEWeb.Cyber 的 .sidebar 一致。
+  与官网 WPEWeb 的 .sidebar 一致。
 
   【为什么要分组】
   WinForms 是平铺 14 项，扫起来很累。按官网 .sb-cap 的做法分成
