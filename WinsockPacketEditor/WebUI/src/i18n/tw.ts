@@ -210,6 +210,8 @@ export const tw: Record<Key, string> = {
   'cli.direct': '直連',
   'cli.udpRelay': 'UDP 中繼',
   'cli.udpTip': 'SOCKS5 的 UDP 關聯：這條 TCP 連線只是 UDP 中繼的控制通道，資料包走 UDP（多半是 DNS 查詢）。目標是用戶端宣告的 UDP 目的地址。',
+  'cli.wpcCtl': 'WPC 控制連線',
+  'cli.wpcCtlTip': 'WPC 用戶端的常駐連線：用來註冊裝置、保持在線，不存取任何目標。它斷開即表示這台裝置離線；實際流量走其他連線。',
   'cli.socketTip': '一般 TCP 連線：連接埠不是 80 / 8080 / 443 / 8443，認不出應用層協定，按原始通訊端原樣轉發。',
   'cli.viaHint': '實際連過去的地址。沒有被轉走時顯示「直連」；走外部代理或命中遠端對映規則時，這裡顯示真正連過去的地址。',
   'pt.req': '請求',

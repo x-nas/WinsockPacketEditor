@@ -209,6 +209,8 @@ export const vi: Record<Key, string> = {
   'cli.direct': 'Trực tiếp',
   'cli.udpRelay': 'Chuyển tiếp UDP',
   'cli.udpTip': 'SOCKS5 UDP associate: kết nối TCP này chỉ là kênh điều khiển của bộ chuyển tiếp UDP, dữ liệu đi qua UDP (thường là truy vấn DNS). Đích là địa chỉ UDP mà máy khách khai báo.',
+  'cli.wpcCtl': 'Kết nối điều khiển WPC',
+  'cli.wpcCtlTip': 'Kết nối thường trực của WPC: dùng để đăng ký thiết bị và giữ trạng thái trực tuyến, không kết nối tới đích nào. Khi nó ngắt, thiết bị ngoại tuyến; lưu lượng thật đi qua các kết nối khác.',
   'cli.socketTip': 'Kết nối TCP thường: cổng không phải 80 / 8080 / 443 / 8443 nên không nhận ra giao thức tầng ứng dụng, được chuyển tiếp nguyên dạng như socket thô.',
   'cli.viaHint': 'Địa chỉ thực sự được kết nối. Khi không bị chuyển hướng sẽ hiện «Trực tiếp»; khi đi qua proxy ngoài hoặc trúng quy tắc ánh xạ từ xa thì hiện địa chỉ thật.',
   'pt.req': 'Yêu cầu',

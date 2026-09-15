@@ -296,6 +296,12 @@ export const DICT = {
     zh: 'SOCKS5 的 UDP 关联：这条 TCP 连接只是 UDP 中继的控制通道，数据报走 UDP（多半是 DNS 查询）。目标是客户端声明的 UDP 目的地址。',
     en: 'SOCKS5 UDP associate: this TCP connection is only the control channel of a UDP relay; the datagrams go over UDP (usually DNS). The target is the UDP destination the client declared.',
   },
+  //WPC 的控制连接：常驻、不连任何目标，目标 / 出口本来就是空的，写明是什么免得看着像坏连接
+  'cli.wpcCtl': { zh: 'WPC 控制连接', en: 'WPC control connection' },
+  'cli.wpcCtlTip': {
+    zh: 'WPC 客户端的常驻连接：用来注册设备、保持在线，不访问任何目标。它断开即表示这台设备下线；实际流量走其他连接。',
+    en: 'The persistent connection of WPC: it registers the device and keeps it online, and never connects to a target. When it closes, the device goes offline; the actual traffic uses the other connections.',
+  },
   'cli.socketTip': {
     zh: '普通 TCP 连接：端口不是 80 / 8080 / 443 / 8443，认不出应用层协议，按原始套接字原样转发。',
     en: 'Plain TCP connection: the port is not 80 / 8080 / 443 / 8443, so no application protocol is recognized and it is relayed as a raw socket.',
