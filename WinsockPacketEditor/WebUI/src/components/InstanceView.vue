@@ -135,26 +135,30 @@ function sizeText(n: number): string {
 <template>
   <SettingsModal :open="props.open" title="多开设置" subtitle="本次运行使用独立数据库" :busy="saving" @update:open="emit('update:open', $event)" @save="save">
     <div class="instance-set">
-      <div class="instance-note">本次运行有效：数据库目录不会永久保存，重启后仍使用默认目录。</div>
-      <div class="instance-field">
-        <label>数据库目录</label>
-        <div class="path-line">
-          <input v-model="path" class="inp" spellcheck="false" :class="{ bad: probe && !probe.valid }" placeholder="例如 D:\\WPE64DB\\instance-02">
-          <button class="path-btn" :disabled="picking" @click="pick">浏览</button>
-          <button class="path-btn reset" :disabled="picking" @click="useDefault">默认目录</button>
+      <p class="instance-lead">本次运行有效：数据库目录不会永久保存，重启后仍使用默认目录。</p>
+      <section class="instance-sec">
+        <div class="instance-sec-title"><b>01</b><strong>数据库目录</strong><span>选择本次运行使用的数据库目录</span></div>
+        <div class="instance-row">
+          <label>目录路径</label>
+          <div class="path-line">
+            <input v-model="path" class="inp" spellcheck="false" :class="{ bad: probe && !probe.valid }" placeholder="例如 D:\\WPE64DB\\instance-02">
+            <button class="path-btn" :disabled="picking" @click="pick">浏览</button>
+            <button class="path-btn reset" :disabled="picking" @click="useDefault">默认目录</button>
+          </div>
         </div>
-      </div>
-      <div class="instance-grid">
-        <div><span>数据库文件</span><b>{{ dbName || '—' }}</b></div>
-        <div><span>目录状态</span><b :class="probe?.dirExists ? 'good' : 'warn'">{{ probe ? (probe.dirExists ? '已存在' : '将自动创建') : '检查中…' }}</b></div>
-        <div><span>数据库状态</span><b :class="probe?.fileExists ? 'good' : 'warn'">{{ probe ? (probe.fileExists ? '沿用已有数据库' : '将新建数据库') : '检查中…' }}</b></div>
-        <div><span>当前数据库</span><b>{{ probe?.current || '—' }}</b></div>
-      </div>
-      <p v-if="probe && !probe.valid" class="error-text">目录路径无效，请选择一个有效的本地目录。</p>
-      <div class="instance-meta" v-else-if="probe">
-        <span>目标大小：{{ sizeText(probe.size) }}</span>
-        <span v-if="probe.modified">最后修改：{{ probe.modified }}</span>
-      </div>
+        <p v-if="probe && !probe.valid" class="error-text">目录路径无效，请选择一个有效的本地目录。</p>
+        <p v-else class="instance-hint">目录不存在时会自动创建；选择已有目录会沿用其中的数据库文件。</p>
+      </section>
+      <section class="instance-sec">
+        <div class="instance-sec-title"><b>02</b><strong>数据库状态</strong><span>当前路径和数据库文件信息</span></div>
+        <div class="instance-info">
+          <div><span>数据库文件</span><b>{{ dbName || '—' }}</b></div>
+          <div><span>目录状态</span><b :class="probe?.dirExists ? 'good' : 'warn'">{{ probe ? (probe.dirExists ? '已存在' : '将自动创建') : '检查中…' }}</b></div>
+          <div><span>数据库状态</span><b :class="probe?.fileExists ? 'good' : 'warn'">{{ probe ? (probe.fileExists ? '沿用已有数据库' : '将新建数据库') : '检查中…' }}</b></div>
+          <div><span>当前数据库</span><b>{{ probe?.current || '—' }}</b></div>
+        </div>
+        <p v-if="probe" class="instance-hint">目标大小：{{ sizeText(probe.size) }}<span v-if="probe.modified">　最后修改：{{ probe.modified }}</span></p>
+      </section>
     </div>
   </SettingsModal>
 </template>
@@ -179,6 +183,51 @@ function sizeText(n: number): string {
   overflow-y: auto;
   padding: 2px 0 4px;
 }
+
+.instance-lead {
+  margin: 0 0 12px;
+  padding: 0 0 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--amber);
+  font-size: var(--fs-body);
+  line-height: 1.5;
+}
+
+.instance-sec {
+  margin: 0 0 12px;
+  border: 1px solid rgb(var(--border-rgb) / 80%);
+  border-left: 2px solid var(--cyan);
+  background: rgb(var(--inset-rgb) / 16%);
+}
+.instance-sec-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 39px;
+  padding: 0 14px;
+  border-bottom: 1px solid rgb(var(--border-rgb) / 65%);
+  background: var(--panel);
+}
+.instance-sec-title b {
+  padding: 2px 5px;
+  border: 1px solid var(--cyan);
+  color: var(--cyan);
+  font-family: var(--share);
+  font-size: var(--fs-caption);
+  letter-spacing: .12em;
+}
+.instance-sec-title strong { color: var(--soft); font-size: var(--fs-body); }
+.instance-sec-title span { color: var(--muted); font-size: var(--fs-caption); }
+.instance-row { display: grid; grid-template-columns: 112px 1fr; align-items: center; min-height: 58px; padding: 8px 12px; }
+.instance-row label { color: var(--muted); font-size: var(--fs-body); }
+.instance-hint { margin: 0; padding: 0 14px 11px; color: var(--muted); font-size: var(--fs-caption); }
+.instance-info { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin: 0 12px 10px; background: var(--border); }
+.instance-info > div { min-width: 0; padding: 10px 12px; background: var(--card); }
+.instance-info span, .instance-info b { display: block; }
+.instance-info span { margin-bottom: 4px; color: var(--muted); font-size: var(--fs-caption); }
+.instance-info b { overflow: hidden; color: var(--soft); font-size: var(--fs-body); text-overflow: ellipsis; white-space: nowrap; }
+.instance-info b.good { color: var(--green); }
+.instance-info b.warn { color: var(--amber); }
 
 .instance-note {
   padding: 11px 14px;
