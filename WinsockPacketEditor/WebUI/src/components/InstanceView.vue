@@ -186,7 +186,7 @@ function sizeText(n: number): string {
 
 .instance-lead {
   margin: 0 0 12px;
-  padding: 0 0 12px;
+  padding: 0 14px 12px;
   border-bottom: 1px solid var(--border);
   color: var(--amber);
   font-size: var(--fs-body);
