@@ -14,6 +14,7 @@ All names use the `wpe_` namespace in MCP. Underscores are deliberately used bec
 | `wpe_accounts_list` | `accounts.list` | `read.capture` | Never expose passwords |
 | `wpe_firewall_get` | `firewall.get` | `read.runtime` | Rules only |
 | `wpe_proxy_settings_get` | `proxy.settings.get` | `read.runtime` | Non-sensitive settings and limits only; no credentials |
+| `wpe_proxy_runtime_get` | `proxy.runtime.get` | `read.runtime` | Live non-sensitive listener state and bounded counters; no payloads or credentials |
 | `wpe_proxy_bind_ip_set` | `proxy.bindIp.set` | `write.proxy` | Auto or validated IPv4/IPv6 listening address, persisted after WPE-local confirmation |
 | `wpe_external_proxy_set_enabled` | `proxy.external.setEnabled` | `write.proxy` | Toggles the existing external proxy endpoint only; credentials are never returned or modified |
 | `wpe_proxy_start` | `proxy.start` | `write.proxy.lifecycle` | Starts configured listeners after confirmation |

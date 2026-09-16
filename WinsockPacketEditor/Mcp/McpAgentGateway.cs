@@ -116,6 +116,7 @@ namespace WinsockPacketEditor.Mcp
             if (operation == "firewall.get") return ReadOnUi(GetFirewall);
             if (operation == "firewall.rules.list") return ReadOnUi(() => ListFirewallRules(arguments));
             if (operation == "proxy.settings.get") return ReadOnUi(GetProxySettings);
+            if (operation == "proxy.runtime.get") return ReadOnUi(GetProxyRuntime);
             if (operation == "bytes.transcode") return BytesTranscode(arguments);
             if (operation == "bytes.compare") return BytesCompare(arguments);
             if (operation == "bytes.extract") return BytesExtract(arguments);
@@ -696,6 +697,15 @@ namespace WinsockPacketEditor.Mcp
                 ["externalProxyAuthEnabled"] = Operate.ProxyConfig.Proxy.Enable_ExternalProxy_Auth,
                 ["running"] = Operate.ProxyConfig.Proxy.IsRunning
             };
+        }
+
+        private static JObject GetProxyRuntime()
+        {
+            var result = GetProxySettings();
+            result["sessionCount"] = Operate.ProxyConfig.Proxy.SessionCount;
+            result["capturedPackets"] = Operate.PacketConfig.Packet.TotalPackets;
+            result["sampledAtUtc"] = DateTime.UtcNow.ToString("o");
+            return result;
         }
 
         private static async Task<JToken> SetProxyBindIpAsync(JObject arguments)

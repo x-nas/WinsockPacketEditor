@@ -30,6 +30,23 @@
     }
   },
   "tools": {
+    "wpe_proxy_runtime_get": {
+      "input": { "type": "object", "additionalProperties": false },
+      "output": {
+        "type": "object",
+        "required": ["running", "sessionCount", "capturedPackets", "sampledAtUtc"],
+        "properties": {
+          "running": { "type": "boolean" },
+          "sessionCount": { "type": "integer", "minimum": 0 },
+          "capturedPackets": { "type": "integer", "minimum": 0 },
+          "sampledAtUtc": { "type": "string", "format": "date-time" },
+          "socks5Enabled": { "type": "boolean" }, "socks5Port": { "type": "integer" },
+          "httpEnabled": { "type": "boolean" }, "httpPort": { "type": "integer" },
+          "externalProxyEnabled": { "type": "boolean" }, "externalProxyIp": { "type": "string" }, "externalProxyPort": { "type": "integer" }
+        },
+        "additionalProperties": true
+      }
+    },
     "wpe_status_get": {
       "input": { "type": "object", "additionalProperties": false },
       "output": { "type": "object", "required": ["version", "mode", "proxyRunning"], "properties": { "version": { "type": "string" }, "mode": { "type": "string" }, "proxyRunning": { "type": "boolean" }, "queue": { "type": "integer" }, "captured": { "type": "integer" } }, "additionalProperties": false }

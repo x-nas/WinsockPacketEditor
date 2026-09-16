@@ -50,6 +50,8 @@ internal static class WpeTools
     public static Task<string> FirewallGet(WpeGatewayClient gateway, CancellationToken cancellationToken) => gateway.InvokeAsync("firewall.get", null, cancellationToken);
     [McpServerTool(Name = "wpe_proxy_settings_get"), Description("Return non-sensitive proxy settings and limits. No credentials are returned and nothing is modified.")]
     public static Task<string> ProxySettingsGet(WpeGatewayClient gateway, CancellationToken cancellationToken) => gateway.InvokeAsync("proxy.settings.get", null, cancellationToken);
+    [McpServerTool(Name = "wpe_proxy_runtime_get"), Description("Return non-sensitive live proxy runtime diagnostics: listener configuration, running state, and connection counts. Nothing is modified.")]
+    public static Task<string> ProxyRuntimeGet(WpeGatewayClient gateway, CancellationToken cancellationToken) => gateway.InvokeAsync("proxy.runtime.get", null, cancellationToken);
     [McpServerTool(Name = "wpe_proxy_bind_ip_set"), Description("Request a reversible proxy listening-address change. WPE validates an explicit IPv4/IPv6 address or automatic detection, then persists after local confirmation.")]
     public static Task<string> ProxyBindIpSet(WpeGatewayClient gateway, bool auto, string ip, string idempotencyKey, CancellationToken cancellationToken = default) => gateway.InvokeAsync("proxy.bindIp.set", new ProxyBindIpSetInput(auto, ip, idempotencyKey), cancellationToken);
     [McpServerTool(Name = "wpe_external_proxy_set_enabled"), Description("Request a reversible external-proxy enable/disable change. Existing credentials are never returned or modified; WPE validates the configured endpoint and persists after local confirmation.")]
