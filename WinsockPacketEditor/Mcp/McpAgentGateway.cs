@@ -118,6 +118,7 @@ namespace WinsockPacketEditor.Mcp
             if (operation == "proxy.settings.get") return ReadOnUi(GetProxySettings);
             if (operation == "proxy.runtime.get") return ReadOnUi(GetProxyRuntime);
             if (operation == "connections.summary.get") return ReadOnUi(GetConnectionsSummary);
+            if (operation == "proxy.failures.list") return ReadOnUi(() => ListProxyFailures(arguments));
             if (operation == "bytes.transcode") return BytesTranscode(arguments);
             if (operation == "bytes.compare") return BytesCompare(arguments);
             if (operation == "bytes.extract") return BytesExtract(arguments);
@@ -728,6 +729,23 @@ namespace WinsockPacketEditor.Mcp
                 ["ordinary"] = rows.Length - wpc,
                 ["sampledAtUtc"] = DateTime.UtcNow.ToString("o")
             };
+        }
+
+        private static JObject ListProxyFailures(JObject arguments)
+        {
+            var limit = Math.Max(1, Math.Min(50, (int?)arguments?["limit"] ?? 20));
+            var rows = new JArray();
+            var list = Operate.LogConfig.List.lstProxyLogInfo;
+            for (var i = list.Count - 1; i >= 0 && rows.Count < limit; i--)
+            {
+                var entry = list[i];
+                var message = (entry.LogContent ?? string.Empty).Replace("\r", " ").Replace("\n", " ").Trim();
+                var lower = message.ToLowerInvariant();
+                if (lower.IndexOf("fail", StringComparison.Ordinal) < 0 && lower.IndexOf("error", StringComparison.Ordinal) < 0 && lower.IndexOf("exception", StringComparison.Ordinal) < 0 && message.IndexOf("失败", StringComparison.Ordinal) < 0 && message.IndexOf("错误", StringComparison.Ordinal) < 0 && message.IndexOf("异常", StringComparison.Ordinal) < 0) continue;
+                if (message.Length > 160) message = message.Substring(0, 160) + "…";
+                rows.Add(new JObject { ["time"] = entry.LogTime.ToUniversalTime().ToString("o"), ["summary"] = message });
+            }
+            return new JObject { ["rows"] = rows, ["sampledAtUtc"] = DateTime.UtcNow.ToString("o") };
         }
 
         private static async Task<JToken> SetProxyBindIpAsync(JObject arguments)

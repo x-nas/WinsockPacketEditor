@@ -16,6 +16,7 @@ All names use the `wpe_` namespace in MCP. Underscores are deliberately used bec
 | `wpe_proxy_settings_get` | `proxy.settings.get` | `read.runtime` | Non-sensitive settings and limits only; no credentials |
 | `wpe_proxy_runtime_get` | `proxy.runtime.get` | `read.runtime` | Live non-sensitive listener state and bounded counters; no payloads or credentials |
 | `wpe_connections_summary_get` | `connections.summary.get` | `read.capture` | Protocol and WPC/ordinary counts only; no addresses, device identifiers, credentials or payloads |
+| `wpe_proxy_failures_list` | `proxy.failures.list` | `read.runtime` | Bounded failure summaries only; account names, IPs, paths, credentials, tokens and full stacks are omitted |
 | `wpe_proxy_bind_ip_set` | `proxy.bindIp.set` | `write.proxy` | Auto or validated IPv4/IPv6 listening address, persisted after WPE-local confirmation |
 | `wpe_external_proxy_set_enabled` | `proxy.external.setEnabled` | `write.proxy` | Toggles the existing external proxy endpoint only; credentials are never returned or modified |
 | `wpe_proxy_start` | `proxy.start` | `write.proxy.lifecycle` | Starts configured listeners after confirmation |

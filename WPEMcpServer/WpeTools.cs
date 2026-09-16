@@ -54,6 +54,8 @@ internal static class WpeTools
     public static Task<string> ProxyRuntimeGet(WpeGatewayClient gateway, CancellationToken cancellationToken) => gateway.InvokeAsync("proxy.runtime.get", null, cancellationToken);
     [McpServerTool(Name = "wpe_connections_summary_get"), Description("Return bounded connection counts grouped by protocol and WPC-control versus ordinary sessions. Addresses, device identifiers, credentials, and payloads are never returned.")]
     public static Task<string> ConnectionsSummaryGet(WpeGatewayClient gateway, CancellationToken cancellationToken) => gateway.InvokeAsync("connections.summary.get", null, cancellationToken);
+    [McpServerTool(Name = "wpe_proxy_failures_list"), Description("List a bounded safe summary of recent proxy failure logs. Account names, IPs, paths, credentials, tokens, and full exception text are omitted.")]
+    public static Task<string> ProxyFailuresList(WpeGatewayClient gateway, int? limit = null, CancellationToken cancellationToken = default) => gateway.InvokeAsync("proxy.failures.list", new ProxyFailuresListInput(limit), cancellationToken);
     [McpServerTool(Name = "wpe_proxy_bind_ip_set"), Description("Request a reversible proxy listening-address change. WPE validates an explicit IPv4/IPv6 address or automatic detection, then persists after local confirmation.")]
     public static Task<string> ProxyBindIpSet(WpeGatewayClient gateway, bool auto, string ip, string idempotencyKey, CancellationToken cancellationToken = default) => gateway.InvokeAsync("proxy.bindIp.set", new ProxyBindIpSetInput(auto, ip, idempotencyKey), cancellationToken);
     [McpServerTool(Name = "wpe_external_proxy_set_enabled"), Description("Request a reversible external-proxy enable/disable change. Existing credentials are never returned or modified; WPE validates the configured endpoint and persists after local confirmation.")]
@@ -89,6 +91,7 @@ public sealed record ProxyOnlyWpcSetEnabledInput(bool Enabled, string Idempotenc
 public sealed record ProxyBindIpSetInput(bool Auto, string Ip, string IdempotencyKey);
 public sealed record ExternalProxySetEnabledInput(bool Enabled, string IdempotencyKey);
 public sealed record ProxyLifecycleInput(string IdempotencyKey);
+public sealed record ProxyFailuresListInput(int? Limit = null);
 public sealed record FirewallRulesListInput(string List, int? Limit = null, string? Cursor = null);
 public sealed record FirewallRuleAddInput(string List, string Address, string IdempotencyKey, bool ExpiryEnabled = false, string? ExpiryTime = null);
 public sealed record FirewallRuleRemoveInput(string List, string Address, string IdempotencyKey);
