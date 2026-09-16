@@ -1048,6 +1048,11 @@ namespace WinsockPacketEditor.Mcp
                             ["startedUtc"] = DateTime.UtcNow.ToString("o")
                         });
                     }
+                    if (!add && entries.Count == 0)
+                    {
+                        if (File.Exists(path)) File.Delete(path);
+                        return;
+                    }
                     root["protocol"] = 1;
                     root["instances"] = entries;
                     File.WriteAllText(path, root.ToString(Formatting.None), Encoding.UTF8);

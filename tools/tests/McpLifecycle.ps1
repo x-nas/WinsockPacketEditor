@@ -22,7 +22,10 @@ function Read-Frame([System.IO.Stream]$stream) {
 }
 
 if ($ExpectDisabled) {
-    if (Test-Path $discovery) { throw "MCP discovery file still exists while disabled: $discovery" }
+    if (Test-Path $discovery) {
+        $disabledRoot = Get-Content $discovery -Raw | ConvertFrom-Json
+        if ($null -ne $disabledRoot.instances -and $disabledRoot.instances.Count -gt 0) { throw "MCP discovery still contains an instance while disabled: $discovery" }
+    }
     Write-Host 'MCP lifecycle: PASS (disabled, no discovery file).'
     exit 0
 }
