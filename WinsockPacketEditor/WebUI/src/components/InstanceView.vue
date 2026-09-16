@@ -14,7 +14,7 @@
 */
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { call } from '../bridge'
-import { lang, normalize, t } from '../i18n'
+import { lang, normalize } from '../i18n'
 import { httpAddr, socks5Addr } from '../stores/runtime'
 import SettingsModal from './proxy/SettingsModal.vue'
 
@@ -33,6 +33,7 @@ interface Probe {
 }
 
 const path = ref('')
+const defaultPath = ref('')
 const dbName = ref('')
 const probe = ref<Probe | null>(null)
 const saving = ref(false)
@@ -42,6 +43,7 @@ async function load(): Promise<void> {
   try {
     const s = await call<any>('getSystemCheck')
     path.value = s.dbDir || ''
+    defaultPath.value = s.dbDir || ''
     dbName.value = s.dbFile || ''
   } catch (e) {
     console.error('[instance] 取当前数据库位置失败', e)
@@ -87,6 +89,8 @@ async function pick(): Promise<void> {
   }
 }
 
+function useDefault(): void { path.value = defaultPath.value }
+
 const canSave = computed(() => !!probe.value?.valid && !saving.value)
 
 async function save(): Promise<void> {
@@ -129,83 +133,30 @@ function sizeText(n: number): string {
 </script>
 
 <template>
-  <SettingsModal :open="props.open" title="多开设置" subtitle="本次运行使用独立数据库" :busy="saving" @update:open="emit('update:open', $event)">
+  <SettingsModal :open="props.open" title="多开设置" subtitle="本次运行使用独立数据库" :busy="saving" @update:open="emit('update:open', $event)" @save="save">
     <div class="instance-set">
-    <!-- 这一屏最重要的一句话：设置只在本次运行有效 -->
-    <div class="note">
-      <span class="bang">{{ t('inst.onceTag') }}</span>
-      <p>{{ t('inst.onceText') }}</p>
-    </div>
-
-    <div class="form">
-      <div class="row">
-        <div class="k">DataBase Path</div>
-        <div class="v">
-          <input
-            v-model="path"
-            class="inp"
-            spellcheck="false"
-            :class="{ bad: probe && !probe.valid }"
-            :placeholder="t('inst.pathPlaceholder')"
-          >
-          <button class="browse" :disabled="picking" @click="pick">
-            <svg class="ico sm" viewBox="0 0 24 24">
-              <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-            </svg>
-            {{ t('inst.browse') }}
-          </button>
+      <div class="instance-note">本次运行有效：数据库目录不会永久保存，重启后仍使用默认目录。</div>
+      <div class="instance-field">
+        <label>数据库目录</label>
+        <div class="path-line">
+          <input v-model="path" class="inp" spellcheck="false" :class="{ bad: probe && !probe.valid }" placeholder="例如 D:\\WPE64DB\\instance-02">
+          <button class="browse" :disabled="picking" @click="pick">浏览</button>
         </div>
       </div>
-
-      <div class="row">
-        <div class="k">DataBase Name</div>
-        <!-- 只读：文件名由主工程的版本号推导，不是用户能定的 -->
-        <div class="v"><input class="inp ro" :value="dbName" readonly></div>
+      <div class="instance-grid">
+        <div><span>数据库文件</span><b>{{ dbName || '—' }}</b></div>
+        <div><span>目录状态</span><b :class="probe?.dirExists ? 'good' : 'warn'">{{ probe ? (probe.dirExists ? '已存在' : '将自动创建') : '检查中…' }}</b></div>
+        <div><span>数据库状态</span><b :class="probe?.fileExists ? 'good' : 'warn'">{{ probe ? (probe.fileExists ? '沿用已有数据库' : '将新建数据库') : '检查中…' }}</b></div>
+        <div><span>当前数据库</span><b>{{ probe?.current || '—' }}</b></div>
       </div>
-    </div>
-
-    <div class="term">
-      <div class="term-bar">
-        <span class="d" style="background:#ff5f57" />
-        <span class="d" style="background:#febc2e" />
-        <span class="d" style="background:#28c840" />
-        <span class="lbl">Preview</span>
+      <p v-if="probe && !probe.valid" class="error-text">目录路径无效，请选择一个有效的本地目录。</p>
+      <div class="instance-meta" v-else-if="probe">
+        <span>目标大小：{{ sizeText(probe.size) }}</span>
+        <span v-if="probe.modified">最后修改：{{ probe.modified }}</span>
       </div>
-      <div class="term-body">
-        <span class="l"><span class="c">$</span> <span class="g">wpe64</span> --db <span class="y">"{{ probe?.full || '…' }}"</span></span>
-
-        <span v-if="probe && !probe.valid" class="l">
-          <span class="c">  ├─</span> <span class="r">{{ t('inst.badPath') }}</span>
-        </span>
-        <span v-else-if="probe" class="l">
-          <span class="c">  ├─</span> {{ t('inst.dir') }}
-          <span :class="probe.dirExists ? 'g' : 'a'">{{ probe.dirExists ? t('inst.dirOk') : t('inst.dirNew') }}</span>
-          <span class="c">   ├─</span> {{ t('inst.db') }}
-          <span :class="probe.fileExists ? 'g' : 'a'">{{ probe.fileExists ? t('inst.dbOld') : t('inst.dbNew') }}</span>
-          <template v-if="probe.fileExists">
-            <span class="c"> · </span><span class="g">{{ sizeText(probe.size) }}</span>
-            <span class="c"> · </span>{{ probe.modified }}
-          </template>
-        </span>
-
-        <span class="l">
-          <span class="c">  └─</span> {{ t('inst.current') }}
-          <span class="y">{{ probe?.current || '…' }}</span>
-          <template v-if="probe?.currentSize">
-            <span class="c"> · </span><span class="g">{{ sizeText(probe.currentSize) }}</span>
-          </template>
-        </span>
+      <div class="instance-actions">
+        <button class="btn" :disabled="picking || path === defaultPath" @click="useDefault">使用默认目录</button>
       </div>
-    </div>
-
-    <div class="acts">
-      <button class="btn primary" :disabled="!canSave" @click="save">
-        {{ saving ? t('inst.saving') : t('inst.save') }}
-      </button>
-      <button class="btn" @click="emit('update:open', false)">{{ t('inst.cancel') }}</button>
-      <span class="grow" />
-      <span class="hint">{{ t('inst.hint') }}</span>
-    </div>
     </div>
   </SettingsModal>
 </template>
@@ -230,6 +181,31 @@ function sizeText(n: number): string {
   overflow-y: auto;
   padding: 2px 0 4px;
 }
+
+.instance-note {
+  padding: 11px 14px;
+  border: 1px solid rgb(var(--amber-rgb) / 35%);
+  background: rgb(var(--amber-rgb) / 7%);
+  color: var(--amber);
+  font-size: var(--fs-body);
+  line-height: 1.5;
+}
+
+.instance-field { margin-top: 14px; }
+.instance-field > label { display: block; margin-bottom: 6px; color: var(--soft); font-size: var(--fs-label); }
+.path-line { display: flex; min-width: 0; border: 1px solid var(--border); background: var(--card); }
+.path-line .inp { height: 42px; }
+.path-line .browse { height: 42px; flex: 0 0 82px; justify-content: center; padding: 0 12px; }
+.instance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin-top: 14px; border: 1px solid var(--border); background: var(--border); }
+.instance-grid > div { min-width: 0; padding: 11px 14px; background: var(--card); }
+.instance-grid span, .instance-grid b { display: block; }
+.instance-grid span { color: var(--muted); font-size: var(--fs-caption); margin-bottom: 5px; }
+.instance-grid b { overflow: hidden; color: var(--soft); font-size: var(--fs-body); text-overflow: ellipsis; white-space: nowrap; }
+.instance-grid b.good { color: var(--green); }
+.instance-grid b.warn { color: var(--amber); }
+.error-text { margin: 10px 0 0; color: var(--danger); font-size: var(--fs-body); }
+.instance-meta { display: flex; gap: 18px; margin-top: 10px; color: var(--muted); font-size: var(--fs-caption); }
+.instance-actions { display: flex; justify-content: flex-end; margin-top: 14px; }
 
 /* eyebrow / 标题 / 副标题：与 StartView 同构，只是主色换成洋红 */
 /*
