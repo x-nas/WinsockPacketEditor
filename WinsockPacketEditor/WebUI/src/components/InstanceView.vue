@@ -140,7 +140,8 @@ function sizeText(n: number): string {
         <label>数据库目录</label>
         <div class="path-line">
           <input v-model="path" class="inp" spellcheck="false" :class="{ bad: probe && !probe.valid }" placeholder="例如 D:\\WPE64DB\\instance-02">
-          <button class="browse" :disabled="picking" @click="pick">浏览</button>
+          <button class="path-btn" :disabled="picking" @click="pick">浏览</button>
+          <button class="path-btn reset" :disabled="picking" @click="useDefault">默认目录</button>
         </div>
       </div>
       <div class="instance-grid">
@@ -153,9 +154,6 @@ function sizeText(n: number): string {
       <div class="instance-meta" v-else-if="probe">
         <span>目标大小：{{ sizeText(probe.size) }}</span>
         <span v-if="probe.modified">最后修改：{{ probe.modified }}</span>
-      </div>
-      <div class="instance-actions">
-        <button class="btn" :disabled="picking || path === defaultPath" @click="useDefault">使用默认目录</button>
       </div>
     </div>
   </SettingsModal>
@@ -195,7 +193,11 @@ function sizeText(n: number): string {
 .instance-field > label { display: block; margin-bottom: 6px; color: var(--soft); font-size: var(--fs-label); }
 .path-line { display: flex; min-width: 0; border: 1px solid var(--border); background: var(--card); }
 .path-line .inp { height: 42px; }
-.path-line .browse { height: 42px; flex: 0 0 82px; justify-content: center; padding: 0 12px; }
+.path-line .path-btn { height: 42px; flex: 0 0 76px; justify-content: center; padding: 0 10px; background: transparent; border: 0; border-left: 1px solid var(--border); color: var(--cyan); font-family: var(--share); font-size: var(--fs-label); cursor: pointer; }
+.path-line .path-btn:hover:not(:disabled) { background: rgb(var(--cyan-rgb) / 10%); }
+.path-line .path-btn:disabled { opacity: .45; cursor: default; }
+.path-line .path-btn.reset { flex-basis: 92px; color: var(--magenta); }
+.path-line .path-btn.reset:hover:not(:disabled) { background: rgb(var(--magenta-rgb) / 10%); }
 .instance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin-top: 14px; border: 1px solid var(--border); background: var(--border); }
 .instance-grid > div { min-width: 0; padding: 11px 14px; background: var(--card); }
 .instance-grid span, .instance-grid b { display: block; }
@@ -205,7 +207,6 @@ function sizeText(n: number): string {
 .instance-grid b.warn { color: var(--amber); }
 .error-text { margin: 10px 0 0; color: var(--danger); font-size: var(--fs-body); }
 .instance-meta { display: flex; gap: 18px; margin-top: 10px; color: var(--muted); font-size: var(--fs-caption); }
-.instance-actions { display: flex; justify-content: flex-end; margin-top: 14px; }
 
 /* eyebrow / 标题 / 副标题：与 StartView 同构，只是主色换成洋红 */
 /*
