@@ -20,8 +20,10 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { call } from '../bridge'
 import { lang, t } from '../i18n'
+import McpSetting from './proxy/McpSetting.vue'
 
 const emit = defineEmits<{ (e: 'enter', mode: 'proxy' | 'instance' | 'inject'): void }>()
+const mcpOpen = ref(false)
 
 interface SystemCheck {
   isAdmin: boolean
@@ -248,7 +250,19 @@ onMounted(async () => {
         <span class="cur">{{ sys?.dbInstance || '—' }}</span>
         <span class="ar">→</span>
       </button>
+      <button class="inst mcp-entry" @click="mcpOpen = true">
+        <svg class="ico" viewBox="0 0 24 24">
+          <path d="M12 3a9 9 0 1 0 9 9" />
+          <path d="M12 7v5l3 2" />
+          <path d="M16 4h5v5" />
+        </svg>
+        <span class="nm">MCP 设置</span>
+        <span class="ds">本机 AI 自动化权限</span>
+        <span class="cur">启动页可用</span>
+        <span class="ar">→</span>
+      </button>
     </div>
+    <McpSetting :open="mcpOpen" @update:open="mcpOpen = $event" />
 
     <!-- 系统自检 -->
     <div class="term">

@@ -41,7 +41,6 @@ import ExtProxySetting from './ExtProxySetting.vue'
 import HotkeySetting from './HotkeySetting.vue'
 import BackupSetting from './BackupSetting.vue'
 import RemoteSetting from './RemoteSetting.vue'
-import McpSetting from './McpSetting.vue'
 import ActionColor from './ActionColor.vue'
 import type { SettingKey } from './settings'
 
@@ -724,7 +723,6 @@ const cells = computed(() => {
     <HotkeySetting :open="setting === 'hotkey'" @update:open="setting = $event ? 'hotkey' : null" />
     <BackupSetting :open="setting === 'backup'" @update:open="setting = $event ? 'backup' : null" />
     <RemoteSetting :open="setting === 'remote'" @update:open="setting = $event ? 'remote' : null" />
-    <McpSetting :open="setting === 'mcp'" @update:open="setting = $event ? 'mcp' : null" />
 
     <ActionColor
       :action="colorEdit"
