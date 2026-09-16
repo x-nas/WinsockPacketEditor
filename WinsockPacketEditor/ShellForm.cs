@@ -1413,7 +1413,10 @@ namespace WPEHybrid
                     else if (!Operate.SystemConfig.McpEnabled && this.mcpGateway.Enabled) this.mcpGateway.Stop();
                 }
                 string message = Operate.SystemConfig.McpEnabled ? UI.T("Mcp.Started", "MCP 已启动") : UI.T("Mcp.Stopped", "MCP 已关闭");
-                UI.Toast(Operate.SystemConfig.McpEnabled ? UiIcon.Success : UiIcon.Info, message);
+                UiIcon icon = !Operate.SystemConfig.McpEnabled
+                    ? UiIcon.Error
+                    : (Operate.SystemConfig.McpAutoApproveWrites ? UiIcon.Success : UiIcon.Warn);
+                UI.Toast(icon, message);
                 Operate.DoLog("McpSettings", message);
                 return new { ok = true, enabled = Operate.SystemConfig.McpEnabled, autoApproveWrites = Operate.SystemConfig.McpAutoApproveWrites };
             });
