@@ -56,4 +56,12 @@ async function save(): Promise<void> {
 .ok { color:var(--green, #65d59b); }
 .hint { margin:10px 0 0; color:var(--tx-3); font-size:var(--fs-small); line-height:1.5; }
 .muted { opacity:.9; }
+.mcp-set { display: block; width: 100%; padding: 8px 0 14px; color: var(--soft); }
+.mcp-set .swb { display: block; width: 100%; }
+.mcp-set .swb .row { display: flex; align-items: center; min-height: 34px; padding: 6px 20px; }
+.mcp-set .swb .hint { padding: 0 20px; }
+.mcp-set .sec { display: block; margin: 10px 20px 12px; padding-bottom: 8px; border: 1px solid rgb(var(--border-rgb) / 80%); background: rgb(var(--inset-rgb) / 16%); }
+.mcp-set .sec .grp { display: flex; align-items: center; padding: 9px 14px 8px; border-bottom: 1px solid rgb(var(--border-rgb) / 60%); background: var(--panel); color: var(--soft); font-size: var(--fs-body); }
+.mcp-set .sec .row { display: flex; align-items: center; justify-content: space-between; min-height: 32px; padding: 5px 14px; }
+.mcp-set .sec .hint { padding: 0 14px; }
 </style>
