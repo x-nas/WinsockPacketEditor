@@ -479,7 +479,7 @@ namespace WPEHybrid
 
                 // Local MCP has its own named-pipe protocol; it never shares the injected-process IPC.
                 this.mcpGateway = new McpAgentGateway();
-                this.mcpGateway.Start();
+                if (Operate.SystemConfig.McpEnabled) this.mcpGateway.Start();
 
                 this.timerFlush.Tick += this.OnFlushTick;
                 this.timerFlush.Start();
@@ -1397,15 +1397,29 @@ namespace WPEHybrid
 
             this.bridge.Register("getMcpSettings", args => new
             {
+                enabled = Operate.SystemConfig.McpEnabled,
                 autoApproveWrites = Operate.SystemConfig.McpAutoApproveWrites,
                 proxyModeAvailable = true,
                 injectModeAvailable = true,
             });
             this.bridge.Register("saveMcpSettings", args =>
             {
+                Operate.SystemConfig.McpEnabled = args["enabled"] == null || (bool)args["enabled"];
                 Operate.SystemConfig.McpAutoApproveWrites = args["autoApproveWrites"] != null && (bool)args["autoApproveWrites"];
                 Operate.SystemConfig.SaveMcpConfig_ToDB();
-                return new { ok = true, autoApproveWrites = Operate.SystemConfig.McpAutoApproveWrites };
+                if (this.mcpGateway != null)
+                {
+                    if (Operate.SystemConfig.McpEnabled && !this.mcpGateway.Enabled) this.mcpGateway.Start();
+                    else if (!Operate.SystemConfig.McpEnabled && this.mcpGateway.Enabled) this.mcpGateway.Stop();
+                }
+                return new { ok = true, enabled = Operate.SystemConfig.McpEnabled, autoApproveWrites = Operate.SystemConfig.McpAutoApproveWrites };
+            });
+
+            this.bridge.Register("getMcpStatus", args => new
+            {
+                enabled = Operate.SystemConfig.McpEnabled,
+                requiresConfirmation = !Operate.SystemConfig.McpAutoApproveWrites,
+                available = this.mcpGateway != null && this.mcpGateway.Enabled
             });
 
             /*

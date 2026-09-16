@@ -5,6 +5,7 @@ import SettingsModal from './SettingsModal.vue'
 
 const props = defineProps<{ open: boolean }>()
 const emit = defineEmits<{ (e: 'update:open', value: boolean): void }>()
+const enabled = ref(true)
 const autoApproveWrites = ref(false)
 const busy = ref(false)
 const error = ref('')
@@ -13,7 +14,8 @@ watch(() => props.open, async (open) => {
   if (!open) return
   error.value = ''
   try {
-    const value = await call<{ autoApproveWrites: boolean }>('getMcpSettings')
+    const value = await call<{ enabled: boolean; autoApproveWrites: boolean }>('getMcpSettings')
+    enabled.value = value.enabled
     autoApproveWrites.value = value.autoApproveWrites
   } catch (e) { error.value = String(e) }
 })
@@ -22,7 +24,7 @@ async function save(): Promise<void> {
   busy.value = true
   error.value = ''
   try {
-    await call('saveMcpSettings', { autoApproveWrites: autoApproveWrites.value })
+    await call('saveMcpSettings', { enabled: enabled.value, autoApproveWrites: autoApproveWrites.value })
     emit('update:open', false)
   } catch (e) { error.value = String(e) } finally { busy.value = false }
 }
@@ -31,6 +33,16 @@ async function save(): Promise<void> {
 <template>
   <SettingsModal :open="props.open" title="MCP 设置" subtitle="本机 AI 自动化权限" :busy="busy" :error="error" @update:open="emit('update:open', $event)" @save="save">
     <div class="setf mcp-set">
+    <div class="swb">
+      <div class="row">
+        <label class="chk" :class="{ on: enabled }">
+          <i />
+          <input v-model="enabled" type="checkbox" hidden />
+          <span>启用 MCP 服务</span>
+        </label>
+      </div>
+      <p class="hint">关闭后，本机 AI 无法发现或调用 WPE 的 MCP 服务。</p>
+    </div>
     <div class="swb">
       <div class="row">
         <label class="chk" :class="{ on: autoApproveWrites }">
@@ -45,7 +57,7 @@ async function save(): Promise<void> {
       <div class="grp">模式范围</div>
       <div class="row"><span class="k">代理模式</span><span class="v ok">可用</span></div>
       <div class="row"><span class="k">注入模式</span><span class="v ok">可用</span></div>
-      <p class="hint">此开关仅影响本机 MCP。幂等保护、敏感数据脱敏和审计仍然保留。后续增加模式专属 MCP 配置时，会在此处显示可用性。</p>
+      <p class="hint">MCP 服务关闭时所有 MCP 对接均不可用。幂等保护、敏感数据脱敏和审计仍然保留。</p>
     </section>
     </div>
   </SettingsModal>

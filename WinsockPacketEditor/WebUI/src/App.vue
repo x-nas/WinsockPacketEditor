@@ -21,7 +21,7 @@
   <b>多开设置不受这条限制</b>：它不是模式，是启动页上的一屏设置
   （WinForms 那边是浮在 StartForm 上的弹窗），所以它照常能返回。
 */
-import { onMounted, ref, watchEffect } from 'vue'
+import { onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import { call, inHost, on } from './bridge'
 import { attachUiHost, busy, modalOpen } from './bridge/host'
 import { anyModalOpen } from './useModal'
@@ -45,6 +45,18 @@ const view = ref<View>('start')
 const version = ref('')
 const isBeta = ref(false)
 const maximized = ref(false)
+const mcpEnabled = ref(false)
+const mcpNeedsConfirmation = ref(false)
+let mcpTimer: number | undefined
+
+async function refreshMcpStatus(): Promise<void> {
+  if (!inHost) return
+  try {
+    const s = await call<{ enabled: boolean; requiresConfirmation: boolean; available: boolean }>('getMcpStatus')
+    mcpEnabled.value = s.available && s.enabled
+    mcpNeedsConfirmation.value = mcpEnabled.value && s.requiresConfirmation
+  } catch { mcpEnabled.value = false; mcpNeedsConfirmation.value = false }
+}
 
 /** 数据库<b>目录</b>名 —— 多开时区分实例靠的是它，不是文件名（文件名由版本号推导）。 */
 const dbInstance = ref('')
@@ -97,7 +109,11 @@ onMounted(async () => {
     先于父组件，所以走到这一行时处理器一定已经登记好了。
   */
   call('uiReady').catch(() => {})
+  await refreshMcpStatus()
+  mcpTimer = window.setInterval(refreshMcpStatus, 1000)
 })
+
+onUnmounted(() => { if (mcpTimer !== undefined) window.clearInterval(mcpTimer) })
 
 /*
   拖动。
@@ -358,6 +374,10 @@ watchEffect(() => {
           原程序启动代理后打的第一条日志也正是这个地址。
         -->
         <div class="sb-right">
+          <span class="mcp-state" :class="{ enabled: mcpEnabled, confirm: mcpNeedsConfirmation }" title="MCP 状态">
+            <i class="mcp-light" /> MCP
+          </span>
+          <span class="sep">//</span>
           <template v-if="view === 'start'">
             <span class="dot" />
             {{ t('foot.ready') }}
@@ -631,6 +651,12 @@ watchEffect(() => {
 .sb-right .sep { color: var(--border); }
 .sb-right .on { color: var(--green); }
 .sb-right .off-t { color: var(--muted); }
+.mcp-state { display: inline-flex; align-items: center; gap: 5px; color: var(--muted); }
+.mcp-state.enabled { color: var(--green); }
+.mcp-state.confirm { color: var(--amber); }
+.mcp-light { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); box-shadow: none; }
+.mcp-state.enabled .mcp-light { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.mcp-state.confirm .mcp-light { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
 
 .dot { width: 7px; margin-top: -1px;   /* 状态栏顶部补了 1px 内边距，圆点不受字形偏移影响、要退回去 */ height: 7px; background: var(--green); box-shadow: 0 0 6px var(--green); }
 

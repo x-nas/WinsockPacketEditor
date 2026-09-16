@@ -27,16 +27,25 @@ namespace WinsockPacketEditor.Mcp
         private readonly string pipeName = "WPE64-Mcp-" + Guid.NewGuid().ToString("N");
         private Task acceptLoop;
 
+        public bool Enabled { get; private set; }
+
         public void Start()
         {
+            Enabled = true;
             PublishInstance(true);
             acceptLoop = Task.Run(() => AcceptLoopAsync(cancellation.Token));
+        }
+
+        public void Stop()
+        {
+            Enabled = false;
+            PublishInstance(false);
         }
 
         public void Dispose()
         {
             cancellation.Cancel();
-            PublishInstance(false);
+            Stop();
             try { if (acceptLoop != null) acceptLoop.Wait(1000); } catch { }
             cancellation.Dispose();
         }
@@ -47,9 +56,11 @@ namespace WinsockPacketEditor.Mcp
             {
                 try
                 {
+                    if (!Enabled) { await Task.Delay(250, token).ConfigureAwait(false); continue; }
                     using (var pipe = CreateCurrentUserPipe())
                     {
                         await pipe.WaitForConnectionAsync(token).ConfigureAwait(false);
+                        if (!Enabled) continue;
                         await ServeAsync(pipe, token).ConfigureAwait(false);
                     }
                 }

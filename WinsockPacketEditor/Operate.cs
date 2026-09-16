@@ -48,6 +48,7 @@ namespace WinsockPacketEditor
             public static bool IsBeta = true;
             /// <summary>允许本机 MCP 写操作跳过 WPE 确认；默认 false。</summary>
             public static bool McpAutoApproveWrites = false;
+            public static bool McpEnabled = true;
             public static int PID = -1;
             public static int AutoSaveINT = 600000;
             /*
@@ -3326,8 +3327,9 @@ namespace WinsockPacketEditor
                 {
                     DataBase.InitConStr();
                     using (var conn = new SQLiteConnection(DataBase.conStr))
-                    using (var cmd = new SQLiteCommand("UPDATE SystemConfig SET McpAutoApproveWrites=@value", conn))
+                    using (var cmd = new SQLiteCommand("UPDATE SystemConfig SET McpEnabled=@enabled, McpAutoApproveWrites=@value", conn))
                     {
+                        cmd.Parameters.AddWithValue("@enabled", SystemConfig.McpEnabled);
                         cmd.Parameters.AddWithValue("@value", SystemConfig.McpAutoApproveWrites);
                         conn.Open();
                         if (cmd.ExecuteNonQuery() == 0) SaveSystemConfig_ToDB();
@@ -3543,6 +3545,10 @@ namespace WinsockPacketEditor
                         if (dtSystemConfig.Columns.Contains("McpAutoApproveWrites"))
                         {
                             SystemConfig.McpAutoApproveWrites = Convert.ToBoolean(dtSystemConfig.Rows[0]["McpAutoApproveWrites"]);
+                        }
+                        if (dtSystemConfig.Columns.Contains("McpEnabled"))
+                        {
+                            SystemConfig.McpEnabled = Convert.ToBoolean(dtSystemConfig.Rows[0]["McpEnabled"]);
                         }
                     }
                     else
@@ -31019,6 +31025,7 @@ namespace WinsockPacketEditor
                             EnsureColumn(conn, "SystemConfig", "LastInjectArgs", "TEXT");
                             EnsureColumn(conn, "SystemConfig", "LastInjectTime", "TEXT");
                             EnsureColumn(conn, "SystemConfig", "McpAutoApproveWrites", "BOOLEAN DEFAULT 0");
+                            EnsureColumn(conn, "SystemConfig", "McpEnabled", "BOOLEAN DEFAULT 1");
                         }
                     }
 
