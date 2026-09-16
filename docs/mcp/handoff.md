@@ -33,7 +33,8 @@
 - 已新增 `tools/tests/McpLifecycle.ps1`：在 WPE 已启动时验证发现文件、进程存活、Named Pipe 可连接和 `runtime.status`；使用 `-ExpectDisabled` 验证关闭总开关后发现文件不存在。
 - 已新增 `tools/tests/McpToolsList.ps1`：通过真实 stdio MCP `initialize` / `tools/list` 验证 Sidecar 启动、工具数量、名称格式和重复注册。
 - 已完成真实生命周期回归：MCP 开启时 PID `2260` 的 Pipe 调用通过；关闭后发现文件删除检查通过；重新开启并重启 WPE 后 PID 变为 `1344`，发现文件、Pipe 和 `runtime.status` 均通过。
-- 下一步：将生命周期脚本纳入发布前清单，并继续补充 Sidecar 异常退出与 WPE 非正常退出后的清理验证。
+- 网关启动时会清理发现文件中已经不存在的进程记录，避免 WPE 异常退出后残留 PID 导致 Sidecar 误判多实例。
+- 下一步：将生命周期脚本纳入发布前清单，并在测试机上补做一次强制退出后的恢复验证。
 
 ## 当前结构与约束
 

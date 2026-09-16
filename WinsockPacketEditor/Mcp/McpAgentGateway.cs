@@ -1037,7 +1037,8 @@ namespace WinsockPacketEditor.Mcp
                     var entries = root["instances"] as JArray ?? new JArray();
                     for (var i = entries.Count - 1; i >= 0; i--)
                     {
-                        if ((int?)entries[i]["processId"] == processId) entries.RemoveAt(i);
+                        var entryPid = (int?)entries[i]["processId"];
+                        if (entryPid == processId || !IsProcessAlive(entryPid)) entries.RemoveAt(i);
                     }
                     if (add)
                     {
@@ -1059,6 +1060,13 @@ namespace WinsockPacketEditor.Mcp
                 }
                 finally { mutex.ReleaseMutex(); }
             }
+        }
+
+        private static bool IsProcessAlive(int? pid)
+        {
+            if (!pid.HasValue || pid.Value <= 0) return false;
+            try { using (Process.GetProcessById(pid.Value)) return true; }
+            catch { return false; }
         }
     }
 }
