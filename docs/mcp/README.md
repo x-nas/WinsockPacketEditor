@@ -20,6 +20,7 @@
 - [写工具 Schema](schemas/write-tools.schema.json)：已开放写工具的输入/输出 JSON Schema。
 - [交接记忆](handoff.md)：当前完成项、验证证据和下一步工作。
 - [阶段 3 只读诊断](phase-3-readonly.md)：下一阶段的工具边界和实施顺序。
+- [阶段 4 只读增强](phase-4-readonly.md)：代理健康、执行器状态和存储健康的设计边界。
 
 ## 当前实施状态（2026-09-16）
 
