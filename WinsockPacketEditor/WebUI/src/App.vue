@@ -376,9 +376,9 @@ watchEffect(() => {
         <div class="sb-right">
           <span class="dot" :class="{ off: !mcpEnabled, confirm: mcpNeedsConfirmation }" />
           MCP
-          <span class="sep">//</span>
+          <span class="sep">-</span>
           <span :class="mcpEnabled ? (mcpNeedsConfirmation ? 'confirm-t' : 'on') : 'off-t'">
-            {{ mcpEnabled ? (mcpNeedsConfirmation ? 'CONFIRM' : 'RUNNING') : 'STOPPED' }}
+            {{ isEn ? (mcpEnabled ? (mcpNeedsConfirmation ? 'CONFIRM' : 'RUNNING') : 'STOPPED') : (mcpEnabled ? (mcpNeedsConfirmation ? '需确认' : '运行中') : '已停止') }}
           </span>
           <span class="sep">//</span>
           <template v-if="view === 'start'">
