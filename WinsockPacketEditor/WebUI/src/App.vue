@@ -374,8 +374,11 @@ watchEffect(() => {
           原程序启动代理后打的第一条日志也正是这个地址。
         -->
         <div class="sb-right">
-          <span class="mcp-state" :class="{ enabled: mcpEnabled, confirm: mcpNeedsConfirmation }" title="MCP 状态">
-            <i class="mcp-light" /> MCP
+          <span class="dot" :class="{ off: !mcpEnabled, confirm: mcpNeedsConfirmation }" />
+          MCP
+          <span class="sep">//</span>
+          <span :class="mcpEnabled ? (mcpNeedsConfirmation ? 'confirm-t' : 'on') : 'off-t'">
+            {{ mcpEnabled ? (mcpNeedsConfirmation ? 'CONFIRM' : 'RUNNING') : 'STOPPED' }}
           </span>
           <span class="sep">//</span>
           <template v-if="view === 'start'">
@@ -651,12 +654,8 @@ watchEffect(() => {
 .sb-right .sep { color: var(--border); }
 .sb-right .on { color: var(--green); }
 .sb-right .off-t { color: var(--muted); }
-.mcp-state { display: inline-flex; align-items: center; gap: 5px; color: var(--muted); }
-.mcp-state.enabled { color: var(--green); }
-.mcp-state.confirm { color: var(--amber); }
-.mcp-light { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); box-shadow: none; }
-.mcp-state.enabled .mcp-light { background: var(--green); box-shadow: 0 0 6px var(--green); }
-.mcp-state.confirm .mcp-light { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+.dot.confirm { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+.sb-right .confirm-t { color: var(--amber); }
 
 .dot { width: 7px; margin-top: -1px;   /* 状态栏顶部补了 1px 内边距，圆点不受字形偏移影响、要退回去 */ height: 7px; background: var(--green); box-shadow: 0 0 6px var(--green); }
 
