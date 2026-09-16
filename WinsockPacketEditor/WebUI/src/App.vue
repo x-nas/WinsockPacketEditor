@@ -374,13 +374,6 @@ watchEffect(() => {
           原程序启动代理后打的第一条日志也正是这个地址。
         -->
         <div class="sb-right">
-          <span class="dot" :class="{ off: !mcpEnabled, confirm: mcpNeedsConfirmation }" />
-          MCP
-          <span class="sep">-</span>
-          <span :class="mcpEnabled ? (mcpNeedsConfirmation ? 'confirm-t' : 'on') : 'off-t'">
-            {{ isEn ? (mcpEnabled ? (mcpNeedsConfirmation ? 'CONFIRM' : 'RUNNING') : 'STOPPED') : (mcpEnabled ? (mcpNeedsConfirmation ? '需确认' : '运行中') : '已停止') }}
-          </span>
-          <span class="sep">//</span>
           <template v-if="view === 'start'">
             <span class="dot" />
             {{ t('foot.ready') }}
@@ -405,6 +398,13 @@ watchEffect(() => {
               {{ proxyRunning ? t('foot.running') : t('foot.stopped') }}
             </span>
           </template>
+          <span class="sep">//</span>
+          <span class="dot" :class="{ off: !mcpEnabled, confirm: mcpNeedsConfirmation }" />
+          MCP
+          <span class="sep">-</span>
+          <span :class="mcpEnabled ? (mcpNeedsConfirmation ? 'confirm-t' : 'on') : 'off-t'">
+            {{ isEn ? (mcpEnabled ? (mcpNeedsConfirmation ? 'CONFIRM' : 'RUNNING') : 'STOPPED') : (mcpEnabled ? (mcpNeedsConfirmation ? '需确认' : '运行中') : '已停止') }}
+          </span>
         </div>
       </footer>
     </div>
