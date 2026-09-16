@@ -1398,14 +1398,14 @@ namespace WPEHybrid
             this.bridge.Register("getMcpSettings", args => new
             {
                 enabled = Operate.SystemConfig.McpEnabled,
-                requiresConfirmation = !Operate.SystemConfig.McpAutoApproveWrites,
+                requiresConfirmation = Operate.SystemConfig.McpRequiresConfirmation,
                 proxyModeAvailable = true,
                 injectModeAvailable = true,
             });
             this.bridge.Register("saveMcpSettings", args =>
             {
                 Operate.SystemConfig.McpEnabled = args["enabled"] == null || (bool)args["enabled"];
-                Operate.SystemConfig.McpAutoApproveWrites = !(args["requiresConfirmation"] == null || (bool)args["requiresConfirmation"]);
+                Operate.SystemConfig.McpRequiresConfirmation = args["requiresConfirmation"] == null || (bool)args["requiresConfirmation"];
                 Operate.SystemConfig.SaveMcpConfig_ToDB();
                 if (this.mcpGateway != null)
                 {
@@ -1415,16 +1415,16 @@ namespace WPEHybrid
                 string message = Operate.SystemConfig.McpEnabled ? UI.T("Mcp.Started", "MCP 已启动") : UI.T("Mcp.Stopped", "MCP 已关闭");
                 UiIcon icon = !Operate.SystemConfig.McpEnabled
                     ? UiIcon.Error
-                    : (Operate.SystemConfig.McpAutoApproveWrites ? UiIcon.Success : UiIcon.Warn);
+                    : (Operate.SystemConfig.McpRequiresConfirmation ? UiIcon.Warn : UiIcon.Success);
                 UI.Toast(icon, message);
                 Operate.DoLog("McpSettings", message);
-                return new { ok = true, enabled = Operate.SystemConfig.McpEnabled, requiresConfirmation = !Operate.SystemConfig.McpAutoApproveWrites };
+                return new { ok = true, enabled = Operate.SystemConfig.McpEnabled, requiresConfirmation = Operate.SystemConfig.McpRequiresConfirmation };
             });
 
             this.bridge.Register("getMcpStatus", args => new
             {
                 enabled = Operate.SystemConfig.McpEnabled,
-                requiresConfirmation = !Operate.SystemConfig.McpAutoApproveWrites,
+                requiresConfirmation = Operate.SystemConfig.McpRequiresConfirmation,
                 available = this.mcpGateway != null && this.mcpGateway.Enabled
             });
 

@@ -70,7 +70,7 @@ namespace WinsockPacketEditor.Mcp
 
         private static async Task<JObject> ApproveCoreAsync(string operation, string idempotencyKey, string requestKey, string hash, JObject arguments, string summary, Func<Task<JObject>> apply)
         {
-            if (Operate.SystemConfig.McpAutoApproveWrites)
+            if (!Operate.SystemConfig.McpRequiresConfirmation)
             {
                 var automatic = await apply();
                 // Keep the public result contract stable; the audit record distinguishes autoApproved.

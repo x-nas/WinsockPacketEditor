@@ -23,7 +23,7 @@
 ## 当前 MCP 设置
 
 - `McpEnabled` 默认开启，保存在 `SystemConfig`；关闭后删除本机发现文件并停止接受 MCP Pipe 请求。
-- MCP 全局“需要人工确认”默认开启；关闭后，所有经过 `McpWriteGuard` 的风险操作都会跳过本机确认并直接执行。内部仍兼容使用 `McpAutoApproveWrites` 字段（默认 `false`），但界面和桥接协议统一使用 `requiresConfirmation` 语义；幂等、校验、脱敏审计和业务层约束始终保留。
+- MCP 全局“需要人工确认”默认开启，数据库字段为 `McpRequiresConfirmation`；关闭后，所有经过 `McpWriteGuard` 的风险操作都会跳过本机确认并直接执行。幂等、校验、脱敏审计和业务层约束始终保留。
 - 状态栏：灰灯 = 已关闭，黄灯 = 需要确认，绿灯 = 自动执行；代理地址与状态使用 `//`、`-` 分组。
 
 ## 阶段 5 进行中

@@ -46,8 +46,8 @@ namespace WinsockPacketEditor
                 2.1.9 正式版是「2.1.9.db」，测过的「2.1.9 Beta.db」不会被读到 —— 要带过去用备份导出 / 导入。
             */
             public static bool IsBeta = true;
-            /// <summary>允许本机 MCP 写操作跳过 WPE 确认；默认 false。</summary>
-            public static bool McpAutoApproveWrites = false;
+            /// <summary>MCP 操作需要 WPE 本机确认；默认 true。</summary>
+            public static bool McpRequiresConfirmation = true;
             public static bool McpEnabled = true;
             public static int PID = -1;
             public static int AutoSaveINT = 600000;
@@ -3327,10 +3327,10 @@ namespace WinsockPacketEditor
                 {
                     DataBase.InitConStr();
                     using (var conn = new SQLiteConnection(DataBase.conStr))
-                    using (var cmd = new SQLiteCommand("UPDATE SystemConfig SET McpEnabled=@enabled, McpAutoApproveWrites=@value", conn))
+                    using (var cmd = new SQLiteCommand("UPDATE SystemConfig SET McpEnabled=@enabled, McpRequiresConfirmation=@value", conn))
                     {
                         cmd.Parameters.AddWithValue("@enabled", SystemConfig.McpEnabled);
-                        cmd.Parameters.AddWithValue("@value", SystemConfig.McpAutoApproveWrites);
+                        cmd.Parameters.AddWithValue("@value", SystemConfig.McpRequiresConfirmation);
                         conn.Open();
                         if (cmd.ExecuteNonQuery() == 0) SaveSystemConfig_ToDB();
                     }
@@ -3352,7 +3352,7 @@ namespace WinsockPacketEditor
                         new XElement("IsDark", UI.Prefs.IsDark),
                         new XElement("ThemeFollowSystem", UI.Prefs.FollowSystemTheme),
                         new XElement("McpEnabled", SystemConfig.McpEnabled),
-                        new XElement("McpAutoApproveWrites", SystemConfig.McpAutoApproveWrites),
+                        new XElement("McpRequiresConfirmation", SystemConfig.McpRequiresConfirmation),
                         new XElement("DefaultLanguage", UI.Prefs.Language),
                         new XElement("LastInjection", SystemConfig.LastInjection),
                         new XElement("LastInjectMethod", SystemConfig.LastInjectMethod),
@@ -3543,9 +3543,9 @@ namespace WinsockPacketEditor
                         UI.Prefs.FilterChange_BackColor = new RgbColor(Convert.ToInt32(dtSystemConfig.Rows[0]["FilterChange_BackColor"]));
                         UI.Prefs.FilterDisplay_ForeColor = new RgbColor(Convert.ToInt32(dtSystemConfig.Rows[0]["FilterDisplay_ForeColor"]));
                         UI.Prefs.FilterDisplay_BackColor = new RgbColor(Convert.ToInt32(dtSystemConfig.Rows[0]["FilterDisplay_BackColor"]));
-                        if (dtSystemConfig.Columns.Contains("McpAutoApproveWrites"))
+                        if (dtSystemConfig.Columns.Contains("McpRequiresConfirmation"))
                         {
-                            SystemConfig.McpAutoApproveWrites = Convert.ToBoolean(dtSystemConfig.Rows[0]["McpAutoApproveWrites"]);
+                            SystemConfig.McpRequiresConfirmation = Convert.ToBoolean(dtSystemConfig.Rows[0]["McpRequiresConfirmation"]);
                         }
                         if (dtSystemConfig.Columns.Contains("McpEnabled"))
                         {
@@ -3574,7 +3574,7 @@ namespace WinsockPacketEditor
                         UI.Prefs.IsDark = true;
                         UI.Prefs.FollowSystemTheme = false;
                         SystemConfig.McpEnabled = true;
-                        SystemConfig.McpAutoApproveWrites = false;
+                        SystemConfig.McpRequiresConfirmation = true;
 
                         UI.Prefs.ScanLine = true;
 
@@ -3605,8 +3605,8 @@ namespace WinsockPacketEditor
                 {
                     XElement xeMcpEnabled = xeSystemConfig.Element("McpEnabled");
                     if (xeMcpEnabled != null) SystemConfig.McpEnabled = Convert.ToBoolean(xeMcpEnabled.Value);
-                    XElement xeMcpAutoApprove = xeSystemConfig.Element("McpAutoApproveWrites");
-                    if (xeMcpAutoApprove != null) SystemConfig.McpAutoApproveWrites = Convert.ToBoolean(xeMcpAutoApprove.Value);
+                    XElement xeMcpRequiresConfirmation = xeSystemConfig.Element("McpRequiresConfirmation");
+                    if (xeMcpRequiresConfirmation != null) SystemConfig.McpRequiresConfirmation = Convert.ToBoolean(xeMcpRequiresConfirmation.Value);
                     XElement xeIsAnimation = xeSystemConfig.Element("IsAnimation");
                     if (xeIsAnimation != null)
                     {
@@ -31029,7 +31029,7 @@ namespace WinsockPacketEditor
                             EnsureColumn(conn, "SystemConfig", "LastInjectPath", "TEXT");
                             EnsureColumn(conn, "SystemConfig", "LastInjectArgs", "TEXT");
                             EnsureColumn(conn, "SystemConfig", "LastInjectTime", "TEXT");
-                            EnsureColumn(conn, "SystemConfig", "McpAutoApproveWrites", "BOOLEAN DEFAULT 0");
+                            EnsureColumn(conn, "SystemConfig", "McpRequiresConfirmation", "BOOLEAN DEFAULT 1");
                             EnsureColumn(conn, "SystemConfig", "McpEnabled", "BOOLEAN DEFAULT 1");
                         }
                     }
@@ -31154,7 +31154,7 @@ namespace WinsockPacketEditor
                         sql += "IsTextRenderingHighQuality,";
                         sql += "IsDark,";
                         sql += "McpEnabled,";
-                        sql += "McpAutoApproveWrites,";
+                        sql += "McpRequiresConfirmation,";
                         sql += "DefaultLanguage,";
                         sql += "LastInjection,";
                         sql += "LastInjectMethod,";
@@ -31222,7 +31222,7 @@ namespace WinsockPacketEditor
                         sql += "@IsTextRenderingHighQuality,";
                         sql += "@IsDark,";
                         sql += "@McpEnabled,";
-                        sql += "@McpAutoApproveWrites,";
+                        sql += "@McpRequiresConfirmation,";
                         sql += "@DefaultLanguage,";
                         sql += "@LastInjection,";
                         sql += "@LastInjectMethod,";
@@ -31300,7 +31300,7 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@IsDark", UI.Prefs.IsDark);
                             cmd.Parameters.AddWithValue("@ThemeFollowSystem", UI.Prefs.FollowSystemTheme);
                             cmd.Parameters.AddWithValue("@McpEnabled", SystemConfig.McpEnabled);
-                            cmd.Parameters.AddWithValue("@McpAutoApproveWrites", SystemConfig.McpAutoApproveWrites);
+                            cmd.Parameters.AddWithValue("@McpRequiresConfirmation", SystemConfig.McpRequiresConfirmation);
                             cmd.Parameters.AddWithValue("@DefaultLanguage", UI.Prefs.Language);
                             cmd.Parameters.AddWithValue("@LastInjection", SystemConfig.LastInjection);
                             cmd.Parameters.AddWithValue("@LastInjectMethod", SystemConfig.LastInjectMethod);
