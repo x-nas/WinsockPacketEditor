@@ -30,7 +30,8 @@
 
 - 已补齐代码工具、`tools.md` 和只读/写入 Schema 的同步检查入口：`tools/tests/McpContract.ps1`。
 - 当前阶段只做稳定性、安全边界和自动化回归，不新增主动发包、注入、驱动或执行器控制。
-- 下一步：补充 MCP 总开关、发现文件和 Named Pipe 生命周期的可重复集成测试，并将 Sidecar `tools/list` 纳入发布前检查。
+- 已新增 `tools/tests/McpLifecycle.ps1`：在 WPE 已启动时验证发现文件、进程存活、Named Pipe 可连接和 `runtime.status`；使用 `-ExpectDisabled` 验证关闭总开关后发现文件不存在。
+- 下一步：将 Sidecar `tools/list` 纳入发布前检查，并在真实 WPE 测试机上补做开关启停和重启场景。
 
 ## 当前结构与约束
 
