@@ -5,7 +5,7 @@
 ## 已完成
 
 - Phase 0：`architecture.md`、`internal-protocol.md`、工具表和 JSON Schema。
-- Phase 1：WPE 内的 `McpAgentGateway`、.NET 10 `WPEMcpServer` stdio Sidecar、打包集成；12 个只读 MCP 工具已实际端到端验证。
+- Phase 1：WPE 内的 `McpAgentGateway`、.NET 10 `WPEMcpServer` stdio Sidecar、打包集成；18 个只读 MCP 工具已实际端到端验证。
 - Phase 2：共享 `McpWriteGuard`（UUID 幂等、同键异参拒绝、60 秒本机确认超时、脱敏内存审计）；已开放 `wpe_filter_set_enabled`、`wpe_firewall_rules_list`、`wpe_firewall_rule_add`、`wpe_firewall_rule_remove`。
 - Phase 2 追加开放 `wpe_account_set_enabled`：只修改已有代理账号启用状态，不读取或修改密码；已完成批准停用、批准恢复、幂等、同键异参拒绝和最终状态核对。
 - Phase 2 追加开放 `wpe_proxy_auth_set_enabled`：只修改代理身份认证布尔值，关闭时校验 `Only_WPC_Client` 约束；已完成批准停用、批准恢复、幂等、同键异参拒绝，以及重启后返回 `changed=false, enabled=true` 的持久化核对。
@@ -19,6 +19,12 @@
 - 筛选器写入已在真实打包 WPE 上验证：确认后返回 `approved`；请求目标已处于指定状态时准确返回 `changed=false`。确认框展示筛选器名称，不展示 GUID。
 - 防火墙规则读取已在真实打包 WPE 上验证；当白/黑名单为空时返回空页。对不存在规则的删除在弹确认框前拒绝，未改变任何配置。
 - 防火墙新增已完成代码、Schema、Sidecar 注册和打包验证。`SaveIPRuleAsync` 会等待归属地查询和实际插入，随后保存对应名单表；已在本次新包上完成拒绝无变更、批准新增、重复幂等键不重复新增、同键异参拒绝、重启后持久化，以及批准删除清理的实际 E2E 验证。
+
+## 当前 MCP 设置
+
+- `McpEnabled` 默认开启，保存在 `SystemConfig`；关闭后删除本机发现记录并停止接受 MCP Pipe 请求。
+- `McpAutoApproveWrites` 默认关闭；开启后写操作跳过本机确认，但仍保留幂等、校验、脱敏审计和业务层约束。
+- 状态栏：灰灯 = 已关闭，黄灯 = 需要确认，绿灯 = 自动执行；代理地址与状态使用 `//`、`-` 分组。
 
 ## 当前结构与约束
 
@@ -41,7 +47,7 @@ powershell -ExecutionPolicy Bypass -File tools/pack/Pack.ps1 -SkipBuild
 
 ## 阶段 2 当前验证点
 
-新发布包是 `dist/WPE64 2.3.exe`（2026-09-16 09:46 构建，SHA-256 `184d526727671ed6600ea6c9de414238813db10373c022f70b99c695d6b45bf6`）。Sidecar `tools/list` 烟测返回 18 个工具，`wpe_proxy_max_connections_set` 已出现；主工程、Sidecar 和完整解决方案均 0 警告、0 错误，UI 解耦守门通过，payload 内含 MCP Sidecar 文件。
+最新发布包为 `dist/WPE64 2.3.exe`；每次前端改动必须先构建 WebUI，再用解决方案构建同步 `bin/Release/wwwroot`，最后运行打包脚本。不要使用 `-SkipBuild` 代替前端同步，除非已先完成这两步。
 
 阶段 2 防火墙写入 E2E 已完成：测试地址 `203.0.113.77` 经过拒绝、批准、幂等、同键异参、重启持久化和删除清理全流程，最终黑名单为空。
 

@@ -3351,6 +3351,7 @@ namespace WinsockPacketEditor
                         new XElement("IsTextRenderingHighQuality", UI.Prefs.IsTextRenderingHighQuality),
                         new XElement("IsDark", UI.Prefs.IsDark),
                         new XElement("ThemeFollowSystem", UI.Prefs.FollowSystemTheme),
+                        new XElement("McpEnabled", SystemConfig.McpEnabled),
                         new XElement("McpAutoApproveWrites", SystemConfig.McpAutoApproveWrites),
                         new XElement("DefaultLanguage", UI.Prefs.Language),
                         new XElement("LastInjection", SystemConfig.LastInjection),
@@ -3572,6 +3573,8 @@ namespace WinsockPacketEditor
                         UI.Prefs.IsTextRenderingHighQuality = false;
                         UI.Prefs.IsDark = true;
                         UI.Prefs.FollowSystemTheme = false;
+                        SystemConfig.McpEnabled = true;
+                        SystemConfig.McpAutoApproveWrites = false;
 
                         UI.Prefs.ScanLine = true;
 
@@ -3600,6 +3603,8 @@ namespace WinsockPacketEditor
             {
                 try
                 {
+                    XElement xeMcpEnabled = xeSystemConfig.Element("McpEnabled");
+                    if (xeMcpEnabled != null) SystemConfig.McpEnabled = Convert.ToBoolean(xeMcpEnabled.Value);
                     XElement xeMcpAutoApprove = xeSystemConfig.Element("McpAutoApproveWrites");
                     if (xeMcpAutoApprove != null) SystemConfig.McpAutoApproveWrites = Convert.ToBoolean(xeMcpAutoApprove.Value);
                     XElement xeIsAnimation = xeSystemConfig.Element("IsAnimation");

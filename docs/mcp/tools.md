@@ -20,11 +20,11 @@ All names use the `wpe_` namespace in MCP. Underscores are deliberately used bec
 | `wpe_proxy_health_get` | `proxy.health.get` | `read.runtime` | Read-only consistency check; never starts, stops, or repairs proxy |
 | `wpe_executors_detail_get` | `executors.detail.get` | `read.runtime` | Executor counts only; never controls executor tasks |
 | `wpe_storage_health_get` | `storage.health.get` | `read.runtime` | Database availability metadata with path hidden and contents excluded |
+| `wpe_firewall_rules_list` | `firewall.rules.list` | `read.runtime` | White/black list rules only |
 | `wpe_proxy_bind_ip_set` | `proxy.bindIp.set` | `write.proxy` | Auto or validated IPv4/IPv6 listening address, persisted after WPE-local confirmation |
 | `wpe_external_proxy_set_enabled` | `proxy.external.setEnabled` | `write.proxy` | Toggles the existing external proxy endpoint only; credentials are never returned or modified |
 | `wpe_proxy_start` | `proxy.start` | `write.proxy.lifecycle` | Starts configured listeners after confirmation |
 | `wpe_proxy_stop` | `proxy.stop` | `write.proxy.lifecycle` | Stops listeners after confirmation; existing connections may disconnect |
-| `wpe_firewall_rules_list` | `firewall.rules.list` | `read.runtime` | White/black list rules only |
 | `wpe_bytes_transcode` | `bytes.transcode` | `read.runtime` | Caller-supplied data only |
 | `wpe_bytes_compare` | `bytes.compare` | `read.runtime` | Caller-supplied data only |
 | `wpe_bytes_extract` | `bytes.extract` | `read.runtime` | Caller-supplied data only |
