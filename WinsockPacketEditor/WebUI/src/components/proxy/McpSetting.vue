@@ -6,7 +6,7 @@ import SettingsModal from './SettingsModal.vue'
 const props = defineProps<{ open: boolean }>()
 const emit = defineEmits<{ (e: 'update:open', value: boolean): void }>()
 const enabled = ref(true)
-const autoApproveWrites = ref(false)
+const requiresConfirmation = ref(true)
 const busy = ref(false)
 const error = ref('')
 
@@ -14,9 +14,9 @@ watch(() => props.open, async (open) => {
   if (!open) return
   error.value = ''
   try {
-    const value = await call<{ enabled: boolean; autoApproveWrites: boolean }>('getMcpSettings')
+    const value = await call<{ enabled: boolean; requiresConfirmation: boolean }>('getMcpSettings')
     enabled.value = value.enabled
-    autoApproveWrites.value = value.autoApproveWrites
+    requiresConfirmation.value = value.requiresConfirmation
   } catch (e) { error.value = String(e) }
 })
 
@@ -24,7 +24,7 @@ async function save(): Promise<void> {
   busy.value = true
   error.value = ''
   try {
-    await call('saveMcpSettings', { enabled: enabled.value, autoApproveWrites: autoApproveWrites.value })
+    await call('saveMcpSettings', { enabled: enabled.value, requiresConfirmation: requiresConfirmation.value })
     emit('update:open', false)
   } catch (e) { error.value = String(e) } finally { busy.value = false }
 }
@@ -45,13 +45,13 @@ async function save(): Promise<void> {
     </div>
     <div class="swb">
       <div class="row">
-        <label class="chk" :class="{ on: autoApproveWrites }">
+        <label class="chk" :class="{ on: requiresConfirmation }">
           <i />
-          <input v-model="autoApproveWrites" type="checkbox" hidden />
-          <span>允许 MCP 自动执行写操作</span>
+          <input v-model="requiresConfirmation" type="checkbox" hidden />
+          <span>MCP 操作需要人工确认</span>
         </label>
       </div>
-      <p class="hint">{{ autoApproveWrites ? '关闭 WPE 本地确认；MCP 写操作将直接执行。' : '每次高风险写操作都需要 WPE 本地确认。' }}</p>
+      <p class="hint">{{ requiresConfirmation ? '所有风险等级的 MCP 操作都需要 WPE 本地确认。' : '关闭确认后，MCP 操作将直接执行，请确保 AI 客户端和本机环境可信。' }}</p>
     </div>
     <section class="sec">
       <div class="grp">模式范围</div>

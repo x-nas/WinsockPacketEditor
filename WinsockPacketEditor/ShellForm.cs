@@ -1398,14 +1398,14 @@ namespace WPEHybrid
             this.bridge.Register("getMcpSettings", args => new
             {
                 enabled = Operate.SystemConfig.McpEnabled,
-                autoApproveWrites = Operate.SystemConfig.McpAutoApproveWrites,
+                requiresConfirmation = !Operate.SystemConfig.McpAutoApproveWrites,
                 proxyModeAvailable = true,
                 injectModeAvailable = true,
             });
             this.bridge.Register("saveMcpSettings", args =>
             {
                 Operate.SystemConfig.McpEnabled = args["enabled"] == null || (bool)args["enabled"];
-                Operate.SystemConfig.McpAutoApproveWrites = args["autoApproveWrites"] != null && (bool)args["autoApproveWrites"];
+                Operate.SystemConfig.McpAutoApproveWrites = !(args["requiresConfirmation"] == null || (bool)args["requiresConfirmation"]);
                 Operate.SystemConfig.SaveMcpConfig_ToDB();
                 if (this.mcpGateway != null)
                 {
@@ -1418,7 +1418,7 @@ namespace WPEHybrid
                     : (Operate.SystemConfig.McpAutoApproveWrites ? UiIcon.Success : UiIcon.Warn);
                 UI.Toast(icon, message);
                 Operate.DoLog("McpSettings", message);
-                return new { ok = true, enabled = Operate.SystemConfig.McpEnabled, autoApproveWrites = Operate.SystemConfig.McpAutoApproveWrites };
+                return new { ok = true, enabled = Operate.SystemConfig.McpEnabled, requiresConfirmation = !Operate.SystemConfig.McpAutoApproveWrites };
             });
 
             this.bridge.Register("getMcpStatus", args => new
