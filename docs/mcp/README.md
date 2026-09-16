@@ -23,6 +23,7 @@
 - [阶段 3 只读诊断](phase-3-readonly.md)：下一阶段的工具边界和实施顺序。
 - [阶段 4 只读增强](phase-4-readonly.md)：代理健康、执行器状态和存储健康的设计边界。
 - [阶段 2–4 交付摘要](delivery-summary.md)：已完成能力、测试覆盖和明确未开放范围。
+- [阶段 6 高风险操作边界](phase-6-high-risk.md)：首个候选操作和强制安全条件。
 - 阶段 5：稳定性、安全边界和自动化契约检查以仓库脚本 `tools/tests/McpContract.ps1` 为入口，逐步补充集成回归。
 - 发布前总检查入口：`tools/tests/McpReleaseCheck.ps1`；加 `-RequireWpe` 时要求当前 WPE 正在运行并完成 Pipe 生命周期检查。
 
