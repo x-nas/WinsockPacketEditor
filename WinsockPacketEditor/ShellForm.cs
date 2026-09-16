@@ -479,7 +479,25 @@ namespace WPEHybrid
 
                 // Local MCP has its own named-pipe protocol; it never shares the injected-process IPC.
                 this.mcpGateway = new McpAgentGateway();
-                if (Operate.SystemConfig.McpEnabled) this.mcpGateway.Start();
+                try
+                {
+                    if (Operate.SystemConfig.McpEnabled)
+                    {
+                        this.mcpGateway.Start();
+                        UI.Toast(UiIcon.Success, UI.T("Mcp.Started", "MCP 已启动"));
+                        Operate.DoLog("McpStartup", UI.T("Mcp.Started", "MCP 已启动"));
+                    }
+                    else
+                    {
+                        UI.Toast(UiIcon.Info, UI.T("Mcp.Stopped", "MCP 已关闭"));
+                        Operate.DoLog("McpStartup", UI.T("Mcp.Stopped", "MCP 已关闭"));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    UI.Toast(UiIcon.Error, UI.T("Mcp.StartFailed", "MCP 启动失败：") + ex.Message);
+                    Operate.DoLog("McpStartup", ex);
+                }
 
                 this.timerFlush.Tick += this.OnFlushTick;
                 this.timerFlush.Start();
