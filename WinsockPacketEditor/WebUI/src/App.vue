@@ -400,7 +400,7 @@ watchEffect(() => {
           <template v-else>
             <span class="dot" :class="{ off: !proxyRunning }" />
             Socks5 <span class="addr">{{ socks5Addr || '—' }}</span>
-            <span class="sep">//</span>
+            <span class="sep">-</span>
             <span :class="proxyRunning ? 'on' : 'off-t'">
               {{ proxyRunning ? t('foot.running') : t('foot.stopped') }}
             </span>
