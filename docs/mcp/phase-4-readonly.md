@@ -32,3 +32,10 @@
 - `wpe_storage_health_get`
 
 下一步只做一次重启后的集成烟测，不开放任何新的写操作。
+
+## 集成烟测结果
+
+- `wpe_proxy_health_get`：`healthy=true`，代理未运行时仍能正确报告端口无冲突、会话数为 0；
+- `wpe_executors_detail_get`：发送器和机器人运行数均为 0；
+- `wpe_storage_health_get`：数据目录和 `2.3 Beta.db` 均存在，版本返回 `2.3 Beta`；
+- 三个工具均未返回密码、令牌、完整路径、任务内容或封包正文。
