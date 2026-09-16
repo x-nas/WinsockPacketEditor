@@ -31153,6 +31153,8 @@ namespace WinsockPacketEditor
                         sql += "IsScrollBarHide,";
                         sql += "IsTextRenderingHighQuality,";
                         sql += "IsDark,";
+                        sql += "McpEnabled,";
+                        sql += "McpAutoApproveWrites,";
                         sql += "DefaultLanguage,";
                         sql += "LastInjection,";
                         sql += "LastInjectMethod,";
@@ -31219,6 +31221,8 @@ namespace WinsockPacketEditor
                         sql += "@IsScrollBarHide,";
                         sql += "@IsTextRenderingHighQuality,";
                         sql += "@IsDark,";
+                        sql += "@McpEnabled,";
+                        sql += "@McpAutoApproveWrites,";
                         sql += "@DefaultLanguage,";
                         sql += "@LastInjection,";
                         sql += "@LastInjectMethod,";
@@ -31295,6 +31299,8 @@ namespace WinsockPacketEditor
                             */
                             cmd.Parameters.AddWithValue("@IsDark", UI.Prefs.IsDark);
                             cmd.Parameters.AddWithValue("@ThemeFollowSystem", UI.Prefs.FollowSystemTheme);
+                            cmd.Parameters.AddWithValue("@McpEnabled", SystemConfig.McpEnabled);
+                            cmd.Parameters.AddWithValue("@McpAutoApproveWrites", SystemConfig.McpAutoApproveWrites);
                             cmd.Parameters.AddWithValue("@DefaultLanguage", UI.Prefs.Language);
                             cmd.Parameters.AddWithValue("@LastInjection", SystemConfig.LastInjection);
                             cmd.Parameters.AddWithValue("@LastInjectMethod", SystemConfig.LastInjectMethod);
