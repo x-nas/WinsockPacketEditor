@@ -34,6 +34,7 @@
 - 已新增 `tools/tests/McpToolsList.ps1`：通过真实 stdio MCP `initialize` / `tools/list` 验证 Sidecar 启动、工具数量、名称格式和重复注册。
 - 已完成真实生命周期回归：MCP 开启时 PID `2260` 的 Pipe 调用通过；关闭后发现文件删除检查通过；重新开启并重启 WPE 后 PID 变为 `1344`，发现文件、Pipe 和 `runtime.status` 均通过。
 - 已修正并验证 C#/前端 `UiIcon` 映射：自动执行绿色、人工确认黄色、关闭红色；契约检查现在会锁定 `None=0, Info=1, Success=2, Warn=3, Error=4`。
+- 阶段 5 发布门禁已通过：`McpReleaseCheck.ps1 -RequireWpe` 完成 35 个工具契约、Sidecar `tools/list` 和真实 WPE PID `4520` 的发现文件、Named Pipe、`runtime.status` 验证。
 - 网关启动时会清理发现文件中已经不存在的进程记录，避免 WPE 异常退出后残留 PID 导致 Sidecar 误判多实例。
 - 下一步：将生命周期脚本纳入发布前清单，并在测试机上补做一次强制退出后的恢复验证。
 
