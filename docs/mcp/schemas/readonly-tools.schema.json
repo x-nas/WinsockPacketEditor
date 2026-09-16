@@ -47,6 +47,19 @@
         "additionalProperties": true
       }
     },
+    "wpe_connections_summary_get": {
+      "input": { "type": "object", "additionalProperties": false },
+      "output": {
+        "type": "object",
+        "required": ["total", "tcp", "udp", "wpcControl", "ordinary", "sampledAtUtc"],
+        "properties": {
+          "total": { "type": "integer", "minimum": 0 }, "tcp": { "type": "integer", "minimum": 0 }, "udp": { "type": "integer", "minimum": 0 },
+          "wpcControl": { "type": "integer", "minimum": 0 }, "ordinary": { "type": "integer", "minimum": 0 },
+          "sampledAtUtc": { "type": "string", "format": "date-time" }
+        },
+        "additionalProperties": false
+      }
+    },
     "wpe_status_get": {
       "input": { "type": "object", "additionalProperties": false },
       "output": { "type": "object", "required": ["version", "mode", "proxyRunning"], "properties": { "version": { "type": "string" }, "mode": { "type": "string" }, "proxyRunning": { "type": "boolean" }, "queue": { "type": "integer" }, "captured": { "type": "integer" } }, "additionalProperties": false }

@@ -117,6 +117,7 @@ namespace WinsockPacketEditor.Mcp
             if (operation == "firewall.rules.list") return ReadOnUi(() => ListFirewallRules(arguments));
             if (operation == "proxy.settings.get") return ReadOnUi(GetProxySettings);
             if (operation == "proxy.runtime.get") return ReadOnUi(GetProxyRuntime);
+            if (operation == "connections.summary.get") return ReadOnUi(GetConnectionsSummary);
             if (operation == "bytes.transcode") return BytesTranscode(arguments);
             if (operation == "bytes.compare") return BytesCompare(arguments);
             if (operation == "bytes.extract") return BytesExtract(arguments);
@@ -706,6 +707,27 @@ namespace WinsockPacketEditor.Mcp
             result["capturedPackets"] = Operate.PacketConfig.Packet.TotalPackets;
             result["sampledAtUtc"] = DateTime.UtcNow.ToString("o");
             return result;
+        }
+
+        private static JObject GetConnectionsSummary()
+        {
+            var rows = Operate.ProxyConfig.Account.GetClientConnections(string.Empty) ?? new ClientConnRow[0];
+            var udp = 0;
+            var wpc = 0;
+            foreach (var row in rows)
+            {
+                if (row.Udp) udp++;
+                if (row.Wpc) wpc++;
+            }
+            return new JObject
+            {
+                ["total"] = rows.Length,
+                ["tcp"] = rows.Length - udp,
+                ["udp"] = udp,
+                ["wpcControl"] = wpc,
+                ["ordinary"] = rows.Length - wpc,
+                ["sampledAtUtc"] = DateTime.UtcNow.ToString("o")
+            };
         }
 
         private static async Task<JToken> SetProxyBindIpAsync(JObject arguments)
