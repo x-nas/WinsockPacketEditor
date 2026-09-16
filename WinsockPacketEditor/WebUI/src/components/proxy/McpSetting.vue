@@ -30,6 +30,7 @@ async function save(): Promise<void> {
 
 <template>
   <SettingsModal :open="props.open" title="MCP 设置" subtitle="本机 AI 自动化权限" :busy="busy" :error="error" @update:open="emit('update:open', $event)" @save="save">
+    <div class="setf mcp-set">
     <section class="sec">
       <div class="sec-h">写操作确认</div>
       <label class="swb">
@@ -49,11 +50,15 @@ async function save(): Promise<void> {
       <div class="mode-row"><span>注入模式</span><span class="ok">可用</span></div>
       <p class="hint">后续增加模式专属 MCP 配置时，会在此处按模式显示可用性。</p>
     </section>
+    </div>
   </SettingsModal>
 </template>
 
 <style scoped>
-.mode-row { display:flex; justify-content:space-between; padding:7px 0; color:var(--tx-2); }
+.mcp-set { padding: 8px 20px 14px; }
+.mcp-set .sec { margin: 0; padding: 12px 0; }
+.mcp-set .sec + .sec { margin-top: 4px; }
+.mode-row { display:flex; justify-content:space-between; align-items:center; padding:8px 0; color:var(--tx-2); }
 .ok { color:var(--green, #65d59b); }
 .hint { margin:10px 0 0; color:var(--tx-3); font-size:var(--fs-small); line-height:1.5; }
 .muted { opacity:.9; }
