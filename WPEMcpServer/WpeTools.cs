@@ -56,6 +56,12 @@ internal static class WpeTools
     public static Task<string> ConnectionsSummaryGet(WpeGatewayClient gateway, CancellationToken cancellationToken) => gateway.InvokeAsync("connections.summary.get", null, cancellationToken);
     [McpServerTool(Name = "wpe_proxy_failures_list"), Description("List a bounded safe summary of recent proxy failure logs. Account names, IPs, paths, credentials, tokens, and full exception text are omitted.")]
     public static Task<string> ProxyFailuresList(WpeGatewayClient gateway, int? limit = null, CancellationToken cancellationToken = default) => gateway.InvokeAsync("proxy.failures.list", new ProxyFailuresListInput(limit), cancellationToken);
+    [McpServerTool(Name = "wpe_proxy_health_get"), Description("Return read-only proxy consistency diagnostics. Nothing is started, stopped, or repaired.")]
+    public static Task<string> ProxyHealthGet(WpeGatewayClient gateway, CancellationToken cancellationToken) => gateway.InvokeAsync("proxy.health.get", null, cancellationToken);
+    [McpServerTool(Name = "wpe_executors_detail_get"), Description("Return read-only sender and robot executor counts. Executor tasks are never started or stopped.")]
+    public static Task<string> ExecutorsDetailGet(WpeGatewayClient gateway, CancellationToken cancellationToken) => gateway.InvokeAsync("executors.detail.get", null, cancellationToken);
+    [McpServerTool(Name = "wpe_storage_health_get"), Description("Return read-only database availability metadata without exposing full paths, credentials, or database contents.")]
+    public static Task<string> StorageHealthGet(WpeGatewayClient gateway, CancellationToken cancellationToken) => gateway.InvokeAsync("storage.health.get", null, cancellationToken);
     [McpServerTool(Name = "wpe_proxy_bind_ip_set"), Description("Request a reversible proxy listening-address change. WPE validates an explicit IPv4/IPv6 address or automatic detection, then persists after local confirmation.")]
     public static Task<string> ProxyBindIpSet(WpeGatewayClient gateway, bool auto, string ip, string idempotencyKey, CancellationToken cancellationToken = default) => gateway.InvokeAsync("proxy.bindIp.set", new ProxyBindIpSetInput(auto, ip, idempotencyKey), cancellationToken);
     [McpServerTool(Name = "wpe_external_proxy_set_enabled"), Description("Request a reversible external-proxy enable/disable change. Existing credentials are never returned or modified; WPE validates the configured endpoint and persists after local confirmation.")]

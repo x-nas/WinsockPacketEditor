@@ -119,6 +119,9 @@ namespace WinsockPacketEditor.Mcp
             if (operation == "proxy.runtime.get") return ReadOnUi(GetProxyRuntime);
             if (operation == "connections.summary.get") return ReadOnUi(GetConnectionsSummary);
             if (operation == "proxy.failures.list") return ReadOnUi(() => ListProxyFailures(arguments));
+            if (operation == "proxy.health.get") return ReadOnUi(GetProxyHealth);
+            if (operation == "executors.detail.get") return ReadOnUi(GetExecutorsDetail);
+            if (operation == "storage.health.get") return ReadOnUi(GetStorageHealth);
             if (operation == "bytes.transcode") return BytesTranscode(arguments);
             if (operation == "bytes.compare") return BytesCompare(arguments);
             if (operation == "bytes.extract") return BytesExtract(arguments);
@@ -746,6 +749,55 @@ namespace WinsockPacketEditor.Mcp
                 rows.Add(new JObject { ["time"] = entry.LogTime.ToUniversalTime().ToString("o"), ["summary"] = message });
             }
             return new JObject { ["rows"] = rows, ["sampledAtUtc"] = DateTime.UtcNow.ToString("o") };
+        }
+
+        private static JObject GetProxyHealth()
+        {
+            var settings = GetProxySettings();
+            var socks = (bool)settings["socks5Enabled"];
+            var http = (bool)settings["httpEnabled"];
+            var socksPort = (int)settings["socks5Port"];
+            var httpPort = (int)settings["httpPort"];
+            var portConflict = socks && http && socksPort == httpPort;
+            var running = (bool)settings["running"];
+            return new JObject
+            {
+                ["healthy"] = !portConflict,
+                ["running"] = running,
+                ["socks5Enabled"] = socks,
+                ["httpEnabled"] = http,
+                ["portConflict"] = portConflict,
+                ["sessionCount"] = Operate.ProxyConfig.Proxy.SessionCount,
+                ["sampledAtUtc"] = DateTime.UtcNow.ToString("o")
+            };
+        }
+
+        private static JObject GetExecutorsDetail()
+        {
+            var send = Operate.SendConfig.List.SendExecute_Count();
+            var robot = Operate.RobotConfig.List.RobotExecute_Count();
+            return new JObject
+            {
+                ["sendRunning"] = send,
+                ["sendStopped"] = 0,
+                ["robotRunning"] = robot,
+                ["robotStopped"] = 0,
+                ["sampledAtUtc"] = DateTime.UtcNow.ToString("o")
+            };
+        }
+
+        private static JObject GetStorageHealth()
+        {
+            var path = Operate.DataBase.dbPath ?? string.Empty;
+            var name = Operate.DataBase.dbName ?? string.Empty;
+            return new JObject
+            {
+                ["directoryAvailable"] = Directory.Exists(path),
+                ["databaseFileAvailable"] = File.Exists(Path.Combine(path, name)),
+                ["databaseName"] = name,
+                ["version"] = Operate.SystemConfig.AssemblyVersion,
+                ["sampledAtUtc"] = DateTime.UtcNow.ToString("o")
+            };
         }
 
         private static async Task<JToken> SetProxyBindIpAsync(JObject arguments)

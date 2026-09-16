@@ -22,3 +22,13 @@
 - 执行器启停；
 - 主动发包、注入和驱动操作；
 - 读取数据库原始内容、密码、令牌或完整路径。
+
+## 实现状态
+
+三个只读工具已完成代码和 Schema：
+
+- `wpe_proxy_health_get`
+- `wpe_executors_detail_get`
+- `wpe_storage_health_get`
+
+下一步只做一次重启后的集成烟测，不开放任何新的写操作。

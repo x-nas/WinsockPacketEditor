@@ -17,6 +17,9 @@ All names use the `wpe_` namespace in MCP. Underscores are deliberately used bec
 | `wpe_proxy_runtime_get` | `proxy.runtime.get` | `read.runtime` | Live non-sensitive listener state and bounded counters; no payloads or credentials |
 | `wpe_connections_summary_get` | `connections.summary.get` | `read.capture` | Protocol and WPC/ordinary counts only; no addresses, device identifiers, credentials or payloads |
 | `wpe_proxy_failures_list` | `proxy.failures.list` | `read.runtime` | Bounded failure summaries only; account names, IPs, paths, credentials, tokens and full stacks are omitted |
+| `wpe_proxy_health_get` | `proxy.health.get` | `read.runtime` | Read-only consistency check; never starts, stops, or repairs proxy |
+| `wpe_executors_detail_get` | `executors.detail.get` | `read.runtime` | Executor counts only; never controls executor tasks |
+| `wpe_storage_health_get` | `storage.health.get` | `read.runtime` | Database availability metadata with path hidden and contents excluded |
 | `wpe_proxy_bind_ip_set` | `proxy.bindIp.set` | `write.proxy` | Auto or validated IPv4/IPv6 listening address, persisted after WPE-local confirmation |
 | `wpe_external_proxy_set_enabled` | `proxy.external.setEnabled` | `write.proxy` | Toggles the existing external proxy endpoint only; credentials are never returned or modified |
 | `wpe_proxy_start` | `proxy.start` | `write.proxy.lifecycle` | Starts configured listeners after confirmation |
