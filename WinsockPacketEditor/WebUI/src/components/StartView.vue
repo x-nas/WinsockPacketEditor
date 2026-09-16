@@ -20,10 +20,12 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { call } from '../bridge'
 import { lang, t } from '../i18n'
+import InstanceView from './InstanceView.vue'
 import McpSetting from './proxy/McpSetting.vue'
 
-const emit = defineEmits<{ (e: 'enter', mode: 'proxy' | 'instance' | 'inject'): void }>()
+const emit = defineEmits<{ (e: 'enter', mode: 'proxy' | 'inject'): void }>()
 const mcpOpen = ref(false)
+const instanceOpen = ref(false)
 
 interface SystemCheck {
   isAdmin: boolean
@@ -76,7 +78,7 @@ function enterProxy(): void {
 }
 
 function enterInstance(): void {
-  emit('enter', 'instance')
+  instanceOpen.value = true
 }
 
 /** 条目数加千分位，1512917 这种数字不分组基本读不出量级。 */
@@ -263,6 +265,7 @@ onMounted(async () => {
       </button>
     </div>
     <McpSetting :open="mcpOpen" @update:open="mcpOpen = $event" />
+    <InstanceView :open="instanceOpen" @update:open="instanceOpen = $event" />
 
     <!-- 系统自检 -->
     <div class="term">

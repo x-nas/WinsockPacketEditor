@@ -30,7 +30,6 @@ import { httpAddr, injectHooked, injectTarget, proxyRunning, socks5Addr } from '
 import { initTheme } from './stores/theme'
 import StartView from './components/StartView.vue'
 import ProxyView from './components/ProxyView.vue'
-import InstanceView from './components/InstanceView.vue'
 import InjectView from './components/InjectView.vue'
 import BetaNotice from './components/BetaNotice.vue'
 import EncryptPassword from './components/EncryptPassword.vue'
@@ -39,7 +38,7 @@ import BusyMask from './components/BusyMask.vue'
 import ConfirmDialog from './components/ConfirmDialog.vue'
 import AppSetting from './components/AppSetting.vue'
 
-type View = 'start' | 'proxy' | 'instance' | 'inject'
+type View = 'start' | 'proxy' | 'inject'
 
 const view = ref<View>('start')
 const version = ref('')
@@ -57,9 +56,6 @@ async function refreshMcpStatus(): Promise<void> {
     mcpNeedsConfirmation.value = mcpEnabled.value && s.requiresConfirmation
   } catch { mcpEnabled.value = false; mcpNeedsConfirmation.value = false }
 }
-
-/** 数据库<b>目录</b>名 —— 多开时区分实例靠的是它，不是文件名（文件名由版本号推导）。 */
-const dbInstance = ref('')
 
 onMounted(async () => {
   if (!inHost) return
@@ -95,7 +91,6 @@ onMounted(async () => {
 
     version.value = s.version
     isBeta.value = s.isBeta
-    dbInstance.value = s.dbInstance || ''
     socks5Addr.value = s.socks5Addr || ''
     //空串 = HTTP 代理没启用，不是取不到
     httpAddr.value = s.httpAddr || ''
@@ -348,12 +343,6 @@ watchEffect(() => {
       <StartView v-else-if="view === 'start'" @enter="view = $event" />
 
       <!--
-        多开设置。用 v-if 而不是 keep-alive：每次进来都该重新读一次当前库位置
-        （用户可能刚在别处切过），组件重挂载正好把这件事做了。
-      -->
-      <InstanceView v-else-if="view === 'instance'" @back="view = 'start'" />
-
-      <!--
         注入模式。与代理模式一样<b>进去就回不来</b> ——
         进来会附加到目标、装钩子，退回一个写着「Ready」的启动页而钩子还在目标里，是在骗人。
       -->
@@ -381,10 +370,6 @@ watchEffect(() => {
           <template v-if="view === 'start'">
             <span class="dot" />
             {{ t('foot.ready') }}
-          </template>
-          <template v-else-if="view === 'instance'">
-            <span class="dot mg" />
-            Instance <span class="addr">{{ dbInstance || '—' }}</span>
           </template>
           <template v-else-if="view === 'inject'">
             <span class="dot" :class="{ off: !injectHooked }" />

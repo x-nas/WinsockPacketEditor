@@ -12,12 +12,14 @@
 
   【主色用洋红】启动页那张卡就是 .cd.mg，一路跟过来，与代理模式的青色分开。
 */
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { call } from '../bridge'
 import { lang, normalize, t } from '../i18n'
 import { httpAddr, socks5Addr } from '../stores/runtime'
+import SettingsModal from './proxy/SettingsModal.vue'
 
-const emit = defineEmits<{ (e: 'back'): void }>()
+const props = defineProps<{ open: boolean }>()
+const emit = defineEmits<{ (e: 'update:open', value: boolean): void }>()
 
 interface Probe {
   valid: boolean
@@ -36,25 +38,7 @@ const probe = ref<Probe | null>(null)
 const saving = ref(false)
 const picking = ref(false)
 
-/** 打字机，与启动页同一套。切语言要重打一遍，见 StartView 里的说明。 */
-const typed = ref('')
-let runId = 0
-
-async function typeSubtitle(): Promise<void> {
-  const mine = ++runId
-  const text = t('inst.subtitle')
-  typed.value = ''
-
-  for (let i = 1; i <= text.length; i++) {
-    if (mine !== runId) return
-    typed.value = text.slice(0, i)
-    await new Promise((r) => setTimeout(r, 32))
-  }
-}
-
-watch(lang, () => { void typeSubtitle() })
-
-onMounted(async () => {
+async function load(): Promise<void> {
   try {
     const s = await call<any>('getSystemCheck')
     path.value = s.dbDir || ''
@@ -64,8 +48,9 @@ onMounted(async () => {
   }
 
   void refreshProbe()
-  void typeSubtitle()
-})
+}
+
+watch(() => props.open, (open) => { if (open) void load() }, { immediate: true })
 
 /*
   路径每改一个字符就问一次 C#（磁盘存在性检查很便宜，Directory.Exists 是一次
@@ -126,7 +111,7 @@ async function save(): Promise<void> {
     httpAddr.value = r.httpAddr || ''
     lang.value = normalize(r.language)
 
-    emit('back')
+    emit('update:open', false)
   } catch (e) {
     console.error('[instance] 保存失败', e)
   } finally {
@@ -144,16 +129,8 @@ function sizeText(n: number): string {
 </script>
 
 <template>
-  <main class="inst scrn">
-    <div class="eyebrow">
-      <span class="dash" />
-      <span class="lbl">{{ t('inst.eyebrow') }}</span>
-    </div>
-
-    <h1 class="ttl">Multiple Open</h1>
-
-    <p class="subtitle">{{ typed }}<span class="cur" /></p>
-
+  <SettingsModal :open="props.open" title="多开设置" subtitle="本次运行使用独立数据库" :busy="saving" @update:open="emit('update:open', $event)">
+    <div class="instance-set">
     <!-- 这一屏最重要的一句话：设置只在本次运行有效 -->
     <div class="note">
       <span class="bang">{{ t('inst.onceTag') }}</span>
@@ -225,11 +202,12 @@ function sizeText(n: number): string {
       <button class="btn primary" :disabled="!canSave" @click="save">
         {{ saving ? t('inst.saving') : t('inst.save') }}
       </button>
-      <button class="btn" @click="emit('back')">{{ t('inst.cancel') }}</button>
+      <button class="btn" @click="emit('update:open', false)">{{ t('inst.cancel') }}</button>
       <span class="grow" />
       <span class="hint">{{ t('inst.hint') }}</span>
     </div>
-  </main>
+    </div>
+  </SettingsModal>
 </template>
 
 <style scoped>
@@ -243,6 +221,14 @@ function sizeText(n: number): string {
   justify-content: center;
   padding: 0 56px;
   overflow: auto;
+}
+
+.instance-set {
+  display: block;
+  width: 100%;
+  max-height: min(62vh, 520px);
+  overflow-y: auto;
+  padding: 2px 0 4px;
 }
 
 /* eyebrow / 标题 / 副标题：与 StartView 同构，只是主色换成洋红 */
