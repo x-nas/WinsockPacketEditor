@@ -73,7 +73,8 @@ namespace WinsockPacketEditor.Mcp
             if (Operate.SystemConfig.McpAutoApproveWrites)
             {
                 var automatic = await apply();
-                automatic["outcome"] = "autoApproved";
+                // Keep the public result contract stable; the audit record distinguishes autoApproved.
+                automatic["outcome"] = "approved";
                 automatic["requestHash"] = hash;
                 Completed.TryAdd(requestKey, (JObject)automatic.DeepClone());
                 Record(operation, idempotencyKey, hash, "autoApproved", arguments, automatic);
