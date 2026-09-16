@@ -240,6 +240,33 @@
           { "$ref": "#/$defs/notApplied" }
         ]
       }
+    },
+    "wpe_start_mode_select": {
+      "input": {
+        "type": "object",
+        "required": ["mode", "idempotencyKey"],
+        "properties": {
+          "mode": { "type": "string", "enum": ["proxy", "inject"] },
+          "idempotencyKey": { "type": "string", "format": "uuid" }
+        },
+        "additionalProperties": false
+      },
+      "output": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["changed", "mode", "outcome", "requestHash"],
+            "properties": {
+              "changed": { "type": "boolean", "const": true },
+              "mode": { "type": "string", "enum": ["proxy", "inject"] },
+              "outcome": { "type": "string", "const": "approved" },
+              "requestHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+            },
+            "additionalProperties": false
+          },
+          { "$ref": "#/$defs/notApplied" }
+        ]
+      }
     }
   },
   "$defs": {

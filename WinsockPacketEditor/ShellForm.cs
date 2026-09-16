@@ -479,6 +479,7 @@ namespace WPEHybrid
 
                 // Local MCP has its own named-pipe protocol; it never shares the injected-process IPC.
                 this.mcpGateway = new McpAgentGateway();
+                McpAgentGateway.StartModeRequested = mode => this.bridge.PushEvent("mcp:start-mode", new { mode = mode });
                 if (Operate.SystemConfig.McpEnabled) this.mcpGateway.Start();
 
                 this.timerFlush.Tick += this.OnFlushTick;

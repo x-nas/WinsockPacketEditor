@@ -26,6 +26,7 @@ namespace WinsockPacketEditor.Mcp
         // current user's LocalAppData discovery record.
         private readonly string pipeName = "WPE64-Mcp-" + Guid.NewGuid().ToString("N");
         private Task acceptLoop;
+        internal static Action<string> StartModeRequested;
 
         public bool Enabled { get; private set; }
 
@@ -44,6 +45,7 @@ namespace WinsockPacketEditor.Mcp
 
         public void Dispose()
         {
+            StartModeRequested = null;
             cancellation.Cancel();
             Stop();
             try { if (acceptLoop != null) acceptLoop.Wait(1000); } catch { }
@@ -155,6 +157,7 @@ namespace WinsockPacketEditor.Mcp
             if (operation == "proxy.start") return StartProxyAsync(arguments);
             if (operation == "proxy.stop") return StopProxyAsync(arguments);
             if (operation == "executors.stopAll") return StopAllExecutorsAsync(arguments);
+            if (operation == "start.mode.select") return SelectStartModeAsync(arguments);
             if (operation == "firewall.rule.add") return AddFirewallRuleAsync(arguments);
             if (operation == "firewall.rule.remove") return RemoveFirewallRuleAsync(arguments);
             return Task.FromResult(Dispatch(operation, arguments));
@@ -922,6 +925,29 @@ namespace WinsockPacketEditor.Mcp
                     };
                     return after;
                 })).ConfigureAwait(false);
+        }
+
+        private static async Task<JToken> SelectStartModeAsync(JObject arguments)
+        {
+            var mode = ((string)arguments?["mode"] ?? string.Empty).Trim().ToLowerInvariant();
+            if (mode != "proxy" && mode != "inject") throw new InvalidOperationException("Mode must be proxy or inject.");
+            if (Operate.SystemConfig.SelectMode != Operate.SystemConfig.SystemMode.None)
+                throw new InvalidOperationException("WPE has already left the start page.");
+            var idempotencyKey = (string)arguments?["idempotencyKey"];
+            JObject prior;
+            if (McpWriteGuard.TryGetCompleted("start.mode.select", idempotencyKey, arguments, out prior)) return prior;
+            return await McpWriteGuard.ApproveAndApplyAsync(
+                "start.mode.select", idempotencyKey, arguments,
+                mode == "proxy" ? "进入 WPE 代理模式。不会自动启动代理监听。" : "进入 WPE 注入模式选择页。不会自动选择目标或执行注入。",
+                () =>
+                {
+                    if (Operate.SystemConfig.SelectMode != Operate.SystemConfig.SystemMode.None)
+                        throw new InvalidOperationException("WPE has already left the start page.");
+                    var request = StartModeRequested;
+                    if (request == null) throw new InvalidOperationException("WPE start page is not ready.");
+                    request(mode);
+                    return new JObject { ["changed"] = true, ["mode"] = mode, ["outcome"] = "approved" };
+                }).ConfigureAwait(false);
         }
 
         private static JObject ListFirewallRules(JObject arguments)

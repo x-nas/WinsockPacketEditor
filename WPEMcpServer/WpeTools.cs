@@ -72,6 +72,8 @@ internal static class WpeTools
     public static Task<string> ProxyStop(WpeGatewayClient gateway, string idempotencyKey, CancellationToken cancellationToken = default) => gateway.InvokeAsync("proxy.stop", new ProxyLifecycleInput(idempotencyKey), cancellationToken);
     [McpServerTool(Name = "wpe_executors_stop_all"), Description("Request stopping all active WPE sender and robot executors. This never starts tasks or sends packets; it follows the global MCP confirmation setting.")]
     public static Task<string> ExecutorsStopAll(WpeGatewayClient gateway, string idempotencyKey, CancellationToken cancellationToken = default) => gateway.InvokeAsync("executors.stopAll", new ExecutorStopAllInput(idempotencyKey), cancellationToken);
+    [McpServerTool(Name = "wpe_start_mode_select"), Description("Request selecting WPE proxy or inject mode from the start page. Proxy mode is not started automatically; inject mode does not select a target or inject automatically.")]
+    public static Task<string> StartModeSelect(WpeGatewayClient gateway, string mode, string idempotencyKey, CancellationToken cancellationToken = default) => gateway.InvokeAsync("start.mode.select", new StartModeSelectInput(mode, idempotencyKey), cancellationToken);
     [McpServerTool(Name = "wpe_firewall_rules_list"), Description("List a bounded page of WPE firewall white-list or black-list rules.")]
     public static Task<string> FirewallRulesList(WpeGatewayClient gateway, string list, int? limit = null, string? cursor = null, CancellationToken cancellationToken = default) => gateway.InvokeAsync("firewall.rules.list", new FirewallRulesListInput(list, limit, cursor), cancellationToken);
     [McpServerTool(Name = "wpe_firewall_rule_add"), Description("Request addition of one WPE firewall rule. WPE validates it and must receive a local confirmation before it applies and persists the rule.")]
@@ -100,6 +102,7 @@ public sealed record ProxyBindIpSetInput(bool Auto, string Ip, string Idempotenc
 public sealed record ExternalProxySetEnabledInput(bool Enabled, string IdempotencyKey);
 public sealed record ProxyLifecycleInput(string IdempotencyKey);
 public sealed record ExecutorStopAllInput(string IdempotencyKey);
+public sealed record StartModeSelectInput(string Mode, string IdempotencyKey);
 public sealed record ProxyFailuresListInput(int? Limit = null);
 public sealed record FirewallRulesListInput(string List, int? Limit = null, string? Cursor = null);
 public sealed record FirewallRuleAddInput(string List, string Address, string IdempotencyKey, bool ExpiryEnabled = false, string? ExpiryTime = null);

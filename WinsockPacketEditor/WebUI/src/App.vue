@@ -68,6 +68,10 @@ onMounted(async () => {
 
   // 最大化状态由 C# 推 —— 用户也可能通过双击拖动区、贴边吸附改变它
   on('window:state', (d: { maximized: boolean }) => { maximized.value = d.maximized })
+  on('mcp:start-mode', (d: { mode?: string }) => {
+    if (view.value !== 'start') return
+    if (d.mode === 'proxy' || d.mode === 'inject') view.value = d.mode
+  })
 
   try {
     const s = await call<any>('getSystemCheck')
