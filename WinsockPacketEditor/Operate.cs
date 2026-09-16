@@ -46,6 +46,8 @@ namespace WinsockPacketEditor
                 2.1.9 正式版是「2.1.9.db」，测过的「2.1.9 Beta.db」不会被读到 —— 要带过去用备份导出 / 导入。
             */
             public static bool IsBeta = true;
+            /// <summary>允许本机 MCP 写操作跳过 WPE 确认；默认 false。</summary>
+            public static bool McpAutoApproveWrites = false;
             public static int PID = -1;
             public static int AutoSaveINT = 600000;
             /*
@@ -3318,6 +3320,22 @@ namespace WinsockPacketEditor
                 }
             }
 
+            public static void SaveMcpConfig_ToDB()
+            {
+                try
+                {
+                    DataBase.InitConStr();
+                    using (var conn = new SQLiteConnection(DataBase.conStr))
+                    using (var cmd = new SQLiteCommand("UPDATE SystemConfig SET McpAutoApproveWrites=@value", conn))
+                    {
+                        cmd.Parameters.AddWithValue("@value", SystemConfig.McpAutoApproveWrites);
+                        conn.Open();
+                        if (cmd.ExecuteNonQuery() == 0) SaveSystemConfig_ToDB();
+                    }
+                }
+                catch (Exception ex) { DoLog(nameof(SaveMcpConfig_ToDB), ex); }
+            }
+
             public static XElement GetSystemConfig_XML()
             {
                 try
@@ -3331,6 +3349,7 @@ namespace WinsockPacketEditor
                         new XElement("IsTextRenderingHighQuality", UI.Prefs.IsTextRenderingHighQuality),
                         new XElement("IsDark", UI.Prefs.IsDark),
                         new XElement("ThemeFollowSystem", UI.Prefs.FollowSystemTheme),
+                        new XElement("McpAutoApproveWrites", SystemConfig.McpAutoApproveWrites),
                         new XElement("DefaultLanguage", UI.Prefs.Language),
                         new XElement("LastInjection", SystemConfig.LastInjection),
                         new XElement("LastInjectMethod", SystemConfig.LastInjectMethod),
@@ -3521,6 +3540,10 @@ namespace WinsockPacketEditor
                         UI.Prefs.FilterChange_BackColor = new RgbColor(Convert.ToInt32(dtSystemConfig.Rows[0]["FilterChange_BackColor"]));
                         UI.Prefs.FilterDisplay_ForeColor = new RgbColor(Convert.ToInt32(dtSystemConfig.Rows[0]["FilterDisplay_ForeColor"]));
                         UI.Prefs.FilterDisplay_BackColor = new RgbColor(Convert.ToInt32(dtSystemConfig.Rows[0]["FilterDisplay_BackColor"]));
+                        if (dtSystemConfig.Columns.Contains("McpAutoApproveWrites"))
+                        {
+                            SystemConfig.McpAutoApproveWrites = Convert.ToBoolean(dtSystemConfig.Rows[0]["McpAutoApproveWrites"]);
+                        }
                     }
                     else
                     {
@@ -3571,6 +3594,8 @@ namespace WinsockPacketEditor
             {
                 try
                 {
+                    XElement xeMcpAutoApprove = xeSystemConfig.Element("McpAutoApproveWrites");
+                    if (xeMcpAutoApprove != null) SystemConfig.McpAutoApproveWrites = Convert.ToBoolean(xeMcpAutoApprove.Value);
                     XElement xeIsAnimation = xeSystemConfig.Element("IsAnimation");
                     if (xeIsAnimation != null)
                     {
@@ -30993,6 +31018,7 @@ namespace WinsockPacketEditor
                             EnsureColumn(conn, "SystemConfig", "LastInjectPath", "TEXT");
                             EnsureColumn(conn, "SystemConfig", "LastInjectArgs", "TEXT");
                             EnsureColumn(conn, "SystemConfig", "LastInjectTime", "TEXT");
+                            EnsureColumn(conn, "SystemConfig", "McpAutoApproveWrites", "BOOLEAN DEFAULT 0");
                         }
                     }
 

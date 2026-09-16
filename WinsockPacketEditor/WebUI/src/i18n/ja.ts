@@ -148,6 +148,7 @@ export const ja: Record<Key, string> = {
   'set.app.assocDone': 'ファイルアイコンを関連付けました',
   'set.app.assocCleared': '関連付けを解除しました。起動時に自動で関連付けません',
   'set.system': 'システム設定',
+  'set.mcp': 'MCP 設定',
   'set.lockedHint': 'プロキシが実行中です —— リッスン関連の設定は起動時に一度だけ読み込まれるため、いま変えても反映されません。変更するにはまずサービスを停止してください。',
   'fw.grp.main': 'ファイアウォール',
   'fw.enable': 'ファイアウォールを有効にする',

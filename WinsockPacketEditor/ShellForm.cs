@@ -1395,6 +1395,19 @@ namespace WPEHybrid
                 };
             });
 
+            this.bridge.Register("getMcpSettings", args => new
+            {
+                autoApproveWrites = Operate.SystemConfig.McpAutoApproveWrites,
+                proxyModeAvailable = true,
+                injectModeAvailable = true,
+            });
+            this.bridge.Register("saveMcpSettings", args =>
+            {
+                Operate.SystemConfig.McpAutoApproveWrites = args["autoApproveWrites"] != null && (bool)args["autoApproveWrites"];
+                Operate.SystemConfig.SaveMcpConfig_ToDB();
+                return new { ok = true, autoApproveWrites = Operate.SystemConfig.McpAutoApproveWrites };
+            });
+
             /*
                 主题：深色 / 浅色 / 跟随系统。
 

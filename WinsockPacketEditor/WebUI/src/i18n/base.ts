@@ -205,6 +205,7 @@ export const DICT = {
   'set.app.assocDone': { zh: '已关联文件图标', en: 'File icons associated' },
   'set.app.assocCleared': { zh: '已清除文件关联，启动时不会再自动关联', en: 'File association removed; it will not be restored at startup' },
   'set.system': { zh: '系统设置', en: 'System Settings' },
+  'set.mcp': { zh: 'MCP 设置', en: 'MCP Settings' },
   'set.lockedHint': {
     zh: '代理服务正在运行 —— 监听相关的设置只在服务启动时读取一次，现在改了不会生效。要修改请先停止服务。',
     en: 'The proxy is running — listener settings are read once at startup, so changes will not take effect. Stop the service first.',

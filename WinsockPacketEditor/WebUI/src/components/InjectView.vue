@@ -51,6 +51,7 @@ import HotkeySetting from './proxy/HotkeySetting.vue'
 import BackupSetting from './proxy/BackupSetting.vue'
 import RemoteSetting from './proxy/RemoteSetting.vue'
 import SystemSetting from './proxy/SystemSetting.vue'
+import McpSetting from './proxy/McpSetting.vue'
 
 interface ProcRow {
   ProcessName: string
@@ -941,6 +942,7 @@ async function clearList(): Promise<void> {
     <BackupSetting :open="setting === 'backup'" @update:open="setting = $event ? 'backup' : null" />
     <RemoteSetting :open="setting === 'remote'" @update:open="setting = $event ? 'remote' : null" />
     <SystemSetting :open="setting === 'system'" @update:open="setting = $event ? 'system' : null" />
+    <McpSetting :open="setting === 'mcp'" @update:open="setting = $event ? 'mcp' : null" />
   </div>
 </template>
 

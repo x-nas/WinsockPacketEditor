@@ -70,6 +70,15 @@ namespace WinsockPacketEditor.Mcp
 
         private static async Task<JObject> ApproveCoreAsync(string operation, string idempotencyKey, string requestKey, string hash, JObject arguments, string summary, Func<Task<JObject>> apply)
         {
+            if (Operate.SystemConfig.McpAutoApproveWrites)
+            {
+                var automatic = await apply();
+                automatic["outcome"] = "autoApproved";
+                automatic["requestHash"] = hash;
+                Completed.TryAdd(requestKey, (JObject)automatic.DeepClone());
+                Record(operation, idempotencyKey, hash, "autoApproved", arguments, automatic);
+                return automatic;
+            }
             var confirmation = UI.Confirm(UI.T("Mcp.Write.Title", "MCP 写入请求"), operation + "\r\n\r\n" + summary + "\r\n\r\n请求摘要: " + hash.Substring(0, 12));
             if (await Task.WhenAny(confirmation, Task.Delay(TimeSpan.FromSeconds(60))) != confirmation)
             {

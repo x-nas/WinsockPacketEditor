@@ -10,6 +10,7 @@ import type { Key } from '../../i18n'
 export type SettingKey =
   | 'proxy' | 'process' | 'leach' | 'hook' | 'list' | 'map'
   | 'extproxy' | 'hotkey' | 'backup' | 'remote' | 'firewall' | 'system'
+  | 'mcp'
 
 export interface SettingDef {
   key: SettingKey
@@ -29,6 +30,7 @@ export const SETTINGS: SettingDef[] = [
   { key: 'remote', label: 'set.remote' },
   { key: 'firewall', label: 'set.firewall' },
   { key: 'system', label: 'set.system' },
+  { key: 'mcp', label: 'set.mcp' },
 ]
 
 /*
@@ -38,7 +40,7 @@ export const SETTINGS: SettingDef[] = [
   外部代理设置 / 防火墙设置）全是 SOCKS5 服务器那条路上的东西，注入模式里没有对应物。
   所以这里直接从 SETTINGS 里挑，不另写一份定义 —— 抄一份的下场见 CLAUDE.md 的 .list-page。
 */
-const INJECT_KEYS: SettingKey[] = ['leach', 'hook', 'list', 'hotkey', 'backup', 'remote', 'system']
+const INJECT_KEYS: SettingKey[] = ['leach', 'hook', 'list', 'hotkey', 'backup', 'remote', 'system', 'mcp']
 
 export const INJECT_SETTINGS: SettingDef[] = INJECT_KEYS.map((k) => {
   const d = SETTINGS.find((x) => x.key === k)

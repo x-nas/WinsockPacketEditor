@@ -148,6 +148,7 @@ export const ko: Record<Key, string> = {
   'set.app.assocDone': '파일 아이콘을 연결했습니다',
   'set.app.assocCleared': '연결을 해제했습니다. 시작할 때 자동으로 연결하지 않습니다',
   'set.system': '시스템 설정',
+  'set.mcp': 'MCP 설정',
   'set.lockedHint': '프록시가 실행 중입니다 —— 리스닝 관련 설정은 서비스 시작 시 한 번만 읽으므로 지금 바꿔도 적용되지 않습니다. 변경하려면 먼저 서비스를 중지하세요.',
   'fw.grp.main': '방화벽',
   'fw.enable': '방화벽 사용',

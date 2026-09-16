@@ -149,6 +149,7 @@ export const tw: Record<Key, string> = {
   'set.app.assocDone': '已關聯檔案圖示',
   'set.app.assocCleared': '已清除檔案關聯，啟動時不會再自動關聯',
   'set.system': '系統設定',
+  'set.mcp': 'MCP 設定',
   'set.lockedHint': '代理服務正在執行 —— 監聽相關的設定只在服務啟動時讀取一次，現在改了不會生效。要修改請先停止服務。',
   'fw.grp.main': '防火牆',
   'fw.enable': '啟用防火牆',
