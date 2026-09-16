@@ -18,6 +18,7 @@ export interface SettingDef {
 }
 
 export const SETTINGS: SettingDef[] = [
+  { key: 'mcp', label: 'set.mcp' },
   { key: 'proxy', label: 'set.proxy' },
   { key: 'process', label: 'set.process' },
   { key: 'leach', label: 'set.leach' },
@@ -30,7 +31,6 @@ export const SETTINGS: SettingDef[] = [
   { key: 'remote', label: 'set.remote' },
   { key: 'firewall', label: 'set.firewall' },
   { key: 'system', label: 'set.system' },
-  { key: 'mcp', label: 'set.mcp' },
 ]
 
 /*

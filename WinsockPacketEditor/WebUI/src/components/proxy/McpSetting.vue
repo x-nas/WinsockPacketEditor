@@ -31,33 +31,27 @@ async function save(): Promise<void> {
 <template>
   <SettingsModal :open="props.open" title="MCP 设置" subtitle="本机 AI 自动化权限" :busy="busy" :error="error" @update:open="emit('update:open', $event)" @save="save">
     <div class="setf mcp-set">
+    <div class="swb">
+      <div class="row">
+        <label class="chk" :class="{ on: autoApproveWrites }">
+          <i />
+          <input v-model="autoApproveWrites" type="checkbox" hidden />
+          <span>允许 MCP 自动执行写操作</span>
+        </label>
+      </div>
+      <p class="hint">{{ autoApproveWrites ? '关闭 WPE 本地确认；MCP 写操作将直接执行。' : '每次高风险写操作都需要 WPE 本地确认。' }}</p>
+    </div>
     <section class="sec">
-      <div class="sec-h">写操作确认</div>
-      <label class="swb">
-        <input v-model="autoApproveWrites" type="checkbox" />
-        <span class="swb-ui" />
-        <span class="swb-text">
-          <b>允许 MCP 自动执行写操作</b>
-          <small v-if="autoApproveWrites">关闭 WPE 本地确认；MCP 写操作将直接执行。</small>
-          <small v-else>每次高风险写操作都需要 WPE 本地确认。</small>
-        </span>
-      </label>
-      <p class="hint">此开关仅影响本机 MCP。幂等保护、敏感数据脱敏和审计仍然保留。</p>
-    </section>
-    <section class="sec muted">
-      <div class="sec-h">模式范围</div>
-      <div class="mode-row"><span>代理模式</span><span class="ok">可用</span></div>
-      <div class="mode-row"><span>注入模式</span><span class="ok">可用</span></div>
-      <p class="hint">后续增加模式专属 MCP 配置时，会在此处按模式显示可用性。</p>
+      <div class="grp">模式范围</div>
+      <div class="row"><span class="k">代理模式</span><span class="v ok">可用</span></div>
+      <div class="row"><span class="k">注入模式</span><span class="v ok">可用</span></div>
+      <p class="hint">此开关仅影响本机 MCP。幂等保护、敏感数据脱敏和审计仍然保留。后续增加模式专属 MCP 配置时，会在此处显示可用性。</p>
     </section>
     </div>
   </SettingsModal>
 </template>
 
 <style scoped>
-.mcp-set { padding: 8px 20px 14px; }
-.mcp-set .sec { margin: 0; padding: 12px 0; }
-.mcp-set .sec + .sec { margin-top: 4px; }
 .mode-row { display:flex; justify-content:space-between; align-items:center; padding:8px 0; color:var(--tx-2); }
 .ok { color:var(--green, #65d59b); }
 .hint { margin:10px 0 0; color:var(--tx-3); font-size:var(--fs-small); line-height:1.5; }
