@@ -56,6 +56,8 @@ namespace WPEHybrid
         private readonly WebView2 web = new WebView2();
 
         private McpAgentGateway mcpGateway;
+        private string mcpStartupMessage;
+        private UiIcon mcpStartupIcon;
 
         private WebBridge bridge;
 
@@ -484,18 +486,21 @@ namespace WPEHybrid
                     if (Operate.SystemConfig.McpEnabled)
                     {
                         this.mcpGateway.Start();
-                        UI.Toast(UiIcon.Success, UI.T("Mcp.Started", "MCP 已启动"));
-                        Operate.DoLog("McpStartup", UI.T("Mcp.Started", "MCP 已启动"));
+                        this.mcpStartupIcon = UiIcon.Success;
+                        this.mcpStartupMessage = UI.T("Mcp.Started", "MCP 已启动");
+                        Operate.DoLog("McpStartup", this.mcpStartupMessage);
                     }
                     else
                     {
-                        UI.Toast(UiIcon.Info, UI.T("Mcp.Stopped", "MCP 已关闭"));
-                        Operate.DoLog("McpStartup", UI.T("Mcp.Stopped", "MCP 已关闭"));
+                        this.mcpStartupIcon = UiIcon.Info;
+                        this.mcpStartupMessage = UI.T("Mcp.Stopped", "MCP 已关闭");
+                        Operate.DoLog("McpStartup", this.mcpStartupMessage);
                     }
                 }
                 catch (Exception ex)
                 {
-                    UI.Toast(UiIcon.Error, UI.T("Mcp.StartFailed", "MCP 启动失败：") + ex.Message);
+                    this.mcpStartupIcon = UiIcon.Error;
+                    this.mcpStartupMessage = UI.T("Mcp.StartFailed", "MCP 启动失败：") + ex.Message;
                     Operate.DoLog("McpStartup", ex);
                 }
 
@@ -5337,6 +5342,12 @@ namespace WPEHybrid
         {
             //先露脸再弹提示 —— 否则弹窗会画在一个还隐形的窗口上
             this.RevealWindow();
+
+            if (!string.IsNullOrEmpty(this.mcpStartupMessage))
+            {
+                UI.Toast(this.mcpStartupIcon, this.mcpStartupMessage);
+                this.mcpStartupMessage = null;
+            }
 
             try
             {
