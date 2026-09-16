@@ -32,3 +32,11 @@
 - `wpe_proxy_failures_list`：空失败日志返回空数组，摘要字段受长度上限保护。
 
 对应提交为 `f6f5958`、`5fc6b3a`、`ad5e60d`。
+
+## 真实连接场景验证
+
+- 普通 TCP 短连接：连接保持期间返回 `total=1, tcp=1, ordinary=1`，关闭后全部恢复为 0；
+- WPEProxyCap 控制连接：返回 `wpcControl=1`；
+- UDP 关联：返回 `udp=1`；
+- 联合场景：返回 `total=2, tcp=1, udp=1, wpcControl=1, ordinary=1`；
+- WPEProxyCap 断开后：所有计数恢复为 0。
