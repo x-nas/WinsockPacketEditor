@@ -26,6 +26,12 @@
 - `McpAutoApproveWrites` 默认关闭；开启后写操作跳过本机确认，但仍保留幂等、校验、脱敏审计和业务层约束。
 - 状态栏：灰灯 = 已关闭，黄灯 = 需要确认，绿灯 = 自动执行；代理地址与状态使用 `//`、`-` 分组。
 
+## 阶段 5 进行中
+
+- 已补齐代码工具、`tools.md` 和只读/写入 Schema 的同步检查入口：`tools/tests/McpContract.ps1`。
+- 当前阶段只做稳定性、安全边界和自动化回归，不新增主动发包、注入、驱动或执行器控制。
+- 下一步：补充 MCP 总开关、发现文件和 Named Pipe 生命周期的可重复集成测试，并将 Sidecar `tools/list` 纳入发布前检查。
+
 ## 当前结构与约束
 
 - WPE 启动后创建随机 Named Pipe 名称，并在 `%LOCALAPPDATA%\WPE64\mcp\instances.json` 发现文件发布当前实例。Sidecar 只支持一个运行实例。

@@ -85,6 +85,8 @@
     "wpe_connections_list": { "input": { "$ref": "#/definitions/page" }, "output": { "type": "object" } },
     "wpe_accounts_list": { "input": { "$ref": "#/definitions/page" }, "output": { "type": "object" } },
     "wpe_firewall_get": { "input": { "type": "object", "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_proxy_settings_get": { "input": { "type": "object", "additionalProperties": false }, "output": { "type": "object", "additionalProperties": true } },
+    "wpe_firewall_rules_list": { "input": { "$ref": "#/definitions/page" }, "output": { "type": "object", "additionalProperties": true } },
     "wpe_bytes_transcode": { "input": { "type": "object", "required": ["text", "decode"], "properties": { "text": { "type": "string", "maxLength": 1048576 }, "decode": { "type": "boolean" } }, "additionalProperties": false }, "output": { "type": "object" } },
     "wpe_bytes_compare": { "input": { "type": "object", "required": ["left", "right"], "properties": { "left": { "type": "string", "maxLength": 1048576 }, "right": { "type": "string", "maxLength": 1048576 }, "minimumRun": { "type": "integer", "minimum": 1, "maximum": 4096, "default": 2 } }, "additionalProperties": false }, "output": { "type": "object" } },
     "wpe_bytes_extract": { "input": { "type": "object", "required": ["kind", "contentBase64"], "properties": { "kind": { "type": "integer", "minimum": 0, "maximum": 32 }, "contentBase64": { "type": "string", "maxLength": 5592408 } }, "additionalProperties": false }, "output": { "type": "object" } }
