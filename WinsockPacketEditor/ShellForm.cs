@@ -56,8 +56,6 @@ namespace WPEHybrid
         private readonly WebView2 web = new WebView2();
 
         private McpAgentGateway mcpGateway;
-        private string mcpStartupMessage;
-        private UiIcon mcpStartupIcon;
 
         private WebBridge bridge;
 
@@ -481,28 +479,7 @@ namespace WPEHybrid
 
                 // Local MCP has its own named-pipe protocol; it never shares the injected-process IPC.
                 this.mcpGateway = new McpAgentGateway();
-                try
-                {
-                    if (Operate.SystemConfig.McpEnabled)
-                    {
-                        this.mcpGateway.Start();
-                        this.mcpStartupIcon = UiIcon.Success;
-                        this.mcpStartupMessage = UI.T("Mcp.Started", "MCP 已启动");
-                        Operate.DoLog("McpStartup", this.mcpStartupMessage);
-                    }
-                    else
-                    {
-                        this.mcpStartupIcon = UiIcon.Info;
-                        this.mcpStartupMessage = UI.T("Mcp.Stopped", "MCP 已关闭");
-                        Operate.DoLog("McpStartup", this.mcpStartupMessage);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    this.mcpStartupIcon = UiIcon.Error;
-                    this.mcpStartupMessage = UI.T("Mcp.StartFailed", "MCP 启动失败：") + ex.Message;
-                    Operate.DoLog("McpStartup", ex);
-                }
+                if (Operate.SystemConfig.McpEnabled) this.mcpGateway.Start();
 
                 this.timerFlush.Tick += this.OnFlushTick;
                 this.timerFlush.Start();
@@ -1435,6 +1412,9 @@ namespace WPEHybrid
                     if (Operate.SystemConfig.McpEnabled && !this.mcpGateway.Enabled) this.mcpGateway.Start();
                     else if (!Operate.SystemConfig.McpEnabled && this.mcpGateway.Enabled) this.mcpGateway.Stop();
                 }
+                string message = Operate.SystemConfig.McpEnabled ? UI.T("Mcp.Started", "MCP 已启动") : UI.T("Mcp.Stopped", "MCP 已关闭");
+                UI.Toast(Operate.SystemConfig.McpEnabled ? UiIcon.Success : UiIcon.Info, message);
+                Operate.DoLog("McpSettings", message);
                 return new { ok = true, enabled = Operate.SystemConfig.McpEnabled, autoApproveWrites = Operate.SystemConfig.McpAutoApproveWrites };
             });
 
@@ -5342,12 +5322,6 @@ namespace WPEHybrid
         {
             //先露脸再弹提示 —— 否则弹窗会画在一个还隐形的窗口上
             this.RevealWindow();
-
-            if (!string.IsNullOrEmpty(this.mcpStartupMessage))
-            {
-                UI.Toast(this.mcpStartupIcon, this.mcpStartupMessage);
-                this.mcpStartupMessage = null;
-            }
 
             try
             {
