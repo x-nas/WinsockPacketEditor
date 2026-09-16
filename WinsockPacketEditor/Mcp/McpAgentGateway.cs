@@ -154,6 +154,7 @@ namespace WinsockPacketEditor.Mcp
             if (operation == "proxy.external.setEnabled") return SetExternalProxyEnabledAsync(arguments);
             if (operation == "proxy.start") return StartProxyAsync(arguments);
             if (operation == "proxy.stop") return StopProxyAsync(arguments);
+            if (operation == "executors.stopAll") return StopAllExecutorsAsync(arguments);
             if (operation == "firewall.rule.add") return AddFirewallRuleAsync(arguments);
             if (operation == "firewall.rule.remove") return RemoveFirewallRuleAsync(arguments);
             return Task.FromResult(Dispatch(operation, arguments));
@@ -896,6 +897,31 @@ namespace WinsockPacketEditor.Mcp
                 Operate.ProxyConfig.Proxy.StopProxy();
                 return new JObject { ["changed"] = true, ["running"] = Operate.ProxyConfig.Proxy.IsRunning };
             })).ConfigureAwait(false);
+        }
+
+        private static async Task<JToken> StopAllExecutorsAsync(JObject arguments)
+        {
+            var idempotencyKey = (string)arguments?["idempotencyKey"];
+            JObject prior;
+            if (McpWriteGuard.TryGetCompleted("executors.stopAll", idempotencyKey, arguments, out prior)) return prior;
+            var before = ReadOnUi(() => new { sendRunning = Operate.SendConfig.List.SendExecute_Count(), robotRunning = Operate.RobotConfig.List.RobotExecute_Count() });
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync(
+                "executors.stopAll", idempotencyKey, arguments,
+                "停止全部发送器和机器人执行器；不会启动任务或主动发包。",
+                () =>
+                {
+                    Operate.SendConfig.List.StopSendList();
+                    Operate.RobotConfig.List.StopRobotList();
+                    var after = new JObject
+                    {
+                        ["changed"] = before.sendRunning > 0 || before.robotRunning > 0,
+                        ["sendRunning"] = Operate.SendConfig.List.SendExecute_Count(),
+                        ["robotRunning"] = Operate.RobotConfig.List.RobotExecute_Count(),
+                        ["stoppedSend"] = before.sendRunning,
+                        ["stoppedRobot"] = before.robotRunning
+                    };
+                    return after;
+                })).ConfigureAwait(false);
         }
 
         private static JObject ListFirewallRules(JObject arguments)

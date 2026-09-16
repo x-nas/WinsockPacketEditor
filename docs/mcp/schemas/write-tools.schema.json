@@ -213,6 +213,33 @@
           { "$ref": "#/$defs/notApplied" }
         ]
       }
+    },
+    "wpe_executors_stop_all": {
+      "input": {
+        "type": "object",
+        "required": ["idempotencyKey"],
+        "properties": { "idempotencyKey": { "type": "string", "format": "uuid" } },
+        "additionalProperties": false
+      },
+      "output": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["changed", "sendRunning", "robotRunning", "stoppedSend", "stoppedRobot", "outcome", "requestHash"],
+            "properties": {
+              "changed": { "type": "boolean" },
+              "sendRunning": { "type": "integer", "minimum": 0 },
+              "robotRunning": { "type": "integer", "minimum": 0 },
+              "stoppedSend": { "type": "integer", "minimum": 0 },
+              "stoppedRobot": { "type": "integer", "minimum": 0 },
+              "outcome": { "type": "string", "const": "approved" },
+              "requestHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+            },
+            "additionalProperties": false
+          },
+          { "$ref": "#/$defs/notApplied" }
+        ]
+      }
     }
   },
   "$defs": {

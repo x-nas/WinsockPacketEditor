@@ -54,6 +54,7 @@ All names use the `wpe_` namespace in MCP. Underscores are deliberately used bec
 | `wpe_external_proxy_set_enabled` | `proxy.external.setEnabled` | `write.proxy` | Boolean-only external proxy switch; validates configured host/port when enabling, never handles credentials |
 | `wpe_proxy_start` | `proxy.start` | `write.proxy.lifecycle` | Starts listeners after local confirmation; idempotent when already running |
 | `wpe_proxy_stop` | `proxy.stop` | `write.proxy.lifecycle` | Stops listeners after local confirmation; may disconnect existing sessions |
+| `wpe_executors_stop_all` | `executors.stopAll` | `write.executors.emergency` | Stops active sender and robot executors only; never starts tasks or sends packets; follows the global MCP confirmation setting |
 | `wpe_firewall_rule_add` | `firewall.rule.add` | `write.firewall` | Validated IPv4/range, optional ISO-8601 expiry, UUID idempotency key, WPE-local confirmation, persisted before success |
 | `wpe_firewall_rule_remove` | `firewall.rule.remove` | `write.firewall` | Exact existing IP/range, UUID idempotency key, WPE-local confirmation, redacted audit event |
 
