@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wpe64.com/schemas/mcp/write-tools-v1.json",
+  "title": "WPE x64 MCP phase 2 write contracts",
+  "tools": {
+    "wpe_filter_set_enabled": {
+      "input": {
+        "type": "object",
+        "required": ["id", "enabled", "idempotencyKey"],
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "enabled": { "type": "boolean" },
+          "idempotencyKey": { "type": "string", "format": "uuid" }
+        },
+        "additionalProperties": false
+      },
+      "output": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["found", "changed", "enabled", "outcome", "requestHash"],
+            "properties": {
+              "found": { "type": "boolean", "const": true },
+              "changed": { "type": "boolean" },
+              "enabled": { "type": "boolean" },
+              "outcome": { "type": "string", "const": "approved" },
+              "requestHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+            },
+            "additionalProperties": false
+          },
+          { "$ref": "#/$defs/notApplied" }
+        ]
+      }
+    },
+    "wpe_account_set_enabled": {
+      "input": {
+        "type": "object",
+        "required": ["id", "enabled", "idempotencyKey"],
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "enabled": { "type": "boolean" },
+          "idempotencyKey": { "type": "string", "format": "uuid" }
+        },
+        "additionalProperties": false
+      },
+      "output": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["found", "changed", "enabled", "outcome", "requestHash"],
+            "properties": {
+              "found": { "type": "boolean", "const": true },
+              "changed": { "type": "boolean" },
+              "enabled": { "type": "boolean" },
+              "outcome": { "type": "string", "const": "approved" },
+              "requestHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+            },
+            "additionalProperties": false
+          },
+          { "$ref": "#/$defs/notApplied" }
+        ]
+      }
+    },
+    "wpe_proxy_auth_set_enabled": {
+      "input": {
+        "type": "object",
+        "required": ["enabled", "idempotencyKey"],
+        "properties": {
+          "enabled": { "type": "boolean" },
+          "idempotencyKey": { "type": "string", "format": "uuid" }
+        },
+        "additionalProperties": false
+      },
+      "output": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["changed", "enabled", "outcome", "requestHash"],
+            "properties": {
+              "changed": { "type": "boolean" },
+              "enabled": { "type": "boolean" },
+              "outcome": { "type": "string", "const": "approved" },
+              "requestHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+            },
+            "additionalProperties": false
+          },
+          { "$ref": "#/$defs/notApplied" }
+        ]
+      }
+    },
+    "wpe_proxy_http_set_enabled": {
+      "input": {
+        "type": "object",
+        "required": ["enabled", "idempotencyKey"],
+        "properties": {
+          "enabled": { "type": "boolean" },
+          "idempotencyKey": { "type": "string", "format": "uuid" }
+        },
+        "additionalProperties": false
+      },
+      "output": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["changed", "enabled", "port", "outcome", "requestHash"],
+            "properties": {
+              "changed": { "type": "boolean" },
+              "enabled": { "type": "boolean" },
+              "port": { "type": "integer", "minimum": 1, "maximum": 65535 },
+              "outcome": { "type": "string", "const": "approved" },
+              "requestHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+            },
+            "additionalProperties": false
+          },
+          { "$ref": "#/$defs/notApplied" }
+        ]
+      }
+    },
+    "wpe_proxy_max_connections_set": {
+      "input": { "type": "object", "required": ["maxConnection", "idempotencyKey"], "properties": { "maxConnection": { "type": "integer", "minimum": 1 }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false },
+      "output": { "oneOf": [ { "type": "object", "required": ["changed", "maxConnection", "cap", "outcome", "requestHash"], "properties": { "changed": { "type": "boolean" }, "maxConnection": { "type": "integer", "minimum": 1 }, "cap": { "type": "integer", "minimum": 1 }, "outcome": { "type": "string", "const": "approved" }, "requestHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" } }, "additionalProperties": false }, { "$ref": "#/$defs/notApplied" } ] }
+    },
+    "wpe_proxy_socks5_port_set": {
+      "input": { "type": "object", "required": ["port", "idempotencyKey"], "properties": { "port": { "type": "integer", "minimum": 1, "maximum": 65535 }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false },
+      "output": { "oneOf": [ { "type": "object", "required": ["changed", "port", "outcome", "requestHash"], "properties": { "changed": { "type": "boolean" }, "port": { "type": "integer", "minimum": 1, "maximum": 65535 }, "outcome": { "type": "string", "const": "approved" }, "requestHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" } }, "additionalProperties": false }, { "$ref": "#/$defs/notApplied" } ] }
+    },
+    "wpe_proxy_http_port_set": {
+      "input": { "type": "object", "required": ["port", "idempotencyKey"], "properties": { "port": { "type": "integer", "minimum": 1, "maximum": 65535 }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false },
+      "output": { "oneOf": [ { "type": "object", "required": ["changed", "port", "outcome", "requestHash"], "properties": { "changed": { "type": "boolean" }, "port": { "type": "integer", "minimum": 1, "maximum": 65535 }, "outcome": { "type": "string", "const": "approved" }, "requestHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" } }, "additionalProperties": false }, { "$ref": "#/$defs/notApplied" } ] }
+    },
+    "wpe_firewall_set_enabled": {
+      "input": { "type": "object", "required": ["enabled", "idempotencyKey"], "properties": { "enabled": { "type": "boolean" }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false },
+      "output": { "oneOf": [ { "type": "object", "required": ["changed", "enabled", "outcome", "requestHash"], "properties": { "changed": { "type": "boolean" }, "enabled": { "type": "boolean" }, "outcome": { "type": "string", "const": "approved" }, "requestHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" } }, "additionalProperties": false }, { "$ref": "#/$defs/notApplied" } ] }
+    },
+    "wpe_proxy_only_wpc_set_enabled": {
+      "input": { "type": "object", "required": ["enabled", "idempotencyKey"], "properties": { "enabled": { "type": "boolean" }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false },
+      "output": { "oneOf": [ { "type": "object", "required": ["changed", "enabled", "outcome", "requestHash"], "properties": { "changed": { "type": "boolean" }, "enabled": { "type": "boolean" }, "outcome": { "type": "string", "const": "approved" }, "requestHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" } }, "additionalProperties": false }, { "$ref": "#/$defs/notApplied" } ] }
+    },
+    "wpe_proxy_bind_ip_set": {
+      "input": { "type": "object", "required": ["auto", "ip", "idempotencyKey"], "properties": { "auto": { "type": "boolean" }, "ip": { "type": "string", "maxLength": 64 }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false },
+      "output": { "oneOf": [ { "type": "object", "required": ["changed", "auto", "ip", "outcome", "requestHash"], "properties": { "changed": { "type": "boolean" }, "auto": { "type": "boolean" }, "ip": { "type": ["string", "null"] }, "outcome": { "type": "string", "const": "approved" }, "requestHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" } }, "additionalProperties": false }, { "$ref": "#/$defs/notApplied" } ] }
+    },
+    "wpe_external_proxy_set_enabled": {
+      "input": { "type": "object", "required": ["enabled", "idempotencyKey"], "properties": { "enabled": { "type": "boolean" }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false },
+      "output": { "oneOf": [ { "type": "object", "required": ["changed", "enabled", "host", "port", "outcome", "requestHash"], "properties": { "changed": { "type": "boolean" }, "enabled": { "type": "boolean" }, "host": { "type": "string" }, "port": { "type": "integer", "minimum": 1, "maximum": 65535 }, "outcome": { "type": "string", "const": "approved" }, "requestHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" } }, "additionalProperties": false }, { "$ref": "#/$defs/notApplied" } ] }
+    },
+    "wpe_proxy_start": {
+      "input": { "type": "object", "required": ["idempotencyKey"], "properties": { "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false },
+      "output": { "oneOf": [ { "type": "object", "required": ["changed", "running", "outcome", "requestHash"], "properties": { "changed": { "type": "boolean" }, "running": { "type": "boolean" }, "ok": { "type": "boolean" }, "outcome": { "type": "string", "const": "approved" }, "requestHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" } }, "additionalProperties": false }, { "$ref": "#/$defs/notApplied" } ] }
+    },
+    "wpe_proxy_stop": {
+      "input": { "type": "object", "required": ["idempotencyKey"], "properties": { "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false },
+      "output": { "oneOf": [ { "type": "object", "required": ["changed", "running", "outcome", "requestHash"], "properties": { "changed": { "type": "boolean" }, "running": { "type": "boolean" }, "outcome": { "type": "string", "const": "approved" }, "requestHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" } }, "additionalProperties": false }, { "$ref": "#/$defs/notApplied" } ] }
+    },
+    "wpe_firewall_rule_add": {
+      "input": {
+        "type": "object",
+        "required": ["list", "address", "idempotencyKey"],
+        "properties": {
+          "list": { "type": "string", "enum": ["white", "black"] },
+          "address": { "type": "string", "minLength": 1, "maxLength": 128 },
+          "idempotencyKey": { "type": "string", "format": "uuid" },
+          "expiryEnabled": { "type": "boolean", "default": false },
+          "expiryTime": { "type": ["string", "null"], "format": "date-time" }
+        },
+        "additionalProperties": false
+      },
+      "output": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["list", "address", "added", "expiryEnabled", "expiryTime", "outcome", "requestHash"],
+            "properties": {
+              "list": { "type": "string", "enum": ["white", "black"] },
+              "address": { "type": "string" },
+              "added": { "type": "boolean", "const": true },
+              "expiryEnabled": { "type": "boolean" },
+              "expiryTime": { "type": ["string", "null"], "format": "date-time" },
+              "outcome": { "type": "string", "const": "approved" },
+              "requestHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+            },
+            "additionalProperties": false
+          },
+          { "$ref": "#/$defs/notApplied" }
+        ]
+      }
+    },
+    "wpe_firewall_rule_remove": {
+      "input": {
+        "type": "object",
+        "required": ["list", "address", "idempotencyKey"],
+        "properties": {
+          "list": { "type": "string", "enum": ["white", "black"] },
+          "address": { "type": "string", "minLength": 1, "maxLength": 128 },
+          "idempotencyKey": { "type": "string", "format": "uuid" }
+        },
+        "additionalProperties": false
+      },
+      "output": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["list", "address", "removed", "outcome", "requestHash"],
+            "properties": {
+              "list": { "type": "string", "enum": ["white", "black"] },
+              "address": { "type": "string" },
+              "removed": { "type": "boolean", "const": true },
+              "outcome": { "type": "string", "const": "approved" },
+              "requestHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+            },
+            "additionalProperties": false
+          },
+          { "$ref": "#/$defs/notApplied" }
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "notApplied": {
+      "type": "object",
+      "required": ["outcome", "requestHash"],
+      "properties": {
+        "outcome": { "type": "string", "enum": ["rejected", "expired"] },
+        "requestHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

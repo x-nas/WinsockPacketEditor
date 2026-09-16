@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wpe64.com/schemas/mcp/readonly-tools-v1.json",
+  "title": "WPE x64 MCP phase 1 contracts",
+  "definitions": {
+    "pageFields": {
+      "type": "object",
+      "properties": {
+        "limit": { "type": "integer", "minimum": 1, "maximum": 200, "default": 50 },
+        "cursor": { "type": "string", "minLength": 1, "maxLength": 512 }
+      }
+    },
+    "page": { "allOf": [{ "$ref": "#/definitions/pageFields" }], "unevaluatedProperties": false },
+    "packetMode": { "type": "string", "enum": ["proxy", "inject"] },
+    "packetId": { "type": "integer", "minimum": 1 },
+    "packetSummary": {
+      "type": "object",
+      "required": ["id", "time", "type", "length", "preview"],
+      "properties": {
+        "id": { "$ref": "#/definitions/packetId" },
+        "time": { "type": "string" },
+        "type": { "type": "integer" },
+        "length": { "type": "integer", "minimum": 0 },
+        "preview": { "type": "string", "maxLength": 192 },
+        "from": { "type": "string" },
+        "to": { "type": "string" },
+        "action": { "type": "integer" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "tools": {
+    "wpe_status_get": {
+      "input": { "type": "object", "additionalProperties": false },
+      "output": { "type": "object", "required": ["version", "mode", "proxyRunning"], "properties": { "version": { "type": "string" }, "mode": { "type": "string" }, "proxyRunning": { "type": "boolean" }, "queue": { "type": "integer" }, "captured": { "type": "integer" } }, "additionalProperties": false }
+    },
+    "wpe_capture_search": {
+      "input": { "allOf": [{ "$ref": "#/definitions/pageFields" }, { "type": "object", "properties": { "mode": { "$ref": "#/definitions/packetMode" }, "pattern": { "type": "string", "maxLength": 4096 }, "hex": { "type": "boolean", "default": false }, "direction": { "type": "string", "enum": ["any", "send", "receive"], "default": "any" } } }], "unevaluatedProperties": false },
+      "output": { "type": "object", "required": ["rows"], "properties": { "rows": { "type": "array", "items": { "$ref": "#/definitions/packetSummary" } }, "nextCursor": { "type": ["string", "null"] } }, "additionalProperties": false }
+    },
+    "wpe_packet_get": {
+      "input": { "type": "object", "required": ["id"], "properties": { "id": { "$ref": "#/definitions/packetId" }, "mode": { "$ref": "#/definitions/packetMode" }, "includePayload": { "type": "boolean", "default": false } }, "additionalProperties": false },
+      "output": { "type": "object", "required": ["id", "found", "truncated"], "properties": { "id": { "$ref": "#/definitions/packetId" }, "found": { "type": "boolean" }, "truncated": { "type": "boolean" }, "sha256": { "type": ["string", "null"] }, "payloadBase64": { "type": ["string", "null"] } }, "additionalProperties": false }
+    },
+    "wpe_logs_list": { "input": { "allOf": [{ "$ref": "#/definitions/pageFields" }, { "type": "object", "required": ["kind"], "properties": { "kind": { "type": "string", "enum": ["system", "filter", "proxy"] } } }], "unevaluatedProperties": false }, "output": { "type": "object" } },
+    "wpe_filters_list": { "input": { "$ref": "#/definitions/page" }, "output": { "type": "object" } },
+    "wpe_executors_list": { "input": { "type": "object", "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_connections_list": { "input": { "$ref": "#/definitions/page" }, "output": { "type": "object" } },
+    "wpe_accounts_list": { "input": { "$ref": "#/definitions/page" }, "output": { "type": "object" } },
+    "wpe_firewall_get": { "input": { "type": "object", "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_bytes_transcode": { "input": { "type": "object", "required": ["text", "decode"], "properties": { "text": { "type": "string", "maxLength": 1048576 }, "decode": { "type": "boolean" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_bytes_compare": { "input": { "type": "object", "required": ["left", "right"], "properties": { "left": { "type": "string", "maxLength": 1048576 }, "right": { "type": "string", "maxLength": 1048576 }, "minimumRun": { "type": "integer", "minimum": 1, "maximum": 4096, "default": 2 } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_bytes_extract": { "input": { "type": "object", "required": ["kind", "contentBase64"], "properties": { "kind": { "type": "integer", "minimum": 0, "maximum": 32 }, "contentBase64": { "type": "string", "maxLength": 5592408 } }, "additionalProperties": false }, "output": { "type": "object" } }
+  }
+}

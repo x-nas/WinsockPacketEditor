@@ -37,6 +37,14 @@ if (-not $SkipBuild) {
     if ($LASTEXITCODE -ne 0) { throw "MSBuild 失败（$LASTEXITCODE）" }
 }
 
+# MCP sidecar is intentionally a separate .NET 10 process. Publish it into the
+# application payload rather than linking it into the net48 WPE executable.
+Write-Host '== MCP · dotnet publish · Release' -ForegroundColor Cyan
+$McpProject = Join-Path $Repo 'WPEMcpServer\WPEMcpServer.csproj'
+$McpOutput = Join-Path $Main 'bin\Release\McpServer'
+& dotnet publish $McpProject --no-restore -c Release -o $McpOutput
+if ($LASTEXITCODE -ne 0) { throw "MCP Server 发布失败（$LASTEXITCODE）" }
+
 & (Join-Path $Repo 'WPELauncher\New-LauncherPackage.ps1') `
     -SourceDir (Join-Path $Main 'bin\Release') `
     -DistDir (Join-Path $Repo 'dist') `
@@ -57,6 +65,8 @@ if (-not $SkipBuild) {
         'x64\SunnyNet64.dll', 'x64\SQLite.Interop.dll', 'x86\SQLite.Interop.dll',
         'SuperSocket.SocketEngine.dll', 'Microsoft.Owin.Host.HttpListener.dll',
         'runtimes\win-x64\native\WebView2Loader.dll',
-        'IPLocation\qqwry.dat', 'Web\index.html', 'wwwroot\index.html', 'wpe-data.ico'
+        'IPLocation\qqwry.dat', 'Web\index.html', 'wwwroot\index.html', 'wpe-data.ico',
+        'McpServer\WPEMcpServer.exe', 'McpServer\WPEMcpServer.dll',
+        'McpServer\WPEMcpServer.deps.json', 'McpServer\WPEMcpServer.runtimeconfig.json'
     )
 if (-not $?) { exit 1 }

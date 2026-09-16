@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.WinForms;
 using WinsockPacketEditor;
+using WinsockPacketEditor.Mcp;
 
 //代理配置的路径太长，这一段里出现十几次。静态类赋不进变量，只能用 using 别名
 using ProxyCfg = WinsockPacketEditor.Operate.ProxyConfig.Proxy;
@@ -53,6 +54,8 @@ namespace WPEHybrid
         #region//字段
 
         private readonly WebView2 web = new WebView2();
+
+        private McpAgentGateway mcpGateway;
 
         private WebBridge bridge;
 
@@ -473,6 +476,10 @@ namespace WPEHybrid
                     if (this.InvokeRequired) { this.Invoke(action); }
                     else { action(); }
                 };
+
+                // Local MCP has its own named-pipe protocol; it never shares the injected-process IPC.
+                this.mcpGateway = new McpAgentGateway();
+                this.mcpGateway.Start();
 
                 this.timerFlush.Tick += this.OnFlushTick;
                 this.timerFlush.Start();
@@ -1106,6 +1113,8 @@ namespace WPEHybrid
                     正常退出就该干净地收尾，不要让用户的游戏白白多跑三秒钩子。
                 */
                 this.DetachInjectOnExit();
+
+                if (this.mcpGateway != null) { this.mcpGateway.Dispose(); this.mcpGateway = null; }
 
                 /*
                     ⚠️ 被驱动拦截的进程要从驱动上摘掉，与系统代理那条同级：
@@ -2353,9 +2362,8 @@ namespace WPEHybrid
 
                 hours <= 0 表示永久：对应 WinForms 的 (IsExpiry: false, MaxDateTime)。
 
-                ⚠️ AddToWhiteList / AddToBlackList 都是 <b>async void</b>，
-                调用即返回、里面自己落库。所以这里返回的 ok 只表示"已经派出去了"，
-                不代表已经写完 —— 与 WinForms 那边点完菜单立刻弹提示是同一个语义。
+                统一走 SaveIPRuleAsync：等归属地、列表插入和落库都完成后再返回，
+                所以 ok=true 就表示这条规则已经保存成功。
             */
             //选中某个客户端后，取它当前开着的连接（那棵树的叶子）
             this.bridge.Register("getClientConnections", args => new
@@ -2364,7 +2372,7 @@ namespace WPEHybrid
                     args["ip"] == null ? null : (string)args["ip"]),
             });
 
-            this.bridge.Register("addIpRule", args =>
+            this.bridge.Register("addIpRule", async args =>
             {
                 try
                 {
@@ -2381,17 +2389,14 @@ namespace WPEHybrid
                     bool expiry = hours > 0;
                     DateTime until = expiry ? DateTime.Now.AddHours(hours) : Operate.SystemConfig.MaxDateTime;
 
-                    if (black)
-                    {
-                        ProxyCfg.AddToBlackList(ip, expiry, until, DateTime.Now);
-                    }
-                    else
-                    {
-                        //白名单在 WinForms 里恒为永久（AddToWhiteList_ByDateTime 把入参丢了），照搬
-                        ProxyCfg.AddToWhiteList(ip, false, Operate.SystemConfig.MaxDateTime, DateTime.Now);
-                    }
+                    //白名单在 WinForms 里恒为永久（AddToWhiteList_ByDateTime 把入参丢了），照搬
+                    bool effectiveExpiry = black && expiry;
+                    DateTime effectiveUntil = effectiveExpiry ? until : Operate.SystemConfig.MaxDateTime;
+                    string err = await ProxyCfg.SaveIPRuleAsync(
+                        black, string.Empty, ip, effectiveExpiry,
+                        effectiveExpiry ? effectiveUntil.ToString("o") : string.Empty);
 
-                    return new { ok = true, error = string.Empty };
+                    return new { ok = string.IsNullOrEmpty(err), error = err };
                 }
                 catch (Exception ex)
                 {
@@ -2464,9 +2469,9 @@ namespace WPEHybrid
             });
 
             //新增 / 改一条。oldIp 为空 = 新增
-            this.bridge.Register("saveIPRule", args =>
+            this.bridge.Register("saveIPRule", async args =>
             {
-                string err = ProxyCfg.SaveIPRule(
+                string err = await ProxyCfg.SaveIPRuleAsync(
                     args["black"] != null && (bool)args["black"],
                     args["oldIp"] == null ? null : (string)args["oldIp"],
                     args["ip"] == null ? null : (string)args["ip"],

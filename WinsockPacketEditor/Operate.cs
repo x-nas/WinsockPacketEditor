@@ -9299,18 +9299,24 @@ namespace WinsockPacketEditor
 
                 public static async void AddToWhiteList(string ipOrRange, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime)
                 {
+                    await AddToWhiteListAsync(ipOrRange, IsExpiry, ExpiryTime, CreateTime);
+                }
+
+                /// <summary>新增白名单并等待归属地查询与列表更新完成；成功新增返回 true。</summary>
+                public static async Task<bool> AddToWhiteListAsync(string ipOrRange, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime)
+                {
                     try
                     {
                         if (string.IsNullOrEmpty(ipOrRange))
                         {
-                            return;
+                            return false;
                         }
 
                         lock (_whiteListLock)
                         {
                             if (ProxyConfig.Proxy.IsExistsInWhiteList(ipOrRange))
                             {
-                                return;
+                                return false;
                             }
                         }
 
@@ -9324,6 +9330,7 @@ namespace WinsockPacketEditor
                         WhiteListInfo wli = new WhiteListInfo(ipOrRange, IPLocation, IsExpiry, ExpiryTime, CreateTime);
 
                         //⚠️ 锁要在界面线程上拿：握着锁去 Invoke 会与界面线程上扫过期项（它也拿这把锁）互相等死
+                        bool added = false;
                         Action add = () =>
                         {
                             lock (_whiteListLock)
@@ -9331,6 +9338,7 @@ namespace WinsockPacketEditor
                                 if (!ProxyConfig.Proxy.IsExistsInWhiteList(ipOrRange))
                                 {
                                     Operate.ProxyConfig.Proxy.lstWhiteList.Add(wli);
+                                    added = true;
                                 }
                             }
                         };
@@ -9343,10 +9351,13 @@ namespace WinsockPacketEditor
                         {
                             add();
                         }
+
+                        return added;
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AddToWhiteList), ex);
+                        Operate.DoLog(nameof(AddToWhiteListAsync), ex);
+                        return false;
                     }
                 }
 
@@ -9447,62 +9458,75 @@ namespace WinsockPacketEditor
                     各一套几乎逐行相同的代码），这里不跟。
                 */
 
+                /// <summary>校验一条白/黑名单规则；返回空串表示可保存。</summary>
+                public static string ValidateIPRule(bool Black, string OldIP, string IP)
+                {
+                    string ip = (IP ?? string.Empty).Trim();
+                    string old = (OldIP ?? string.Empty).Trim();
+
+                    if (ip.Length == 0)
+                    {
+                        return UI.T("FireWallSetting.IPAddress.Error", "IP 地址不正确");
+                    }
+
+                    //单个 IP 或 "起-止"，两段都要是合法 IPv4 —— 与 WhiteListEdit 的校验同一份规则
+                    foreach (string part in ip.Split('-'))
+                    {
+                        if (!SystemConfig.IsValidIPv4(part.Trim()))
+                        {
+                            return UI.T("FireWallSetting.IPAddress.Error", "IP 地址不正确");
+                        }
+                    }
+
+                    var range = ProxyConfig.Proxy.ParseIpRange(ip);
+                    if (range.StartIP == -1 || range.EndIP == -1 || range.StartIP > range.EndIP)
+                    {
+                        return UI.T("FireWallSetting.IPAddress.Range", "IP 段的起始地址不能大于结束地址");
+                    }
+
+                    bool exists = Black
+                        ? ProxyConfig.Proxy.IsExistsInBlackList(ip)
+                        : ProxyConfig.Proxy.IsExistsInWhiteList(ip);
+
+                    //改成一个已经存在的 IP，或新增一个重复的，都不行；改回自己不算重复
+                    if (exists && !ip.Equals(old, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return UI.T("FireWallSetting.IPAddress.Exists", "这个 IP 已经在名单里了");
+                    }
+
+                    return string.Empty;
+                }
+
                 /// <summary>新增或改一条。OldIP 为空 = 新增。返回空串表示成功，否则是给用户看的原因。</summary>
-                public static string SaveIPRule(bool Black, string OldIP, string IP, bool IsExpiry, string ExpiryTime)
+                public static async Task<string> SaveIPRuleAsync(bool Black, string OldIP, string IP, bool IsExpiry, string ExpiryTime)
                 {
                     try
                     {
                         string ip = (IP ?? string.Empty).Trim();
                         string old = (OldIP ?? string.Empty).Trim();
+                        string validationError = ValidateIPRule(Black, old, ip);
+                        if (!string.IsNullOrEmpty(validationError)) { return validationError; }
 
-                        if (ip.Length == 0)
+                        DateTime until = SystemConfig.MaxDateTime;
+
+                        if (IsExpiry && !DateTime.TryParse(ExpiryTime, out until))
                         {
-                            return UI.T("FireWallSetting.IPAddress.Error", "IP 地址不正确");
-                        }
-
-                        //单个 IP 或 "起-止"，两段都要是合法 IPv4 —— 与 WhiteListEdit 的校验同一份规则
-                        foreach (string part in ip.Split('-'))
-                        {
-                            if (!SystemConfig.IsValidIPv4(part.Trim()))
-                            {
-                                return UI.T("FireWallSetting.IPAddress.Error", "IP 地址不正确");
-                            }
-                        }
-
-                        /*
-                            ⚠️ IP 段还要查<b>起 ≤ 止</b>。写反了的话 ContainsIp 恒为 false ——
-                            那条规则<b>躺在名单里却永远不生效</b>，界面上看不出任何异常，
-                            白名单模式下表现成「明明把这个网段加进去了还是连不上」。
-                            顺带也把 ParseIpRange 解不出来的（-1）挡在外面。
-                        */
-                        var Range = ProxyConfig.Proxy.ParseIpRange(ip);
-
-                        if (Range.StartIP == -1 || Range.EndIP == -1 || Range.StartIP > Range.EndIP)
-                        {
-                            return UI.T("FireWallSetting.IPAddress.Range", "IP 段的起始地址不能大于结束地址");
-                        }
-
-                        bool exists = Black
-                            ? ProxyConfig.Proxy.IsExistsInBlackList(ip)
-                            : ProxyConfig.Proxy.IsExistsInWhiteList(ip);
-
-                        //改成一个已经存在的 IP，或新增一个重复的，都不行；改回自己不算重复
-                        if (exists && !ip.Equals(old, StringComparison.OrdinalIgnoreCase))
-                        {
-                            return UI.T("FireWallSetting.IPAddress.Exists", "这个 IP 已经在名单里了");
-                        }
-
-                        DateTime until;
-
-                        if (!IsExpiry || !DateTime.TryParse(ExpiryTime, out until))
-                        {
-                            until = SystemConfig.MaxDateTime;
+                            return UI.T("FireWallSetting.ExpiryTime.Error", "到期时间不正确");
                         }
 
                         if (old.Length == 0)
                         {
-                            if (Black) { ProxyConfig.Proxy.AddToBlackList(ip, IsExpiry, until, DateTime.Now); }
-                            else { ProxyConfig.Proxy.AddToWhiteList(ip, IsExpiry, until, DateTime.Now); }
+                            bool added = Black
+                                ? await ProxyConfig.Proxy.AddToBlackListAsync(ip, IsExpiry, until, DateTime.Now)
+                                : await ProxyConfig.Proxy.AddToWhiteListAsync(ip, IsExpiry, until, DateTime.Now);
+
+                            if (!added)
+                            {
+                                return UI.T("FireWallSetting.IPAddress.Exists", "这个 IP 已经在名单里了");
+                            }
+
+                            if (Black) { ProxyConfig.Proxy.SaveBlackList_ToDB(); }
+                            else { ProxyConfig.Proxy.SaveWhiteList_ToDB(); }
 
                             return string.Empty;
                         }
@@ -9535,7 +9559,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveIPRule), ex);
+                        Operate.DoLog(nameof(SaveIPRuleAsync), ex);
                         return ex.Message;
                     }
                 }
@@ -9723,18 +9747,24 @@ namespace WinsockPacketEditor
 
                 public static async void AddToBlackList(string ipOrRange, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime)
                 {
+                    await AddToBlackListAsync(ipOrRange, IsExpiry, ExpiryTime, CreateTime);
+                }
+
+                /// <summary>新增黑名单并等待归属地查询与列表更新完成；成功新增返回 true。</summary>
+                public static async Task<bool> AddToBlackListAsync(string ipOrRange, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime)
+                {
                     try
                     {
                         if (string.IsNullOrEmpty(ipOrRange))
                         {
-                            return;
+                            return false;
                         }
 
                         lock (_blackListLock)
                         {
                             if (ProxyConfig.Proxy.IsExistsInBlackList(ipOrRange))
                             {
-                                return;
+                                return false;
                             }
                         }
 
@@ -9748,6 +9778,7 @@ namespace WinsockPacketEditor
                         BlackListInfo bli = new BlackListInfo(ipOrRange, IPLocation, IsExpiry, ExpiryTime, CreateTime);
 
                         //⚠️ 同白名单：锁在界面线程上拿，不能握着锁去 Invoke
+                        bool added = false;
                         Action add = () =>
                         {
                             lock (_blackListLock)
@@ -9755,6 +9786,7 @@ namespace WinsockPacketEditor
                                 if (!ProxyConfig.Proxy.IsExistsInBlackList(ipOrRange))
                                 {
                                     Operate.ProxyConfig.Proxy.lstBlackList.Add(bli);
+                                    added = true;
                                 }
                             }
                         };
@@ -9767,10 +9799,13 @@ namespace WinsockPacketEditor
                         {
                             add();
                         }
+
+                        return added;
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AddToBlackList), ex);
+                        Operate.DoLog(nameof(AddToBlackListAsync), ex);
+                        return false;
                     }
                 }
 
