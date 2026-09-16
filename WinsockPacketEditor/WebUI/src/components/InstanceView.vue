@@ -185,8 +185,12 @@ function sizeText(n: number): string {
 }
 
 .instance-lead {
+  display: flex;
+  align-items: center;
+  min-height: 46px;
+  box-sizing: border-box;
   margin: 0 0 12px;
-  padding: 0 14px 12px;
+  padding: 0 14px;
   border-bottom: 1px solid var(--border);
   color: var(--amber);
   font-size: var(--fs-body);
