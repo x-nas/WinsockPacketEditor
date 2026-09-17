@@ -1,7 +1,7 @@
-// 三路运行日志的接收端。
+// 四路运行日志的接收端。
 //
-// 通道：Operate.DoLog / DoFilterLog / DoProxyLog → LogConfig 的三个队列 →
-// 外壳搬运定时器每拍 FlushToFeed → UI.Feed.Append(FeedList.SystemLog / FilterLog / ProxyLog)。
+// 通道：Operate.DoLog / DoFilterLog / DoProxyLog / McpLog → LogConfig 的四个队列 →
+// 外壳搬运定时器每拍 FlushToFeed → UI.Feed.Append(... )。
 //
 // 【三份必须分开存】
 // 它们的 DTO 形状完全不同（见 ClassObject/Ui/FeedRows.cs）：
@@ -36,17 +36,19 @@ const MAX = 2000
 const sysAll: LogRow[] = []
 const filterAll: FilterLogRow[] = []
 const proxyAll: ProxyLogRow[] = []
+const mcpAll: LogRow[] = []
 
 /** 与 packets store 同一个理由用 shallowRef：不给每一行套 Proxy。 */
 export const sysLogs = shallowRef<LogRow[]>(sysAll)
 export const filterLogs = shallowRef<FilterLogRow[]>(filterAll)
 export const proxyLogs = shallowRef<ProxyLogRow[]>(proxyAll)
+export const mcpLogs = shallowRef<LogRow[]>(mcpAll)
 
 let rafId = 0
-const dirty = new Set<'sys' | 'filter' | 'proxy'>()
+const dirty = new Set<'sys' | 'filter' | 'proxy' | 'mcp'>()
 
 /** 与封包列表同一套做法：一帧内多批只触发一次重渲染。 */
-function scheduleFlush(which: 'sys' | 'filter' | 'proxy'): void {
+function scheduleFlush(which: 'sys' | 'filter' | 'proxy' | 'mcp'): void {
   dirty.add(which)
   if (rafId) return
 
@@ -55,11 +57,12 @@ function scheduleFlush(which: 'sys' | 'filter' | 'proxy'): void {
     if (dirty.has('sys')) triggerRef(sysLogs)
     if (dirty.has('filter')) triggerRef(filterLogs)
     if (dirty.has('proxy')) triggerRef(proxyLogs)
+    if (dirty.has('mcp')) triggerRef(mcpLogs)
     dirty.clear()
   })
 }
 
-function append<T>(all: T[], rows: T[], which: 'sys' | 'filter' | 'proxy'): void {
+function append<T>(all: T[], rows: T[], which: 'sys' | 'filter' | 'proxy' | 'mcp'): void {
   if (!rows?.length) return
 
   for (let i = 0; i < rows.length; i++) {
@@ -74,7 +77,7 @@ function append<T>(all: T[], rows: T[], which: 'sys' | 'filter' | 'proxy'): void
   scheduleFlush(which)
 }
 
-function trim<T>(all: T[], keep: number, which: 'sys' | 'filter' | 'proxy'): void {
+function trim<T>(all: T[], keep: number, which: 'sys' | 'filter' | 'proxy' | 'mcp'): void {
   const drop = all.length - keep
   if (drop <= 0) return
 
@@ -90,12 +93,14 @@ export function attachLogFeed(): () => void {
     if (d.list === FeedList.SystemLog) append(sysAll, d.rows, 'sys')
     else if (d.list === FeedList.FilterLog) append(filterAll, d.rows, 'filter')
     else if (d.list === FeedList.ProxyLog) append(proxyAll, d.rows, 'proxy')
+    else if (d.list === FeedList.McpLog) append(mcpAll, d.rows, 'mcp')
   }))
 
   offs.push(on('feed:clear', (d: { list: number }) => {
     if (d.list === FeedList.SystemLog) { sysAll.length = 0; scheduleFlush('sys') }
     else if (d.list === FeedList.FilterLog) { filterAll.length = 0; scheduleFlush('filter') }
     else if (d.list === FeedList.ProxyLog) { proxyAll.length = 0; scheduleFlush('proxy') }
+    else if (d.list === FeedList.McpLog) { mcpAll.length = 0; scheduleFlush('mcp') }
   }))
 
   /*
@@ -114,6 +119,7 @@ export function attachLogFeed(): () => void {
     if (d.list === FeedList.SystemLog) trim(sysAll, keep, 'sys')
     else if (d.list === FeedList.FilterLog) trim(filterAll, keep, 'filter')
     else if (d.list === FeedList.ProxyLog) trim(proxyAll, keep, 'proxy')
+    else if (d.list === FeedList.McpLog) trim(mcpAll, keep, 'mcp')
   }))
 
   return () => offs.forEach((f) => f())

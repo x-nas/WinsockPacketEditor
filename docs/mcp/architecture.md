@@ -6,7 +6,7 @@
 MCP client (Codex / Claude / compatible client)
         | stdio, JSON-RPC
         v
-WPE.McpServer.exe (.NET 10, asInvoker)
+WPEMcpServer.exe (.NET 10, self-contained single-file, asInvoker)
         | authenticated current-user Named Pipe
         v
 WPE AgentGateway (.NET Framework 4.8, in WPE main process)
@@ -21,7 +21,7 @@ IWpeReadService -> Operate + ShellForm coordinators
 
 ### WPE.McpServer
 
-- Implements only MCP transport, discovery, schemas, pagination and MCP-shaped errors.
+- Implements only MCP transport, discovery, schemas, pagination and MCP-shaped errors. The launcher publishes this single file at `C:\WPE64DB\McpServer\WPEMcpServer.exe`.
 - Writes MCP messages only to stdout; diagnostics go only to stderr.
 - Opens no database and does not access packet capture structures directly.
 - Connects to a selected running WPE instance and exits cleanly when stdin closes.
@@ -33,7 +33,7 @@ IWpeReadService -> Operate + ShellForm coordinators
 - Validates internal protocol version, frame sizes, deadlines and allowed operation names. The Windows named-pipe ACL is the phase-1 authentication boundary; an application-level handshake is deferred until a remote transport is introduced.
 - Marshals list snapshots and mutations through WPE's existing UI dispatcher.
 - Emits only detached DTO snapshots. No BindingList, WinForms object, byte array or mutable model escapes the UI thread.
-- Owns audit records and the later approval gate.
+- Owns audit records and the approval gate. The dedicated MCP log records one concise tool result per call; write results append their human-readable audit conclusion. It never logs payloads, passwords, tokens, pipe connect/disconnect noise, or audit hashes.
 
 ### IWpeReadService
 
@@ -54,7 +54,7 @@ IWpeReadService -> Operate + ShellForm coordinators
 
 1. WPE starts normally and creates one per-process local pipe.
 2. WPE publishes a current-user discovery record with an unguessable, per-run pipe name.
-3. The connector requires exactly one running WPE instance and opens its pipe under the same Windows user.
+3. The connector requires exactly one running WPE instance and opens its pipe under the same Windows user. If a write call omits an empty `idempotencyKey`, the Sidecar supplies a UUID; explicitly supplied keys are retained for deterministic retries.
 5. WPE validates every operation and returns a detached result.
 6. On WPE shutdown the gateway closes the pipe and removes its discovery record. The connector reports WPE offline and exits.
 

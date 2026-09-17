@@ -483,6 +483,7 @@ export const ja: Record<Key, string> = {
   'log.sys': 'システムログ',
   'log.filter': 'フィルターログ',
   'log.proxy': 'プロキシログ',
+  'log.mcp': 'MCP ログ',
   'log.empty': 'ログはまだありません',
   'log.autoClear': 'ログの自動クリア',
   'log.keepHint': 'ログ 1 系統あたりの最大保持行数（100 ～ 500000）。超えると古いものから破棄します',

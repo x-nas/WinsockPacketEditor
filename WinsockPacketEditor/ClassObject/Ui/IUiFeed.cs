@@ -57,6 +57,9 @@
         Server,
         Notice,
 
+        /// <summary>MCP 操作日志。</summary>
+        McpLog,
+
         #endregion
     }
 

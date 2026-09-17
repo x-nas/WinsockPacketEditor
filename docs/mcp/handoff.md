@@ -1,6 +1,23 @@
 # WPE MCP 改造交接记忆
 
-更新时间：2026-09-16。工作分支：`feature-mcp-server`；基线为 `Develop`。不得切换、合并、重置或修改 `Develop`、`master`。
+更新时间：2026-09-17。工作分支：`feature-mcp-server`；基线为 `Develop`。不得切换、合并、重置或修改 `Develop`、`master`。
+
+## 2026-09-17 交接要点
+
+- 当前正式测试包：`dist/WPE64 2.3.exe`，SHA-256 为 `518afa25b2cebb0eceff92f67c913bf830e1a0c4fe8200b25f6e0711d97cdbc7`。后续真实测试一律使用此 `pack` 产物，不使用 bin 目录程序。
+- 当前 MCP 工具数为 **83**；`McpToolsList.ps1 -ExpectedCount 83`、`McpContract.ps1`、解决方案构建、WebUI 构建和 `CheckUiCoupling.ps1` 均已通过。
+- `tools/pack/Pack.ps1` 发布自包含单文件 `WPEMcpServer.exe`，启动器同步到固定路径 `C:\WPE64DB\McpServer\WPEMcpServer.exe`。不要把 Sidecar 改回多文件部署或不稳定的 `%LOCALAPPDATA%` 发布路径。
+- MCP 日志是 `FeedList.McpLog` 的独立队列与标签。只写 `wpe_*` 工具调用结果、写操作审计结论和工具错误；不写服务启停、Pipe 连接/断开、请求摘要、密码、令牌或 payload。`logs.list` 接受 `kind: "mcp"`。
+- `wpe_start_mode_select` 仅在启动页有效：成功切换 WebUI 页面而不启动 SOCKS5 监听；重复当前模式返回 `alreadySelected`，已选另一模式返回 `unavailable`。`getSystemCheck.selectedMode` 是前端事件漏收时的可靠补偿。
+- 写工具遗漏空 `idempotencyKey` 时，Sidecar 会生成 UUID；调用方显式给出的 UUID 不可改写。WPE 仍以该键做同键重放/同键异参拒绝和脱敏内存审计。
+- 筛选器编辑 DTO 故意不含启用字段：`wpe_filter_update` 只保存规则与高级模式，不能启用；用户要求启停时必须调用 `wpe_filter_set_enabled`，并用 `wpe_filter_get.enabled` 验证。
+
+- 历史基线（51 工具阶段）：实际包已通过 `McpAnalysis.ps1` 的实例发现、状态、日志、代理/注入抓包列表、原生查找、编码转换、比对和数据提取；当前以本节开头的 83 工具状态为准。
+- 已修复正常命名管道断连：客户端在帧未完成时退出产生的 `EndOfStreamException` 视为正常对端断连，不再写系统错误日志；已在实际包执行连接后立即断开探针。
+- 先前“所有读取工具失败”不是 WPE UI 线程问题：`McpAnalysis.ps1` 曾错误使用 PowerShell 自动变量 `$args` 作为工具参数，导致 `arguments` 编码为数组；现已改为 `$toolArguments` 并清除了临时诊断输出。另一次失败是 WPE 已退出、发现文件不存在。
+- 历史启动模式测试中的“WPE has already left the start page”来自旧契约；当前契约已改为同模式 `alreadySelected`、异模式 `unavailable`。
+- 当前 WPE 已关闭。续接时先要求用户启动上述新包，再做实际 MCP 回归。
+- 下一模块为**发送器**：只映射现有发送列表/发送编辑器。顺序：列表与详情读取 → 创建、编辑、复制、删除、启停、排序、计数清零、从代理/注入抓包追加 → 单条发送与整表开始/停止。写操作必须通过 `McpWriteGuard` 和既有 `SendConfig`/`ShellForm` 入口，禁止直接写 SQLite 或列表；导入/导出依赖原生文件选择器，暂不开放。
 
 ## 已完成
 
@@ -36,17 +53,24 @@
 - 已新增 `tools/tests/McpToolsList.ps1`：通过真实 stdio MCP `initialize` / `tools/list` 验证 Sidecar 启动、工具数量、名称格式和重复注册。
 - 已完成真实生命周期回归：MCP 开启时 PID `2260` 的 Pipe 调用通过；关闭后发现文件删除检查通过；重新开启并重启 WPE 后 PID 变为 `1344`，发现文件、Pipe 和 `runtime.status` 均通过。
 - 已修正并验证 C#/前端 `UiIcon` 映射：自动执行绿色、人工确认黄色、关闭红色；契约检查现在会锁定 `None=0, Info=1, Success=2, Warn=3, Error=4`。
-- 阶段 5 发布门禁已通过：`McpReleaseCheck.ps1 -RequireWpe` 完成 35 个工具契约、Sidecar `tools/list` 和真实 WPE PID `4520` 的发现文件、Named Pipe、`runtime.status` 验证。
+- 阶段 5 发布门禁已通过：`McpReleaseCheck.ps1 -RequireWpe` 已验证当时的 35 个工具契约、Sidecar `tools/list` 和真实 WPE PID `4520` 的发现文件、Named Pipe、`runtime.status`；后续工具总数已扩展至 44。
 - 网关启动时会清理发现文件中已经不存在的进程记录，避免 WPE 异常退出后残留 PID 导致 Sidecar 误判多实例。
 - 阶段 5 发布门禁已完成；后续生命周期强制退出恢复验证仍可作为发布前补充回归。
 
 ## 阶段 6 当前状态
 
 - 阶段 5 发布门禁已通过后，开始设计高风险操作。
-- `wpe_executors_stop_all` 已完成首版接入：只做紧急停止，不启动执行器、不主动发包，并遵循 MCP 全局确认开关；真实确认、拒绝、幂等和空任务回归暂缓。
-- `wpe_start_mode_select` 已完成首版接入：仅在启动页选择代理/注入页面，不自动启动代理、不选择目标、不执行注入；真实页面切换和非启动页拒绝回归暂缓。
-- 真实运行态测试策略：先完成发送器和机器人相关 MCP 工具，再统一测试执行器停止、确认策略、幂等和模式选择流程。
-- `wpe_start_mode_select` 已完成首版接入：仅在启动页选择代理/注入页面，不自动启动代理、不选择目标、不执行注入；待真实 WPE 上验证页面切换和非启动页拒绝。
+- `wpe_executors_stop_all` 已完成首版接入：只做紧急停止，不启动执行器、不主动发包，并遵循 MCP 全局确认开关；已在真实发布包验证无任务返回、UUID 拒绝、幂等重放，以及列表级运行中延时机器人和仅经本机回环 SOCKS5 夹具运行的发送器的停止和归零。夹具完成后已恢复原 SOCKS5 身份认证并停止本机监听。
+- `wpe_start_mode_select` 已完成首版接入：仅在启动页选择代理/注入页面，不自动启动代理、不选择目标、不执行注入；已在真实发布包验证首次选择、同键幂等重放和离开启动页后的新请求拒绝。
+
+## 2026-09-16 筛选器 MCP 回归
+
+- 筛选器 MCP 已增加 `wpe_filter_get`、`wpe_filter_stats_get`、`wpe_filter_create`、`wpe_filter_update`、`wpe_filter_delete`，工具总数为 44；代码、Schema、契约和 Sidecar `tools/list` 均已通过。
+- `wpe_filter_create` 复用现有界面 `addFilter` 的同一入口：`ShellForm.addFilter -> Operate.FilterConfig.List.AddFilter_New_ById -> FilterConfig.Filter.AddFilter_New`。根据封包生成筛选器是另外的 `AddToFilter_ByPacketId` / `AddToFilter_ByProxyId` 路径。
+- 新建入口在数据库保存失败时回滚内存中新加的条目，避免界面状态与持久化状态分离。
+- 已用 `pack` 生成的启动器包进行真实回归：Sidecar `tools/list`、MCP 生命周期及 `create -> get -> update -> get -> delete` 全流程均通过；测试会删除其临时筛选器。
+- `McpFilterCrud.ps1` 的工具参数不得命名为 PowerShell 自动变量 `$args`；现已使用 `$toolArguments`，避免哈希表被重组为数组。
+- `wpe_start_mode_select` 的真实发布包回归已通过。为消除请求事件到 WebView 页面切换之间的竞态，网关在发布前原子提交模式选择；同一幂等键仍可重放原结果，新键会被正确拒绝。
 
 ## 当前结构与约束
 
@@ -69,7 +93,7 @@ powershell -ExecutionPolicy Bypass -File tools/pack/Pack.ps1 -SkipBuild
 
 ## 阶段 2 当前验证点
 
-最新发布包为 `dist/WPE64 2.3.exe`，最近一次 SHA256 为 `9805429843b1b602529a7483024a17e65ef359fda875191efa7f25e12a8311f6`；每次前端改动必须先构建 WebUI，再用解决方案构建同步 `bin/Release/wwwroot`，最后运行打包脚本。不要使用 `-SkipBuild` 代替前端同步，除非已先完成这两步。
+最新发布包为 `dist/WPE64 2.3.exe`，最近一次 SHA256 为 `518afa25b2cebb0eceff92f67c913bf830e1a0c4fe8200b25f6e0711d97cdbc7`；每次前端改动必须先构建 WebUI，再用解决方案构建同步 `bin/Release/wwwroot`，最后运行打包脚本。不要使用 `-SkipBuild` 代替前端同步，除非已先完成这两步。
 
 阶段 2 防火墙写入 E2E 已完成：测试地址 `203.0.113.77` 经过拒绝、批准、幂等、同键异参、重启持久化和删除清理全流程，最终黑名单为空。
 

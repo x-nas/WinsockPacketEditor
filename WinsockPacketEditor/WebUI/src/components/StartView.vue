@@ -22,10 +22,24 @@ import { call } from '../bridge'
 import { lang, t } from '../i18n'
 import InstanceView from './InstanceView.vue'
 import McpSetting from './proxy/McpSetting.vue'
+import toolSource from '../../../../WPEMcpServer/WpeTools.cs?raw'
 
 const emit = defineEmits<{ (e: 'enter', mode: 'proxy' | 'inject'): void }>()
 const mcpOpen = ref(false)
 const instanceOpen = ref(false)
+const mcpToolCount = Array.from(toolSource.matchAll(/\[McpServerTool\(Name = "[^"]+"\), Description\("[^"]*"\)\]/g)).length
+
+function mcpAvailability(): string {
+  switch (lang.value) {
+    case 'zh': return `${mcpToolCount} 个工具可用`
+    case 'tw': return `${mcpToolCount} 個工具可用`
+    case 'ja': return `${mcpToolCount} 個のツールを利用可能`
+    case 'ko': return `${mcpToolCount}개 도구 사용 가능`
+    case 'vi': return `${mcpToolCount} công cụ khả dụng`
+    case 'ru': return `Доступно инструментов: ${mcpToolCount}`
+    default: return `${mcpToolCount} tools available`
+  }
+}
 
 interface SystemCheck {
   isAdmin: boolean
@@ -260,7 +274,7 @@ onMounted(async () => {
         </svg>
         <span class="nm">MCP 设置</span>
         <span class="ds">本机 AI 自动化权限</span>
-        <span class="cur">启动页可用</span>
+        <span class="cur">{{ mcpAvailability() }}</span>
         <span class="ar">→</span>
       </button>
     </div>

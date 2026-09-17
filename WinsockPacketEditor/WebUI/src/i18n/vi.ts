@@ -483,6 +483,7 @@ export const vi: Record<Key, string> = {
   'log.sys': 'Nhật ký hệ thống',
   'log.filter': 'Nhật ký bộ lọc',
   'log.proxy': 'Nhật ký proxy',
+  'log.mcp': 'Nhật ký MCP',
   'log.empty': 'Chưa có mục nhật ký nào',
   'log.autoClear': 'Tự động dọn nhật ký',
   'log.keepHint': 'Số dòng tối đa giữ lại cho mỗi loại nhật ký (100 – 500000); vượt quá sẽ bỏ dòng cũ nhất',

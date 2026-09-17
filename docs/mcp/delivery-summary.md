@@ -22,6 +22,14 @@
 - 数据目录和数据库文件可用性；
 - 三项工具已完成重启后集成烟测。
 
+## 当前发布形态与可观测性
+
+- 当前 MCP 工具数：**83**。
+- `WPEMcpServer.exe` 是自包含单文件；WPE 启动器同步到 `C:\WPE64DB\McpServer\WPEMcpServer.exe`，使 VS Code 等客户端可以使用固定配置路径。
+- 日志页新增独立 `MCP 日志`：只记录工具调用结果、写入审计结论和工具错误；调用 `wpe_logs_list` 时使用 `kind: "mcp"` 可读取同一数据。
+- 启动页模式选择与代理监听分离：`wpe_start_mode_select` 只进入页面，`wpe_proxy_start` 才绑定代理监听端口。
+- 滤镜规则更新不包含启停；启停一律通过 `wpe_filter_set_enabled`，并由 `wpe_filter_get.enabled` 验证。
+
 ## 明确未开放
 
-主动发包、注入控制、驱动操作、执行器启停、自动修复、密码/令牌读取和完整网络 payload。
+密码/令牌读取、任意文件或剪贴板访问、驱动操作、自动注入和完整网络 payload 的默认返回。

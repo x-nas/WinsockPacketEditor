@@ -479,7 +479,21 @@ namespace WPEHybrid
 
                 // Local MCP has its own named-pipe protocol; it never shares the injected-process IPC.
                 this.mcpGateway = new McpAgentGateway();
-                McpAgentGateway.StartModeRequested = mode => this.bridge.PushEvent("mcp:start-mode", new { mode = mode });
+                McpAgentGateway.StartModeRequested = mode =>
+                {
+                    /*
+                        MCP mode selection must be a completed state transition, not
+                        merely a WebView navigation request.  The normal ProxyView
+                        mount calls enterProxyMode later, but a following MCP read can
+                        otherwise arrive in that gap and observe uninitialised lists.
+                    */
+                    if (string.Equals(mode, "proxy", StringComparison.OrdinalIgnoreCase))
+                    {
+                        EnsureProxyConfigLoaded();
+                        FeedPump.MarkAllDirty();
+                    }
+                    this.bridge.PushEvent("mcp:start-mode", new { mode = mode });
+                };
                 if (Operate.SystemConfig.McpEnabled) this.mcpGateway.Start();
 
                 this.timerFlush.Tick += this.OnFlushTick;
@@ -2086,87 +2100,16 @@ namespace WPEHybrid
                 int socks5Port = args["socks5Port"] == null ? 1080 : (int)args["socks5Port"];
                 int httpPort = args["httpPort"] == null ? 1081 : (int)args["httpPort"];
 
-                if (!enableSocks5)
-                {
-                    return new { ok = false, error = UI.T("ProxySettingsForm.ProxyType.Error", "代理类型未设置") };
-                }
-
-                if (enableHttp && socks5Port == httpPort)
-                {
-                    return new { ok = false, error = UI.T("ProxySettingsForm.ProxyType.Error", "SOCKS 和 HTTP 端口不能相同") };
-                }
-
-                if (socks5Port < 1 || socks5Port > 65535 || httpPort < 1 || httpPort > 65535)
-                {
-                    return new { ok = false, error = UI.T("ProxySettingsForm.Port.Error", "端口必须在 1 ~ 65535 之间") };
-                }
-
-                /*
-                    不勾「自动检测」就必须真给出一个监听地址。
-
-                    留空（或值坏了）时 InitProxyServer 走的是 IPAddress.TryParse 失败那一支，
-                    <b>静默退回自动</b> —— TCP 听 0.0.0.0、UDP 绑 ProxyServerIP[0]，
-                    与勾上「自动检测」的结果逐字相同。而界面上「自动检测」没勾、地址框空着，
-                    看起来像「我指定了监听地址」，两者对不上且没有任何提示。
-
-                    WinForms 侧撞不到：Controls/ProxySetting.InitProxyIP 里有一句
-                    「SelectedValue == null 就 SelectedIndex = 0」，下拉永远有值。
-                    外壳的 CyberSelect 没有那个默认，所以在这儿拦。
-                */
                 bool proxyIpAuto = args["proxyIpAuto"] != null && (bool)args["proxyIpAuto"];
                 string proxyIp = args["proxyIp"] == null ? string.Empty : ((string)args["proxyIp"]).Trim();
-
-                if (!proxyIpAuto && !IPAddress.TryParse(proxyIp, out IPAddress _))
-                {
-                    return new
-                    {
-                        ok = false,
-                        error = UI.T("ProxySettingsForm.ProxyIP.Empty", "请选择监听地址，或勾上「自动检测」"),
-                    };
-                }
-
-                /*
-                    最大连接数按本机内存封顶（Operate.ProxyConfig.Proxy.MaxConnectionCap）：
-                    SuperSocket 启动时按「每连接缓冲 × 最大连接数」一次性预分配，填大了服务起不来。
-                    这里拒绝而不是静默收窄 —— 用户填的数字得到明确的回答。
-                */
-                //「只允许 WPC 客户端」靠账号注册设备，认证没开它无从生效
                 bool enableAuth = args["enableAuth"] != null && (bool)args["enableAuth"];
                 bool onlyWpc = args["onlyWpc"] != null && (bool)args["onlyWpc"];
-                if (onlyWpc && !enableAuth)
-                {
-                    return new { ok = false, error = UI.T("ProxySettingsForm.OnlyWpc.NeedAuth", "「只允许 WPC 客户端连接」需要先启用身份认证") };
-                }
-
                 int maxConnection = args["maxConnection"] == null ? Operate.ProxyConfig.Proxy.DefaultMaxConnectionNumber : (int)args["maxConnection"];
-                int maxConnectionCap = ProxyCfg.MaxConnectionCap();
-                if (maxConnection < 1 || maxConnection > maxConnectionCap)
-                {
-                    return new
-                    {
-                        ok = false,
-                        error = string.Format(
-                            UI.T("ProxySettingsForm.MaxConnection.Error", "最大连接数必须在 1 ~ {0} 之间（每个连接预留 {1} KB，本机内存 {2} GB）"),
-                            maxConnectionCap,
-                            Operate.ProxyConfig.Proxy.ProxyReceiveBufferBytes / 1024,
-                            Math.Round(Kernel32.TotalPhysicalMemory() / 1073741824.0, 1)),
-                    };
-                }
 
                 try
                 {
-
-                    ProxyCfg.ProxyIP_Auto = proxyIpAuto;
-                    ProxyCfg.ProxyIP = proxyIp;
-                    ProxyCfg.Enable_SOCKS5 = enableSocks5;
-                    ProxyCfg.SOCKS5_Port = (ushort)socks5Port;
-                    ProxyCfg.Enable_Auth = enableAuth;
-                    ProxyCfg.Only_WPC_Client = onlyWpc;
-                    ProxyCfg.MaxConnectionNumber = maxConnection;
-                    ProxyCfg.Enable_HTTP = enableHttp;
-                    ProxyCfg.HTTP_Port = (ushort)httpPort;
-
-                    Operate.SystemConfig.SaveProxyMode_ToDB();
+                    string error = ProxyCfg.SaveProxySettings(proxyIpAuto, proxyIp, enableSocks5, socks5Port, enableAuth, onlyWpc, maxConnection, enableHttp, httpPort);
+                    if (!string.IsNullOrEmpty(error)) return new { ok = false, error = error };
 
                     UI.Toast(UiIcon.Success, UI.T("ProxySettingsForm.Success", "代理设置保存成功"));
 
@@ -5222,6 +5165,13 @@ namespace WPEHybrid
                     isBeta = Operate.SystemConfig.IsBeta,
                     //界面语言的初值。前端拿它决定首屏用哪份字典，切换后走 setLanguage 写回
                     language = UI.Prefs.Language ?? "zh-CN",
+                    //MCP 可能在 Vue 注册 mcp:start-mode 事件前就完成模式选择。把已选模式
+                    //随首屏自检一并返回，让前端能补做页面切换，不能只依赖瞬时事件。
+                    selectedMode = Operate.SystemConfig.SelectMode == Operate.SystemConfig.SystemMode.Proxy
+                        ? "proxy"
+                        : Operate.SystemConfig.SelectMode == Operate.SystemConfig.SystemMode.Inject
+                            ? "inject"
+                            : "start",
                     /*
                         主题的初值，与语言同一个理由搭这一趟车：
                         它要在<b>任何像素画出来之前</b>定好，否则浅色用户会先看见

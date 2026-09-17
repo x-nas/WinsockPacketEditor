@@ -484,6 +484,7 @@ export const tw: Record<Key, string> = {
   'log.sys': '系統日誌',
   'log.filter': '濾鏡日誌',
   'log.proxy': '代理日誌',
+  'log.mcp': 'MCP 日誌',
   'log.empty': '暫無日誌',
   'log.autoClear': '日誌自動清理',
   'log.keepHint': '每路日誌最多保留的條數（100 ~ 500000），超出後丟掉最舊的',

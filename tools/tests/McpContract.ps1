@@ -32,4 +32,15 @@ $missingSchemas = @($toolNames | Where-Object { $_ -notin $schemaNames })
 if ($missingDocs.Count -gt 0) { throw ('Tools missing from docs/mcp/tools.md: ' + ($missingDocs -join ', ')) }
 if ($missingSchemas.Count -gt 0) { throw ('Tools missing from MCP schemas: ' + ($missingSchemas -join ', ')) }
 
-Write-Host ('MCP contract check: PASS ({0} tools, docs, schemas and UiIcon mapping synchronized).' -f $toolNames.Count)
+# The Sidecar is allowed to discover a tool only when the in-process gateway
+# can dispatch its corresponding operation. This prevents a newly published
+# tool from failing only after a client calls it.
+$sidecarOperations = [regex]::Matches($toolsSource, 'gateway\.InvokeAsync\("([a-z]+(?:\.[A-Za-z]+)+)"') |
+    ForEach-Object { $_.Groups[1].Value } | Sort-Object -Unique
+$gatewaySource = Get-Content (Join-Path $repo 'WinsockPacketEditor\Mcp\McpAgentGateway.cs') -Raw
+$gatewayOperations = [regex]::Matches($gatewaySource, 'operation\s*==\s*"([a-z]+(?:\.[A-Za-z]+)+)"') |
+    ForEach-Object { $_.Groups[1].Value } | Sort-Object -Unique
+$missingGatewayOperations = @($sidecarOperations | Where-Object { $_ -notin $gatewayOperations })
+if ($missingGatewayOperations.Count -gt 0) { throw ('Sidecar operations missing from McpAgentGateway dispatch: ' + ($missingGatewayOperations -join ', ')) }
+
+Write-Host ('MCP contract check: PASS ({0} tools, docs, schemas, gateway dispatch and UiIcon mapping synchronized).' -f $toolNames.Count)

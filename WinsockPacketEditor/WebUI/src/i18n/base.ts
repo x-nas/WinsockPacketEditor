@@ -687,10 +687,11 @@ export const DICT = {
   'acct.lg.empty': { zh: '这个账号还没有登录记录', en: 'No login records for this account' },
 
   // ── 系统日志 ────────────────────────────────────────
-  //三路日志的名字照 Controls/LogList 的三个标签页
+  //前三路照 Controls/LogList；MCP 是外部自动化边界的独立运行日志。
   'log.sys': { zh: '系统日志', en: 'System Log' },
   'log.filter': { zh: '滤镜日志', en: 'Filter Log' },
   'log.proxy': { zh: '代理日志', en: 'Proxy Log' },
+  'log.mcp': { zh: 'MCP 日志', en: 'MCP Log' },
   'log.empty': { zh: '暂无日志', en: 'No log entries yet' },
   //⚠️ 「丢掉最旧的」不是「整表清空」—— 2026-09-07 改成环形之后连文案一起改的
   //⚠️ 与 proxy.autoClear 分开：两处控件长得一样、管的却是两份配置（日志 / 封包列表）

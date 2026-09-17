@@ -75,20 +75,36 @@
       "input": { "allOf": [{ "$ref": "#/definitions/pageFields" }, { "type": "object", "properties": { "mode": { "$ref": "#/definitions/packetMode" }, "pattern": { "type": "string", "maxLength": 4096 }, "hex": { "type": "boolean", "default": false }, "direction": { "type": "string", "enum": ["any", "send", "receive"], "default": "any" } } }], "unevaluatedProperties": false },
       "output": { "type": "object", "required": ["rows"], "properties": { "rows": { "type": "array", "items": { "$ref": "#/definitions/packetSummary" } }, "nextCursor": { "type": ["string", "null"] } }, "additionalProperties": false }
     },
+    "wpe_capture_find_next": { "input": { "type": "object", "required": ["pattern"], "properties": { "pattern": { "type": "string", "minLength": 1, "maxLength": 4096 }, "hex": { "type": "boolean", "default": false }, "mode": { "$ref": "#/definitions/packetMode" }, "fromIndex": { "type": "integer", "minimum": 0, "default": 0 }, "fromPosition": { "type": "integer", "minimum": 0, "default": 0 } }, "additionalProperties": false }, "output": { "type": "object" } },
     "wpe_packet_get": {
       "input": { "type": "object", "required": ["id"], "properties": { "id": { "$ref": "#/definitions/packetId" }, "mode": { "$ref": "#/definitions/packetMode" }, "includePayload": { "type": "boolean", "default": false } }, "additionalProperties": false },
       "output": { "type": "object", "required": ["id", "found", "truncated"], "properties": { "id": { "$ref": "#/definitions/packetId" }, "found": { "type": "boolean" }, "truncated": { "type": "boolean" }, "sha256": { "type": ["string", "null"] }, "payloadBase64": { "type": ["string", "null"] } }, "additionalProperties": false }
     },
-    "wpe_logs_list": { "input": { "allOf": [{ "$ref": "#/definitions/pageFields" }, { "type": "object", "required": ["kind"], "properties": { "kind": { "type": "string", "enum": ["system", "filter", "proxy"] } } }], "unevaluatedProperties": false }, "output": { "type": "object" } },
+    "wpe_logs_list": { "input": { "allOf": [{ "$ref": "#/definitions/pageFields" }, { "type": "object", "required": ["kind"], "properties": { "kind": { "type": "string", "enum": ["system", "filter", "proxy", "mcp"] } } }], "unevaluatedProperties": false }, "output": { "type": "object" } },
     "wpe_filters_list": { "input": { "$ref": "#/definitions/page" }, "output": { "type": "object" } },
+    "wpe_filter_get": { "input": { "type": "object", "required": ["id"], "properties": { "id": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_filter_stats_get": { "input": { "type": "object", "required": ["id"], "properties": { "id": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
     "wpe_executors_list": { "input": { "type": "object", "additionalProperties": false }, "output": { "type": "object" } },
     "wpe_connections_list": { "input": { "$ref": "#/definitions/page" }, "output": { "type": "object" } },
     "wpe_accounts_list": { "input": { "$ref": "#/definitions/page" }, "output": { "type": "object" } },
+    "wpe_account_get": { "input": { "type": "object", "required": ["id"], "properties": { "id": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_account_logins_list": { "input": { "allOf": [{ "$ref": "#/definitions/pageFields" }, { "type": "object", "required": ["id"], "properties": { "id": { "type": "string", "format": "uuid" } } }], "unevaluatedProperties": false }, "output": { "type": "object" } },
     "wpe_firewall_get": { "input": { "type": "object", "additionalProperties": false }, "output": { "type": "object" } },
     "wpe_proxy_settings_get": { "input": { "type": "object", "additionalProperties": false }, "output": { "type": "object", "additionalProperties": true } },
+    "wpe_proxy_config_get": { "input": { "type": "object", "additionalProperties": false }, "output": { "type": "object", "additionalProperties": true } },
+    "wpe_proxy_capabilities_get": { "input": { "type": "object", "additionalProperties": false }, "output": { "type": "object", "additionalProperties": true } },
     "wpe_firewall_rules_list": { "input": { "$ref": "#/definitions/page" }, "output": { "type": "object", "additionalProperties": true } },
     "wpe_bytes_transcode": { "input": { "type": "object", "required": ["text", "decode"], "properties": { "text": { "type": "string", "maxLength": 1048576 }, "decode": { "type": "boolean" } }, "additionalProperties": false }, "output": { "type": "object" } },
     "wpe_bytes_compare": { "input": { "type": "object", "required": ["left", "right"], "properties": { "left": { "type": "string", "maxLength": 1048576 }, "right": { "type": "string", "maxLength": 1048576 }, "minimumRun": { "type": "integer", "minimum": 1, "maximum": 4096, "default": 2 } }, "additionalProperties": false }, "output": { "type": "object" } },
-    "wpe_bytes_extract": { "input": { "type": "object", "required": ["kind", "contentBase64"], "properties": { "kind": { "type": "integer", "minimum": 0, "maximum": 32 }, "contentBase64": { "type": "string", "maxLength": 5592408 } }, "additionalProperties": false }, "output": { "type": "object" } }
+    "wpe_bytes_extract": { "input": { "type": "object", "required": ["kind", "contentBase64"], "properties": { "kind": { "type": "integer", "minimum": 0, "maximum": 32 }, "contentBase64": { "type": "string", "maxLength": 5592408 } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_sends_list": { "input": { "$ref": "#/definitions/page" }, "output": { "type": "object" } },
+    "wpe_send_get": { "input": { "type": "object", "required": ["id"], "properties": { "id": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_send_collection_list": { "input": { "allOf": [{ "$ref": "#/definitions/pageFields" }, { "type": "object", "required": ["id"], "properties": { "id": { "type": "string", "format": "uuid" } } }], "unevaluatedProperties": false }, "output": { "type": "object" } },
+    "wpe_robots_list": { "input": { "$ref": "#/definitions/page" }, "output": { "type": "object" } },
+    "wpe_robot_get": { "input": { "type": "object", "required": ["id"], "properties": { "id": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_warehouse_list": { "input": { "$ref": "#/definitions/page" }, "output": { "type": "object" } },
+    "wpe_warehouse_get": { "input": { "allOf": [{ "$ref": "#/definitions/pageFields" }, { "type": "object", "required": ["id"], "properties": { "id": { "type": "string", "format": "uuid" } } }], "unevaluatedProperties": false }, "output": { "type": "object" } },
+    "wpe_auto_stores_list": { "input": { "type": "object", "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_packet_edit_get": { "input": { "type": "object", "required": ["list", "id"], "properties": { "list": { "type": "string", "enum": ["proxy", "packet"] }, "id": { "type": "integer", "minimum": 1 } }, "additionalProperties": false }, "output": { "type": "object" } }
   }
 }

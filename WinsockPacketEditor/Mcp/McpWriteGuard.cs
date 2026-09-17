@@ -15,14 +15,16 @@ namespace WinsockPacketEditor.Mcp
         private static readonly ConcurrentDictionary<string, JObject> Completed = new ConcurrentDictionary<string, JObject>();
         private static readonly ConcurrentDictionary<string, Lazy<Task<JObject>>> InFlight = new ConcurrentDictionary<string, Lazy<Task<JObject>>>();
         private static readonly ConcurrentDictionary<string, string> RequestHashes = new ConcurrentDictionary<string, string>();
+        private static readonly ConcurrentQueue<string> CompletedOrder = new ConcurrentQueue<string>();
         private static readonly ConcurrentQueue<JObject> Audit = new ConcurrentQueue<JObject>();
         private const int AuditLimit = 1000;
+        private const int IdempotencyCacheLimit = 4096;
 
         public static bool TryGetCompleted(string operation, string idempotencyKey, JObject arguments, out JObject result)
         {
             if (!Guid.TryParse(idempotencyKey, out _)) throw new InvalidOperationException("A UUID idempotencyKey is required.");
             var requestKey = operation + "\n" + idempotencyKey;
-            var hash = Hash(operation + "\n" + (arguments ?? new JObject()).ToString(Newtonsoft.Json.Formatting.None));
+            var hash = Hash(operation + "\n" + Canonicalize(arguments ?? new JObject()));
             string registeredHash;
             if (RequestHashes.TryGetValue(requestKey, out registeredHash) && !string.Equals(registeredHash, hash, StringComparison.Ordinal))
             {
@@ -49,7 +51,7 @@ namespace WinsockPacketEditor.Mcp
         {
             if (!Guid.TryParse(idempotencyKey, out _)) throw new InvalidOperationException("A UUID idempotencyKey is required.");
             var requestKey = operation + "\n" + idempotencyKey;
-            var hash = Hash(operation + "\n" + (arguments ?? new JObject()).ToString(Newtonsoft.Json.Formatting.None));
+            var hash = Hash(operation + "\n" + Canonicalize(arguments ?? new JObject()));
             var registeredHash = RequestHashes.GetOrAdd(requestKey, hash);
             if (!string.Equals(registeredHash, hash, StringComparison.Ordinal))
             {
@@ -72,11 +74,13 @@ namespace WinsockPacketEditor.Mcp
         {
             if (!Operate.SystemConfig.McpRequiresConfirmation)
             {
-                var automatic = await apply();
+                JObject automatic;
+                try { automatic = await apply(); }
+                catch (Exception ex) { Record(operation, idempotencyKey, hash, "failed", arguments, new JObject { ["error"] = ex.Message }); throw; }
                 // Keep the public result contract stable; the audit record distinguishes autoApproved.
                 automatic["outcome"] = "approved";
                 automatic["requestHash"] = hash;
-                Completed.TryAdd(requestKey, (JObject)automatic.DeepClone());
+                StoreCompleted(requestKey, automatic);
                 Record(operation, idempotencyKey, hash, "autoApproved", arguments, automatic);
                 return automatic;
             }
@@ -84,7 +88,7 @@ namespace WinsockPacketEditor.Mcp
             if (await Task.WhenAny(confirmation, Task.Delay(TimeSpan.FromSeconds(60))) != confirmation)
             {
                 var expired = new JObject { ["outcome"] = "expired", ["requestHash"] = hash };
-                Completed.TryAdd(requestKey, (JObject)expired.DeepClone());
+                StoreCompleted(requestKey, expired);
                 Record(operation, idempotencyKey, hash, "expired", arguments, null);
                 return expired;
             }
@@ -92,15 +96,17 @@ namespace WinsockPacketEditor.Mcp
             if (!approved)
             {
                 var rejected = new JObject { ["outcome"] = "rejected", ["requestHash"] = hash };
-                Completed.TryAdd(requestKey, (JObject)rejected.DeepClone());
+                StoreCompleted(requestKey, rejected);
                 Record(operation, idempotencyKey, hash, "rejected", arguments, null);
                 return rejected;
             }
 
-            var result = await apply();
+            JObject result;
+            try { result = await apply(); }
+            catch (Exception ex) { Record(operation, idempotencyKey, hash, "failed", arguments, new JObject { ["error"] = ex.Message }); throw; }
             result["outcome"] = "approved";
             result["requestHash"] = hash;
-            Completed.TryAdd(requestKey, (JObject)result.DeepClone());
+            StoreCompleted(requestKey, result);
             Record(operation, idempotencyKey, hash, "approved", arguments, result);
             return result;
         }
@@ -111,14 +117,60 @@ namespace WinsockPacketEditor.Mcp
             while (Audit.Count > AuditLimit) Audit.TryDequeue(out _);
         }
 
+        private static void StoreCompleted(string requestKey, JObject result)
+        {
+            if (!Completed.TryAdd(requestKey, (JObject)result.DeepClone())) return;
+            CompletedOrder.Enqueue(requestKey);
+            while (Completed.Count > IdempotencyCacheLimit && CompletedOrder.TryDequeue(out var oldest))
+            {
+                Completed.TryRemove(oldest, out _);
+                RequestHashes.TryRemove(oldest, out _);
+            }
+        }
+
         private static JObject Redact(JObject value)
         {
-            var copy = value == null ? new JObject() : (JObject)value.DeepClone();
-            foreach (var property in new List<JProperty>(copy.Properties()))
+            return (JObject)RedactToken(value ?? new JObject());
+        }
+
+        private static JToken RedactToken(JToken value)
+        {
+            if (value.Type == JTokenType.Object)
             {
-                if (property.Name.IndexOf("password", StringComparison.OrdinalIgnoreCase) >= 0 || property.Name.IndexOf("token", StringComparison.OrdinalIgnoreCase) >= 0 || property.Name.IndexOf("payload", StringComparison.OrdinalIgnoreCase) >= 0) property.Value = "[redacted]";
+                var result = new JObject();
+                foreach (var property in ((JObject)value).Properties())
+                {
+                    var sensitive = property.Name.IndexOf("password", StringComparison.OrdinalIgnoreCase) >= 0 || property.Name.IndexOf("token", StringComparison.OrdinalIgnoreCase) >= 0 || property.Name.IndexOf("payload", StringComparison.OrdinalIgnoreCase) >= 0;
+                    result[property.Name] = sensitive ? new JValue("[redacted]") : RedactToken(property.Value);
+                }
+                return result;
             }
-            return copy;
+            if (value.Type == JTokenType.Array)
+            {
+                var result = new JArray();
+                foreach (var item in value.Children()) result.Add(RedactToken(item));
+                return result;
+            }
+            return value.DeepClone();
+        }
+
+        private static string Canonicalize(JToken value)
+        {
+            if (value.Type == JTokenType.Object)
+            {
+                var result = new JObject();
+                var properties = new List<JProperty>(((JObject)value).Properties());
+                properties.Sort((left, right) => string.CompareOrdinal(left.Name, right.Name));
+                foreach (var property in properties) result[property.Name] = JToken.Parse(Canonicalize(property.Value));
+                return result.ToString(Newtonsoft.Json.Formatting.None);
+            }
+            if (value.Type == JTokenType.Array)
+            {
+                var result = new JArray();
+                foreach (var item in value.Children()) result.Add(JToken.Parse(Canonicalize(item)));
+                return result.ToString(Newtonsoft.Json.Formatting.None);
+            }
+            return value.ToString(Newtonsoft.Json.Formatting.None);
         }
 
         private static string Hash(string text)

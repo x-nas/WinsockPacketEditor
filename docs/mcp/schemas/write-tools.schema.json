@@ -3,6 +3,9 @@
   "$id": "https://wpe64.com/schemas/mcp/write-tools-v1.json",
   "title": "WPE x64 MCP phase 2 write contracts",
   "tools": {
+    "wpe_filter_delete": { "input": { "type": "object", "required": ["id", "idempotencyKey"], "properties": { "id": { "type": "string", "format": "uuid" }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_filter_update": { "input": { "type": "object", "required": ["filter", "idempotencyKey"], "properties": { "filter": { "type": "object" }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_filter_create": { "input": { "type": "object", "required": ["idempotencyKey"], "properties": { "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
     "wpe_filter_set_enabled": {
       "input": {
         "type": "object",
@@ -32,6 +35,12 @@
         ]
       }
     },
+    "wpe_filters_set_all_enabled": { "input": { "type": "object", "required": ["enabled", "idempotencyKey"], "properties": { "enabled": { "type": "boolean" }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_filter_counts_reset": { "input": { "type": "object", "required": ["idempotencyKey"], "properties": { "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_filters_move": { "input": { "type": "object", "required": ["ids", "direction", "idempotencyKey"], "properties": { "ids": { "type": "array", "minItems": 1, "maxItems": 200, "items": { "type": "string", "format": "uuid" } }, "direction": { "type": "string", "enum": ["top", "up", "down", "bottom"] }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_filters_copy": { "input": { "type": "object", "required": ["ids", "idempotencyKey"], "properties": { "ids": { "type": "array", "minItems": 1, "maxItems": 200, "items": { "type": "string", "format": "uuid" } }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_filters_clear_all": { "input": { "type": "object", "required": ["idempotencyKey"], "properties": { "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_filter_create_from_capture": { "input": { "type": "object", "required": ["packetId", "idempotencyKey"], "properties": { "packetId": { "type": "integer", "minimum": 1 }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
     "wpe_account_set_enabled": {
       "input": {
         "type": "object",
@@ -61,6 +70,9 @@
         ]
       }
     },
+    "wpe_account_create": { "input": { "type": "object", "required": ["userName", "password", "enabled", "limitLinksEnabled", "limitLinks", "limitDevicesEnabled", "limitDevices", "expiryEnabled", "idempotencyKey"], "properties": { "userName": { "type": "string", "minLength": 1, "maxLength": 64 }, "password": { "type": "string", "minLength": 1, "maxLength": 256 }, "enabled": { "type": "boolean" }, "limitLinksEnabled": { "type": "boolean" }, "limitLinks": { "type": "integer", "minimum": 0 }, "limitDevicesEnabled": { "type": "boolean" }, "limitDevices": { "type": "integer", "minimum": 0 }, "expiryEnabled": { "type": "boolean" }, "expiryTime": { "type": ["string", "null"], "format": "date-time" }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_account_update": { "input": { "type": "object", "required": ["id", "enabled", "limitLinksEnabled", "limitLinks", "limitDevicesEnabled", "limitDevices", "expiryEnabled", "idempotencyKey"], "properties": { "id": { "type": "string", "format": "uuid" }, "enabled": { "type": "boolean" }, "limitLinksEnabled": { "type": "boolean" }, "limitLinks": { "type": "integer", "minimum": 0 }, "limitDevicesEnabled": { "type": "boolean" }, "limitDevices": { "type": "integer", "minimum": 0 }, "expiryEnabled": { "type": "boolean" }, "expiryTime": { "type": ["string", "null"], "format": "date-time" }, "password": { "type": ["string", "null"], "maxLength": 256 }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_account_delete": { "input": { "type": "object", "required": ["id", "idempotencyKey"], "properties": { "id": { "type": "string", "format": "uuid" }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
     "wpe_proxy_auth_set_enabled": {
       "input": {
         "type": "object",
@@ -241,6 +253,29 @@
         ]
       }
     },
+    "wpe_send_set_enabled": { "input": { "type": "object", "required": ["id", "enabled", "idempotencyKey"], "properties": { "id": { "type": "string", "format": "uuid" }, "enabled": { "type": "boolean" }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_robot_set_enabled": { "input": { "type": "object", "required": ["id", "enabled", "idempotencyKey"], "properties": { "id": { "type": "string", "format": "uuid" }, "enabled": { "type": "boolean" }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_task_create": { "input": { "type": "object", "required": ["kind", "idempotencyKey"], "properties": { "kind": { "type": "string", "enum": ["send", "robot", "warehouse"] }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_task_update": { "input": { "type": "object", "required": ["kind", "id", "name", "idempotencyKey"], "properties": { "kind": { "type": "string", "enum": ["send", "robot", "warehouse"] }, "id": { "type": "string", "format": "uuid" }, "name": { "type": "string", "minLength": 1, "maxLength": 256 }, "useSystemSocket": { "type": ["boolean", "null"] }, "loopCount": { "type": ["integer", "null"], "minimum": 1 }, "loopInterval": { "type": ["integer", "null"], "minimum": 0 }, "notes": { "type": ["string", "null"], "maxLength": 4096 }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_tasks_move": { "input": { "type": "object", "required": ["kind", "ids", "direction", "idempotencyKey"], "properties": { "kind": { "type": "string", "enum": ["send", "robot", "warehouse"] }, "ids": { "type": "array", "minItems": 1, "maxItems": 200, "items": { "type": "string", "format": "uuid" } }, "direction": { "type": "string", "enum": ["top", "up", "down", "bottom"] }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_tasks_copy": { "input": { "type": "object", "required": ["kind", "ids", "idempotencyKey"], "properties": { "kind": { "type": "string", "enum": ["send", "robot", "warehouse"] }, "ids": { "type": "array", "minItems": 1, "maxItems": 200, "items": { "type": "string", "format": "uuid" } }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_tasks_delete": { "input": { "type": "object", "required": ["kind", "ids", "idempotencyKey"], "properties": { "kind": { "type": "string", "enum": ["send", "robot", "warehouse"] }, "ids": { "type": "array", "minItems": 1, "maxItems": 200, "items": { "type": "string", "format": "uuid" } }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_tasks_clear": { "input": { "type": "object", "required": ["kind", "idempotencyKey"], "properties": { "kind": { "type": "string", "enum": ["send", "robot", "warehouse"] }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_capture_add_to_send": { "input": { "$ref": "#/$defs/captureAdd" }, "output": { "type": "object" } },
+    "wpe_capture_add_to_warehouse": { "input": { "$ref": "#/$defs/captureAdd" }, "output": { "type": "object" } },
+    "wpe_proxy_capture_add_to_send": { "input": { "$ref": "#/$defs/captureAdd" }, "output": { "type": "object" } },
+    "wpe_proxy_capture_add_to_warehouse": { "input": { "$ref": "#/$defs/captureAdd" }, "output": { "type": "object" } },
+    "wpe_send_collection_action": { "input": { "$ref": "#/$defs/sendCollectionAction" }, "output": { "type": "object" } },
+    "wpe_send_collection_clear": { "input": { "$ref": "#/$defs/entityWrite" }, "output": { "type": "object" } },
+    "wpe_robot_instruction_add": { "input": { "type": "object", "required": ["robotId", "type", "content", "insertAt", "idempotencyKey"], "properties": { "robotId": { "type": "string", "format": "uuid" }, "type": { "type": "integer" }, "content": { "type": "string", "maxLength": 4096 }, "insertAt": { "type": "integer", "minimum": -1 }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_robot_instruction_action": { "input": { "type": "object", "required": ["robotId", "indexes", "action", "idempotencyKey"], "properties": { "robotId": { "type": "string", "format": "uuid" }, "indexes": { "type": "array", "maxItems": 200, "items": { "type": "integer", "minimum": 0 } }, "action": { "type": "string", "enum": ["top", "up", "down", "bottom", "delete", "clear"] }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_auto_stores_save": { "input": { "type": "object", "required": ["packetHead", "warehouseId", "idempotencyKey"], "properties": { "id": { "type": ["string", "null"], "format": "uuid" }, "packetHead": { "type": "string", "minLength": 1, "maxLength": 4096 }, "warehouseId": { "type": "string", "format": "uuid" }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_auto_stores_set_enabled": { "input": { "type": "object", "required": ["id", "enabled", "idempotencyKey"], "properties": { "id": { "type": "string", "format": "uuid" }, "enabled": { "type": "boolean" }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_auto_stores_delete": { "input": { "$ref": "#/$defs/entityWrite" }, "output": { "type": "object" } },
+    "wpe_warehouse_stores_action": { "input": { "$ref": "#/$defs/warehouseStoresAction" }, "output": { "type": "object" } },
+    "wpe_warehouse_stores_command": { "input": { "type": "object", "required": ["warehouseId", "action", "idempotencyKey"], "properties": { "warehouseId": { "type": "string", "format": "uuid" }, "action": { "type": "string", "enum": ["import", "export", "clear"] }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_packet_edit_save": { "input": { "$ref": "#/$defs/packetEditSave" }, "output": { "type": "object" } },
+    "wpe_packet_edit_add_to_send": { "input": { "type": "object", "required": ["sendId", "list", "id", "payloadBase64", "idempotencyKey"], "properties": { "sendId": { "type": "string", "format": "uuid" }, "list": { "type": "string", "enum": ["proxy", "packet"] }, "id": { "type": "integer", "minimum": 1 }, "payloadBase64": { "type": "string", "minLength": 1, "maxLength": 1398104 }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
     "wpe_start_mode_select": {
       "input": {
         "type": "object",
@@ -251,25 +286,15 @@
         },
         "additionalProperties": false
       },
-      "output": {
-        "oneOf": [
-          {
-            "type": "object",
-            "required": ["changed", "mode", "outcome", "requestHash"],
-            "properties": {
-              "changed": { "type": "boolean", "const": true },
-              "mode": { "type": "string", "enum": ["proxy", "inject"] },
-              "outcome": { "type": "string", "const": "approved" },
-              "requestHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
-            },
-            "additionalProperties": false
-          },
-          { "$ref": "#/$defs/notApplied" }
-        ]
-      }
+          "output": { "type": "object" }
     }
   },
   "$defs": {
+    "entityWrite": { "type": "object", "required": ["id", "idempotencyKey"], "properties": { "id": { "type": "string", "format": "uuid" }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false },
+    "sendCollectionAction": { "type": "object", "required": ["sendId", "packetIds", "action", "idempotencyKey"], "properties": { "sendId": { "type": "string", "format": "uuid" }, "packetIds": { "type": "array", "minItems": 1, "maxItems": 200, "items": { "type": "string", "minLength": 1 } }, "action": { "type": "string", "enum": ["top", "up", "down", "bottom", "copy", "delete"] }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false },
+    "warehouseStoresAction": { "type": "object", "required": ["warehouseId", "storeIds", "action", "idempotencyKey"], "properties": { "warehouseId": { "type": "string", "format": "uuid" }, "storeIds": { "type": "array", "minItems": 1, "maxItems": 200, "items": { "type": "string", "minLength": 1 } }, "action": { "type": "string", "enum": ["top", "up", "down", "bottom", "copy", "export", "delete"] }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false },
+    "packetEditSave": { "type": "object", "required": ["list", "id", "socket", "payloadBase64", "idempotencyKey"], "properties": { "list": { "type": "string", "enum": ["proxy", "packet"] }, "id": { "type": "integer", "minimum": 1 }, "socket": { "type": "integer" }, "payloadBase64": { "type": "string", "minLength": 1, "maxLength": 1398104 }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false },
+    "captureAdd": { "type": "object", "required": ["targetId", "packetIds", "idempotencyKey"], "properties": { "targetId": { "type": "string", "format": "uuid" }, "packetIds": { "type": "array", "minItems": 1, "maxItems": 200, "items": { "type": "integer", "minimum": 1 } }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false },
     "notApplied": {
       "type": "object",
       "required": ["outcome", "requestHash"],

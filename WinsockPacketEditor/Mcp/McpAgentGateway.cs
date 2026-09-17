@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Globalization;
 using System.Security.AccessControl;
 using System.Security.Principal;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,6 +22,9 @@ namespace WinsockPacketEditor.Mcp
     internal sealed class McpAgentGateway : IDisposable
     {
         private const int MaxFrameBytes = 1024 * 1024;
+        // Connection ids are only stable for this WPE process. The random salt keeps
+        // account/IP/device tuples from becoming externally meaningful identifiers.
+        private static readonly string connectionIdSalt = Guid.NewGuid().ToString("N");
         private readonly CancellationTokenSource cancellation = new CancellationTokenSource();
         private readonly int processId = Process.GetCurrentProcess().Id;
         // The name is an unguessable capability; it is disclosed only through the
@@ -67,7 +72,11 @@ namespace WinsockPacketEditor.Mcp
                     }
                 }
                 catch (OperationCanceledException) { return; }
-                catch (Exception ex) { Operate.DoLog("McpAgentGateway", ex); }
+                // A stdio MCP client may terminate while a pipe connection is being
+                // established or while its process is being torn down.  That is a
+                // normal peer disconnect, not a WPE system error.
+                catch (EndOfStreamException) { }
+                catch (Exception) { /* MCP 工具错误会在 ServeAsync 中写入专用 MCP 日志。 */ }
             }
         }
 
@@ -91,16 +100,32 @@ namespace WinsockPacketEditor.Mcp
             JObject response;
             try
             {
+                var result = await DispatchAsync(operation, request["arguments"] as JObject).ConfigureAwait(false);
                 response = new JObject
                 {
                     ["requestId"] = requestId,
                     ["ok"] = true,
-                    ["result"] = await DispatchAsync(operation, request["arguments"] as JObject).ConfigureAwait(false)
+                    ["result"] = result
                 };
+                var outcome = (string)(result as JObject)?["outcome"];
+                var changed = (bool?)(result as JObject)?["changed"];
+                var message = string.IsNullOrEmpty(outcome) ? "调用结果：成功。"
+                    : "调用结果：" + outcome + (changed.HasValue ? (changed.Value ? "，已变更。" : "，无需变更。") : "。");
+                // 写入守卫已经把审计原始记录保存在内存中；界面日志只展示人能读懂的
+                // 审计结论，并与该次调用结果合并成一行，避免一项操作占两行。
+                if (outcome == "approved")
+                {
+                    message += Operate.SystemConfig.McpRequiresConfirmation
+                        ? " 审计结果：已本地确认并完成。"
+                        : " 审计结果：已自动确认并完成。";
+                }
+                else if (outcome == "rejected") message += " 审计结果：本地用户已拒绝。";
+                else if (outcome == "expired") message += " 审计结果：等待本地确认超时。";
+                McpLog.Write(McpLog.ToolName(operation), message);
             }
             catch (Exception ex)
             {
-                Operate.DoLog("McpAgentGateway." + operation, ex);
+                McpLog.Error(McpLog.ToolName(operation), ex);
                 response = new JObject { ["requestId"] = requestId, ["ok"] = false, ["error"] = "WPE gateway request failed." };
             }
             await WriteFrameAsync(stream, Encoding.UTF8.GetBytes(response.ToString(Formatting.None)), token).ConfigureAwait(false);
@@ -113,7 +138,9 @@ namespace WinsockPacketEditor.Mcp
                 return ReadOnUi(() => new JObject
                 {
                     ["version"] = Operate.SystemConfig.AssemblyVersion,
-                    ["mode"] = Operate.ProxyConfig.Proxy.IsRunning ? "proxy" : "idle",
+                    // 模式和监听器生命周期是两件事：进入代理页面后可以尚未启动 SOCKS5 监听。
+                    ["mode"] = Operate.SystemConfig.SelectMode == Operate.SystemConfig.SystemMode.Proxy ? "proxy"
+                        : Operate.SystemConfig.SelectMode == Operate.SystemConfig.SystemMode.Inject ? "inject" : "start",
                     ["proxyRunning"] = Operate.ProxyConfig.Proxy.IsRunning,
                     ["captured"] = Operate.PacketConfig.Packet.TotalPackets,
                     ["proxyConnections"] = Operate.ProxyConfig.Proxy.SessionCount
@@ -121,14 +148,22 @@ namespace WinsockPacketEditor.Mcp
             }
             if (operation == "capture.search") return ReadOnUi(() => SearchPackets(arguments));
             if (operation == "capture.get") return ReadOnUi(() => GetPacket(arguments));
+            if (operation == "capture.findNext") return ReadOnUi(() => FindNextCapture(arguments));
             if (operation == "logs.list") return ReadOnUi(() => ListLogs(arguments));
             if (operation == "filters.list") return ReadOnUi(() => ListFilters(arguments));
+            if (operation == "filters.get") return ReadOnUi(() => GetFilter(arguments));
+            if (operation == "filters.stats.get") return ReadOnUi(() => GetFilterStats(arguments));
             if (operation == "accounts.list") return ReadOnUi(() => ListAccounts(arguments));
+            if (operation == "accounts.get") return ReadOnUi(() => GetAccount(arguments));
+            if (operation == "accounts.logins.list") return ReadOnUi(() => ListAccountLogins(arguments));
             if (operation == "connections.list") return ReadOnUi(() => ListConnections(arguments));
+            if (operation == "connections.get") return ReadOnUi(() => GetConnection(arguments));
             if (operation == "executors.list") return ReadOnUi(ListExecutors);
             if (operation == "firewall.get") return ReadOnUi(GetFirewall);
             if (operation == "firewall.rules.list") return ReadOnUi(() => ListFirewallRules(arguments));
             if (operation == "proxy.settings.get") return ReadOnUi(GetProxySettings);
+            if (operation == "proxy.config.get") return ReadOnUi(GetProxyConfig);
+            if (operation == "proxy.capabilities.get") return ReadOnUi(GetProxyCapabilities);
             if (operation == "proxy.runtime.get") return ReadOnUi(GetProxyRuntime);
             if (operation == "connections.summary.get") return ReadOnUi(GetConnectionsSummary);
             if (operation == "proxy.failures.list") return ReadOnUi(() => ListProxyFailures(arguments));
@@ -138,13 +173,34 @@ namespace WinsockPacketEditor.Mcp
             if (operation == "bytes.transcode") return BytesTranscode(arguments);
             if (operation == "bytes.compare") return BytesCompare(arguments);
             if (operation == "bytes.extract") return BytesExtract(arguments);
+            if (operation == "sends.list") return ReadOnUi(() => ListSends(arguments));
+            if (operation == "sends.get") return ReadOnUi(() => GetSend(arguments));
+            if (operation == "sends.collection.list") return ReadOnUi(() => ListSendCollection(arguments));
+            if (operation == "robots.list") return ReadOnUi(() => ListRobots(arguments));
+            if (operation == "robots.get") return ReadOnUi(() => GetRobot(arguments));
+            if (operation == "warehouses.list") return ReadOnUi(() => ListWarehouses(arguments));
+            if (operation == "warehouses.get") return ReadOnUi(() => GetWarehouse(arguments));
+            if (operation == "autoStores.list") return ReadOnUi(ListAutoStores);
+            if (operation == "packet.edit.get") return ReadOnUi(() => GetPacketEdit(arguments));
             throw new InvalidOperationException("The requested MCP operation is not available in phase 1.");
         }
 
         private static Task<JToken> DispatchAsync(string operation, JObject arguments)
         {
             if (operation == "filters.setEnabled") return SetFilterEnabledAsync(arguments);
+            if (operation == "filters.setAllEnabled") return SetAllFiltersEnabledAsync(arguments);
+            if (operation == "filters.counts.reset") return ResetFilterCountsAsync(arguments);
+            if (operation == "filters.move") return MoveFiltersAsync(arguments);
+            if (operation == "filters.copy") return CopyFiltersAsync(arguments);
+            if (operation == "filters.clearAll") return ClearAllFiltersAsync(arguments);
+            if (operation == "filters.createFromCapture") return CreateFilterFromCaptureAsync(arguments);
+            if (operation == "filters.create") return CreateFilterAsync(arguments);
+            if (operation == "filters.update") return UpdateFilterAsync(arguments);
+            if (operation == "filters.delete") return DeleteFilterAsync(arguments);
             if (operation == "accounts.setEnabled") return SetAccountEnabledAsync(arguments);
+            if (operation == "accounts.create") return CreateAccountAsync(arguments);
+            if (operation == "accounts.update") return UpdateAccountAsync(arguments);
+            if (operation == "accounts.delete") return DeleteAccountAsync(arguments);
             if (operation == "proxy.auth.setEnabled") return SetProxyAuthEnabledAsync(arguments);
             if (operation == "proxy.http.setEnabled") return SetProxyHttpEnabledAsync(arguments);
             if (operation == "proxy.maxConnections.set") return SetProxyMaxConnectionsAsync(arguments);
@@ -160,7 +216,445 @@ namespace WinsockPacketEditor.Mcp
             if (operation == "start.mode.select") return SelectStartModeAsync(arguments);
             if (operation == "firewall.rule.add") return AddFirewallRuleAsync(arguments);
             if (operation == "firewall.rule.remove") return RemoveFirewallRuleAsync(arguments);
+            if (operation == "sends.setEnabled") return SetTaskEnabledAsync("send", arguments);
+            if (operation == "robots.setEnabled") return SetTaskEnabledAsync("robot", arguments);
+            if (operation == "tasks.create") return CreateTaskAsync(arguments);
+            if (operation == "tasks.update") return UpdateTaskAsync(arguments);
+            if (operation == "tasks.move" || operation == "tasks.copy" || operation == "tasks.delete") return TaskListActionAsync(operation, arguments);
+            if (operation == "tasks.clear") return ClearTasksAsync(arguments);
+            if (operation == "capture.addToSend") return AddCaptureAsync("capture.addToSend", true, false, arguments);
+            if (operation == "capture.addToWarehouse") return AddCaptureAsync("capture.addToWarehouse", false, false, arguments);
+            if (operation == "proxyCapture.addToSend") return AddCaptureAsync("proxyCapture.addToSend", true, true, arguments);
+            if (operation == "proxyCapture.addToWarehouse") return AddCaptureAsync("proxyCapture.addToWarehouse", false, true, arguments);
+            if (operation == "sends.collection.action") return SendCollectionActionAsync(arguments);
+            if (operation == "sends.collection.clear") return ClearSendCollectionAsync(arguments);
+            if (operation == "robots.instructions.add") return AddRobotInstructionAsync(arguments);
+            if (operation == "robots.instructions.action") return RobotInstructionActionAsync(arguments);
+            if (operation == "autoStores.save") return SaveAutoStoresAsync(arguments);
+            if (operation == "autoStores.setEnabled") return SetAutoStoresEnabledAsync(arguments);
+            if (operation == "autoStores.delete") return DeleteAutoStoresAsync(arguments);
+            if (operation == "warehouses.stores.action") return WarehouseStoresActionAsync(arguments);
+            if (operation == "warehouses.stores.command") return WarehouseStoresCommandAsync(arguments);
+            if (operation == "packet.edit.save") return SavePacketEditAsync(arguments);
+            if (operation == "packet.edit.addToSend") return AddPacketEditToSendAsync(arguments);
             return Task.FromResult(Dispatch(operation, arguments));
+        }
+
+        private static int PageLimit(JObject arguments) { return Math.Max(1, Math.Min(200, (int?)arguments?["limit"] ?? 50)); }
+        private static string RequireGuidId(JObject arguments)
+        {
+            var id = (string)arguments?["id"];
+            if (!Guid.TryParse(id, out _)) throw new InvalidOperationException("A task GUID id is required.");
+            return id;
+        }
+        private static JObject Page(JArray rows, int total, int offset)
+        {
+            return new JObject { ["rows"] = rows, ["nextCursor"] = NextCursor(offset, rows.Count, offset + rows.Count < total) };
+        }
+        private static JObject ListSends(JObject a)
+        {
+            var offset = ReadOffset(a); var limit = PageLimit(a); var rows = new JArray(); var list = Operate.SendConfig.List.lstSendInfo;
+            for (var i = offset; i < list.Count && rows.Count < limit; i++) rows.Add(JObject.FromObject(SendRow.From_(list[i])));
+            return Page(rows, list.Count, offset);
+        }
+        private static JObject GetSend(JObject a)
+        {
+            var row = Operate.SendConfig.Send.OpenSendEdit_ById(RequireGuidId(a));
+            try { if (string.IsNullOrEmpty(row.Id)) throw new InvalidOperationException("The send task does not exist."); return JObject.FromObject(row); }
+            finally { Operate.SendConfig.Send.CloseSendEdit(); }
+        }
+        private static JObject ListSendCollection(JObject a)
+        {
+            var id = RequireGuidId(a); var offset = ReadOffset(a); var limit = PageLimit(a); var edit = Operate.SendConfig.Send.OpenSendEdit_ById(id);
+            try
+            {
+                if (string.IsNullOrEmpty(edit.Id)) throw new InvalidOperationException("The send task does not exist.");
+                var source = Operate.SendConfig.Send.GetSendCollectionRows(); var rows = new JArray();
+                for (var i = offset; i < source.Length && rows.Count < limit; i++) rows.Add(JObject.FromObject(source[i]));
+                return Page(rows, source.Length, offset);
+            }
+            finally { Operate.SendConfig.Send.CloseSendEdit(); }
+        }
+        private static JObject ListRobots(JObject a)
+        {
+            var offset = ReadOffset(a); var limit = PageLimit(a); var rows = new JArray(); var list = Operate.RobotConfig.List.lstRobotInfo;
+            for (var i = offset; i < list.Count && rows.Count < limit; i++) rows.Add(JObject.FromObject(RobotRow.From_(list[i])));
+            return Page(rows, list.Count, offset);
+        }
+        private static JObject GetRobot(JObject a)
+        {
+            var edit = Operate.RobotConfig.Robot.OpenRobotEdit_ById(RequireGuidId(a));
+            try
+            {
+                if (string.IsNullOrEmpty(edit.Id)) throw new InvalidOperationException("The robot task does not exist.");
+                return new JObject { ["id"] = edit.Id, ["name"] = edit.Name, ["instructions"] = JArray.FromObject(Operate.RobotConfig.Robot.GetRobotInstructionRows()) };
+            }
+            finally { Operate.RobotConfig.Robot.CloseRobotEdit(); }
+        }
+        private static JObject ListWarehouses(JObject a)
+        {
+            var offset = ReadOffset(a); var limit = PageLimit(a); var rows = new JArray(); var list = Operate.WareHouseConfig.List.lstWareHouseInfo;
+            for (var i = offset; i < list.Count && rows.Count < limit; i++) rows.Add(JObject.FromObject(WareHouseRow.From_(list[i])));
+            return Page(rows, list.Count, offset);
+        }
+        private static JObject GetWarehouse(JObject a)
+        {
+            var id = RequireGuidId(a); var warehouse = Operate.WareHouseConfig.List.OpenWareHouseEdit_ById(id);
+            if (string.IsNullOrEmpty(warehouse.Id)) throw new InvalidOperationException("The warehouse does not exist.");
+            var all = Operate.WareHouseConfig.List.GetStoreRows_ById(id); var offset = ReadOffset(a); var limit = PageLimit(a); var rows = new JArray();
+            for (var i = offset; i < all.Length && rows.Count < limit; i++) rows.Add(JObject.FromObject(all[i]));
+            return new JObject { ["id"] = warehouse.Id, ["name"] = warehouse.Name, ["dataCount"] = warehouse.DataCount, ["rows"] = rows, ["nextCursor"] = NextCursor(offset, rows.Count, offset + rows.Count < all.Length) };
+        }
+        private static JObject ListAutoStores()
+        {
+            var rows = new JArray();
+            foreach (var rule in Operate.WareHouseConfig.List.lstAutoStoresInfo) rows.Add(JObject.FromObject(AutoStoresRow.From_(rule)));
+            return new JObject { ["rows"] = rows };
+        }
+        private static JObject GetPacketEdit(JObject a)
+        {
+            var list = ReadEditablePacketList((string)a?["list"]); var id = (long?)a?["id"];
+            if (!id.HasValue || id.Value < 1) throw new InvalidOperationException("A positive packet id is required.");
+            var row = Operate.PacketEditConfig.Open(list, id.Value);
+            if (string.IsNullOrEmpty(row.Id)) throw new InvalidOperationException("The packet no longer exists.");
+            var result = JObject.FromObject(row);
+            // Never emit the same bytes twice under two casing conventions. MCP uses
+            // an explicit payload name, while the in-process DTO keeps its UI field.
+            result.Remove("Buffer");
+            result["payloadBase64"] = Convert.ToBase64String(row.Buffer ?? new byte[0]);
+            return result;
+        }
+
+        private static string ReadTaskKind(JObject a)
+        {
+            var kind = ((string)a?["kind"] ?? string.Empty).Trim().ToLowerInvariant();
+            if (kind != "send" && kind != "robot" && kind != "warehouse") throw new InvalidOperationException("kind must be send, robot, or warehouse.");
+            return kind;
+        }
+        private static IList<string> ReadTaskIds(JObject a)
+        {
+            var result = new List<string>(); var values = a?["ids"] as JArray;
+            if (values == null) throw new InvalidOperationException("At least one task id is required.");
+            foreach (var value in values) { var id = (string)value; if (Guid.TryParse(id, out _)) result.Add(id); else throw new InvalidOperationException("Each task id must be a GUID."); }
+            if (result.Count == 0) throw new InvalidOperationException("At least one task id is required."); return result;
+        }
+        private static async Task<JToken> SetTaskEnabledAsync(string kind, JObject a)
+        {
+            var id = RequireGuidId(a); var enabled = (bool?)a?["enabled"]; if (!enabled.HasValue) throw new InvalidOperationException("A boolean enabled value is required.");
+            var key = (string)a?["idempotencyKey"]; var op = kind == "send" ? "sends.setEnabled" : "robots.setEnabled"; JObject prior;
+            if (McpWriteGuard.TryGetCompleted(op, key, a, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync(op, key, a, (enabled.Value ? "启用" : "停用") + (kind == "send" ? "发送任务。" : "机器人任务。"), () =>
+            {
+                object current = kind == "send" ? (object)Operate.SendConfig.List.FindSend_ById(id) : Operate.RobotConfig.List.FindRobot_ById(id);
+                if (current == null) throw new InvalidOperationException("The task no longer exists.");
+                var already = kind == "send" ? ((SendInfo)current).IsEnable == enabled.Value : ((RobotInfo)current).IsEnable == enabled.Value;
+                if (already) return new JObject { ["id"] = id, ["enabled"] = enabled.Value, ["changed"] = false };
+                var changed = kind == "send" ? Operate.SendConfig.List.SetSendEnable_ById(id, enabled.Value) : Operate.RobotConfig.List.SetRobotEnable_ById(id, enabled.Value);
+                if (!changed) throw new InvalidOperationException("The task no longer exists."); return new JObject { ["id"] = id, ["enabled"] = enabled.Value, ["changed"] = true };
+            })).ConfigureAwait(false);
+        }
+        private static async Task<JToken> CreateTaskAsync(JObject a)
+        {
+            var kind = ReadTaskKind(a); var key = (string)a?["idempotencyKey"]; JObject prior; if (McpWriteGuard.TryGetCompleted("tasks.create", key, a, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("tasks.create", key, a, "新建一个空白" + kind + "任务；不会启动执行器或发送封包。", () =>
+            {
+                var id = kind == "send" ? Operate.SendConfig.List.AddSend_New_ById() : kind == "robot" ? Operate.RobotConfig.List.AddRobot_New_ById() : Operate.WareHouseConfig.List.AddWareHouse_New_ById();
+                if (string.IsNullOrEmpty(id)) throw new InvalidOperationException("Unable to create the task."); return new JObject { ["kind"] = kind, ["id"] = id, ["changed"] = true };
+            })).ConfigureAwait(false);
+        }
+        private static async Task<JToken> UpdateTaskAsync(JObject a)
+        {
+            var kind = ReadTaskKind(a); var id = RequireGuidId(a); var name = (string)a?["name"]; if (string.IsNullOrWhiteSpace(name)) throw new InvalidOperationException("A non-empty name is required.");
+            var key = (string)a?["idempotencyKey"]; JObject prior; if (McpWriteGuard.TryGetCompleted("tasks.update", key, a, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("tasks.update", key, a, "更新" + kind + "任务“" + name.Trim() + "”；不会启动执行器或发送封包。", () =>
+            {
+                string error;
+                if (kind == "send") { var current = Operate.SendConfig.Send.OpenSendEdit_ById(id); try { if (string.IsNullOrEmpty(current.Id)) throw new InvalidOperationException("The task no longer exists."); error = Operate.SendConfig.Send.SaveSendEdit(name, (bool?)a?["useSystemSocket"] ?? current.UseSystemSocket, (int?)a?["loopCount"] ?? current.LoopCount, (int?)a?["loopInterval"] ?? current.LoopInterval, (string)a?["notes"] ?? current.Notes); } finally { Operate.SendConfig.Send.CloseSendEdit(); } }
+                else if (kind == "robot") { var current = Operate.RobotConfig.Robot.OpenRobotEdit_ById(id); try { if (string.IsNullOrEmpty(current.Id)) throw new InvalidOperationException("The task no longer exists."); error = Operate.RobotConfig.Robot.SaveRobotEdit(name); } finally { Operate.RobotConfig.Robot.CloseRobotEdit(); } }
+                else error = Operate.WareHouseConfig.List.SaveWareHouseName_ById(id, name);
+                if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error); return new JObject { ["kind"] = kind, ["id"] = id, ["changed"] = true };
+            })).ConfigureAwait(false);
+        }
+        private static int ReadTaskAction(string direction)
+        {
+            switch ((direction ?? string.Empty).Trim().ToLowerInvariant())
+            {
+                case "top": return 0; case "up": return 1; case "down": return 2; case "bottom": return 3; case "copy": return 4; case "delete": return 6;
+                default: throw new InvalidOperationException("direction must be top, up, down, bottom, copy, or delete.");
+            }
+        }
+        private static async Task<JToken> TaskListActionAsync(string operation, JObject a)
+        {
+            var kind = ReadTaskKind(a); var ids = ReadTaskIds(a); var action = ReadTaskAction((string)a?["direction"]); var key = (string)a?["idempotencyKey"]; JObject prior;
+            if (McpWriteGuard.TryGetCompleted(operation, key, a, out prior)) return prior;
+            var verb = action == 4 ? "复制" : action == 6 ? "删除" : "调整顺序";
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync(operation, key, a, verb + "选中的" + kind + "任务；不会启动执行器或发送封包。", async () =>
+            {
+                var before = kind == "send" ? Operate.SendConfig.List.lstSendInfo.Count : kind == "robot" ? Operate.RobotConfig.List.lstRobotInfo.Count : Operate.WareHouseConfig.List.lstWareHouseInfo.Count;
+                var delta = kind == "send" ? await Operate.SendConfig.List.SendListAction_ByIds(action, ids) : kind == "robot" ? await Operate.RobotConfig.List.RobotListAction_ByIds(action, ids) : await Operate.WareHouseConfig.List.WareHouseListAction_ByIds(action, ids);
+                var after = kind == "send" ? Operate.SendConfig.List.lstSendInfo.Count : kind == "robot" ? Operate.RobotConfig.List.lstRobotInfo.Count : Operate.WareHouseConfig.List.lstWareHouseInfo.Count;
+                return new JObject { ["kind"] = kind, ["changed"] = action < 4 ? true : before != after, ["delta"] = delta, ["count"] = after };
+            })).ConfigureAwait(false);
+        }
+        private static async Task<JToken> ClearTasksAsync(JObject a)
+        {
+            var kind = ReadTaskKind(a); var key = (string)a?["idempotencyKey"]; JObject prior; if (McpWriteGuard.TryGetCompleted("tasks.clear", key, a, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("tasks.clear", key, a, "清空全部" + kind + "任务；不会启动执行器或发送封包。", async () =>
+            {
+                var before = kind == "send" ? Operate.SendConfig.List.lstSendInfo.Count : kind == "robot" ? Operate.RobotConfig.List.lstRobotInfo.Count : Operate.WareHouseConfig.List.lstWareHouseInfo.Count;
+                if (kind == "send") await Operate.SendConfig.List.CleanUpSendList_Dialog_Shell();
+                else if (kind == "robot") await Operate.RobotConfig.List.CleanUpRobotList_Dialog_Shell();
+                else await Operate.WareHouseConfig.List.CleanUpWareHouseList_Dialog_Shell();
+                var after = kind == "send" ? Operate.SendConfig.List.lstSendInfo.Count : kind == "robot" ? Operate.RobotConfig.List.lstRobotInfo.Count : Operate.WareHouseConfig.List.lstWareHouseInfo.Count;
+                return new JObject { ["kind"] = kind, ["changed"] = before != after, ["removed"] = before - after };
+            })).ConfigureAwait(false);
+        }
+        private static async Task<JToken> AddCaptureAsync(string operation, bool send, bool proxy, JObject a)
+        {
+            var target = (string)a?["targetId"]; if (!Guid.TryParse(target, out _)) throw new InvalidOperationException("A target task GUID is required.");
+            var values = a?["packetIds"] as JArray; if (values == null || values.Count == 0) throw new InvalidOperationException("At least one packet id is required.");
+            var ids = new List<long>(); foreach (var value in values) { var id = (long?)value; if (!id.HasValue || id.Value < 1) throw new InvalidOperationException("Each packet id must be positive."); ids.Add(id.Value); }
+            var key = (string)a?["idempotencyKey"]; JObject prior; if (McpWriteGuard.TryGetCompleted(operation, key, a, out prior)) return prior;
+            var what = proxy ? "代理捕获封包" : "捕获封包"; var targetKind = send ? "发送任务" : "仓库";
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync(operation, key, a, "将 " + ids.Count + " 条" + what + "加入" + targetKind + "；不会启动执行器或发送封包。", () =>
+            {
+                var count = proxy ? (send ? Operate.ProxyConfig.List.AddToSend_ByProxyIds(target, ids) : Operate.ProxyConfig.List.AddToWareHouse_ByProxyIds(target, ids)) : (send ? Operate.PacketConfig.List.AddToSend_ByPacketIds(target, ids) : Operate.PacketConfig.List.AddToWareHouse_ByPacketIds(target, ids));
+                return new JObject { ["targetId"] = target, ["requested"] = ids.Count, ["added"] = count, ["changed"] = count > 0 };
+            })).ConfigureAwait(false);
+        }
+
+        private static string ReadEditablePacketList(string value)
+        {
+            value = (value ?? string.Empty).Trim().ToLowerInvariant();
+            if (value != Operate.PacketEditConfig.ListProxy && value != Operate.PacketEditConfig.ListPacket)
+                throw new InvalidOperationException("list must be proxy or packet; send collections are edited through their dedicated tools.");
+            return value;
+        }
+        private static byte[] ReadPacketBytes(JObject a)
+        {
+            var text = (string)a?["payloadBase64"];
+            if (string.IsNullOrWhiteSpace(text)) throw new InvalidOperationException("payloadBase64 is required.");
+            try { var bytes = Convert.FromBase64String(text); if (bytes.Length == 0 || bytes.Length > MaxFrameBytes) throw new InvalidOperationException("Payload size is out of range."); return bytes; }
+            catch (FormatException) { throw new InvalidOperationException("payloadBase64 must be valid Base64."); }
+        }
+        private static int ReadCollectionAction(string value, bool export)
+        {
+            switch ((value ?? string.Empty).Trim().ToLowerInvariant())
+            {
+                case "top": return 0; case "up": return 1; case "down": return 2; case "bottom": return 3;
+                case "copy": return 4; case "delete": return 6; case "clear": return 7;
+                case "export": if (export) return 5; break;
+            }
+            throw new InvalidOperationException(export ? "action must be top, up, down, bottom, copy, export, or delete." : "action must be top, up, down, bottom, copy, or delete.");
+        }
+        private static IList<string> ReadCollectionIds(JObject a, string name)
+        {
+            var values = a?[name] as JArray; if (values == null || values.Count == 0 || values.Count > 200) throw new InvalidOperationException(name + " must contain between 1 and 200 ids.");
+            var result = new List<string>(); var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var value in values) { var id = ((string)value ?? string.Empty).Trim(); if (id.Length == 0) throw new InvalidOperationException("Every id must be non-empty."); if (seen.Add(id)) result.Add(id); }
+            return result;
+        }
+        private static async Task<JToken> SendCollectionActionAsync(JObject a)
+        {
+            var id = RequireGuidId(new JObject { ["id"] = a?["sendId"] }); var ids = ReadCollectionIds(a, "packetIds"); var action = ReadCollectionAction((string)a?["action"], false); var key = (string)a?["idempotencyKey"]; JObject prior;
+            if (McpWriteGuard.TryGetCompleted("sends.collection.action", key, a, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("sends.collection.action", key, a, "编辑发送任务的 " + ids.Count + " 条封包；不会启动发送器。", async () =>
+            {
+                var edit = Operate.SendConfig.Send.OpenSendEdit_ById(id); try { if (string.IsNullOrEmpty(edit.Id)) throw new InvalidOperationException("The send task no longer exists."); var before = Operate.SendConfig.Send.GetSendCollectionRows().Length; var delta = await Operate.SendConfig.Send.SendCollectionAction_ByIds(action, ids); var error = Operate.SendConfig.Send.SaveSendEdit(edit.Name, edit.UseSystemSocket, edit.LoopCount, edit.LoopInterval, edit.Notes); if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error); return new JObject { ["sendId"] = id, ["delta"] = delta, ["count"] = Operate.SendConfig.Send.GetSendCollectionRows().Length, ["changed"] = before != Operate.SendConfig.Send.GetSendCollectionRows().Length || action < 4 }; } finally { Operate.SendConfig.Send.CloseSendEdit(); }
+            })).ConfigureAwait(false);
+        }
+        private static async Task<JToken> ClearSendCollectionAsync(JObject a)
+        {
+            var id = RequireGuidId(a); var key = (string)a?["idempotencyKey"]; JObject prior; if (McpWriteGuard.TryGetCompleted("sends.collection.clear", key, a, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("sends.collection.clear", key, a, "清空该发送任务的全部封包；不会启动发送器。", async () =>
+            { var edit = Operate.SendConfig.Send.OpenSendEdit_ById(id); try { if (string.IsNullOrEmpty(edit.Id)) throw new InvalidOperationException("The send task no longer exists."); var before = Operate.SendConfig.Send.GetSendCollectionRows().Length; await Operate.SendConfig.Send.ClearSendCollection_Dialog_Shell(); var error = Operate.SendConfig.Send.SaveSendEdit(edit.Name, edit.UseSystemSocket, edit.LoopCount, edit.LoopInterval, edit.Notes); if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error); return new JObject { ["sendId"] = id, ["removed"] = before - Operate.SendConfig.Send.GetSendCollectionRows().Length, ["changed"] = before != Operate.SendConfig.Send.GetSendCollectionRows().Length }; } finally { Operate.SendConfig.Send.CloseSendEdit(); } })).ConfigureAwait(false);
+        }
+        private static async Task<JToken> AddRobotInstructionAsync(JObject a)
+        {
+            var id = (string)a?["robotId"]; if (!Guid.TryParse(id, out _)) throw new InvalidOperationException("A robot GUID id is required."); var type = (int?)a?["type"]; if (!type.HasValue) throw new InvalidOperationException("type is required."); var key = (string)a?["idempotencyKey"]; JObject prior; if (McpWriteGuard.TryGetCompleted("robots.instructions.add", key, a, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("robots.instructions.add", key, a, "向机器人任务添加一条指令；不会启动机器人。", () => { var edit = Operate.RobotConfig.Robot.OpenRobotEdit_ById(id); try { if (string.IsNullOrEmpty(edit.Id)) throw new InvalidOperationException("The robot task no longer exists."); var error = Operate.RobotConfig.Robot.AddRobotInstruction_Edit(type.Value, (string)a?["content"], (int?)a?["insertAt"] ?? -1); if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error); error = Operate.RobotConfig.Robot.SaveRobotEdit(edit.Name); if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error); return new JObject { ["robotId"] = id, ["changed"] = true }; } finally { Operate.RobotConfig.Robot.CloseRobotEdit(); } })).ConfigureAwait(false);
+        }
+        private static async Task<JToken> RobotInstructionActionAsync(JObject a)
+        {
+            var id = (string)a?["robotId"]; if (!Guid.TryParse(id, out _)) throw new InvalidOperationException("A robot GUID id is required."); var action = ReadCollectionAction((string)a?["action"], false); if (action == 4) throw new InvalidOperationException("Robot instructions cannot be copied."); var values = a?["indexes"] as JArray; if (values == null) throw new InvalidOperationException("indexes is required."); var indexes = new List<int>(); foreach (var value in values) { var n = (int?)value; if (!n.HasValue || n.Value < 0) throw new InvalidOperationException("Every index must be non-negative."); indexes.Add(n.Value); } if (action != 7 && indexes.Count == 0) throw new InvalidOperationException("At least one index is required."); var key = (string)a?["idempotencyKey"]; JObject prior; if (McpWriteGuard.TryGetCompleted("robots.instructions.action", key, a, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("robots.instructions.action", key, a, "编辑机器人任务的指令；不会启动机器人。", async () => { var edit = Operate.RobotConfig.Robot.OpenRobotEdit_ById(id); try { if (string.IsNullOrEmpty(edit.Id)) throw new InvalidOperationException("The robot task no longer exists."); var delta = await Operate.RobotConfig.Robot.RobotInstructionAction_ByIndexes(action, indexes); var error = Operate.RobotConfig.Robot.SaveRobotEdit(edit.Name); if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error); return new JObject { ["robotId"] = id, ["delta"] = delta, ["changed"] = action < 4 || delta != 0 }; } finally { Operate.RobotConfig.Robot.CloseRobotEdit(); } })).ConfigureAwait(false);
+        }
+        private static async Task<JToken> SaveAutoStoresAsync(JObject a)
+        {
+            var id = (string)a?["id"] ?? string.Empty; var warehouse = (string)a?["warehouseId"]; if (!Guid.TryParse(warehouse, out _)) throw new InvalidOperationException("warehouseId must be a GUID."); var head = (string)a?["packetHead"]; if (string.IsNullOrWhiteSpace(head)) throw new InvalidOperationException("packetHead is required."); var key = (string)a?["idempotencyKey"]; JObject prior; if (McpWriteGuard.TryGetCompleted("autoStores.save", key, a, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("autoStores.save", key, a, string.IsNullOrEmpty(id) ? "新增一条自动入库规则（默认停用）。" : "更新一条自动入库规则。", () => { var error = Operate.WareHouseConfig.List.SaveAutoStores_Shell(id, head, warehouse); if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error); if (string.IsNullOrEmpty(id)) { foreach (var rule in Operate.WareHouseConfig.List.lstAutoStoresInfo) { if (rule != null && string.Equals(rule.PacketHead, head.Trim(), StringComparison.Ordinal)) { id = rule.AID.ToString().ToUpperInvariant(); break; } } } return new JObject { ["id"] = id, ["changed"] = true }; })).ConfigureAwait(false);
+        }
+        private static async Task<JToken> SetAutoStoresEnabledAsync(JObject a)
+        {
+            var id = RequireGuidId(a); var enabled = (bool?)a?["enabled"]; if (!enabled.HasValue) throw new InvalidOperationException("A boolean enabled value is required."); var key = (string)a?["idempotencyKey"]; JObject prior; if (McpWriteGuard.TryGetCompleted("autoStores.setEnabled", key, a, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("autoStores.setEnabled", key, a, (enabled.Value ? "启用" : "停用") + "一条自动入库规则。", () => { if (!Operate.WareHouseConfig.List.SetAutoStoresEnable_ById(id, enabled.Value)) throw new InvalidOperationException("The automatic-storage rule no longer exists."); return new JObject { ["id"] = id, ["enabled"] = enabled.Value, ["changed"] = true }; })).ConfigureAwait(false);
+        }
+        private static async Task<JToken> DeleteAutoStoresAsync(JObject a)
+        {
+            var id = RequireGuidId(a); var key = (string)a?["idempotencyKey"]; JObject prior; if (McpWriteGuard.TryGetCompleted("autoStores.delete", key, a, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("autoStores.delete", key, a, "删除一条自动入库规则。", async () => { var deleted = await Operate.WareHouseConfig.List.DeleteAutoStores_Dialog_ById(id); return new JObject { ["id"] = id, ["deleted"] = deleted, ["changed"] = deleted }; })).ConfigureAwait(false);
+        }
+        private static async Task<JToken> WarehouseStoresActionAsync(JObject a)
+        {
+            var id = RequireGuidId(new JObject { ["id"] = a?["warehouseId"] }); var ids = ReadCollectionIds(a, "storeIds"); var action = ReadCollectionAction((string)a?["action"], true); var key = (string)a?["idempotencyKey"]; JObject prior; if (McpWriteGuard.TryGetCompleted("warehouses.stores.action", key, a, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("warehouses.stores.action", key, a, "编辑仓库中的 " + ids.Count + " 条封包。", async () => { var before = Operate.WareHouseConfig.List.GetStoreRows_ById(id).Length; var delta = await Operate.WareHouseConfig.List.StoresAction_ByIds(id, action, ids); var after = Operate.WareHouseConfig.List.GetStoreRows_ById(id).Length; return new JObject { ["warehouseId"] = id, ["delta"] = delta, ["count"] = after, ["changed"] = before != after || action < 4 }; })).ConfigureAwait(false);
+        }
+        private static async Task<JToken> WarehouseStoresCommandAsync(JObject a)
+        {
+            var id = RequireGuidId(new JObject { ["id"] = a?["warehouseId"] }); var name = ((string)a?["action"] ?? string.Empty).Trim().ToLowerInvariant(); int action; if (name == "import") action = 8; else if (name == "export") action = 5; else if (name == "clear") action = 7; else throw new InvalidOperationException("action must be import, export, or clear."); var key = (string)a?["idempotencyKey"]; JObject prior; if (McpWriteGuard.TryGetCompleted("warehouses.stores.command", key, a, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("warehouses.stores.command", key, a, "运行仓库 " + name + " 命令。导入和导出会显示 WPE 的本地文件对话框。", async () => { var before = Operate.WareHouseConfig.List.GetStoreRows_ById(id).Length; await Operate.WareHouseConfig.List.StoresCommand_Shell(id, action); var after = Operate.WareHouseConfig.List.GetStoreRows_ById(id).Length; return new JObject { ["warehouseId"] = id, ["action"] = name, ["count"] = after, ["changed"] = before != after }; })).ConfigureAwait(false);
+        }
+        private static async Task<JToken> SavePacketEditAsync(JObject a)
+        {
+            var list = ReadEditablePacketList((string)a?["list"]); var id = (long?)a?["id"]; if (!id.HasValue || id.Value < 1) throw new InvalidOperationException("A positive packet id is required."); var bytes = ReadPacketBytes(a); var socket = (int?)a?["socket"]; if (!socket.HasValue) throw new InvalidOperationException("socket is required."); var key = (string)a?["idempotencyKey"]; JObject prior; if (McpWriteGuard.TryGetCompleted("packet.edit.save", key, a, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("packet.edit.save", key, a, "修改一条已捕获封包的套接字和内容。", () => { var error = Operate.PacketEditConfig.Save(list, id.Value, socket.Value, bytes); if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error); return new JObject { ["id"] = id.Value, ["list"] = list, ["length"] = bytes.Length, ["changed"] = true }; })).ConfigureAwait(false);
+        }
+        private static async Task<JToken> AddPacketEditToSendAsync(JObject a)
+        {
+            var send = (string)a?["sendId"]; if (!Guid.TryParse(send, out _)) throw new InvalidOperationException("sendId must be a GUID."); var list = ReadEditablePacketList((string)a?["list"]); var id = (long?)a?["id"]; if (!id.HasValue || id.Value < 1) throw new InvalidOperationException("A positive packet id is required."); var bytes = ReadPacketBytes(a); var key = (string)a?["idempotencyKey"]; JObject prior; if (McpWriteGuard.TryGetCompleted("packet.edit.addToSend", key, a, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("packet.edit.addToSend", key, a, "复制一条封包到发送任务；不会启动发送器。", () => { if (!Operate.PacketEditConfig.AddToSend(send, list, id.Value, bytes)) throw new InvalidOperationException("The packet or send task no longer exists."); return new JObject { ["sendId"] = send, ["packetId"] = id.Value, ["added"] = true }; })).ConfigureAwait(false);
+        }
+
+        private static async Task<JToken> CreateFilterAsync(JObject arguments)
+        {
+            var key = (string)arguments?["idempotencyKey"];
+            JObject prior;
+            if (McpWriteGuard.TryGetCompleted("filters.create", key, arguments, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("filters.create", key, arguments, "新建一个空白筛选器。", () =>
+            {
+                var id = Operate.FilterConfig.List.AddFilter_New_ById();
+                if (string.IsNullOrEmpty(id)) throw new InvalidOperationException("Unable to create the filter.");
+                return new JObject { ["changed"] = true, ["id"] = id };
+            })).ConfigureAwait(false);
+        }
+
+        private static async Task<JToken> CreateFilterFromCaptureAsync(JObject arguments)
+        {
+            var packetId = (long?)arguments?["packetId"];
+            var key = (string)arguments?["idempotencyKey"];
+            if (!packetId.HasValue || packetId.Value < 1) throw new InvalidOperationException("A positive packetId is required.");
+            JObject prior;
+            if (McpWriteGuard.TryGetCompleted("filters.createFromCapture", key, arguments, out prior)) return prior;
+            if (ReadOnUi(() => Operate.PacketConfig.List.GetPacketById(packetId.Value)) == null) throw new InvalidOperationException("The captured packet does not exist.");
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("filters.createFromCapture", key, arguments, "从已捕获封包 #" + packetId.Value + " 新建滤镜。", () =>
+            {
+                var packet = Operate.PacketConfig.List.GetPacketById(packetId.Value);
+                if (packet == null) throw new InvalidOperationException("The captured packet no longer exists.");
+                var before = Operate.FilterConfig.List.lstFilterInfo.Count;
+                if (!Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(packet, null)) throw new InvalidOperationException("Unable to create a filter from the captured packet.");
+                Operate.FilterConfig.List.SaveFilterList_ToDB();
+                var filter = Operate.FilterConfig.List.lstFilterInfo.Count > before ? Operate.FilterConfig.List.lstFilterInfo[Operate.FilterConfig.List.lstFilterInfo.Count - 1] : null;
+                return new JObject { ["changed"] = filter != null, ["filter"] = filter == null ? new JObject() : JObject.FromObject(FilterRow.From_(filter)) };
+            })).ConfigureAwait(false);
+        }
+
+        private static async Task<JToken> SetAllFiltersEnabledAsync(JObject arguments)
+        {
+            var enabled = RequireBoolean(arguments, "enabled");
+            var key = (string)arguments?["idempotencyKey"];
+            JObject prior;
+            if (McpWriteGuard.TryGetCompleted("filters.setAllEnabled", key, arguments, out prior)) return prior;
+            var total = ReadOnUi(() => Operate.FilterConfig.List.lstFilterInfo.Count);
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("filters.setAllEnabled", key, arguments, (enabled ? "启用" : "停用") + "全部 " + total + " 条滤镜。", () =>
+            {
+                var changed = Operate.FilterConfig.List.SetAllFilterEnable(enabled);
+                return new JObject { ["changed"] = changed > 0, ["count"] = changed, ["enabled"] = enabled };
+            })).ConfigureAwait(false);
+        }
+
+        private static async Task<JToken> ResetFilterCountsAsync(JObject arguments)
+        {
+            var key = (string)arguments?["idempotencyKey"];
+            JObject prior;
+            if (McpWriteGuard.TryGetCompleted("filters.counts.reset", key, arguments, out prior)) return prior;
+            var total = ReadOnUi(() => Operate.FilterConfig.List.lstFilterInfo.Count);
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("filters.counts.reset", key, arguments, "重置 " + total + " 条滤镜的运行期执行计数。", () =>
+            {
+                Operate.FilterConfig.List.ResetFilterCount();
+                return new JObject { ["changed"] = total > 0, ["count"] = total };
+            })).ConfigureAwait(false);
+        }
+
+        private static async Task<JToken> MoveFiltersAsync(JObject arguments)
+        {
+            var ids = ReadFilterIds(arguments);
+            var direction = ((string)arguments?["direction"] ?? string.Empty).Trim().ToLowerInvariant();
+            var action = direction == "top" ? 0 : direction == "up" ? 1 : direction == "down" ? 2 : direction == "bottom" ? 3 : -1;
+            if (action < 0) throw new InvalidOperationException("direction must be top, up, down, or bottom.");
+            var key = (string)arguments?["idempotencyKey"];
+            JObject prior;
+            if (McpWriteGuard.TryGetCompleted("filters.move", key, arguments, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("filters.move", key, arguments, "调整 " + ids.Count + " 条滤镜的执行顺序（" + direction + "）。", async () =>
+            {
+                var before = FilterOrder();
+                await Operate.FilterConfig.List.FilterListAction_ByIds(action, ids);
+                var after = FilterOrder();
+                return new JObject { ["changed"] = !string.Equals(before, after, StringComparison.Ordinal), ["direction"] = direction, ["count"] = ids.Count };
+            })).ConfigureAwait(false);
+        }
+
+        private static async Task<JToken> CopyFiltersAsync(JObject arguments)
+        {
+            var ids = ReadFilterIds(arguments);
+            var key = (string)arguments?["idempotencyKey"];
+            JObject prior;
+            if (McpWriteGuard.TryGetCompleted("filters.copy", key, arguments, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("filters.copy", key, arguments, "复制 " + ids.Count + " 条滤镜。", async () =>
+            {
+                var before = Operate.FilterConfig.List.lstFilterInfo.Count;
+                await Operate.FilterConfig.List.FilterListAction_ByIds(4, ids);
+                var copied = Operate.FilterConfig.List.lstFilterInfo.Count - before;
+                return new JObject { ["changed"] = copied > 0, ["count"] = copied };
+            })).ConfigureAwait(false);
+        }
+
+        private static async Task<JToken> ClearAllFiltersAsync(JObject arguments)
+        {
+            var key = (string)arguments?["idempotencyKey"];
+            JObject prior;
+            if (McpWriteGuard.TryGetCompleted("filters.clearAll", key, arguments, out prior)) return prior;
+            var total = ReadOnUi(() => Operate.FilterConfig.List.lstFilterInfo.Count);
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("filters.clearAll", key, arguments, "清空全部 " + total + " 条滤镜；WPE 还会显示其原生删除确认。", async () =>
+            {
+                var before = Operate.FilterConfig.List.lstFilterInfo.Count;
+                await Operate.FilterConfig.List.CleanUpFilterList_Dialog_Shell();
+                return new JObject { ["changed"] = Operate.FilterConfig.List.lstFilterInfo.Count != before, ["count"] = before };
+            })).ConfigureAwait(false);
+        }
+
+        private static async Task<JToken> UpdateFilterAsync(JObject arguments)
+        {
+            var key = (string)arguments?["idempotencyKey"];
+            var filterToken = arguments?["filter"] as JObject;
+            if (filterToken == null) throw new InvalidOperationException("A complete filter object is required.");
+            var row = filterToken.ToObject<FilterEditRow>();
+            if (row == null || !Guid.TryParse(row.Id, out _)) throw new InvalidOperationException("Filter id must be a GUID.");
+            JObject prior;
+            if (McpWriteGuard.TryGetCompleted("filters.update", key, arguments, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("filters.update", key, arguments, "修改筛选器配置：" + (row.Name ?? string.Empty).Trim(), () =>
+            {
+                var error = Operate.FilterConfig.List.SaveFilterEdit(row);
+                if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
+                var detail = Operate.FilterConfig.List.GetFilterEdit_ById(row.Id);
+                return new JObject { ["changed"] = true, ["filter"] = detail == null ? new JObject() : JObject.FromObject(detail) };
+            })).ConfigureAwait(false);
+        }
+
+        private static async Task<JToken> DeleteFilterAsync(JObject arguments)
+        {
+            var id = ((string)arguments?["id"] ?? string.Empty).Trim();
+            var key = (string)arguments?["idempotencyKey"];
+            if (!Guid.TryParse(id, out _)) throw new InvalidOperationException("Filter id must be a GUID.");
+            JObject prior;
+            if (McpWriteGuard.TryGetCompleted("filters.delete", key, arguments, out prior)) return prior;
+            var name = ReadOnUi(() => { foreach (var item in Operate.FilterConfig.List.lstFilterInfo) if (item != null && string.Equals(item.FID.ToString(), id, StringComparison.OrdinalIgnoreCase)) return item.FName; return null; });
+            if (name == null) throw new InvalidOperationException("The filter does not exist.");
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("filters.delete", key, arguments, "删除筛选器：" + name, async () =>
+            {
+                var before = Operate.FilterConfig.List.lstFilterInfo.Count;
+                await Operate.FilterConfig.List.FilterListAction_ByIds((int)Operate.SystemConfig.ListAction.Delete, new[] { id });
+                return new JObject { ["changed"] = Operate.FilterConfig.List.lstFilterInfo.Count < before, ["id"] = id };
+            })).ConfigureAwait(false);
         }
 
         private static async Task<JToken> SetAccountEnabledAsync(JObject arguments)
@@ -193,6 +687,58 @@ namespace WinsockPacketEditor.Mcp
                 })).ConfigureAwait(false);
         }
 
+        private static async Task<JToken> CreateAccountAsync(JObject arguments)
+        {
+            var change = ReadAccountChange(arguments, true);
+            var key = (string)arguments?["idempotencyKey"];
+            JObject prior;
+            if (McpWriteGuard.TryGetCompleted("accounts.create", key, arguments, out prior)) return prior;
+            if (ReadOnUi(() => FindAccountByName(change.UserName)) != null) throw new InvalidOperationException("An account with this user name already exists.");
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("accounts.create", key, arguments, "新建代理账号“" + change.UserName + "”。", () =>
+            {
+                if (FindAccountByName(change.UserName) != null) throw new InvalidOperationException("An account with this user name already exists.");
+                var encrypted = Operate.SystemConfig.PassWord_Encrypt(change.Password);
+                if (!Operate.ProxyConfig.Account.AddProxyAccount(change.Enabled, change.UserName, encrypted, change.LimitLinksEnabled, change.LimitLinks, change.LimitDevicesEnabled, change.LimitDevices, change.ExpiryEnabled, change.ExpiryTime)) throw new InvalidOperationException("Unable to create the account.");
+                var account = FindAccountByName(change.UserName);
+                if (account == null) throw new InvalidOperationException("The account was created but could not be read back.");
+                return new JObject { ["changed"] = true, ["account"] = JObject.FromObject(AccountRow.From_(account)) };
+            })).ConfigureAwait(false);
+        }
+
+        private static async Task<JToken> UpdateAccountAsync(JObject arguments)
+        {
+            var id = RequireAccountId(arguments);
+            var change = ReadAccountChange(arguments, false);
+            var key = (string)arguments?["idempotencyKey"];
+            JObject prior;
+            if (McpWriteGuard.TryGetCompleted("accounts.update", key, arguments, out prior)) return prior;
+            var account = ReadOnUi(() => FindAccount(id));
+            if (account == null) throw new InvalidOperationException("The account does not exist.");
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("accounts.update", key, arguments, "修改代理账号“" + account.UserName + "”。", () =>
+            {
+                var current = FindAccount(id);
+                if (current == null) throw new InvalidOperationException("The account no longer exists.");
+                var password = string.IsNullOrEmpty(change.Password) ? string.Empty : Operate.SystemConfig.PassWord_Encrypt(change.Password);
+                if (!Operate.ProxyConfig.Account.UpdateProxyAccount_ByAccountID(id, change.Enabled, password, change.LimitLinksEnabled, change.LimitLinks, change.LimitDevicesEnabled, change.LimitDevices, change.ExpiryEnabled, change.ExpiryTime)) throw new InvalidOperationException("Unable to update the account.");
+                return new JObject { ["changed"] = true, ["account"] = JObject.FromObject(AccountRow.From_(current)) };
+            })).ConfigureAwait(false);
+        }
+
+        private static async Task<JToken> DeleteAccountAsync(JObject arguments)
+        {
+            var id = RequireAccountId(arguments);
+            var key = (string)arguments?["idempotencyKey"];
+            JObject prior;
+            if (McpWriteGuard.TryGetCompleted("accounts.delete", key, arguments, out prior)) return prior;
+            var account = ReadOnUi(() => FindAccount(id));
+            if (account == null) throw new InvalidOperationException("The account does not exist.");
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("accounts.delete", key, arguments, "删除代理账号“" + account.UserName + "”。", () =>
+            {
+                if (!Operate.ProxyConfig.Account.DeleteAccount_ById(id)) throw new InvalidOperationException("The account no longer exists.");
+                return new JObject { ["changed"] = true, ["id"] = id };
+            })).ConfigureAwait(false);
+        }
+
         private static async Task<JToken> SetProxyAuthEnabledAsync(JObject arguments)
         {
             var enabledToken = arguments?["enabled"];
@@ -202,8 +748,7 @@ namespace WinsockPacketEditor.Mcp
             JObject prior;
             if (McpWriteGuard.TryGetCompleted("proxy.auth.setEnabled", idempotencyKey, arguments, out prior)) return prior;
 
-            var config = ReadOnUi(() => new { enabled = Operate.ProxyConfig.Proxy.Enable_Auth, onlyWpc = Operate.ProxyConfig.Proxy.Only_WPC_Client });
-            if (!enabled && config.onlyWpc) throw new InvalidOperationException("Proxy authentication cannot be disabled while Only_WPC_Client is enabled.");
+            var config = ReadOnUi(() => new { onlyWpc = Operate.ProxyConfig.Proxy.Only_WPC_Client });
 
             return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync(
                 "proxy.auth.setEnabled",
@@ -212,11 +757,10 @@ namespace WinsockPacketEditor.Mcp
                 (enabled ? "启用" : "停用") + "代理身份认证；只允许 WPC 客户端当前为" + (config.onlyWpc ? "开启" : "关闭") + "。",
                 () =>
                 {
-                    if (Operate.ProxyConfig.Proxy.Enable_Auth == enabled) return new JObject { ["changed"] = false, ["enabled"] = enabled };
-                    if (!enabled && Operate.ProxyConfig.Proxy.Only_WPC_Client) throw new InvalidOperationException("Proxy authentication cannot be disabled while Only_WPC_Client is enabled.");
-                    Operate.ProxyConfig.Proxy.Enable_Auth = enabled;
-                    Operate.SystemConfig.SaveProxyMode_ToDB();
-                    return new JObject { ["changed"] = true, ["enabled"] = enabled };
+                    bool changed;
+                    var error = Operate.ProxyConfig.Proxy.SetProxyAuthEnabled(enabled, out changed);
+                    if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
+                    return new JObject { ["changed"] = changed, ["enabled"] = enabled };
                 })).ConfigureAwait(false);
         }
 
@@ -229,13 +773,7 @@ namespace WinsockPacketEditor.Mcp
             JObject prior;
             if (McpWriteGuard.TryGetCompleted("proxy.http.setEnabled", idempotencyKey, arguments, out prior)) return prior;
 
-            var config = ReadOnUi(() => new { enabled = Operate.ProxyConfig.Proxy.Enable_HTTP, httpPort = (int)Operate.ProxyConfig.Proxy.HTTP_Port, socks5Enabled = Operate.ProxyConfig.Proxy.Enable_SOCKS5, socks5Port = (int)Operate.ProxyConfig.Proxy.SOCKS5_Port });
-            if (enabled)
-            {
-                if (!config.socks5Enabled) throw new InvalidOperationException("HTTP proxy requires SOCKS5 to be enabled.");
-                if (config.httpPort < 1 || config.httpPort > 65535) throw new InvalidOperationException("The HTTP proxy port must be between 1 and 65535.");
-                if (config.httpPort == config.socks5Port) throw new InvalidOperationException("HTTP and SOCKS5 proxy ports must be different.");
-            }
+            var config = ReadOnUi(() => new { httpPort = (int)Operate.ProxyConfig.Proxy.HTTP_Port });
 
             return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync(
                 "proxy.http.setEnabled",
@@ -244,15 +782,10 @@ namespace WinsockPacketEditor.Mcp
                 (enabled ? "启用" : "停用") + " HTTP 代理（端口 " + config.httpPort + "）。",
                 () =>
                 {
-                    if (Operate.ProxyConfig.Proxy.Enable_HTTP == enabled) return new JObject { ["changed"] = false, ["enabled"] = enabled, ["port"] = config.httpPort };
-                    if (enabled)
-                    {
-                        if (!Operate.ProxyConfig.Proxy.Enable_SOCKS5) throw new InvalidOperationException("HTTP proxy requires SOCKS5 to be enabled.");
-                        if (Operate.ProxyConfig.Proxy.HTTP_Port == Operate.ProxyConfig.Proxy.SOCKS5_Port) throw new InvalidOperationException("HTTP and SOCKS5 proxy ports must be different.");
-                    }
-                    Operate.ProxyConfig.Proxy.Enable_HTTP = enabled;
-                    Operate.SystemConfig.SaveProxyMode_ToDB();
-                    return new JObject { ["changed"] = true, ["enabled"] = enabled, ["port"] = (int)Operate.ProxyConfig.Proxy.HTTP_Port };
+                    bool changed;
+                    var error = Operate.ProxyConfig.Proxy.SetProxyHttpEnabled(enabled, out changed);
+                    if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
+                    return new JObject { ["changed"] = changed, ["enabled"] = enabled, ["port"] = (int)Operate.ProxyConfig.Proxy.HTTP_Port };
                 })).ConfigureAwait(false);
         }
 
@@ -262,12 +795,11 @@ namespace WinsockPacketEditor.Mcp
             var idempotencyKey = (string)arguments?["idempotencyKey"];
             if (valueToken == null || valueToken.Type != JTokenType.Integer) throw new InvalidOperationException("maxConnection must be an integer.");
             var requested = valueToken.Value<int>();
-            var cap = ReadOnUi(() => Operate.ProxyConfig.Proxy.MaxConnectionCap());
-            if (requested < 1 || requested > cap) throw new InvalidOperationException("maxConnection is outside the current machine limit.");
             JObject prior;
             if (McpWriteGuard.TryGetCompleted("proxy.maxConnections.set", idempotencyKey, arguments, out prior)) return prior;
 
             var current = ReadOnUi(() => Operate.ProxyConfig.Proxy.MaxConnectionNumber);
+            var cap = ReadOnUi(() => Operate.ProxyConfig.Proxy.MaxConnectionCap());
             return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync(
                 "proxy.maxConnections.set",
                 idempotencyKey,
@@ -275,14 +807,9 @@ namespace WinsockPacketEditor.Mcp
                 "将代理最大连接数从 " + current + " 调整为 " + requested + "（当前上限 " + cap + "）。",
                 () =>
                 {
-                    var liveCap = Operate.ProxyConfig.Proxy.MaxConnectionCap();
-                    if (requested < 1 || requested > liveCap) throw new InvalidOperationException("maxConnection is outside the current machine limit.");
-                    var changed = Operate.ProxyConfig.Proxy.MaxConnectionNumber != requested;
-                    if (changed)
-                    {
-                        Operate.ProxyConfig.Proxy.MaxConnectionNumber = requested;
-                        Operate.SystemConfig.SaveProxyMode_ToDB();
-                    }
+                    bool changed; int liveCap;
+                    var error = Operate.ProxyConfig.Proxy.SetProxyMaxConnections(requested, out changed, out liveCap);
+                    if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
                     return new JObject { ["changed"] = changed, ["maxConnection"] = requested, ["cap"] = liveCap };
                 })).ConfigureAwait(false);
         }
@@ -293,12 +820,10 @@ namespace WinsockPacketEditor.Mcp
             var idempotencyKey = (string)arguments?["idempotencyKey"];
             if (valueToken == null || valueToken.Type != JTokenType.Integer) throw new InvalidOperationException("port must be an integer.");
             var requested = valueToken.Value<int>();
-            if (requested < 1 || requested > 65535) throw new InvalidOperationException("The SOCKS5 port must be between 1 and 65535.");
             JObject prior;
             if (McpWriteGuard.TryGetCompleted("proxy.socks5Port.set", idempotencyKey, arguments, out prior)) return prior;
 
-            var config = ReadOnUi(() => new { current = (int)Operate.ProxyConfig.Proxy.SOCKS5_Port, httpEnabled = Operate.ProxyConfig.Proxy.Enable_HTTP, httpPort = (int)Operate.ProxyConfig.Proxy.HTTP_Port });
-            if (config.httpEnabled && requested == config.httpPort) throw new InvalidOperationException("SOCKS5 and HTTP proxy ports must be different.");
+            var config = ReadOnUi(() => new { current = (int)Operate.ProxyConfig.Proxy.SOCKS5_Port });
             return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync(
                 "proxy.socks5Port.set",
                 idempotencyKey,
@@ -306,14 +831,9 @@ namespace WinsockPacketEditor.Mcp
                 "将 SOCKS5 监听端口从 " + config.current + " 调整为 " + requested + "。",
                 () =>
                 {
-                    if (requested < 1 || requested > 65535) throw new InvalidOperationException("The SOCKS5 port must be between 1 and 65535.");
-                    if (Operate.ProxyConfig.Proxy.Enable_HTTP && requested == Operate.ProxyConfig.Proxy.HTTP_Port) throw new InvalidOperationException("SOCKS5 and HTTP proxy ports must be different.");
-                    var changed = Operate.ProxyConfig.Proxy.SOCKS5_Port != requested;
-                    if (changed)
-                    {
-                        Operate.ProxyConfig.Proxy.SOCKS5_Port = (ushort)requested;
-                        Operate.SystemConfig.SaveProxyMode_ToDB();
-                    }
+                    bool changed;
+                    var error = Operate.ProxyConfig.Proxy.SetProxySocks5Port(requested, out changed);
+                    if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
                     return new JObject { ["changed"] = changed, ["port"] = requested };
                 })).ConfigureAwait(false);
         }
@@ -324,13 +844,10 @@ namespace WinsockPacketEditor.Mcp
             var idempotencyKey = (string)arguments?["idempotencyKey"];
             if (valueToken == null || valueToken.Type != JTokenType.Integer) throw new InvalidOperationException("port must be an integer.");
             var requested = valueToken.Value<int>();
-            if (requested < 1 || requested > 65535) throw new InvalidOperationException("The HTTP port must be between 1 and 65535.");
             JObject prior;
             if (McpWriteGuard.TryGetCompleted("proxy.httpPort.set", idempotencyKey, arguments, out prior)) return prior;
 
-            var config = ReadOnUi(() => new { current = (int)Operate.ProxyConfig.Proxy.HTTP_Port, httpEnabled = Operate.ProxyConfig.Proxy.Enable_HTTP, socks5Enabled = Operate.ProxyConfig.Proxy.Enable_SOCKS5, socks5Port = (int)Operate.ProxyConfig.Proxy.SOCKS5_Port });
-            if (!config.httpEnabled) throw new InvalidOperationException("The HTTP proxy is disabled; enable it before changing its port.");
-            if (config.socks5Enabled && requested == config.socks5Port) throw new InvalidOperationException("HTTP and SOCKS5 proxy ports must be different.");
+            var config = ReadOnUi(() => new { current = (int)Operate.ProxyConfig.Proxy.HTTP_Port });
             return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync(
                 "proxy.httpPort.set",
                 idempotencyKey,
@@ -338,15 +855,9 @@ namespace WinsockPacketEditor.Mcp
                 "将 HTTP 监听端口从 " + config.current + " 调整为 " + requested + "。",
                 () =>
                 {
-                    if (requested < 1 || requested > 65535) throw new InvalidOperationException("The HTTP port must be between 1 and 65535.");
-                    if (!Operate.ProxyConfig.Proxy.Enable_HTTP) throw new InvalidOperationException("The HTTP proxy is disabled; enable it before changing its port.");
-                    if (Operate.ProxyConfig.Proxy.Enable_SOCKS5 && requested == Operate.ProxyConfig.Proxy.SOCKS5_Port) throw new InvalidOperationException("HTTP and SOCKS5 proxy ports must be different.");
-                    var changed = Operate.ProxyConfig.Proxy.HTTP_Port != requested;
-                    if (changed)
-                    {
-                        Operate.ProxyConfig.Proxy.HTTP_Port = (ushort)requested;
-                        Operate.SystemConfig.SaveProxyMode_ToDB();
-                    }
+                    bool changed;
+                    var error = Operate.ProxyConfig.Proxy.SetProxyHttpPort(requested, out changed);
+                    if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
                     return new JObject { ["changed"] = changed, ["port"] = requested };
                 })).ConfigureAwait(false);
         }
@@ -367,12 +878,9 @@ namespace WinsockPacketEditor.Mcp
                 (enabled ? "启用" : "停用") + "代理防火墙。",
                 () =>
                 {
-                    var changed = Operate.ProxyConfig.Proxy.EnableFireWall != enabled;
-                    if (changed)
-                    {
-                        Operate.ProxyConfig.Proxy.EnableFireWall = enabled;
-                        Operate.SystemConfig.SaveProxyMode_ToDB();
-                    }
+                    bool changed;
+                    var error = Operate.ProxyConfig.Proxy.SetFirewallEnabled(enabled, out changed);
+                    if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
                     return new JObject { ["changed"] = changed, ["enabled"] = enabled };
                 })).ConfigureAwait(false);
         }
@@ -385,8 +893,6 @@ namespace WinsockPacketEditor.Mcp
             var enabled = enabledToken.Value<bool>();
             JObject prior;
             if (McpWriteGuard.TryGetCompleted("proxy.onlyWpc.setEnabled", idempotencyKey, arguments, out prior)) return prior;
-            var config = ReadOnUi(() => new { current = Operate.ProxyConfig.Proxy.Only_WPC_Client, auth = Operate.ProxyConfig.Proxy.Enable_Auth });
-            if (enabled && !config.auth) throw new InvalidOperationException("Only-WPC mode requires proxy authentication to be enabled.");
             return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync(
                 "proxy.onlyWpc.setEnabled",
                 idempotencyKey,
@@ -394,13 +900,9 @@ namespace WinsockPacketEditor.Mcp
                 (enabled ? "启用" : "停用") + "只允许 WPC 客户端连接。",
                 () =>
                 {
-                    if (enabled && !Operate.ProxyConfig.Proxy.Enable_Auth) throw new InvalidOperationException("Only-WPC mode requires proxy authentication to be enabled.");
-                    var changed = Operate.ProxyConfig.Proxy.Only_WPC_Client != enabled;
-                    if (changed)
-                    {
-                        Operate.ProxyConfig.Proxy.Only_WPC_Client = enabled;
-                        Operate.SystemConfig.SaveProxyMode_ToDB();
-                    }
+                    bool changed;
+                    var error = Operate.ProxyConfig.Proxy.SetOnlyWpcEnabled(enabled, out changed);
+                    if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
                     return new JObject { ["changed"] = changed, ["enabled"] = enabled };
                 })).ConfigureAwait(false);
         }
@@ -520,6 +1022,14 @@ namespace WinsockPacketEditor.Mcp
             var limit = Math.Max(1, Math.Min(200, (int?)arguments?["limit"] ?? 50));
             var offset = ReadOffset(arguments);
             var pattern = ((string)arguments?["pattern"] ?? string.Empty).Trim();
+            var mode = ReadCaptureMode(arguments, "proxy");
+            var rows = new JArray();
+            if (mode == "proxy") return SearchProxyPackets(limit, offset, pattern);
+            return SearchInjectPackets(limit, offset, pattern);
+        }
+
+        private static JObject SearchInjectPackets(int limit, int offset, string pattern)
+        {
             var rows = new JArray();
             var list = Operate.PacketConfig.List.lstPacketInfo;
             var matched = 0;
@@ -533,6 +1043,25 @@ namespace WinsockPacketEditor.Mcp
                 var preview = packet.PacketData ?? string.Empty;
                 if (preview.Length > 192) preview = preview.Substring(0, 192);
                 rows.Add(new JObject { ["id"] = packet.Id, ["time"] = packet.PacketTime.ToUniversalTime().ToString("o"), ["type"] = (int)packet.PacketType, ["length"] = packet.PacketLen, ["preview"] = preview, ["from"] = packet.PacketFrom, ["to"] = packet.PacketTo, ["action"] = (int)packet.FilterAction });
+            }
+            return new JObject { ["rows"] = rows, ["nextCursor"] = NextCursor(offset, rows.Count, matched < list.Count) };
+        }
+
+        private static JObject SearchProxyPackets(int limit, int offset, string pattern)
+        {
+            var rows = new JArray();
+            var list = Operate.ProxyConfig.List.lstProxyInfo;
+            var matched = 0;
+            for (var i = list.Count - 1; i >= 0 && rows.Count < limit; i--)
+            {
+                var packet = list[i];
+                if (packet == null) continue;
+                var searchable = (packet.ClientAddr ?? string.Empty) + " " + (packet.ServerAddr ?? string.Empty) + " " + (packet.ServerDomain ?? string.Empty) + " " + (packet.PacketData ?? string.Empty);
+                if (pattern.Length > 0 && searchable.IndexOf(pattern, StringComparison.OrdinalIgnoreCase) < 0) continue;
+                if (matched++ < offset) continue;
+                var preview = packet.PacketData ?? string.Empty;
+                if (preview.Length > 192) preview = preview.Substring(0, 192);
+                rows.Add(new JObject { ["id"] = packet.Id, ["time"] = packet.ProxyTime.ToUniversalTime().ToString("o"), ["type"] = (int)packet.PacketType, ["length"] = packet.PacketLen, ["preview"] = preview, ["from"] = packet.ClientAddr, ["to"] = packet.ServerAddr, ["action"] = (int)packet.FilterAction });
             }
             return new JObject { ["rows"] = rows, ["nextCursor"] = NextCursor(offset, rows.Count, matched < list.Count) };
         }
@@ -566,6 +1095,95 @@ namespace WinsockPacketEditor.Mcp
             return null;
         }
 
+        private static List<string> ReadFilterIds(JObject arguments)
+        {
+            var values = arguments?["ids"] as JArray;
+            if (values == null || values.Count == 0 || values.Count > 200) throw new InvalidOperationException("ids must contain between 1 and 200 filter UUIDs.");
+            var ids = new List<string>();
+            var unique = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var value in values)
+            {
+                var id = ((string)value ?? string.Empty).Trim();
+                if (!Guid.TryParse(id, out _)) throw new InvalidOperationException("Every filter id must be a GUID.");
+                if (unique.Add(id)) ids.Add(id);
+            }
+            if (ids.Count == 0) throw new InvalidOperationException("At least one filter id is required.");
+            return ids;
+        }
+
+        private static string FilterOrder()
+        {
+            var ids = new StringBuilder();
+            foreach (var filter in Operate.FilterConfig.List.lstFilterInfo)
+            {
+                if (filter != null) ids.Append(filter.FID.ToString("N")).Append('|');
+            }
+            return ids.ToString();
+        }
+
+        private static AccountInfo FindAccountByName(string userName)
+        {
+            foreach (var account in Operate.ProxyConfig.Account.lstAccountInfo)
+            {
+                if (account != null && string.Equals(account.UserName, userName, StringComparison.OrdinalIgnoreCase)) return account;
+            }
+            return null;
+        }
+
+        private static string RequireAccountId(JObject arguments)
+        {
+            var id = ((string)arguments?["id"] ?? string.Empty).Trim();
+            if (!Guid.TryParse(id, out _)) throw new InvalidOperationException("Account id must be a GUID.");
+            return id;
+        }
+
+        private static AccountChange ReadAccountChange(JObject arguments, bool creating)
+        {
+            var userName = ((string)arguments?["userName"] ?? string.Empty).Trim();
+            var password = (string)arguments?["password"] ?? string.Empty;
+            if (creating && string.IsNullOrWhiteSpace(userName)) throw new InvalidOperationException("A userName is required.");
+            if (userName.Length > 64) throw new InvalidOperationException("The userName must be at most 64 characters.");
+            if (creating && string.IsNullOrEmpty(password)) throw new InvalidOperationException("A password is required when creating an account.");
+            if (password.Length > 256) throw new InvalidOperationException("The password must be at most 256 characters.");
+            var enabled = RequireBoolean(arguments, "enabled");
+            var limitLinksEnabled = RequireBoolean(arguments, "limitLinksEnabled");
+            var limitDevicesEnabled = RequireBoolean(arguments, "limitDevicesEnabled");
+            var expiryEnabled = RequireBoolean(arguments, "expiryEnabled");
+            var limitLinks = RequireNonNegativeInt(arguments, "limitLinks");
+            var limitDevices = RequireNonNegativeInt(arguments, "limitDevices");
+            var expiryTime = DateTime.Now.AddYears(1);
+            var expiry = (string)arguments?["expiryTime"];
+            if (expiryEnabled && (!DateTime.TryParse(expiry, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out expiryTime) || expiryTime <= DateTime.Now)) throw new InvalidOperationException("A future ISO 8601 expiryTime is required when expiry is enabled.");
+            return new AccountChange { UserName = userName, Password = password, Enabled = enabled, LimitLinksEnabled = limitLinksEnabled, LimitLinks = limitLinks, LimitDevicesEnabled = limitDevicesEnabled, LimitDevices = limitDevices, ExpiryEnabled = expiryEnabled, ExpiryTime = expiryTime };
+        }
+
+        private static bool RequireBoolean(JObject arguments, string name)
+        {
+            var value = arguments?[name];
+            if (value == null || value.Type != JTokenType.Boolean) throw new InvalidOperationException("A boolean " + name + " value is required.");
+            return value.Value<bool>();
+        }
+
+        private static int RequireNonNegativeInt(JObject arguments, string name)
+        {
+            var value = arguments?[name];
+            if (value == null || value.Type != JTokenType.Integer || value.Value<int>() < 0) throw new InvalidOperationException("A non-negative integer " + name + " value is required.");
+            return value.Value<int>();
+        }
+
+        private sealed class AccountChange
+        {
+            public string UserName;
+            public string Password;
+            public bool Enabled;
+            public bool LimitLinksEnabled;
+            public int LimitLinks;
+            public bool LimitDevicesEnabled;
+            public int LimitDevices;
+            public bool ExpiryEnabled;
+            public DateTime ExpiryTime;
+        }
+
         private static string DisplayFilterName(string name)
         {
             var value = (name ?? string.Empty).Replace("\r", " ").Replace("\n", " ").Trim();
@@ -577,17 +1195,54 @@ namespace WinsockPacketEditor.Mcp
         {
             var id = (long?)arguments?["id"];
             if (!id.HasValue || id.Value < 1) throw new InvalidOperationException("A positive packet id is required.");
-            var packet = Operate.PacketConfig.List.GetPacketById(id.Value);
-            if (packet == null) return new JObject { ["id"] = id.Value, ["found"] = false, ["truncated"] = false, ["sha256"] = JValue.CreateNull(), ["payloadBase64"] = JValue.CreateNull() };
-
+            var mode = ReadCaptureMode(arguments, "proxy");
             var includePayload = (bool?)arguments?["includePayload"] ?? false;
-            var bytes = packet.PacketBuffer ?? new byte[0];
+            byte[] bytes;
+            byte[] raw;
+            if (mode == "proxy")
+            {
+                var packet = Operate.ProxyConfig.List.GetProxyById(id.Value);
+                if (packet == null) return CaptureNotFound(id.Value, mode);
+                bytes = packet.PacketBuffer ?? new byte[0]; raw = packet.RawBuffer ?? new byte[0];
+            }
+            else
+            {
+                var packet = Operate.PacketConfig.List.GetPacketById(id.Value);
+                if (packet == null) return CaptureNotFound(id.Value, mode);
+                bytes = packet.PacketBuffer ?? new byte[0]; raw = packet.RawBuffer ?? new byte[0];
+            }
             const int maxPayloadBytes = 4 * 1024 * 1024;
             var truncated = bytes.Length > maxPayloadBytes;
-            var result = new JObject { ["id"] = id.Value, ["found"] = true, ["truncated"] = truncated };
+            var result = new JObject { ["id"] = id.Value, ["mode"] = mode, ["found"] = true, ["truncated"] = truncated };
             using (var sha = System.Security.Cryptography.SHA256.Create()) result["sha256"] = BitConverter.ToString(sha.ComputeHash(bytes)).Replace("-", string.Empty).ToLowerInvariant();
             result["payloadBase64"] = includePayload ? Convert.ToBase64String(bytes, 0, Math.Min(bytes.Length, maxPayloadBytes)) : (JToken)JValue.CreateNull();
+            result["rawPayloadBase64"] = includePayload ? Convert.ToBase64String(raw, 0, Math.Min(raw.Length, maxPayloadBytes)) : (JToken)JValue.CreateNull();
+            result["modified"] = !bytes.AsSpan().SequenceEqual(raw);
             return result;
+        }
+
+        private static JObject FindNextCapture(JObject arguments)
+        {
+            var pattern = ((string)arguments?["pattern"] ?? string.Empty);
+            if (pattern.Length == 0 || pattern.Length > 4096) throw new InvalidOperationException("pattern must contain between 1 and 4096 characters.");
+            var mode = ReadCaptureMode(arguments, "proxy");
+            var hex = (bool?)arguments?["hex"] ?? false;
+            var fromIndex = Math.Max(0, (int?)arguments?["fromIndex"] ?? 0);
+            var fromPosition = Math.Max(0, (int?)arguments?["fromPosition"] ?? 0);
+            var hit = mode == "proxy" ? Operate.ProxyConfig.List.SearchProxy_Shell(pattern, hex, fromIndex, fromPosition) : Operate.PacketConfig.List.SearchPacket_Shell(pattern, hex, fromIndex, fromPosition);
+            return JObject.FromObject(hit);
+        }
+
+        private static JObject CaptureNotFound(long id, string mode)
+        {
+            return new JObject { ["id"] = id, ["mode"] = mode, ["found"] = false, ["truncated"] = false, ["sha256"] = JValue.CreateNull(), ["payloadBase64"] = JValue.CreateNull(), ["rawPayloadBase64"] = JValue.CreateNull(), ["modified"] = false };
+        }
+
+        private static string ReadCaptureMode(JObject arguments, string fallback)
+        {
+            var mode = ((string)arguments?["mode"] ?? fallback).Trim().ToLowerInvariant();
+            if (mode == "proxy" || mode == "inject") return mode;
+            throw new InvalidOperationException("mode must be proxy or inject.");
         }
 
         private static JObject ListLogs(JObject arguments)
@@ -615,7 +1270,13 @@ namespace WinsockPacketEditor.Mcp
                 total = list.Count;
                 for (var i = list.Count - 1 - offset; i >= 0 && rows.Count < limit; i--) { var x = list[i]; rows.Add(new JObject { ["time"] = x.LogTime.ToUniversalTime().ToString("o"), ["account"] = x.UserName, ["ip"] = x.LoginIP, ["message"] = x.LogContent }); }
             }
-            else throw new InvalidOperationException("Log kind must be system, filter, or proxy.");
+            else if (kind == "mcp")
+            {
+                var list = Operate.LogConfig.List.lstMcpLogInfo;
+                total = list.Count;
+                for (var i = list.Count - 1 - offset; i >= 0 && rows.Count < limit; i--) { var x = list[i]; rows.Add(new JObject { ["time"] = x.LogTime.ToUniversalTime().ToString("o"), ["source"] = x.FuncName, ["message"] = x.LogContent }); }
+            }
+            else throw new InvalidOperationException("Log kind must be system, filter, proxy, or mcp.");
             return new JObject { ["rows"] = rows, ["nextCursor"] = NextCursor(offset, rows.Count, offset + rows.Count < total) };
         }
 
@@ -633,6 +1294,32 @@ namespace WinsockPacketEditor.Mcp
             return new JObject { ["rows"] = rows, ["nextCursor"] = NextCursor(offset, rows.Count, offset + rows.Count < list.Count) };
         }
 
+        private static JObject GetFilter(JObject arguments)
+        {
+            var id = ((string)arguments?["id"] ?? string.Empty).Trim();
+            if (!Guid.TryParse(id, out _)) throw new InvalidOperationException("Filter id must be a GUID.");
+            var detail = Operate.FilterConfig.List.GetFilterEdit_ById(id);
+            if (detail == null) throw new InvalidOperationException("The filter does not exist.");
+            // 编辑 DTO 刻意不含 IsEnable（编辑器不管理列表开关）；MCP 查询则必须
+            // 明确带回它，避免客户端把“规则已保存”误判成“滤镜已启用”。
+            var result = JObject.FromObject(detail);
+            result["enabled"] = GetFilterEnabled(id) ?? false;
+            return result;
+        }
+
+        private static JObject GetFilterStats(JObject arguments)
+        {
+            var id = ((string)arguments?["id"] ?? string.Empty).Trim();
+            if (!Guid.TryParse(id, out _)) throw new InvalidOperationException("Filter id must be a GUID.");
+            FilterInfo filter = null;
+            foreach (var item in Operate.FilterConfig.List.lstFilterInfo)
+            {
+                if (item != null && string.Equals(item.FID.ToString(), id, StringComparison.OrdinalIgnoreCase)) { filter = item; break; }
+            }
+            if (filter == null) throw new InvalidOperationException("The filter does not exist.");
+            return new JObject { ["id"] = filter.FID.ToString().ToUpperInvariant(), ["name"] = filter.FName, ["enabled"] = filter.IsEnable, ["executionCount"] = filter.ExecutionCount, ["sampledAtUtc"] = DateTime.UtcNow.ToString("o") };
+        }
+
         private static JObject ListAccounts(JObject arguments)
         {
             var limit = Math.Max(1, Math.Min(200, (int?)arguments?["limit"] ?? 50));
@@ -647,6 +1334,30 @@ namespace WinsockPacketEditor.Mcp
             return new JObject { ["rows"] = rows, ["nextCursor"] = NextCursor(offset, rows.Count, offset + rows.Count < list.Count) };
         }
 
+        private static JObject GetAccount(JObject arguments)
+        {
+            var id = ((string)arguments?["id"] ?? string.Empty).Trim();
+            Guid accountId;
+            if (!Guid.TryParse(id, out accountId)) throw new InvalidOperationException("Account id must be a GUID.");
+            var account = Operate.ProxyConfig.Account.GetProxyAccount_ByAccountID(accountId);
+            if (account == null) throw new InvalidOperationException("The account does not exist.");
+            // AccountRow is the same non-sensitive projection used by WPE's account list.
+            // It deliberately omits AccountInfo's encrypted password and any WPC token.
+            return JObject.FromObject(AccountRow.From_(account));
+        }
+
+        private static JObject ListAccountLogins(JObject arguments)
+        {
+            var id = RequireAccountId(arguments);
+            if (FindAccount(id) == null) throw new InvalidOperationException("The account does not exist.");
+            var limit = Math.Max(1, Math.Min(200, (int?)arguments?["limit"] ?? 50));
+            var offset = ReadOffset(arguments);
+            var list = Operate.ProxyConfig.Account.GetAccountLogins_ById(id);
+            var rows = new JArray();
+            for (var i = offset; i < list.Count && rows.Count < limit; i++) rows.Add(JObject.FromObject(list[i]));
+            return new JObject { ["rows"] = rows, ["nextCursor"] = NextCursor(offset, rows.Count, offset + rows.Count < list.Count) };
+        }
+
         private static JObject ListConnections(JObject arguments)
         {
             var limit = Math.Max(1, Math.Min(200, (int?)arguments?["limit"] ?? 50));
@@ -655,10 +1366,44 @@ namespace WinsockPacketEditor.Mcp
             var list = Operate.ProxyConfig.Account.lstAuthInfo;
             for (var i = offset; i < list.Count && rows.Count < limit; i++)
             {
-                var row = AuthRow.From_(list[i]);
-                if (row != null) rows.Add(JObject.FromObject(row));
+                var connection = list[i];
+                var row = AuthRow.From_(connection);
+                if (row != null)
+                {
+                    var item = JObject.FromObject(row);
+                    item["id"] = GetConnectionId(connection);
+                    rows.Add(item);
+                }
             }
             return new JObject { ["rows"] = rows, ["nextCursor"] = NextCursor(offset, rows.Count, offset + rows.Count < list.Count) };
+        }
+
+        private static JObject GetConnection(JObject arguments)
+        {
+            var id = ((string)arguments?["id"] ?? string.Empty).Trim();
+            if (id.Length == 0 || id.Length > 128) throw new InvalidOperationException("Connection id is required.");
+            foreach (var connection in Operate.ProxyConfig.Account.lstAuthInfo)
+            {
+                if (connection != null && string.Equals(GetConnectionId(connection), id, StringComparison.Ordinal))
+                {
+                    var row = AuthRow.From_(connection);
+                    var result = JObject.FromObject(row);
+                    result["id"] = id;
+                    result["sampledAtUtc"] = DateTime.UtcNow.ToString("o");
+                    return result;
+                }
+            }
+            throw new InvalidOperationException("The connection no longer exists.");
+        }
+
+        private static string GetConnectionId(AuthInfo connection)
+        {
+            var material = connectionIdSalt + "|" + connection.AID.ToString("N") + "|" + (connection.AuthIP ?? string.Empty) + "|" + (connection.DeviceId ?? string.Empty);
+            using (var hash = SHA256.Create())
+            {
+                return Convert.ToBase64String(hash.ComputeHash(Encoding.UTF8.GetBytes(material)))
+                    .TrimEnd('=').Replace('+', '-').Replace('/', '_');
+            }
         }
 
         private static int ReadOffset(JObject arguments)
@@ -719,6 +1464,28 @@ namespace WinsockPacketEditor.Mcp
             };
         }
 
+        private static JObject GetProxyConfig()
+        {
+            var result = GetProxySettings();
+            result["schemaVersion"] = 1;
+            result["requiresRestart"] = false;
+            return result;
+        }
+
+        private static JObject GetProxyCapabilities()
+        {
+            return new JObject
+            {
+                ["socks5"] = true,
+                ["http"] = true,
+                ["udpRelay"] = true,
+                ["ipv6"] = true,
+                ["externalProxy"] = true,
+                ["wpcControl"] = true,
+                ["sampledAtUtc"] = DateTime.UtcNow.ToString("o")
+            };
+        }
+
         private static JObject GetProxyRuntime()
         {
             var result = GetProxySettings();
@@ -775,16 +1542,36 @@ namespace WinsockPacketEditor.Mcp
             var httpPort = (int)settings["httpPort"];
             var portConflict = socks && http && socksPort == httpPort;
             var running = (bool)settings["running"];
+            var checks = new JArray();
+            AddHealthCheck(checks, "socks5PortRange", !socks || (socksPort >= 1 && socksPort <= 65535), "SOCKS5 端口范围有效");
+            AddHealthCheck(checks, "httpPortRange", !http || (httpPort >= 1 && httpPort <= 65535), "HTTP 端口范围有效");
+            AddHealthCheck(checks, "portConflict", !portConflict, "SOCKS5 与 HTTP 端口不冲突");
+            var auth = (bool)settings["authEnabled"];
+            var onlyWpc = (bool)settings["onlyWpc"];
+            AddHealthCheck(checks, "onlyWpcAuth", !onlyWpc || auth, "Only-WPC 模式要求认证开启");
+            var external = (bool)settings["externalProxyEnabled"];
+            var externalHost = ((string)settings["externalProxyIp"] ?? string.Empty).Trim();
+            var externalPort = (int)settings["externalProxyPort"];
+            AddHealthCheck(checks, "externalProxyEndpoint", !external || (externalHost.Length > 0 && externalPort >= 1 && externalPort <= 65535), "外部代理 endpoint 有效");
+            AddHealthCheck(checks, "listenerState", !running || socks || http, "运行时至少启用一个代理监听器");
+            var healthy = true;
+            foreach (var check in checks) if (!(bool)check["ok"]) { healthy = false; break; }
             return new JObject
             {
-                ["healthy"] = !portConflict,
+                ["healthy"] = healthy,
                 ["running"] = running,
                 ["socks5Enabled"] = socks,
                 ["httpEnabled"] = http,
                 ["portConflict"] = portConflict,
+                ["checks"] = checks,
                 ["sessionCount"] = Operate.ProxyConfig.Proxy.SessionCount,
                 ["sampledAtUtc"] = DateTime.UtcNow.ToString("o")
             };
+        }
+
+        private static void AddHealthCheck(JArray checks, string name, bool ok, string description)
+        {
+            checks.Add(new JObject { ["name"] = name, ["ok"] = ok, ["description"] = description });
         }
 
         private static JObject GetExecutorsDetail()
@@ -822,7 +1609,6 @@ namespace WinsockPacketEditor.Mcp
             var idempotencyKey = (string)arguments?["idempotencyKey"];
             if (autoToken == null || autoToken.Type != JTokenType.Boolean) throw new InvalidOperationException("auto must be a boolean.");
             var auto = autoToken.Value<bool>();
-            if (!auto && !System.Net.IPAddress.TryParse(ip, out System.Net.IPAddress _)) throw new InvalidOperationException("ip must be a valid IPv4 or IPv6 address when auto is false.");
             JObject prior;
             if (McpWriteGuard.TryGetCompleted("proxy.bindIp.set", idempotencyKey, arguments, out prior)) return prior;
             var current = ReadOnUi(() => new { auto = Operate.ProxyConfig.Proxy.ProxyIP_Auto, ip = Operate.ProxyConfig.Proxy.ProxyIP ?? string.Empty });
@@ -833,14 +1619,9 @@ namespace WinsockPacketEditor.Mcp
                 auto ? "将代理监听地址切换为自动检测。" : "将代理监听地址切换为“" + ip + "”。",
                 () =>
                 {
-                    if (!auto && !System.Net.IPAddress.TryParse(ip, out System.Net.IPAddress _)) throw new InvalidOperationException("ip must be a valid IPv4 or IPv6 address when auto is false.");
-                    var changed = Operate.ProxyConfig.Proxy.ProxyIP_Auto != auto || !string.Equals(Operate.ProxyConfig.Proxy.ProxyIP ?? string.Empty, ip, StringComparison.Ordinal);
-                    if (changed)
-                    {
-                        Operate.ProxyConfig.Proxy.ProxyIP_Auto = auto;
-                        Operate.ProxyConfig.Proxy.ProxyIP = ip;
-                        Operate.SystemConfig.SaveProxyMode_ToDB();
-                    }
+                    bool changed;
+                    var error = Operate.ProxyConfig.Proxy.SetProxyBindIp(auto, ip, out changed);
+                    if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
                     return new JObject { ["changed"] = changed, ["auto"] = auto, ["ip"] = auto ? (JToken)JValue.CreateNull() : ip };
                 })).ConfigureAwait(false);
         }
@@ -854,23 +1635,17 @@ namespace WinsockPacketEditor.Mcp
             JObject prior;
             if (McpWriteGuard.TryGetCompleted("proxy.external.setEnabled", idempotencyKey, arguments, out prior)) return prior;
             var config = ReadOnUi(() => new { enabled = Operate.ProxyConfig.Proxy.Enable_ExternalProxy, ip = (Operate.ProxyConfig.Proxy.ExternalProxy_IP ?? string.Empty).Trim(), port = (int)Operate.ProxyConfig.Proxy.ExternalProxy_Port, auth = Operate.ProxyConfig.Proxy.Enable_ExternalProxy_Auth });
-            if (enabled)
-            {
-                if (string.IsNullOrWhiteSpace(config.ip)) throw new InvalidOperationException("An external proxy host is required before enabling it.");
-                if (config.port < 1 || config.port > 65535) throw new InvalidOperationException("The external proxy port must be between 1 and 65535.");
-            }
             return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync(
                 "proxy.external.setEnabled", idempotencyKey, arguments,
                 (enabled ? "启用" : "停用") + "外部代理（" + config.ip + ":" + config.port + "；认证" + (config.auth ? "已启用" : "未启用") + "）。",
                 () =>
                 {
-                    if (Operate.ProxyConfig.Proxy.Enable_ExternalProxy == enabled) return new JObject { ["changed"] = false, ["enabled"] = enabled, ["host"] = config.ip, ["port"] = config.port };
                     var host = (Operate.ProxyConfig.Proxy.ExternalProxy_IP ?? string.Empty).Trim();
                     var port = (int)Operate.ProxyConfig.Proxy.ExternalProxy_Port;
-                    if (enabled && (string.IsNullOrWhiteSpace(host) || port < 1 || port > 65535)) throw new InvalidOperationException("The configured external proxy endpoint is invalid.");
-                    Operate.ProxyConfig.Proxy.Enable_ExternalProxy = enabled;
-                    Operate.SystemConfig.SaveProxyMode_ToDB();
-                    return new JObject { ["changed"] = true, ["enabled"] = enabled, ["host"] = host, ["port"] = port };
+                    bool changed;
+                    var error = Operate.ProxyConfig.Proxy.SetExternalProxyEnabled(enabled, out changed);
+                    if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
+                    return new JObject { ["changed"] = changed, ["enabled"] = enabled, ["host"] = host, ["port"] = port };
                 })).ConfigureAwait(false);
         }
 
@@ -931,23 +1706,65 @@ namespace WinsockPacketEditor.Mcp
         {
             var mode = ((string)arguments?["mode"] ?? string.Empty).Trim().ToLowerInvariant();
             if (mode != "proxy" && mode != "inject") throw new InvalidOperationException("Mode must be proxy or inject.");
-            if (Operate.SystemConfig.SelectMode != Operate.SystemConfig.SystemMode.None)
-                throw new InvalidOperationException("WPE has already left the start page.");
             var idempotencyKey = (string)arguments?["idempotencyKey"];
             JObject prior;
             if (McpWriteGuard.TryGetCompleted("start.mode.select", idempotencyKey, arguments, out prior)) return prior;
-            return await McpWriteGuard.ApproveAndApplyAsync(
-                "start.mode.select", idempotencyKey, arguments,
-                mode == "proxy" ? "进入 WPE 代理模式。不会自动启动代理监听。" : "进入 WPE 注入模式选择页。不会自动选择目标或执行注入。",
-                () =>
+            return await InvokeOnUiAsync<JToken>(async () =>
+            {
+                var selected = Operate.SystemConfig.SelectMode;
+                if (selected != Operate.SystemConfig.SystemMode.None)
                 {
-                    if (Operate.SystemConfig.SelectMode != Operate.SystemConfig.SystemMode.None)
-                        throw new InvalidOperationException("WPE has already left the start page.");
-                    var request = StartModeRequested;
-                    if (request == null) throw new InvalidOperationException("WPE start page is not ready.");
-                    request(mode);
-                    return new JObject { ["changed"] = true, ["mode"] = mode, ["outcome"] = "approved" };
-                }).ConfigureAwait(false);
+                    var current = selected == Operate.SystemConfig.SystemMode.Proxy ? "proxy" : "inject";
+                    // Repeating the desired startup action is normal when an AI retries after
+                    // a delayed response. It is not an error and must not prompt again.
+                    if (current == mode)
+                    {
+                        return (JToken)new JObject
+                        {
+                            ["changed"] = false,
+                            ["mode"] = current,
+                            ["screen"] = current,
+                            ["proxyRunning"] = Operate.ProxyConfig.Proxy.IsRunning,
+                            ["outcome"] = "alreadySelected"
+                        };
+                    }
+
+                    // Mode selection is intentionally one-way. A caller on any non-start page
+                    // receives a machine-readable unavailable result instead of a vague error.
+                    return (JToken)new JObject
+                    {
+                        ["changed"] = false,
+                        ["mode"] = current,
+                        ["requestedMode"] = mode,
+                        ["outcome"] = "unavailable",
+                        ["reason"] = "mode_already_selected"
+                    };
+                }
+
+                return await McpWriteGuard.ApproveAndApplyAsync(
+                    "start.mode.select", idempotencyKey, arguments,
+                    mode == "proxy" ? "进入 WPE 代理模式。不会自动启动代理监听。" : "进入 WPE 注入模式选择页。不会自动选择目标或执行注入。",
+                    () =>
+                    {
+                        var request = StartModeRequested;
+                        if (request == null) throw new InvalidOperationException("WPE start page is not ready.");
+                        // The bridge event only asks the WebView to navigate. Commit the
+                        // one-way mode selection before publishing it so a second MCP
+                        // request cannot race the component's later enter*Mode callback.
+                        Operate.SystemConfig.SelectMode = mode == "proxy"
+                            ? Operate.SystemConfig.SystemMode.Proxy
+                            : Operate.SystemConfig.SystemMode.Inject;
+                        request(mode);
+                        return new JObject
+                        {
+                            ["changed"] = true,
+                            ["mode"] = mode,
+                            ["screen"] = mode,
+                            ["proxyRunning"] = Operate.ProxyConfig.Proxy.IsRunning,
+                            ["outcome"] = "approved"
+                        };
+                    });
+            }).ConfigureAwait(false);
         }
 
         private static JObject ListFirewallRules(JObject arguments)
@@ -996,7 +1813,10 @@ namespace WinsockPacketEditor.Mcp
             var text = (string)arguments?["text"] ?? string.Empty;
             if (text.Length > 1024 * 1024) throw new InvalidOperationException("Text exceeds 1 MiB.");
             var decode = (bool?)arguments?["decode"] ?? false;
-            return new JObject { ["text"] = decode ? Encoding.UTF8.GetString(Convert.FromBase64String(text)) : Convert.ToBase64String(Encoding.UTF8.GetBytes(text)), ["format"] = decode ? "utf8" : "base64" };
+            // Keep the MCP result aligned with WPE's Encoding Conversion page: one
+            // input produces its complete native conversion table, not a separate
+            // MCP-only UTF-8/Base64 conversion.
+            return new JObject { ["rows"] = JArray.FromObject(Operate.SystemConfig.Transcode(text, decode)) };
         }
 
         private static JObject BytesCompare(JObject arguments)
@@ -1004,9 +1824,8 @@ namespace WinsockPacketEditor.Mcp
             var left = (string)arguments?["left"] ?? string.Empty;
             var right = (string)arguments?["right"] ?? string.Empty;
             if (left.Length > 1024 * 1024 || right.Length > 1024 * 1024) throw new InvalidOperationException("Input exceeds 1 MiB.");
-            var a = Encoding.UTF8.GetBytes(left); var b = Encoding.UTF8.GetBytes(right);
-            var same = 0; while (same < a.Length && same < b.Length && a[same] == b[same]) same++;
-            return new JObject { ["equal"] = a.Length == b.Length && same == a.Length, ["commonPrefixBytes"] = same, ["leftBytes"] = a.Length, ["rightBytes"] = b.Length };
+            var minimumRun = Math.Max(1, Math.Min(4096, (int?)arguments?["minimumRun"] ?? 2));
+            return new JObject { ["rows"] = JArray.FromObject(Operate.SystemConfig.FindDuplicates(left, right, minimumRun)) };
         }
 
         private static JObject BytesExtract(JObject arguments)
@@ -1016,21 +1835,15 @@ namespace WinsockPacketEditor.Mcp
             var bytes = Convert.FromBase64String(content);
             if (bytes.Length > 4 * 1024 * 1024) throw new InvalidOperationException("Content exceeds 4 MiB.");
             if (kind < 0 || kind > 32) throw new InvalidOperationException("Unsupported extraction kind.");
-            return new JObject { ["kind"] = kind, ["value"] = Operate.SystemConfig.BytesToString((Operate.PacketConfig.Packet.EncodingFormat)kind, bytes) };
+            return JObject.FromObject(Operate.SystemConfig.ExtractData(kind, bytes));
         }
 
         private static T ReadOnUi<T>(Func<T> action)
         {
-            if (Operate.SystemConfig.InvokeAction == null) throw new InvalidOperationException("WPE UI is not ready.");
-            T result = default(T);
-            Exception failure = null;
-            using (var done = new ManualResetEventSlim(false))
-            {
-                Operate.SystemConfig.InvokeAction(() => { try { result = action(); } catch (Exception ex) { failure = ex; } finally { done.Set(); } });
-                if (!done.Wait(TimeSpan.FromSeconds(3))) throw new TimeoutException("WPE UI did not answer in time.");
-            }
-            if (failure != null) throw failure;
-            return result;
+            // WebUi.OnUi is WPE's established synchronous UI-boundary used by
+            // remote management. Reusing it avoids a second, subtly different
+            // invoke/wait protocol for MCP reads.
+            return WebUi.OnUi(action);
         }
 
         private static Task<T> InvokeOnUiAsync<T>(Func<Task<T>> action)

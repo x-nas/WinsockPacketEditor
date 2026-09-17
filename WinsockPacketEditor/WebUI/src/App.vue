@@ -79,6 +79,12 @@ onMounted(async () => {
     */
     initLang(s.language)
 
+    //MCP 的模式选择可能发生在本页刚加载、事件监听尚未登记的极短窗口内。
+    //事件负责即时切换；这里读取 C# 中已提交的状态，保证不会因错过事件停留在启动页。
+    if (view.value === 'start' && (s.selectedMode === 'proxy' || s.selectedMode === 'inject')) {
+      view.value = s.selectedMode
+    }
+
     /*
       主题与语言同一条理由：要在任何像素画出来之前定好。
 

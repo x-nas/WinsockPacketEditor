@@ -6525,6 +6525,120 @@ namespace WinsockPacketEditor
                     return Math.Min(Value, MaxConnectionCap());
                 }
 
+                // These setters are the single business boundary for the proxy-settings UI
+                // and local automation.  They validate, mutate and persist as one operation;
+                // callers must not assign these fields and save ProxyMode themselves.
+                public static string SaveProxySettings(bool proxyIpAuto, string proxyIp, bool enableSocks5, int socks5Port, bool enableAuth, bool onlyWpc, int maxConnection, bool enableHttp, int httpPort)
+                {
+                    proxyIp = (proxyIp ?? string.Empty).Trim();
+                    if (!enableSocks5) return UI.T("ProxySettingsForm.ProxyType.Error", "代理类型未设置");
+                    if (socks5Port < 1 || socks5Port > 65535 || httpPort < 1 || httpPort > 65535) return UI.T("ProxySettingsForm.Port.Error", "端口必须在 1 ~ 65535 之间");
+                    if (enableHttp && socks5Port == httpPort) return UI.T("ProxySettingsForm.ProxyType.Error", "SOCKS 和 HTTP 端口不能相同");
+                    if (!proxyIpAuto && !IPAddress.TryParse(proxyIp, out IPAddress _)) return UI.T("ProxySettingsForm.ProxyIP.Empty", "请选择监听地址，或勾上「自动检测」");
+                    if (onlyWpc && !enableAuth) return UI.T("ProxySettingsForm.OnlyWpc.NeedAuth", "「只允许 WPC 客户端连接」需要先启用身份认证");
+
+                    int cap = MaxConnectionCap();
+                    if (maxConnection < 1 || maxConnection > cap)
+                    {
+                        return string.Format(UI.T("ProxySettingsForm.MaxConnection.Error", "最大连接数必须在 1 ~ {0} 之间（每个连接预留 {1} KB，本机内存 {2} GB）"), cap, ProxyReceiveBufferBytes / 1024, Math.Round(Kernel32.TotalPhysicalMemory() / 1073741824.0, 1));
+                    }
+
+                    ProxyIP_Auto = proxyIpAuto;
+                    ProxyIP = proxyIp;
+                    Enable_SOCKS5 = enableSocks5;
+                    SOCKS5_Port = (ushort)socks5Port;
+                    Enable_Auth = enableAuth;
+                    Only_WPC_Client = onlyWpc;
+                    MaxConnectionNumber = maxConnection;
+                    Enable_HTTP = enableHttp;
+                    HTTP_Port = (ushort)httpPort;
+                    SystemConfig.SaveProxyMode_ToDB();
+                    return string.Empty;
+                }
+
+                public static string SetProxyAuthEnabled(bool enabled, out bool changed)
+                {
+                    changed = Enable_Auth != enabled;
+                    if (!enabled && Only_WPC_Client) return "Proxy authentication cannot be disabled while Only-WPC mode is enabled.";
+                    if (changed) { Enable_Auth = enabled; SystemConfig.SaveProxyMode_ToDB(); }
+                    return string.Empty;
+                }
+
+                public static string SetProxyHttpEnabled(bool enabled, out bool changed)
+                {
+                    changed = Enable_HTTP != enabled;
+                    if (enabled && !Enable_SOCKS5) return "HTTP proxy requires SOCKS5 to be enabled.";
+                    if (enabled && HTTP_Port == SOCKS5_Port) return "HTTP and SOCKS5 proxy ports must be different.";
+                    if (changed) { Enable_HTTP = enabled; SystemConfig.SaveProxyMode_ToDB(); }
+                    return string.Empty;
+                }
+
+                public static string SetProxyMaxConnections(int value, out bool changed, out int cap)
+                {
+                    cap = MaxConnectionCap();
+                    changed = MaxConnectionNumber != value;
+                    if (value < 1 || value > cap) return "maxConnection is outside the current machine limit.";
+                    if (changed) { MaxConnectionNumber = value; SystemConfig.SaveProxyMode_ToDB(); }
+                    return string.Empty;
+                }
+
+                public static string SetProxySocks5Port(int port, out bool changed)
+                {
+                    changed = SOCKS5_Port != port;
+                    if (port < 1 || port > 65535) return "The SOCKS5 port must be between 1 and 65535.";
+                    if (Enable_HTTP && port == HTTP_Port) return "SOCKS5 and HTTP proxy ports must be different.";
+                    if (changed) { SOCKS5_Port = (ushort)port; SystemConfig.SaveProxyMode_ToDB(); }
+                    return string.Empty;
+                }
+
+                public static string SetProxyHttpPort(int port, out bool changed)
+                {
+                    changed = HTTP_Port != port;
+                    if (port < 1 || port > 65535) return "The HTTP port must be between 1 and 65535.";
+                    if (!Enable_HTTP) return "The HTTP proxy is disabled; enable it before changing its port.";
+                    if (Enable_SOCKS5 && port == SOCKS5_Port) return "HTTP and SOCKS5 proxy ports must be different.";
+                    if (changed) { HTTP_Port = (ushort)port; SystemConfig.SaveProxyMode_ToDB(); }
+                    return string.Empty;
+                }
+
+                public static string SetFirewallEnabled(bool enabled, out bool changed)
+                {
+                    changed = EnableFireWall != enabled;
+                    if (changed) { EnableFireWall = enabled; SystemConfig.SaveProxyMode_ToDB(); }
+                    return string.Empty;
+                }
+
+                public static string SetOnlyWpcEnabled(bool enabled, out bool changed)
+                {
+                    changed = Only_WPC_Client != enabled;
+                    if (enabled && !Enable_Auth) return "Only-WPC mode requires proxy authentication to be enabled.";
+                    if (changed) { Only_WPC_Client = enabled; SystemConfig.SaveProxyMode_ToDB(); }
+                    return string.Empty;
+                }
+
+                public static string SetProxyBindIp(bool auto, string ip, out bool changed)
+                {
+                    ip = (ip ?? string.Empty).Trim();
+                    changed = ProxyIP_Auto != auto || !string.Equals(ProxyIP ?? string.Empty, ip, StringComparison.Ordinal);
+                    if (!auto && !IPAddress.TryParse(ip, out IPAddress _)) return "ip must be a valid IPv4 or IPv6 address when auto is false.";
+                    if (changed) { ProxyIP_Auto = auto; ProxyIP = ip; SystemConfig.SaveProxyMode_ToDB(); }
+                    return string.Empty;
+                }
+
+                public static string SetExternalProxyEnabled(bool enabled, out bool changed)
+                {
+                    string host = (ExternalProxy_IP ?? string.Empty).Trim();
+                    changed = Enable_ExternalProxy != enabled;
+                    if (enabled)
+                    {
+                        if (ExternalProxy_Port < 1 || ExternalProxy_Port > 65535) return "The external proxy port must be between 1 and 65535.";
+                        string error = ValidateExtProxy(true, host, Enable_ExternalProxy_AppointPort, ExternalProxy_AppointPort, Enable_ExternalProxy_Auth, ExternalProxy_UserName, ExternalProxy_PassWord);
+                        if (!string.IsNullOrEmpty(error)) return error;
+                    }
+                    if (changed) { Enable_ExternalProxy = enabled; SystemConfig.SaveProxyMode_ToDB(); }
+                    return string.Empty;
+                }
+
                 /// <summary>给定连接数在启动时会预留多少字节。</summary>
                 public static long PreallocBytes(int Connections)
                 {
@@ -12305,6 +12419,27 @@ namespace WinsockPacketEditor
                     }
 
                     return false;
+                }
+
+                /// <summary>按 Id 删除一个账号，不再弹第二个确认框；调用方必须先完成自己的确认。</summary>
+                public static bool DeleteAccount_ById(string AID)
+                {
+                    try
+                    {
+                        AccountInfo ai = ProxyConfig.Account.FindAccount_ById(AID);
+                        if (ai == null) return false;
+                        using (FeedPump.Suppress(FeedList.Account))
+                        {
+                            if (!ProxyConfig.Account.DeleteProxyAccount_ByAccountID(ai.AID)) return false;
+                        }
+                        if (UI.Feed.NeedsRows) UI.Feed.Remove(FeedList.Account, AccountRow.From_(ai).Id);
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(DeleteAccount_ById), ex);
+                        return false;
+                    }
                 }
 
                 /// <summary>
@@ -20754,7 +20889,6 @@ namespace WinsockPacketEditor
                 public static string AddFilter_New_ById()
                 {
                     int before = FilterConfig.List.lstFilterInfo.Count;
-
                     FilterConfig.Filter.AddFilter_New();
 
                     if (FilterConfig.List.lstFilterInfo.Count <= before)
@@ -20762,7 +20896,19 @@ namespace WinsockPacketEditor
                         return string.Empty;
                     }
 
-                    FilterConfig.List.SaveFilterList_ToDB();
+                    try
+                    {
+                        FilterConfig.List.SaveFilterList_ToDB();
+                    }
+                    catch
+                    {
+                        // Do not leave an in-memory filter behind when persistence fails.
+                        while (FilterConfig.List.lstFilterInfo.Count > before)
+                        {
+                            FilterConfig.List.lstFilterInfo.RemoveAt(FilterConfig.List.lstFilterInfo.Count - 1);
+                        }
+                        throw;
+                    }
 
                     //AddFilter 是往后追加的，新的那条就在表尾
                     return FilterConfig.List.lstFilterInfo[FilterConfig.List.lstFilterInfo.Count - 1]
@@ -23527,22 +23673,26 @@ namespace WinsockPacketEditor
                                 SendExecute se = Operate.SendConfig.Send.DoSend(si.SID);
                                 if (se != null)
                                 {
+                                    //无论并发还是顺序模式，都要登记当前执行器。停止、运行态计数和 MCP
+                                    //紧急停止都以这张表为唯一真源；顺序模式以前漏登记，造成任务实际在跑
+                                    //却显示为 0，也无法如实报告已停止数量。
+                                    Operate.SendConfig.List.SendExecute_Add(se);
                                     if (Operate.SystemConfig.ListExecute == Operate.SystemConfig.Execute.Together)
                                     {
-                                        Operate.SendConfig.List.SendExecute_Add(se);
+                                        continue;
                                     }
-                                    else
+
+                                    //「等某件事做完」用 WaitOne，取消当场返回（原来最坏还要睡满 10ms）
+                                    while (se.Running)
                                     {
-                                        //⚠️ 「等某件事做完」用 WaitOne，取消当场返回（原来最坏还要睡满 10ms）
-                                        while (se.Running)
+                                        if (token.WaitHandle.WaitOne(10))
                                         {
-                                            if (token.WaitHandle.WaitOne(10))
-                                            {
-                                                se.StopSend();
-                                                return;
-                                            }
+                                            se.StopSend();
+                                            return;
                                         }
                                     }
+
+                                    Operate.SendConfig.List.SendExecute_Remove(se);
                                 }
                             }
                         }
@@ -23743,6 +23893,12 @@ namespace WinsockPacketEditor
                     }
 
                     return null;
+                }
+
+                /// <summary>发送列表的脱离快照；供 UI 与自动化读取，绝不泄露封包正文。</summary>
+                public static SendRow[] GetSendRows()
+                {
+                    return SendConfig.List.lstSendInfo.Select(SendRow.From_).Where(x => x != null).ToArray();
                 }
 
                 /// <summary>
@@ -25689,22 +25845,24 @@ namespace WinsockPacketEditor
                                 RobotExecute re = Operate.RobotConfig.Robot.DoRobot(ri.RID, null);
                                 if (re != null)
                                 {
+                                    //与发送列表同理：顺序执行中的当前机器人也必须可被停止、计数和审计。
+                                    Operate.RobotConfig.List.RobotExecute_Add(re);
                                     if (Operate.SystemConfig.ListExecute == Operate.SystemConfig.Execute.Together)
                                     {
-                                        Operate.RobotConfig.List.RobotExecute_Add(re);
+                                        continue;
                                     }
-                                    else
+
+                                    //「等某件事做完」用 WaitOne，取消当场返回（原来最坏还要睡满 100ms）
+                                    while (re.Running)
                                     {
-                                        //⚠️ 「等某件事做完」用 WaitOne，取消当场返回（原来最坏还要睡满 100ms）
-                                        while (re.Running)
+                                        if (token.WaitHandle.WaitOne(100))
                                         {
-                                            if (token.WaitHandle.WaitOne(100))
-                                            {
-                                                re.StopRobot();
-                                                return;
-                                            }
+                                            re.StopRobot();
+                                            return;
                                         }
                                     }
+
+                                    Operate.RobotConfig.List.RobotExecute_Remove(re);
                                 }
                             }
                         }
@@ -25892,6 +26050,12 @@ namespace WinsockPacketEditor
                         Operate.DoLog(nameof(FindRobot_ById), ex);
                         return null;
                     }
+                }
+
+                /// <summary>机器人列表的脱离快照；指令正文由单项详情按需读取。</summary>
+                public static RobotRow[] GetRobotRows()
+                {
+                    return RobotConfig.List.lstRobotInfo.Select(RobotRow.From_).Where(x => x != null).ToArray();
                 }
 
                 /// <summary>Id 数组 → 模型列表，<b>按列表里的先后顺序</b>返回（理由与 PickFilters / PickSends 相同：上移 / 下移是逐个做的）。</summary>
@@ -27406,6 +27570,12 @@ namespace WinsockPacketEditor
                         Operate.DoLog(nameof(FindWareHouse_ById), ex);
                         return null;
                     }
+                }
+
+                /// <summary>仓库列表的脱离快照；仓储数据正文不包含在列表结果中。</summary>
+                public static WareHouseRow[] GetWareHouseRows()
+                {
+                    return WareHouseConfig.List.lstWareHouseInfo.Select(WareHouseRow.From_).Where(x => x != null).ToArray();
                 }
 
                 /// <summary>
@@ -30245,6 +30415,7 @@ namespace WinsockPacketEditor
                 public static ConcurrentQueue<LogInfo> cqLogInfo = new ConcurrentQueue<LogInfo>();
                 public static ConcurrentQueue<FilterLogInfo> cqFilterLogInfo = new ConcurrentQueue<FilterLogInfo>();
                 public static ConcurrentQueue<ProxyLogInfo> cqProxyLogInfo = new ConcurrentQueue<ProxyLogInfo>();
+                public static ConcurrentQueue<LogInfo> cqMcpLogInfo = new ConcurrentQueue<LogInfo>();
 
                 #region//日志入队列
 
@@ -30269,6 +30440,12 @@ namespace WinsockPacketEditor
                 {
                     ProxyLogInfo pli = new ProxyLogInfo(UserName, LoginIP, LogContent);
                     await Task.Run(() => cqProxyLogInfo.Enqueue(pli));
+                }
+
+                /// <summary>MCP 网关在后台线程运行，直接使用并发队列，不额外派发线程池任务。</summary>
+                public static void McpLogToQueue(string Category, string Content)
+                {
+                    cqMcpLogInfo.Enqueue(new LogInfo(Category, Content));
                 }
 
                 #endregion
@@ -30299,6 +30476,14 @@ namespace WinsockPacketEditor
                     }
                 }
 
+                public static void ClearMcpLogQueue()
+                {
+                    while (!cqMcpLogInfo.IsEmpty)
+                    {
+                        cqMcpLogInfo.TryDequeue(out LogInfo li);
+                    }
+                }
+
                 #endregion                
             }
 
@@ -30313,6 +30498,7 @@ namespace WinsockPacketEditor
                 public static BindingList<LogInfo> lstLogInfo = new BindingList<LogInfo>();
                 public static BindingList<FilterLogInfo> lstFilterLogInfo = new BindingList<FilterLogInfo>();
                 public static BindingList<ProxyLogInfo> lstProxyLogInfo = new BindingList<ProxyLogInfo>();
+                public static BindingList<LogInfo> lstMcpLogInfo = new BindingList<LogInfo>();
 
                 #region//日志入列表
 
@@ -30341,6 +30527,9 @@ namespace WinsockPacketEditor
                         FlushOne(Queue.cqProxyLogInfo, lstProxyLogInfo, FeedList.ProxyLog,
                             x => ProxyLogRow.From_(x));
 
+                        FlushOne(Queue.cqMcpLogInfo, lstMcpLogInfo, FeedList.McpLog,
+                            x => LogRow.From_(x));
+
                         if (AutoClear)
                         {
                             //AutoClear_Value 是 decimal，比较与传参都要显式转
@@ -30349,6 +30538,7 @@ namespace WinsockPacketEditor
                             TrimOne(lstLogInfo, FeedList.SystemLog, Queue.cqLogInfo, "SystemLogQueue", keep);
                             TrimOne(lstFilterLogInfo, FeedList.FilterLog, Queue.cqFilterLogInfo, "FilterLogQueue", keep);
                             TrimOne(lstProxyLogInfo, FeedList.ProxyLog, Queue.cqProxyLogInfo, "ProxyLogQueue", keep);
+                            TrimOne(lstMcpLogInfo, FeedList.McpLog, Queue.cqMcpLogInfo, "McpLogQueue", keep);
                         }
                     }
                     catch (Exception ex)
@@ -30444,6 +30634,11 @@ namespace WinsockPacketEditor
                     lstProxyLogInfo.Clear();
                 }
 
+                public static void ClearMcpLogList()
+                {
+                    lstMcpLogInfo.Clear();
+                }
+
                 #endregion
 
                 #region//日志列表 - 外壳入口（三路日志按 Kind 区分，只出基础类型）
@@ -30453,8 +30648,8 @@ namespace WinsockPacketEditor
                     动作本身散在 Controls/LogList.cs 的三段 switch 里 —— 三路日志各抄了一遍。
                     这里按 Kind 收成一份，两套 UI 都能调。
 
-                    Kind：0 = 系统日志、1 = 滤镜日志、2 = 代理日志。
-                    与前端 SystemLog.vue 的三个页签同序，也与 FeedList.SystemLog / FilterLog / ProxyLog 同序。
+                    Kind：0 = 系统日志、1 = 滤镜日志、2 = 代理日志、3 = MCP 日志。
+                    与前端 SystemLog.vue 的页签同序，也与对应 FeedList 同序。
                 */
 
                 /// <summary>三路日志的 Kind。前端传的是这个。</summary>
@@ -30463,6 +30658,7 @@ namespace WinsockPacketEditor
                     System = 0,
                     Filter = 1,
                     Proxy = 2,
+                    Mcp = 3,
                 }
 
                 /// <summary>
@@ -30494,6 +30690,12 @@ namespace WinsockPacketEditor
                                 Queue.ClearProxyLogQueue();
                                 ClearProxyLogList();
                                 UI.Feed.Clear(FeedList.ProxyLog);
+                                break;
+
+                            case LogKind.Mcp:
+                                Queue.ClearMcpLogQueue();
+                                ClearMcpLogList();
+                                UI.Feed.Clear(FeedList.McpLog);
                                 break;
 
                             default:
@@ -30532,6 +30734,10 @@ namespace WinsockPacketEditor
                                 await SaveProxyLogList_Dialog(name, lstProxyLogInfo.ToList());
                                 break;
 
+                            case LogKind.Mcp:
+                                await SaveLogList_Dialog(name + " MCP", lstMcpLogInfo.ToList());
+                                break;
+
                             default:
                                 await SaveLogList_Dialog(name, lstLogInfo.ToList());
                                 break;
@@ -30551,9 +30757,9 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        if (LogConfig.List.lstLogInfo.Count > 0)
+                        if (liList != null && liList.Count > 0)
                         {
-                            int SaveCount = LogConfig.List.lstLogInfo.Count;
+                            int SaveCount = liList.Count;
 
                             FilePick sfdSaveToExcel = new FilePick();
                             sfdSaveToExcel.Filter = UI.T("ExcelFile", "Excel 文件") + " (*.xls)|*.xls";

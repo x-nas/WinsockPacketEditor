@@ -2,6 +2,7 @@ using System.IO.Pipes;
 using System.Security.Principal;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 
 internal sealed class WpeGatewayClient
 {
@@ -15,7 +16,7 @@ internal sealed class WpeGatewayClient
             PipeOptions.Asynchronous, TokenImpersonationLevel.Identification);
         await pipe.ConnectAsync(3000, cancellationToken);
 
-        var request = JsonSerializer.SerializeToUtf8Bytes(new GatewayRequest(Guid.NewGuid().ToString("N"), operation, arguments), JsonOptions);
+        var request = JsonSerializer.SerializeToUtf8Bytes(new GatewayRequest(Guid.NewGuid().ToString("N"), operation, EnsureIdempotencyKey(arguments)), JsonOptions);
         await WriteFrameAsync(pipe, request, cancellationToken);
         using var response = JsonDocument.Parse(await ReadFrameAsync(pipe, cancellationToken));
         var root = response.RootElement;
@@ -26,6 +27,26 @@ internal sealed class WpeGatewayClient
         }
 
         return root.GetProperty("result").GetRawText();
+    }
+
+    /*
+       MCP 客户端常会把模型生成的写入参数原样转发；有些客户端不会替必填 UUID
+       生成值，导致本来可安全执行的写入先失败一次。仅在工具声明了
+       idempotencyKey、但该值为空时补一个 UUID；显式提供的键绝不改写。
+
+       WPE 侧仍以这个键做请求去重与审计。客户端若需要跨进程重试的稳定键，
+       依然可以显式传入自己的 UUID。
+    */
+    private static object? EnsureIdempotencyKey(object? arguments)
+    {
+        if (arguments == null) return null;
+        var node = JsonSerializer.SerializeToNode(arguments, JsonOptions) as JsonObject;
+        if (node == null) return arguments;
+        JsonNode? key;
+        if (!node.TryGetPropertyValue("idempotencyKey", out key)) return node;
+        if (key != null && !string.IsNullOrWhiteSpace(key.GetValue<string>())) return node;
+        node["idempotencyKey"] = Guid.NewGuid().ToString("D");
+        return node;
     }
 
     private static async Task WriteFrameAsync(Stream stream, byte[] payload, CancellationToken cancellationToken)
