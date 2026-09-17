@@ -21,7 +21,9 @@ namespace WinsockPacketEditor.Mcp
     /// </summary>
     internal sealed class McpAgentGateway : IDisposable
     {
-        private const int MaxFrameBytes = 1024 * 1024;
+        // The local, current-user pipe can carry complete packet data. This remains a
+        // protocol allocation guard, not a data-redaction policy.
+        private const int MaxFrameBytes = 128 * 1024 * 1024;
         // Connection ids are only stable for this WPE process. The random salt keeps
         // account/IP/device tuples from becoming externally meaningful identifiers.
         private static readonly string connectionIdSalt = Guid.NewGuid().ToString("N");
@@ -434,7 +436,7 @@ namespace WinsockPacketEditor.Mcp
         {
             var text = (string)a?["payloadBase64"];
             if (string.IsNullOrWhiteSpace(text)) throw new InvalidOperationException("payloadBase64 is required.");
-            try { var bytes = Convert.FromBase64String(text); if (bytes.Length == 0 || bytes.Length > MaxFrameBytes) throw new InvalidOperationException("Payload size is out of range."); return bytes; }
+            try { var bytes = Convert.FromBase64String(text); if (bytes.Length == 0 || bytes.Length > MaxFrameBytes * 3 / 4) throw new InvalidOperationException("Payload size is out of range."); return bytes; }
             catch (FormatException) { throw new InvalidOperationException("payloadBase64 must be valid Base64."); }
         }
         private static int ReadCollectionAction(string value, bool export)
@@ -1196,7 +1198,6 @@ namespace WinsockPacketEditor.Mcp
             var id = (long?)arguments?["id"];
             if (!id.HasValue || id.Value < 1) throw new InvalidOperationException("A positive packet id is required.");
             var mode = ReadCaptureMode(arguments, "proxy");
-            var includePayload = (bool?)arguments?["includePayload"] ?? false;
             byte[] bytes;
             byte[] raw;
             if (mode == "proxy")
@@ -1211,12 +1212,10 @@ namespace WinsockPacketEditor.Mcp
                 if (packet == null) return CaptureNotFound(id.Value, mode);
                 bytes = packet.PacketBuffer ?? new byte[0]; raw = packet.RawBuffer ?? new byte[0];
             }
-            const int maxPayloadBytes = 4 * 1024 * 1024;
-            var truncated = bytes.Length > maxPayloadBytes;
-            var result = new JObject { ["id"] = id.Value, ["mode"] = mode, ["found"] = true, ["truncated"] = truncated };
+            var result = new JObject { ["id"] = id.Value, ["mode"] = mode, ["found"] = true, ["truncated"] = false };
             using (var sha = System.Security.Cryptography.SHA256.Create()) result["sha256"] = BitConverter.ToString(sha.ComputeHash(bytes)).Replace("-", string.Empty).ToLowerInvariant();
-            result["payloadBase64"] = includePayload ? Convert.ToBase64String(bytes, 0, Math.Min(bytes.Length, maxPayloadBytes)) : (JToken)JValue.CreateNull();
-            result["rawPayloadBase64"] = includePayload ? Convert.ToBase64String(raw, 0, Math.Min(raw.Length, maxPayloadBytes)) : (JToken)JValue.CreateNull();
+            result["payloadBase64"] = Convert.ToBase64String(bytes);
+            result["rawPayloadBase64"] = Convert.ToBase64String(raw);
             result["modified"] = !bytes.AsSpan().SequenceEqual(raw);
             return result;
         }
@@ -1328,8 +1327,8 @@ namespace WinsockPacketEditor.Mcp
             var list = Operate.ProxyConfig.Account.lstAccountInfo;
             for (var i = offset; i < list.Count && rows.Count < limit; i++)
             {
-                var row = AccountRow.From_(list[i]);
-                if (row != null) rows.Add(JObject.FromObject(row));
+                var row = AccountToMcp(list[i]);
+                if (row != null) rows.Add(row);
             }
             return new JObject { ["rows"] = rows, ["nextCursor"] = NextCursor(offset, rows.Count, offset + rows.Count < list.Count) };
         }
@@ -1341,9 +1340,18 @@ namespace WinsockPacketEditor.Mcp
             if (!Guid.TryParse(id, out accountId)) throw new InvalidOperationException("Account id must be a GUID.");
             var account = Operate.ProxyConfig.Account.GetProxyAccount_ByAccountID(accountId);
             if (account == null) throw new InvalidOperationException("The account does not exist.");
-            // AccountRow is the same non-sensitive projection used by WPE's account list.
-            // It deliberately omits AccountInfo's encrypted password and any WPC token.
-            return JObject.FromObject(AccountRow.From_(account));
+            var result = AccountToMcp(account);
+            result["logins"] = JArray.FromObject(Operate.ProxyConfig.Account.GetAccountLogins_ById(accountId.ToString()));
+            return result;
+        }
+
+        private static JObject AccountToMcp(AccountInfo account)
+        {
+            var row = AccountRow.From_(account);
+            if (row == null) return null;
+            var result = JObject.FromObject(row);
+            result["password"] = Operate.SystemConfig.PassWord_Decrypt(account.Password ?? string.Empty);
+            return result;
         }
 
         private static JObject ListAccountLogins(JObject arguments)
@@ -1460,6 +1468,9 @@ namespace WinsockPacketEditor.Mcp
                 ["externalProxyPort"] = (int)Operate.ProxyConfig.Proxy.ExternalProxy_Port,
                 ["externalProxyAppointPort"] = Operate.ProxyConfig.Proxy.Enable_ExternalProxy_AppointPort,
                 ["externalProxyAuthEnabled"] = Operate.ProxyConfig.Proxy.Enable_ExternalProxy_Auth,
+                ["externalProxyUserName"] = Operate.ProxyConfig.Proxy.ExternalProxy_UserName ?? string.Empty,
+                ["externalProxyPassword"] = Operate.ProxyConfig.Proxy.ExternalProxy_PassWord ?? string.Empty,
+                ["externalProxyAppointPortContent"] = Operate.ProxyConfig.Proxy.ExternalProxy_AppointPort ?? string.Empty,
                 ["running"] = Operate.ProxyConfig.Proxy.IsRunning
             };
         }

@@ -12,7 +12,7 @@ MCP tool call (operation + idempotencyKey)
   -> WPE UI displays an approval card with a human-readable diff
   -> user approves or rejects in WPE
   -> WPE applies one transaction on the UI thread
-  -> audit event records outcome, affected ids and a redacted diff
+  -> audit event records outcome, affected ids and the complete request/result data
   -> MCP receives approved / rejected / expired result
 ```
 
@@ -21,14 +21,14 @@ MCP tool call (operation + idempotencyKey)
 - Every mutating request requires a caller-provided UUID `idempotencyKey`; a repeated key returns the original completed result and never applies a second mutation.
 - Approval expires after 60 seconds and is bound to the precise canonical request hash. Any changed field requires a new approval.
 - The MCP client cannot programmatically answer WPE's approval dialog.
-- Audit records contain operation, timestamp, request hash, outcome, redacted arguments and redacted result values. Passwords, tokens, packet payloads and encryption keys never enter an audit record.
+- Audit records contain operation, timestamp, request hash, outcome, complete arguments and complete result values. The local MCP caller is the current Windows user's WPE operator, so passwords, tokens and packet payloads are retained when supplied by a tool call.
 - Mutations execute through existing `Operate` business methods on the UI thread. MCP never writes the SQLite database directly.
 - A failed validation, rejection, timeout or cancellation causes no mutation.
 
 ## Rollout order
 
 1. Reversible list and account configuration edits: enable/disable an existing filter or account, and firewall list add/remove.
-2. Account and proxy configuration edits, after dedicated redaction and field validation tests.
+2. Account and proxy configuration edits, after complete-data and field validation tests.
 3. Operational actions (proxy start/stop, executor start/stop) with a high-risk approval class.
 4. Packet transmission and injection controls last; they require a separate per-session safety switch and are out of scope for the first Phase 2 release.
 
@@ -37,8 +37,8 @@ MCP tool call (operation + idempotencyKey)
 | Tool | Approval class | Notes |
 |---|---|---|
 | `wpe_filter_set_enabled` | reversible-config | Existing filter only; no filter body edits. |
-| `wpe_account_set_enabled` | reversible-config | Existing account only; never reads or changes its password. |
-| `wpe_proxy_auth_set_enabled` | reversible-config | Boolean-only authentication setting; rejects `Only_WPC_Client=true` with auth disabled and never handles credentials. |
+| `wpe_account_set_enabled` | reversible-config | Existing account only; changes its enabled state. |
+| `wpe_proxy_auth_set_enabled` | reversible-config | Boolean-only authentication setting; rejects `Only_WPC_Client=true` with auth disabled. |
 | `wpe_proxy_http_set_enabled` | reversible-config | Boolean-only HTTP proxy setting; validates the existing port against SOCKS5 before applying. |
 | `wpe_proxy_max_connections_set` | reversible-config | Integer-only limit; validates against the live memory-based cap before applying. |
 | `wpe_proxy_socks5_port_set` | reversible-config | Integer-only port; validates range and conflict with the enabled HTTP port before applying. |
@@ -46,7 +46,7 @@ MCP tool call (operation + idempotencyKey)
 | `wpe_firewall_set_enabled` | reversible-config | Boolean-only firewall switch; reversible and persisted after local confirmation. |
 | `wpe_proxy_only_wpc_set_enabled` | reversible-config | Boolean-only Only-WPC setting; enabling requires authentication to remain enabled. |
 | `wpe_proxy_bind_ip_set` | reversible-config | Auto or explicit IPv4/IPv6 listening address; invalid explicit addresses are rejected before confirmation. |
-| `wpe_external_proxy_set_enabled` | reversible-config | Boolean-only switch for the existing external endpoint; host/port are validated when enabling and credentials are never handled. |
+| `wpe_external_proxy_set_enabled` | reversible-config | Boolean-only switch for the existing external endpoint; host/port are validated when enabling. |
 | `wpe_proxy_start` | high-risk-operational | Starts configured proxy listeners after confirmation; idempotent when already running. |
 | `wpe_proxy_stop` | high-risk-operational | Stops listeners after confirmation and may disconnect existing sessions. |
 | `wpe_firewall_rule_add` | network-access | Adds one validated IPv4 address/range and persists it after approval. |

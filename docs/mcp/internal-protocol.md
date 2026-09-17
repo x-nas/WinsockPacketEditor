@@ -46,7 +46,7 @@ Failures never include raw exception data across the pipe:
 
 - `WPEMcpServer` owns MCP stdio, tool discovery, input schemas and conversion to this envelope. It never accesses WPE's SQLite data or WPEHook.
 - `McpAgentGateway` owns pipe framing, operation dispatch and UI-thread handoff.
-- `McpWriteGuard` owns mutation idempotency, local approval, expiry and redacted audit records.
+- `McpWriteGuard` owns mutation idempotency, local approval, expiry and complete audit records for the local WPE operator.
 - WPE business methods own validation, in-memory changes, feed refresh and persistence. Gateway code must not write SQLite or mutate lists directly.
 
 ## Compatibility

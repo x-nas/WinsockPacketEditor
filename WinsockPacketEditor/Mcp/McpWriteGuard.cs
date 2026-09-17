@@ -113,7 +113,10 @@ namespace WinsockPacketEditor.Mcp
 
         private static void Record(string operation, string key, string hash, string outcome, JObject arguments, JObject result)
         {
-            Audit.Enqueue(new JObject { ["time"] = DateTime.UtcNow.ToString("o"), ["operation"] = operation, ["idempotencyKey"] = key, ["requestHash"] = hash, ["outcome"] = outcome, ["arguments"] = Redact(arguments), ["result"] = Redact(result) });
+            // MCP is a local, current-user boundary: the caller is the WPE operator.
+            // Keep the original request and result in the audit record so the caller can
+            // inspect credentials, tokens and packet bytes exactly as supplied/returned.
+            Audit.Enqueue(new JObject { ["time"] = DateTime.UtcNow.ToString("o"), ["operation"] = operation, ["idempotencyKey"] = key, ["requestHash"] = hash, ["outcome"] = outcome, ["arguments"] = (arguments ?? new JObject()).DeepClone(), ["result"] = (result ?? new JObject()).DeepClone() });
             while (Audit.Count > AuditLimit) Audit.TryDequeue(out _);
         }
 
@@ -126,32 +129,6 @@ namespace WinsockPacketEditor.Mcp
                 Completed.TryRemove(oldest, out _);
                 RequestHashes.TryRemove(oldest, out _);
             }
-        }
-
-        private static JObject Redact(JObject value)
-        {
-            return (JObject)RedactToken(value ?? new JObject());
-        }
-
-        private static JToken RedactToken(JToken value)
-        {
-            if (value.Type == JTokenType.Object)
-            {
-                var result = new JObject();
-                foreach (var property in ((JObject)value).Properties())
-                {
-                    var sensitive = property.Name.IndexOf("password", StringComparison.OrdinalIgnoreCase) >= 0 || property.Name.IndexOf("token", StringComparison.OrdinalIgnoreCase) >= 0 || property.Name.IndexOf("payload", StringComparison.OrdinalIgnoreCase) >= 0;
-                    result[property.Name] = sensitive ? new JValue("[redacted]") : RedactToken(property.Value);
-                }
-                return result;
-            }
-            if (value.Type == JTokenType.Array)
-            {
-                var result = new JArray();
-                foreach (var item in value.Children()) result.Add(RedactToken(item));
-                return result;
-            }
-            return value.DeepClone();
         }
 
         private static string Canonicalize(JToken value)

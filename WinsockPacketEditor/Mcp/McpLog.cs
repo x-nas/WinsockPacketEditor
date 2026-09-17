@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace WinsockPacketEditor.Mcp
 {
-    /// <summary>Dedicated, redacted operational log for the local MCP boundary.</summary>
+    /// <summary>Dedicated concise operational log for the local MCP boundary.</summary>
     internal static class McpLog
     {
         internal static string ToolName(string operation)

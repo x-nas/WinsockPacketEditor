@@ -7,9 +7,10 @@
 - 当前正式测试包：`dist/WPE64 2.3.exe`，SHA-256 为 `518afa25b2cebb0eceff92f67c913bf830e1a0c4fe8200b25f6e0711d97cdbc7`。后续真实测试一律使用此 `pack` 产物，不使用 bin 目录程序。
 - 当前 MCP 工具数为 **83**；`McpToolsList.ps1 -ExpectedCount 83`、`McpContract.ps1`、解决方案构建、WebUI 构建和 `CheckUiCoupling.ps1` 均已通过。
 - `tools/pack/Pack.ps1` 发布自包含单文件 `WPEMcpServer.exe`，启动器同步到固定路径 `C:\WPE64DB\McpServer\WPEMcpServer.exe`。不要把 Sidecar 改回多文件部署或不稳定的 `%LOCALAPPDATA%` 发布路径。
-- MCP 日志是 `FeedList.McpLog` 的独立队列与标签。只写 `wpe_*` 工具调用结果、写操作审计结论和工具错误；不写服务启停、Pipe 连接/断开、请求摘要、密码、令牌或 payload。`logs.list` 接受 `kind: "mcp"`。
+- MCP 日志是 `FeedList.McpLog` 的独立队列与标签。只写 `wpe_*` 工具调用结果、写操作审计结论和工具错误；不写服务启停、Pipe 连接/断开和请求摘要。完整请求/结果（包括敏感字段）保留在 MCP 调用结果与写入审计中。`logs.list` 接受 `kind: "mcp"`。
+- 2026-09-17：取消 MCP 数据脱敏。`wpe_packet_get` 始终返回完整当前/原始 Base64 payload；账号列表/详情返回解密后的密码，详情含登录记录；代理设置返回外部代理用户名、密码和端口配置；`McpWriteGuard` 审计保留原始参数和结果。Named Pipe 的 128 MiB 单帧分配保护、分页、写入确认和幂等校验仍然保留。
 - `wpe_start_mode_select` 仅在启动页有效：成功切换 WebUI 页面而不启动 SOCKS5 监听；重复当前模式返回 `alreadySelected`，已选另一模式返回 `unavailable`。`getSystemCheck.selectedMode` 是前端事件漏收时的可靠补偿。
-- 写工具遗漏空 `idempotencyKey` 时，Sidecar 会生成 UUID；调用方显式给出的 UUID 不可改写。WPE 仍以该键做同键重放/同键异参拒绝和脱敏内存审计。
+- 写工具遗漏空 `idempotencyKey` 时，Sidecar 会生成 UUID；调用方显式给出的 UUID 不可改写。WPE 仍以该键做同键重放/同键异参拒绝和完整内存审计。
 - 筛选器编辑 DTO 故意不含启用字段：`wpe_filter_update` 只保存规则与高级模式，不能启用；用户要求启停时必须调用 `wpe_filter_set_enabled`，并用 `wpe_filter_get.enabled` 验证。
 
 - 历史基线（51 工具阶段）：实际包已通过 `McpAnalysis.ps1` 的实例发现、状态、日志、代理/注入抓包列表、原生查找、编码转换、比对和数据提取；当前以本节开头的 83 工具状态为准。
@@ -23,7 +24,7 @@
 
 - Phase 0：`architecture.md`、`internal-protocol.md`、工具表和 JSON Schema。
 - Phase 1：WPE 内的 `McpAgentGateway`、.NET 10 `WPEMcpServer` stdio Sidecar、打包集成；18 个只读 MCP 工具已实际端到端验证。
-- Phase 2：共享 `McpWriteGuard`（UUID 幂等、同键异参拒绝、60 秒本机确认超时、脱敏内存审计）；已开放 `wpe_filter_set_enabled`、`wpe_firewall_rules_list`、`wpe_firewall_rule_add`、`wpe_firewall_rule_remove`。
+- Phase 2：共享 `McpWriteGuard`（UUID 幂等、同键异参拒绝、60 秒本机确认超时、完整内存审计）；已开放 `wpe_filter_set_enabled`、`wpe_firewall_rules_list`、`wpe_firewall_rule_add`、`wpe_firewall_rule_remove`。
 - Phase 2 追加开放 `wpe_account_set_enabled`：只修改已有代理账号启用状态，不读取或修改密码；已完成批准停用、批准恢复、幂等、同键异参拒绝和最终状态核对。
 - Phase 2 追加开放 `wpe_proxy_auth_set_enabled`：只修改代理身份认证布尔值，关闭时校验 `Only_WPC_Client` 约束；已完成批准停用、批准恢复、幂等、同键异参拒绝，以及重启后返回 `changed=false, enabled=true` 的持久化核对。
 - Phase 2 追加开放 `wpe_proxy_http_set_enabled`：只修改 HTTP 代理启用布尔值，开启时校验 SOCKS5 已启用、端口范围和端口冲突；已完成批准停用、批准恢复、幂等、同键异参拒绝，以及重启后返回 `changed=false, enabled=true, port=1081` 的持久化核对。
@@ -42,7 +43,7 @@
 ## 当前 MCP 设置
 
 - `McpEnabled` 默认开启，保存在 `SystemConfig`；关闭后删除本机发现文件并停止接受 MCP Pipe 请求。
-- MCP 全局“需要人工确认”默认开启，数据库字段为 `McpRequiresConfirmation`；关闭后，所有经过 `McpWriteGuard` 的风险操作都会跳过本机确认并直接执行。幂等、校验、脱敏审计和业务层约束始终保留。
+- MCP 全局“需要人工确认”默认开启，数据库字段为 `McpRequiresConfirmation`；关闭后，所有经过 `McpWriteGuard` 的风险操作都会跳过本机确认并直接执行。幂等、校验、完整审计和业务层约束始终保留。
 - 状态栏：灰灯 = 已关闭，黄灯 = 需要确认，绿灯 = 自动执行；代理地址与状态使用 `//`、`-` 分组。
 
 ## 阶段 5 已完成 / 阶段 6 进行中

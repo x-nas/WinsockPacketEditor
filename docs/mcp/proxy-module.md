@@ -6,16 +6,16 @@
 
 ### 只读
 
-- `wpe_proxy_settings_get`：非敏感代理配置和限制。
-- `wpe_proxy_config_get`：完整非敏感代理配置快照。
+- `wpe_proxy_settings_get`：代理配置、限制和外部代理凭据。
+- `wpe_proxy_config_get`：完整代理配置快照（含外部代理凭据）。
 - `wpe_proxy_capabilities_get`：当前构建支持的代理能力。
 - `wpe_proxy_runtime_get`：监听器、运行状态和连接计数。
-- `wpe_connections_list`：分页连接元数据，不返回凭据。
+- `wpe_connections_list`：分页连接元数据。
 - `wpe_connections_summary_get`：按协议及 WPC/普通连接汇总。
-- `wpe_proxy_failures_list`：脱敏代理失败摘要。
+- `wpe_proxy_failures_list`：代理失败摘要。
 - `wpe_proxy_health_get`：只读一致性诊断，不自动修复。
 - `wpe_storage_health_get`：数据库可用性元数据。
-- `wpe_accounts_list`：账号元数据，不返回密码和令牌。
+- `wpe_accounts_list`：账号元数据（含解密后的密码）。
 
 ### 配置写入
 
@@ -29,7 +29,7 @@
 - `wpe_external_proxy_set_enabled`
 - `wpe_account_set_enabled`
 
-所有写入均使用 WPE 本地确认、UUID 幂等键、业务校验和脱敏审计。
+所有写入均使用 WPE 本地确认、UUID 幂等键、业务校验和完整审计。
 
 ### 生命周期
 
@@ -50,12 +50,12 @@
 - `wpe_account_delete`
 - `wpe_account_devices_list`
 
-账号密码不提供读取工具。设置密码必须使用不可回显、不可进入审计摘要的专用输入流程。
+`wpe_account_get` 与 `wpe_accounts_list` 返回账号的解密后密码；写入审计保留原始参数和结果，供当前 Windows 用户下的 WPE 操作者复核。
 
 ## 实施顺序
 
 1. 完成账号单项详情和设备列表。
-2. 实现账号 CRUD，逐项验证持久化、脱敏和回滚。
+2. 实现账号 CRUD，逐项验证持久化、完整审计和回滚。
 3. 盘点代理页面剩余已有功能，逐项接口化；不创建 WPE 当前没有的连接/设备强制控制。
 
 ## 范围约束
@@ -69,6 +69,6 @@
 ## 统一返回约定
 
 - 配置读取返回 `schemaVersion`、`effective` 和 `requiresRestart`。
-- 写入返回 `changed`、修改后的安全字段和 `outcome`，不返回密码、令牌或完整连接地址。
+- 写入返回 `changed`、修改后的字段和 `outcome`；审计保留完整请求与结果。
 - 健康检查返回 `healthy`、`checks[]` 和 `observedAt`，检查失败不自动修复。
 - 所有列表使用 1..200 的 `limit` 和 opaque `nextCursor`。

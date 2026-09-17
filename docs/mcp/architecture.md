@@ -33,7 +33,7 @@ IWpeReadService -> Operate + ShellForm coordinators
 - Validates internal protocol version, frame sizes, deadlines and allowed operation names. The Windows named-pipe ACL is the phase-1 authentication boundary; an application-level handshake is deferred until a remote transport is introduced.
 - Marshals list snapshots and mutations through WPE's existing UI dispatcher.
 - Emits only detached DTO snapshots. No BindingList, WinForms object, byte array or mutable model escapes the UI thread.
-- Owns audit records and the approval gate. The dedicated MCP log records one concise tool result per call; write results append their human-readable audit conclusion. It never logs payloads, passwords, tokens, pipe connect/disconnect noise, or audit hashes.
+- Owns audit records and the approval gate. The dedicated MCP log records one concise tool result per call; write results append their human-readable audit conclusion. It omits pipe connect/disconnect noise and audit hashes; full request/result data remains available from the tool result and audit record.
 
 ### IWpeReadService
 

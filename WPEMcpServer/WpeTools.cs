@@ -5,16 +5,16 @@ using ModelContextProtocol.Server;
 [McpServerToolType]
 internal static class WpeTools
 {
-    [McpServerTool(Name = "wpe_status_get"), Description("Return the current WPE runtime status. This tool never returns credentials or tokens.")]
+    [McpServerTool(Name = "wpe_status_get"), Description("Return the current WPE runtime status.")]
     public static Task<string> StatusGet(WpeGatewayClient gateway, CancellationToken cancellationToken) =>
         gateway.InvokeAsync("runtime.status", null, cancellationToken);
 
-    [McpServerTool(Name = "wpe_capture_search"), Description("Search bounded WPE packet metadata. Payload bytes are never returned by this tool.")]
+    [McpServerTool(Name = "wpe_capture_search"), Description("Search a bounded page of WPE packet metadata. Use wpe_packet_get for complete packet bytes.")]
     public static Task<string> CaptureSearch(WpeGatewayClient gateway, int? limit = null, string? cursor = null, string? mode = null, string? pattern = null, bool hex = false, string direction = "any", CancellationToken cancellationToken = default) =>
         gateway.InvokeAsync("capture.search", new PacketSearchInput(limit, cursor, mode, pattern, hex, direction), cancellationToken);
 
-    [McpServerTool(Name = "wpe_packet_get"), Description("Get one captured packet. Payload delivery is opt-in and bounded by WPE.")]
-    public static Task<string> PacketGet(WpeGatewayClient gateway, long id, string? mode = null, bool includePayload = false, CancellationToken cancellationToken = default) =>
+    [McpServerTool(Name = "wpe_packet_get"), Description("Get one captured packet with its complete current and original payload bytes as Base64.")]
+    public static Task<string> PacketGet(WpeGatewayClient gateway, long id, string? mode = null, bool includePayload = true, CancellationToken cancellationToken = default) =>
         gateway.InvokeAsync("capture.get", new PacketGetInput(id, mode, includePayload), cancellationToken);
     [McpServerTool(Name = "wpe_capture_find_next"), Description("Use WPE's native regex packet search to find the next match in the proxy or inject capture list, including byte offset metadata for highlighting.")]
     public static Task<string> CaptureFindNext(WpeGatewayClient gateway, string pattern, bool hex = false, string mode = "proxy", int fromIndex = 0, int fromPosition = 0, CancellationToken cancellationToken = default) =>
@@ -26,7 +26,7 @@ internal static class WpeTools
 
     [McpServerTool(Name = "wpe_filters_list"), Description("List WPE filters without modifying them.")]
     public static Task<string> FiltersList(WpeGatewayClient gateway, int? limit = null, string? cursor = null, CancellationToken cancellationToken = default) => gateway.InvokeAsync("filters.list", new PageInput(limit, cursor), cancellationToken);
-    [McpServerTool(Name = "wpe_filter_get"), Description("Get one existing WPE filter's editable non-sensitive configuration, including its current enabled state. Use this to verify mode and enablement after changes.")]
+    [McpServerTool(Name = "wpe_filter_get"), Description("Get one existing WPE filter's editable configuration, including its current enabled state. Use this to verify mode and enablement after changes.")]
     public static Task<string> FilterGet(WpeGatewayClient gateway, string id, CancellationToken cancellationToken = default) => gateway.InvokeAsync("filters.get", new FilterGetInput(id), cancellationToken);
     [McpServerTool(Name = "wpe_filter_stats_get"), Description("Get read-only runtime statistics for one existing WPE filter.")]
     public static Task<string> FilterStatsGet(WpeGatewayClient gateway, string id, CancellationToken cancellationToken = default) => gateway.InvokeAsync("filters.stats.get", new FilterGetInput(id), cancellationToken);
@@ -50,9 +50,9 @@ internal static class WpeTools
     public static Task<string> FilterUpdate(WpeGatewayClient gateway, JsonElement filter, string idempotencyKey, CancellationToken cancellationToken = default) => gateway.InvokeAsync("filters.update", new FilterUpdateInput(filter, idempotencyKey), cancellationToken);
     [McpServerTool(Name = "wpe_filter_delete"), Description("Delete an existing WPE filter after local confirmation.")]
     public static Task<string> FilterDelete(WpeGatewayClient gateway, string id, string idempotencyKey, CancellationToken cancellationToken = default) => gateway.InvokeAsync("filters.delete", new FilterDeleteInput(id, idempotencyKey), cancellationToken);
-    [McpServerTool(Name = "wpe_account_set_enabled"), Description("Request a reversible proxy-account enable/disable change. Passwords are never returned or entered.")]
+    [McpServerTool(Name = "wpe_account_set_enabled"), Description("Request a reversible proxy-account enable/disable change.")]
     public static Task<string> AccountSetEnabled(WpeGatewayClient gateway, string id, bool enabled, string idempotencyKey, CancellationToken cancellationToken = default) => gateway.InvokeAsync("accounts.setEnabled", new AccountSetEnabledInput(id, enabled, idempotencyKey), cancellationToken);
-    [McpServerTool(Name = "wpe_account_create"), Description("Create one existing-WPE proxy account after local confirmation. The supplied password is never returned or recorded in MCP audit data.")]
+    [McpServerTool(Name = "wpe_account_create"), Description("Create one WPE proxy account after local confirmation.")]
     public static Task<string> AccountCreate(WpeGatewayClient gateway, string userName, string password, bool enabled, bool limitLinksEnabled, int limitLinks, bool limitDevicesEnabled, int limitDevices, bool expiryEnabled, string? expiryTime, string idempotencyKey, CancellationToken cancellationToken = default) => gateway.InvokeAsync("accounts.create", new AccountCreateInput(userName, password, enabled, limitLinksEnabled, limitLinks, limitDevicesEnabled, limitDevices, expiryEnabled, expiryTime, idempotencyKey), cancellationToken);
     [McpServerTool(Name = "wpe_account_update"), Description("Update one existing WPE proxy account after local confirmation. userName cannot be changed because WPE's account editor does not support it; omit password to keep it unchanged.")]
     public static Task<string> AccountUpdate(WpeGatewayClient gateway, string id, bool enabled, bool limitLinksEnabled, int limitLinks, bool limitDevicesEnabled, int limitDevices, bool expiryEnabled, string? expiryTime, string? password, string idempotencyKey, CancellationToken cancellationToken = default) => gateway.InvokeAsync("accounts.update", new AccountUpdateInput(id, enabled, limitLinksEnabled, limitLinks, limitDevicesEnabled, limitDevices, expiryEnabled, expiryTime, password, idempotencyKey), cancellationToken);
@@ -74,27 +74,27 @@ internal static class WpeTools
     public static Task<string> ProxyOnlyWpcSetEnabled(WpeGatewayClient gateway, bool enabled, string idempotencyKey, CancellationToken cancellationToken = default) => gateway.InvokeAsync("proxy.onlyWpc.setEnabled", new ProxyOnlyWpcSetEnabledInput(enabled, idempotencyKey), cancellationToken);
     [McpServerTool(Name = "wpe_executors_list"), Description("List WPE send and robot executor status without changing it.")]
     public static Task<string> ExecutorsList(WpeGatewayClient gateway, CancellationToken cancellationToken) => gateway.InvokeAsync("executors.list", null, cancellationToken);
-    [McpServerTool(Name = "wpe_connections_list"), Description("List a bounded page of WPE connections without credentials.")]
+    [McpServerTool(Name = "wpe_connections_list"), Description("List a bounded page of WPE connections.")]
     public static Task<string> ConnectionsList(WpeGatewayClient gateway, int? limit = null, string? cursor = null, CancellationToken cancellationToken = default) => gateway.InvokeAsync("connections.list", new PageInput(limit, cursor), cancellationToken);
-    [McpServerTool(Name = "wpe_accounts_list"), Description("List proxy account metadata only; passwords and tokens are excluded.")]
+    [McpServerTool(Name = "wpe_accounts_list"), Description("List proxy accounts including their decrypted passwords.")]
     public static Task<string> AccountsList(WpeGatewayClient gateway, int? limit = null, string? cursor = null, CancellationToken cancellationToken = default) => gateway.InvokeAsync("accounts.list", new PageInput(limit, cursor), cancellationToken);
-    [McpServerTool(Name = "wpe_account_get"), Description("Get one proxy account's existing non-sensitive list metadata. Passwords and tokens are excluded.")]
+    [McpServerTool(Name = "wpe_account_get"), Description("Get one proxy account's complete configuration, decrypted password, and login records.")]
     public static Task<string> AccountGet(WpeGatewayClient gateway, string id, CancellationToken cancellationToken = default) => gateway.InvokeAsync("accounts.get", new AccountGetInput(id), cancellationToken);
-    [McpServerTool(Name = "wpe_account_logins_list"), Description("List the selected WPE proxy account's existing native login-location records. This is not a device inventory and never returns passwords or tokens.")]
+    [McpServerTool(Name = "wpe_account_logins_list"), Description("List the selected WPE proxy account's existing native login-location records. This is not a device inventory.")]
     public static Task<string> AccountLoginsList(WpeGatewayClient gateway, string id, int? limit = null, string? cursor = null, CancellationToken cancellationToken = default) => gateway.InvokeAsync("accounts.logins.list", new AccountLoginsListInput(id, limit, cursor), cancellationToken);
     [McpServerTool(Name = "wpe_firewall_get"), Description("Return WPE firewall configuration without modifying it.")]
     public static Task<string> FirewallGet(WpeGatewayClient gateway, CancellationToken cancellationToken) => gateway.InvokeAsync("firewall.get", null, cancellationToken);
-    [McpServerTool(Name = "wpe_proxy_settings_get"), Description("Return non-sensitive proxy settings and limits. No credentials are returned and nothing is modified.")]
+    [McpServerTool(Name = "wpe_proxy_settings_get"), Description("Return proxy settings, limits, and configured external-proxy credentials without modifying WPE.")]
     public static Task<string> ProxySettingsGet(WpeGatewayClient gateway, CancellationToken cancellationToken) => gateway.InvokeAsync("proxy.settings.get", null, cancellationToken);
-    [McpServerTool(Name = "wpe_proxy_config_get"), Description("Return the complete non-sensitive proxy configuration snapshot.")]
+    [McpServerTool(Name = "wpe_proxy_config_get"), Description("Return the complete proxy configuration snapshot, including configured external-proxy credentials.")]
     public static Task<string> ProxyConfigGet(WpeGatewayClient gateway, CancellationToken cancellationToken) => gateway.InvokeAsync("proxy.config.get", null, cancellationToken);
-    [McpServerTool(Name = "wpe_proxy_runtime_get"), Description("Return non-sensitive live proxy runtime diagnostics: listener configuration, running state, and connection counts. Nothing is modified.")]
+    [McpServerTool(Name = "wpe_proxy_runtime_get"), Description("Return live proxy runtime diagnostics: listener configuration, running state, and connection counts. Nothing is modified.")]
     public static Task<string> ProxyRuntimeGet(WpeGatewayClient gateway, CancellationToken cancellationToken) => gateway.InvokeAsync("proxy.runtime.get", null, cancellationToken);
-    [McpServerTool(Name = "wpe_connections_summary_get"), Description("Return bounded connection counts grouped by protocol and WPC-control versus ordinary sessions. Addresses, device identifiers, credentials, and payloads are never returned.")]
+    [McpServerTool(Name = "wpe_connections_summary_get"), Description("Return complete connection counts grouped by protocol and WPC-control versus ordinary sessions.")]
     public static Task<string> ConnectionsSummaryGet(WpeGatewayClient gateway, CancellationToken cancellationToken) => gateway.InvokeAsync("connections.summary.get", null, cancellationToken);
     [McpServerTool(Name = "wpe_proxy_bind_ip_set"), Description("Request a reversible proxy listening-address change. WPE validates an explicit IPv4/IPv6 address or automatic detection, then persists after local confirmation.")]
     public static Task<string> ProxyBindIpSet(WpeGatewayClient gateway, bool auto, string ip, string idempotencyKey, CancellationToken cancellationToken = default) => gateway.InvokeAsync("proxy.bindIp.set", new ProxyBindIpSetInput(auto, ip, idempotencyKey), cancellationToken);
-    [McpServerTool(Name = "wpe_external_proxy_set_enabled"), Description("Request a reversible external-proxy enable/disable change. Existing credentials are never returned or modified; WPE validates the configured endpoint and persists after local confirmation.")]
+    [McpServerTool(Name = "wpe_external_proxy_set_enabled"), Description("Request a reversible external-proxy enable/disable change. WPE validates the configured endpoint and persists after local confirmation.")]
     public static Task<string> ExternalProxySetEnabled(WpeGatewayClient gateway, bool enabled, string idempotencyKey, CancellationToken cancellationToken = default) => gateway.InvokeAsync("proxy.external.setEnabled", new ExternalProxySetEnabledInput(enabled, idempotencyKey), cancellationToken);
     [McpServerTool(Name = "wpe_proxy_start"), Description("Request starting WPE proxy listeners. This may bind configured ports and requires local confirmation.")]
     public static Task<string> ProxyStart(WpeGatewayClient gateway, string idempotencyKey, CancellationToken cancellationToken = default) => gateway.InvokeAsync("proxy.start", new ProxyLifecycleInput(idempotencyKey), cancellationToken);
@@ -116,19 +116,19 @@ internal static class WpeTools
     public static Task<string> BytesCompare(WpeGatewayClient gateway, string left, string right, int minimumRun = 2, CancellationToken cancellationToken = default) => gateway.InvokeAsync("bytes.compare", new BytesCompareInput(left, right, minimumRun), cancellationToken);
     [McpServerTool(Name = "wpe_bytes_extract"), Description("Extract structured values from caller-supplied Base64 bytes using WPE logic.")]
     public static Task<string> BytesExtract(WpeGatewayClient gateway, int kind, string contentBase64, CancellationToken cancellationToken = default) => gateway.InvokeAsync("bytes.extract", new BytesExtractInput(kind, contentBase64), cancellationToken);
-    [McpServerTool(Name = "wpe_sends_list"), Description("List a bounded page of send-task metadata; packet payloads are excluded.")]
+    [McpServerTool(Name = "wpe_sends_list"), Description("List a bounded page of send-task metadata.")]
     public static Task<string> SendsList(WpeGatewayClient gateway, int? limit = null, string? cursor = null, CancellationToken cancellationToken = default) => gateway.InvokeAsync("sends.list", new PageInput(limit, cursor), cancellationToken);
-    [McpServerTool(Name = "wpe_send_get"), Description("Get one send task's editable non-sensitive configuration.")]
+    [McpServerTool(Name = "wpe_send_get"), Description("Get one send task's editable configuration.")]
     public static Task<string> SendGet(WpeGatewayClient gateway, string id, CancellationToken cancellationToken = default) => gateway.InvokeAsync("sends.get", new EntityGetInput(id), cancellationToken);
-    [McpServerTool(Name = "wpe_send_collection_list"), Description("List a bounded page of one send task's packet collection. Payload is excluded; previews are short.")]
+    [McpServerTool(Name = "wpe_send_collection_list"), Description("List a bounded page of one send task's packet collection with its native preview fields.")]
     public static Task<string> SendCollectionList(WpeGatewayClient gateway, string id, int? limit = null, string? cursor = null, CancellationToken cancellationToken = default) => gateway.InvokeAsync("sends.collection.list", new EntityPageInput(id, limit, cursor), cancellationToken);
-    [McpServerTool(Name = "wpe_robots_list"), Description("List a bounded page of robot-task metadata; instruction payloads are excluded.")]
+    [McpServerTool(Name = "wpe_robots_list"), Description("List a bounded page of robot-task metadata.")]
     public static Task<string> RobotsList(WpeGatewayClient gateway, int? limit = null, string? cursor = null, CancellationToken cancellationToken = default) => gateway.InvokeAsync("robots.list", new PageInput(limit, cursor), cancellationToken);
     [McpServerTool(Name = "wpe_robot_get"), Description("Get one robot task and its native instruction configuration.")]
     public static Task<string> RobotGet(WpeGatewayClient gateway, string id, CancellationToken cancellationToken = default) => gateway.InvokeAsync("robots.get", new EntityGetInput(id), cancellationToken);
-    [McpServerTool(Name = "wpe_warehouse_list"), Description("List a bounded page of warehouse metadata without packet payloads.")]
+    [McpServerTool(Name = "wpe_warehouse_list"), Description("List a bounded page of warehouse metadata.")]
     public static Task<string> WarehousesList(WpeGatewayClient gateway, int? limit = null, string? cursor = null, CancellationToken cancellationToken = default) => gateway.InvokeAsync("warehouses.list", new PageInput(limit, cursor), cancellationToken);
-    [McpServerTool(Name = "wpe_warehouse_get"), Description("Get one warehouse's name and a bounded page of packet metadata; payload is excluded.")]
+    [McpServerTool(Name = "wpe_warehouse_get"), Description("Get one warehouse's name and a bounded page of its stored-packet records.")]
     public static Task<string> WarehouseGet(WpeGatewayClient gateway, string id, int? limit = null, string? cursor = null, CancellationToken cancellationToken = default) => gateway.InvokeAsync("warehouses.get", new EntityPageInput(id, limit, cursor), cancellationToken);
     [McpServerTool(Name = "wpe_send_collection_action"), Description("Move, copy, or delete selected packets in one send collection after local confirmation. This edits and persists the send task but never starts it.")]
     public static Task<string> SendCollectionAction(WpeGatewayClient gateway, string sendId, string[] packetIds, string action, string idempotencyKey, CancellationToken cancellationToken = default) => gateway.InvokeAsync("sends.collection.action", new SendCollectionActionInput(sendId, packetIds, action, idempotencyKey), cancellationToken);
@@ -152,7 +152,7 @@ internal static class WpeTools
     public static Task<string> WarehouseStoresCommand(WpeGatewayClient gateway, string warehouseId, string action, string idempotencyKey, CancellationToken cancellationToken = default) => gateway.InvokeAsync("warehouses.stores.command", new WarehouseCommandInput(warehouseId, action, idempotencyKey), cancellationToken);
     [McpServerTool(Name = "wpe_packet_edit_get"), Description("Get one proxy or inject captured packet for editing. Payload is returned as Base64 only for this explicit request.")]
     public static Task<string> PacketEditGet(WpeGatewayClient gateway, string list, long id, CancellationToken cancellationToken = default) => gateway.InvokeAsync("packet.edit.get", new PacketEditGetInput(list, id), cancellationToken);
-    [McpServerTool(Name = "wpe_packet_edit_save"), Description("Replace one proxy or inject captured packet's socket and payload after local confirmation. payloadBase64 is redacted from MCP audit data.")]
+    [McpServerTool(Name = "wpe_packet_edit_save"), Description("Replace one proxy or inject captured packet's socket and payload after local confirmation. The complete request is retained in MCP audit data.")]
     public static Task<string> PacketEditSave(WpeGatewayClient gateway, string list, long id, int socket, string payloadBase64, string idempotencyKey, CancellationToken cancellationToken = default) => gateway.InvokeAsync("packet.edit.save", new PacketEditSaveInput(list, id, socket, payloadBase64, idempotencyKey), cancellationToken);
     [McpServerTool(Name = "wpe_packet_edit_add_to_send"), Description("Copy one proxy or inject captured packet, using supplied Base64 bytes, into a send task after local confirmation. It never starts the sender.")]
     public static Task<string> PacketEditAddToSend(WpeGatewayClient gateway, string sendId, string list, long id, string payloadBase64, string idempotencyKey, CancellationToken cancellationToken = default) => gateway.InvokeAsync("packet.edit.addToSend", new PacketEditAddToSendInput(sendId, list, id, payloadBase64, idempotencyKey), cancellationToken);

@@ -6,7 +6,9 @@ using System.Text.Json.Nodes;
 
 internal sealed class WpeGatewayClient
 {
-    private const int MaxFrameBytes = 1024 * 1024;
+    // Matches WPE's local pipe allocation guard. Full packet data is intentionally
+    // available to the current-user MCP caller.
+    private const int MaxFrameBytes = 128 * 1024 * 1024;
     private static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
     public async Task<string> InvokeAsync(string operation, object? arguments, CancellationToken cancellationToken)
@@ -51,7 +53,7 @@ internal sealed class WpeGatewayClient
 
     private static async Task WriteFrameAsync(Stream stream, byte[] payload, CancellationToken cancellationToken)
     {
-        if (payload.Length > MaxFrameBytes) throw new InvalidOperationException("Gateway request exceeds 1 MiB.");
+        if (payload.Length > MaxFrameBytes) throw new InvalidOperationException("Gateway request exceeds the protocol size limit.");
         await stream.WriteAsync(BitConverter.GetBytes(payload.Length), cancellationToken);
         await stream.WriteAsync(payload, cancellationToken);
         await stream.FlushAsync(cancellationToken);
