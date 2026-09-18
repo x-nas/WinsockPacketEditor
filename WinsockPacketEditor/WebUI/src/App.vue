@@ -10,16 +10,8 @@
   三个视图：启动页（模式选择）· 多开设置 · 代理模式。
   注入模式要等 IPC 改造完成才能进来。
 
-  【选完模式就<b>回不去</b>了，与主程序一致】
-  WinForms 的 StartForm 选完模式直接 this.Close()，启动页窗体就销毁了，
-  换模式只能重启程序。外壳照搬这个模式，所以标题栏没有「返回启动页」。
-
-  这不只是为了像：进代理模式会加载 14 份列表、设 SelectMode、并可能已经把
-  SOCKS5 服务起起来了 —— 退回一个写着「Ready」的启动页，而后台正在监听端口，
-  是在骗人。真要换模式，重启是最干净的。
-
-  <b>多开设置不受这条限制</b>：它不是模式，是启动页上的一屏设置
-  （WinForms 那边是浮在 StartForm 上的弹窗），所以它照常能返回。
+  注入模式允许回到启动页；这只切换 WebUI 的导航视图，
+  不会卸载已附加的钩子或停止用户已经启动的服务。
 */
 import { onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import { call, inHost, on } from './bridge'
@@ -178,6 +170,10 @@ function fireBtn(e: MouseEvent, run: () => void): void {
   run()
 }
 
+function returnToStart(): void {
+  view.value = 'start'
+}
+
 async function toggleMax(): Promise<void> {
   try {
     const r = await call<{ maximized: boolean }>('toggleMaximize')
@@ -273,6 +269,11 @@ watchEffect(() => {
         </div>
 
         <div class="tbright">
+          <button v-if="view === 'inject'" class="wb back" :title="t('win.backStart')"
+                  @mousedown="armBtn" @click="fireBtn($event, returnToStart)">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M14 5l-7 7 7 7M8 12h11" /></svg>
+          </button>
+
           <!--
             软件设置（语言 + 主题）。
 
@@ -348,10 +349,6 @@ watchEffect(() => {
 
       <StartView v-else-if="view === 'start'" @enter="view = $event" />
 
-      <!--
-        注入模式。与代理模式一样<b>进去就回不来</b> ——
-        进来会附加到目标、装钩子，退回一个写着「Ready」的启动页而钩子还在目标里，是在骗人。
-      -->
       <InjectView v-else-if="view === 'inject'" />
 
       <ProxyView v-else />
@@ -541,6 +538,7 @@ watchEffect(() => {
 }
 
 .wb:hover { color: var(--green); background: rgb(var(--green-rgb) / 8%); }
+.wb.back:hover { color: var(--cyan); background: rgb(var(--cyan-rgb) / 8%); }
 .wb.close:hover { color: var(--danger); background: rgb(var(--danger-rgb) / 12%); }
 
 /*

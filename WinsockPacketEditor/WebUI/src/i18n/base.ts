@@ -35,6 +35,9 @@ export const DICT = {
   'win.max': { zh: '最大化', en: 'Maximize' },
   'win.restore': { zh: '还原', en: 'Restore' },
   'win.close': { zh: '退出', en: 'Exit' },
+  'win.backStart': { zh: '返回启动页', en: 'Back to start page' },
+  'win.collapseSidebar': { zh: '折叠侧栏', en: 'Collapse sidebar' },
+  'win.expandSidebar': { zh: '展开侧栏', en: 'Expand sidebar' },
   'win.nohost': {
     zh: '不在 WebView2 宿主内 —— 请通过 WPEHybrid.exe 打开。',
     en: 'Not inside the WebView2 host — please launch WPEHybrid.exe.',

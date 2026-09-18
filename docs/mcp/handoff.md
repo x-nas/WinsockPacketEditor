@@ -1,19 +1,20 @@
 # WPE MCP 改造交接记忆
 
-更新时间：2026-09-17。工作分支：`feature-mcp-server`；基线为 `Develop`。不得切换、合并、重置或修改 `Develop`、`master`。
+更新时间：2026-09-19。工作分支：`feature-mcp-server`；基线为 `Develop`。不得切换、合并、重置或修改 `Develop`、`master`。
 
 ## 2026-09-17 交接要点
 
-- 当前正式测试包：`dist/WPE64 2.3.exe`，SHA-256 为 `518afa25b2cebb0eceff92f67c913bf830e1a0c4fe8200b25f6e0711d97cdbc7`。后续真实测试一律使用此 `pack` 产物，不使用 bin 目录程序。
-- 当前 MCP 工具数为 **83**；`McpToolsList.ps1 -ExpectedCount 83`、`McpContract.ps1`、解决方案构建、WebUI 构建和 `CheckUiCoupling.ps1` 均已通过。
+- 当前正式测试包：`dist/WPE64 2.3.exe`，SHA-256 为 `a307c5b8fd5ac7a64f56549df9089470c153a759fd6079e80952985745ff2972`。后续真实测试一律使用此 `pack` 产物，不使用 bin 目录程序。
+- 当前 MCP 工具数为 **113**；`McpContract.ps1`、Sidecar 构建、解决方案 Release 构建和打包均已通过。
 - `tools/pack/Pack.ps1` 发布自包含单文件 `WPEMcpServer.exe`，启动器同步到固定路径 `C:\WPE64DB\McpServer\WPEMcpServer.exe`。不要把 Sidecar 改回多文件部署或不稳定的 `%LOCALAPPDATA%` 发布路径。
 - MCP 日志是 `FeedList.McpLog` 的独立队列与标签。只写 `wpe_*` 工具调用结果、写操作审计结论和工具错误；不写服务启停、Pipe 连接/断开和请求摘要。完整请求/结果（包括敏感字段）保留在 MCP 调用结果与写入审计中。`logs.list` 接受 `kind: "mcp"`。
 - 2026-09-17：取消 MCP 数据脱敏。`wpe_packet_get` 始终返回完整当前/原始 Base64 payload；账号列表/详情返回解密后的密码，详情含登录记录；代理设置返回外部代理用户名、密码和端口配置；`McpWriteGuard` 审计保留原始参数和结果。Named Pipe 的 128 MiB 单帧分配保护、分页、写入确认和幂等校验仍然保留。
 - `wpe_start_mode_select` 仅在启动页有效：成功切换 WebUI 页面而不启动 SOCKS5 监听；重复当前模式返回 `alreadySelected`，已选另一模式返回 `unavailable`。`getSystemCheck.selectedMode` 是前端事件漏收时的可靠补偿。
 - 写工具遗漏空 `idempotencyKey` 时，Sidecar 会生成 UUID；调用方显式给出的 UUID 不可改写。WPE 仍以该键做同键重放/同键异参拒绝和完整内存审计。
-- 筛选器编辑 DTO 故意不含启用字段：`wpe_filter_update` 只保存规则与高级模式，不能启用；用户要求启停时必须调用 `wpe_filter_set_enabled`，并用 `wpe_filter_get.enabled` 验证。
+- 筛选器规则保存工具不含启用字段：`wpe_filter_rule_save` 只保存规则，不能启用；用户要求启停时必须调用 `wpe_filter_set_enabled`，并用 `wpe_filter_get.enabled` 验证。
+- 机器人指令的原生保存会检查循环开始/结束是否已经配对，故不能用逐条保存构造新循环。`wpe_robot_instructions_save` 会在同一个编辑快照中替换完整顺序列表、再一次性校验保存；循环 10 次、延迟 1 秒、按数字行 1 的四条内容依次为 `{type:2,content:"10"}`、`{type:1,content:"1000"}`、`{type:4,content:"Press|D1"}`、`{type:3,content:""}`。保存后调用 `wpe_robot_get` 复核。
 
-- 历史基线（51 工具阶段）：实际包已通过 `McpAnalysis.ps1` 的实例发现、状态、日志、代理/注入抓包列表、原生查找、编码转换、比对和数据提取；当前以本节开头的 83 工具状态为准。
+- 历史基线（51 工具阶段）：实际包已通过 `McpAnalysis.ps1` 的实例发现、状态、日志、代理/注入抓包列表、原生查找、编码转换、比对和数据提取；当前以本节开头的 103 工具状态为准。
 - 已修复正常命名管道断连：客户端在帧未完成时退出产生的 `EndOfStreamException` 视为正常对端断连，不再写系统错误日志；已在实际包执行连接后立即断开探针。
 - 先前“所有读取工具失败”不是 WPE UI 线程问题：`McpAnalysis.ps1` 曾错误使用 PowerShell 自动变量 `$args` 作为工具参数，导致 `arguments` 编码为数组；现已改为 `$toolArguments` 并清除了临时诊断输出。另一次失败是 WPE 已退出、发现文件不存在。
 - 历史启动模式测试中的“WPE has already left the start page”来自旧契约；当前契约已改为同模式 `alreadySelected`、异模式 `unavailable`。
@@ -43,7 +44,7 @@
 ## 当前 MCP 设置
 
 - `McpEnabled` 默认开启，保存在 `SystemConfig`；关闭后删除本机发现文件并停止接受 MCP Pipe 请求。
-- MCP 全局“需要人工确认”默认开启，数据库字段为 `McpRequiresConfirmation`；关闭后，所有经过 `McpWriteGuard` 的风险操作都会跳过本机确认并直接执行。幂等、校验、完整审计和业务层约束始终保留。
+- MCP 全局“需要人工确认”默认关闭，数据库字段为 `McpRequiresConfirmation`；开启后，所有经过 `McpWriteGuard` 的风险操作都会请求本机确认。无论开关状态如何，幂等、校验、完整审计和业务层约束始终保留。
 - 状态栏：灰灯 = 已关闭，黄灯 = 需要确认，绿灯 = 自动执行；代理地址与状态使用 `//`、`-` 分组。
 
 ## 阶段 5 已完成 / 阶段 6 进行中
@@ -66,7 +67,7 @@
 
 ## 2026-09-16 筛选器 MCP 回归
 
-- 筛选器 MCP 已增加 `wpe_filter_get`、`wpe_filter_stats_get`、`wpe_filter_create`、`wpe_filter_update`、`wpe_filter_delete`，工具总数为 44；代码、Schema、契约和 Sidecar `tools/list` 均已通过。
+- 筛选器 MCP 已增加 `wpe_filter_get`、`wpe_filter_stats_get`、`wpe_filter_create`、规则保存和删除入口，工具总数为 44；代码、Schema、契约和 Sidecar `tools/list` 均已通过。
 - `wpe_filter_create` 复用现有界面 `addFilter` 的同一入口：`ShellForm.addFilter -> Operate.FilterConfig.List.AddFilter_New_ById -> FilterConfig.Filter.AddFilter_New`。根据封包生成筛选器是另外的 `AddToFilter_ByPacketId` / `AddToFilter_ByProxyId` 路径。
 - 新建入口在数据库保存失败时回滚内存中新加的条目，避免界面状态与持久化状态分离。
 - 已用 `pack` 生成的启动器包进行真实回归：Sidecar `tools/list`、MCP 生命周期及 `create -> get -> update -> get -> delete` 全流程均通过；测试会删除其临时筛选器。
@@ -94,7 +95,7 @@ powershell -ExecutionPolicy Bypass -File tools/pack/Pack.ps1 -SkipBuild
 
 ## 阶段 2 当前验证点
 
-最新发布包为 `dist/WPE64 2.3.exe`，最近一次 SHA256 为 `518afa25b2cebb0eceff92f67c913bf830e1a0c4fe8200b25f6e0711d97cdbc7`；每次前端改动必须先构建 WebUI，再用解决方案构建同步 `bin/Release/wwwroot`，最后运行打包脚本。不要使用 `-SkipBuild` 代替前端同步，除非已先完成这两步。
+最新发布包为 `dist/WPE64 2.3.exe`，最近一次 SHA256 为 `a307c5b8fd5ac7a64f56549df9089470c153a759fd6079e80952985745ff2972`；每次前端改动必须先构建 WebUI，再用解决方案构建同步 `bin/Release/wwwroot`，最后运行打包脚本。不要使用 `-SkipBuild` 代替前端同步，除非已先完成这两步。
 
 阶段 2 防火墙写入 E2E 已完成：测试地址 `203.0.113.77` 经过拒绝、批准、幂等、同键异参、重启持久化和删除清理全流程，最终黑名单为空。
 

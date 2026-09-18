@@ -28,9 +28,11 @@ $schemaNames = $schemaNames | Sort-Object -Unique
 
 $missingDocs = @($toolNames | Where-Object { $docs -notmatch [regex]::Escape($_) })
 $missingSchemas = @($toolNames | Where-Object { $_ -notin $schemaNames })
+$unregisteredSchemas = @($schemaNames | Where-Object { $_ -notin $toolNames })
 
 if ($missingDocs.Count -gt 0) { throw ('Tools missing from docs/mcp/tools.md: ' + ($missingDocs -join ', ')) }
 if ($missingSchemas.Count -gt 0) { throw ('Tools missing from MCP schemas: ' + ($missingSchemas -join ', ')) }
+if ($unregisteredSchemas.Count -gt 0) { throw ('MCP schemas contain tools not registered by the Sidecar: ' + ($unregisteredSchemas -join ', ')) }
 
 # The Sidecar is allowed to discover a tool only when the in-process gateway
 # can dispatch its corresponding operation. This prevents a newly published

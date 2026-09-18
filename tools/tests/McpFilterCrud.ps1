@@ -28,11 +28,9 @@ try {
     Send @{ jsonrpc='2.0'; method='notifications/initialized'; params=@{} }
     $created = Call 2 'wpe_filter_create' @{ idempotencyKey = ([guid]::NewGuid().ToString()) }
     $id = $created.id; if ([string]::IsNullOrWhiteSpace($id)) { throw 'Create returned no filter id.' }
-    $filter = Call 3 'wpe_filter_get' @{ id = $id }
-    $filter.Name = 'MCP CRUD E2E'
-    $updated = Call 4 'wpe_filter_update' @{ filter = $filter; idempotencyKey = ([guid]::NewGuid().ToString()) }
+    $updated = Call 4 'wpe_filter_rule_save' @{ filter = $id; rule = @{ name = 'MCP CRUD E2E'; mode = 'advanced'; action = 'replace'; startFrom = 'position'; packetTypes = @('tcpRequest'); search = @(@{ offset = 0; value = '01' }); modify = @(@{ offset = 0; value = '02' }) }; idempotencyKey = ([guid]::NewGuid().ToString()) }
     $verified = Call 5 'wpe_filter_get' @{ id = $id }
-    if ($verified.Name -ne 'MCP CRUD E2E') { throw "Update verification failed: $($verified.Name)" }
+    if ($verified.name -ne 'MCP CRUD E2E' -or $verified.rule.startFrom -ne 'position') { throw "Semantic rule verification failed." }
     $beforeCopy = Call 6 'wpe_filters_list' @{ limit = 200 }
     $copied = Call 7 'wpe_filters_copy' @{ ids = @($id); idempotencyKey = ([guid]::NewGuid().ToString()) }
     if (-not $copied.changed -or $copied.count -ne 1) { throw 'Copy verification failed.' }

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Globalization;
+using System.Linq;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Security.Cryptography;
@@ -34,6 +35,9 @@ namespace WinsockPacketEditor.Mcp
         private readonly string pipeName = "WPE64-Mcp-" + Guid.NewGuid().ToString("N");
         private Task acceptLoop;
         internal static Action<string> StartModeRequested;
+        // Operations that must preserve ShellForm's existing target-process routing
+        // or native-dialog behaviour are delegated back to the owning shell.
+        internal static Func<string, JObject, Task<JObject>> ShellActionRequested;
 
         public bool Enabled { get; private set; }
 
@@ -53,6 +57,7 @@ namespace WinsockPacketEditor.Mcp
         public void Dispose()
         {
             StartModeRequested = null;
+            ShellActionRequested = null;
             cancellation.Cancel();
             Stop();
             try { if (acceptLoop != null) acceptLoop.Wait(1000); } catch { }
@@ -102,7 +107,8 @@ namespace WinsockPacketEditor.Mcp
             JObject response;
             try
             {
-                var result = await DispatchAsync(operation, request["arguments"] as JObject).ConfigureAwait(false);
+                var arguments = ReadOnUi(() => NormalizeEntityReferences(operation, request["arguments"] as JObject ?? new JObject()));
+                var result = await DispatchAsync(operation, arguments).ConfigureAwait(false);
                 response = new JObject
                 {
                     ["requestId"] = requestId,
@@ -133,6 +139,108 @@ namespace WinsockPacketEditor.Mcp
             await WriteFrameAsync(stream, Encoding.UTF8.GetBytes(response.ToString(Formatting.None)), token).ConfigureAwait(false);
         }
 
+        // MCP callers speak in the same nouns shown by WPE.  GUIDs remain accepted
+        // for deterministic scripting, but never have to be discovered merely to
+        // carry out an ordinary user request such as “stop 发送 1”.
+        private static JObject NormalizeEntityReferences(string operation, JObject arguments)
+        {
+            if (arguments == null) return new JObject();
+            switch (operation ?? string.Empty)
+            {
+                case "filters.get": case "filters.stats.get": case "filters.setEnabled": case "filters.delete":
+                    ResolveField(arguments, "id", "filter"); break;
+                case "filters.rule.save":
+                    ResolveField(arguments, "filter", "filter"); break;
+                case "filters.move": case "filters.copy":
+                    ResolveArrayField(arguments, "ids", "filter"); break;
+                case "accounts.get": case "accounts.logins.list": case "accounts.setEnabled": case "accounts.update": case "accounts.delete":
+                    ResolveField(arguments, "id", "account"); break;
+                case "sends.get": case "sends.collection.list": case "sends.setEnabled": case "send.start":
+                    ResolveField(arguments, "id", "send"); break;
+                case "robots.get": case "robots.setEnabled": case "robot.start":
+                    ResolveField(arguments, "id", "robot"); break;
+                case "warehouses.get":
+                    ResolveField(arguments, "id", "warehouse"); break;
+                case "tasks.update":
+                    ResolveField(arguments, "id", TaskEntityKind(arguments)); break;
+                case "tasks.move": case "tasks.copy": case "tasks.delete":
+                    ResolveArrayField(arguments, "ids", TaskEntityKind(arguments)); break;
+                case "capture.addToSend": case "proxyCapture.addToSend":
+                    ResolveField(arguments, "targetId", "send"); break;
+                case "capture.addToWarehouse": case "proxyCapture.addToWarehouse":
+                    ResolveField(arguments, "targetId", "warehouse"); break;
+                case "sends.collection.action": case "sends.collection.clear":
+                    ResolveField(arguments, "sendId", "send"); break;
+                case "robots.instructions.add":
+                    ResolveField(arguments, "robot", "robot"); break;
+                case "robots.instructions.save":
+                    ResolveField(arguments, "robot", "robot"); break;
+                case "robots.instructions.action":
+                    ResolveField(arguments, "robotId", "robot"); break;
+                case "autoStores.save":
+                    ResolveField(arguments, "warehouseId", "warehouse"); break;
+                case "warehouses.stores.action": case "warehouses.stores.command":
+                    ResolveField(arguments, "warehouseId", "warehouse"); break;
+                case "wpc.server.rules.list":
+                    ResolveField(arguments, "serverId", "wpcServer"); break;
+                case "wpc.server.save":
+                    ResolveOptionalField(arguments, "id", "wpcServer"); break;
+                case "wpc.server.rule.save":
+                    ResolveField(arguments, "serverId", "wpcServer"); break;
+                case "export.run": case "import.run":
+                    ResolveOptionalField(arguments, "sendId", "send");
+                    ResolveOptionalField(arguments, "warehouseId", "warehouse");
+                    break;
+            }
+            return arguments;
+        }
+
+        private static string TaskEntityKind(JObject arguments)
+        {
+            var kind = ((string)arguments?["kind"] ?? string.Empty).Trim().ToLowerInvariant();
+            if (kind == "send" || kind == "robot" || kind == "warehouse") return kind;
+            throw new InvalidOperationException("Task kind must be send, robot, or warehouse.");
+        }
+
+        private static void ResolveField(JObject arguments, string field, string kind)
+        {
+            var value = ((string)arguments?[field] ?? string.Empty).Trim();
+            if (value.Length == 0) return;
+            arguments[field] = ResolveEntityReference(kind, value);
+        }
+
+        private static void ResolveOptionalField(JObject arguments, string field, string kind)
+        {
+            if (arguments?[field] != null && !string.IsNullOrWhiteSpace((string)arguments[field])) ResolveField(arguments, field, kind);
+        }
+
+        private static void ResolveArrayField(JObject arguments, string field, string kind)
+        {
+            var values = arguments?[field] as JArray;
+            if (values == null) return;
+            for (var i = 0; i < values.Count; i++)
+            {
+                var value = ((string)values[i] ?? string.Empty).Trim();
+                if (value.Length > 0) values[i] = ResolveEntityReference(kind, value);
+            }
+        }
+
+        private static string ResolveEntityReference(string kind, string value)
+        {
+            Guid parsed;
+            if (Guid.TryParse(value, out parsed)) return parsed.ToString().ToUpperInvariant();
+            var matches = new List<KeyValuePair<string, string>>();
+            if (kind == "filter") foreach (var filter in Operate.FilterConfig.List.lstFilterInfo) if (filter != null && string.Equals(filter.FName, value, StringComparison.OrdinalIgnoreCase)) matches.Add(new KeyValuePair<string, string>(filter.FID.ToString().ToUpperInvariant(), filter.FName));
+            else if (kind == "account") foreach (var account in Operate.ProxyConfig.Account.lstAccountInfo) if (account != null && string.Equals(account.UserName, value, StringComparison.OrdinalIgnoreCase)) matches.Add(new KeyValuePair<string, string>(account.AID.ToString().ToUpperInvariant(), account.UserName));
+            else if (kind == "send") foreach (var send in Operate.SendConfig.List.lstSendInfo) if (send != null && string.Equals(send.SName, value, StringComparison.OrdinalIgnoreCase)) matches.Add(new KeyValuePair<string, string>(send.SID.ToString().ToUpperInvariant(), send.SName));
+            else if (kind == "robot") foreach (var robot in Operate.RobotConfig.List.lstRobotInfo) if (robot != null && string.Equals(robot.RName, value, StringComparison.OrdinalIgnoreCase)) matches.Add(new KeyValuePair<string, string>(robot.RID.ToString().ToUpperInvariant(), robot.RName));
+            else if (kind == "warehouse") foreach (var warehouse in Operate.WareHouseConfig.List.lstWareHouseInfo) if (warehouse != null && string.Equals(warehouse.WName, value, StringComparison.OrdinalIgnoreCase)) matches.Add(new KeyValuePair<string, string>(warehouse.WID.ToString().ToUpperInvariant(), warehouse.WName));
+            else if (kind == "wpcServer") foreach (var server in Operate.WPCConfig.ServerList.lstServerInfo) if (server != null && string.Equals(server.ServerName, value, StringComparison.OrdinalIgnoreCase)) matches.Add(new KeyValuePair<string, string>(server.SID.ToString().ToUpperInvariant(), server.ServerName));
+            if (matches.Count == 0) throw new InvalidOperationException(kind + " '" + value + "' does not exist.");
+            if (matches.Count > 1) throw new InvalidOperationException(kind + " name '" + value + "' is not unique; use its GUID from the corresponding list tool.");
+            return matches[0].Key;
+        }
+
         private static JToken Dispatch(string operation, JObject arguments)
         {
             if (operation == "runtime.status")
@@ -152,6 +260,7 @@ namespace WinsockPacketEditor.Mcp
             if (operation == "capture.get") return ReadOnUi(() => GetPacket(arguments));
             if (operation == "capture.findNext") return ReadOnUi(() => FindNextCapture(arguments));
             if (operation == "logs.list") return ReadOnUi(() => ListLogs(arguments));
+            if (operation == "logs.all.list") return ReadOnUi(() => ListAllLogs(arguments));
             if (operation == "filters.list") return ReadOnUi(() => ListFilters(arguments));
             if (operation == "filters.get") return ReadOnUi(() => GetFilter(arguments));
             if (operation == "filters.stats.get") return ReadOnUi(() => GetFilterStats(arguments));
@@ -167,6 +276,10 @@ namespace WinsockPacketEditor.Mcp
             if (operation == "proxy.config.get") return ReadOnUi(GetProxyConfig);
             if (operation == "proxy.capabilities.get") return ReadOnUi(GetProxyCapabilities);
             if (operation == "proxy.runtime.get") return ReadOnUi(GetProxyRuntime);
+            if (operation == "remoteManagement.get") return ReadOnUi(GetRemoteManagement);
+            if (operation == "settings.get") return ReadOnUi(() => GetSetting(arguments));
+            if (operation == "wpc.servers.list") return ReadOnUi(ListWpcServers);
+            if (operation == "wpc.server.rules.list") return ReadOnUi(() => ListWpcServerRules(arguments));
             if (operation == "connections.summary.get") return ReadOnUi(GetConnectionsSummary);
             if (operation == "proxy.failures.list") return ReadOnUi(() => ListProxyFailures(arguments));
             if (operation == "proxy.health.get") return ReadOnUi(GetProxyHealth);
@@ -197,7 +310,7 @@ namespace WinsockPacketEditor.Mcp
             if (operation == "filters.clearAll") return ClearAllFiltersAsync(arguments);
             if (operation == "filters.createFromCapture") return CreateFilterFromCaptureAsync(arguments);
             if (operation == "filters.create") return CreateFilterAsync(arguments);
-            if (operation == "filters.update") return UpdateFilterAsync(arguments);
+            if (operation == "filters.rule.save") return SaveFilterRuleAsync(arguments);
             if (operation == "filters.delete") return DeleteFilterAsync(arguments);
             if (operation == "accounts.setEnabled") return SetAccountEnabledAsync(arguments);
             if (operation == "accounts.create") return CreateAccountAsync(arguments);
@@ -214,6 +327,14 @@ namespace WinsockPacketEditor.Mcp
             if (operation == "proxy.external.setEnabled") return SetExternalProxyEnabledAsync(arguments);
             if (operation == "proxy.start") return StartProxyAsync(arguments);
             if (operation == "proxy.stop") return StopProxyAsync(arguments);
+            if (operation == "remoteManagement.save") return SaveRemoteManagementAsync(arguments);
+            if (operation == "settings.save") return SaveSettingAsync(arguments);
+            if (operation == "map.local.save") return SaveMapLocalAsync(arguments);
+            if (operation == "map.remote.save") return SaveMapRemoteAsync(arguments);
+            if (operation == "backup.export") return ShellActionAsync("backup.export", arguments, "导出选定的 WPE 备份内容；WPE 会显示本地保存对话框。", "backup.export");
+            if (operation == "backup.import") return ShellActionAsync("backup.import", arguments, "导入 WPE 备份；WPE 会显示本地选择文件对话框并替换所含配置。", "backup.import");
+            if (operation == "wpc.server.save") return SaveWpcServerAsync(arguments);
+            if (operation == "wpc.server.rule.save") return SaveWpcServerRuleAsync(arguments);
             if (operation == "executors.stopAll") return StopAllExecutorsAsync(arguments);
             if (operation == "start.mode.select") return SelectStartModeAsync(arguments);
             if (operation == "firewall.rule.add") return AddFirewallRuleAsync(arguments);
@@ -231,6 +352,7 @@ namespace WinsockPacketEditor.Mcp
             if (operation == "sends.collection.action") return SendCollectionActionAsync(arguments);
             if (operation == "sends.collection.clear") return ClearSendCollectionAsync(arguments);
             if (operation == "robots.instructions.add") return AddRobotInstructionAsync(arguments);
+            if (operation == "robots.instructions.save") return SaveRobotInstructionsAsync(arguments);
             if (operation == "robots.instructions.action") return RobotInstructionActionAsync(arguments);
             if (operation == "autoStores.save") return SaveAutoStoresAsync(arguments);
             if (operation == "autoStores.setEnabled") return SetAutoStoresEnabledAsync(arguments);
@@ -239,7 +361,39 @@ namespace WinsockPacketEditor.Mcp
             if (operation == "warehouses.stores.command") return WarehouseStoresCommandAsync(arguments);
             if (operation == "packet.edit.save") return SavePacketEditAsync(arguments);
             if (operation == "packet.edit.addToSend") return AddPacketEditToSendAsync(arguments);
+            if (operation == "capture.clear") return ShellActionAsync("capture.clear", arguments, "清空当前捕获封包列表。", "capture.clear");
+            if (operation == "capture.export") return ShellActionAsync("capture.export", arguments, "导出捕获封包；WPE 会显示本地保存文件对话框。", "capture.export");
+            if (operation == "filters.import") return ShellActionAsync("filters.import", arguments, "导入滤镜列表；WPE 会显示本地选择文件和必要的密码对话框。", "filters.import");
+            if (operation == "import.run") return ShellActionAsync("import.run", arguments, "通过 WPE 原生选择文件对话框导入数据。", "import.run");
+            if (operation == "filters.export") return ShellActionAsync("filters.export", arguments, "导出滤镜列表；WPE 会显示本地保存文件和必要的密码对话框。", "filters.export");
+            if (operation == "export.run") return ShellActionAsync("export.run", arguments, "通过 WPE 原生保存对话框导出数据。", "export.run");
+            if (operation == "sends.start") return ShellActionAsync("sends.start", arguments, "启动已启用的发送任务列表，可能主动发送封包。", "sends.start");
+            if (operation == "sends.stop") return ShellActionAsync("sends.stop", arguments, "停止发送任务列表。", "sends.stop");
+            if (operation == "send.start") return ShellActionAsync("send.start", arguments, "启动一个已启用的发送任务，可能主动发送封包。", "send.start");
+            if (operation == "robots.start") return ShellActionAsync("robots.start", arguments, "启动已启用的机器人任务列表。", "robots.start");
+            if (operation == "robots.stop") return ShellActionAsync("robots.stop", arguments, "停止机器人任务列表。", "robots.stop");
+            if (operation == "robot.start") return ShellActionAsync("robot.start", arguments, "启动一个已启用的机器人任务。", "robot.start");
+            if (operation == "inject.attach") return ShellActionAsync("inject.attach", arguments, "按 WPE 当前注入方式附加目标进程或启动并注入目标程序。", "inject.attach");
+            if (operation == "inject.quickAttach") return ShellActionAsync("inject.quickAttach", arguments, "按 WPE 已保存的上次注入记录重新附加目标。", "inject.quickAttach");
+            if (operation == "inject.detach") return ShellActionAsync("inject.detach", arguments, "卸载当前注入钩子并断开目标进程连接。", "inject.detach");
+            if (operation == "inject.startHook") return ShellActionAsync("inject.startHook", arguments, "在当前已附加目标中启动 WPE 钩子。", "inject.startHook");
+            if (operation == "inject.stopHook") return ShellActionAsync("inject.stopHook", arguments, "停止当前已附加目标中的 WPE 钩子。", "inject.stopHook");
+            if (operation == "driver.uninstall") return ShellActionAsync("driver.uninstall", arguments, "卸载 WPE 进程代理驱动；该原生操作会要求重启电脑。", "driver.uninstall");
+            if (operation == "processProxy.save") return ShellActionAsync("processProxy.save", arguments, "保存 WPE 进程代理设置；原生逻辑会按需安装或配置驱动。", "processProxy.save");
+            if (operation == "packetEdit.sendStart") return ShellActionAsync("packetEdit.sendStart", arguments, "按当前编辑快照发送封包。", "packetEdit.sendStart");
+            if (operation == "packetEdit.sendStop") return ShellActionAsync("packetEdit.sendStop", arguments, "停止当前封包编辑器发送会话。", "packetEdit.sendStop");
             return Task.FromResult(Dispatch(operation, arguments));
+        }
+
+        private static async Task<JToken> ShellActionAsync(string operation, JObject arguments, string summary, string action)
+        {
+            var key = (string)arguments?["idempotencyKey"];
+            JObject prior;
+            if (McpWriteGuard.TryGetCompleted(operation, key, arguments, out prior)) return prior;
+            if (ShellActionRequested == null) throw new InvalidOperationException("WPE shell action is not available.");
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync(
+                operation, key, arguments, summary,
+                () => ShellActionRequested(action, arguments ?? new JObject()))).ConfigureAwait(false);
         }
 
         private static int PageLimit(JObject arguments) { return Math.Max(1, Math.Min(200, (int?)arguments?["limit"] ?? 50)); }
@@ -473,8 +627,59 @@ namespace WinsockPacketEditor.Mcp
         }
         private static async Task<JToken> AddRobotInstructionAsync(JObject a)
         {
-            var id = (string)a?["robotId"]; if (!Guid.TryParse(id, out _)) throw new InvalidOperationException("A robot GUID id is required."); var type = (int?)a?["type"]; if (!type.HasValue) throw new InvalidOperationException("type is required."); var key = (string)a?["idempotencyKey"]; JObject prior; if (McpWriteGuard.TryGetCompleted("robots.instructions.add", key, a, out prior)) return prior;
+            var robot = ((string)a?["robot"] ?? (string)a?["robotId"] ?? string.Empty).Trim();
+            if (robot.Length == 0) throw new InvalidOperationException("robot is required.");
+            string id;
+            if (Guid.TryParse(robot, out _)) id = robot;
+            else
+            {
+                var matches = Operate.RobotConfig.List.lstRobotInfo.Where(x => x != null && string.Equals(x.RName, robot, StringComparison.OrdinalIgnoreCase)).ToList();
+                if (matches.Count == 0) throw new InvalidOperationException("Robot '" + robot + "' does not exist.");
+                if (matches.Count > 1) throw new InvalidOperationException("Robot name '" + robot + "' is not unique; use its GUID from wpe_robots_list.");
+                id = matches[0].RID.ToString().ToUpperInvariant();
+            }
+            var type = (int?)a?["type"]; if (!type.HasValue) throw new InvalidOperationException("type is required."); var key = (string)a?["idempotencyKey"]; JObject prior; if (McpWriteGuard.TryGetCompleted("robots.instructions.add", key, a, out prior)) return prior;
             return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("robots.instructions.add", key, a, "向机器人任务添加一条指令；不会启动机器人。", () => { var edit = Operate.RobotConfig.Robot.OpenRobotEdit_ById(id); try { if (string.IsNullOrEmpty(edit.Id)) throw new InvalidOperationException("The robot task no longer exists."); var error = Operate.RobotConfig.Robot.AddRobotInstruction_Edit(type.Value, (string)a?["content"], (int?)a?["insertAt"] ?? -1); if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error); error = Operate.RobotConfig.Robot.SaveRobotEdit(edit.Name); if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error); return new JObject { ["robotId"] = id, ["changed"] = true }; } finally { Operate.RobotConfig.Robot.CloseRobotEdit(); } })).ConfigureAwait(false);
+        }
+
+        // A loop is only valid as a complete pair.  Saving each line separately (the
+        // legacy add tool's behavior) can never persist a loop start, so accept the
+        // ordered native rows and validate/save them as one edit transaction.
+        private static async Task<JToken> SaveRobotInstructionsAsync(JObject a)
+        {
+            var id = (string)a?["robot"];
+            if (!Guid.TryParse(id, out _)) throw new InvalidOperationException("robot must be an existing robot name or GUID.");
+            var rows = a?["instructions"] as JArray;
+            if (rows == null) throw new InvalidOperationException("instructions must be an array.");
+            var parsed = new List<KeyValuePair<int, string>>();
+            foreach (var row in rows.OfType<JObject>())
+            {
+                var type = (int?)row["type"];
+                if (!type.HasValue || type.Value < 0 || type.Value > 8) throw new InvalidOperationException("Each instruction type must be an integer from 0 through 8.");
+                parsed.Add(new KeyValuePair<int, string>(type.Value, ((string)row["content"] ?? string.Empty).Trim()));
+            }
+            if (parsed.Count != rows.Count) throw new InvalidOperationException("Each instruction must be an object with type and content.");
+            var key = (string)a?["idempotencyKey"]; JObject prior;
+            if (McpWriteGuard.TryGetCompleted("robots.instructions.save", key, a, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("robots.instructions.save", key, a, "替换机器人任务的完整指令列表；不会启动机器人。", async () =>
+            {
+                var edit = Operate.RobotConfig.Robot.OpenRobotEdit_ById(id);
+                try
+                {
+                    if (string.IsNullOrEmpty(edit.Id)) throw new InvalidOperationException("The robot task no longer exists.");
+                    var existing = Operate.RobotConfig.Robot.GetRobotInstructionRows();
+                    if (existing.Length > 0) await Operate.RobotConfig.Robot.RobotInstructionAction_ByIndexes(6, existing.Select(x => x.Index).ToArray());
+                    foreach (var item in parsed)
+                    {
+                        var error = Operate.RobotConfig.Robot.AddRobotInstruction_Edit(item.Key, item.Value, -1);
+                        if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
+                    }
+                    var saveError = Operate.RobotConfig.Robot.SaveRobotEdit(edit.Name);
+                    if (!string.IsNullOrEmpty(saveError)) throw new InvalidOperationException(saveError);
+                    return new JObject { ["robotId"] = id, ["changed"] = true, ["instructions"] = JArray.FromObject(Operate.RobotConfig.Robot.GetRobotInstructionRows()) };
+                }
+                finally { Operate.RobotConfig.Robot.CloseRobotEdit(); }
+            })).ConfigureAwait(false);
         }
         private static async Task<JToken> RobotInstructionActionAsync(JObject a)
         {
@@ -624,23 +829,235 @@ namespace WinsockPacketEditor.Mcp
             })).ConfigureAwait(false);
         }
 
-        private static async Task<JToken> UpdateFilterAsync(JObject arguments)
+        // Semantic MCP contract for the complete WPE filter editor.  It deliberately
+        // maps names and cell rules here instead of exposing FunctionMask, enum values
+        // or the persisted FSearch/FModify strings to clients.
+        private static async Task<JToken> SaveFilterRuleAsync(JObject arguments)
         {
+            var id = ((string)arguments?["filter"] ?? string.Empty).Trim();
+            var rule = arguments?["rule"] as JObject;
+            if (rule == null) throw new InvalidOperationException("A complete rule object is required.");
             var key = (string)arguments?["idempotencyKey"];
-            var filterToken = arguments?["filter"] as JObject;
-            if (filterToken == null) throw new InvalidOperationException("A complete filter object is required.");
-            var row = filterToken.ToObject<FilterEditRow>();
-            if (row == null || !Guid.TryParse(row.Id, out _)) throw new InvalidOperationException("Filter id must be a GUID.");
             JObject prior;
-            if (McpWriteGuard.TryGetCompleted("filters.update", key, arguments, out prior)) return prior;
-            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("filters.update", key, arguments, "修改筛选器配置：" + (row.Name ?? string.Empty).Trim(), () =>
+            if (McpWriteGuard.TryGetCompleted("filters.rule.save", key, arguments, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("filters.rule.save", key, arguments, "保存滤镜规则。", () =>
             {
+                var row = Operate.FilterConfig.List.GetFilterEdit_ById(id);
+                if (row == null) throw new InvalidOperationException("The filter does not exist.");
+                ApplyFilterRule(row, rule, id);
                 var error = Operate.FilterConfig.List.SaveFilterEdit(row);
                 if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
-                var detail = Operate.FilterConfig.List.GetFilterEdit_ById(row.Id);
-                return new JObject { ["changed"] = true, ["filter"] = detail == null ? new JObject() : JObject.FromObject(detail) };
+                var detail = Operate.FilterConfig.List.GetFilterEdit_ById(id);
+                return new JObject { ["changed"] = true, ["filter"] = detail == null ? new JObject() : FilterRuleResult(detail, GetFilterEnabled(id) ?? false) };
             })).ConfigureAwait(false);
         }
+
+        private static void ApplyFilterRule(FilterEditRow row, JObject rule, string filterId)
+        {
+            row.Name = OptionalRuleString(rule, "name") ?? row.Name;
+            row.Mode = FilterChoice(rule, "mode", new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase) { ["normal"] = 0, ["advanced"] = 1 });
+            row.Action = FilterChoice(rule, "action", new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase) { ["replace"] = 0, ["intercept"] = 1, ["display"] = 2, ["hide"] = 3, ["change"] = 5 });
+            if (row.Mode == 1 && string.IsNullOrEmpty(OptionalRuleString(rule, "startFrom"))) throw new InvalidOperationException("Advanced filters must explicitly set startFrom: head processes only the first match; position processes every match.");
+            row.StartFrom = FilterChoice(rule, "startFrom", new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase) { ["head"] = 0, ["position"] = 1 }, 0);
+            if (row.Mode == 0 && row.StartFrom != 0) throw new InvalidOperationException("startFrom position is available only in advanced mode.");
+            row.FunctionMask = FilterPacketTypes(rule["packetTypes"] as JArray);
+            row.Search = FilterSearchCells(rule["search"] as JArray, row.Mode);
+            row.Modify = FilterModifyCells(rule["modify"] as JArray, row.Mode, row.StartFrom);
+            if (row.Action == 5 && !IsCompleteReplacement(row.Modify))
+                throw new InvalidOperationException("action change replaces the entire packet. Its modify cells must be contiguous from offset 0; use action replace to change selected bytes.");
+            ApplyFilterConditions(row, rule["conditions"] as JObject);
+            ApplyFilterProgression(row, rule["progression"] as JObject);
+            ApplyFilterOnMatch(row, rule["onMatch"] as JObject, filterId);
+        }
+
+        private static int FilterChoice(JObject source, string field, IDictionary<string, int> choices, int? fallback = null)
+        {
+            var value = OptionalRuleString(source, field);
+            if (string.IsNullOrEmpty(value) && fallback.HasValue) return fallback.Value;
+            int result;
+            if (string.IsNullOrEmpty(value) || !choices.TryGetValue(value, out result)) throw new InvalidOperationException(field + " must be one of: " + string.Join(", ", choices.Keys) + ".");
+            return result;
+        }
+
+        private static string OptionalRuleString(JObject source, string field)
+        {
+            var token = source?[field];
+            return token == null || token.Type == JTokenType.Null ? null : ((string)token ?? string.Empty).Trim();
+        }
+
+        private static int FilterPacketTypes(JArray values)
+        {
+            if (values == null) return AllPacketTypesForCurrentMode();
+            if (values.Count == 0) throw new InvalidOperationException("packetTypes must contain at least one packet type; use all to select every packet type for the current mode.");
+            var bits = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["send"] = 0, ["sendTo"] = 1, ["recv"] = 2, ["recvFrom"] = 3,
+                ["wsaSend"] = 4, ["wsaSendTo"] = 5, ["wsaRecv"] = 6, ["wsaRecvFrom"] = 7,
+                ["tcpRequest"] = 8, ["udpRequest"] = 9, ["tcpResponse"] = 10, ["udpResponse"] = 11,
+            };
+            var mask = 0;
+            foreach (var token in values)
+            {
+                int bit;
+                var value = ((string)token ?? string.Empty).Trim();
+                if (string.Equals(value, "all", StringComparison.OrdinalIgnoreCase) || value == "全部" || value == "全选") { mask |= AllPacketTypesForCurrentMode(); continue; }
+                if (string.Equals(value, "tcp", StringComparison.OrdinalIgnoreCase) || value == "TCP") { mask |= (1 << 8) | (1 << 10); continue; }
+                if (string.Equals(value, "udp", StringComparison.OrdinalIgnoreCase) || value == "UDP") { mask |= (1 << 9) | (1 << 11); continue; }
+                if (!bits.TryGetValue(value, out bit)) throw new InvalidOperationException("Unknown packet type: " + value + ".");
+                mask |= 1 << bit;
+            }
+            var active = AllPacketTypesForCurrentMode();
+            if ((mask & active) == 0) throw new InvalidOperationException("packetTypes does not select any packet type for the current WPE mode. Use all or choose a packet type for that mode.");
+            return mask;
+        }
+
+        private static int AllPacketTypesForCurrentMode()
+        {
+            if (Operate.SystemConfig.SelectMode == Operate.SystemConfig.SystemMode.Proxy) return 0xF00;
+            if (Operate.SystemConfig.SelectMode == Operate.SystemConfig.SystemMode.Inject) return 0x0FF;
+            return 0xFFF;
+        }
+
+        private static FilterSearchCell[] FilterSearchCells(JArray values, int mode)
+        {
+            if (values == null || values.Count == 0) throw new InvalidOperationException("search must contain at least one matching cell.");
+            var seen = new HashSet<int>();
+            var cells = new List<FilterSearchCell>();
+            foreach (var item in values.OfType<JObject>())
+            {
+                var index = (int?)item["offset"];
+                var value = OptionalRuleString(item, "value");
+                if (!index.HasValue || index.Value < 0 || index.Value >= Operate.FilterConfig.Filter.FilterSize_MaxLen || !seen.Add(index.Value)) throw new InvalidOperationException("search offsets must be unique integers from 0 to 999.");
+                if (!IsFilterByte(value, mode == 1)) throw new InvalidOperationException("Each search value must be XX, X*, or *X; normal mode allows XX only.");
+                cells.Add(new FilterSearchCell { Index = index.Value, Value = value.ToUpperInvariant(), Exclude = (bool?)item["exclude"] ?? false });
+            }
+            if (cells.Count != values.Count) throw new InvalidOperationException("Each search item must be an object.");
+            if (mode == 1 && !cells.Any(x => x.Index == 0)) throw new InvalidOperationException("Advanced-mode search must define an exact anchor at offset 0.");
+            if (mode == 1 && cells.Any(x => x.Index == 0 && x.Value.IndexOf('*') >= 0)) throw new InvalidOperationException("The advanced-mode search anchor at offset 0 must be an exact byte.");
+            return cells.OrderBy(x => x.Index).ToArray();
+        }
+
+        private static FilterModifyCell[] FilterModifyCells(JArray values, int mode, int startFrom)
+        {
+            var seen = new HashSet<int>();
+            var cells = new List<FilterModifyCell>();
+            if (values == null) return cells.ToArray();
+            var min = mode == 1 && startFrom == 1 ? -Operate.FilterConfig.Filter.FilterSize_MaxLen : 0;
+            foreach (var item in values.OfType<JObject>())
+            {
+                var index = (int?)item["offset"];
+                var progression = (bool?)item["progression"] ?? false;
+                var random = (bool?)item["random"] ?? false;
+                var value = OptionalRuleString(item, "value");
+                if (!index.HasValue || index.Value < min || index.Value >= Operate.FilterConfig.Filter.FilterSize_MaxLen || !seen.Add(index.Value)) throw new InvalidOperationException("modify offsets are out of range or duplicated.");
+                if (progression && random) throw new InvalidOperationException("A modify cell cannot be both progression and random.");
+                if (!random && !IsFilterByte(value, false)) throw new InvalidOperationException("A non-random modify value must be an exact hexadecimal byte.");
+                cells.Add(new FilterModifyCell { Index = index.Value, Value = random ? string.Empty : value.ToUpperInvariant(), Progression = progression, Random = random });
+            }
+            if (cells.Count != values.Count) throw new InvalidOperationException("Each modify item must be an object.");
+            return cells.OrderBy(x => x.Index).ToArray();
+        }
+
+        private static bool IsCompleteReplacement(FilterModifyCell[] cells)
+        {
+            if (cells == null || cells.Length == 0) return false;
+            var ordered = cells.OrderBy(x => x.Index).ToArray();
+            if (ordered[0].Index != 0) return false;
+            for (var i = 0; i < ordered.Length; i++) if (ordered[i].Index != i || ordered[i].Random) return false;
+            return true;
+        }
+
+        private static bool IsFilterByte(string value, bool wildcard)
+        {
+            if (string.IsNullOrEmpty(value) || value.Length != 2) return false;
+            var first = Uri.IsHexDigit(value[0]); var second = Uri.IsHexDigit(value[1]);
+            return first && second || wildcard && ((first && value[1] == '*') || (value[0] == '*' && second));
+        }
+
+        private static void ApplyFilterConditions(FilterEditRow row, JObject conditions)
+        {
+            row.AppointHeader = SetCondition(conditions, "header", out row.HeaderContent);
+            row.AppointSocket = SetCondition(conditions, "socket", out row.SocketContent);
+            row.AppointLength = SetCondition(conditions, "length", out row.LengthContent);
+            row.AppointPort = SetCondition(conditions, "port", out row.PortContent);
+        }
+
+        private static bool SetCondition(JObject conditions, string field, out string content)
+        {
+            content = OptionalRuleString(conditions, field) ?? string.Empty;
+            return content.Length > 0;
+        }
+
+        private static void ApplyFilterProgression(FilterEditRow row, JObject progression)
+        {
+            row.IsProgressionContinuous = (bool?)progression?["continuous"] ?? false;
+            row.ProgressionStep = (int?)progression?["step"] ?? 1;
+            row.IsProgressionCarry = (bool?)progression?["carry"] ?? false;
+            row.ProgressionCarryNumber = (int?)progression?["carryCount"] ?? 1;
+            if (row.ProgressionStep < 1 || row.ProgressionCarryNumber < 1) throw new InvalidOperationException("progression step and carryCount must be positive.");
+        }
+
+        private static void ApplyFilterOnMatch(FilterEditRow row, JObject onMatch, string filterId)
+        {
+            var kind = OptionalRuleString(onMatch, "type") ?? "none";
+            if (string.Equals(kind, "none", StringComparison.OrdinalIgnoreCase)) { row.IsExecute = false; row.ExecuteType = 2; row.ExecuteId = Guid.Empty.ToString(); return; }
+            var kinds = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase) { ["send"] = 0, ["robot"] = 1, ["filter"] = 3, ["warehouse"] = 4 };
+            int type;
+            if (!kinds.TryGetValue(kind, out type)) throw new InvalidOperationException("onMatch type must be none, send, robot, filter, or warehouse.");
+            var target = OptionalRuleString(onMatch, "target");
+            if (string.IsNullOrEmpty(target)) throw new InvalidOperationException("onMatch target is required when type is not none.");
+            var targetId = ResolveEntityReference(kind == "warehouse" ? "warehouse" : kind, target);
+            if (type == 3 && string.Equals(targetId, filterId, StringComparison.OrdinalIgnoreCase)) throw new InvalidOperationException("A filter cannot execute itself.");
+            row.IsExecute = true; row.ExecuteType = type; row.ExecuteId = targetId;
+        }
+
+        // Do not leak the editor DTO back to MCP callers: its numeric enums and
+        // persistence-shaped field names invite callers to replay invalid payloads.
+        private static JObject FilterRuleResult(FilterEditRow row, bool enabled)
+        {
+            var packetTypes = new JArray();
+            var names = new[] { "send", "sendTo", "recv", "recvFrom", "wsaSend", "wsaSendTo", "wsaRecv", "wsaRecvFrom", "tcpRequest", "udpRequest", "tcpResponse", "udpResponse" };
+            for (var i = 0; i < names.Length; i++) if ((row.FunctionMask & (1 << i)) != 0) packetTypes.Add(names[i]);
+            var search = new JArray((row.Search ?? new FilterSearchCell[0]).OrderBy(x => x.Index).Select(x => new JObject { ["offset"] = x.Index, ["value"] = x.Value, ["exclude"] = x.Exclude }));
+            var modify = new JArray((row.Modify ?? new FilterModifyCell[0]).OrderBy(x => x.Index).Select(x => new JObject { ["offset"] = x.Index, ["value"] = x.Random ? null : x.Value, ["progression"] = x.Progression, ["random"] = x.Random }));
+            var conditions = new JObject();
+            if (row.AppointHeader) conditions["header"] = row.HeaderContent;
+            if (row.AppointSocket) conditions["socket"] = row.SocketContent;
+            if (row.AppointLength) conditions["length"] = row.LengthContent;
+            if (row.AppointPort) conditions["port"] = row.PortContent;
+            var onMatch = new JObject { ["type"] = FilterOnMatchName(row.ExecuteType, row.IsExecute) };
+            if (row.IsExecute) onMatch["target"] = row.ExecuteId;
+            return new JObject
+            {
+                ["id"] = row.Id,
+                ["name"] = row.Name,
+                ["enabled"] = enabled,
+                ["rule"] = new JObject
+                {
+                    ["mode"] = row.Mode == 1 ? "advanced" : "normal",
+                    ["action"] = FilterActionName(row.Action),
+                    ["startFrom"] = row.StartFrom == 1 ? "position" : "head",
+                    ["packetTypes"] = packetTypes,
+                    ["search"] = search,
+                    ["modify"] = modify,
+                    ["conditions"] = conditions,
+                    ["progression"] = new JObject { ["continuous"] = row.IsProgressionContinuous, ["step"] = row.ProgressionStep, ["carry"] = row.IsProgressionCarry, ["carryCount"] = row.ProgressionCarryNumber },
+                    ["onMatch"] = onMatch,
+                },
+            };
+        }
+
+        private static string FilterActionName(int action)
+        {
+            switch (action) { case 0: return "replace"; case 1: return "intercept"; case 2: return "display"; case 3: return "hide"; case 5: return "change"; default: return "replace"; }
+        }
+
+        private static string FilterOnMatchName(int type, bool enabled)
+        {
+            if (!enabled) return "none";
+            switch (type) { case 0: return "send"; case 1: return "robot"; case 3: return "filter"; case 4: return "warehouse"; default: return "none"; }
+        }
+
 
         private static async Task<JToken> DeleteFilterAsync(JObject arguments)
         {
@@ -1279,6 +1696,25 @@ namespace WinsockPacketEditor.Mcp
             return new JObject { ["rows"] = rows, ["nextCursor"] = NextCursor(offset, rows.Count, offset + rows.Count < total) };
         }
 
+        private static JObject ListAllLogs(JObject arguments)
+        {
+            var limit = Math.Max(1, Math.Min(200, (int?)arguments?["limit"] ?? 50));
+            var offset = ReadOffset(arguments);
+            var all = new List<JObject>();
+            foreach (var x in Operate.LogConfig.List.lstLogInfo)
+                all.Add(new JObject { ["kind"] = "system", ["time"] = x.LogTime.ToUniversalTime().ToString("o"), ["source"] = x.FuncName, ["message"] = x.LogContent });
+            foreach (var x in Operate.LogConfig.List.lstFilterLogInfo)
+                all.Add(new JObject { ["kind"] = "filter", ["time"] = x.LogTime.ToUniversalTime().ToString("o"), ["filter"] = x.FName, ["action"] = (int)x.FAction, ["matches"] = x.MatchNum, ["type"] = (int)x.PacketType, ["length"] = x.PacketLen });
+            foreach (var x in Operate.LogConfig.List.lstProxyLogInfo)
+                all.Add(new JObject { ["kind"] = "proxy", ["time"] = x.LogTime.ToUniversalTime().ToString("o"), ["account"] = x.UserName, ["ip"] = x.LoginIP, ["message"] = x.LogContent });
+            foreach (var x in Operate.LogConfig.List.lstMcpLogInfo)
+                all.Add(new JObject { ["kind"] = "mcp", ["time"] = x.LogTime.ToUniversalTime().ToString("o"), ["source"] = x.FuncName, ["message"] = x.LogContent });
+            all.Sort((left, right) => string.CompareOrdinal((string)right["time"], (string)left["time"]));
+            var rows = new JArray();
+            for (var i = offset; i < all.Count && rows.Count < limit; i++) rows.Add(all[i]);
+            return new JObject { ["rows"] = rows, ["nextCursor"] = NextCursor(offset, rows.Count, offset + rows.Count < all.Count) };
+        }
+
         private static JObject ListFilters(JObject arguments)
         {
             var limit = Math.Max(1, Math.Min(200, (int?)arguments?["limit"] ?? 50));
@@ -1299,11 +1735,7 @@ namespace WinsockPacketEditor.Mcp
             if (!Guid.TryParse(id, out _)) throw new InvalidOperationException("Filter id must be a GUID.");
             var detail = Operate.FilterConfig.List.GetFilterEdit_ById(id);
             if (detail == null) throw new InvalidOperationException("The filter does not exist.");
-            // 编辑 DTO 刻意不含 IsEnable（编辑器不管理列表开关）；MCP 查询则必须
-            // 明确带回它，避免客户端把“规则已保存”误判成“滤镜已启用”。
-            var result = JObject.FromObject(detail);
-            result["enabled"] = GetFilterEnabled(id) ?? false;
-            return result;
+            return FilterRuleResult(detail, GetFilterEnabled(id) ?? false);
         }
 
         private static JObject GetFilterStats(JObject arguments)
@@ -1506,6 +1938,69 @@ namespace WinsockPacketEditor.Mcp
             return result;
         }
 
+        private static JObject GetRemoteManagement()
+        {
+            var setting = Operate.SystemConfig.GetRemoteSetting();
+            return new JObject
+            {
+                ["enabled"] = setting.IsRemote,
+                ["running"] = setting.Running,
+                ["ip"] = setting.IP,
+                ["port"] = setting.Port,
+                ["url"] = Operate.SystemConfig.GetRemoteMGT_URL(setting.IP, setting.Port.ToString()),
+                ["userName"] = setting.UserName,
+                ["password"] = setting.PassWord,
+                ["availableIps"] = new JArray(setting.IPs ?? new string[0]),
+                ["ipMissing"] = setting.IPMissing
+            };
+        }
+
+        private static JObject GetSetting(JObject arguments)
+        {
+            var page = ((string)arguments?["page"] ?? string.Empty).Trim().ToLowerInvariant();
+            var mode = ((string)arguments?["mode"] ?? "proxy").Trim().ToLowerInvariant();
+            if (page == "proxy") return GetProxySettings();
+            if (page == "process") return JObject.FromObject(Operate.ProxyConfig.Proxy.GetProcessSetting());
+            if (page == "extproxy") return JObject.FromObject(Operate.ProxyConfig.Proxy.GetExtProxySetting());
+            if (page == "remote") return GetRemoteManagement();
+            if (page == "firewall") return GetFirewall();
+            if (page == "map") return new JObject { ["enableLocal"] = Operate.ProxyConfig.Mapping.Enable_MapLocal, ["enableRemote"] = Operate.ProxyConfig.Mapping.Enable_MapRemote };
+            if (page == "hotkey") return JObject.FromObject(Operate.SystemConfig.GetHotkeySetting());
+            if (page == "system") return new JObject { ["speedMode"] = Operate.SystemConfig.SpeedMode, ["listExecute"] = (int)Operate.SystemConfig.ListExecute, ["filterExecute"] = (int)Operate.FilterConfig.Filter.FilterExecute };
+            if (page == "log") return new JObject { ["autoClear"] = Operate.LogConfig.List.AutoClear, ["autoClearValue"] = (int)Operate.LogConfig.List.AutoClear_Value };
+            if (page == "hook") return new JObject { ["ws1Send"] = Operate.PacketConfig.Packet.HookWS1_Send, ["ws1SendTo"] = Operate.PacketConfig.Packet.HookWS1_SendTo, ["ws1Recv"] = Operate.PacketConfig.Packet.HookWS1_Recv, ["ws1RecvFrom"] = Operate.PacketConfig.Packet.HookWS1_RecvFrom, ["ws2Send"] = Operate.PacketConfig.Packet.HookWS2_Send, ["ws2SendTo"] = Operate.PacketConfig.Packet.HookWS2_SendTo, ["ws2Recv"] = Operate.PacketConfig.Packet.HookWS2_Recv, ["ws2RecvFrom"] = Operate.PacketConfig.Packet.HookWS2_RecvFrom, ["wsaSend"] = Operate.PacketConfig.Packet.HookWSA_Send, ["wsaSendTo"] = Operate.PacketConfig.Packet.HookWSA_SendTo, ["wsaRecv"] = Operate.PacketConfig.Packet.HookWSA_Recv, ["wsaRecvFrom"] = Operate.PacketConfig.Packet.HookWSA_RecvFrom, ["tcpReq"] = Operate.ProxyConfig.Proxy.HookTCP_Req, ["tcpResp"] = Operate.ProxyConfig.Proxy.HookTCP_Resp, ["udpReq"] = Operate.ProxyConfig.Proxy.HookUDP_Req, ["udpResp"] = Operate.ProxyConfig.Proxy.HookUDP_Resp, ["unpack"] = Operate.ProxyConfig.Proxy.Enable_UnPack, ["unpackHead"] = Operate.ProxyConfig.Proxy.UnPack_Head ?? string.Empty, ["unpackLength"] = Operate.ProxyConfig.Proxy.UnPack_Length ?? string.Empty };
+            if (page == "leach") { var f = Operate.SystemConfig.CheckType_Value; return new JObject { ["notShow"] = Operate.SystemConfig.CheckNotShow, ["checkSocket"] = Operate.SystemConfig.CheckSocket, ["socketValue"] = Operate.SystemConfig.CheckSocket_Value ?? string.Empty, ["checkIP"] = Operate.SystemConfig.CheckIP, ["ipValue"] = Operate.SystemConfig.CheckIP_Value ?? string.Empty, ["checkPort"] = Operate.SystemConfig.CheckPort, ["portValue"] = Operate.SystemConfig.CheckPort_Value ?? string.Empty, ["checkHead"] = Operate.SystemConfig.CheckHead, ["headValue"] = Operate.SystemConfig.CheckHead_Value ?? string.Empty, ["checkData"] = Operate.SystemConfig.CheckData, ["dataValue"] = Operate.SystemConfig.CheckData_Value ?? string.Empty, ["checkLen"] = Operate.SystemConfig.CheckLen, ["lenValue"] = Operate.SystemConfig.CheckLength_Value ?? string.Empty, ["checkType"] = Operate.SystemConfig.CheckType, ["send"] = f.Send, ["sendTo"] = f.SendTo, ["recv"] = f.Recv, ["recvFrom"] = f.RecvFrom, ["wsaSend"] = f.WSASend, ["wsaSendTo"] = f.WSASendTo, ["wsaRecv"] = f.WSARecv, ["wsaRecvFrom"] = f.WSARecvFrom, ["tcpReq"] = f.TCP_Req, ["tcpResp"] = f.TCP_Resp, ["udpReq"] = f.UDP_Req, ["udpResp"] = f.UDP_Resp }; }
+            if (page == "list")
+            {
+                var inject = mode == "inject" || mode == "packet";
+                return new JObject { ["mode"] = inject ? "inject" : "proxy", ["showSocket"] = inject ? Operate.PacketConfig.List.IsShow_PacketSocket : Operate.ProxyConfig.List.IsShow_PacketSocket, ["showType"] = inject ? Operate.PacketConfig.List.IsShow_PacketType : Operate.ProxyConfig.List.IsShow_PacketType, ["showClientAddr"] = inject ? Operate.PacketConfig.List.IsShow_ClientAddr : Operate.ProxyConfig.List.IsShow_ClientAddr, ["showClientLoc"] = inject ? Operate.PacketConfig.List.IsShow_ClientLocation : Operate.ProxyConfig.List.IsShow_ClientLocation, ["showServerAddr"] = inject ? Operate.PacketConfig.List.IsShow_ServerAddr : Operate.ProxyConfig.List.IsShow_ServerAddr, ["showServerLoc"] = inject ? Operate.PacketConfig.List.IsShow_ServerLocation : Operate.ProxyConfig.List.IsShow_ServerLocation, ["showLen"] = inject ? Operate.PacketConfig.List.IsShow_PacketLen : Operate.ProxyConfig.List.IsShow_PacketLen, ["autoClear"] = Operate.PacketConfig.List.AutoClear, ["autoClearValue"] = (int)Operate.PacketConfig.List.AutoClear_Value };
+            }
+            throw new InvalidOperationException("Unsupported settings page: " + page);
+        }
+
+        private static JObject ListWpcServers()
+        {
+            var rows = new JArray();
+            foreach (var server in Operate.WPCConfig.ServerList.lstServerInfo)
+            {
+                if (server == null) continue;
+                rows.Add(new JObject { ["id"] = server.SID.ToString().ToUpperInvariant(), ["enabled"] = server.IsEnable, ["name"] = server.ServerName ?? string.Empty, ["ip"] = server.ServerIP ?? string.Empty, ["port"] = server.ServerPort, ["forgotUrl"] = server.ForgotURL ?? string.Empty, ["registerUrl"] = server.RegisterURL ?? string.Empty, ["verifyUrl"] = server.VerifyURL ?? string.Empty, ["ruleCount"] = server.ServerRInfo == null ? 0 : server.ServerRInfo.Count });
+            }
+            return new JObject { ["rows"] = rows };
+        }
+
+        private static JObject ListWpcServerRules(JObject arguments)
+        {
+            var serverId = (string)arguments?["serverId"];
+            if (Operate.WPCConfig.ServerList.FindServer_ById(serverId) == null) throw new InvalidOperationException("The WPC server does not exist.");
+            var rows = new JArray();
+            foreach (var rule in Operate.WPCConfig.ServerList.GetRuleRows_ById(serverId))
+            {
+                rows.Add(new JObject { ["id"] = rule.Id, ["enabled"] = rule.IsEnable, ["type"] = rule.Type, ["typeName"] = rule.TypeName, ["argument"] = rule.Argument, ["action"] = rule.Action });
+            }
+            return new JObject { ["serverId"] = serverId, ["rows"] = rows };
+        }
+
         private static JObject GetConnectionsSummary()
         {
             var rows = Operate.ProxyConfig.Account.GetClientConnections(string.Empty) ?? new ClientConnRow[0];
@@ -1657,6 +2152,164 @@ namespace WinsockPacketEditor.Mcp
                     var error = Operate.ProxyConfig.Proxy.SetExternalProxyEnabled(enabled, out changed);
                     if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
                     return new JObject { ["changed"] = changed, ["enabled"] = enabled, ["host"] = host, ["port"] = port };
+                })).ConfigureAwait(false);
+        }
+
+        private static Task<JToken> SaveMapLocalAsync(JObject a) { return SaveMapAsync("map.local.save", a, false); }
+        private static Task<JToken> SaveMapRemoteAsync(JObject a) { return SaveMapAsync("map.remote.save", a, true); }
+        private static async Task<JToken> SaveMapAsync(string operation, JObject a, bool remote)
+        {
+            var key = (string)a?["idempotencyKey"]; JObject prior; if (McpWriteGuard.TryGetCompleted(operation, key, a, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync(operation, key, a, (string.IsNullOrEmpty((string)a?["id"]) ? "新增" : "更新") + " HTTP 映射规则。", () =>
+            {
+                string error;
+                if (remote) error = Operate.ProxyConfig.Mapping.SaveMapRemote_Shell((string)a?["id"], (int?)a?["protocolFrom"] ?? 0, (string)a?["hostFrom"], (int?)a?["portFrom"] ?? 80, (string)a?["pathFrom"], (int?)a?["protocolTo"] ?? 0, (string)a?["hostTo"], (int?)a?["portTo"] ?? 80, (string)a?["pathTo"]);
+                else error = Operate.ProxyConfig.Mapping.SaveMapLocal_Shell((string)a?["id"], (int?)a?["protocol"] ?? 0, (string)a?["host"], (int?)a?["port"] ?? 80, (string)a?["remotePath"], (string)a?["localPath"]);
+                if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
+                return new JObject { ["changed"] = true, ["created"] = string.IsNullOrEmpty((string)a?["id"]) };
+            })).ConfigureAwait(false);
+        }
+
+        private static async Task<JToken> SaveSettingAsync(JObject arguments)
+        {
+            var page = ((string)arguments?["page"] ?? string.Empty).Trim().ToLowerInvariant();
+            var values = arguments?["values"] as JObject;
+            var key = (string)arguments?["idempotencyKey"];
+            if (values == null) throw new InvalidOperationException("values must be an object.");
+            JObject prior;
+            if (McpWriteGuard.TryGetCompleted("settings.save", key, arguments, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("settings.save", key, arguments, "保存 WPE “" + page + "”设置页的完整配置。", () =>
+            {
+                bool Bool(string n) { return (bool?)values[n] ?? false; }
+                int Int(string n, int d) { return (int?)values[n] ?? d; }
+                string Text(string n) { return ((string)values[n] ?? string.Empty).Trim(); }
+                if (page == "proxy")
+                {
+                    var error = Operate.ProxyConfig.Proxy.SaveProxySettings(Bool("proxyIpAuto"), Text("proxyIp"), Bool("enableSocks5"), Int("socks5Port", 1080), Bool("enableAuth"), Bool("onlyWpc"), Int("maxConnection", Operate.ProxyConfig.Proxy.DefaultMaxConnectionNumber), Bool("enableHttp"), Int("httpPort", 1081));
+                    if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
+                }
+                else if (page == "extproxy")
+                {
+                    var error = Operate.ProxyConfig.Proxy.SaveExtProxySetting(Bool("enable"), Text("ip"), Int("port", 8889), Bool("appointPort"), Text("appointPortContent"), Bool("auth"), Text("userName"), Text("passWord"));
+                    if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
+                }
+                else if (page == "map") Operate.ProxyConfig.Mapping.SaveMapSetting_Shell(Bool("enableLocal"), Bool("enableRemote"));
+                else if (page == "system")
+                {
+                    Operate.SystemConfig.SpeedMode = Bool("speedMode");
+                    Operate.SystemConfig.ListExecute = Int("listExecute", 0) == 1 ? Operate.SystemConfig.Execute.Sequence : Operate.SystemConfig.Execute.Together;
+                    Operate.FilterConfig.Filter.FilterExecute = Int("filterExecute", 0) == 1 ? Operate.FilterConfig.Filter.Execute.Sequence : Operate.FilterConfig.Filter.Execute.Priority;
+                    Operate.SystemConfig.SaveSystemConfig_ToDB();
+                }
+                else if (page == "log")
+                {
+                    var keep = Int("autoClearValue", (int)Operate.LogConfig.List.AutoClear_Value); if (keep < 100 || keep > 500000) throw new InvalidOperationException("autoClearValue must be from 100 to 500000.");
+                    Operate.LogConfig.List.AutoClear = Bool("autoClear"); Operate.LogConfig.List.AutoClear_Value = keep; Operate.SystemConfig.SaveSystemConfig_ToDB();
+                }
+                else if (page == "list")
+                {
+                    var inject = Text("mode") == "inject" || Text("mode") == "packet";
+                    if (inject) { Operate.PacketConfig.List.IsShow_PacketSocket = Bool("showSocket"); Operate.PacketConfig.List.IsShow_PacketType = Bool("showType"); Operate.PacketConfig.List.IsShow_ClientAddr = Bool("showClientAddr"); Operate.PacketConfig.List.IsShow_ClientLocation = Bool("showClientLoc"); Operate.PacketConfig.List.IsShow_ServerAddr = Bool("showServerAddr"); Operate.PacketConfig.List.IsShow_ServerLocation = Bool("showServerLoc"); Operate.PacketConfig.List.IsShow_PacketLen = Bool("showLen"); }
+                    else { Operate.ProxyConfig.List.IsShow_PacketSocket = Bool("showSocket"); Operate.ProxyConfig.List.IsShow_PacketType = Bool("showType"); Operate.ProxyConfig.List.IsShow_ClientAddr = Bool("showClientAddr"); Operate.ProxyConfig.List.IsShow_ClientLocation = Bool("showClientLoc"); Operate.ProxyConfig.List.IsShow_ServerAddr = Bool("showServerAddr"); Operate.ProxyConfig.List.IsShow_ServerLocation = Bool("showServerLoc"); Operate.ProxyConfig.List.IsShow_PacketLen = Bool("showLen"); }
+                    Operate.SystemConfig.SaveProxyMode_ToDB(); Operate.SystemConfig.SaveInjectMode_ToDB();
+                }
+                else if (page == "hook")
+                {
+                    Operate.PacketConfig.Packet.HookWS1_Send = Bool("ws1Send"); Operate.PacketConfig.Packet.HookWS1_SendTo = Bool("ws1SendTo"); Operate.PacketConfig.Packet.HookWS1_Recv = Bool("ws1Recv"); Operate.PacketConfig.Packet.HookWS1_RecvFrom = Bool("ws1RecvFrom"); Operate.PacketConfig.Packet.HookWS2_Send = Bool("ws2Send"); Operate.PacketConfig.Packet.HookWS2_SendTo = Bool("ws2SendTo"); Operate.PacketConfig.Packet.HookWS2_Recv = Bool("ws2Recv"); Operate.PacketConfig.Packet.HookWS2_RecvFrom = Bool("ws2RecvFrom"); Operate.PacketConfig.Packet.HookWSA_Send = Bool("wsaSend"); Operate.PacketConfig.Packet.HookWSA_SendTo = Bool("wsaSendTo"); Operate.PacketConfig.Packet.HookWSA_Recv = Bool("wsaRecv"); Operate.PacketConfig.Packet.HookWSA_RecvFrom = Bool("wsaRecvFrom");
+                    Operate.ProxyConfig.Proxy.HookTCP_Req = Bool("tcpReq"); Operate.ProxyConfig.Proxy.HookTCP_Resp = Bool("tcpResp"); Operate.ProxyConfig.Proxy.HookUDP_Req = Bool("udpReq"); Operate.ProxyConfig.Proxy.HookUDP_Resp = Bool("udpResp"); Operate.ProxyConfig.Proxy.Enable_UnPack = Bool("unpack"); Operate.ProxyConfig.Proxy.UnPack_Head = Text("unpackHead"); Operate.ProxyConfig.Proxy.UnPack_Length = Text("unpackLength"); Operate.SystemConfig.SaveInjectMode_ToDB(); Operate.SystemConfig.SaveProxyMode_ToDB();
+                }
+                else if (page == "leach")
+                {
+                    Operate.SystemConfig.CheckNotShow = Bool("notShow"); Operate.SystemConfig.CheckSocket = Bool("checkSocket"); Operate.SystemConfig.CheckSocket_Value = Text("socketValue"); Operate.SystemConfig.CheckIP = Bool("checkIP"); Operate.SystemConfig.CheckIP_Value = Text("ipValue"); Operate.SystemConfig.CheckPort = Bool("checkPort"); Operate.SystemConfig.CheckPort_Value = Text("portValue"); Operate.SystemConfig.CheckHead = Bool("checkHead"); Operate.SystemConfig.CheckHead_Value = Text("headValue"); Operate.SystemConfig.CheckData = Bool("checkData"); Operate.SystemConfig.CheckData_Value = Text("dataValue"); Operate.SystemConfig.CheckLen = Bool("checkLen"); Operate.SystemConfig.CheckLength_Value = Text("lenValue"); Operate.SystemConfig.CheckType = Bool("checkType"); var f = Operate.SystemConfig.CheckType_Value; f.Send = Bool("send"); f.SendTo = Bool("sendTo"); f.Recv = Bool("recv"); f.RecvFrom = Bool("recvFrom"); f.WSASend = Bool("wsaSend"); f.WSASendTo = Bool("wsaSendTo"); f.WSARecv = Bool("wsaRecv"); f.WSARecvFrom = Bool("wsaRecvFrom"); f.TCP_Req = Bool("tcpReq"); f.TCP_Resp = Bool("tcpResp"); f.UDP_Req = Bool("udpReq"); f.UDP_Resp = Bool("udpResp"); Operate.SystemConfig.CheckType_Value = f; Operate.SystemConfig.SaveSystemConfig_ToDB();
+                }
+                else if (page == "remote")
+                {
+                    var error = Operate.SystemConfig.SaveRemoteSetting(Bool("enabled"), Text("ip"), Int("port", 88), Text("userName"), Text("password")); if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
+                }
+                else if (page == "firewall")
+                {
+                    Operate.ProxyConfig.Proxy.EnableFireWall = Bool("enable"); Operate.ProxyConfig.Proxy.FireWall_AutoWhiteList_AuthSuccess = Bool("autoWhiteAuthOk"); Operate.ProxyConfig.Proxy.FireWall_AutoBlackList_UnSupport = Bool("autoBlackUnsupport"); Operate.ProxyConfig.Proxy.FireWall_AutoBlackList_AuthFail = Bool("autoBlackAuthFail"); Operate.ProxyConfig.Proxy.FireWall_AutoBlackList_Minutes = Int("autoBlackMinutes", 30); Operate.ProxyConfig.Proxy.FireWall_AutoClear_Expiry = Bool("autoClearExpiry"); Operate.SystemConfig.SaveProxyMode_ToDB();
+                }
+                else if (page == "hotkey")
+                {
+                    var keys = values["keys"] as JArray; if (keys != null) for (var i = 0; i < keys.Count && i < 12; i++) { if (!Operate.SystemConfig.RegisterHotkey_Shell(i + 1, (string)keys[i])) throw new InvalidOperationException("Invalid hotkey at index " + (i + 1)); } Operate.SystemConfig.SaveHotkeyType_Shell(Int("type", 0));
+                }
+                else throw new InvalidOperationException("Unsupported writable settings page: " + page);
+                return new JObject { ["page"] = page, ["changed"] = true };
+            })).ConfigureAwait(false);
+        }
+
+        private static async Task<JToken> SaveWpcServerAsync(JObject arguments)
+        {
+            var id = (string)arguments?["id"] ?? string.Empty;
+            var enabled = (bool?)arguments?["enabled"];
+            var name = (string)arguments?["name"] ?? string.Empty;
+            var ip = (string)arguments?["ip"] ?? string.Empty;
+            var port = (int?)arguments?["port"];
+            var key = (string)arguments?["idempotencyKey"];
+            if (!enabled.HasValue || !port.HasValue) throw new InvalidOperationException("enabled and port are required.");
+            if (!string.IsNullOrEmpty(id) && !Guid.TryParse(id, out _)) throw new InvalidOperationException("WPC server id must be a GUID or an empty string for creation.");
+            JObject prior;
+            if (McpWriteGuard.TryGetCompleted("wpc.server.save", key, arguments, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("wpc.server.save", key, arguments, (string.IsNullOrEmpty(id) ? "新增" : "更新") + " WPC 服务器“" + name.Trim() + "”。", () =>
+            {
+                var error = Operate.WPCConfig.ServerList.SaveServer_Shell(id, enabled.Value, name, ip, port.Value, (string)arguments?["forgotUrl"], (string)arguments?["registerUrl"], (string)arguments?["verifyUrl"]);
+                if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
+                var server = string.IsNullOrEmpty(id) ? Operate.WPCConfig.ServerList.lstServerInfo[Operate.WPCConfig.ServerList.lstServerInfo.Count - 1] : Operate.WPCConfig.ServerList.FindServer_ById(id);
+                return new JObject { ["id"] = server.SID.ToString().ToUpperInvariant(), ["created"] = string.IsNullOrEmpty(id), ["changed"] = true };
+            })).ConfigureAwait(false);
+        }
+
+        private static async Task<JToken> SaveWpcServerRuleAsync(JObject arguments)
+        {
+            var serverId = (string)arguments?["serverId"];
+            var id = (string)arguments?["id"] ?? string.Empty;
+            var enabled = (bool?)arguments?["enabled"];
+            var type = (int?)arguments?["type"];
+            var action = (int?)arguments?["action"];
+            var key = (string)arguments?["idempotencyKey"];
+            if (!Guid.TryParse(serverId, out _) || !enabled.HasValue || !type.HasValue || !action.HasValue) throw new InvalidOperationException("serverId, enabled, type and action are required.");
+            if (!string.IsNullOrEmpty(id) && !Guid.TryParse(id, out _)) throw new InvalidOperationException("WPC rule id must be a GUID or an empty string for creation.");
+            JObject prior;
+            if (McpWriteGuard.TryGetCompleted("wpc.server.rule.save", key, arguments, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("wpc.server.rule.save", key, arguments, (string.IsNullOrEmpty(id) ? "新增" : "更新") + " WPC 服务器规则。", () =>
+            {
+                var error = Operate.WPCConfig.ServerList.SaveRule_Shell(serverId, id, enabled.Value, type.Value, (string)arguments?["argument"], action.Value);
+                if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
+                var server = Operate.WPCConfig.ServerList.FindServer_ById(serverId);
+                var ruleId = string.IsNullOrEmpty(id) ? server.ServerRInfo[server.ServerRInfo.Count - 1].RID.ToString().ToUpperInvariant() : id;
+                return new JObject { ["serverId"] = serverId, ["id"] = ruleId, ["created"] = string.IsNullOrEmpty(id), ["changed"] = true };
+            })).ConfigureAwait(false);
+        }
+
+        private static async Task<JToken> SaveRemoteManagementAsync(JObject arguments)
+        {
+            var enabledToken = arguments?["enabled"];
+            var ip = ((string)arguments?["ip"] ?? string.Empty).Trim();
+            var portToken = arguments?["port"];
+            var userName = (string)arguments?["userName"] ?? string.Empty;
+            var password = (string)arguments?["password"] ?? string.Empty;
+            var idempotencyKey = (string)arguments?["idempotencyKey"];
+            if (enabledToken == null || enabledToken.Type != JTokenType.Boolean) throw new InvalidOperationException("A boolean enabled value is required.");
+            if (string.IsNullOrEmpty(ip)) throw new InvalidOperationException("A remote-management IP address is required.");
+            if (portToken == null || portToken.Type != JTokenType.Integer) throw new InvalidOperationException("A remote-management port is required.");
+            var port = portToken.Value<int>();
+            if (port < 1 || port > 65535) throw new InvalidOperationException("Remote-management port must be from 1 to 65535.");
+            if (enabledToken.Value<bool>() && string.IsNullOrWhiteSpace(userName)) throw new InvalidOperationException("An administrator user name is required when enabling remote management.");
+            if (enabledToken.Value<bool>() && string.IsNullOrWhiteSpace(password)) throw new InvalidOperationException("An administrator password is required when enabling remote management.");
+
+            JObject prior;
+            if (McpWriteGuard.TryGetCompleted("remoteManagement.save", idempotencyKey, arguments, out prior)) return prior;
+            var summary = (enabledToken.Value<bool>() ? "启用" : "停用") + "远程管理，监听 " + ip + ":" + port + "，管理员账号为“" + userName.Trim() + "”。";
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync(
+                "remoteManagement.save", idempotencyKey, arguments, summary,
+                () =>
+                {
+                    var error = Operate.SystemConfig.SaveRemoteSetting(enabledToken.Value<bool>(), ip, port, userName, password);
+                    var setting = GetRemoteManagement();
+                    setting["changed"] = true;
+                    setting["error"] = string.IsNullOrEmpty(error) ? null : error;
+                    return setting;
                 })).ConfigureAwait(false);
         }
 

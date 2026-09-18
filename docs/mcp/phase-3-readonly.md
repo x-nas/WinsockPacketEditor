@@ -7,14 +7,12 @@
 | 工具 | 目的 | 数据边界 |
 |---|---|---|
 | `wpe_proxy_runtime_get` | 查看代理运行态、监听配置、会话数和外部代理状态 | 返回该运行态工具的完整字段 |
-| `wpe_proxy_failures_list` | 查看最近代理启动/监听失败日志 | 返回时间、阶段和原生日志摘要 |
 | `wpe_connections_summary_get` | 按协议和设备类型汇总连接 | 返回该汇总工具的完整计数字段 |
 
 ## 实施顺序
 
 1. 先实现 `wpe_proxy_runtime_get`，复用现有 `wpe_status_get` 与 `wpe_proxy_settings_get` 的数据边界。
-2. 为失败日志建立固定字段和长度上限，避免把异常文本变成信息泄露出口。
-3. 最后实现连接汇总，并用空列表、WPC 控制连接和普通连接分别验证。
+2. 实现连接汇总，并用空列表、WPC 控制连接和普通连接分别验证。
 
 ## 暂不开放
 
@@ -29,9 +27,8 @@
 
 - `wpe_proxy_runtime_get`：返回运行态、端口、连接数和抓包计数；
 - `wpe_connections_summary_get`：空连接状态返回各类计数 0；
-- `wpe_proxy_failures_list`：空失败日志返回空数组，摘要字段受长度上限保护。
 
-对应提交为 `f6f5958`、`5fc6b3a`、`ad5e60d`。
+`wpe_proxy_failures_list` 未进入 Sidecar 注册表。它是 MCP 专用的日志筛选视图；在 WPE 提供同口径的原生页面前，保持为不公开候选，参见 [tool-audit.md](tool-audit.md)。
 
 ## 真实连接场景验证
 

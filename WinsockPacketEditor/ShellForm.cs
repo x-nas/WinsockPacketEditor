@@ -494,6 +494,7 @@ namespace WPEHybrid
                     }
                     this.bridge.PushEvent("mcp:start-mode", new { mode = mode });
                 };
+                McpAgentGateway.ShellActionRequested = this.HandleMcpShellActionAsync;
                 if (Operate.SystemConfig.McpEnabled) this.mcpGateway.Start();
 
                 this.timerFlush.Tick += this.OnFlushTick;
@@ -6168,6 +6169,341 @@ namespace WPEHybrid
             catch (Exception ex) { Operate.DoLog(nameof(DetachInjectOnExit), ex); }
 
             this.DisposeInjectLink();
+        }
+
+        /// <summary>
+        /// MCP actions that already exist in the shell UI.  This is deliberately a
+        /// thin adapter: it keeps native file dialogs, target-process IPC routing and
+        /// driver installation behaviour in their existing owners rather than giving
+        /// the gateway a second implementation.
+        /// </summary>
+        private async Task<Newtonsoft.Json.Linq.JObject> HandleMcpShellActionAsync(string action, Newtonsoft.Json.Linq.JObject args)
+        {
+            if (action == "backup.export")
+            {
+                var parts = args["parts"] as Newtonsoft.Json.Linq.JObject ?? args;
+                var all = (bool?)parts["all"] ?? false;
+                Func<string, bool> on = key => all || (bool?)parts[key] == true;
+                var fileName = ((string)args["fileName"] ?? (string)parts["name"] ?? Operate.SystemConfig.AssemblyVersion).Trim();
+                var path = await Operate.SystemConfig.ExportSystemBackUp_Dialog(fileName, new Operate.SystemConfig.BackupParts { SystemConfig = on("systemConfig"), ProxySet = on("proxySet"), ProxyAccount = on("proxyAccount"), WhiteList = on("whiteList"), BlackList = on("blackList"), ProxyMapping = on("proxyMapping"), InjectSet = on("injectSet"), FilterList = on("filterList"), SendList = on("sendList"), RobotList = on("robotList"), WareHouse = on("wareHouse"), AutoStores = on("autoStores"), WpcServer = on("wpcServer"), WpcNotice = on("wpcNotice") });
+                return new Newtonsoft.Json.Linq.JObject { ["saved"] = !string.IsNullOrEmpty(path), ["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path };
+            }
+            if (action == "backup.import")
+            {
+                var path = await Operate.SystemConfig.ImportSystemBackUp_Dialog((string)args["fileName"]);
+                if (!string.IsNullOrEmpty(path)) { FeedPump.MarkAllDirty(); this.SaveProxyState(); var link = AttachedLink(); if (link != null) link.TryPush(link.PushAll); this.ApplyShellBack(); }
+                return new Newtonsoft.Json.Linq.JObject { ["imported"] = !string.IsNullOrEmpty(path), ["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path, ["language"] = UI.Prefs.Language ?? string.Empty };
+            }
+            if (action == "capture.clear")
+            {
+                string list = ((string)args["list"] ?? string.Empty).Trim().ToLowerInvariant();
+                if (list != "proxy" && list != "packet") throw new InvalidOperationException("list must be proxy or packet.");
+                if (list == "proxy")
+                {
+                    var count = Operate.ProxyConfig.List.lstProxyInfo.Count;
+                    Operate.ProxyConfig.Queue.ClearProxyInfoQueue();
+                    Operate.ProxyConfig.List.ClearProxyInfo();
+                    UI.Feed.Clear(FeedList.Proxy);
+                    Operate.SystemConfig.ResetPacketCounters(false);
+                    return new Newtonsoft.Json.Linq.JObject { ["list"] = list, ["removed"] = count, ["changed"] = count > 0 };
+                }
+                else
+                {
+                    var count = Operate.PacketConfig.List.lstPacketInfo.Count;
+                    Operate.PacketConfig.Queue.ClearPacketQueue();
+                    Operate.PacketConfig.List.ClearPacketList();
+                    UI.Feed.Clear(FeedList.Packet);
+                    ResetCountsEverywhere(WinsockPacketEditor.Ipc.ResetWhat.PacketCounters);
+                    return new Newtonsoft.Json.Linq.JObject { ["list"] = list, ["removed"] = count, ["changed"] = count > 0 };
+                }
+            }
+            if (action == "capture.export")
+            {
+                string list = ((string)args["list"] ?? string.Empty).Trim().ToLowerInvariant();
+                var ids = new List<long>(); var values = args["packetIds"] as Newtonsoft.Json.Linq.JArray;
+                if (values != null) foreach (var value in values) { var id = (long?)value; if (!id.HasValue || id.Value < 1) throw new InvalidOperationException("Every packetId must be positive."); ids.Add(id.Value); }
+                string path;
+                var fileName = (string)args["fileName"];
+                if (list == "proxy") path = await Operate.ProxyConfig.List.ExportProxyExcel_ByIds(ids, fileName);
+                else if (list == "packet") path = await Operate.PacketConfig.List.ExportPacketExcel_ByIds(ids, fileName);
+                else throw new InvalidOperationException("list must be proxy or packet.");
+                return new Newtonsoft.Json.Linq.JObject { ["list"] = list, ["requested"] = ids.Count, ["saved"] = !string.IsNullOrEmpty(path), ["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path };
+            }
+            if (action == "filters.import")
+            {
+                var path = await Operate.FilterConfig.List.LoadFilterList_Dialog_Shell((string)args["fileName"]);
+                var after = Operate.FilterConfig.List.lstFilterInfo.Count;
+                return new Newtonsoft.Json.Linq.JObject { ["count"] = after, ["imported"] = !string.IsNullOrEmpty(path), ["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path };
+            }
+            if (action == "filters.export")
+            {
+                var path = await Operate.FilterConfig.List.SaveAllFilters_Dialog((string)args["fileName"]);
+                return new Newtonsoft.Json.Linq.JObject { ["count"] = Operate.FilterConfig.List.lstFilterInfo.Count, ["saved"] = !string.IsNullOrEmpty(path), ["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path };
+            }
+            if (action == "export.run")
+            {
+                var kind = ((string)args["kind"] ?? string.Empty).Trim().ToLowerInvariant();
+                var fileName = ((string)args["fileName"] ?? string.Empty).Trim();
+                var result = new Newtonsoft.Json.Linq.JObject { ["kind"] = kind, ["fileName"] = fileName };
+                if (kind == "backup")
+                {
+                    var parts = args["backupParts"] as Newtonsoft.Json.Linq.JObject;
+                    if (parts == null) throw new InvalidOperationException("backupParts is required when kind is backup.");
+                    var all = (bool?)parts["all"] ?? false;
+                    Func<string, bool> on = key => all || (bool?)parts[key] == true;
+                    var path = await Operate.SystemConfig.ExportSystemBackUp_Dialog(string.IsNullOrEmpty(fileName) ? ((string)parts["name"] ?? Operate.SystemConfig.AssemblyVersion) : fileName, new Operate.SystemConfig.BackupParts { SystemConfig = on("systemConfig"), ProxySet = on("proxySet"), ProxyAccount = on("proxyAccount"), WhiteList = on("whiteList"), BlackList = on("blackList"), ProxyMapping = on("proxyMapping"), InjectSet = on("injectSet"), FilterList = on("filterList"), SendList = on("sendList"), RobotList = on("robotList"), WareHouse = on("wareHouse"), AutoStores = on("autoStores"), WpcServer = on("wpcServer"), WpcNotice = on("wpcNotice") });
+                    result["saved"] = !string.IsNullOrEmpty(path);
+                    result["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path;
+                    return result;
+                }
+                if (kind == "capture")
+                {
+                    var list = ((string)args["captureList"] ?? string.Empty).Trim().ToLowerInvariant();
+                    var ids = new List<long>(); var values = args["capturePacketIds"] as Newtonsoft.Json.Linq.JArray;
+                    if (values != null) foreach (var value in values) { var id = (long?)value; if (!id.HasValue || id.Value < 1) throw new InvalidOperationException("Every capturePacketId must be positive."); ids.Add(id.Value); }
+                    string path;
+                    if (list == "proxy") path = await Operate.ProxyConfig.List.ExportProxyExcel_ByIds(ids, fileName);
+                    else if (list == "packet") path = await Operate.PacketConfig.List.ExportPacketExcel_ByIds(ids, fileName);
+                    else throw new InvalidOperationException("captureList must be proxy or packet.");
+                    result["list"] = list; result["requested"] = ids.Count; result["saved"] = !string.IsNullOrEmpty(path); result["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path;
+                    return result;
+                }
+                if (kind == "filters")
+                {
+                    var path = await Operate.FilterConfig.List.SaveAllFilters_Dialog(fileName);
+                    result["count"] = Operate.FilterConfig.List.lstFilterInfo.Count; result["saved"] = !string.IsNullOrEmpty(path); result["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path;
+                    return result;
+                }
+                if (kind == "certificate")
+                {
+                    var type = (int?)args["certificateType"] ?? 0;
+                    if (type < 0 || type > 5) throw new InvalidOperationException("certificateType must be between 0 and 5.");
+                    await Operate.ProxyConfig.Proxy.SaveCertToFile_Dialog(type, string.IsNullOrEmpty(fileName) ? (type == 5 ? "9a7ae4b0" : "WPE64") : fileName);
+                }
+                else if (kind == "accounts") await Operate.ProxyConfig.Account.SaveAccount_Dialog(fileName);
+                else if (kind == "accountsselected") await Operate.ProxyConfig.Account.SaveAccount_Dialog_ByIds(fileName, ReadIds(args));
+                else if (kind == "firewallwhitelist") await Operate.ProxyConfig.Proxy.SaveWhiteList_Dialog(fileName, Operate.ProxyConfig.Proxy.lstWhiteList);
+                else if (kind == "firewallblacklist") await Operate.ProxyConfig.Proxy.SaveBlackList_Dialog(fileName, Operate.ProxyConfig.Proxy.lstBlackList);
+                else if (kind == "maplocal") await Operate.ProxyConfig.Mapping.SaveMapLocal_Dialog(fileName, Operate.ProxyConfig.Mapping.lstMapLocal);
+                else if (kind == "mapremote") await Operate.ProxyConfig.Mapping.SaveMapRemote_Dialog(fileName, Operate.ProxyConfig.Mapping.lstMapRemote);
+                else if (kind == "sends") await Operate.SendConfig.List.SaveSendList_Dialog(fileName, null);
+                else if (kind == "robots") await Operate.RobotConfig.List.SaveRobotList_Dialog(fileName, null);
+                else if (kind == "sendcollection")
+                {
+                    var sendId = (string)args["sendId"];
+                    if (!Guid.TryParse(sendId, out _)) throw new InvalidOperationException("sendId must be a GUID.");
+                    var edit = Operate.SendConfig.Send.OpenSendEdit_ById(sendId);
+                    try
+                    {
+                        if (string.IsNullOrEmpty(edit.Id)) throw new InvalidOperationException("The send task does not exist.");
+                        await Operate.SendConfig.Send.ExportSendCollection_Dialog_Shell(fileName);
+                    }
+                    finally { Operate.SendConfig.Send.CloseSendEdit(); }
+                }
+                else if (kind == "warehouses") await Operate.WareHouseConfig.List.SaveWareHouseList_Dialog(fileName, null);
+                else if (kind == "warehousestores")
+                {
+                    var warehouseId = (string)args["warehouseId"];
+                    if (!Guid.TryParse(warehouseId, out _)) throw new InvalidOperationException("warehouseId must be a GUID.");
+                    var warehouse = Operate.WareHouseConfig.List.FindWareHouse_ById(warehouseId);
+                    if (warehouse == null) throw new InvalidOperationException("The warehouse does not exist.");
+                    var ids = ReadIds(args);
+                    if (ids.Count == 0) await Operate.WareHouseConfig.List.StoresCommand_Shell(warehouseId, 5, fileName);
+                    else await Operate.WareHouseConfig.List.StoresAction_ByIds(warehouseId, 5, ids, fileName);
+                    result["count"] = ids.Count == 0 ? warehouse.Stores.Count : ids.Count;
+                }
+                else if (kind == "autostores") await Operate.WareHouseConfig.List.SaveAutoStores_Dialog(fileName, Operate.WareHouseConfig.List.lstAutoStoresInfo);
+                else if (kind == "logs")
+                {
+                    var logKind = ((string)args["logKind"] ?? "system").Trim().ToLowerInvariant();
+                    if (logKind == "filter") await Operate.LogConfig.List.SaveFilterLogList_Dialog(fileName, new List<FilterLogInfo>(Operate.LogConfig.List.lstFilterLogInfo));
+                    else if (logKind == "proxy") await Operate.LogConfig.List.SaveProxyLogList_Dialog(fileName, new List<ProxyLogInfo>(Operate.LogConfig.List.lstProxyLogInfo));
+                    else if (logKind == "mcp") await Operate.LogConfig.List.SaveLogList_Dialog(fileName, new List<LogInfo>(Operate.LogConfig.List.lstMcpLogInfo));
+                    else if (logKind == "system") await Operate.LogConfig.List.SaveLogList_Dialog(fileName, new List<LogInfo>(Operate.LogConfig.List.lstLogInfo));
+                    else throw new InvalidOperationException("logKind must be system, filter, proxy, or mcp.");
+                    result["logKind"] = logKind;
+                }
+                else if (kind == "extraction")
+                {
+                    var extractionKind = (int?)args["extractionKind"];
+                    if (!extractionKind.HasValue) throw new InvalidOperationException("extractionKind is required.");
+                    var path = await Operate.SystemConfig.SaveExtraction_Dialog(extractionKind.Value, (string)args["extractionText"] ?? string.Empty);
+                    result["saved"] = !string.IsNullOrEmpty(path);
+                    result["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path;
+                    return result;
+                }
+                else throw new InvalidOperationException("Unsupported export kind.");
+                result["dialogCompleted"] = true;
+                return result;
+            }
+            if (action == "import.run")
+            {
+                var kind = ((string)args["kind"] ?? string.Empty).Trim().ToLowerInvariant();
+                var fileName = ((string)args["fileName"] ?? string.Empty).Trim();
+                var result = new Newtonsoft.Json.Linq.JObject { ["kind"] = kind, ["fileName"] = fileName };
+                if (kind == "backup")
+                {
+                    var path = await Operate.SystemConfig.ImportSystemBackUp_Dialog(fileName);
+                    if (!string.IsNullOrEmpty(path)) { FeedPump.MarkAllDirty(); this.SaveProxyState(); var link = AttachedLink(); if (link != null) link.TryPush(link.PushAll); this.ApplyShellBack(); }
+                    result["imported"] = !string.IsNullOrEmpty(path); result["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path;
+                    return result;
+                }
+                if (kind == "filters")
+                {
+                    var path = await Operate.FilterConfig.List.LoadFilterList_Dialog_Shell(fileName);
+                    result["count"] = Operate.FilterConfig.List.lstFilterInfo.Count; result["imported"] = !string.IsNullOrEmpty(path); result["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path;
+                    return result;
+                }
+                if (kind == "accounts") await Operate.ProxyConfig.Account.LoadAccountList_Dialog(fileName);
+                else if (kind == "firewallwhitelist") await Operate.ProxyConfig.Proxy.LoadWhiteList_Dialog(fileName);
+                else if (kind == "firewallblacklist") await Operate.ProxyConfig.Proxy.LoadBlackList_Dialog(fileName);
+                else if (kind == "maplocal") await Operate.ProxyConfig.Mapping.LoadMapLocal_Dialog(fileName);
+                else if (kind == "mapremote") await Operate.ProxyConfig.Mapping.LoadMapRemote_Dialog(fileName);
+                else if (kind == "sends") await Operate.SendConfig.List.LoadSendList_Dialog_Shell(fileName);
+                else if (kind == "robots") await Operate.RobotConfig.List.LoadRobotList_Dialog_Shell(fileName);
+                else if (kind == "sendcollection")
+                {
+                    var sendId = (string)args["sendId"];
+                    if (!Guid.TryParse(sendId, out _)) throw new InvalidOperationException("sendId must be a GUID.");
+                    var edit = Operate.SendConfig.Send.OpenSendEdit_ById(sendId);
+                    try
+                    {
+                        if (string.IsNullOrEmpty(edit.Id)) throw new InvalidOperationException("The send task does not exist.");
+                        await Operate.SendConfig.Send.ImportSendCollection_Dialog_Shell(fileName);
+                        var error = Operate.SendConfig.Send.SaveSendEdit(edit.Name, edit.UseSystemSocket, edit.LoopCount, edit.LoopInterval, edit.Notes);
+                        if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
+                    }
+                    finally { Operate.SendConfig.Send.CloseSendEdit(); }
+                }
+                else if (kind == "warehouses") await Operate.WareHouseConfig.List.LoadWareHouseList_Dialog_Shell(fileName);
+                else if (kind == "warehousestores")
+                {
+                    var warehouseId = (string)args["warehouseId"];
+                    if (!Guid.TryParse(warehouseId, out _)) throw new InvalidOperationException("warehouseId must be a GUID.");
+                    if (Operate.WareHouseConfig.List.FindWareHouse_ById(warehouseId) == null) throw new InvalidOperationException("The warehouse does not exist.");
+                    await Operate.WareHouseConfig.List.StoresCommand_Shell(warehouseId, 8, fileName);
+                }
+                else if (kind == "autostores") await Operate.WareHouseConfig.List.LoadAutoStores_Dialog(fileName);
+                else throw new InvalidOperationException("Unsupported import kind.");
+                result["dialogCompleted"] = true;
+                return result;
+            }
+            if (action == "sends.start" || action == "sends.stop")
+            {
+                var link = AttachedLink();
+                if (link != null)
+                {
+                    if (action == "sends.start") await Task.Run(() => link.StartSendList()); else await Task.Run(() => link.StopSendList());
+                    return new Newtonsoft.Json.Linq.JObject { ["running"] = link.SendListRunning, ["changed"] = true };
+                }
+                if (action == "sends.start")
+                {
+                    if (Operate.SendConfig.List.AllBlockedBySystemSocket()) throw new InvalidOperationException("All enabled send tasks are blocked by the current system socket setting.");
+                    Operate.SendConfig.List.StartSendList();
+                }
+                else Operate.SendConfig.List.StopSendList();
+                return new Newtonsoft.Json.Linq.JObject { ["running"] = Operate.SendConfig.List.IsSendListRunning, ["changed"] = true };
+            }
+            if (action == "robots.start" || action == "robots.stop")
+            {
+                var link = AttachedLink();
+                if (link != null)
+                {
+                    if (action == "robots.start") await Task.Run(() => link.StartRobotList()); else await Task.Run(() => link.StopRobotList());
+                    return new Newtonsoft.Json.Linq.JObject { ["running"] = link.RobotListRunning, ["changed"] = true };
+                }
+                if (action == "robots.start") Operate.RobotConfig.List.StartRobotList(); else Operate.RobotConfig.List.StopRobotList();
+                return new Newtonsoft.Json.Linq.JObject { ["running"] = Operate.RobotConfig.List.IsRobotListRunning, ["changed"] = true };
+            }
+            if (action == "send.start" || action == "robot.start")
+            {
+                Guid id;
+                if (!Guid.TryParse((string)args["id"], out id)) throw new InvalidOperationException("A task GUID id is required.");
+                var link = AttachedLink();
+                if (link != null)
+                {
+                    await Task.Run(() => { if (action == "send.start") link.StartSend(id); else link.StartRobot(id, -1); });
+                    return new Newtonsoft.Json.Linq.JObject { ["id"] = id.ToString(), ["started"] = true, ["changed"] = true };
+                }
+                if (action == "send.start")
+                {
+                    var executor = Operate.SendConfig.Send.DoSend(id);
+                    if (executor == null) throw new InvalidOperationException("The enabled send task has no sendable packet or is blocked by its socket setting.");
+                    Operate.SendConfig.List.SendExecute_Add(executor);
+                }
+                else
+                {
+                    var executor = Operate.RobotConfig.Robot.DoRobot(id, null);
+                    if (executor == null) throw new InvalidOperationException("The enabled robot task has no valid instruction to execute.");
+                    Operate.RobotConfig.List.RobotExecute_Add(executor);
+                }
+                return new Newtonsoft.Json.Linq.JObject { ["id"] = id.ToString(), ["started"] = true, ["changed"] = true };
+            }
+            if (action == "inject.attach")
+            {
+                int pid = (int?)args["pid"] ?? -1;
+                var path = (string)args["path"];
+                var extraArgs = (string)args["args"];
+                int method = (int?)args["method"] ?? (pid < 0 ? 2 : 0);
+                return Newtonsoft.Json.Linq.JObject.FromObject(await AttachTarget(pid, path, extraArgs, method));
+            }
+            if (action == "inject.quickAttach")
+            {
+                int pid; string path; string error;
+                if (!ResolveQuickTarget(out pid, out path, out error)) throw new InvalidOperationException(error);
+                return Newtonsoft.Json.Linq.JObject.FromObject(await AttachTarget(pid, path, Operate.SystemConfig.LastInjectArgs, Operate.SystemConfig.LastInjectMethod));
+            }
+            if (action == "inject.detach")
+            {
+                if (AttachedLink() == null) return new Newtonsoft.Json.Linq.JObject { ["changed"] = false, ["attached"] = false };
+                DetachInjectOnExit();
+                return new Newtonsoft.Json.Linq.JObject { ["changed"] = true, ["attached"] = false };
+            }
+            if (action == "inject.startHook" || action == "inject.stopHook")
+            {
+                var link = AttachedLink();
+                if (link == null) throw new InvalidOperationException("No target process is attached.");
+                if (action == "inject.startHook") await Task.Run(() => { link.PushHookFlags(); link.PushFilters(); link.PushRuntime(); link.StartHook(); });
+                else await Task.Run(() => link.StopHook());
+                return Newtonsoft.Json.Linq.JObject.FromObject(InjectStatus());
+            }
+            if (action == "driver.uninstall")
+            {
+                var ok = await Operate.ProxyConfig.Proxy.UninstallDriver_Dialog();
+                return new Newtonsoft.Json.Linq.JObject { ["uninstalled"] = ok, ["changed"] = ok };
+            }
+            if (action == "processProxy.save")
+            {
+                var pids = new List<int>(); var values = args["pids"] as Newtonsoft.Json.Linq.JArray;
+                if (values != null) foreach (var value in values) { var pid = (int?)value; if (!pid.HasValue || pid.Value <= 0) throw new InvalidOperationException("Every pid must be positive."); pids.Add(pid.Value); }
+                var error = await Operate.ProxyConfig.Proxy.SaveProcessSetting(
+                    (int?)args["driverType"] ?? 1, (bool?)args["mustTcp"] ?? false,
+                    (string)args["ip"], (int?)args["port"] ?? 1080,
+                    (bool?)args["appointPort"] ?? false, (string)args["appointPortContent"],
+                    (bool?)args["auth"] ?? false, (string)args["userName"], (string)args["passWord"], pids);
+                if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
+                return new Newtonsoft.Json.Linq.JObject { ["changed"] = true, ["processCount"] = pids.Count };
+            }
+            if (action == "packetEdit.sendStart")
+            {
+                string list = ((string)args["list"] ?? string.Empty).Trim().ToLowerInvariant();
+                if (list != Operate.PacketEditConfig.ListProxy && list != Operate.PacketEditConfig.ListPacket) throw new InvalidOperationException("list must be proxy or packet.");
+                long id = (long?)args["id"] ?? 0; int socket = (int?)args["socket"] ?? 0;
+                var bytes = Convert.FromBase64String((string)args["payloadBase64"] ?? string.Empty);
+                var error = Operate.PacketEditConfig.StartSend(list, id, socket, bytes,
+                    (bool?)args["continuous"] ?? false, (int?)args["times"] ?? 1, (int?)args["interval"] ?? 0,
+                    (bool?)args["progression"] ?? false, (int?)args["position"] ?? 0, (int?)args["step"] ?? 1,
+                    (bool?)args["carry"] ?? false, (int?)args["carryCount"] ?? 1);
+                if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
+                return new Newtonsoft.Json.Linq.JObject { ["id"] = id, ["running"] = Operate.PacketEditConfig.IsSending, ["changed"] = true };
+            }
+            if (action == "packetEdit.sendStop")
+            {
+                var wasRunning = Operate.PacketEditConfig.IsSending;
+                Operate.PacketEditConfig.StopSend();
+                return new Newtonsoft.Json.Linq.JObject { ["running"] = Operate.PacketEditConfig.IsSending, ["changed"] = wasRunning };
+            }
+            throw new InvalidOperationException("Unsupported WPE shell action.");
         }
 
         #region//「选择窗体」取 PID（对应 WinForms 的 ProcessList.bSelectForm_Click）

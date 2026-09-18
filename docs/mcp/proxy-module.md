@@ -8,13 +8,9 @@
 
 - `wpe_proxy_settings_get`：代理配置、限制和外部代理凭据。
 - `wpe_proxy_config_get`：完整代理配置快照（含外部代理凭据）。
-- `wpe_proxy_capabilities_get`：当前构建支持的代理能力。
 - `wpe_proxy_runtime_get`：监听器、运行状态和连接计数。
 - `wpe_connections_list`：分页连接元数据。
 - `wpe_connections_summary_get`：按协议及 WPC/普通连接汇总。
-- `wpe_proxy_failures_list`：代理失败摘要。
-- `wpe_proxy_health_get`：只读一致性诊断，不自动修复。
-- `wpe_storage_health_get`：数据库可用性元数据。
 - `wpe_accounts_list`：账号元数据（含解密后的密码）。
 
 ### 配置写入
@@ -40,7 +36,7 @@
 
 ## 后续候选工具
 
-`wpe_proxy_config_get`、`wpe_proxy_capabilities_get` 和结构化的 `wpe_proxy_health_get` 已完成；`wpe_proxy_settings_get` 保持兼容。连接工具继续只读，不新增 WPE 当前没有的按连接断开等控制能力。
+`wpe_proxy_config_get` 与 `wpe_proxy_settings_get` 均已完成。`wpe_proxy_capabilities_get`、`wpe_proxy_health_get`、`wpe_proxy_failures_list` 和 `wpe_storage_health_get` 是未发布候选，不得写入 Schema 或 `tools/list`；重新纳入前需先补齐 WPE 原生能力，见 [tool-audit.md](tool-audit.md)。连接工具继续只读，不新增 WPE 当前没有的按连接断开等控制能力。
 
 ### 账号与设备
 

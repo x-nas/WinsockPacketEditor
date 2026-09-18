@@ -46,8 +46,8 @@ namespace WinsockPacketEditor
                 2.1.9 正式版是「2.1.9.db」，测过的「2.1.9 Beta.db」不会被读到 —— 要带过去用备份导出 / 导入。
             */
             public static bool IsBeta = true;
-            /// <summary>MCP 操作需要 WPE 本机确认；默认 true。</summary>
-            public static bool McpRequiresConfirmation = true;
+            /// <summary>MCP 操作需要 WPE 本机确认；默认 false。</summary>
+            public static bool McpRequiresConfirmation = false;
             public static bool McpEnabled = true;
             public static int PID = -1;
             public static int AutoSaveINT = 600000;
@@ -3574,7 +3574,7 @@ namespace WinsockPacketEditor
                         UI.Prefs.IsDark = true;
                         UI.Prefs.FollowSystemTheme = false;
                         SystemConfig.McpEnabled = true;
-                        SystemConfig.McpRequiresConfirmation = true;
+                        SystemConfig.McpRequiresConfirmation = false;
 
                         UI.Prefs.ScanLine = true;
 
@@ -4664,7 +4664,7 @@ namespace WinsockPacketEditor
             /// 仓库 / 自动入库 / WPC 那四个新分组，所以这个重载永远只勾得到前十项。
             /// 哪天 WinForms 那条线要删或要跟上，连这个重载一起处理。
             /// </summary>
-            public static Task ExportSystemBackUp_Dialog(
+            public static Task<string> ExportSystemBackUp_Dialog(
                 string FileName,
                 bool bSystemConfig,
                 bool bProxySet,
@@ -4692,7 +4692,8 @@ namespace WinsockPacketEditor
                 });
             }
 
-            public static async Task ExportSystemBackUp_Dialog(string FileName, BackupParts Parts)
+            /// <summary>Shows WPE's native save dialog and returns the saved path, or null when cancelled or failed.</summary>
+            public static async Task<string> ExportSystemBackUp_Dialog(string FileName, BackupParts Parts)
             {
                 try
                 {
@@ -4703,7 +4704,7 @@ namespace WinsockPacketEditor
                     if (Parts == null || Parts.IsEmpty)
                     {
                         UI.Toast(UiIcon.Warn, UI.T("BackUpSettingsForm.NothingSelected", "请先勾选要备份的内容"));
-                        return;
+                        return null;
                     }
 
                     FilePick sfdSaveFile = new FilePick();
@@ -4733,6 +4734,7 @@ namespace WinsockPacketEditor
                                 string Title = UI.T("BackUpSettingsForm.Export.Success", "导出系统备份成功");
                                 UI.Notify(UiIcon.Success, Title, FilePath);
                                 Operate.DoLog(nameof(ExportSystemBackUp_Dialog), Title + ": " + FilePath);
+                                return FilePath;
                             }
                             else
                             {
@@ -4747,6 +4749,7 @@ namespace WinsockPacketEditor
                 {
                     Operate.DoLog(nameof(ExportSystemBackUp_Dialog), ex);
                 }
+                return null;
             }
 
             private static bool ExportSystemBackUp(
@@ -4963,12 +4966,14 @@ namespace WinsockPacketEditor
 
             #region//从文件导入系统备份（对话框）
 
-            public static async Task ImportSystemBackUp_Dialog()
+            /// <summary>Shows WPE's native open dialog and returns the imported path, or null when cancelled or failed.</summary>
+            public static async Task<string> ImportSystemBackUp_Dialog(string FileName = null)
             {
                 try
                 {
                     FilePick ofdLoadFile = new FilePick();
                     ofdLoadFile.Filter = "WPE x64（*.sb）|*.sb";
+                    if (!string.IsNullOrWhiteSpace(FileName)) { ofdLoadFile.FileName = FileName; }
 
                     string sPickedPath = await UI.PickOpen(ofdLoadFile);
                     if (!string.IsNullOrEmpty(sPickedPath))
@@ -4981,6 +4986,7 @@ namespace WinsockPacketEditor
                                 string Title = UI.T("BackUpSettingsForm.Import.Success", "导入系统备份成功");
                                 UI.Notify(UiIcon.Success, Title, FilePath);
                                 Operate.DoLog(nameof(ImportSystemBackUp_Dialog), Title + ": " + FilePath);
+                                return FilePath;
                             }
                         }
                     }
@@ -4989,6 +4995,7 @@ namespace WinsockPacketEditor
                 {
                     Operate.DoLog(nameof(ImportSystemBackUp_Dialog), ex);
                 }
+                return null;
             }
 
             private static async Task<bool> ImportSystemBackUp(string FilePath, bool LoadFromUser)
@@ -10703,12 +10710,13 @@ namespace WinsockPacketEditor
 
                 #region//从文件加载白名单（对话框）
 
-                public static async Task LoadWhiteList_Dialog()
+                public static async Task LoadWhiteList_Dialog(string FileName = null)
                 {
                     try
                     {
                         FilePick ofdLoadFile = new FilePick();
                         ofdLoadFile.Filter = UI.T("FireWallSetting.WhiteListFile", "白名单文件") + "（*.wl）|*.wl";
+                        ofdLoadFile.FileName = FileName;
 
                         string sPickedPath = await UI.PickOpen(ofdLoadFile);
                         if (!string.IsNullOrEmpty(sPickedPath))
@@ -10822,12 +10830,13 @@ namespace WinsockPacketEditor
 
                 #region//从文件加载黑名单（对话框）
 
-                public static async Task LoadBlackList_Dialog()
+                public static async Task LoadBlackList_Dialog(string FileName = null)
                 {
                     try
                     {
                         FilePick ofdLoadFile = new FilePick();
                         ofdLoadFile.Filter = UI.T("FireWallSetting.BlackListFile", "黑名单文件") + "（*.bl）|*.bl";
+                        ofdLoadFile.FileName = FileName;
 
                         string sPickedPath = await UI.PickOpen(ofdLoadFile);
                         if (!string.IsNullOrEmpty(sPickedPath))
@@ -11387,18 +11396,19 @@ namespace WinsockPacketEditor
                 /// 这不是这里的特例，SaveProxyList_Dialog 本来就是这么写的
                 /// （piList 为空则退回 lstProxyInfo），所以「什么都不选 = 导全部」。
                 /// </summary>
-                public static async Task ExportProxyExcel_ByIds(IList<long> Ids)
+                public static async Task<string> ExportProxyExcel_ByIds(IList<long> Ids, string FileName = null)
                 {
                     try
                     {
-                        await ProxyConfig.List.SaveProxyList_Dialog(
-                            PacketConfig.Packet.InjectProcess,
+                        return await ProxyConfig.List.SaveProxyList_Dialog(
+                            string.IsNullOrWhiteSpace(FileName) ? PacketConfig.Packet.InjectProcess : FileName,
                             ProxyConfig.List.PickProxies(Ids));
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(ExportProxyExcel_ByIds), ex);
                     }
+                    return null;
                 }
 
                 #endregion
@@ -11704,7 +11714,7 @@ namespace WinsockPacketEditor
 
                 #region//保存代理列表为Excel（对话框）
 
-                public static async Task SaveProxyList_Dialog(string FileName, List<ProxyInfo> piList)
+                public static async Task<string> SaveProxyList_Dialog(string FileName, List<ProxyInfo> piList)
                 {
                     try
                     {
@@ -11732,6 +11742,7 @@ namespace WinsockPacketEditor
                                         string Title = UI.T("ExportToExcel.Success", "导出到Excel成功");
                                         UI.Notify(UiIcon.Success, Title, FilePath);
                                         Operate.DoLog(nameof(SaveProxyList_Dialog), Title + ": " + FilePath);
+                                        return FilePath;
                                     }
                                     else
                                     {
@@ -11743,10 +11754,11 @@ namespace WinsockPacketEditor
                             }
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(SaveProxyList_Dialog), ex);
-                    }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(SaveProxyList_Dialog), ex);
+                }
+                return null;
                 }
 
                 private static bool SaveProxyListToExcel(string filePath, List<ProxyInfo> piList)
@@ -14061,12 +14073,13 @@ namespace WinsockPacketEditor
 
                 #region//从文件加载代理账号列表（对话框）
 
-                public static async Task LoadAccountList_Dialog()
+                public static async Task LoadAccountList_Dialog(string FileName = null)
                 {
                     try
                     {
                         FilePick ofdLoadFile = new FilePick();
                         ofdLoadFile.Filter = UI.T("ProxyAccountListFile", "代理账号列表文件") + " (*.pa)|*.pa|INI Files (*.ini)|*.ini";
+                        ofdLoadFile.FileName = FileName;
 
                         string sPickedPath = await UI.PickOpen(ofdLoadFile);
                         if (!string.IsNullOrEmpty(sPickedPath))
@@ -15628,12 +15641,13 @@ namespace WinsockPacketEditor
 
                 #region//从文件加载本地映射（对话框）
 
-                public static async Task LoadMapLocal_Dialog()
+                public static async Task LoadMapLocal_Dialog(string FileName = null)
                 {
                     try
                     {
                         FilePick ofdLoadFile = new FilePick();
                         ofdLoadFile.Filter = UI.T("MapLocalFile", "本地映射文件") + "（*.pml）|*.pml";
+                        ofdLoadFile.FileName = FileName;
 
                         string sPickedPath = await UI.PickOpen(ofdLoadFile);
                         if (!string.IsNullOrEmpty(sPickedPath))
@@ -15759,12 +15773,13 @@ namespace WinsockPacketEditor
 
                 #region//从文件加载远程映射（对话框）
 
-                public static async Task LoadMapRemote_Dialog()
+                public static async Task LoadMapRemote_Dialog(string FileName = null)
                 {
                     try
                     {
                         FilePick ofdLoadFile = new FilePick();
                         ofdLoadFile.Filter = UI.T("MapRemoteFile", "远程映射文件") + "（*.pmr）|*.pmr";
+                        ofdLoadFile.FileName = FileName;
 
                         string sPickedPath = await UI.PickOpen(ofdLoadFile);
                         if (!string.IsNullOrEmpty(sPickedPath))
@@ -17291,18 +17306,19 @@ namespace WinsockPacketEditor
                 /// 这不是这里的特例，SavePacketListToExcel 本来就是这么写的
                 /// （piList 为空则退回 lstPacketInfo），所以「什么都不选 = 导全部」。
                 /// </summary>
-                public static async Task ExportPacketExcel_ByIds(IList<long> Ids)
+                public static async Task<string> ExportPacketExcel_ByIds(IList<long> Ids, string FileName = null)
                 {
                     try
                     {
-                        await PacketConfig.List.SavePacketList_Dialog(
-                            PacketConfig.Packet.InjectProcess,
+                        return await PacketConfig.List.SavePacketList_Dialog(
+                            string.IsNullOrWhiteSpace(FileName) ? PacketConfig.Packet.InjectProcess : FileName,
                             PacketConfig.List.PickPackets(Ids));
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(ExportPacketExcel_ByIds), ex);
                     }
+                    return null;
                 }
 
                 #endregion
@@ -17831,7 +17847,7 @@ namespace WinsockPacketEditor
 
                 #region//保存封包列表为Excel（对话框）
 
-                public static async Task SavePacketList_Dialog(string FileName, List<PacketInfo> piList)
+                public static async Task<string> SavePacketList_Dialog(string FileName, List<PacketInfo> piList)
                 {
                     try
                     {
@@ -17859,6 +17875,7 @@ namespace WinsockPacketEditor
                                         string Title = UI.T("ExportToExcel.Success", "导出到Excel成功");
                                         UI.Notify(UiIcon.Success, Title, FilePath);
                                         Operate.DoLog(nameof(SavePacketList_Dialog), Title + ": " + FilePath);
+                                        return FilePath;
                                     }
                                     else
                                     {
@@ -17870,10 +17887,11 @@ namespace WinsockPacketEditor
                             }
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(SavePacketList_Dialog), ex);
-                    }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(SavePacketList_Dialog), ex);
+                }
+                return null;
                 }
 
                 private static bool SavePacketListToExcel(string filePath, List<PacketInfo> piList)
@@ -21013,25 +21031,27 @@ namespace WinsockPacketEditor
                 }
 
                 /// <summary>导入滤镜列表（带文件框）。导进来之后要落库。</summary>
-                public static async Task LoadFilterList_Dialog_Shell()
+                public static async Task<string> LoadFilterList_Dialog_Shell(string FileName = null)
                 {
                     int before = FilterConfig.List.lstFilterInfo.Count;
 
-                    await FilterConfig.List.LoadFilterList_Dialog();
+                    var path = await FilterConfig.List.LoadFilterList_Dialog(FileName);
 
                     if (FilterConfig.List.lstFilterInfo.Count != before)
                     {
                         FilterConfig.List.SaveFilterList_ToDB();
                     }
+                    return path;
                 }
 
                 /// <summary>导出全部滤镜（带文件框）。不改列表，不落库。</summary>
-                public static async Task SaveAllFilters_Dialog()
+                public static async Task<string> SaveAllFilters_Dialog(string FileName = null)
                 {
                     if (FilterConfig.List.lstFilterInfo.Count > 0)
                     {
-                        await FilterConfig.List.SaveFilterList_Dialog(string.Empty, null);
+                        return await FilterConfig.List.SaveFilterList_Dialog(FileName, null);
                     }
+                    return null;
                 }
 
                 #endregion
@@ -21864,7 +21884,7 @@ namespace WinsockPacketEditor
 
                 #region//保存滤镜列表到文件（对话框）
 
-                public static async Task SaveFilterList_Dialog(string FileName, List<FilterInfo> fiList)
+                public static async Task<string> SaveFilterList_Dialog(string FileName, List<FilterInfo> fiList)
                 {
                     try
                     {
@@ -21891,6 +21911,7 @@ namespace WinsockPacketEditor
                                         string Title = UI.T("ExportFilterList.Success", "导出滤镜列表成功");
                                         UI.Notify(UiIcon.Success, Title, FilePath);
                                         Operate.DoLog(nameof(SaveFilterList_Dialog), Title + ": " + FilePath);
+                                        return FilePath;
                                     }
                                     else
                                     {
@@ -21902,10 +21923,11 @@ namespace WinsockPacketEditor
                             }
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(SaveFilterList_Dialog), ex);
-                    }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(SaveFilterList_Dialog), ex);
+                }
+                return null;
                 }
 
                 private static bool SaveFilterList(string FilePath, List<FilterInfo> fiList, bool DoEncrypt, string Password)
@@ -22005,12 +22027,13 @@ namespace WinsockPacketEditor
 
                 #region//从文件加载滤镜列表（对话框）
 
-                public static async Task LoadFilterList_Dialog()
+                public static async Task<string> LoadFilterList_Dialog(string FileName = null)
                 {
                     try
                     {
                         FilePick ofdLoadFile = new FilePick();
                         ofdLoadFile.Filter = UI.T("FilterListFile", "滤镜列表文件") + "（*.fp）|*.fp";
+                        if (!string.IsNullOrWhiteSpace(FileName)) { ofdLoadFile.FileName = FileName; }
 
                         string sPickedPath = await UI.PickOpen(ofdLoadFile);
                         if (!string.IsNullOrEmpty(sPickedPath))
@@ -22023,14 +22046,16 @@ namespace WinsockPacketEditor
                                     string Title = UI.T("ImportFilterList.Success", "导入滤镜列表成功");
                                     UI.Notify(UiIcon.Success, Title, FilePath);
                                     Operate.DoLog(nameof(LoadFilterList_Dialog), Title + ": " + FilePath);
+                                    return FilePath;
                                 }
                             }
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(LoadFilterList_Dialog), ex);
-                    }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(LoadFilterList_Dialog), ex);
+                }
+                return null;
                 }
 
                 private static async Task<bool> LoadFilterList(string FilePath, bool LoadFromUser)
@@ -22963,12 +22988,13 @@ namespace WinsockPacketEditor
 
                 #region//加载发送集（对话框）
 
-                public static async Task LoadSendCollection_Dialog(BindingList<PacketInfo> SendCollection)
+                public static async Task LoadSendCollection_Dialog(BindingList<PacketInfo> SendCollection, string FileName = null)
                 {
                     try
                     {
                         FilePick ofdLoadFile = new FilePick();
                         ofdLoadFile.Filter = UI.T("SendList.SendCollectionFile", "发送集文件") + "（*.sc）|*.sc";
+                        ofdLoadFile.FileName = FileName;
 
                         string sPickedPath = await UI.PickOpen(ofdLoadFile);
                         if (!string.IsNullOrEmpty(sPickedPath))
@@ -23311,19 +23337,19 @@ namespace WinsockPacketEditor
                 }
 
                 /// <summary>导入发送集（带文件框），追加进工作副本。</summary>
-                public static async Task ImportSendCollection_Dialog_Shell()
+                public static async Task ImportSendCollection_Dialog_Shell(string FileName = null)
                 {
                     if (editCollection == null) { return; }
 
-                    await SendConfig.Send.LoadSendCollection_Dialog(editCollection);
+                    await SendConfig.Send.LoadSendCollection_Dialog(editCollection, FileName);
                 }
 
                 /// <summary>导出发送集（带文件框）。不改工作副本。</summary>
-                public static async Task ExportSendCollection_Dialog_Shell()
+                public static async Task ExportSendCollection_Dialog_Shell(string FileName = null)
                 {
                     if (editCollection == null || editCollection.Count == 0) { return; }
 
-                    await SendConfig.Send.SaveSendCollection_Dialog(string.Empty, editCollection.ToList());
+                    await SendConfig.Send.SaveSendCollection_Dialog(FileName, editCollection.ToList());
                 }
 
                 /// <summary>清空发送集（带确认框）。只动工作副本，不保存就不算数。</summary>
@@ -24049,11 +24075,11 @@ namespace WinsockPacketEditor
                 }
 
                 /// <summary>导入发送列表（带文件框）。导进来之后要落库。</summary>
-                public static async Task LoadSendList_Dialog_Shell()
+                public static async Task LoadSendList_Dialog_Shell(string FileName = null)
                 {
                     int before = SendConfig.List.lstSendInfo.Count;
 
-                    await SendConfig.List.LoadSendList_Dialog();
+                    await SendConfig.List.LoadSendList_Dialog(FileName);
 
                     if (SendConfig.List.lstSendInfo.Count != before)
                     {
@@ -24318,12 +24344,13 @@ namespace WinsockPacketEditor
 
                 #region//从文件加载发送列表（对话框）
 
-                public static async Task LoadSendList_Dialog()
+                public static async Task LoadSendList_Dialog(string FileName = null)
                 {
                     try
                     {
                         FilePick ofdLoadFile = new FilePick();
                         ofdLoadFile.Filter = UI.T("SendListFile", "发送列表文件") + "（*.sp）|*.sp";
+                        ofdLoadFile.FileName = FileName;
 
                         string sPickedPath = await UI.PickOpen(ofdLoadFile);
                         if (!string.IsNullOrEmpty(sPickedPath))
@@ -26162,11 +26189,11 @@ namespace WinsockPacketEditor
                 }
 
                 /// <summary>导入机器人列表（带文件框）。导进来之后要落库。</summary>
-                public static async Task LoadRobotList_Dialog_Shell()
+                public static async Task LoadRobotList_Dialog_Shell(string FileName = null)
                 {
                     int before = RobotConfig.List.lstRobotInfo.Count;
 
-                    await RobotConfig.List.LoadRobotList_Dialog();
+                    await RobotConfig.List.LoadRobotList_Dialog(FileName);
 
                     if (RobotConfig.List.lstRobotInfo.Count != before) { RobotConfig.List.SaveRobotList_ToDB(); }
                 }
@@ -26404,13 +26431,14 @@ namespace WinsockPacketEditor
 
                 #region//从文件加载机器人列表（对话框）
 
-                public static async Task LoadRobotList_Dialog()
+                public static async Task LoadRobotList_Dialog(string FileName = null)
                 {
                     try
                     {
                         FilePick ofdLoadFile = new FilePick();
 
                         ofdLoadFile.Filter = UI.T("RobotListFile", "机器人列表文件") + "（*.rp）|*.rp";
+                        ofdLoadFile.FileName = FileName;
 
                         string sPickedPath = await UI.PickOpen(ofdLoadFile);
                         if (!string.IsNullOrEmpty(sPickedPath))
@@ -27102,7 +27130,7 @@ namespace WinsockPacketEditor
 
                 #region//仓储数据的列表操作
 
-                public static async Task UpdateStores_ByListAction(BindingList<DataInfo> Stores, SystemConfig.ListAction listAction, List<DataInfo> diList)
+                public static async Task UpdateStores_ByListAction(BindingList<DataInfo> Stores, SystemConfig.ListAction listAction, List<DataInfo> diList, string FileName = null)
                 {
                     try
                     {
@@ -27178,18 +27206,18 @@ namespace WinsockPacketEditor
 
                                 if (diList != null)
                                 {
-                                    await WareHouseConfig.List.SaveStores_Dialog(string.Empty, diList);
+                                    await WareHouseConfig.List.SaveStores_Dialog(FileName, diList);
                                 }
                                 else
                                 {
-                                    await WareHouseConfig.List.SaveStores_Dialog(string.Empty, Stores.ToList());
+                                    await WareHouseConfig.List.SaveStores_Dialog(FileName, Stores.ToList());
                                 }
 
                                 break;
 
                             case SystemConfig.ListAction.Import:
 
-                                await WareHouseConfig.List.LoadStores_Dialog(Stores);
+                                await WareHouseConfig.List.LoadStores_Dialog(Stores, FileName);
 
                                 break;
 
@@ -27422,12 +27450,13 @@ namespace WinsockPacketEditor
 
                 #region//从文件加载仓库列表（对话框）
 
-                public static async Task LoadWareHouseList_Dialog()
+                public static async Task LoadWareHouseList_Dialog(string FileName = null)
                 {
                     try
                     {
                         FilePick ofdLoadFile = new FilePick();
                         ofdLoadFile.Filter = UI.T("WareHouseList.File", "仓库列表文件") + "（*.whp）|*.whp";
+                        ofdLoadFile.FileName = FileName;
 
                         string sPickedPath = await UI.PickOpen(ofdLoadFile);
                         if (!string.IsNullOrEmpty(sPickedPath))
@@ -27679,11 +27708,11 @@ namespace WinsockPacketEditor
                 }
 
                 /// <summary>导入仓库列表（带文件框）。导进来之后要落库。</summary>
-                public static async Task LoadWareHouseList_Dialog_Shell()
+                public static async Task LoadWareHouseList_Dialog_Shell(string FileName = null)
                 {
                     int before = WareHouseConfig.List.lstWareHouseInfo.Count;
 
-                    await WareHouseConfig.List.LoadWareHouseList_Dialog();
+                    await WareHouseConfig.List.LoadWareHouseList_Dialog(FileName);
 
                     if (WareHouseConfig.List.lstWareHouseInfo.Count != before)
                     {
@@ -27872,7 +27901,7 @@ namespace WinsockPacketEditor
                 /// 仓储数据的右键菜单（置顶 / 上移 / 下移 / 置底 / 复制 / 导出选中 / 删除），按 Id 数组收。
                 /// 返回条数变化。
                 /// </summary>
-                public static async Task<int> StoresAction_ByIds(string WID, int Action, IList<string> Ids)
+                public static async Task<int> StoresAction_ByIds(string WID, int Action, IList<string> Ids, string FileName = null)
                 {
                     try
                     {
@@ -27887,7 +27916,7 @@ namespace WinsockPacketEditor
                         int before = whi.Stores.Count;
 
                         await WareHouseConfig.List.UpdateStores_ByListAction(
-                            whi.Stores, (SystemConfig.ListAction)Action, picked);
+                            whi.Stores, (SystemConfig.ListAction)Action, picked, FileName);
 
                         //仓库列表那一列「仓储数量」要跟着变；Stores 是嵌套列表，FeedPump 没订阅它
                         FeedPump.MarkDirty(FeedList.WareHouse);
@@ -27905,7 +27934,7 @@ namespace WinsockPacketEditor
                 /// 工具条上的三个：导入(8) / 导出全部(5) / 清空(7)。
                 /// 导出与清空在 UpdateStores_ByListAction 里 diList 传 null 就是「全部」。
                 /// </summary>
-                public static async Task StoresCommand_Shell(string WID, int Action)
+                public static async Task StoresCommand_Shell(string WID, int Action, string FileName = null)
                 {
                     try
                     {
@@ -27930,7 +27959,7 @@ namespace WinsockPacketEditor
                             return;
                         }
 
-                        await WareHouseConfig.List.UpdateStores_ByListAction(whi.Stores, act, null);
+                        await WareHouseConfig.List.UpdateStores_ByListAction(whi.Stores, act, null, FileName);
 
                         if (act != SystemConfig.ListAction.Export)
                         {
@@ -28372,12 +28401,13 @@ namespace WinsockPacketEditor
 
                 #region//从文件加载仓储数据（对话框）
 
-                public static async Task LoadStores_Dialog(BindingList<DataInfo> diList)
+                public static async Task LoadStores_Dialog(BindingList<DataInfo> diList, string FileName = null)
                 {
                     try
                     {
                         FilePick ofdLoadFile = new FilePick();
                         ofdLoadFile.Filter = UI.T("StoresFile", "仓储数据文件") + "（*.whs）|*.whs";
+                        ofdLoadFile.FileName = FileName;
 
                         string sPickedPath = await UI.PickOpen(ofdLoadFile);
                         if (!string.IsNullOrEmpty(sPickedPath))
@@ -28589,12 +28619,13 @@ namespace WinsockPacketEditor
 
                 #region//从文件加载自动入库（对话框）
 
-                public static async Task LoadAutoStores_Dialog()
+                public static async Task LoadAutoStores_Dialog(string FileName = null)
                 {
                     try
                     {
                         FilePick ofdLoadFile = new FilePick();
                         ofdLoadFile.Filter = UI.T("AutoStores.File", "自动入库文件") + "（*.pas）|*.pas";
+                        ofdLoadFile.FileName = FileName;
 
                         string sPickedPath = await UI.PickOpen(ofdLoadFile);
                         if (!string.IsNullOrEmpty(sPickedPath))
@@ -31235,7 +31266,7 @@ namespace WinsockPacketEditor
                             EnsureColumn(conn, "SystemConfig", "LastInjectPath", "TEXT");
                             EnsureColumn(conn, "SystemConfig", "LastInjectArgs", "TEXT");
                             EnsureColumn(conn, "SystemConfig", "LastInjectTime", "TEXT");
-                            EnsureColumn(conn, "SystemConfig", "McpRequiresConfirmation", "BOOLEAN DEFAULT 1");
+                            EnsureColumn(conn, "SystemConfig", "McpRequiresConfirmation", "BOOLEAN DEFAULT 0");
                             EnsureColumn(conn, "SystemConfig", "McpEnabled", "BOOLEAN DEFAULT 1");
                         }
                     }

@@ -2,6 +2,8 @@
 
 All names use the `wpe_` namespace in MCP. Underscores are deliberately used because they are valid in every MCP client's standard tool-name validator. Internal operation names omit that prefix.
 
+For named WPE business objects—filters, proxy accounts, send tasks, robots, warehouses, and WPC servers—reference fields accept either the exact visible name or a GUID. WPE resolves a unique name internally and reports missing or duplicate names. Captured packets, live connections, WPC rule rows, stored packets, and automatic-storage rules remain runtime records and therefore still require their returned IDs.
+
 | MCP tool | Internal operation | Permission | Sensitive data rule |
 |---|---|---|---|
 | `wpe_status_get` | `runtime.status` | `read.runtime` | No secrets |
@@ -9,8 +11,9 @@ All names use the `wpe_` namespace in MCP. Underscores are deliberately used bec
 | `wpe_packet_get` | `capture.get` | `read.capture` | Complete current and original payloads as Base64 |
 | `wpe_capture_find_next` | `capture.findNext` | `read.capture` | Native proxy/inject regex search with match byte offset and continuation cursor |
 | `wpe_logs_list` | `logs.list` | `read.runtime` | Bounded tail and pagination |
+| `wpe_logs_all_list` | `logs.all.list` | `read.runtime` | One time-ordered, paginated stream across system, filter, proxy and MCP logs; every row includes `kind` |
 | `wpe_filters_list` | `filters.list` | `read.runtime` | No edit capability |
-| `wpe_filter_get` | `filters.get` | `read.runtime` | Existing editable configuration plus actual `enabled` state; no mutation |
+| `wpe_filter_get` | `filters.get` | `read.runtime` | Semantic rule object plus actual `enabled` state; its `rule` can be used directly as the basis for `wpe_filter_rule_save` |
 | `wpe_filter_stats_get` | `filters.stats.get` | `read.runtime` | Runtime execution count and enabled state |
 | `wpe_executors_list` | `executors.list` | `read.runtime` | No start/stop capability |
 | `wpe_connections_list` | `connections.list` | `read.capture` | Bounded native connection records |
@@ -21,6 +24,10 @@ All names use the `wpe_` namespace in MCP. Underscores are deliberately used bec
 | `wpe_proxy_settings_get` | `proxy.settings.get` | `read.runtime` | Settings, limits and configured external-proxy credentials |
 | `wpe_proxy_config_get` | `proxy.config.get` | `read.runtime` | Complete proxy configuration snapshot |
 | `wpe_proxy_runtime_get` | `proxy.runtime.get` | `read.runtime` | Live listener state and bounded counters |
+| `wpe_remote_management_get` | `remoteManagement.get` | `read.runtime` | Remote-management address, administrator credentials, available local addresses and current HTTP-server state |
+| `wpe_setting_get` | `settings.get` | `read.runtime` | Complete snapshot for a named WPE settings page |
+| `wpe_wpc_servers_list` | `wpc.servers.list` | `read.runtime` | WPC server configurations including all three client URLs and nested rule counts |
+| `wpe_wpc_server_rules_list` | `wpc.server.rules.list` | `read.runtime` | Rules for one WPC server, including native numeric type/action values |
 | `wpe_connections_summary_get` | `connections.summary.get` | `read.capture` | Complete count fields for the summary's protocol and WPC/ordinary groups |
 | `wpe_firewall_rules_list` | `firewall.rules.list` | `read.runtime` | White/black list rules only |
 | `wpe_sends_list` | `sends.list` | `read.runtime` | Bounded task metadata; use the collection/detail tools for task data |
@@ -61,7 +68,7 @@ All names use the `wpe_` namespace in MCP. Underscores are deliberately used bec
 | `wpe_filters_clear_all` | `filters.clearAll` | `write.filter` | Existing clear action; WPE-native destructive confirmation remains |
 | `wpe_filter_create_from_capture` | `filters.createFromCapture` | `write.filter` | Existing captured-packet-to-filter action |
 | `wpe_filter_create` | `filters.create` | `write.filter` | Creates an empty filter through the existing WPE business path after confirmation |
-| `wpe_filter_update` | `filters.update` | `write.filter` | Replaces rules and normal/advanced mode through `SaveFilterEdit`; deliberately does not change enabled state |
+| `wpe_filter_rule_save` | `filters.rule.save` | `write.filter` | Complete semantic rule editor. Use `replace` for selected-byte substitutions; `change` replaces the whole packet and needs contiguous modify cells from offset 0. Advanced rules must state `startFrom`: `position` applies to every match, `head` only the first. `packetTypes` must select one or more types; use `all` for all types in the current mode. It preserves enablement |
 | `wpe_filter_delete` | `filters.delete` | `write.filter` | Deletes an existing filter through the existing WPE list action after confirmation |
 | `wpe_account_set_enabled` | `accounts.setEnabled` | `write.account` | Existing account only; UUID idempotency key and WPE-local confirmation |
 | `wpe_account_create` | `accounts.create` | `write.account` | Existing account-editor fields, UUID idempotency key, WPE-local confirmation; complete arguments are retained in audit data |
@@ -77,6 +84,12 @@ All names use the `wpe_` namespace in MCP. Underscores are deliberately used bec
 | `wpe_external_proxy_set_enabled` | `proxy.external.setEnabled` | `write.proxy` | Boolean-only external proxy switch; validates configured host/port when enabling |
 | `wpe_proxy_start` | `proxy.start` | `write.proxy.lifecycle` | Starts listeners after local confirmation; idempotent when already running |
 | `wpe_proxy_stop` | `proxy.stop` | `write.proxy.lifecycle` | Stops listeners after local confirmation; may disconnect existing sessions |
+| `wpe_remote_management_save` | `remoteManagement.save` | `write.remote-management` | Saves the existing remote-management enabled state, bind address, port and administrator credentials; starts or stops its HTTP server accordingly |
+| `wpe_setting_save` | `settings.save` | `write.settings` | Persists a complete named settings-page configuration through WPE's native business rules |
+| `wpe_map_local_save` / `wpe_map_remote_save` | `map.local.save` / `map.remote.save` | `write.mapping` | Creates or updates the two native HTTP mapping record types |
+| `wpe_export` / `wpe_import` | `export.run` / `import.run` | `write.export` / `write.import` | The two unified file-workflow tools cover every native WPE export and import. Use `kind: backup` plus `backupParts.all: true` to export every module. |
+| `wpe_wpc_server_save` | `wpc.server.save` | `write.wpc` | Creates when `id` is omitted; updates accept the exact visible server name or its GUID |
+| `wpe_wpc_server_rule_save` | `wpc.server.rule.save` | `write.wpc` | `serverId` accepts the exact visible server name or GUID; creates rules when `id` is omitted. Global proxy is enabled `type: 15`, empty `argument`, `action: 0` |
 | `wpe_executors_stop_all` | `executors.stopAll` | `write.executors.emergency` | Stops active sender and robot executors only; never starts tasks or sends packets; follows the global MCP confirmation setting |
 | `wpe_start_mode_select` | `start.mode.select` | `write.startup.mode` | Selects proxy or inject mode only while WPE is on the start page; repeated current mode returns `alreadySelected`, other pages return `unavailable`; it never starts proxy or injects |
 | `wpe_firewall_rule_add` | `firewall.rule.add` | `write.firewall` | Validated IPv4/range, optional ISO-8601 expiry, UUID idempotency key, WPE-local confirmation, persisted before success |
@@ -95,7 +108,8 @@ All names use the `wpe_` namespace in MCP. Underscores are deliberately used bec
 | `wpe_proxy_capture_add_to_warehouse` | `proxyCapture.addToWarehouse` | `write.task` | Adds selected proxy-capture packets to an existing warehouse |
 | `wpe_send_collection_action` | `sends.collection.action` | `write.task` | Native move/copy/delete action for a send collection; never starts it |
 | `wpe_send_collection_clear` | `sends.collection.clear` | `write.task` | Native destructive clear for one send collection |
-| `wpe_robot_instruction_add` | `robots.instructions.add` | `write.task` | Validated native robot instruction insertion; never starts it |
+| `wpe_robot_instruction_add` | `robots.instructions.add` | `write.task` | Validated native robot instruction insertion; never starts it. `robot` accepts the exact visible name (for example `机器人 1`) or a GUID; WPE resolves names internally and reports missing/duplicate names. `content` is the parameter only: a fixed delay is `type: 1, content: "1000"`; never send `1|1000` or `延迟|1000`. |
+| `wpe_robot_instructions_save` | `robots.instructions.save` | `write.task` | Atomically replaces one robot's complete instruction list, so a loop pair is never rejected in its temporary unmatched state. Use `type: 2, content: "10"` for loop start, `type: 1, content: "1000"` for delay, `type: 4, content: "Press|D1"` for the number-row 1 key, and `type: 3, content: ""` for loop end. |
 | `wpe_robot_instruction_action` | `robots.instructions.action` | `write.task` | Native move/delete/clear by current instruction indexes |
 | `wpe_auto_stores_save` | `autoStores.save` | `write.task` | Creates or updates an automatic-storage rule through the existing validation path |
 | `wpe_auto_stores_set_enabled` | `autoStores.setEnabled` | `write.task` | Toggles an existing automatic-storage rule |
@@ -104,5 +118,21 @@ All names use the `wpe_` namespace in MCP. Underscores are deliberately used bec
 | `wpe_warehouse_stores_command` | `warehouses.stores.command` | `write.task` | Native import/export-all/clear; file commands open WPE's local dialogs |
 | `wpe_packet_edit_save` | `packet.edit.save` | `write.capture` | Replaces an explicit proxy/inject capture snapshot; payload is Base64 and retained in the complete audit record |
 | `wpe_packet_edit_add_to_send` | `packet.edit.addToSend` | `write.task` | Copies an explicit proxy/inject capture snapshot into a send task; never starts it |
+| `wpe_capture_clear` | `capture.clear` | `write.capture` | Clears one native proxy or inject capture list after confirmation |
+| `wpe_export` (`kind: capture`) | `export.run` | `write.export` | Exports selected or all proxy/inject captured packets through WPE's native save dialog |
+| `wpe_import` (`kind: filters`) | `import.run` | `write.import` | Opens WPE's native file and encryption-password dialogs |
+| `wpe_export` (`kind: filters`) | `export.run` | `write.export` | Opens WPE's native save and encryption-password dialogs |
+| `wpe_export` | `export.run` | `write.export` | The only export tool. It covers backups, captures, filters, certificates, accounts, firewall lists, mappings, sends, robots, send collections, warehouses and their packets, automatic-storage rules, logs, and extraction results. `kind` selects the format; `fileName` pre-fills the native save dialog. |
+| `wpe_sends_start` / `wpe_sends_stop` | `sends.start` / `sends.stop` | `write.executors` | Starts or stops WPE's existing send-list worker |
+| `wpe_send_start` | `send.start` | `write.executors` | Starts one enabled native send task |
+| `wpe_robots_start` / `wpe_robots_stop` | `robots.start` / `robots.stop` | `write.executors` | Starts or stops WPE's existing robot-list worker |
+| `wpe_robot_start` | `robot.start` | `write.executors` | Starts one enabled native robot task |
+| `wpe_inject_attach` | `inject.attach` | `write.inject` | Uses WPE's existing attach or start-and-inject path |
+| `wpe_inject_quick_attach` | `inject.quickAttach` | `write.inject` | Repeats the existing WPE quick-inject action |
+| `wpe_inject_detach` | `inject.detach` | `write.inject` | Detaches the current native injection link |
+| `wpe_inject_start_hook` / `wpe_inject_stop_hook` | `inject.startHook` / `inject.stopHook` | `write.inject` | Starts or stops the existing hook on the attached target |
+| `wpe_driver_uninstall` | `driver.uninstall` | `write.driver` | Opens WPE's existing driver-uninstall confirmation flow |
+| `wpe_process_proxy_save` | `processProxy.save` | `write.driver` | Saves existing process-proxy settings and performs its native on-demand driver install/configuration |
+| `wpe_packet_edit_send_start` / `wpe_packet_edit_send_stop` | `packetEdit.sendStart` / `packetEdit.sendStop` | `write.capture` | Starts or stops the existing packet-editor send session |
 
 `wpe_filter_set_enabled` calls WPE's normal `SetFilterEnable_ById` path, so configuration persistence and UI refresh remain identical to a local change. Firewall add/remove tools call the normal `Operate.ProxyConfig.Proxy` business paths; add waits for IP-location lookup, list insertion and database persistence before returning success, while remove only accepts an exact existing address. Rejected or expired confirmation requests make no change.

@@ -72,7 +72,7 @@ function localizedDescription(tool: McpTool): string {
 const props = defineProps<{ open: boolean }>()
 const emit = defineEmits<{ (e: 'update:open', value: boolean): void }>()
 const enabled = ref(true)
-const requiresConfirmation = ref(true)
+const requiresConfirmation = ref(false)
 const busy = ref(false)
 const error = ref('')
 

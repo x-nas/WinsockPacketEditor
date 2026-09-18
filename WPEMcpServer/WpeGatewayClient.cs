@@ -1,4 +1,5 @@
 using System.IO.Pipes;
+using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
 using System.Text.Json;
@@ -34,10 +35,12 @@ internal sealed class WpeGatewayClient
     /*
        MCP 客户端常会把模型生成的写入参数原样转发；有些客户端不会替必填 UUID
        生成值，导致本来可安全执行的写入先失败一次。仅在工具声明了
-       idempotencyKey、但该值为空时补一个 UUID；显式提供的键绝不改写。
+       idempotencyKey、但该值为空时补一个 UUID。部分客户端会将人类可读的
+       请求标签（例如 create-wpc-test1）误填入该字段；这类标签会稳定地派生为
+       UUID，而不是让一次本可执行的写入失败。
 
-       WPE 侧仍以这个键做请求去重与审计。客户端若需要跨进程重试的稳定键，
-       依然可以显式传入自己的 UUID。
+       WPE 侧仍以 UUID 做请求去重与审计。相同标签会得到相同 UUID，因此跨进程
+       重试仍然稳定；调用者也可以显式传入自己的 UUID。
     */
     private static object? EnsureIdempotencyKey(object? arguments)
     {
@@ -46,9 +49,22 @@ internal sealed class WpeGatewayClient
         if (node == null) return arguments;
         JsonNode? key;
         if (!node.TryGetPropertyValue("idempotencyKey", out key)) return node;
-        if (key != null && !string.IsNullOrWhiteSpace(key.GetValue<string>())) return node;
-        node["idempotencyKey"] = Guid.NewGuid().ToString("D");
+        var text = key == null ? string.Empty : key.ToString().Trim();
+        if (string.IsNullOrEmpty(text)) node["idempotencyKey"] = Guid.NewGuid().ToString("D");
+        else if (!Guid.TryParse(text, out _)) node["idempotencyKey"] = StableGuid(text).ToString("D");
         return node;
+    }
+
+    private static Guid StableGuid(string text)
+    {
+        using var sha256 = SHA256.Create();
+        var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(text));
+        var guidBytes = new byte[16];
+        Buffer.BlockCopy(bytes, 0, guidBytes, 0, guidBytes.Length);
+        // RFC 4122 variant and a deterministic version marker.
+        guidBytes[6] = (byte)((guidBytes[6] & 0x0F) | 0x50);
+        guidBytes[8] = (byte)((guidBytes[8] & 0x3F) | 0x80);
+        return new Guid(guidBytes);
     }
 
     private static async Task WriteFrameAsync(Stream stream, byte[] payload, CancellationToken cancellationToken)
