@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [string]$Server,
-    [int]$ExpectedCount = 70
+    [int]$ExpectedCount = 125
 )
 
 $ErrorActionPreference = 'Stop'

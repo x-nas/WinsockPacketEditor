@@ -18,13 +18,19 @@ namespace WinsockPacketEditor.Mcp
 {
     /// <summary>
     /// Local-only boundary for the external MCP process. This is intentionally separate from
-    /// the injected-process IPC protocol: it only serves bounded, read-only snapshots.
+    /// the injected-process IPC protocol: reads are bounded snapshots and writes remain
+    /// behind the shared WPE confirmation and idempotency guard.
     /// </summary>
     internal sealed class McpAgentGateway : IDisposable
     {
         // The local, current-user pipe can carry complete packet data. This remains a
         // protocol allocation guard, not a data-redaction policy.
         private const int MaxFrameBytes = 128 * 1024 * 1024;
+        // Keep enough acceptors available for parallel MCP tool calls.  A request may
+        // wait up to one minute for local write approval, so one blocked caller must
+        // never make reads or other callers lose the pipe listener.
+        private const int PipeInstanceCount = 8;
+        private static readonly TimeSpan RequestDeadline = TimeSpan.FromSeconds(75);
         // Connection ids are only stable for this WPE process. The random salt keeps
         // account/IP/device tuples from becoming externally meaningful identifiers.
         private static readonly string connectionIdSalt = Guid.NewGuid().ToString("N");
@@ -45,7 +51,8 @@ namespace WinsockPacketEditor.Mcp
         {
             Enabled = true;
             PublishInstance(true);
-            acceptLoop = Task.Run(() => AcceptLoopAsync(cancellation.Token));
+            acceptLoop = Task.WhenAll(Enumerable.Range(0, PipeInstanceCount)
+                .Select(_ => Task.Run(() => AcceptLoopAsync(cancellation.Token))).ToArray());
         }
 
         public void Stop()
@@ -95,150 +102,61 @@ namespace WinsockPacketEditor.Mcp
             var security = new PipeSecurity();
             security.SetAccessRuleProtection(true, false);
             security.AddAccessRule(new PipeAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), PipeAccessRights.FullControl, AccessControlType.Allow));
-            return new NamedPipeServerStream(pipeName, PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous, 0, 0, security);
+            return new NamedPipeServerStream(pipeName, PipeDirection.InOut, PipeInstanceCount, PipeTransmissionMode.Byte, PipeOptions.Asynchronous, 0, 0, security);
         }
 
         private static async Task ServeAsync(Stream stream, CancellationToken token)
         {
-            var bytes = await ReadFrameAsync(stream, token).ConfigureAwait(false);
-            var request = JObject.Parse(Encoding.UTF8.GetString(bytes));
-            var requestId = (string)request["requestId"];
-            var operation = (string)request["operation"];
-            JObject response;
-            try
+            while (!token.IsCancellationRequested)
             {
-                var arguments = ReadOnUi(() => NormalizeEntityReferences(operation, request["arguments"] as JObject ?? new JObject()));
-                var result = await DispatchAsync(operation, arguments).ConfigureAwait(false);
-                response = new JObject
+                var bytes = await ReadFrameAsync(stream, token).ConfigureAwait(false);
+                var request = JObject.Parse(Encoding.UTF8.GetString(bytes));
+                var requestId = (string)request["requestId"];
+                var operation = (string)request["operation"];
+                JObject response;
+                try
                 {
-                    ["requestId"] = requestId,
-                    ["ok"] = true,
-                    ["result"] = result
-                };
-                var outcome = (string)(result as JObject)?["outcome"];
-                var changed = (bool?)(result as JObject)?["changed"];
-                var message = string.IsNullOrEmpty(outcome) ? "调用结果：成功。"
-                    : "调用结果：" + outcome + (changed.HasValue ? (changed.Value ? "，已变更。" : "，无需变更。") : "。");
+                    using (var requestCancellation = CancellationTokenSource.CreateLinkedTokenSource(token))
+                    {
+                        requestCancellation.CancelAfter(ReadRequestDeadline(request));
+                        var dispatch = Task.Run(async () =>
+                        {
+                            var arguments = request["arguments"] as JObject ?? new JObject();
+                            return await DispatchAsync(operation, arguments).ConfigureAwait(false);
+                        });
+                        var completed = await Task.WhenAny(dispatch, Task.Delay(Timeout.Infinite, requestCancellation.Token)).ConfigureAwait(false);
+                        if (completed != dispatch) throw new TimeoutException("WPE gateway request deadline expired.");
+                        var result = await dispatch.ConfigureAwait(false);
+                        response = new JObject { ["requestId"] = requestId, ["ok"] = true, ["result"] = result };
+                        var outcome = (string)(result as JObject)?["outcome"];
+                        var changed = (bool?)(result as JObject)?["changed"];
+                        var message = string.IsNullOrEmpty(outcome) ? "调用结果：成功。"
+                            : "调用结果：" + outcome + (changed.HasValue ? (changed.Value ? "，已变更。" : "，无需变更。") : "。");
                 // 写入守卫已经把审计原始记录保存在内存中；界面日志只展示人能读懂的
                 // 审计结论，并与该次调用结果合并成一行，避免一项操作占两行。
-                if (outcome == "approved")
-                {
-                    message += Operate.SystemConfig.McpRequiresConfirmation
-                        ? " 审计结果：已本地确认并完成。"
-                        : " 审计结果：已自动确认并完成。";
+                        if (outcome == "approved") message += Operate.SystemConfig.McpRequiresConfirmation ? " 审计结果：已本地确认并完成。" : " 审计结果：已自动确认并完成。";
+                        else if (outcome == "rejected") message += " 审计结果：本地用户已拒绝。";
+                        else if (outcome == "expired") message += " 审计结果：等待本地确认超时。";
+                        McpLog.Write(McpLog.ToolName(operation), message);
+                    }
                 }
-                else if (outcome == "rejected") message += " 审计结果：本地用户已拒绝。";
-                else if (outcome == "expired") message += " 审计结果：等待本地确认超时。";
-                McpLog.Write(McpLog.ToolName(operation), message);
-            }
-            catch (Exception ex)
-            {
-                McpLog.Error(McpLog.ToolName(operation), ex);
-                response = new JObject { ["requestId"] = requestId, ["ok"] = false, ["error"] = "WPE gateway request failed." };
-            }
-            await WriteFrameAsync(stream, Encoding.UTF8.GetBytes(response.ToString(Formatting.None)), token).ConfigureAwait(false);
-        }
-
-        // MCP callers speak in the same nouns shown by WPE.  GUIDs remain accepted
-        // for deterministic scripting, but never have to be discovered merely to
-        // carry out an ordinary user request such as “stop 发送 1”.
-        private static JObject NormalizeEntityReferences(string operation, JObject arguments)
-        {
-            if (arguments == null) return new JObject();
-            switch (operation ?? string.Empty)
-            {
-                case "filters.get": case "filters.stats.get": case "filters.setEnabled": case "filters.delete":
-                    ResolveField(arguments, "id", "filter"); break;
-                case "filters.rule.save":
-                    ResolveField(arguments, "filter", "filter"); break;
-                case "filters.move": case "filters.copy":
-                    ResolveArrayField(arguments, "ids", "filter"); break;
-                case "accounts.get": case "accounts.logins.list": case "accounts.setEnabled": case "accounts.update": case "accounts.delete":
-                    ResolveField(arguments, "id", "account"); break;
-                case "sends.get": case "sends.collection.list": case "sends.setEnabled": case "send.start":
-                    ResolveField(arguments, "id", "send"); break;
-                case "robots.get": case "robots.setEnabled": case "robot.start":
-                    ResolveField(arguments, "id", "robot"); break;
-                case "warehouses.get":
-                    ResolveField(arguments, "id", "warehouse"); break;
-                case "tasks.update":
-                    ResolveField(arguments, "id", TaskEntityKind(arguments)); break;
-                case "tasks.move": case "tasks.copy": case "tasks.delete":
-                    ResolveArrayField(arguments, "ids", TaskEntityKind(arguments)); break;
-                case "capture.addToSend": case "proxyCapture.addToSend":
-                    ResolveField(arguments, "targetId", "send"); break;
-                case "capture.addToWarehouse": case "proxyCapture.addToWarehouse":
-                    ResolveField(arguments, "targetId", "warehouse"); break;
-                case "sends.collection.action": case "sends.collection.clear":
-                    ResolveField(arguments, "sendId", "send"); break;
-                case "robots.instructions.add":
-                    ResolveField(arguments, "robot", "robot"); break;
-                case "robots.instructions.save":
-                    ResolveField(arguments, "robot", "robot"); break;
-                case "robots.instructions.action":
-                    ResolveField(arguments, "robotId", "robot"); break;
-                case "autoStores.save":
-                    ResolveField(arguments, "warehouseId", "warehouse"); break;
-                case "warehouses.stores.action": case "warehouses.stores.command":
-                    ResolveField(arguments, "warehouseId", "warehouse"); break;
-                case "wpc.server.rules.list":
-                    ResolveField(arguments, "serverId", "wpcServer"); break;
-                case "wpc.server.save":
-                    ResolveOptionalField(arguments, "id", "wpcServer"); break;
-                case "wpc.server.rule.save":
-                    ResolveField(arguments, "serverId", "wpcServer"); break;
-                case "export.run": case "import.run":
-                    ResolveOptionalField(arguments, "sendId", "send");
-                    ResolveOptionalField(arguments, "warehouseId", "warehouse");
-                    break;
-            }
-            return arguments;
-        }
-
-        private static string TaskEntityKind(JObject arguments)
-        {
-            var kind = ((string)arguments?["kind"] ?? string.Empty).Trim().ToLowerInvariant();
-            if (kind == "send" || kind == "robot" || kind == "warehouse") return kind;
-            throw new InvalidOperationException("Task kind must be send, robot, or warehouse.");
-        }
-
-        private static void ResolveField(JObject arguments, string field, string kind)
-        {
-            var value = ((string)arguments?[field] ?? string.Empty).Trim();
-            if (value.Length == 0) return;
-            arguments[field] = ResolveEntityReference(kind, value);
-        }
-
-        private static void ResolveOptionalField(JObject arguments, string field, string kind)
-        {
-            if (arguments?[field] != null && !string.IsNullOrWhiteSpace((string)arguments[field])) ResolveField(arguments, field, kind);
-        }
-
-        private static void ResolveArrayField(JObject arguments, string field, string kind)
-        {
-            var values = arguments?[field] as JArray;
-            if (values == null) return;
-            for (var i = 0; i < values.Count; i++)
-            {
-                var value = ((string)values[i] ?? string.Empty).Trim();
-                if (value.Length > 0) values[i] = ResolveEntityReference(kind, value);
+                catch (Exception ex)
+                {
+                    McpLog.Error(McpLog.ToolName(operation), ex);
+                    response = new JObject { ["requestId"] = requestId, ["ok"] = false, ["error"] = ex is TimeoutException ? "WPE gateway request deadline expired." : "WPE gateway request failed." };
+                }
+                await WriteFrameAsync(stream, Encoding.UTF8.GetBytes(response.ToString(Formatting.None)), token).ConfigureAwait(false);
             }
         }
 
-        private static string ResolveEntityReference(string kind, string value)
+        private static TimeSpan ReadRequestDeadline(JObject request)
         {
-            Guid parsed;
-            if (Guid.TryParse(value, out parsed)) return parsed.ToString().ToUpperInvariant();
-            var matches = new List<KeyValuePair<string, string>>();
-            if (kind == "filter") foreach (var filter in Operate.FilterConfig.List.lstFilterInfo) if (filter != null && string.Equals(filter.FName, value, StringComparison.OrdinalIgnoreCase)) matches.Add(new KeyValuePair<string, string>(filter.FID.ToString().ToUpperInvariant(), filter.FName));
-            else if (kind == "account") foreach (var account in Operate.ProxyConfig.Account.lstAccountInfo) if (account != null && string.Equals(account.UserName, value, StringComparison.OrdinalIgnoreCase)) matches.Add(new KeyValuePair<string, string>(account.AID.ToString().ToUpperInvariant(), account.UserName));
-            else if (kind == "send") foreach (var send in Operate.SendConfig.List.lstSendInfo) if (send != null && string.Equals(send.SName, value, StringComparison.OrdinalIgnoreCase)) matches.Add(new KeyValuePair<string, string>(send.SID.ToString().ToUpperInvariant(), send.SName));
-            else if (kind == "robot") foreach (var robot in Operate.RobotConfig.List.lstRobotInfo) if (robot != null && string.Equals(robot.RName, value, StringComparison.OrdinalIgnoreCase)) matches.Add(new KeyValuePair<string, string>(robot.RID.ToString().ToUpperInvariant(), robot.RName));
-            else if (kind == "warehouse") foreach (var warehouse in Operate.WareHouseConfig.List.lstWareHouseInfo) if (warehouse != null && string.Equals(warehouse.WName, value, StringComparison.OrdinalIgnoreCase)) matches.Add(new KeyValuePair<string, string>(warehouse.WID.ToString().ToUpperInvariant(), warehouse.WName));
-            else if (kind == "wpcServer") foreach (var server in Operate.WPCConfig.ServerList.lstServerInfo) if (server != null && string.Equals(server.ServerName, value, StringComparison.OrdinalIgnoreCase)) matches.Add(new KeyValuePair<string, string>(server.SID.ToString().ToUpperInvariant(), server.ServerName));
-            if (matches.Count == 0) throw new InvalidOperationException(kind + " '" + value + "' does not exist.");
-            if (matches.Count > 1) throw new InvalidOperationException(kind + " name '" + value + "' is not unique; use its GUID from the corresponding list tool.");
-            return matches[0].Key;
+            DateTime deadline;
+            var value = (string)request?["deadlineUtc"];
+            if (!DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out deadline)) return RequestDeadline;
+            var remaining = deadline.ToUniversalTime() - DateTime.UtcNow;
+            if (remaining <= TimeSpan.Zero) throw new TimeoutException("WPE gateway request deadline expired.");
+            return remaining < RequestDeadline ? remaining : RequestDeadline;
         }
 
         private static JToken Dispatch(string operation, JObject arguments)
@@ -256,8 +174,6 @@ namespace WinsockPacketEditor.Mcp
                     ["proxyConnections"] = Operate.ProxyConfig.Proxy.SessionCount
                 });
             }
-            if (operation == "capture.search") return ReadOnUi(() => SearchPackets(arguments));
-            if (operation == "capture.get") return ReadOnUi(() => GetPacket(arguments));
             if (operation == "capture.findNext") return ReadOnUi(() => FindNextCapture(arguments));
             if (operation == "logs.list") return ReadOnUi(() => ListLogs(arguments));
             if (operation == "logs.all.list") return ReadOnUi(() => ListAllLogs(arguments));
@@ -268,23 +184,17 @@ namespace WinsockPacketEditor.Mcp
             if (operation == "accounts.get") return ReadOnUi(() => GetAccount(arguments));
             if (operation == "accounts.logins.list") return ReadOnUi(() => ListAccountLogins(arguments));
             if (operation == "connections.list") return ReadOnUi(() => ListConnections(arguments));
-            if (operation == "connections.get") return ReadOnUi(() => GetConnection(arguments));
             if (operation == "executors.list") return ReadOnUi(ListExecutors);
             if (operation == "firewall.get") return ReadOnUi(GetFirewall);
             if (operation == "firewall.rules.list") return ReadOnUi(() => ListFirewallRules(arguments));
             if (operation == "proxy.settings.get") return ReadOnUi(GetProxySettings);
             if (operation == "proxy.config.get") return ReadOnUi(GetProxyConfig);
-            if (operation == "proxy.capabilities.get") return ReadOnUi(GetProxyCapabilities);
             if (operation == "proxy.runtime.get") return ReadOnUi(GetProxyRuntime);
             if (operation == "remoteManagement.get") return ReadOnUi(GetRemoteManagement);
             if (operation == "settings.get") return ReadOnUi(() => GetSetting(arguments));
             if (operation == "wpc.servers.list") return ReadOnUi(ListWpcServers);
             if (operation == "wpc.server.rules.list") return ReadOnUi(() => ListWpcServerRules(arguments));
             if (operation == "connections.summary.get") return ReadOnUi(GetConnectionsSummary);
-            if (operation == "proxy.failures.list") return ReadOnUi(() => ListProxyFailures(arguments));
-            if (operation == "proxy.health.get") return ReadOnUi(GetProxyHealth);
-            if (operation == "executors.detail.get") return ReadOnUi(GetExecutorsDetail);
-            if (operation == "storage.health.get") return ReadOnUi(GetStorageHealth);
             if (operation == "bytes.transcode") return BytesTranscode(arguments);
             if (operation == "bytes.compare") return BytesCompare(arguments);
             if (operation == "bytes.extract") return BytesExtract(arguments);
@@ -297,11 +207,13 @@ namespace WinsockPacketEditor.Mcp
             if (operation == "warehouses.get") return ReadOnUi(() => GetWarehouse(arguments));
             if (operation == "autoStores.list") return ReadOnUi(ListAutoStores);
             if (operation == "packet.edit.get") return ReadOnUi(() => GetPacketEdit(arguments));
-            throw new InvalidOperationException("The requested MCP operation is not available in phase 1.");
+            throw new InvalidOperationException("The requested MCP operation is not available.");
         }
 
         private static Task<JToken> DispatchAsync(string operation, JObject arguments)
         {
+            if (operation == "capture.search") return SearchPacketsAsync(arguments);
+            if (operation == "capture.get") return GetPacketAsync(arguments);
             if (operation == "filters.setEnabled") return SetFilterEnabledAsync(arguments);
             if (operation == "filters.setAllEnabled") return SetAllFiltersEnabledAsync(arguments);
             if (operation == "filters.counts.reset") return ResetFilterCountsAsync(arguments);
@@ -1006,9 +918,16 @@ namespace WinsockPacketEditor.Mcp
             if (!kinds.TryGetValue(kind, out type)) throw new InvalidOperationException("onMatch type must be none, send, robot, filter, or warehouse.");
             var target = OptionalRuleString(onMatch, "target");
             if (string.IsNullOrEmpty(target)) throw new InvalidOperationException("onMatch target is required when type is not none.");
-            var targetId = ResolveEntityReference(kind == "warehouse" ? "warehouse" : kind, target);
+            var targetId = RequireGuid(kind, target);
             if (type == 3 && string.Equals(targetId, filterId, StringComparison.OrdinalIgnoreCase)) throw new InvalidOperationException("A filter cannot execute itself.");
             row.IsExecute = true; row.ExecuteType = type; row.ExecuteId = targetId;
+        }
+
+        private static string RequireGuid(string entityKind, string value)
+        {
+            Guid id;
+            if (!Guid.TryParse(value, out id)) throw new InvalidOperationException(entityKind + " target must be a GUID returned by its list tool.");
+            return id.ToString().ToUpperInvariant();
         }
 
         // Do not leak the editor DTO back to MCP callers: its numeric enums and
@@ -1436,53 +1355,46 @@ namespace WinsockPacketEditor.Mcp
                 })).ConfigureAwait(false);
         }
 
-        private static JObject SearchPackets(JObject arguments)
+        private static Task<JToken> SearchPacketsAsync(JObject arguments)
         {
             var limit = Math.Max(1, Math.Min(200, (int?)arguments?["limit"] ?? 50));
             var offset = ReadOffset(arguments);
             var pattern = ((string)arguments?["pattern"] ?? string.Empty).Trim();
             var mode = ReadCaptureMode(arguments, "proxy");
-            var rows = new JArray();
-            if (mode == "proxy") return SearchProxyPackets(limit, offset, pattern);
-            return SearchInjectPackets(limit, offset, pattern);
+            var snapshot = ReadOnUi(() => SnapshotPackets(mode));
+            return Task.Run<JToken>(() => SearchPackets(snapshot, limit, offset, pattern));
         }
 
-        private static JObject SearchInjectPackets(int limit, int offset, string pattern)
+        private static CaptureSearchSnapshot[] SnapshotPackets(string mode)
         {
-            var rows = new JArray();
-            var list = Operate.PacketConfig.List.lstPacketInfo;
-            var matched = 0;
-            for (var i = list.Count - 1; i >= 0 && rows.Count < limit; i--)
+            var rows = new List<CaptureSearchSnapshot>();
+            if (mode == "proxy")
             {
-                var packet = list[i];
-                if (packet == null) continue;
-                var searchable = (packet.PacketFrom ?? string.Empty) + " " + (packet.PacketTo ?? string.Empty) + " " + (packet.PacketData ?? string.Empty);
-                if (pattern.Length > 0 && searchable.IndexOf(pattern, StringComparison.OrdinalIgnoreCase) < 0) continue;
-                if (matched++ < offset) continue;
-                var preview = packet.PacketData ?? string.Empty;
-                if (preview.Length > 192) preview = preview.Substring(0, 192);
-                rows.Add(new JObject { ["id"] = packet.Id, ["time"] = packet.PacketTime.ToUniversalTime().ToString("o"), ["type"] = (int)packet.PacketType, ["length"] = packet.PacketLen, ["preview"] = preview, ["from"] = packet.PacketFrom, ["to"] = packet.PacketTo, ["action"] = (int)packet.FilterAction });
+                foreach (var packet in Operate.ProxyConfig.List.lstProxyInfo)
+                    if (packet != null) rows.Add(new CaptureSearchSnapshot(packet.Id, packet.ProxyTime, (int)packet.PacketType, packet.PacketLen, packet.PacketData, packet.ClientAddr, packet.ServerAddr, packet.ServerDomain, (int)packet.FilterAction));
             }
-            return new JObject { ["rows"] = rows, ["nextCursor"] = NextCursor(offset, rows.Count, matched < list.Count) };
+            else
+            {
+                foreach (var packet in Operate.PacketConfig.List.lstPacketInfo)
+                    if (packet != null) rows.Add(new CaptureSearchSnapshot(packet.Id, packet.PacketTime, (int)packet.PacketType, packet.PacketLen, packet.PacketData, packet.PacketFrom, packet.PacketTo, null, (int)packet.FilterAction));
+            }
+            return rows.ToArray();
         }
 
-        private static JObject SearchProxyPackets(int limit, int offset, string pattern)
+        private static JObject SearchPackets(CaptureSearchSnapshot[] snapshot, int limit, int offset, string pattern)
         {
-            var rows = new JArray();
-            var list = Operate.ProxyConfig.List.lstProxyInfo;
-            var matched = 0;
-            for (var i = list.Count - 1; i >= 0 && rows.Count < limit; i--)
+            var rows = new JArray(); var matched = 0;
+            for (var i = snapshot.Length - 1; i >= 0 && rows.Count < limit; i--)
             {
-                var packet = list[i];
-                if (packet == null) continue;
-                var searchable = (packet.ClientAddr ?? string.Empty) + " " + (packet.ServerAddr ?? string.Empty) + " " + (packet.ServerDomain ?? string.Empty) + " " + (packet.PacketData ?? string.Empty);
+                var packet = snapshot[i];
+                var searchable = (packet.From ?? string.Empty) + " " + (packet.To ?? string.Empty) + " " + (packet.Domain ?? string.Empty) + " " + (packet.Preview ?? string.Empty);
                 if (pattern.Length > 0 && searchable.IndexOf(pattern, StringComparison.OrdinalIgnoreCase) < 0) continue;
                 if (matched++ < offset) continue;
-                var preview = packet.PacketData ?? string.Empty;
+                var preview = packet.Preview ?? string.Empty;
                 if (preview.Length > 192) preview = preview.Substring(0, 192);
-                rows.Add(new JObject { ["id"] = packet.Id, ["time"] = packet.ProxyTime.ToUniversalTime().ToString("o"), ["type"] = (int)packet.PacketType, ["length"] = packet.PacketLen, ["preview"] = preview, ["from"] = packet.ClientAddr, ["to"] = packet.ServerAddr, ["action"] = (int)packet.FilterAction });
+                rows.Add(new JObject { ["id"] = packet.Id, ["time"] = packet.Time.ToUniversalTime().ToString("o"), ["type"] = packet.Type, ["length"] = packet.Length, ["preview"] = preview, ["from"] = packet.From, ["to"] = packet.To, ["action"] = packet.Action });
             }
-            return new JObject { ["rows"] = rows, ["nextCursor"] = NextCursor(offset, rows.Count, matched < list.Count) };
+            return new JObject { ["rows"] = rows, ["nextCursor"] = NextCursor(offset, rows.Count, matched < snapshot.Length) };
         }
 
         private static bool? GetFilterEnabled(string filterId)
@@ -1610,26 +1522,29 @@ namespace WinsockPacketEditor.Mcp
             return value.Length <= 120 ? value : value.Substring(0, 120) + "…";
         }
 
-        private static JObject GetPacket(JObject arguments)
+        private static Task<JToken> GetPacketAsync(JObject arguments)
         {
             var id = (long?)arguments?["id"];
             if (!id.HasValue || id.Value < 1) throw new InvalidOperationException("A positive packet id is required.");
             var mode = ReadCaptureMode(arguments, "proxy");
-            byte[] bytes;
-            byte[] raw;
-            if (mode == "proxy")
-            {
-                var packet = Operate.ProxyConfig.List.GetProxyById(id.Value);
-                if (packet == null) return CaptureNotFound(id.Value, mode);
-                bytes = packet.PacketBuffer ?? new byte[0]; raw = packet.RawBuffer ?? new byte[0];
-            }
-            else
-            {
-                var packet = Operate.PacketConfig.List.GetPacketById(id.Value);
-                if (packet == null) return CaptureNotFound(id.Value, mode);
-                bytes = packet.PacketBuffer ?? new byte[0]; raw = packet.RawBuffer ?? new byte[0];
-            }
-            var result = new JObject { ["id"] = id.Value, ["mode"] = mode, ["found"] = true, ["truncated"] = false };
+            var snapshot = ReadOnUi(() => SnapshotPacket(id.Value, mode));
+            if (snapshot == null) return Task.FromResult<JToken>(CaptureNotFound(id.Value, mode));
+            return Task.Run<JToken>(() => BuildPacketResult(id.Value, mode, snapshot));
+        }
+
+        private static PacketSnapshot SnapshotPacket(long id, string mode)
+        {
+            byte[] bytes = null; byte[] raw = null;
+            if (mode == "proxy") { var packet = Operate.ProxyConfig.List.GetProxyById(id); if (packet != null) { bytes = packet.PacketBuffer; raw = packet.RawBuffer; } }
+            else { var packet = Operate.PacketConfig.List.GetPacketById(id); if (packet != null) { bytes = packet.PacketBuffer; raw = packet.RawBuffer; } }
+            if (bytes == null && raw == null) return null;
+            return new PacketSnapshot(bytes == null ? new byte[0] : (byte[])bytes.Clone(), raw == null ? new byte[0] : (byte[])raw.Clone());
+        }
+
+        private static JObject BuildPacketResult(long id, string mode, PacketSnapshot snapshot)
+        {
+            var bytes = snapshot.Bytes; var raw = snapshot.Raw;
+            var result = new JObject { ["id"] = id, ["mode"] = mode, ["found"] = true, ["truncated"] = false };
             using (var sha = System.Security.Cryptography.SHA256.Create()) result["sha256"] = BitConverter.ToString(sha.ComputeHash(bytes)).Replace("-", string.Empty).ToLowerInvariant();
             result["payloadBase64"] = Convert.ToBase64String(bytes);
             result["rawPayloadBase64"] = Convert.ToBase64String(raw);
@@ -1755,14 +1670,24 @@ namespace WinsockPacketEditor.Mcp
         {
             var limit = Math.Max(1, Math.Min(200, (int?)arguments?["limit"] ?? 50));
             var offset = ReadOffset(arguments);
+            var userName = ((string)arguments?["userName"] ?? string.Empty).Trim();
+            if (userName.Length > 128) throw new InvalidOperationException("userName must not exceed 128 characters.");
             var rows = new JArray();
             var list = Operate.ProxyConfig.Account.lstAccountInfo;
-            for (var i = offset; i < list.Count && rows.Count < limit; i++)
+            var matched = new List<AccountInfo>();
+            for (var i = 0; i < list.Count; i++)
             {
-                var row = AccountToMcp(list[i]);
+                var account = list[i];
+                if (account == null || (userName.Length > 0 && (account.UserName ?? string.Empty).IndexOf(userName, StringComparison.OrdinalIgnoreCase) < 0)) continue;
+                matched.Add(account);
+            }
+            for (var i = offset; i < matched.Count && rows.Count < limit; i++)
+            {
+                var account = matched[i];
+                var row = AccountToMcp(account);
                 if (row != null) rows.Add(row);
             }
-            return new JObject { ["rows"] = rows, ["nextCursor"] = NextCursor(offset, rows.Count, offset + rows.Count < list.Count) };
+            return new JObject { ["rows"] = rows, ["nextCursor"] = NextCursor(offset, rows.Count, offset + rows.Count < matched.Count) };
         }
 
         private static JObject GetAccount(JObject arguments)
@@ -1816,24 +1741,6 @@ namespace WinsockPacketEditor.Mcp
                 }
             }
             return new JObject { ["rows"] = rows, ["nextCursor"] = NextCursor(offset, rows.Count, offset + rows.Count < list.Count) };
-        }
-
-        private static JObject GetConnection(JObject arguments)
-        {
-            var id = ((string)arguments?["id"] ?? string.Empty).Trim();
-            if (id.Length == 0 || id.Length > 128) throw new InvalidOperationException("Connection id is required.");
-            foreach (var connection in Operate.ProxyConfig.Account.lstAuthInfo)
-            {
-                if (connection != null && string.Equals(GetConnectionId(connection), id, StringComparison.Ordinal))
-                {
-                    var row = AuthRow.From_(connection);
-                    var result = JObject.FromObject(row);
-                    result["id"] = id;
-                    result["sampledAtUtc"] = DateTime.UtcNow.ToString("o");
-                    return result;
-                }
-            }
-            throw new InvalidOperationException("The connection no longer exists.");
         }
 
         private static string GetConnectionId(AuthInfo connection)
@@ -1913,20 +1820,6 @@ namespace WinsockPacketEditor.Mcp
             result["schemaVersion"] = 1;
             result["requiresRestart"] = false;
             return result;
-        }
-
-        private static JObject GetProxyCapabilities()
-        {
-            return new JObject
-            {
-                ["socks5"] = true,
-                ["http"] = true,
-                ["udpRelay"] = true,
-                ["ipv6"] = true,
-                ["externalProxy"] = true,
-                ["wpcControl"] = true,
-                ["sampledAtUtc"] = DateTime.UtcNow.ToString("o")
-            };
         }
 
         private static JObject GetProxyRuntime()
@@ -2018,92 +1911,6 @@ namespace WinsockPacketEditor.Mcp
                 ["udp"] = udp,
                 ["wpcControl"] = wpc,
                 ["ordinary"] = rows.Length - wpc,
-                ["sampledAtUtc"] = DateTime.UtcNow.ToString("o")
-            };
-        }
-
-        private static JObject ListProxyFailures(JObject arguments)
-        {
-            var limit = Math.Max(1, Math.Min(50, (int?)arguments?["limit"] ?? 20));
-            var rows = new JArray();
-            var list = Operate.LogConfig.List.lstProxyLogInfo;
-            for (var i = list.Count - 1; i >= 0 && rows.Count < limit; i--)
-            {
-                var entry = list[i];
-                var message = (entry.LogContent ?? string.Empty).Replace("\r", " ").Replace("\n", " ").Trim();
-                var lower = message.ToLowerInvariant();
-                if (lower.IndexOf("fail", StringComparison.Ordinal) < 0 && lower.IndexOf("error", StringComparison.Ordinal) < 0 && lower.IndexOf("exception", StringComparison.Ordinal) < 0 && message.IndexOf("失败", StringComparison.Ordinal) < 0 && message.IndexOf("错误", StringComparison.Ordinal) < 0 && message.IndexOf("异常", StringComparison.Ordinal) < 0) continue;
-                if (message.Length > 160) message = message.Substring(0, 160) + "…";
-                rows.Add(new JObject { ["time"] = entry.LogTime.ToUniversalTime().ToString("o"), ["summary"] = message });
-            }
-            return new JObject { ["rows"] = rows, ["sampledAtUtc"] = DateTime.UtcNow.ToString("o") };
-        }
-
-        private static JObject GetProxyHealth()
-        {
-            var settings = GetProxySettings();
-            var socks = (bool)settings["socks5Enabled"];
-            var http = (bool)settings["httpEnabled"];
-            var socksPort = (int)settings["socks5Port"];
-            var httpPort = (int)settings["httpPort"];
-            var portConflict = socks && http && socksPort == httpPort;
-            var running = (bool)settings["running"];
-            var checks = new JArray();
-            AddHealthCheck(checks, "socks5PortRange", !socks || (socksPort >= 1 && socksPort <= 65535), "SOCKS5 端口范围有效");
-            AddHealthCheck(checks, "httpPortRange", !http || (httpPort >= 1 && httpPort <= 65535), "HTTP 端口范围有效");
-            AddHealthCheck(checks, "portConflict", !portConflict, "SOCKS5 与 HTTP 端口不冲突");
-            var auth = (bool)settings["authEnabled"];
-            var onlyWpc = (bool)settings["onlyWpc"];
-            AddHealthCheck(checks, "onlyWpcAuth", !onlyWpc || auth, "Only-WPC 模式要求认证开启");
-            var external = (bool)settings["externalProxyEnabled"];
-            var externalHost = ((string)settings["externalProxyIp"] ?? string.Empty).Trim();
-            var externalPort = (int)settings["externalProxyPort"];
-            AddHealthCheck(checks, "externalProxyEndpoint", !external || (externalHost.Length > 0 && externalPort >= 1 && externalPort <= 65535), "外部代理 endpoint 有效");
-            AddHealthCheck(checks, "listenerState", !running || socks || http, "运行时至少启用一个代理监听器");
-            var healthy = true;
-            foreach (var check in checks) if (!(bool)check["ok"]) { healthy = false; break; }
-            return new JObject
-            {
-                ["healthy"] = healthy,
-                ["running"] = running,
-                ["socks5Enabled"] = socks,
-                ["httpEnabled"] = http,
-                ["portConflict"] = portConflict,
-                ["checks"] = checks,
-                ["sessionCount"] = Operate.ProxyConfig.Proxy.SessionCount,
-                ["sampledAtUtc"] = DateTime.UtcNow.ToString("o")
-            };
-        }
-
-        private static void AddHealthCheck(JArray checks, string name, bool ok, string description)
-        {
-            checks.Add(new JObject { ["name"] = name, ["ok"] = ok, ["description"] = description });
-        }
-
-        private static JObject GetExecutorsDetail()
-        {
-            var send = Operate.SendConfig.List.SendExecute_Count();
-            var robot = Operate.RobotConfig.List.RobotExecute_Count();
-            return new JObject
-            {
-                ["sendRunning"] = send,
-                ["sendStopped"] = 0,
-                ["robotRunning"] = robot,
-                ["robotStopped"] = 0,
-                ["sampledAtUtc"] = DateTime.UtcNow.ToString("o")
-            };
-        }
-
-        private static JObject GetStorageHealth()
-        {
-            var path = Operate.DataBase.dbPath ?? string.Empty;
-            var name = Operate.DataBase.dbName ?? string.Empty;
-            return new JObject
-            {
-                ["directoryAvailable"] = Directory.Exists(path),
-                ["databaseFileAvailable"] = File.Exists(Path.Combine(path, name)),
-                ["databaseName"] = name,
-                ["version"] = Operate.SystemConfig.AssemblyVersion,
                 ["sampledAtUtc"] = DateTime.UtcNow.ToString("o")
             };
         }
@@ -2500,6 +2307,19 @@ namespace WinsockPacketEditor.Mcp
             if (bytes.Length > 4 * 1024 * 1024) throw new InvalidOperationException("Content exceeds 4 MiB.");
             if (kind < 0 || kind > 32) throw new InvalidOperationException("Unsupported extraction kind.");
             return JObject.FromObject(Operate.SystemConfig.ExtractData(kind, bytes));
+        }
+
+        private sealed class CaptureSearchSnapshot
+        {
+            public readonly long Id; public readonly DateTime Time; public readonly int Type; public readonly int Length; public readonly string Preview; public readonly string From; public readonly string To; public readonly string Domain; public readonly int Action;
+            public CaptureSearchSnapshot(long id, DateTime time, int type, int length, string preview, string from, string to, string domain, int action)
+            { Id = id; Time = time; Type = type; Length = length; Preview = preview; From = from; To = to; Domain = domain; Action = action; }
+        }
+
+        private sealed class PacketSnapshot
+        {
+            public readonly byte[] Bytes; public readonly byte[] Raw;
+            public PacketSnapshot(byte[] bytes, byte[] raw) { Bytes = bytes; Raw = raw; }
         }
 
         private static T ReadOnUi<T>(Func<T> action)

@@ -2,7 +2,7 @@
 
 All names use the `wpe_` namespace in MCP. Underscores are deliberately used because they are valid in every MCP client's standard tool-name validator. Internal operation names omit that prefix.
 
-For named WPE business objects—filters, proxy accounts, send tasks, robots, warehouses, and WPC servers—reference fields accept either the exact visible name or a GUID. WPE resolves a unique name internally and reports missing or duplicate names. Captured packets, live connections, WPC rule rows, stored packets, and automatic-storage rules remain runtime records and therefore still require their returned IDs.
+For filters and WPC servers, reference fields accept an exact visible name or a GUID. Proxy accounts, send tasks, robots, and warehouses require the GUID returned by their list/create tools, so automated calls cannot silently select an ambiguous display name. Captured packets, live connections, WPC rule rows, stored packets, and automatic-storage rules remain runtime records and likewise require returned IDs.
 
 | MCP tool | Internal operation | Permission | Sensitive data rule |
 |---|---|---|---|
@@ -17,9 +17,9 @@ For named WPE business objects—filters, proxy accounts, send tasks, robots, wa
 | `wpe_filter_stats_get` | `filters.stats.get` | `read.runtime` | Runtime execution count and enabled state |
 | `wpe_executors_list` | `executors.list` | `read.runtime` | No start/stop capability |
 | `wpe_connections_list` | `connections.list` | `read.capture` | Bounded native connection records |
-| `wpe_accounts_list` | `accounts.list` | `read.capture` | Bounded account records including decrypted passwords |
-| `wpe_account_get` | `accounts.get` | `read.capture` | Complete account configuration, decrypted password and login records |
-| `wpe_account_logins_list` | `accounts.logins.list` | `read.capture` | Existing native login-location records; not a device inventory |
+| `wpe_accounts_list` | `accounts.list` | `read.capture` | `userName` is optional case-insensitive login-name text search; use each returned `Id` GUID for later account calls |
+| `wpe_account_get` | `accounts.get` | `read.capture` | Complete account configuration, decrypted password and login records; `id` is the GUID returned by `wpe_accounts_list`, never `userName` |
+| `wpe_account_logins_list` | `accounts.logins.list` | `read.capture` | Existing native login-location records; `id` is the GUID returned by `wpe_accounts_list`, not `userName` |
 | `wpe_firewall_get` | `firewall.get` | `read.runtime` | Rules only |
 | `wpe_proxy_settings_get` | `proxy.settings.get` | `read.runtime` | Settings, limits and configured external-proxy credentials |
 | `wpe_proxy_config_get` | `proxy.config.get` | `read.runtime` | Complete proxy configuration snapshot |
@@ -36,7 +36,7 @@ For named WPE business objects—filters, proxy accounts, send tasks, robots, wa
 | `wpe_robots_list` | `robots.list` | `read.runtime` | Bounded robot metadata |
 | `wpe_robot_get` | `robots.get` | `read.runtime` | Existing instruction configuration only |
 | `wpe_warehouse_list` | `warehouses.list` | `read.runtime` | Bounded warehouse metadata |
-| `wpe_warehouse_get` | `warehouses.get` | `read.runtime` | Bounded stored-packet records |
+| `wpe_warehouse_get` | `warehouses.get` | `read.runtime` | One warehouse's bounded stored-packet records; `id` is required and must be the `Id` GUID returned by `wpe_warehouse_list`, never its display name |
 | `wpe_auto_stores_list` | `autoStores.list` | `read.runtime` | Automatic-storage rules only; no mutation |
 | `wpe_packet_edit_get` | `packet.edit.get` | `read.capture` | Explicit editing snapshot; payload returned as Base64 |
 | `wpe_proxy_bind_ip_set` | `proxy.bindIp.set` | `write.proxy` | Auto or validated IPv4/IPv6 listening address, persisted after WPE-local confirmation |
@@ -70,10 +70,10 @@ For named WPE business objects—filters, proxy accounts, send tasks, robots, wa
 | `wpe_filter_create` | `filters.create` | `write.filter` | Creates an empty filter through the existing WPE business path after confirmation |
 | `wpe_filter_rule_save` | `filters.rule.save` | `write.filter` | Complete semantic rule editor. Use `replace` for selected-byte substitutions; `change` replaces the whole packet and needs contiguous modify cells from offset 0. Advanced rules must state `startFrom`: `position` applies to every match, `head` only the first. `packetTypes` must select one or more types; use `all` for all types in the current mode. It preserves enablement |
 | `wpe_filter_delete` | `filters.delete` | `write.filter` | Deletes an existing filter through the existing WPE list action after confirmation |
-| `wpe_account_set_enabled` | `accounts.setEnabled` | `write.account` | Existing account only; UUID idempotency key and WPE-local confirmation |
-| `wpe_account_create` | `accounts.create` | `write.account` | Existing account-editor fields, UUID idempotency key, WPE-local confirmation; complete arguments are retained in audit data |
-| `wpe_account_update` | `accounts.update` | `write.account` | Existing account-editor fields except immutable user name; omitting password preserves it |
-| `wpe_account_delete` | `accounts.delete` | `write.account` | Delete one existing account after WPE-local confirmation |
+| `wpe_account_set_enabled` | `accounts.setEnabled` | `write.account` | `id` is the GUID returned by `wpe_accounts_list`; UUID idempotency key and WPE-local confirmation |
+| `wpe_account_create` | `accounts.create` | `write.account` | `userName` is new login-name text, not a GUID; complete arguments are retained in audit data |
+| `wpe_account_update` | `accounts.update` | `write.account` | `id` is the GUID returned by `wpe_accounts_list`, never `userName`; username is immutable and omitting password preserves it |
+| `wpe_account_delete` | `accounts.delete` | `write.account` | `id` is the GUID returned by `wpe_accounts_list`, never `userName` |
 | `wpe_proxy_auth_set_enabled` | `proxy.auth.setEnabled` | `write.proxy` | Boolean-only setting, rejects incompatible Only-WPC state and persists after WPE-local confirmation |
 | `wpe_proxy_http_set_enabled` | `proxy.http.setEnabled` | `write.proxy` | Boolean-only setting, validates SOCKS5/HTTP port compatibility, persists after WPE-local confirmation |
 | `wpe_proxy_max_connections_set` | `proxy.maxConnections.set` | `write.proxy` | Integer setting validated against the live machine cap; persists after WPE-local confirmation |
@@ -96,12 +96,16 @@ For named WPE business objects—filters, proxy accounts, send tasks, robots, wa
 | `wpe_firewall_rule_remove` | `firewall.rule.remove` | `write.firewall` | Exact existing IP/range, UUID idempotency key, WPE-local confirmation, complete audit event |
 | `wpe_send_set_enabled` | `sends.setEnabled` | `write.task` | Existing send task only; UUID idempotency key and WPE-local confirmation |
 | `wpe_robot_set_enabled` | `robots.setEnabled` | `write.task` | Existing robot task only; UUID idempotency key and WPE-local confirmation |
-| `wpe_task_create` | `tasks.create` | `write.task` | Creates one empty send, robot, or warehouse through its native path; never starts execution |
-| `wpe_task_update` | `tasks.update` | `write.task` | Updates native editable configuration; never starts execution or sends a packet |
-| `wpe_tasks_move` | `tasks.move` | `write.task` | Existing top/up/down/bottom list action after local confirmation |
-| `wpe_tasks_copy` | `tasks.copy` | `write.task` | Existing native list copy action after local confirmation |
-| `wpe_tasks_delete` | `tasks.delete` | `write.task` | Existing native list delete action after local confirmation |
-| `wpe_tasks_clear` | `tasks.clear` | `write.task` | Existing native clear action after local confirmation; native destructive confirmation remains |
+| `wpe_send_create` | `tasks.create` | `write.task` | Creates one empty send task; never sends packets |
+| `wpe_robot_create` | `tasks.create` | `write.task` | Creates one empty robot task; never executes it |
+| `wpe_warehouse_create` | `tasks.create` | `write.task` | Creates one empty warehouse; never imports or changes packets |
+| `wpe_send_update` | `tasks.update` | `write.send` | Updates one send task by returned GUID; omitted scheduling fields retain their current values and it never sends packets |
+| `wpe_robot_update` | `tasks.update` | `write.robot` | Renames one robot by returned GUID; it never starts execution |
+| `wpe_warehouse_update` | `tasks.update` | `write.warehouse` | Renames one warehouse by returned GUID |
+| `wpe_send_move` / `wpe_robot_move` / `wpe_warehouse_move` | `tasks.move` | scope-specific write | Moves only the stated task scope by returned GUIDs; direction is top, up, down, or bottom |
+| `wpe_send_copy` / `wpe_robot_copy` / `wpe_warehouse_copy` | `tasks.copy` | scope-specific write | Copies only the stated task scope by returned GUIDs; does not start execution |
+| `wpe_send_delete` / `wpe_robot_delete` / `wpe_warehouse_delete` | `tasks.delete` | scope-specific write | Deletes only the stated task scope by returned GUIDs after local confirmation |
+| `wpe_sends_clear` / `wpe_robots_clear` / `wpe_warehouses_clear` | `tasks.clear` | scope-specific write | Clears only the stated scope after local confirmation; WPE-native destructive confirmation remains |
 | `wpe_capture_add_to_send` | `capture.addToSend` | `write.task` | Adds selected inject-capture packets to an existing send task; does not execute it |
 | `wpe_capture_add_to_warehouse` | `capture.addToWarehouse` | `write.task` | Adds selected inject-capture packets to an existing warehouse |
 | `wpe_proxy_capture_add_to_send` | `proxyCapture.addToSend` | `write.task` | Adds selected proxy-capture packets to an existing send task; does not execute it |

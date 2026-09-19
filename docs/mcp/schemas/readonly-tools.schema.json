@@ -84,9 +84,9 @@
     "wpe_filter_stats_get": { "input": { "type": "object", "required": ["id"], "properties": { "id": { "type": "string", "description": "Exact visible filter name or GUID." } }, "additionalProperties": false }, "output": { "type": "object" } },
     "wpe_executors_list": { "input": { "type": "object", "additionalProperties": false }, "output": { "type": "object" } },
     "wpe_connections_list": { "input": { "$ref": "#/definitions/page" }, "output": { "type": "object" } },
-    "wpe_accounts_list": { "input": { "$ref": "#/definitions/page" }, "output": { "type": "object" } },
-    "wpe_account_get": { "input": { "type": "object", "required": ["id"], "properties": { "id": { "type": "string", "description": "Exact visible account user name or GUID." } }, "additionalProperties": false }, "output": { "type": "object" } },
-    "wpe_account_logins_list": { "input": { "allOf": [{ "$ref": "#/definitions/pageFields" }, { "type": "object", "required": ["id"], "properties": { "id": { "type": "string", "description": "Exact visible account user name or GUID." } } }], "unevaluatedProperties": false }, "output": { "type": "object" } },
+    "wpe_accounts_list": { "input": { "allOf": [{ "$ref": "#/definitions/pageFields" }, { "type": "object", "properties": { "userName": { "type": "string", "minLength": 1, "maxLength": 128, "description": "Optional case-insensitive login-name text search. Read the returned Id GUID before calling other account tools." } } }], "unevaluatedProperties": false }, "output": { "type": "object" } },
+    "wpe_account_get": { "input": { "type": "object", "required": ["id"], "properties": { "id": { "type": "string", "format": "uuid", "description": "Account record GUID returned in wpe_accounts_list.rows[].Id. This is not the userName." } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_account_logins_list": { "input": { "allOf": [{ "$ref": "#/definitions/pageFields" }, { "type": "object", "required": ["id"], "properties": { "id": { "type": "string", "format": "uuid", "description": "Account record GUID returned in wpe_accounts_list.rows[].Id. This is not the userName." } } }], "unevaluatedProperties": false }, "output": { "type": "object" } },
     "wpe_firewall_get": { "input": { "type": "object", "additionalProperties": false }, "output": { "type": "object" } },
     "wpe_proxy_settings_get": { "input": { "type": "object", "additionalProperties": false }, "output": { "type": "object", "additionalProperties": true } },
     "wpe_proxy_config_get": { "input": { "type": "object", "additionalProperties": false }, "output": { "type": "object", "additionalProperties": true } },
@@ -100,7 +100,7 @@
     "wpe_robots_list": { "input": { "$ref": "#/definitions/page" }, "output": { "type": "object" } },
     "wpe_robot_get": { "input": { "type": "object", "required": ["id"], "properties": { "id": { "type": "string", "description": "Exact visible robot name or GUID." } }, "additionalProperties": false }, "output": { "type": "object" } },
     "wpe_warehouse_list": { "input": { "$ref": "#/definitions/page" }, "output": { "type": "object" } },
-    "wpe_warehouse_get": { "input": { "allOf": [{ "$ref": "#/definitions/pageFields" }, { "type": "object", "required": ["id"], "properties": { "id": { "type": "string", "description": "Exact visible warehouse name or GUID." } } }], "unevaluatedProperties": false }, "output": { "type": "object" } },
+    "wpe_warehouse_get": { "input": { "allOf": [{ "$ref": "#/definitions/pageFields" }, { "type": "object", "required": ["id"], "properties": { "id": { "type": "string", "description": "Required warehouse GUID: first call wpe_warehouse_list, then pass the returned row.Id. Display names are not accepted." } } }], "unevaluatedProperties": false }, "output": { "type": "object" } },
     "wpe_auto_stores_list": { "input": { "type": "object", "additionalProperties": false }, "output": { "type": "object" } },
     "wpe_packet_edit_get": { "input": { "type": "object", "required": ["list", "id"], "properties": { "list": { "type": "string", "enum": ["proxy", "packet"] }, "id": { "type": "integer", "minimum": 1 } }, "additionalProperties": false }, "output": { "type": "object" } }
   }

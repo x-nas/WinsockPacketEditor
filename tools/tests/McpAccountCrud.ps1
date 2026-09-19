@@ -16,7 +16,7 @@ try {
     $created = Call 2 'wpe_account_create' $createArgs
     $accountId = $created.account.Id; if ([string]::IsNullOrWhiteSpace($accountId)) { throw 'Create returned no account id.' }
     $got = Call 3 'wpe_account_get' @{ id = $accountId }; if ($got.UserName -ne $createArgs.userName -or -not $got.IsEnable) { throw 'Create read-back verification failed.' }
-    $listed = Call 4 'wpe_accounts_list' @{ limit = 200 }; if (-not @($listed.rows | Where-Object { $_.Id -eq $accountId })) { throw 'Created account is absent from list.' }
+    $listed = Call 4 'wpe_accounts_list' @{ limit = 200; userName = $createArgs.userName }; if (@($listed.rows).Count -ne 1 -or $listed.rows[0].Id -ne $accountId) { throw 'Account userName search did not return exactly the created account GUID.' }
     $updated = Call 5 'wpe_account_update' @{ id = $accountId; enabled = $false; limitLinksEnabled = $true; limitLinks = 5; limitDevicesEnabled = $true; limitDevices = 4; expiryEnabled = $false; expiryTime = $null; password = $null; idempotencyKey = ([guid]::NewGuid().ToString()) }
     if ($updated.account.IsEnable -or $updated.account.LimitLinks -ne 5 -or $updated.account.LimitDevices -ne 4) { throw 'Update verification failed.' }
     $enabled = Call 6 'wpe_account_set_enabled' @{ id = $accountId; enabled = $true; idempotencyKey = ([guid]::NewGuid().ToString()) }; if (-not $enabled.changed) { throw 'Set enabled returned changed=false.' }

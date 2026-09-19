@@ -478,7 +478,8 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "Exact visible account user name or GUID."
+            "format": "uuid",
+            "description": "Account record GUID returned in wpe_accounts_list.rows[].Id. This is not the userName."
           },
           "enabled": {
             "type": "boolean"
@@ -608,7 +609,8 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "Exact visible account user name or GUID."
+            "format": "uuid",
+            "description": "Account record GUID returned in wpe_accounts_list.rows[].Id. This is not the userName."
           },
           "enabled": {
             "type": "boolean"
@@ -665,7 +667,8 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "Exact visible account user name or GUID."
+            "format": "uuid",
+            "description": "Account record GUID returned in wpe_accounts_list.rows[].Id. This is not the userName."
           },
           "idempotencyKey": {
             "type": "string",
@@ -1765,246 +1768,24 @@
         "type": "object"
       }
     },
-    "wpe_task_create": {
-      "input": {
-        "type": "object",
-        "required": [
-          "kind",
-          "idempotencyKey"
-        ],
-        "properties": {
-          "kind": {
-            "type": "string",
-            "enum": [
-              "send",
-              "robot",
-              "warehouse"
-            ]
-          },
-          "idempotencyKey": {
-            "type": "string",
-            "format": "uuid"
-          }
-        },
-        "additionalProperties": false
-      },
-      "output": {
-        "type": "object"
-      }
-    },
-    "wpe_task_update": {
-      "input": {
-        "type": "object",
-        "required": [
-          "kind",
-          "id",
-          "name",
-          "idempotencyKey"
-        ],
-        "properties": {
-          "kind": {
-            "type": "string",
-            "enum": [
-              "send",
-              "robot",
-              "warehouse"
-            ]
-          },
-          "id": {
-            "type": "string",
-            "description": "Exact visible name or GUID for the selected kind."
-          },
-          "name": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 256
-          },
-          "useSystemSocket": {
-            "type": [
-              "boolean",
-              "null"
-            ]
-          },
-          "loopCount": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 1
-          },
-          "loopInterval": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0
-          },
-          "notes": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "maxLength": 4096
-          },
-          "idempotencyKey": {
-            "type": "string",
-            "format": "uuid"
-          }
-        },
-        "additionalProperties": false
-      },
-      "output": {
-        "type": "object"
-      }
-    },
-    "wpe_tasks_move": {
-      "input": {
-        "type": "object",
-        "required": [
-          "kind",
-          "ids",
-          "direction",
-          "idempotencyKey"
-        ],
-        "properties": {
-          "kind": {
-            "type": "string",
-            "enum": [
-              "send",
-              "robot",
-              "warehouse"
-            ]
-          },
-          "ids": {
-            "type": "array",
-            "minItems": 1,
-            "maxItems": 200,
-            "items": {
-              "type": "string",
-              "description": "Exact visible name or GUID for the selected kind."
-            }
-          },
-          "direction": {
-            "type": "string",
-            "enum": [
-              "top",
-              "up",
-              "down",
-              "bottom"
-            ]
-          },
-          "idempotencyKey": {
-            "type": "string",
-            "format": "uuid"
-          }
-        },
-        "additionalProperties": false
-      },
-      "output": {
-        "type": "object"
-      }
-    },
-    "wpe_tasks_copy": {
-      "input": {
-        "type": "object",
-        "required": [
-          "kind",
-          "ids",
-          "idempotencyKey"
-        ],
-        "properties": {
-          "kind": {
-            "type": "string",
-            "enum": [
-              "send",
-              "robot",
-              "warehouse"
-            ]
-          },
-          "ids": {
-            "type": "array",
-            "minItems": 1,
-            "maxItems": 200,
-            "items": {
-              "type": "string",
-              "description": "Exact visible name or GUID for the selected kind."
-            }
-          },
-          "idempotencyKey": {
-            "type": "string",
-            "format": "uuid"
-          }
-        },
-        "additionalProperties": false
-      },
-      "output": {
-        "type": "object"
-      }
-    },
-    "wpe_tasks_delete": {
-      "input": {
-        "type": "object",
-        "required": [
-          "kind",
-          "ids",
-          "idempotencyKey"
-        ],
-        "properties": {
-          "kind": {
-            "type": "string",
-            "enum": [
-              "send",
-              "robot",
-              "warehouse"
-            ]
-          },
-          "ids": {
-            "type": "array",
-            "minItems": 1,
-            "maxItems": 200,
-            "items": {
-              "type": "string",
-              "description": "Exact visible name or GUID for the selected kind."
-            }
-          },
-          "idempotencyKey": {
-            "type": "string",
-            "format": "uuid"
-          }
-        },
-        "additionalProperties": false
-      },
-      "output": {
-        "type": "object"
-      }
-    },
-    "wpe_tasks_clear": {
-      "input": {
-        "type": "object",
-        "required": [
-          "kind",
-          "idempotencyKey"
-        ],
-        "properties": {
-          "kind": {
-            "type": "string",
-            "enum": [
-              "send",
-              "robot",
-              "warehouse"
-            ]
-          },
-          "idempotencyKey": {
-            "type": "string",
-            "format": "uuid"
-          }
-        },
-        "additionalProperties": false
-      },
-      "output": {
-        "type": "object"
-      }
-    },
+    "wpe_send_create": { "input": { "type": "object", "required": ["idempotencyKey"], "properties": { "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_robot_create": { "input": { "type": "object", "required": ["idempotencyKey"], "properties": { "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_warehouse_create": { "input": { "type": "object", "required": ["idempotencyKey"], "properties": { "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_send_update": { "input": { "$ref": "#/$defs/sendUpdate" }, "output": { "type": "object" } },
+    "wpe_robot_update": { "input": { "$ref": "#/$defs/taskRename" }, "output": { "type": "object" } },
+    "wpe_warehouse_update": { "input": { "$ref": "#/$defs/taskRename" }, "output": { "type": "object" } },
+    "wpe_send_move": { "input": { "$ref": "#/$defs/taskMove" }, "output": { "type": "object" } },
+    "wpe_robot_move": { "input": { "$ref": "#/$defs/taskMove" }, "output": { "type": "object" } },
+    "wpe_warehouse_move": { "input": { "$ref": "#/$defs/taskMove" }, "output": { "type": "object" } },
+    "wpe_send_copy": { "input": { "$ref": "#/$defs/taskIds" }, "output": { "type": "object" } },
+    "wpe_robot_copy": { "input": { "$ref": "#/$defs/taskIds" }, "output": { "type": "object" } },
+    "wpe_warehouse_copy": { "input": { "$ref": "#/$defs/taskIds" }, "output": { "type": "object" } },
+    "wpe_send_delete": { "input": { "$ref": "#/$defs/taskIds" }, "output": { "type": "object" } },
+    "wpe_robot_delete": { "input": { "$ref": "#/$defs/taskIds" }, "output": { "type": "object" } },
+    "wpe_warehouse_delete": { "input": { "$ref": "#/$defs/taskIds" }, "output": { "type": "object" } },
+    "wpe_sends_clear": { "input": { "$ref": "#/$defs/idempotentWrite" }, "output": { "type": "object" } },
+    "wpe_robots_clear": { "input": { "$ref": "#/$defs/idempotentWrite" }, "output": { "type": "object" } },
+    "wpe_warehouses_clear": { "input": { "$ref": "#/$defs/idempotentWrite" }, "output": { "type": "object" } },
     "wpe_capture_add_to_send": {
       "input": {
         "$ref": "#/$defs/captureAdd"
@@ -3033,6 +2814,55 @@
     }
   },
   "$defs": {
+    "idempotentWrite": {
+      "type": "object",
+      "required": ["idempotencyKey"],
+      "properties": { "idempotencyKey": { "type": "string", "format": "uuid" } },
+      "additionalProperties": false
+    },
+    "taskIds": {
+      "type": "object",
+      "required": ["ids", "idempotencyKey"],
+      "properties": {
+        "ids": { "type": "array", "minItems": 1, "maxItems": 200, "items": { "type": "string", "format": "uuid" } },
+        "idempotencyKey": { "type": "string", "format": "uuid" }
+      },
+      "additionalProperties": false
+    },
+    "taskMove": {
+      "type": "object",
+      "required": ["ids", "direction", "idempotencyKey"],
+      "properties": {
+        "ids": { "type": "array", "minItems": 1, "maxItems": 200, "items": { "type": "string", "format": "uuid" } },
+        "direction": { "type": "string", "enum": ["top", "up", "down", "bottom"] },
+        "idempotencyKey": { "type": "string", "format": "uuid" }
+      },
+      "additionalProperties": false
+    },
+    "taskRename": {
+      "type": "object",
+      "required": ["id", "name", "idempotencyKey"],
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "idempotencyKey": { "type": "string", "format": "uuid" }
+      },
+      "additionalProperties": false
+    },
+    "sendUpdate": {
+      "type": "object",
+      "required": ["id", "name", "idempotencyKey"],
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "useSystemSocket": { "type": ["boolean", "null"] },
+        "loopCount": { "type": ["integer", "null"], "minimum": 1 },
+        "loopInterval": { "type": ["integer", "null"], "minimum": 0 },
+        "notes": { "type": ["string", "null"], "maxLength": 4096 },
+        "idempotencyKey": { "type": "string", "format": "uuid" }
+      },
+      "additionalProperties": false
+    },
     "entityWrite": {
       "type": "object",
       "required": [

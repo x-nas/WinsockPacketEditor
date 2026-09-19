@@ -10,18 +10,22 @@ internal sealed class WpeGatewayClient
     // Matches WPE's local pipe allocation guard. Full packet data is intentionally
     // available to the current-user MCP caller.
     private const int MaxFrameBytes = 128 * 1024 * 1024;
+    private static readonly TimeSpan RequestDeadline = TimeSpan.FromSeconds(75);
     private static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
     public async Task<string> InvokeAsync(string operation, object? arguments, CancellationToken cancellationToken)
     {
-        var instance = await WpeInstanceDiscovery.FindOneAsync(cancellationToken);
+        using var requestCancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        requestCancellation.CancelAfter(RequestDeadline);
+        var token = requestCancellation.Token;
+        var instance = await WpeInstanceDiscovery.FindOneAsync(token);
         using var pipe = new NamedPipeClientStream(".", instance.PipeName, PipeDirection.InOut,
             PipeOptions.Asynchronous, TokenImpersonationLevel.Identification);
-        await pipe.ConnectAsync(3000, cancellationToken);
+        await pipe.ConnectAsync(3000, token);
 
-        var request = JsonSerializer.SerializeToUtf8Bytes(new GatewayRequest(Guid.NewGuid().ToString("N"), operation, EnsureIdempotencyKey(arguments)), JsonOptions);
-        await WriteFrameAsync(pipe, request, cancellationToken);
-        using var response = JsonDocument.Parse(await ReadFrameAsync(pipe, cancellationToken));
+        var request = JsonSerializer.SerializeToUtf8Bytes(new GatewayRequest(Guid.NewGuid().ToString("N"), operation, EnsureIdempotencyKey(arguments), DateTime.UtcNow.Add(RequestDeadline).ToString("o")), JsonOptions);
+        await WriteFrameAsync(pipe, request, token);
+        using var response = JsonDocument.Parse(await ReadFrameAsync(pipe, token));
         var root = response.RootElement;
         if (!root.TryGetProperty("ok", out var ok) || !ok.GetBoolean())
         {
@@ -96,7 +100,7 @@ internal sealed class WpeGatewayClient
         return buffer;
     }
 
-    private sealed record GatewayRequest(string RequestId, string Operation, object? Arguments);
+    private sealed record GatewayRequest(string RequestId, string Operation, object? Arguments, string DeadlineUtc);
 }
 
 internal sealed record WpeInstance(string PipeName, int ProcessId, string StartedUtc);

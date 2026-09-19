@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 
 namespace WinsockPacketEditor.Mcp
 {
-    /// <summary>Shared Phase-2 gate. Callers must already be executing on WPE's UI thread.</summary>
+    /// <summary>Shared MCP write gate. Callers must already be executing on WPE's UI thread.</summary>
     internal static class McpWriteGuard
     {
         private static readonly ConcurrentDictionary<string, JObject> Completed = new ConcurrentDictionary<string, JObject>();

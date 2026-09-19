@@ -13,6 +13,31 @@ const tools: McpTool[] = Array.from(toolSource.matchAll(/\[McpServerTool\(Name =
   description: match[2],
 }))
 
+interface ToolGroup { title: string; tools: McpTool[] }
+
+// Keep the human-facing list in the same scopes an operator uses in WPE. A
+// cross-scope "add to …" operation belongs to its destination: adding a
+// captured packet to a send task is a Send tool, while adding it to a warehouse
+// is a Warehouse tool. The predicates are otherwise mutually exclusive.
+const toolScopes: Array<{ title: string; matches: (name: string) => boolean }> = [
+  { title: '代理', matches: (name) => /^wpe_(?:proxy_(?:auth|http|max|socks5|bind|external|only|settings|config|runtime|start|stop)|external_proxy|accounts?(?:_|$)|account_|firewall|connections?(?:_|$)|executors_)/.test(name) },
+  { title: '注入', matches: (name) => /^wpe_(?:inject|driver|process_proxy)/.test(name) },
+  { title: '封包', matches: (name) => /^wpe_(?:capture(?!_add_to_(?:send|warehouse)$)|proxy_capture(?!_add_to_(?:send|warehouse)$)|packet(?!_edit_(?:send|add_to_send)$)|bytes|import$|export$)/.test(name) },
+  { title: '滤镜', matches: (name) => /^wpe_filters?(?:_|$)/.test(name) },
+  { title: '发送', matches: (name) => /^wpe_(?:sends?(?:_|$)|send_collection|packet_edit_(?:send|add_to_send)|(?:capture|proxy_capture)_add_to_send)/.test(name) },
+  { title: '机器人', matches: (name) => /^wpe_robots?(?:_|$)/.test(name) },
+  { title: '仓库', matches: (name) => /^wpe_(?:warehouses?(?:_|$)|auto_stores|(?:capture|proxy_capture)_add_to_warehouse)/.test(name) },
+  { title: '设置', matches: (name) => /^wpe_(?:remote_management|setting|map_local|map_remote|wpc_server|start_mode)/.test(name) },
+]
+
+const toolGroups: ToolGroup[] = [
+  ...toolScopes.map((scope, index) => ({
+    title: scope.title,
+    tools: tools.filter((tool) => scope.matches(tool.name) && !toolScopes.slice(0, index).some((earlier) => earlier.matches(tool.name))),
+  })),
+  { title: '其它', tools: tools.filter((tool) => !toolScopes.some((scope) => scope.matches(tool.name))) },
+].filter((group) => group.tools.length > 0)
+
 function isWriteTool(name: string): boolean {
   return /(?:_set(?:_|$)|_create$|_update$|_delete$|_clear(?:_|$)|_move$|_copy$|_add(?:_|$)|_save$|_start$|_stop$|_action$|_command$|_reset$|_select$)/.test(name)
 }
@@ -123,10 +148,13 @@ async function save(): Promise<void> {
       <div class="grp"><span>MCP 工具列表</span><b>{{ tools.length }}</b></div>
       <p class="hint">以下为当前 MCP Server 实际注册的全部工具。{{ requiresConfirmation ? '写入工具会请求 WPE 本地确认。' : '已关闭人工确认，写入工具将自动确认并直接执行。' }}</p>
       <div class="mcp-tools">
-        <article v-for="tool in tools" :key="tool.name" class="mcp-tool">
-          <code>{{ tool.name }}</code>
-          <p>{{ localizedDescription(tool) }}</p>
-        </article>
+        <section v-for="group in toolGroups" :key="group.title" class="mcp-scope">
+          <h3>{{ group.title }} <b>{{ group.tools.length }}</b></h3>
+          <article v-for="tool in group.tools" :key="tool.name" class="mcp-tool">
+            <code>{{ tool.name }}</code>
+            <p>{{ localizedDescription(tool) }}</p>
+          </article>
+        </section>
       </div>
     </section>
     </div>
@@ -150,8 +178,11 @@ async function save(): Promise<void> {
 .mcp-set .tools-sec .grp { justify-content: space-between; }
 .mcp-set .tools-sec .grp b { padding: 2px 6px; border: 1px solid rgb(var(--cyan-rgb) / 45%); color: var(--cyan); font-family: var(--share); font-size: var(--fs-caption); line-height: 1; }
 .mcp-tools { border-top: 1px solid rgb(var(--border-rgb) / 60%); background: rgb(var(--inset-rgb) / 16%); }
+.mcp-scope + .mcp-scope { border-top: 1px solid rgb(var(--cyan-rgb) / 30%); }
+.mcp-scope h3 { display: flex; align-items: center; gap: 7px; margin: 0; padding: 8px 14px; color: var(--soft); background: rgb(var(--inset-rgb) / 45%); font-size: var(--fs-small); font-weight: 600; }
+.mcp-scope h3 b { padding: 1px 5px; border: 1px solid rgb(var(--cyan-rgb) / 35%); color: var(--cyan); font-family: var(--mono); font-size: var(--fs-caption); font-weight: 400; }
 .mcp-tool { padding: 9px 14px 8px; border-bottom: 1px solid rgb(var(--border-rgb) / 45%); }
-.mcp-tool:last-child { border-bottom: 0; }
+.mcp-scope:last-child .mcp-tool:last-child { border-bottom: 0; }
 .mcp-tool code { color: var(--cyan); font-family: var(--mono); font-size: var(--fs-small); }
 .mcp-tool p { margin: 4px 0 0; color: var(--muted); font-size: var(--fs-small); line-height: 1.5; }
 </style>

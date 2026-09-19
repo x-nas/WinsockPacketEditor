@@ -1,6 +1,6 @@
 # WPE x64 MCP 改造
 
-本目录记录 `feature-mcp-server` 分支上的 MCP 契约、实施状态和交接信息。它们是实现和测试的依据；对外的工具名、权限和数据边界不应仅存在于代码注释中。
+本目录记录 MCP 的正式契约、架构和发布验证入口。对外的工具名、权限和数据边界不应仅存在于代码注释中。
 
 ## 已确认的产品边界
 
@@ -19,42 +19,20 @@
 - [只读工具 Schema](schemas/readonly-tools.schema.json)：只读工具输入/输出 JSON Schema。
 - [阶段 2 写入安全](phase-2-write-safety.md)：确认、幂等、审计和开放顺序。
 - [写工具 Schema](schemas/write-tools.schema.json)：已开放写工具的输入/输出 JSON Schema。
-- [交接记忆](handoff.md)：当前完成项、验证证据和下一步工作。
-- [阶段 3 只读诊断](phase-3-readonly.md)：下一阶段的工具边界和实施顺序。
-- [阶段 4 只读增强](phase-4-readonly.md)：代理健康、执行器状态和存储健康的设计边界。
-- [阶段 2–4 交付摘要](delivery-summary.md)：已完成能力、测试覆盖和明确未开放范围。
-- [阶段 6 高风险操作边界](phase-6-high-risk.md)：首个候选操作和强制安全条件。
-- [代理模块](proxy-module.md)：代理 MCP 工具清单、目标能力和实施顺序。
-- 阶段 5：稳定性、安全边界和自动化契约检查以仓库脚本 `tools/tests/McpContract.ps1` 为入口，逐步补充集成回归。
+- 稳定性、安全边界和自动化契约检查以仓库脚本 `tools/tests/McpContract.ps1` 为入口；真实 stdio 工具发现由 `tools/tests/McpToolsList.ps1` 验证。
 - 发布前总检查入口：`tools/tests/McpReleaseCheck.ps1`；加 `-RequireWpe` 时要求当前 WPE 正在运行并完成 Pipe 生命周期检查。
 
-## 当前实施状态（2026-09-19）
+## 当前发布状态
 
-- Phase 0 已完成：架构、内部协议、工具表面和 Schema 已落地。
-- Phase 1–6 已完成：WPE 本地 Named Pipe 网关与 stdio MCP Sidecar 已完成端到端验证，当前注册 **113** 个工具。
-- Phase 2 已完成：代理配置、外部代理开关和代理启停均已实现并完成验证；停止代理会断开现有连接，符合预期。
-- Phase 3 第一批只读诊断已完成：运行态和连接汇总均已实时烟测通过。
+- WPE 本地 Named Pipe 网关与 stdio MCP Sidecar 已完成；当前注册 **125** 个工具。
 - 打包会把自包含单文件 `WPEMcpServer.exe` 作为 `McpServer/` 载荷发布；启动器每次启动同步它到固定路径 `C:\WPE64DB\McpServer\WPEMcpServer.exe`。状态栏使用灰灯/黄灯/绿灯分别表示关闭、需要确认和可自动执行。
 - Phase 6 已接入 `wpe_executors_stop_all` 和 `wpe_start_mode_select`：前者只停止现有发送器/机器人执行器，后者只在启动页选择代理或注入页面；两者均不主动发包、不自动注入。真实发布包已验证停止工具在无任务、原生运行态机器人和仅本机回环发送器的停止、UUID 校验和幂等；启动模式已验证首次选择、幂等重放及离开启动页后的新请求拒绝。
 - MCP 设置已移至启动页，关闭总开关后仍可从启动页重新开启；多开设置也统一为启动页弹窗，并采用与其他设置页一致的分区布局。
-- 当前公开工具为 **113** 个。代理、账号、滤镜、抓包/分析、发送、机器人、仓库、自动入库、单包编辑、进程代理和注入均只经现有 WPE 原生入口实现；实际 `pack` 产物已覆盖 Sidecar 工具发现、生命周期、状态和分析回归。
+- 代理、账号、滤镜、抓包/分析、发送、机器人、仓库、自动入库、单包编辑、进程代理和注入均只经现有 WPE 原生入口实现；实际 `pack` 产物覆盖 Sidecar 工具发现、生命周期、状态和分析回归。
 - Named Pipe 的客户端提前断开属于正常会话结束，不写入 WPE 系统错误日志。后续实际验证必须运行 `pack` 生成的 `dist/WPE64 2.3.exe`。
 - `wpe_start_mode_select` 只在启动页有效：成功会切入代理/注入界面，不会启动代理监听或执行注入；重复选择当前模式返回 `alreadySelected`，另一模式返回 `unavailable`。
-- MCP 设置页和日志页均展示当前 113 工具；日志页的 `MCP 日志` 仅记录工具调用结果、写入审计结论和工具错误，模块列使用 `wpe_*` 工具名。`wpe_logs_list` 支持 `kind: "mcp"`；`wpe_logs_all_list` 则按时间合并返回四类日志。
+- MCP 设置页按代理、注入、封包、滤镜、发送、机器人、仓库、设置、其它分组展示当前工具；日志页的 `MCP 日志` 仅记录工具调用结果、写入审计结论和工具错误，模块列使用 `wpe_*` 工具名。`wpe_logs_list` 支持 `kind: "mcp"`；`wpe_logs_all_list` 则按时间合并返回四类日志。
 - 滤镜规则保存与启用是刻意分离的：`wpe_filter_rule_save` 不改变启用状态；需要启用/停用时必须调用 `wpe_filter_set_enabled`，`wpe_filter_get` 返回实际 `enabled` 状态供验证。
 - 机器人循环必须使用 `wpe_robot_instructions_save` 原子提交完整、顺序化指令列表；逐条 `wpe_robot_instruction_add` 会在每次保存时触发原生循环配对校验。数字行 `1` 的键盘指令内容为 `Press|D1`，不是 `1` 或虚拟键码数值。
-
-## 兼容性
-
-## 模块实施顺序
-
-1. 代理模块：补齐配置读取、连接管理与账号管理。
-2. 滤镜模块：完成 CRUD、启停、规则校验与试运行。
-3. 抓包与分析模块：搜索、详情、Payload 片段、比对、编解码与日志关联。
-4. 发送器模块：配置 CRUD、单次发送、循环执行与停止。
-5. 机器人模块：配置 CRUD、状态读取、启动、暂停、恢复与停止。
-6. 仓库模块：数据项、分组、导入导出及滤镜/机器人引用关系。
-7. 代理、防火墙、系统设置：补齐完整配置面。
-8. 注入模块：目标选择、注入、卸载、目标状态与 IPC 管理。
 
 外部连接器以官方 MCP C# SDK 的稳定 API 实现，目标为 MCP 2026-07-28，同时保留 SDK 提供的旧协议协商能力。WPE 内部 Named Pipe 协议独立从 v1 开始，绝不复用注入 IPC v4。

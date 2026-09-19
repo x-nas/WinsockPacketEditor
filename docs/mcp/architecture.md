@@ -30,14 +30,14 @@ IWpeReadService -> Operate + ShellForm coordinators
 
 - Runs while WPE is running, but remains inert until a local MCP client connects.
 - Accepts one current-user client connection at a time in v1.
-- Validates internal protocol version, frame sizes, deadlines and allowed operation names. The Windows named-pipe ACL is the phase-1 authentication boundary; an application-level handshake is deferred until a remote transport is introduced.
+- Validates internal protocol version, frame sizes, deadlines and allowed operation names. The Windows named-pipe ACL is the local authentication boundary; an application-level handshake is deferred until a remote transport is introduced.
 - Marshals list snapshots and mutations through WPE's existing UI dispatcher.
 - Emits only detached DTO snapshots. No BindingList, WinForms object, byte array or mutable model escapes the UI thread.
 - Owns audit records and the approval gate. The dedicated MCP log records one concise tool result per call; write results append their human-readable audit conclusion. It omits pipe connect/disconnect noise and audit hashes; full request/result data remains available from the tool result and audit record.
 
 ### IWpeReadService
 
-- Is the application boundary for phase 1 tools.
+- Is the application boundary for every published MCP tool.
 - Returns bounded immutable DTOs and opaque cursors.
 - Does not activate proxy services merely to answer a query.
 - Does not call UI dialogs, clipboard, native file pickers or WebView2.
@@ -58,7 +58,7 @@ IWpeReadService -> Operate + ShellForm coordinators
 5. WPE validates every operation and returns a detached result.
 6. On WPE shutdown the gateway closes the pipe and removes its discovery record. The connector reports WPE offline and exits.
 
-## Deliberate non-goals for phase 1
+## Deliberate non-goals
 
 - Streamable HTTP and OAuth.
 - Direct database integration.
@@ -66,6 +66,6 @@ IWpeReadService -> Operate + ShellForm coordinators
 - Remote access.
 - Any mutating or privileged operation.
 
-## Phase 2
+## Write safety
 
-The write-operation safety contract is in [phase-2-write-safety.md](phase-2-write-safety.md). It is intentionally separate from the phase-1 protocol: no write tool is registered until WPE-side approval, idempotency and audit handling are implemented.
+The write-operation safety contract is in [phase-2-write-safety.md](phase-2-write-safety.md). It is intentionally separate from the transport protocol: no write tool is registered until WPE-side approval, idempotency and audit handling are implemented.
