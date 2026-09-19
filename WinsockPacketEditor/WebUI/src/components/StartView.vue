@@ -22,12 +22,11 @@ import { call } from '../bridge'
 import { lang, t } from '../i18n'
 import InstanceView from './InstanceView.vue'
 import McpSetting from './proxy/McpSetting.vue'
-import toolSource from '../../../../WPEMcpServer/WpeTools.cs?raw'
+import { mcpToolCount } from '../mcpTools'
 
 const emit = defineEmits<{ (e: 'enter', mode: 'proxy' | 'inject'): void }>()
 const mcpOpen = ref(false)
 const instanceOpen = ref(false)
-const mcpToolCount = Array.from(toolSource.matchAll(/\[McpServerTool\(Name = "[^"]+"\), Description\("[^"]*"\)\]/g)).length
 
 function mcpAvailability(): string {
   switch (lang.value) {

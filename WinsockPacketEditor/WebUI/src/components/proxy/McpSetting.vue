@@ -2,16 +2,10 @@
 import { ref, watch } from 'vue'
 import { call } from '../../bridge'
 import { lang } from '../../i18n'
+import { mcpTools as tools, type McpTool } from '../../mcpTools'
 import SettingsModal from './SettingsModal.vue'
-import toolSource from '../../../../../WPEMcpServer/WpeTools.cs?raw'
 
-interface McpTool { name: string; description: string }
-
-// 直接从 MCP Server 的注册特性生成，避免设置页和实际 tools/list 出现两份清单。
-const tools: McpTool[] = Array.from(toolSource.matchAll(/\[McpServerTool\(Name = "([^"]+)"\), Description\("([^"]*)"\)\]/g) as Iterable<RegExpMatchArray>, match => ({
-  name: match[1],
-  description: match[2],
-}))
+// 清单从 MCP Server 的注册特性生成（见 src/mcpTools.ts，启动页的计数用的是同一份）。
 
 interface ToolGroup { title: string; tools: McpTool[] }
 
