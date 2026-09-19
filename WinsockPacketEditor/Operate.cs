@@ -45,7 +45,7 @@ namespace WinsockPacketEditor
                 ⚠️ 它也进了库文件名（DataBase.dbName ＝ AssemblyVersion + ".db"）：
                 2.1.9 正式版是「2.1.9.db」，测过的「2.1.9 Beta.db」不会被读到 —— 要带过去用备份导出 / 导入。
             */
-            public static bool IsBeta = true;
+            public static bool IsBeta = false;
             /// <summary>MCP 操作需要 WPE 本机确认；默认 false。</summary>
             public static bool McpRequiresConfirmation = false;
             public static bool McpEnabled = true;
