@@ -6,7 +6,7 @@
 //
 // 枚举一律按 int 传，前端不依赖 C# 的枚举名。
 
-/** 19 份列表。与 ClassObject/Ui/IUiFeed.cs 的 FeedList 顺序严格一致。 */
+/** 20 份列表。与 ClassObject/Ui/IUiFeed.cs 的 FeedList 顺序严格一致。 */
 export const enum FeedList {
   Packet = 0,
   Proxy = 1,
@@ -27,6 +27,7 @@ export const enum FeedList {
   BlackList = 16,
   Server = 17,
   Notice = 18,
+  McpLog = 19,
 }
 
 /**

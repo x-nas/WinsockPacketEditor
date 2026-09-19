@@ -86,6 +86,7 @@ const page = ref<PageKey>('packet')
 
 /** 当前打开的设置弹窗。null = 没开。 */
 const setting = ref<SettingKey | null>(null)
+const sideCollapsed = ref(false)
 
 const dataRef = ref<InstanceType<typeof InjectData> | null>(null)
 
@@ -774,8 +775,8 @@ async function clearList(): Promise<void> {
     </div>
 
     <!-- ══════════ ② 已附加：侧栏 + 11 页 ══════════ -->
-    <div v-else class="workscr">
-      <ProxySide :current="page" :groups="INJECT_GROUPS" mode="inject" @go="page = $event" />
+    <div v-else class="workscr" :class="{ collapsed: sideCollapsed }">
+      <ProxySide :current="page" :groups="INJECT_GROUPS" mode="inject" :collapsed="sideCollapsed" @go="page = $event" @toggle="sideCollapsed = !sideCollapsed" />
 
       <!--
         封包页用 v-show 保活：切走再切回来若重新挂载，PacketList 的滚动位置与选中行都会重来一遍。
@@ -1463,4 +1464,5 @@ async function clearList(): Promise<void> {
   display: grid;
   grid-template-columns: var(--side-w, 196px) 1fr;
 }
+.workscr.collapsed { grid-template-columns: 56px 1fr; }
 </style>

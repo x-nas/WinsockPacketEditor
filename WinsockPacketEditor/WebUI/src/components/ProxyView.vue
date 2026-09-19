@@ -29,6 +29,7 @@ import SystemLog from './proxy/SystemLog.vue'
 import { PAGES, type PageKey } from './proxy/pages'
 
 const page = ref<PageKey>('data')
+const sideCollapsed = ref(false)
 
 //别处（封包列表右键「添加到文本 A / B」）要求切页：切完清掉，下次还能再切同一页
 watch(gotoPage, (k) => {
@@ -63,8 +64,8 @@ onBeforeUnmount(() => detach?.())
 </script>
 
 <template>
-  <div class="proxy">
-    <ProxySide :current="page" @go="page = $event" />
+  <div class="proxy" :class="{ collapsed: sideCollapsed }">
+    <ProxySide :current="page" :collapsed="sideCollapsed" @go="page = $event" @toggle="sideCollapsed = !sideCollapsed" />
 
     <!--
       只有代理数据用 v-show 保活，其余用占位。
@@ -125,4 +126,5 @@ onBeforeUnmount(() => detach?.())
   display: grid;
   grid-template-columns: var(--side-w, 196px) 1fr;
 }
+.proxy.collapsed { grid-template-columns: 56px 1fr; }
 </style>
