@@ -38,7 +38,7 @@ const emit = defineEmits<{
   (e: 'openSetting', key: SettingKey): void
 }>()
 
-const props = defineProps<{ busy: boolean }>()
+const props = withDefaults(defineProps<{ busy: boolean; visible?: boolean }>(), { visible: true })
 
 const prefs = ref<Prefs | null>(null)
 
@@ -757,6 +757,7 @@ defineExpose({ onCleared })
         :selected-id="selectedId"
         :picked="picked"
         :follow="follow"
+        :visible="props.visible"
         @select="onSelect"
       @open="(r: any) => (editTarget = { list: 'packet', id: r.Id })"
         @menu="onMenu"

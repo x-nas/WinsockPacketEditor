@@ -35,6 +35,9 @@ export const DICT = {
   'win.max': { zh: '最大化', en: 'Maximize' },
   'win.restore': { zh: '还原', en: 'Restore' },
   'win.close': { zh: '退出', en: 'Exit' },
+  'win.backStart': { zh: '返回启动页', en: 'Back to start page' },
+  'win.collapseSidebar': { zh: '折叠侧栏', en: 'Collapse sidebar' },
+  'win.expandSidebar': { zh: '展开侧栏', en: 'Expand sidebar' },
   'win.nohost': {
     zh: '不在 WebView2 宿主内 —— 请通过 WPEHybrid.exe 打开。',
     en: 'Not inside the WebView2 host — please launch WPEHybrid.exe.',
@@ -205,6 +208,7 @@ export const DICT = {
   'set.app.assocDone': { zh: '已关联文件图标', en: 'File icons associated' },
   'set.app.assocCleared': { zh: '已清除文件关联，启动时不会再自动关联', en: 'File association removed; it will not be restored at startup' },
   'set.system': { zh: '系统设置', en: 'System Settings' },
+  'set.mcp': { zh: 'MCP 设置', en: 'MCP Settings' },
   'set.lockedHint': {
     zh: '代理服务正在运行 —— 监听相关的设置只在服务启动时读取一次，现在改了不会生效。要修改请先停止服务。',
     en: 'The proxy is running — listener settings are read once at startup, so changes will not take effect. Stop the service first.',
@@ -686,10 +690,11 @@ export const DICT = {
   'acct.lg.empty': { zh: '这个账号还没有登录记录', en: 'No login records for this account' },
 
   // ── 系统日志 ────────────────────────────────────────
-  //三路日志的名字照 Controls/LogList 的三个标签页
+  //前三路照 Controls/LogList；MCP 是外部自动化边界的独立运行日志。
   'log.sys': { zh: '系统日志', en: 'System Log' },
   'log.filter': { zh: '滤镜日志', en: 'Filter Log' },
   'log.proxy': { zh: '代理日志', en: 'Proxy Log' },
+  'log.mcp': { zh: 'MCP 日志', en: 'MCP Log' },
   'log.empty': { zh: '暂无日志', en: 'No log entries yet' },
   //⚠️ 「丢掉最旧的」不是「整表清空」—— 2026-09-07 改成环形之后连文案一起改的
   //⚠️ 与 proxy.autoClear 分开：两处控件长得一样、管的却是两份配置（日志 / 封包列表）

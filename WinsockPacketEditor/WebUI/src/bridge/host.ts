@@ -16,8 +16,8 @@ import { on, onAsk } from './index'
 /** UiIcon（ClassObject/Ui/IUiHost.cs）。 */
 const enum UiIcon {
   None = 0,
-  Success = 1,
-  Info = 2,
+  Info = 1,
+  Success = 2,
   Warn = 3,
   Error = 4,
 }

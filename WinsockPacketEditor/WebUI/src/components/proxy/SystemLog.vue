@@ -17,10 +17,10 @@ import { t, type Key } from '../../i18n'
 import { call } from '../../bridge'
 import { pushToast } from '../../stores/toast'
 import {
-  attachLogFeed, filterLogs, proxyLogs, sysLogs,
+  attachLogFeed, filterLogs, mcpLogs, proxyLogs, sysLogs,
 } from '../../stores/logs'
 
-type TabKey = 'sys' | 'filter' | 'proxy'
+type TabKey = 'sys' | 'filter' | 'proxy' | 'mcp'
 
 /*
   ⚠️ 注入模式不出「代理日志」那一页。
@@ -118,6 +118,7 @@ const ALL_TABS: Array<{ key: TabKey; label: Key }> = [
   { key: 'sys', label: 'log.sys' },
   { key: 'filter', label: 'log.filter' },
   { key: 'proxy', label: 'log.proxy' },
+  { key: 'mcp', label: 'log.mcp' },
 ]
 
 const TABS = computed(() => (props.mode === 'inject'
@@ -129,6 +130,7 @@ const counts = computed(() => ({
   sys: sysLogs.value.length,
   filter: filterLogs.value.length,
   proxy: proxyLogs.value.length,
+  mcp: mcpLogs.value.length,
 }))
 
 /*
@@ -172,7 +174,7 @@ function scrollToBottom(): void {
   if (el) el.scrollTop = el.scrollHeight
 }
 
-watch([sysLogs, filterLogs, proxyLogs, tab], () => {
+watch([sysLogs, filterLogs, proxyLogs, mcpLogs, tab], () => {
   if (follow.value) requestAnimationFrame(scrollToBottom)
 }, { flush: 'post' })
 
@@ -194,7 +196,7 @@ function onScroll(): void {
 
   确认框也在 C# 侧（ClearLog_Dialog 里 await UI.Confirm），与防火墙删除同一条路数。
 */
-const KIND: Record<TabKey, number> = { sys: 0, filter: 1, proxy: 2 }
+const KIND: Record<TabKey, number> = { sys: 0, filter: 1, proxy: 2, mcp: 3 }
 
 const busy = ref(false)
 
@@ -293,7 +295,7 @@ async function doExport(): Promise<void> {
       </template>
 
       <!-- 代理日志 -->
-      <template v-else>
+      <template v-else-if="tab === 'proxy'">
         <div class="head pxy">
           <span>{{ t('col.time') }}</span><span>{{ t('log.account') }}</span>
           <span>{{ t('log.ip') }}</span><span>{{ t('log.content') }}</span>
@@ -303,6 +305,19 @@ async function doExport(): Promise<void> {
           <span class="tm">{{ r.Time }}</span>
           <span class="fn">{{ r.UserName }}</span>
           <span class="ip">{{ r.LoginIP }}</span>
+          <span class="ct">{{ r.Content }}</span>
+        </div>
+      </template>
+
+      <!-- MCP 日志：字段与系统日志一致，但独立队列与标签，方便审计外部调用。 -->
+      <template v-else>
+        <div class="head sys">
+          <span>{{ t('col.time') }}</span><span>{{ t('log.module') }}</span><span>{{ t('log.content') }}</span>
+        </div>
+        <div v-if="!mcpLogs.length" class="empty">{{ t('log.empty') }}</div>
+        <div v-for="(r, i) in mcpLogs" :key="i" class="row sys" :class="{ bad: isError(r.Content) }">
+          <span class="tm">{{ r.Time }}</span>
+          <span class="fn">{{ r.FuncName }}</span>
           <span class="ct">{{ r.Content }}</span>
         </div>
       </template>

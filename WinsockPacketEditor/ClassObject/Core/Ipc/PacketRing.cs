@@ -19,6 +19,7 @@ namespace WinsockPacketEditor.Ipc
     {
         public long Id;
         public long TimeTicks;
+        public DateTimeKind TimeKind;
         public int Socket;
         public Operate.PacketConfig.Packet.PacketType PacketType;
         public Operate.FilterConfig.Filter.FilterAction FilterAction;

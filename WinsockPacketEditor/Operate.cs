@@ -45,7 +45,10 @@ namespace WinsockPacketEditor
                 ⚠️ 它也进了库文件名（DataBase.dbName ＝ AssemblyVersion + ".db"）：
                 2.1.9 正式版是「2.1.9.db」，测过的「2.1.9 Beta.db」不会被读到 —— 要带过去用备份导出 / 导入。
             */
-            public static bool IsBeta = true;
+            public static bool IsBeta = false;
+            /// <summary>MCP 操作需要 WPE 本机确认；默认 false。</summary>
+            public static bool McpRequiresConfirmation = false;
+            public static bool McpEnabled = true;
             public static int PID = -1;
             public static int AutoSaveINT = 600000;
             /*
@@ -2186,14 +2189,12 @@ namespace WinsockPacketEditor
 
             public static byte GetRandomHexByte(byte excludeByte)
             {
-                byte result;
-
-                do
+                lock (rdHex)
                 {
-                    result = (byte)rdHex.Next(256);
-                } while (result == excludeByte);
-
-                return result;
+                    // Select uniformly from the other 255 values without retrying.
+                    int value = rdHex.Next(255);
+                    return (byte)(value >= excludeByte ? value + 1 : value);
+                }
             }
 
             #endregion
@@ -3320,6 +3321,23 @@ namespace WinsockPacketEditor
                 }
             }
 
+            public static void SaveMcpConfig_ToDB()
+            {
+                try
+                {
+                    DataBase.InitConStr();
+                    using (var conn = new SQLiteConnection(DataBase.conStr))
+                    using (var cmd = new SQLiteCommand("UPDATE SystemConfig SET McpEnabled=@enabled, McpRequiresConfirmation=@value", conn))
+                    {
+                        cmd.Parameters.AddWithValue("@enabled", SystemConfig.McpEnabled);
+                        cmd.Parameters.AddWithValue("@value", SystemConfig.McpRequiresConfirmation);
+                        conn.Open();
+                        if (cmd.ExecuteNonQuery() == 0) SaveSystemConfig_ToDB();
+                    }
+                }
+                catch (Exception ex) { DoLog(nameof(SaveMcpConfig_ToDB), ex); }
+            }
+
             public static XElement GetSystemConfig_XML()
             {
                 try
@@ -3333,6 +3351,8 @@ namespace WinsockPacketEditor
                         new XElement("IsTextRenderingHighQuality", UI.Prefs.IsTextRenderingHighQuality),
                         new XElement("IsDark", UI.Prefs.IsDark),
                         new XElement("ThemeFollowSystem", UI.Prefs.FollowSystemTheme),
+                        new XElement("McpEnabled", SystemConfig.McpEnabled),
+                        new XElement("McpRequiresConfirmation", SystemConfig.McpRequiresConfirmation),
                         new XElement("DefaultLanguage", UI.Prefs.Language),
                         new XElement("LastInjection", SystemConfig.LastInjection),
                         new XElement("LastInjectMethod", SystemConfig.LastInjectMethod),
@@ -3523,6 +3543,14 @@ namespace WinsockPacketEditor
                         UI.Prefs.FilterChange_BackColor = new RgbColor(Convert.ToInt32(dtSystemConfig.Rows[0]["FilterChange_BackColor"]));
                         UI.Prefs.FilterDisplay_ForeColor = new RgbColor(Convert.ToInt32(dtSystemConfig.Rows[0]["FilterDisplay_ForeColor"]));
                         UI.Prefs.FilterDisplay_BackColor = new RgbColor(Convert.ToInt32(dtSystemConfig.Rows[0]["FilterDisplay_BackColor"]));
+                        if (dtSystemConfig.Columns.Contains("McpRequiresConfirmation"))
+                        {
+                            SystemConfig.McpRequiresConfirmation = Convert.ToBoolean(dtSystemConfig.Rows[0]["McpRequiresConfirmation"]);
+                        }
+                        if (dtSystemConfig.Columns.Contains("McpEnabled"))
+                        {
+                            SystemConfig.McpEnabled = Convert.ToBoolean(dtSystemConfig.Rows[0]["McpEnabled"]);
+                        }
                     }
                     else
                     {
@@ -3545,6 +3573,8 @@ namespace WinsockPacketEditor
                         UI.Prefs.IsTextRenderingHighQuality = false;
                         UI.Prefs.IsDark = true;
                         UI.Prefs.FollowSystemTheme = false;
+                        SystemConfig.McpEnabled = true;
+                        SystemConfig.McpRequiresConfirmation = false;
 
                         UI.Prefs.ScanLine = true;
 
@@ -3573,6 +3603,10 @@ namespace WinsockPacketEditor
             {
                 try
                 {
+                    XElement xeMcpEnabled = xeSystemConfig.Element("McpEnabled");
+                    if (xeMcpEnabled != null) SystemConfig.McpEnabled = Convert.ToBoolean(xeMcpEnabled.Value);
+                    XElement xeMcpRequiresConfirmation = xeSystemConfig.Element("McpRequiresConfirmation");
+                    if (xeMcpRequiresConfirmation != null) SystemConfig.McpRequiresConfirmation = Convert.ToBoolean(xeMcpRequiresConfirmation.Value);
                     XElement xeIsAnimation = xeSystemConfig.Element("IsAnimation");
                     if (xeIsAnimation != null)
                     {
@@ -4630,7 +4664,7 @@ namespace WinsockPacketEditor
             /// 仓库 / 自动入库 / WPC 那四个新分组，所以这个重载永远只勾得到前十项。
             /// 哪天 WinForms 那条线要删或要跟上，连这个重载一起处理。
             /// </summary>
-            public static Task ExportSystemBackUp_Dialog(
+            public static Task<string> ExportSystemBackUp_Dialog(
                 string FileName,
                 bool bSystemConfig,
                 bool bProxySet,
@@ -4658,7 +4692,8 @@ namespace WinsockPacketEditor
                 });
             }
 
-            public static async Task ExportSystemBackUp_Dialog(string FileName, BackupParts Parts)
+            /// <summary>Shows WPE's native save dialog and returns the saved path, or null when cancelled or failed.</summary>
+            public static async Task<string> ExportSystemBackUp_Dialog(string FileName, BackupParts Parts)
             {
                 try
                 {
@@ -4669,7 +4704,7 @@ namespace WinsockPacketEditor
                     if (Parts == null || Parts.IsEmpty)
                     {
                         UI.Toast(UiIcon.Warn, UI.T("BackUpSettingsForm.NothingSelected", "请先勾选要备份的内容"));
-                        return;
+                        return null;
                     }
 
                     FilePick sfdSaveFile = new FilePick();
@@ -4699,6 +4734,7 @@ namespace WinsockPacketEditor
                                 string Title = UI.T("BackUpSettingsForm.Export.Success", "导出系统备份成功");
                                 UI.Notify(UiIcon.Success, Title, FilePath);
                                 Operate.DoLog(nameof(ExportSystemBackUp_Dialog), Title + ": " + FilePath);
+                                return FilePath;
                             }
                             else
                             {
@@ -4713,6 +4749,7 @@ namespace WinsockPacketEditor
                 {
                     Operate.DoLog(nameof(ExportSystemBackUp_Dialog), ex);
                 }
+                return null;
             }
 
             private static bool ExportSystemBackUp(
@@ -4929,12 +4966,14 @@ namespace WinsockPacketEditor
 
             #region//从文件导入系统备份（对话框）
 
-            public static async Task ImportSystemBackUp_Dialog()
+            /// <summary>Shows WPE's native open dialog and returns the imported path, or null when cancelled or failed.</summary>
+            public static async Task<string> ImportSystemBackUp_Dialog(string FileName = null)
             {
                 try
                 {
                     FilePick ofdLoadFile = new FilePick();
                     ofdLoadFile.Filter = "WPE x64（*.sb）|*.sb";
+                    if (!string.IsNullOrWhiteSpace(FileName)) { ofdLoadFile.FileName = FileName; }
 
                     string sPickedPath = await UI.PickOpen(ofdLoadFile);
                     if (!string.IsNullOrEmpty(sPickedPath))
@@ -4947,6 +4986,7 @@ namespace WinsockPacketEditor
                                 string Title = UI.T("BackUpSettingsForm.Import.Success", "导入系统备份成功");
                                 UI.Notify(UiIcon.Success, Title, FilePath);
                                 Operate.DoLog(nameof(ImportSystemBackUp_Dialog), Title + ": " + FilePath);
+                                return FilePath;
                             }
                         }
                     }
@@ -4955,6 +4995,7 @@ namespace WinsockPacketEditor
                 {
                     Operate.DoLog(nameof(ImportSystemBackUp_Dialog), ex);
                 }
+                return null;
             }
 
             private static async Task<bool> ImportSystemBackUp(string FilePath, bool LoadFromUser)
@@ -6489,6 +6530,120 @@ namespace WinsockPacketEditor
                 {
                     if (Value < 1) { return DefaultMaxConnectionNumber; }
                     return Math.Min(Value, MaxConnectionCap());
+                }
+
+                // These setters are the single business boundary for the proxy-settings UI
+                // and local automation.  They validate, mutate and persist as one operation;
+                // callers must not assign these fields and save ProxyMode themselves.
+                public static string SaveProxySettings(bool proxyIpAuto, string proxyIp, bool enableSocks5, int socks5Port, bool enableAuth, bool onlyWpc, int maxConnection, bool enableHttp, int httpPort)
+                {
+                    proxyIp = (proxyIp ?? string.Empty).Trim();
+                    if (!enableSocks5) return UI.T("ProxySettingsForm.ProxyType.Error", "代理类型未设置");
+                    if (socks5Port < 1 || socks5Port > 65535 || httpPort < 1 || httpPort > 65535) return UI.T("ProxySettingsForm.Port.Error", "端口必须在 1 ~ 65535 之间");
+                    if (enableHttp && socks5Port == httpPort) return UI.T("ProxySettingsForm.ProxyType.Error", "SOCKS 和 HTTP 端口不能相同");
+                    if (!proxyIpAuto && !IPAddress.TryParse(proxyIp, out IPAddress _)) return UI.T("ProxySettingsForm.ProxyIP.Empty", "请选择监听地址，或勾上「自动检测」");
+                    if (onlyWpc && !enableAuth) return UI.T("ProxySettingsForm.OnlyWpc.NeedAuth", "「只允许 WPC 客户端连接」需要先启用身份认证");
+
+                    int cap = MaxConnectionCap();
+                    if (maxConnection < 1 || maxConnection > cap)
+                    {
+                        return string.Format(UI.T("ProxySettingsForm.MaxConnection.Error", "最大连接数必须在 1 ~ {0} 之间（每个连接预留 {1} KB，本机内存 {2} GB）"), cap, ProxyReceiveBufferBytes / 1024, Math.Round(Kernel32.TotalPhysicalMemory() / 1073741824.0, 1));
+                    }
+
+                    ProxyIP_Auto = proxyIpAuto;
+                    ProxyIP = proxyIp;
+                    Enable_SOCKS5 = enableSocks5;
+                    SOCKS5_Port = (ushort)socks5Port;
+                    Enable_Auth = enableAuth;
+                    Only_WPC_Client = onlyWpc;
+                    MaxConnectionNumber = maxConnection;
+                    Enable_HTTP = enableHttp;
+                    HTTP_Port = (ushort)httpPort;
+                    SystemConfig.SaveProxyMode_ToDB();
+                    return string.Empty;
+                }
+
+                public static string SetProxyAuthEnabled(bool enabled, out bool changed)
+                {
+                    changed = Enable_Auth != enabled;
+                    if (!enabled && Only_WPC_Client) return "Proxy authentication cannot be disabled while Only-WPC mode is enabled.";
+                    if (changed) { Enable_Auth = enabled; SystemConfig.SaveProxyMode_ToDB(); }
+                    return string.Empty;
+                }
+
+                public static string SetProxyHttpEnabled(bool enabled, out bool changed)
+                {
+                    changed = Enable_HTTP != enabled;
+                    if (enabled && !Enable_SOCKS5) return "HTTP proxy requires SOCKS5 to be enabled.";
+                    if (enabled && HTTP_Port == SOCKS5_Port) return "HTTP and SOCKS5 proxy ports must be different.";
+                    if (changed) { Enable_HTTP = enabled; SystemConfig.SaveProxyMode_ToDB(); }
+                    return string.Empty;
+                }
+
+                public static string SetProxyMaxConnections(int value, out bool changed, out int cap)
+                {
+                    cap = MaxConnectionCap();
+                    changed = MaxConnectionNumber != value;
+                    if (value < 1 || value > cap) return "maxConnection is outside the current machine limit.";
+                    if (changed) { MaxConnectionNumber = value; SystemConfig.SaveProxyMode_ToDB(); }
+                    return string.Empty;
+                }
+
+                public static string SetProxySocks5Port(int port, out bool changed)
+                {
+                    changed = SOCKS5_Port != port;
+                    if (port < 1 || port > 65535) return "The SOCKS5 port must be between 1 and 65535.";
+                    if (Enable_HTTP && port == HTTP_Port) return "SOCKS5 and HTTP proxy ports must be different.";
+                    if (changed) { SOCKS5_Port = (ushort)port; SystemConfig.SaveProxyMode_ToDB(); }
+                    return string.Empty;
+                }
+
+                public static string SetProxyHttpPort(int port, out bool changed)
+                {
+                    changed = HTTP_Port != port;
+                    if (port < 1 || port > 65535) return "The HTTP port must be between 1 and 65535.";
+                    if (!Enable_HTTP) return "The HTTP proxy is disabled; enable it before changing its port.";
+                    if (Enable_SOCKS5 && port == SOCKS5_Port) return "HTTP and SOCKS5 proxy ports must be different.";
+                    if (changed) { HTTP_Port = (ushort)port; SystemConfig.SaveProxyMode_ToDB(); }
+                    return string.Empty;
+                }
+
+                public static string SetFirewallEnabled(bool enabled, out bool changed)
+                {
+                    changed = EnableFireWall != enabled;
+                    if (changed) { EnableFireWall = enabled; SystemConfig.SaveProxyMode_ToDB(); }
+                    return string.Empty;
+                }
+
+                public static string SetOnlyWpcEnabled(bool enabled, out bool changed)
+                {
+                    changed = Only_WPC_Client != enabled;
+                    if (enabled && !Enable_Auth) return "Only-WPC mode requires proxy authentication to be enabled.";
+                    if (changed) { Only_WPC_Client = enabled; SystemConfig.SaveProxyMode_ToDB(); }
+                    return string.Empty;
+                }
+
+                public static string SetProxyBindIp(bool auto, string ip, out bool changed)
+                {
+                    ip = (ip ?? string.Empty).Trim();
+                    changed = ProxyIP_Auto != auto || !string.Equals(ProxyIP ?? string.Empty, ip, StringComparison.Ordinal);
+                    if (!auto && !IPAddress.TryParse(ip, out IPAddress _)) return "ip must be a valid IPv4 or IPv6 address when auto is false.";
+                    if (changed) { ProxyIP_Auto = auto; ProxyIP = ip; SystemConfig.SaveProxyMode_ToDB(); }
+                    return string.Empty;
+                }
+
+                public static string SetExternalProxyEnabled(bool enabled, out bool changed)
+                {
+                    string host = (ExternalProxy_IP ?? string.Empty).Trim();
+                    changed = Enable_ExternalProxy != enabled;
+                    if (enabled)
+                    {
+                        if (ExternalProxy_Port < 1 || ExternalProxy_Port > 65535) return "The external proxy port must be between 1 and 65535.";
+                        string error = ValidateExtProxy(true, host, Enable_ExternalProxy_AppointPort, ExternalProxy_AppointPort, Enable_ExternalProxy_Auth, ExternalProxy_UserName, ExternalProxy_PassWord);
+                        if (!string.IsNullOrEmpty(error)) return error;
+                    }
+                    if (changed) { Enable_ExternalProxy = enabled; SystemConfig.SaveProxyMode_ToDB(); }
+                    return string.Empty;
                 }
 
                 /// <summary>给定连接数在启动时会预留多少字节。</summary>
@@ -9301,18 +9456,24 @@ namespace WinsockPacketEditor
 
                 public static async void AddToWhiteList(string ipOrRange, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime)
                 {
+                    await AddToWhiteListAsync(ipOrRange, IsExpiry, ExpiryTime, CreateTime);
+                }
+
+                /// <summary>新增白名单并等待归属地查询与列表更新完成；成功新增返回 true。</summary>
+                public static async Task<bool> AddToWhiteListAsync(string ipOrRange, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime)
+                {
                     try
                     {
                         if (string.IsNullOrEmpty(ipOrRange))
                         {
-                            return;
+                            return false;
                         }
 
                         lock (_whiteListLock)
                         {
                             if (ProxyConfig.Proxy.IsExistsInWhiteList(ipOrRange))
                             {
-                                return;
+                                return false;
                             }
                         }
 
@@ -9326,6 +9487,7 @@ namespace WinsockPacketEditor
                         WhiteListInfo wli = new WhiteListInfo(ipOrRange, IPLocation, IsExpiry, ExpiryTime, CreateTime);
 
                         //⚠️ 锁要在界面线程上拿：握着锁去 Invoke 会与界面线程上扫过期项（它也拿这把锁）互相等死
+                        bool added = false;
                         Action add = () =>
                         {
                             lock (_whiteListLock)
@@ -9333,6 +9495,7 @@ namespace WinsockPacketEditor
                                 if (!ProxyConfig.Proxy.IsExistsInWhiteList(ipOrRange))
                                 {
                                     Operate.ProxyConfig.Proxy.lstWhiteList.Add(wli);
+                                    added = true;
                                 }
                             }
                         };
@@ -9345,10 +9508,13 @@ namespace WinsockPacketEditor
                         {
                             add();
                         }
+
+                        return added;
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AddToWhiteList), ex);
+                        Operate.DoLog(nameof(AddToWhiteListAsync), ex);
+                        return false;
                     }
                 }
 
@@ -9449,62 +9615,75 @@ namespace WinsockPacketEditor
                     各一套几乎逐行相同的代码），这里不跟。
                 */
 
+                /// <summary>校验一条白/黑名单规则；返回空串表示可保存。</summary>
+                public static string ValidateIPRule(bool Black, string OldIP, string IP)
+                {
+                    string ip = (IP ?? string.Empty).Trim();
+                    string old = (OldIP ?? string.Empty).Trim();
+
+                    if (ip.Length == 0)
+                    {
+                        return UI.T("FireWallSetting.IPAddress.Error", "IP 地址不正确");
+                    }
+
+                    //单个 IP 或 "起-止"，两段都要是合法 IPv4 —— 与 WhiteListEdit 的校验同一份规则
+                    foreach (string part in ip.Split('-'))
+                    {
+                        if (!SystemConfig.IsValidIPv4(part.Trim()))
+                        {
+                            return UI.T("FireWallSetting.IPAddress.Error", "IP 地址不正确");
+                        }
+                    }
+
+                    var range = ProxyConfig.Proxy.ParseIpRange(ip);
+                    if (range.StartIP == -1 || range.EndIP == -1 || range.StartIP > range.EndIP)
+                    {
+                        return UI.T("FireWallSetting.IPAddress.Range", "IP 段的起始地址不能大于结束地址");
+                    }
+
+                    bool exists = Black
+                        ? ProxyConfig.Proxy.IsExistsInBlackList(ip)
+                        : ProxyConfig.Proxy.IsExistsInWhiteList(ip);
+
+                    //改成一个已经存在的 IP，或新增一个重复的，都不行；改回自己不算重复
+                    if (exists && !ip.Equals(old, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return UI.T("FireWallSetting.IPAddress.Exists", "这个 IP 已经在名单里了");
+                    }
+
+                    return string.Empty;
+                }
+
                 /// <summary>新增或改一条。OldIP 为空 = 新增。返回空串表示成功，否则是给用户看的原因。</summary>
-                public static string SaveIPRule(bool Black, string OldIP, string IP, bool IsExpiry, string ExpiryTime)
+                public static async Task<string> SaveIPRuleAsync(bool Black, string OldIP, string IP, bool IsExpiry, string ExpiryTime)
                 {
                     try
                     {
                         string ip = (IP ?? string.Empty).Trim();
                         string old = (OldIP ?? string.Empty).Trim();
+                        string validationError = ValidateIPRule(Black, old, ip);
+                        if (!string.IsNullOrEmpty(validationError)) { return validationError; }
 
-                        if (ip.Length == 0)
+                        DateTime until = SystemConfig.MaxDateTime;
+
+                        if (IsExpiry && !DateTime.TryParse(ExpiryTime, out until))
                         {
-                            return UI.T("FireWallSetting.IPAddress.Error", "IP 地址不正确");
-                        }
-
-                        //单个 IP 或 "起-止"，两段都要是合法 IPv4 —— 与 WhiteListEdit 的校验同一份规则
-                        foreach (string part in ip.Split('-'))
-                        {
-                            if (!SystemConfig.IsValidIPv4(part.Trim()))
-                            {
-                                return UI.T("FireWallSetting.IPAddress.Error", "IP 地址不正确");
-                            }
-                        }
-
-                        /*
-                            ⚠️ IP 段还要查<b>起 ≤ 止</b>。写反了的话 ContainsIp 恒为 false ——
-                            那条规则<b>躺在名单里却永远不生效</b>，界面上看不出任何异常，
-                            白名单模式下表现成「明明把这个网段加进去了还是连不上」。
-                            顺带也把 ParseIpRange 解不出来的（-1）挡在外面。
-                        */
-                        var Range = ProxyConfig.Proxy.ParseIpRange(ip);
-
-                        if (Range.StartIP == -1 || Range.EndIP == -1 || Range.StartIP > Range.EndIP)
-                        {
-                            return UI.T("FireWallSetting.IPAddress.Range", "IP 段的起始地址不能大于结束地址");
-                        }
-
-                        bool exists = Black
-                            ? ProxyConfig.Proxy.IsExistsInBlackList(ip)
-                            : ProxyConfig.Proxy.IsExistsInWhiteList(ip);
-
-                        //改成一个已经存在的 IP，或新增一个重复的，都不行；改回自己不算重复
-                        if (exists && !ip.Equals(old, StringComparison.OrdinalIgnoreCase))
-                        {
-                            return UI.T("FireWallSetting.IPAddress.Exists", "这个 IP 已经在名单里了");
-                        }
-
-                        DateTime until;
-
-                        if (!IsExpiry || !DateTime.TryParse(ExpiryTime, out until))
-                        {
-                            until = SystemConfig.MaxDateTime;
+                            return UI.T("FireWallSetting.ExpiryTime.Error", "到期时间不正确");
                         }
 
                         if (old.Length == 0)
                         {
-                            if (Black) { ProxyConfig.Proxy.AddToBlackList(ip, IsExpiry, until, DateTime.Now); }
-                            else { ProxyConfig.Proxy.AddToWhiteList(ip, IsExpiry, until, DateTime.Now); }
+                            bool added = Black
+                                ? await ProxyConfig.Proxy.AddToBlackListAsync(ip, IsExpiry, until, DateTime.Now)
+                                : await ProxyConfig.Proxy.AddToWhiteListAsync(ip, IsExpiry, until, DateTime.Now);
+
+                            if (!added)
+                            {
+                                return UI.T("FireWallSetting.IPAddress.Exists", "这个 IP 已经在名单里了");
+                            }
+
+                            if (Black) { ProxyConfig.Proxy.SaveBlackList_ToDB(); }
+                            else { ProxyConfig.Proxy.SaveWhiteList_ToDB(); }
 
                             return string.Empty;
                         }
@@ -9537,7 +9716,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveIPRule), ex);
+                        Operate.DoLog(nameof(SaveIPRuleAsync), ex);
                         return ex.Message;
                     }
                 }
@@ -9725,18 +9904,24 @@ namespace WinsockPacketEditor
 
                 public static async void AddToBlackList(string ipOrRange, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime)
                 {
+                    await AddToBlackListAsync(ipOrRange, IsExpiry, ExpiryTime, CreateTime);
+                }
+
+                /// <summary>新增黑名单并等待归属地查询与列表更新完成；成功新增返回 true。</summary>
+                public static async Task<bool> AddToBlackListAsync(string ipOrRange, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime)
+                {
                     try
                     {
                         if (string.IsNullOrEmpty(ipOrRange))
                         {
-                            return;
+                            return false;
                         }
 
                         lock (_blackListLock)
                         {
                             if (ProxyConfig.Proxy.IsExistsInBlackList(ipOrRange))
                             {
-                                return;
+                                return false;
                             }
                         }
 
@@ -9750,6 +9935,7 @@ namespace WinsockPacketEditor
                         BlackListInfo bli = new BlackListInfo(ipOrRange, IPLocation, IsExpiry, ExpiryTime, CreateTime);
 
                         //⚠️ 同白名单：锁在界面线程上拿，不能握着锁去 Invoke
+                        bool added = false;
                         Action add = () =>
                         {
                             lock (_blackListLock)
@@ -9757,6 +9943,7 @@ namespace WinsockPacketEditor
                                 if (!ProxyConfig.Proxy.IsExistsInBlackList(ipOrRange))
                                 {
                                     Operate.ProxyConfig.Proxy.lstBlackList.Add(bli);
+                                    added = true;
                                 }
                             }
                         };
@@ -9769,10 +9956,13 @@ namespace WinsockPacketEditor
                         {
                             add();
                         }
+
+                        return added;
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AddToBlackList), ex);
+                        Operate.DoLog(nameof(AddToBlackListAsync), ex);
+                        return false;
                     }
                 }
 
@@ -10520,12 +10710,13 @@ namespace WinsockPacketEditor
 
                 #region//从文件加载白名单（对话框）
 
-                public static async Task LoadWhiteList_Dialog()
+                public static async Task LoadWhiteList_Dialog(string FileName = null)
                 {
                     try
                     {
                         FilePick ofdLoadFile = new FilePick();
                         ofdLoadFile.Filter = UI.T("FireWallSetting.WhiteListFile", "白名单文件") + "（*.wl）|*.wl";
+                        ofdLoadFile.FileName = FileName;
 
                         string sPickedPath = await UI.PickOpen(ofdLoadFile);
                         if (!string.IsNullOrEmpty(sPickedPath))
@@ -10639,12 +10830,13 @@ namespace WinsockPacketEditor
 
                 #region//从文件加载黑名单（对话框）
 
-                public static async Task LoadBlackList_Dialog()
+                public static async Task LoadBlackList_Dialog(string FileName = null)
                 {
                     try
                     {
                         FilePick ofdLoadFile = new FilePick();
                         ofdLoadFile.Filter = UI.T("FireWallSetting.BlackListFile", "黑名单文件") + "（*.bl）|*.bl";
+                        ofdLoadFile.FileName = FileName;
 
                         string sPickedPath = await UI.PickOpen(ofdLoadFile);
                         if (!string.IsNullOrEmpty(sPickedPath))
@@ -11204,18 +11396,19 @@ namespace WinsockPacketEditor
                 /// 这不是这里的特例，SaveProxyList_Dialog 本来就是这么写的
                 /// （piList 为空则退回 lstProxyInfo），所以「什么都不选 = 导全部」。
                 /// </summary>
-                public static async Task ExportProxyExcel_ByIds(IList<long> Ids)
+                public static async Task<string> ExportProxyExcel_ByIds(IList<long> Ids, string FileName = null)
                 {
                     try
                     {
-                        await ProxyConfig.List.SaveProxyList_Dialog(
-                            PacketConfig.Packet.InjectProcess,
+                        return await ProxyConfig.List.SaveProxyList_Dialog(
+                            string.IsNullOrWhiteSpace(FileName) ? PacketConfig.Packet.InjectProcess : FileName,
                             ProxyConfig.List.PickProxies(Ids));
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(ExportProxyExcel_ByIds), ex);
                     }
+                    return null;
                 }
 
                 #endregion
@@ -11521,7 +11714,7 @@ namespace WinsockPacketEditor
 
                 #region//保存代理列表为Excel（对话框）
 
-                public static async Task SaveProxyList_Dialog(string FileName, List<ProxyInfo> piList)
+                public static async Task<string> SaveProxyList_Dialog(string FileName, List<ProxyInfo> piList)
                 {
                     try
                     {
@@ -11549,6 +11742,7 @@ namespace WinsockPacketEditor
                                         string Title = UI.T("ExportToExcel.Success", "导出到Excel成功");
                                         UI.Notify(UiIcon.Success, Title, FilePath);
                                         Operate.DoLog(nameof(SaveProxyList_Dialog), Title + ": " + FilePath);
+                                        return FilePath;
                                     }
                                     else
                                     {
@@ -11560,10 +11754,11 @@ namespace WinsockPacketEditor
                             }
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(SaveProxyList_Dialog), ex);
-                    }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(SaveProxyList_Dialog), ex);
+                }
+                return null;
                 }
 
                 private static bool SaveProxyListToExcel(string filePath, List<ProxyInfo> piList)
@@ -12236,6 +12431,27 @@ namespace WinsockPacketEditor
                     }
 
                     return false;
+                }
+
+                /// <summary>按 Id 删除一个账号，不再弹第二个确认框；调用方必须先完成自己的确认。</summary>
+                public static bool DeleteAccount_ById(string AID)
+                {
+                    try
+                    {
+                        AccountInfo ai = ProxyConfig.Account.FindAccount_ById(AID);
+                        if (ai == null) return false;
+                        using (FeedPump.Suppress(FeedList.Account))
+                        {
+                            if (!ProxyConfig.Account.DeleteProxyAccount_ByAccountID(ai.AID)) return false;
+                        }
+                        if (UI.Feed.NeedsRows) UI.Feed.Remove(FeedList.Account, AccountRow.From_(ai).Id);
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(DeleteAccount_ById), ex);
+                        return false;
+                    }
                 }
 
                 /// <summary>
@@ -13857,12 +14073,13 @@ namespace WinsockPacketEditor
 
                 #region//从文件加载代理账号列表（对话框）
 
-                public static async Task LoadAccountList_Dialog()
+                public static async Task LoadAccountList_Dialog(string FileName = null)
                 {
                     try
                     {
                         FilePick ofdLoadFile = new FilePick();
                         ofdLoadFile.Filter = UI.T("ProxyAccountListFile", "代理账号列表文件") + " (*.pa)|*.pa|INI Files (*.ini)|*.ini";
+                        ofdLoadFile.FileName = FileName;
 
                         string sPickedPath = await UI.PickOpen(ofdLoadFile);
                         if (!string.IsNullOrEmpty(sPickedPath))
@@ -15424,12 +15641,13 @@ namespace WinsockPacketEditor
 
                 #region//从文件加载本地映射（对话框）
 
-                public static async Task LoadMapLocal_Dialog()
+                public static async Task LoadMapLocal_Dialog(string FileName = null)
                 {
                     try
                     {
                         FilePick ofdLoadFile = new FilePick();
                         ofdLoadFile.Filter = UI.T("MapLocalFile", "本地映射文件") + "（*.pml）|*.pml";
+                        ofdLoadFile.FileName = FileName;
 
                         string sPickedPath = await UI.PickOpen(ofdLoadFile);
                         if (!string.IsNullOrEmpty(sPickedPath))
@@ -15555,12 +15773,13 @@ namespace WinsockPacketEditor
 
                 #region//从文件加载远程映射（对话框）
 
-                public static async Task LoadMapRemote_Dialog()
+                public static async Task LoadMapRemote_Dialog(string FileName = null)
                 {
                     try
                     {
                         FilePick ofdLoadFile = new FilePick();
                         ofdLoadFile.Filter = UI.T("MapRemoteFile", "远程映射文件") + "（*.pmr）|*.pmr";
+                        ofdLoadFile.FileName = FileName;
 
                         string sPickedPath = await UI.PickOpen(ofdLoadFile);
                         if (!string.IsNullOrEmpty(sPickedPath))
@@ -15921,7 +16140,7 @@ namespace WinsockPacketEditor
                             {
                                 case Operate.PacketConfig.Packet.PacketType.WS1_Send:
                                 case Operate.PacketConfig.Packet.PacketType.WS1_Recv:
-                                    res = WSock32.send(Socket, ipSend, bSendBuffer.Length, SocketFlags.None);
+                                    res = SendAll(Socket, ipSend, bSendBuffer.Length, true);
                                     break;
                                 case Operate.PacketConfig.Packet.PacketType.WS2_Send:
                                 case Operate.PacketConfig.Packet.PacketType.WS2_Recv:
@@ -15930,7 +16149,7 @@ namespace WinsockPacketEditor
                                 case Operate.PacketConfig.Packet.PacketType.WSARecvEx:
                                 case Operate.PacketConfig.Packet.PacketType.TCP_Req:
                                 case Operate.PacketConfig.Packet.PacketType.TCP_Resp:
-                                    res = WS2_32.send(Socket, ipSend, bSendBuffer.Length, SocketFlags.None);
+                                    res = SendAll(Socket, ipSend, bSendBuffer.Length, false);
                                     break;
                                 case Operate.PacketConfig.Packet.PacketType.WS1_SendTo:
                                 case Operate.PacketConfig.Packet.PacketType.WS1_RecvFrom:
@@ -15954,7 +16173,7 @@ namespace WinsockPacketEditor
                                     break;
                             }
 
-                            if (res > 0)
+                            if (res == bSendBuffer.Length)
                             {
                                 bReturn = true;
                             }
@@ -15978,6 +16197,30 @@ namespace WinsockPacketEditor
                 #endregion
 
                 #region//获取封包收发速率
+
+                private static int SendAll(int socket, IntPtr buffer, int length, bool winsock1)
+                {
+                    int offset = 0;
+                    var idle = System.Diagnostics.Stopwatch.StartNew();
+                    while (offset < length)
+                    {
+                        int n = winsock1
+                            ? WSock32.send(socket, IntPtr.Add(buffer, offset), length - offset, SocketFlags.None)
+                            : WS2_32.send(socket, IntPtr.Add(buffer, offset), length - offset, SocketFlags.None);
+                        if (n > 0)
+                        {
+                            if (n > length - offset) { return -1; }
+                            offset += n;
+                            idle.Restart();
+                        }
+                        else if (n < 0 && WS2_32.WSAGetLastError() == SocketError.WouldBlock && idle.ElapsedMilliseconds < 5000)
+                        {
+                            Thread.Sleep(1);
+                        }
+                        else { return -1; }
+                    }
+                    return offset;
+                }
 
                 #endregion
 
@@ -17063,18 +17306,19 @@ namespace WinsockPacketEditor
                 /// 这不是这里的特例，SavePacketListToExcel 本来就是这么写的
                 /// （piList 为空则退回 lstPacketInfo），所以「什么都不选 = 导全部」。
                 /// </summary>
-                public static async Task ExportPacketExcel_ByIds(IList<long> Ids)
+                public static async Task<string> ExportPacketExcel_ByIds(IList<long> Ids, string FileName = null)
                 {
                     try
                     {
-                        await PacketConfig.List.SavePacketList_Dialog(
-                            PacketConfig.Packet.InjectProcess,
+                        return await PacketConfig.List.SavePacketList_Dialog(
+                            string.IsNullOrWhiteSpace(FileName) ? PacketConfig.Packet.InjectProcess : FileName,
                             PacketConfig.List.PickPackets(Ids));
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(ExportPacketExcel_ByIds), ex);
                     }
+                    return null;
                 }
 
                 #endregion
@@ -17603,7 +17847,7 @@ namespace WinsockPacketEditor
 
                 #region//保存封包列表为Excel（对话框）
 
-                public static async Task SavePacketList_Dialog(string FileName, List<PacketInfo> piList)
+                public static async Task<string> SavePacketList_Dialog(string FileName, List<PacketInfo> piList)
                 {
                     try
                     {
@@ -17631,6 +17875,7 @@ namespace WinsockPacketEditor
                                         string Title = UI.T("ExportToExcel.Success", "导出到Excel成功");
                                         UI.Notify(UiIcon.Success, Title, FilePath);
                                         Operate.DoLog(nameof(SavePacketList_Dialog), Title + ": " + FilePath);
+                                        return FilePath;
                                     }
                                     else
                                     {
@@ -17642,10 +17887,11 @@ namespace WinsockPacketEditor
                             }
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(SavePacketList_Dialog), ex);
-                    }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(SavePacketList_Dialog), ex);
+                }
+                return null;
                 }
 
                 private static bool SavePacketListToExcel(string filePath, List<PacketInfo> piList)
@@ -19085,30 +19331,7 @@ namespace WinsockPacketEditor
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public static bool CheckPacket_IsMatch_AppointSocket(Int32 iSocket, string socketContent)
                 {
-                    if (string.IsNullOrEmpty(socketContent))
-                        return false;
-
-                    try
-                    {
-                        string[] parts = socketContent.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-
-                        foreach (string part in parts)
-                        {
-                            if (int.TryParse(part.Trim(), out int currentValue))
-                            {
-                                if (currentValue == iSocket)
-                                {
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(CheckPacket_IsMatch_AppointSocket), ex);                        
-                    }
-
-                    return false;
+                    return !string.IsNullOrEmpty(socketContent) && socketRuleCache.Get(socketContent).Contains(iSocket);
                 }
 
                 #endregion
@@ -19118,47 +19341,7 @@ namespace WinsockPacketEditor
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public static bool CheckPacket_IsMatch_AppointLength(int len, string lengthContent)
                 {
-                    if (string.IsNullOrEmpty(lengthContent))
-                        return false;
-
-                    try
-                    {
-                        string[] parts = lengthContent.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-
-                        foreach (string part in parts)
-                        {
-                            string trimmedPart = part.Trim();
-                            int dashIndex = trimmedPart.IndexOf('-');
-
-                            if (dashIndex >= 0)
-                            {
-                                string fromStr = trimmedPart.Substring(0, dashIndex).Trim();
-                                string toStr = trimmedPart.Substring(dashIndex + 1).Trim();
-
-                                if (int.TryParse(fromStr, out int lenFrom) &&
-                                    int.TryParse(toStr, out int lenTo) &&
-                                    len >= lenFrom &&
-                                    len <= lenTo)
-                                {
-                                    return true;
-                                }
-                            }
-                            else
-                            {
-                                if (int.TryParse(trimmedPart, out int exactLen) && len == exactLen)
-                                {
-                                    return true;
-                                }
-                            }
-                        }
-
-                        return false;
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(CheckPacket_IsMatch_AppointLength), ex);
-                        return false;
-                    }
+                    return !string.IsNullOrEmpty(lengthContent) && InRanges(len, lengthContent);
                 }
 
                 #endregion
@@ -19175,6 +19358,13 @@ namespace WinsockPacketEditor
                 {
                     if (string.IsNullOrEmpty(portContent))
                         return false;
+
+                    if ((int)ptType <= (int)PacketConfig.Packet.PacketType.WSARecvFrom)
+                    {
+                        int local, remote;
+                        Ipc.HookPorts.Get(iSocket, ptType, sAddr, out local, out remote);
+                        return (local >= 0 && InRanges(local, portContent)) || (remote >= 0 && InRanges(remote, portContent));
+                    }
 
                     try
                     {
@@ -19224,34 +19414,7 @@ namespace WinsockPacketEditor
 
                 private static bool CheckPortMatch(string portContent, int actualPort)
                 {
-                    string[] parts = portContent.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-
-                    foreach (string part in parts)
-                    {
-                        string trimmedPart = part.Trim();
-
-                        int dashIndex = trimmedPart.IndexOf('-');
-                        if (dashIndex > 0)
-                        {
-                            string fromStr = trimmedPart.Substring(0, dashIndex).Trim();
-                            string toStr = trimmedPart.Substring(dashIndex + 1).Trim();
-
-                            if (int.TryParse(fromStr, out int minPort) &&
-                                int.TryParse(toStr, out int maxPort) &&
-                                actualPort >= minPort && actualPort <= maxPort)
-                            {
-                                return true;
-                            }
-                            continue;
-                        }
-
-                        if (int.TryParse(trimmedPart, out int port) && actualPort == port)
-                        {
-                            return true;
-                        }
-                    }
-
-                    return false;
+                    return InRanges(actualPort, portContent);
                 }
 
                 #endregion
@@ -19340,9 +19503,103 @@ namespace WinsockPacketEditor
 
                 #region//检查滤镜辅助方法
 
+                // Strings are immutable. Weak keys keep parsed rules alive exactly as long
+                // as their configuration; editing a rule cannot reuse a stale parse.
+                private sealed class RuleCache<T> where T : class
+                {
+                    private readonly ConditionalWeakTable<string, T> entries = new ConditionalWeakTable<string, T>();
+                    private readonly ConditionalWeakTable<string, T>.CreateValueCallback create;
+                    internal RuleCache(Func<string, T> parse) { create = key => parse(key); }
+                    internal T Get(string key) { return entries.GetValue(key ?? string.Empty, create); }
+                }
+
+                private sealed class NormalSearch
+                {
+                    internal bool Valid = true;
+                    internal readonly List<SearchCondition> Conditions = new List<SearchCondition>();
+                }
+
+                private static readonly RuleCache<HashSet<int>> excludeRuleCache = new RuleCache<HashSet<int>>(ParseExcludePositionsCore);
+                private static readonly RuleCache<List<SearchCondition>> searchRuleCache = new RuleCache<List<SearchCondition>>(ParseSearchConditionsCore);
+                private static readonly RuleCache<List<Modification>> modificationRuleCache = new RuleCache<List<Modification>>(ParseModificationsCore);
+                private static readonly RuleCache<NormalSearch> normalRuleCache = new RuleCache<NormalSearch>(CompileNormalSearch);
+                private static readonly RuleCache<int[]> positionRuleCache = new RuleCache<int[]>(CompilePositions);
+                private static readonly RuleCache<HashSet<int>> socketRuleCache = new RuleCache<HashSet<int>>(text =>
+                    new HashSet<int>(text.Split(';').Select(s => { int n; return int.TryParse(s.Trim(), out n) ? (int?)n : null; })
+                        .Where(n => n.HasValue).Select(n => n.Value)));
+                private static readonly RuleCache<int[][]> rangeRuleCache = new RuleCache<int[][]>(CompileRanges);
+
+                private static NormalSearch CompileNormalSearch(string text)
+                {
+                    var result = new NormalSearch();
+                    foreach (string part in text.Split(','))
+                    {
+                        if (string.IsNullOrWhiteSpace(part)) { continue; }
+                        int pipe = part.IndexOf('|'), index;
+                        byte value, mask;
+                        if (pipe <= 0 || pipe >= part.Length - 1 ||
+                            !TryParseNonNegativeInt(part.AsSpan(0, pipe).Trim(), out index) ||
+                            !HexCharsWithWildcardToByte(part.AsSpan(pipe + 1).Trim(), out value, out mask))
+                        { result.Valid = false; break; }
+                        result.Conditions.Add(new SearchCondition { RelativePosition = index, Value = value, Mask = mask });
+                    }
+                    return result;
+                }
+
+                private static int[] CompilePositions(string text)
+                {
+                    var result = new List<int>();
+                    foreach (string part in text.Split(','))
+                    { int n; if (int.TryParse(part, out n)) { result.Add(n); } }
+                    return result.ToArray();
+                }
+
+                private static int[][] CompileRanges(string text)
+                {
+                    var result = new List<int[]>();
+                    foreach (string entry in text.Split(';'))
+                    {
+                        string part = entry.Trim();
+                        int dash = part.IndexOf('-'), lo, hi;
+                        if (dash >= 0)
+                        {
+                            if (int.TryParse(part.Substring(0, dash).Trim(), out lo) &&
+                                int.TryParse(part.Substring(dash + 1).Trim(), out hi)) { result.Add(new[] { lo, hi }); }
+                        }
+                        else if (int.TryParse(part, out lo)) { result.Add(new[] { lo, lo }); }
+                    }
+                    return result.ToArray();
+                }
+
+                private static bool InRanges(int value, string text)
+                {
+                    foreach (int[] range in rangeRuleCache.Get(text))
+                        if (value >= range[0] && value <= range[1]) { return true; }
+                    return false;
+                }
+
+                internal static void WarmRules(FilterInfo filter)
+                {
+                    normalRuleCache.Get(filter.FSearch);
+                    searchRuleCache.Get(filter.FSearch);
+                    modificationRuleCache.Get(filter.FModify);
+                    excludeRuleCache.Get(filter.ExcludePosition);
+                    positionRuleCache.Get(filter.ProgressionPosition);
+                    positionRuleCache.Get(filter.RandomPosition);
+                    socketRuleCache.Get(filter.SocketContent);
+                    rangeRuleCache.Get(filter.LengthContent);
+                    rangeRuleCache.Get(filter.PortContent);
+                    if (!string.IsNullOrEmpty(filter.HeaderContent)) { HeaderBytes(filter.HeaderContent); }
+                }
+
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
 
                 private static HashSet<int> ParseExcludePositions(string excludeString)
+                {
+                    return excludeRuleCache.Get(excludeString);
+                }
+
+                private static HashSet<int> ParseExcludePositionsCore(string excludeString)
                 {
                     var positions = new HashSet<int>();
 
@@ -19459,73 +19716,17 @@ namespace WinsockPacketEditor
 
                 public static bool CheckFilter_IsMatch_Normal(FilterInfo sfi, ReadOnlySpan<byte> bufferSpan)
                 {
-                    if (string.IsNullOrEmpty(sfi.FSearch) || bufferSpan.IsEmpty)
-                        return false;
-
-                    try
+                    if (string.IsNullOrEmpty(sfi.FSearch) || bufferSpan.IsEmpty) { return false; }
+                    var rule = normalRuleCache.Get(sfi.FSearch);
+                    if (!rule.Valid) { return false; }
+                    var excluded = excludeRuleCache.Get(sfi.ExcludePosition);
+                    foreach (var condition in rule.Conditions)
                     {
-                        HashSet<int> excludePositions = null;
-                        if (!string.IsNullOrEmpty(sfi.ExcludePosition))
-                        {
-                            excludePositions = ParseExcludePositions(sfi.ExcludePosition);
-                        }
-
-                        var searchParts = sfi.FSearch.AsSpan();
-
-                        while (!searchParts.IsEmpty)
-                        {
-                            int commaIndex = searchParts.IndexOf(',');
-                            ReadOnlySpan<char> partSpan = commaIndex >= 0
-                                ? searchParts.Slice(0, commaIndex)
-                                : searchParts;
-
-                            searchParts = commaIndex >= 0
-                                ? searchParts.Slice(commaIndex + 1)
-                                : ReadOnlySpan<char>.Empty;
-
-                            if (partSpan.IsEmpty || partSpan.IsWhiteSpace())
-                                continue;
-
-                            int pipeIndex = partSpan.IndexOf('|');
-                            if (pipeIndex <= 0 || pipeIndex >= partSpan.Length - 1)
-                                return false;
-
-                            var indexSpan = partSpan.Slice(0, pipeIndex).Trim();
-                            if (!TryParseNonNegativeInt(indexSpan, out int index) ||
-                                index >= bufferSpan.Length)
-                            {
-                                return false;
-                            }
-
-                            var hexSpan = partSpan.Slice(pipeIndex + 1).Trim();
-                            if (!HexCharsWithWildcardToByte(hexSpan, out byte expected, out byte mask))
-                                return false;
-
-                            bool isExcludePosition = excludePositions != null && excludePositions.Contains(index);
-
-                            if (isExcludePosition)
-                            {
-                                byte actualValue = bufferSpan[index];
-                                if ((actualValue & mask) == (expected & mask))
-                                {
-                                    return false;
-                                }
-                            }
-                            else
-                            {
-                                if ((bufferSpan[index] & mask) != (expected & mask))
-                                {
-                                    return false;
-                                }
-                            }
-                        }
+                        int index = condition.RelativePosition;
+                        if (index >= bufferSpan.Length) { return false; }
+                        bool equal = (bufferSpan[index] & condition.Mask) == (condition.Value & condition.Mask);
+                        if (equal == excluded.Contains(index)) { return false; }
                     }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(CheckFilter_IsMatch_Normal), ex);
-                        return false;
-                    }
-
                     return true;
                 }
 
@@ -19559,7 +19760,7 @@ namespace WinsockPacketEditor
 
                         for (int i = 0; i < bufferSpan.Length; i++)
                         {
-                            if (bufferSpan[i] == firstValue)
+                            if ((bufferSpan[i] & firstCondition.Mask) == (firstValue & firstCondition.Mask))
                             {
                                 bool isMatch = true;
                                 int lastCheckedIndex = i;
@@ -19636,6 +19837,11 @@ namespace WinsockPacketEditor
 
                 private static List<SearchCondition> ParseSearchConditions(string searchPattern)
                 {
+                    return searchRuleCache.Get(searchPattern);
+                }
+
+                private static List<SearchCondition> ParseSearchConditionsCore(string searchPattern)
+                {
                     var conditions = new List<SearchCondition>();
                     string[] parts = searchPattern.Split(',');
 
@@ -19693,7 +19899,76 @@ namespace WinsockPacketEditor
 
                 #region//执行滤镜
 
+                [ThreadStatic]
+                private static HashSet<Guid> activeFilters;
+
+                private static readonly AsyncLocal<bool> filterExecutorContext = new AsyncLocal<bool>();
+                private static readonly object filterExecutorGate = new object();
+                private static readonly Dictionary<Guid, SendExecute> filterSends = new Dictionary<Guid, SendExecute>();
+                private static readonly Dictionary<Guid, RobotExecute> filterRobots = new Dictionary<Guid, RobotExecute>();
+
+                private static void StartFilterExecutor(FilterInfo fi, int socket)
+                {
+                    // ExecutionContext flows into Task.Run: traffic from an action must
+                    // not launch another copy of that action (or a cycle of actions).
+                    if (filterExecutorContext.Value) { return; }
+                    lock (filterExecutorGate)
+                    {
+                        filterExecutorContext.Value = true;
+                        try
+                        {
+                            foreach (Guid id in filterSends.Where(x => !x.Value.Running).Select(x => x.Key).ToArray())
+                                filterSends.Remove(id);
+                            foreach (Guid id in filterRobots.Where(x => !x.Value.Running).Select(x => x.Key).ToArray())
+                                filterRobots.Remove(id);
+
+                            if (fi.FEType == FilterExecuteType.Send && !filterSends.ContainsKey(fi.Execute_GUID))
+                            {
+                                var executor = SendConfig.Send.DoSend(fi.Execute_GUID);
+                                if (executor != null)
+                                {
+                                    SendConfig.List.SendExecute_Add(executor);
+                                    filterSends[fi.Execute_GUID] = executor;
+                                }
+                            }
+                            else if (fi.FEType == FilterExecuteType.Robot && !filterRobots.ContainsKey(fi.Execute_GUID))
+                            {
+                                var executor = RobotConfig.Robot.DoRobot(fi.Execute_GUID,
+                                    new Dictionary<string, object> { { "FilterSocket", socket } });
+                                if (executor != null)
+                                {
+                                    RobotConfig.List.RobotExecute_Add(executor);
+                                    filterRobots[fi.Execute_GUID] = executor;
+                                }
+                            }
+                        }
+                        finally { filterExecutorContext.Value = false; }
+                    }
+                }
+
                 public static FilterConfig.Filter.FilterAction DoFilter(
+                    FilterInfo fi,
+                    Int32 iSocket,
+                    Span<byte> bufferSpan,
+                    out byte[] bNewBuffer,
+                    PacketConfig.Packet.PacketType ptType,
+                    PacketConfig.Packet.SockAddr sAddr)
+                {
+                    bNewBuffer = null;
+                    if (fi == null) { return FilterAction.None; }
+                    var active = activeFilters ?? (activeFilters = new HashSet<Guid>());
+                    if (active.Count >= 64 || !active.Add(fi.FID))
+                    {
+                        return FilterAction.None;
+                    }
+                    try
+                    {
+                        return DoFilterCore(fi, iSocket, bufferSpan, out bNewBuffer, ptType, sAddr);
+                    }
+                    finally { active.Remove(fi.FID); }
+                }
+
+                private static FilterConfig.Filter.FilterAction DoFilterCore(
                     FilterInfo fi,
                     Int32 iSocket,
                     Span<byte> bufferSpan,
@@ -19732,6 +20007,10 @@ namespace WinsockPacketEditor
 
                         byte[] tempBuffer = null;
 
+                        // Only serialize this filter's byte transformation. Nested actions run
+                        // outside this lock, so two filters cannot deadlock each other.
+                        lock (fi.State)
+                        {
                         switch (fi.FAction)
                         {
                             case FilterConfig.Filter.FilterAction.Replace:
@@ -19784,27 +20063,21 @@ namespace WinsockPacketEditor
                                 break;
                         }
 
+                        }
+
                         if (fi.IsExecute && fi.Execute_GUID != null && fi.Execute_GUID != Guid.Empty)
                         {
                             switch (fi.FEType)
                             {
                                 case FilterConfig.Filter.FilterExecuteType.Send:
 
-                                    SendConfig.Send.DoSend(fi.Execute_GUID);
+                                    StartFilterExecutor(fi, iSocket);
 
                                     break;
 
                                 case FilterConfig.Filter.FilterExecuteType.Robot:
 
-                                    Dictionary<string, object> parameters = new Dictionary<string, object>
-                                    {
-                                        { 
-                                            "FilterSocket", 
-                                            iSocket 
-                                        }
-                                    };
-
-                                    RobotConfig.Robot.DoRobot(fi.Execute_GUID, parameters);
+                                    StartFilterExecutor(fi, iSocket);
 
                                     break;
 
@@ -19833,7 +20106,7 @@ namespace WinsockPacketEditor
                         if (bDoFilter)
                         {
                             faReturn = fi.FAction;
-                            fi.ExecutionCount++;
+                            fi.IncrementExecutionCount();
 
                             switch (fi.FAction)
                             {
@@ -20080,27 +20353,12 @@ namespace WinsockPacketEditor
                 private static bool ProcessModifications(FilterInfo fi, Span<byte> bufferSpan)
                 {
                     bool modified = false;
-                    string[] modifications = fi.FModify.Split(',');
-
-                    foreach (string modification in modifications)
+                    foreach (var modification in ParseModifications(fi.FModify))
                     {
-                        if (string.IsNullOrEmpty(modification))
-                            continue;
-
-                        string[] parts = modification.Split('|');
-                        if (parts.Length != 2)
-                            continue;
-
-                        if (int.TryParse(parts[0], out int index) &&
-                            index >= 0 &&
-                            index < bufferSpan.Length &&
-                            byte.TryParse(parts[1], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte value))
-                        {
-                            bufferSpan[index] = value;
-                            modified = true;
-                        }
+                        if (modification.Index < 0 || modification.Index >= bufferSpan.Length) { continue; }
+                        bufferSpan[modification.Index] = modification.Value;
+                        modified = true;
                     }
-
                     return modified;
                 }
 
@@ -20111,12 +20369,12 @@ namespace WinsockPacketEditor
                     bool modified = false;
                     int carryCount = 0;
                     int step = (int)fi.ProgressionStep;
-                    string[] positions = fi.ProgressionPosition.Split(',');
+                    int[] positions = positionRuleCache.Get(fi.ProgressionPosition);
 
-                    foreach (string position in positions)
+                    foreach (int position in positions)
                     {
-                        if (string.IsNullOrEmpty(position) ||
-                            !int.TryParse(position, out int index) ||
+                        int index = position;
+                        if (
                             index < 0 ||
                             index >= bufferSpan.Length)
                         {
@@ -20156,12 +20414,12 @@ namespace WinsockPacketEditor
                 private static bool ProcessRandoms(FilterInfo fi, Span<byte> bufferSpan)
                 {
                     bool modified = false;
-                    string[] positions = fi.RandomPosition.Split(',');
+                    int[] positions = positionRuleCache.Get(fi.RandomPosition);
 
-                    foreach (string position in positions)
+                    foreach (int position in positions)
                     {
-                        if (string.IsNullOrEmpty(position) ||
-                            !int.TryParse(position, out int index) ||
+                        int index = position;
+                        if (
                             index < 0 ||
                             index >= bufferSpan.Length)
                         {
@@ -20235,52 +20493,14 @@ namespace WinsockPacketEditor
                     FilterConfig.Filter.FilterStartFrom startFrom)
                 {
                     bool modified = false;
-                    string[] modifications = fi.FModify.Split(',');
-
-                    foreach (string modification in modifications)
+                    foreach (var modification in ParseModifications(fi.FModify))
                     {
-                        if (string.IsNullOrEmpty(modification))
-                            continue;
-
-                        string[] parts = modification.Split('|');
-                        if (parts.Length != 2)
-                            continue;
-
-                        if (!int.TryParse(parts[0], out int index))
-                            continue;
-
-                        if (startFrom == FilterConfig.Filter.FilterStartFrom.Position)
-                        {
-                            index += matchIndex;
-                        }
-
-                        if (index < 0 || index >= bufferSpan.Length)
-                            continue;
-
-                        if (byte.TryParse(parts[1], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte value))
-                        {
-                            /*
-                                <b>写了就算命中，不比较新旧值是否相同。</b>
-
-                                这里原本有一道 `if (bufferSpan[index] != value)` ——
-                                改成同一个值时 modified 保持 false，于是 Replace_Advanced 返回 false、
-                                DoFilter 返回 None，这条滤镜的执行次数不加、日志不记、统计不计，
-                                在界面上看就是「滤镜启用了却完全没反应」。
-
-                                它是六条改写路径里<b>唯一</b>带这道守卫的：
-                                普通模式的 修改 / 递进 / 随机、高级模式的 递进 / 随机，
-                                全都是写进去就置 modified —— 所以这不是设计，是它自己不一致。
-
-                                语义上也该按「匹配成功」算：滤镜命不命中由查找条件决定，
-                                跟改写后的字节碰巧等于原值没有关系。
-                                「把这一位钉成 17」本来就是一次有效的改写，
-                                只是这个包原来就是 17。
-                            */
-                            bufferSpan[index] = value;
-                            modified = true;
-                        }
+                        int index = modification.Index;
+                        if (startFrom == FilterStartFrom.Position) { index += matchIndex; }
+                        if (index < 0 || index >= bufferSpan.Length) { continue; }
+                        bufferSpan[index] = modification.Value;
+                        modified = true;
                     }
-
                     return modified;
                 }
 
@@ -20295,12 +20515,11 @@ namespace WinsockPacketEditor
                     bool modified = false;
                     int carryCount = 0;
                     int step = (int)fi.ProgressionStep;
-                    string[] positions = fi.ProgressionPosition.Split(',');
+                    int[] positions = positionRuleCache.Get(fi.ProgressionPosition);
 
-                    foreach (string position in positions)
+                    foreach (int position in positions)
                     {
-                        if (string.IsNullOrEmpty(position) || !int.TryParse(position, out int index))
-                            continue;
+                        int index = position;
 
                         if (startFrom == FilterConfig.Filter.FilterStartFrom.Position)
                         {
@@ -20334,12 +20553,11 @@ namespace WinsockPacketEditor
                     FilterConfig.Filter.FilterStartFrom startFrom)
                 {
                     bool modified = false;
-                    string[] positions = fi.RandomPosition.Split(',');
+                    int[] positions = positionRuleCache.Get(fi.RandomPosition);
 
-                    foreach (string position in positions)
+                    foreach (int position in positions)
                     {
-                        if (string.IsNullOrEmpty(position) || !int.TryParse(position, out int index))
-                            continue;
+                        int index = position;
 
                         if (startFrom == FilterConfig.Filter.FilterStartFrom.Position)
                         {
@@ -20412,6 +20630,11 @@ namespace WinsockPacketEditor
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 private static List<FilterConfig.Filter.Modification> ParseModifications(string modifyString)
                 {
+                    return modificationRuleCache.Get(modifyString);
+                }
+
+                private static List<FilterConfig.Filter.Modification> ParseModificationsCore(string modifyString)
+                {
                     var modifications = new List<FilterConfig.Filter.Modification>();
                     string[] parts = modifyString.Split(',');
 
@@ -20451,12 +20674,12 @@ namespace WinsockPacketEditor
                 {
                     int carryCount = 0;
                     int step = (int)sfi.ProgressionStep;
-                    string[] positions = sfi.ProgressionPosition.Split(',');
+                    int[] positions = positionRuleCache.Get(sfi.ProgressionPosition);
 
-                    foreach (string position in positions)
+                    foreach (int position in positions)
                     {
-                        if (string.IsNullOrEmpty(position) ||
-                            !int.TryParse(position, out int index) ||
+                        int index = position;
+                        if (
                             index < 0 ||
                             index >= buffer.Length)
                         {
@@ -20519,7 +20742,7 @@ namespace WinsockPacketEditor
                                 ptType, 
                                 sockaddr, 
                                 filterAction, 
-                                packetTime);
+                                packetTime.Kind == DateTimeKind.Utc ? packetTime.ToLocalTime() : packetTime);
                         }
                         catch (Exception ex)
                         {
@@ -20684,7 +20907,6 @@ namespace WinsockPacketEditor
                 public static string AddFilter_New_ById()
                 {
                     int before = FilterConfig.List.lstFilterInfo.Count;
-
                     FilterConfig.Filter.AddFilter_New();
 
                     if (FilterConfig.List.lstFilterInfo.Count <= before)
@@ -20692,7 +20914,19 @@ namespace WinsockPacketEditor
                         return string.Empty;
                     }
 
-                    FilterConfig.List.SaveFilterList_ToDB();
+                    try
+                    {
+                        FilterConfig.List.SaveFilterList_ToDB();
+                    }
+                    catch
+                    {
+                        // Do not leave an in-memory filter behind when persistence fails.
+                        while (FilterConfig.List.lstFilterInfo.Count > before)
+                        {
+                            FilterConfig.List.lstFilterInfo.RemoveAt(FilterConfig.List.lstFilterInfo.Count - 1);
+                        }
+                        throw;
+                    }
 
                     //AddFilter 是往后追加的，新的那条就在表尾
                     return FilterConfig.List.lstFilterInfo[FilterConfig.List.lstFilterInfo.Count - 1]
@@ -20797,25 +21031,27 @@ namespace WinsockPacketEditor
                 }
 
                 /// <summary>导入滤镜列表（带文件框）。导进来之后要落库。</summary>
-                public static async Task LoadFilterList_Dialog_Shell()
+                public static async Task<string> LoadFilterList_Dialog_Shell(string FileName = null)
                 {
                     int before = FilterConfig.List.lstFilterInfo.Count;
 
-                    await FilterConfig.List.LoadFilterList_Dialog();
+                    var path = await FilterConfig.List.LoadFilterList_Dialog(FileName);
 
                     if (FilterConfig.List.lstFilterInfo.Count != before)
                     {
                         FilterConfig.List.SaveFilterList_ToDB();
                     }
+                    return path;
                 }
 
                 /// <summary>导出全部滤镜（带文件框）。不改列表，不落库。</summary>
-                public static async Task SaveAllFilters_Dialog()
+                public static async Task<string> SaveAllFilters_Dialog(string FileName = null)
                 {
                     if (FilterConfig.List.lstFilterInfo.Count > 0)
                     {
-                        await FilterConfig.List.SaveFilterList_Dialog(string.Empty, null);
+                        return await FilterConfig.List.SaveFilterList_Dialog(FileName, null);
                     }
+                    return null;
                 }
 
                 #endregion
@@ -21496,11 +21732,43 @@ namespace WinsockPacketEditor
                 #region//执行滤镜列表
 
                 public static FilterConfig.Filter.FilterAction DoFilterList(
+                    Int32 iSocket, Span<byte> bufferSpan, out byte[] bNewBuffer,
+                    PacketConfig.Packet.PacketType ptType, PacketConfig.Packet.SockAddr sAddr)
+                {
+                    using (Ipc.HookPorts.Enter())
+                        return DoFilterListCore(iSocket, bufferSpan, out bNewBuffer, ptType, sAddr, Ipc.FilterEngine.Filters, null);
+                }
+
+                internal static FilterConfig.Filter.FilterAction FilterHookPacket(
+                    int socket, byte[] raw, out byte[] modified,
+                    PacketConfig.Packet.PacketType type, PacketConfig.Packet.SockAddr address)
+                {
+                    var filters = Ipc.FilterEngine.Filters;
+                    modified = raw;
+                    if (filters.Count == 0) { return Filter.FilterAction.None; }
+                    bool writesInput = false;
+                    for (int i = 0; i < filters.Count; i++)
+                    {
+                        var filter = filters[i];
+                        if (filter.IsEnable && (filter.FAction == Filter.FilterAction.Replace ||
+                            (filter.IsExecute && filter.FEType == Filter.FilterExecuteType.Filter)))
+                        { writesInput = true; break; }
+                    }
+                    byte[] work = writesInput ? (byte[])raw.Clone() : raw;
+                    Filter.FilterAction action;
+                    using (Ipc.HookPorts.Enter())
+                        action = DoFilterListCore(socket, work, out modified, type, address, filters, work);
+                    if (!ReferenceEquals(raw, modified) && raw.AsSpan().SequenceEqual(modified)) { modified = raw; }
+                    return action;
+                }
+
+                private static FilterConfig.Filter.FilterAction DoFilterListCore(
                     Int32 iSocket, 
                     Span<byte> bufferSpan, 
                     out byte[] bNewBuffer, 
                     PacketConfig.Packet.PacketType ptType, 
-                    PacketConfig.Packet.SockAddr sAddr)
+                    PacketConfig.Packet.SockAddr sAddr,
+                    IList<FilterInfo> filters, byte[] ownedBuffer)
                 {
                     FilterConfig.Filter.FilterAction faReturn = FilterConfig.Filter.FilterAction.None;
                     bNewBuffer = null;
@@ -21510,7 +21778,6 @@ namespace WinsockPacketEditor
                         //【B-IPC 阶段 1】取一次引用用到底。
                         //无头核心下会拿到一份不可变数组（Volatile 换引用，见 Ipc/FilterEngine），
                         //外壳 / WinForms 下就是 lstFilterInfo 本身，行为与改造前一致。
-                        var filters = Ipc.FilterEngine.Filters;
                         for (int i = 0; i < filters.Count; i++)
                         {
                             FilterConfig.Filter.FilterAction faDoFilter = FilterConfig.Filter.DoFilter(filters[i], iSocket, bufferSpan, out bNewBuffer, ptType, sAddr);
@@ -21527,7 +21794,7 @@ namespace WinsockPacketEditor
                                 {
                                     if (bNewBuffer == null)
                                     {
-                                        bNewBuffer = bufferSpan.ToArray();
+                                        bNewBuffer = ownedBuffer ?? bufferSpan.ToArray();
                                     }
 
                                     return faReturn;
@@ -21542,7 +21809,7 @@ namespace WinsockPacketEditor
 
                     if (bNewBuffer == null)
                     {
-                        bNewBuffer = bufferSpan.ToArray();
+                        bNewBuffer = ownedBuffer ?? bufferSpan.ToArray();
                     }                    
 
                     return faReturn;
@@ -21617,7 +21884,7 @@ namespace WinsockPacketEditor
 
                 #region//保存滤镜列表到文件（对话框）
 
-                public static async Task SaveFilterList_Dialog(string FileName, List<FilterInfo> fiList)
+                public static async Task<string> SaveFilterList_Dialog(string FileName, List<FilterInfo> fiList)
                 {
                     try
                     {
@@ -21644,6 +21911,7 @@ namespace WinsockPacketEditor
                                         string Title = UI.T("ExportFilterList.Success", "导出滤镜列表成功");
                                         UI.Notify(UiIcon.Success, Title, FilePath);
                                         Operate.DoLog(nameof(SaveFilterList_Dialog), Title + ": " + FilePath);
+                                        return FilePath;
                                     }
                                     else
                                     {
@@ -21655,10 +21923,11 @@ namespace WinsockPacketEditor
                             }
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(SaveFilterList_Dialog), ex);
-                    }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(SaveFilterList_Dialog), ex);
+                }
+                return null;
                 }
 
                 private static bool SaveFilterList(string FilePath, List<FilterInfo> fiList, bool DoEncrypt, string Password)
@@ -21758,12 +22027,13 @@ namespace WinsockPacketEditor
 
                 #region//从文件加载滤镜列表（对话框）
 
-                public static async Task LoadFilterList_Dialog()
+                public static async Task<string> LoadFilterList_Dialog(string FileName = null)
                 {
                     try
                     {
                         FilePick ofdLoadFile = new FilePick();
                         ofdLoadFile.Filter = UI.T("FilterListFile", "滤镜列表文件") + "（*.fp）|*.fp";
+                        if (!string.IsNullOrWhiteSpace(FileName)) { ofdLoadFile.FileName = FileName; }
 
                         string sPickedPath = await UI.PickOpen(ofdLoadFile);
                         if (!string.IsNullOrEmpty(sPickedPath))
@@ -21776,14 +22046,16 @@ namespace WinsockPacketEditor
                                     string Title = UI.T("ImportFilterList.Success", "导入滤镜列表成功");
                                     UI.Notify(UiIcon.Success, Title, FilePath);
                                     Operate.DoLog(nameof(LoadFilterList_Dialog), Title + ": " + FilePath);
+                                    return FilePath;
                                 }
                             }
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(LoadFilterList_Dialog), ex);
-                    }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(LoadFilterList_Dialog), ex);
+                }
+                return null;
                 }
 
                 private static async Task<bool> LoadFilterList(string FilePath, bool LoadFromUser)
@@ -22716,12 +22988,13 @@ namespace WinsockPacketEditor
 
                 #region//加载发送集（对话框）
 
-                public static async Task LoadSendCollection_Dialog(BindingList<PacketInfo> SendCollection)
+                public static async Task LoadSendCollection_Dialog(BindingList<PacketInfo> SendCollection, string FileName = null)
                 {
                     try
                     {
                         FilePick ofdLoadFile = new FilePick();
                         ofdLoadFile.Filter = UI.T("SendList.SendCollectionFile", "发送集文件") + "（*.sc）|*.sc";
+                        ofdLoadFile.FileName = FileName;
 
                         string sPickedPath = await UI.PickOpen(ofdLoadFile);
                         if (!string.IsNullOrEmpty(sPickedPath))
@@ -23064,19 +23337,19 @@ namespace WinsockPacketEditor
                 }
 
                 /// <summary>导入发送集（带文件框），追加进工作副本。</summary>
-                public static async Task ImportSendCollection_Dialog_Shell()
+                public static async Task ImportSendCollection_Dialog_Shell(string FileName = null)
                 {
                     if (editCollection == null) { return; }
 
-                    await SendConfig.Send.LoadSendCollection_Dialog(editCollection);
+                    await SendConfig.Send.LoadSendCollection_Dialog(editCollection, FileName);
                 }
 
                 /// <summary>导出发送集（带文件框）。不改工作副本。</summary>
-                public static async Task ExportSendCollection_Dialog_Shell()
+                public static async Task ExportSendCollection_Dialog_Shell(string FileName = null)
                 {
                     if (editCollection == null || editCollection.Count == 0) { return; }
 
-                    await SendConfig.Send.SaveSendCollection_Dialog(string.Empty, editCollection.ToList());
+                    await SendConfig.Send.SaveSendCollection_Dialog(FileName, editCollection.ToList());
                 }
 
                 /// <summary>清空发送集（带确认框）。只动工作副本，不保存就不算数。</summary>
@@ -23426,22 +23699,26 @@ namespace WinsockPacketEditor
                                 SendExecute se = Operate.SendConfig.Send.DoSend(si.SID);
                                 if (se != null)
                                 {
+                                    //无论并发还是顺序模式，都要登记当前执行器。停止、运行态计数和 MCP
+                                    //紧急停止都以这张表为唯一真源；顺序模式以前漏登记，造成任务实际在跑
+                                    //却显示为 0，也无法如实报告已停止数量。
+                                    Operate.SendConfig.List.SendExecute_Add(se);
                                     if (Operate.SystemConfig.ListExecute == Operate.SystemConfig.Execute.Together)
                                     {
-                                        Operate.SendConfig.List.SendExecute_Add(se);
+                                        continue;
                                     }
-                                    else
+
+                                    //「等某件事做完」用 WaitOne，取消当场返回（原来最坏还要睡满 10ms）
+                                    while (se.Running)
                                     {
-                                        //⚠️ 「等某件事做完」用 WaitOne，取消当场返回（原来最坏还要睡满 10ms）
-                                        while (se.Running)
+                                        if (token.WaitHandle.WaitOne(10))
                                         {
-                                            if (token.WaitHandle.WaitOne(10))
-                                            {
-                                                se.StopSend();
-                                                return;
-                                            }
+                                            se.StopSend();
+                                            return;
                                         }
                                     }
+
+                                    Operate.SendConfig.List.SendExecute_Remove(se);
                                 }
                             }
                         }
@@ -23644,6 +23921,12 @@ namespace WinsockPacketEditor
                     return null;
                 }
 
+                /// <summary>发送列表的脱离快照；供 UI 与自动化读取，绝不泄露封包正文。</summary>
+                public static SendRow[] GetSendRows()
+                {
+                    return SendConfig.List.lstSendInfo.Select(SendRow.From_).Where(x => x != null).ToArray();
+                }
+
                 /// <summary>
                 /// Id 数组 → 模型列表，<b>按列表里的先后顺序</b>返回。
                 ///
@@ -23792,11 +24075,11 @@ namespace WinsockPacketEditor
                 }
 
                 /// <summary>导入发送列表（带文件框）。导进来之后要落库。</summary>
-                public static async Task LoadSendList_Dialog_Shell()
+                public static async Task LoadSendList_Dialog_Shell(string FileName = null)
                 {
                     int before = SendConfig.List.lstSendInfo.Count;
 
-                    await SendConfig.List.LoadSendList_Dialog();
+                    await SendConfig.List.LoadSendList_Dialog(FileName);
 
                     if (SendConfig.List.lstSendInfo.Count != before)
                     {
@@ -24061,12 +24344,13 @@ namespace WinsockPacketEditor
 
                 #region//从文件加载发送列表（对话框）
 
-                public static async Task LoadSendList_Dialog()
+                public static async Task LoadSendList_Dialog(string FileName = null)
                 {
                     try
                     {
                         FilePick ofdLoadFile = new FilePick();
                         ofdLoadFile.Filter = UI.T("SendListFile", "发送列表文件") + "（*.sp）|*.sp";
+                        ofdLoadFile.FileName = FileName;
 
                         string sPickedPath = await UI.PickOpen(ofdLoadFile);
                         if (!string.IsNullOrEmpty(sPickedPath))
@@ -25588,22 +25872,24 @@ namespace WinsockPacketEditor
                                 RobotExecute re = Operate.RobotConfig.Robot.DoRobot(ri.RID, null);
                                 if (re != null)
                                 {
+                                    //与发送列表同理：顺序执行中的当前机器人也必须可被停止、计数和审计。
+                                    Operate.RobotConfig.List.RobotExecute_Add(re);
                                     if (Operate.SystemConfig.ListExecute == Operate.SystemConfig.Execute.Together)
                                     {
-                                        Operate.RobotConfig.List.RobotExecute_Add(re);
+                                        continue;
                                     }
-                                    else
+
+                                    //「等某件事做完」用 WaitOne，取消当场返回（原来最坏还要睡满 100ms）
+                                    while (re.Running)
                                     {
-                                        //⚠️ 「等某件事做完」用 WaitOne，取消当场返回（原来最坏还要睡满 100ms）
-                                        while (re.Running)
+                                        if (token.WaitHandle.WaitOne(100))
                                         {
-                                            if (token.WaitHandle.WaitOne(100))
-                                            {
-                                                re.StopRobot();
-                                                return;
-                                            }
+                                            re.StopRobot();
+                                            return;
                                         }
                                     }
+
+                                    Operate.RobotConfig.List.RobotExecute_Remove(re);
                                 }
                             }
                         }
@@ -25793,6 +26079,12 @@ namespace WinsockPacketEditor
                     }
                 }
 
+                /// <summary>机器人列表的脱离快照；指令正文由单项详情按需读取。</summary>
+                public static RobotRow[] GetRobotRows()
+                {
+                    return RobotConfig.List.lstRobotInfo.Select(RobotRow.From_).Where(x => x != null).ToArray();
+                }
+
                 /// <summary>Id 数组 → 模型列表，<b>按列表里的先后顺序</b>返回（理由与 PickFilters / PickSends 相同：上移 / 下移是逐个做的）。</summary>
                 private static List<RobotInfo> PickRobots(IList<string> Ids)
                 {
@@ -25897,11 +26189,11 @@ namespace WinsockPacketEditor
                 }
 
                 /// <summary>导入机器人列表（带文件框）。导进来之后要落库。</summary>
-                public static async Task LoadRobotList_Dialog_Shell()
+                public static async Task LoadRobotList_Dialog_Shell(string FileName = null)
                 {
                     int before = RobotConfig.List.lstRobotInfo.Count;
 
-                    await RobotConfig.List.LoadRobotList_Dialog();
+                    await RobotConfig.List.LoadRobotList_Dialog(FileName);
 
                     if (RobotConfig.List.lstRobotInfo.Count != before) { RobotConfig.List.SaveRobotList_ToDB(); }
                 }
@@ -26139,13 +26431,14 @@ namespace WinsockPacketEditor
 
                 #region//从文件加载机器人列表（对话框）
 
-                public static async Task LoadRobotList_Dialog()
+                public static async Task LoadRobotList_Dialog(string FileName = null)
                 {
                     try
                     {
                         FilePick ofdLoadFile = new FilePick();
 
                         ofdLoadFile.Filter = UI.T("RobotListFile", "机器人列表文件") + "（*.rp）|*.rp";
+                        ofdLoadFile.FileName = FileName;
 
                         string sPickedPath = await UI.PickOpen(ofdLoadFile);
                         if (!string.IsNullOrEmpty(sPickedPath))
@@ -26837,7 +27130,7 @@ namespace WinsockPacketEditor
 
                 #region//仓储数据的列表操作
 
-                public static async Task UpdateStores_ByListAction(BindingList<DataInfo> Stores, SystemConfig.ListAction listAction, List<DataInfo> diList)
+                public static async Task UpdateStores_ByListAction(BindingList<DataInfo> Stores, SystemConfig.ListAction listAction, List<DataInfo> diList, string FileName = null)
                 {
                     try
                     {
@@ -26913,18 +27206,18 @@ namespace WinsockPacketEditor
 
                                 if (diList != null)
                                 {
-                                    await WareHouseConfig.List.SaveStores_Dialog(string.Empty, diList);
+                                    await WareHouseConfig.List.SaveStores_Dialog(FileName, diList);
                                 }
                                 else
                                 {
-                                    await WareHouseConfig.List.SaveStores_Dialog(string.Empty, Stores.ToList());
+                                    await WareHouseConfig.List.SaveStores_Dialog(FileName, Stores.ToList());
                                 }
 
                                 break;
 
                             case SystemConfig.ListAction.Import:
 
-                                await WareHouseConfig.List.LoadStores_Dialog(Stores);
+                                await WareHouseConfig.List.LoadStores_Dialog(Stores, FileName);
 
                                 break;
 
@@ -27157,12 +27450,13 @@ namespace WinsockPacketEditor
 
                 #region//从文件加载仓库列表（对话框）
 
-                public static async Task LoadWareHouseList_Dialog()
+                public static async Task LoadWareHouseList_Dialog(string FileName = null)
                 {
                     try
                     {
                         FilePick ofdLoadFile = new FilePick();
                         ofdLoadFile.Filter = UI.T("WareHouseList.File", "仓库列表文件") + "（*.whp）|*.whp";
+                        ofdLoadFile.FileName = FileName;
 
                         string sPickedPath = await UI.PickOpen(ofdLoadFile);
                         if (!string.IsNullOrEmpty(sPickedPath))
@@ -27307,6 +27601,12 @@ namespace WinsockPacketEditor
                     }
                 }
 
+                /// <summary>仓库列表的脱离快照；仓储数据正文不包含在列表结果中。</summary>
+                public static WareHouseRow[] GetWareHouseRows()
+                {
+                    return WareHouseConfig.List.lstWareHouseInfo.Select(WareHouseRow.From_).Where(x => x != null).ToArray();
+                }
+
                 /// <summary>
                 /// Id 数组 → 模型列表，<b>按列表里的先后顺序</b>返回。
                 ///
@@ -27408,11 +27708,11 @@ namespace WinsockPacketEditor
                 }
 
                 /// <summary>导入仓库列表（带文件框）。导进来之后要落库。</summary>
-                public static async Task LoadWareHouseList_Dialog_Shell()
+                public static async Task LoadWareHouseList_Dialog_Shell(string FileName = null)
                 {
                     int before = WareHouseConfig.List.lstWareHouseInfo.Count;
 
-                    await WareHouseConfig.List.LoadWareHouseList_Dialog();
+                    await WareHouseConfig.List.LoadWareHouseList_Dialog(FileName);
 
                     if (WareHouseConfig.List.lstWareHouseInfo.Count != before)
                     {
@@ -27601,7 +27901,7 @@ namespace WinsockPacketEditor
                 /// 仓储数据的右键菜单（置顶 / 上移 / 下移 / 置底 / 复制 / 导出选中 / 删除），按 Id 数组收。
                 /// 返回条数变化。
                 /// </summary>
-                public static async Task<int> StoresAction_ByIds(string WID, int Action, IList<string> Ids)
+                public static async Task<int> StoresAction_ByIds(string WID, int Action, IList<string> Ids, string FileName = null)
                 {
                     try
                     {
@@ -27616,7 +27916,7 @@ namespace WinsockPacketEditor
                         int before = whi.Stores.Count;
 
                         await WareHouseConfig.List.UpdateStores_ByListAction(
-                            whi.Stores, (SystemConfig.ListAction)Action, picked);
+                            whi.Stores, (SystemConfig.ListAction)Action, picked, FileName);
 
                         //仓库列表那一列「仓储数量」要跟着变；Stores 是嵌套列表，FeedPump 没订阅它
                         FeedPump.MarkDirty(FeedList.WareHouse);
@@ -27634,7 +27934,7 @@ namespace WinsockPacketEditor
                 /// 工具条上的三个：导入(8) / 导出全部(5) / 清空(7)。
                 /// 导出与清空在 UpdateStores_ByListAction 里 diList 传 null 就是「全部」。
                 /// </summary>
-                public static async Task StoresCommand_Shell(string WID, int Action)
+                public static async Task StoresCommand_Shell(string WID, int Action, string FileName = null)
                 {
                     try
                     {
@@ -27659,7 +27959,7 @@ namespace WinsockPacketEditor
                             return;
                         }
 
-                        await WareHouseConfig.List.UpdateStores_ByListAction(whi.Stores, act, null);
+                        await WareHouseConfig.List.UpdateStores_ByListAction(whi.Stores, act, null, FileName);
 
                         if (act != SystemConfig.ListAction.Export)
                         {
@@ -28101,12 +28401,13 @@ namespace WinsockPacketEditor
 
                 #region//从文件加载仓储数据（对话框）
 
-                public static async Task LoadStores_Dialog(BindingList<DataInfo> diList)
+                public static async Task LoadStores_Dialog(BindingList<DataInfo> diList, string FileName = null)
                 {
                     try
                     {
                         FilePick ofdLoadFile = new FilePick();
                         ofdLoadFile.Filter = UI.T("StoresFile", "仓储数据文件") + "（*.whs）|*.whs";
+                        ofdLoadFile.FileName = FileName;
 
                         string sPickedPath = await UI.PickOpen(ofdLoadFile);
                         if (!string.IsNullOrEmpty(sPickedPath))
@@ -28318,12 +28619,13 @@ namespace WinsockPacketEditor
 
                 #region//从文件加载自动入库（对话框）
 
-                public static async Task LoadAutoStores_Dialog()
+                public static async Task LoadAutoStores_Dialog(string FileName = null)
                 {
                     try
                     {
                         FilePick ofdLoadFile = new FilePick();
                         ofdLoadFile.Filter = UI.T("AutoStores.File", "自动入库文件") + "（*.pas）|*.pas";
+                        ofdLoadFile.FileName = FileName;
 
                         string sPickedPath = await UI.PickOpen(ofdLoadFile);
                         if (!string.IsNullOrEmpty(sPickedPath))
@@ -30144,6 +30446,7 @@ namespace WinsockPacketEditor
                 public static ConcurrentQueue<LogInfo> cqLogInfo = new ConcurrentQueue<LogInfo>();
                 public static ConcurrentQueue<FilterLogInfo> cqFilterLogInfo = new ConcurrentQueue<FilterLogInfo>();
                 public static ConcurrentQueue<ProxyLogInfo> cqProxyLogInfo = new ConcurrentQueue<ProxyLogInfo>();
+                public static ConcurrentQueue<LogInfo> cqMcpLogInfo = new ConcurrentQueue<LogInfo>();
 
                 #region//日志入队列
 
@@ -30168,6 +30471,12 @@ namespace WinsockPacketEditor
                 {
                     ProxyLogInfo pli = new ProxyLogInfo(UserName, LoginIP, LogContent);
                     await Task.Run(() => cqProxyLogInfo.Enqueue(pli));
+                }
+
+                /// <summary>MCP 网关在后台线程运行，直接使用并发队列，不额外派发线程池任务。</summary>
+                public static void McpLogToQueue(string Category, string Content)
+                {
+                    cqMcpLogInfo.Enqueue(new LogInfo(Category, Content));
                 }
 
                 #endregion
@@ -30198,6 +30507,14 @@ namespace WinsockPacketEditor
                     }
                 }
 
+                public static void ClearMcpLogQueue()
+                {
+                    while (!cqMcpLogInfo.IsEmpty)
+                    {
+                        cqMcpLogInfo.TryDequeue(out LogInfo li);
+                    }
+                }
+
                 #endregion                
             }
 
@@ -30212,6 +30529,7 @@ namespace WinsockPacketEditor
                 public static BindingList<LogInfo> lstLogInfo = new BindingList<LogInfo>();
                 public static BindingList<FilterLogInfo> lstFilterLogInfo = new BindingList<FilterLogInfo>();
                 public static BindingList<ProxyLogInfo> lstProxyLogInfo = new BindingList<ProxyLogInfo>();
+                public static BindingList<LogInfo> lstMcpLogInfo = new BindingList<LogInfo>();
 
                 #region//日志入列表
 
@@ -30240,6 +30558,9 @@ namespace WinsockPacketEditor
                         FlushOne(Queue.cqProxyLogInfo, lstProxyLogInfo, FeedList.ProxyLog,
                             x => ProxyLogRow.From_(x));
 
+                        FlushOne(Queue.cqMcpLogInfo, lstMcpLogInfo, FeedList.McpLog,
+                            x => LogRow.From_(x));
+
                         if (AutoClear)
                         {
                             //AutoClear_Value 是 decimal，比较与传参都要显式转
@@ -30248,6 +30569,7 @@ namespace WinsockPacketEditor
                             TrimOne(lstLogInfo, FeedList.SystemLog, Queue.cqLogInfo, "SystemLogQueue", keep);
                             TrimOne(lstFilterLogInfo, FeedList.FilterLog, Queue.cqFilterLogInfo, "FilterLogQueue", keep);
                             TrimOne(lstProxyLogInfo, FeedList.ProxyLog, Queue.cqProxyLogInfo, "ProxyLogQueue", keep);
+                            TrimOne(lstMcpLogInfo, FeedList.McpLog, Queue.cqMcpLogInfo, "McpLogQueue", keep);
                         }
                     }
                     catch (Exception ex)
@@ -30343,6 +30665,11 @@ namespace WinsockPacketEditor
                     lstProxyLogInfo.Clear();
                 }
 
+                public static void ClearMcpLogList()
+                {
+                    lstMcpLogInfo.Clear();
+                }
+
                 #endregion
 
                 #region//日志列表 - 外壳入口（三路日志按 Kind 区分，只出基础类型）
@@ -30352,8 +30679,8 @@ namespace WinsockPacketEditor
                     动作本身散在 Controls/LogList.cs 的三段 switch 里 —— 三路日志各抄了一遍。
                     这里按 Kind 收成一份，两套 UI 都能调。
 
-                    Kind：0 = 系统日志、1 = 滤镜日志、2 = 代理日志。
-                    与前端 SystemLog.vue 的三个页签同序，也与 FeedList.SystemLog / FilterLog / ProxyLog 同序。
+                    Kind：0 = 系统日志、1 = 滤镜日志、2 = 代理日志、3 = MCP 日志。
+                    与前端 SystemLog.vue 的页签同序，也与对应 FeedList 同序。
                 */
 
                 /// <summary>三路日志的 Kind。前端传的是这个。</summary>
@@ -30362,6 +30689,7 @@ namespace WinsockPacketEditor
                     System = 0,
                     Filter = 1,
                     Proxy = 2,
+                    Mcp = 3,
                 }
 
                 /// <summary>
@@ -30393,6 +30721,12 @@ namespace WinsockPacketEditor
                                 Queue.ClearProxyLogQueue();
                                 ClearProxyLogList();
                                 UI.Feed.Clear(FeedList.ProxyLog);
+                                break;
+
+                            case LogKind.Mcp:
+                                Queue.ClearMcpLogQueue();
+                                ClearMcpLogList();
+                                UI.Feed.Clear(FeedList.McpLog);
                                 break;
 
                             default:
@@ -30431,6 +30765,10 @@ namespace WinsockPacketEditor
                                 await SaveProxyLogList_Dialog(name, lstProxyLogInfo.ToList());
                                 break;
 
+                            case LogKind.Mcp:
+                                await SaveLogList_Dialog(name + " MCP", lstMcpLogInfo.ToList());
+                                break;
+
                             default:
                                 await SaveLogList_Dialog(name, lstLogInfo.ToList());
                                 break;
@@ -30450,9 +30788,9 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        if (LogConfig.List.lstLogInfo.Count > 0)
+                        if (liList != null && liList.Count > 0)
                         {
-                            int SaveCount = LogConfig.List.lstLogInfo.Count;
+                            int SaveCount = liList.Count;
 
                             FilePick sfdSaveToExcel = new FilePick();
                             sfdSaveToExcel.Filter = UI.T("ExcelFile", "Excel 文件") + " (*.xls)|*.xls";
@@ -30928,6 +31266,8 @@ namespace WinsockPacketEditor
                             EnsureColumn(conn, "SystemConfig", "LastInjectPath", "TEXT");
                             EnsureColumn(conn, "SystemConfig", "LastInjectArgs", "TEXT");
                             EnsureColumn(conn, "SystemConfig", "LastInjectTime", "TEXT");
+                            EnsureColumn(conn, "SystemConfig", "McpRequiresConfirmation", "BOOLEAN DEFAULT 0");
+                            EnsureColumn(conn, "SystemConfig", "McpEnabled", "BOOLEAN DEFAULT 1");
                         }
                     }
 
@@ -31050,6 +31390,8 @@ namespace WinsockPacketEditor
                         sql += "IsScrollBarHide,";
                         sql += "IsTextRenderingHighQuality,";
                         sql += "IsDark,";
+                        sql += "McpEnabled,";
+                        sql += "McpRequiresConfirmation,";
                         sql += "DefaultLanguage,";
                         sql += "LastInjection,";
                         sql += "LastInjectMethod,";
@@ -31116,6 +31458,8 @@ namespace WinsockPacketEditor
                         sql += "@IsScrollBarHide,";
                         sql += "@IsTextRenderingHighQuality,";
                         sql += "@IsDark,";
+                        sql += "@McpEnabled,";
+                        sql += "@McpRequiresConfirmation,";
                         sql += "@DefaultLanguage,";
                         sql += "@LastInjection,";
                         sql += "@LastInjectMethod,";
@@ -31192,6 +31536,8 @@ namespace WinsockPacketEditor
                             */
                             cmd.Parameters.AddWithValue("@IsDark", UI.Prefs.IsDark);
                             cmd.Parameters.AddWithValue("@ThemeFollowSystem", UI.Prefs.FollowSystemTheme);
+                            cmd.Parameters.AddWithValue("@McpEnabled", SystemConfig.McpEnabled);
+                            cmd.Parameters.AddWithValue("@McpRequiresConfirmation", SystemConfig.McpRequiresConfirmation);
                             cmd.Parameters.AddWithValue("@DefaultLanguage", UI.Prefs.Language);
                             cmd.Parameters.AddWithValue("@LastInjection", SystemConfig.LastInjection);
                             cmd.Parameters.AddWithValue("@LastInjectMethod", SystemConfig.LastInjectMethod);

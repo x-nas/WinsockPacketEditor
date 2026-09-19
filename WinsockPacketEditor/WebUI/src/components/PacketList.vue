@@ -44,10 +44,16 @@ const props = withDefaults(
     selectedId: number | null
     picked?: Set<number>
     follow?: boolean
+    /**
+     * 父页用 v-show 保活时显式告诉列表可见性。
+     * 隐藏的滚动容器可能被浏览器把实际 scrollTop 夹回 0，却不会派发 scroll；
+     * 若仍拿着切走前的 scrollTop，虚拟窗口会从表尾以外开始，整表看起来就是空的。
+     */
+    visible?: boolean
     /** 'proxy' = 代理数据（ProxyRow）；'inject' = 注入模式的封包列表（PacketRow）。 */
     mode?: 'proxy' | 'inject'
   }>(),
-  { follow: true, picked: () => new Set<number>(), mode: 'proxy' },
+  { follow: true, picked: () => new Set<number>(), visible: true, mode: 'proxy' },
 )
 
 const emit = defineEmits<{
@@ -419,21 +425,51 @@ watch(total, () => {
 })
 
 let ro: ResizeObserver | null = null
+let layoutRaf = 0
 
-onMounted(() => {
+/**
+ * v-show 不会卸载 PacketList。容器从 display:none 回来时，WebView2 有时只夹取
+ * 原生 scrollTop 而不发 scroll / ResizeObserver 回调；主动重新读一次实际值，
+ * 让虚拟窗口和浏览器保持同一坐标系。
+ */
+function syncViewport(): void {
   const el = scroller.value
   if (!el) return
 
   viewH.value = el.clientHeight
   viewW.value = el.clientWidth
+  scrollTop.value = el.scrollTop
+}
+
+function refreshVisibleViewport(): void {
+  if (layoutRaf) cancelAnimationFrame(layoutRaf)
+  layoutRaf = requestAnimationFrame(() => {
+    layoutRaf = 0
+    syncViewport()
+
+    // 原本处于「跟随最新」时，隐藏期间新增的行也应回到底部；用户已暂停跟随则保留位置。
+    if (following.value && props.follow) scrollToBottom()
+  })
+}
+
+watch(() => props.visible, (visible) => {
+  if (visible) refreshVisibleViewport()
+})
+
+onMounted(() => {
+  const el = scroller.value
+  if (!el) return
+
+  syncViewport()
   ro = new ResizeObserver(() => {
-    viewH.value = el.clientHeight
-    viewW.value = el.clientWidth
+    syncViewport()
   })
   ro.observe(el)
 })
 
 onBeforeUnmount(() => {
+  if (layoutRaf) cancelAnimationFrame(layoutRaf)
+  layoutRaf = 0
   ro?.disconnect()
   ro = null
 })

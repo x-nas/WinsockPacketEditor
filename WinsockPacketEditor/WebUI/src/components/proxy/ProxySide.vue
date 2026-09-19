@@ -29,10 +29,10 @@ import { GROUPS } from './pages'
   抄一份 InjectSide 出来，下场是两边慢慢走样 —— 见 CLAUDE.md 的 .list-page。
 */
 const props = withDefaults(
-  defineProps<{ current: PageKey; groups?: PageGroup[]; mode?: 'proxy' | 'inject' }>(),
-  { groups: () => GROUPS, mode: 'proxy' },
+  defineProps<{ current: PageKey; groups?: PageGroup[]; mode?: 'proxy' | 'inject'; collapsed?: boolean }>(),
+  { groups: () => GROUPS, mode: 'proxy', collapsed: false },
 )
-const emit = defineEmits<{ (e: 'go', page: PageKey): void }>()
+const emit = defineEmits<{ (e: 'go', page: PageKey): void; (e: 'toggle'): void }>()
 
 /*
   代理数据与日志的条数<b>按 2Hz 采样，不跟数据源走</b>。
@@ -88,9 +88,18 @@ function fmt(n: number | undefined): string {
 </script>
 
 <template>
-  <nav class="side">
-    <template v-for="g in props.groups" :key="g.cap">
-      <div class="sb-cap">{{ g.cap }}</div>
+  <nav class="side" :class="{ collapsed: props.collapsed }">
+    <template v-for="(g, groupIndex) in props.groups" :key="g.cap">
+      <div v-if="groupIndex === 0" class="sb-head">
+        <div class="sb-cap">{{ g.cap }}</div>
+        <button class="sb-toggle" :title="t(props.collapsed ? 'win.expandSidebar' : 'win.collapseSidebar')"
+                :aria-label="t(props.collapsed ? 'win.expandSidebar' : 'win.collapseSidebar')"
+                :aria-expanded="!props.collapsed" @click="emit('toggle')">
+          <!-- 侧栏布局图标：窄栏 + 内容区，不用方向箭头表达折叠。 -->
+          <svg class="ico" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="1" /><path d="M9 5v14M12 9h5M12 12h5M12 15h5" /></svg>
+        </button>
+      </div>
+      <div v-else class="sb-cap">{{ g.cap }}</div>
 
       <!--
         role="button" + tabindex 而不是真 <button>：与启动页的模式卡同一个理由，
@@ -104,6 +113,7 @@ function fmt(n: number | undefined): string {
         role="button"
         tabindex="0"
         :aria-current="p.key === props.current ? 'page' : undefined"
+        :title="props.collapsed ? t(p.label) : undefined"
         @click="emit('go', p.key)"
         @keydown.enter.prevent="emit('go', p.key)"
         @keydown.space.prevent="emit('go', p.key)"
@@ -124,6 +134,32 @@ function fmt(n: number | undefined): string {
   padding: 14px 0 12px;
   overflow-y: auto;
 }
+
+.sb-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 28px;
+  margin: 0 0 7px;
+  padding: 0 12px 0 18px;
+}
+.sb-head .sb-cap { margin: 0; padding: 0; }
+
+.sb-toggle {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--dim);
+  cursor: pointer;
+}
+.sb-toggle .ico { width: 15px; height: 15px; }
+.sb-toggle:hover { color: var(--cyan); background: rgb(var(--cyan-rgb) / 6%); }
+.sb-toggle:focus-visible { outline-offset: -2px; }
 
 .sb-cap {
   font-family: var(--share);
@@ -174,4 +210,14 @@ function fmt(n: number | undefined): string {
 
 /* 焦点环画在内侧：侧栏右边就是内容区的边界，正偏移会压过去 */
 .sb-item:focus-visible { outline-offset: -2px; }
+
+.side.collapsed { overflow-x: hidden; }
+.side.collapsed .sb-head { justify-content: center; padding: 0; }
+.side.collapsed .sb-head .sb-cap { display: none; }
+.side.collapsed .sb-cap { height: 12px; margin: 10px 0 5px; padding: 0; font-size: 0; }
+.side.collapsed .sb-cap::after { content: ""; display: block; width: 18px; height: 1px; margin: 6px auto 0; background: var(--border); }
+.side.collapsed .sb-item { justify-content: center; padding: 8px 0; border-left-width: 2px; }
+.side.collapsed .sb-item .t,
+.side.collapsed .sb-item .n { display: none; }
+.side.collapsed .sb-item .ico { width: 17px; height: 17px; }
 </style>

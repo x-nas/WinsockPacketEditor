@@ -53,6 +53,20 @@ namespace WPELauncher
             get { return T("有文件被占用，请先关闭正在运行的程序再试。", "Some files are in use. Close the running program and try again."); }
         }
 
+        public static string McpServerInUseTitle
+        {
+            get { return T("MCP Server 正在使用", "MCP Server is in use"); }
+        }
+
+        public static string McpServerInUseContent
+        {
+            get { return T("请先停止正在运行的 MCP Server，然后重新启动 WPE。", "Stop the running MCP Server, then start WPE again."); }
+        }
+
+        public static string McpServerInUseLog { get { return T("需要先停止 MCP Server", "stop the MCP Server first"); } }
+
+        public static string Ok { get { return T("知道了", "OK"); } }
+
         public static string NoSpace
         {
             get { return T("磁盘 {0} 空间不足：需要约 {1} MB，剩余 {2} MB。", "Not enough space on {0}: about {1} MB needed, {2} MB free."); }

@@ -9,7 +9,7 @@
   单个 IP 就是 "1.2.3.4"，段是 "1.2.3.4-1.2.3.9"。所以界面上给两个输入框，
   提交时按这个格式拼起来 —— 与 WhiteListEdit 的 bSave 一致。
 
-  【校验在 C# 侧】IsValidIPv4 与"是否已在名单里"都在 Operate.SaveIPRule，
+  【校验在 C# 侧】IsValidIPv4 与"是否已在名单里"都在 Operate.SaveIPRuleAsync，
   前端只把错误显示出来。两边各写一份就有两套真相。
 */
 import { computed, ref, watch } from 'vue'

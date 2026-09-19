@@ -37,6 +37,18 @@ if (-not $SkipBuild) {
     if ($LASTEXITCODE -ne 0) { throw "MSBuild 失败（$LASTEXITCODE）" }
 }
 
+# MCP sidecar is intentionally a separate .NET 10 process. Publish it into the
+# application payload rather than linking it into the net48 WPE executable.
+Write-Host '== MCP · dotnet publish · Release' -ForegroundColor Cyan
+$McpProject = Join-Path $Repo 'WPEMcpServer\WPEMcpServer.csproj'
+$McpOutput = Join-Path $Main 'bin\Release\McpServer'
+# 单文件发布不会自动删除旧的 framework-dependent 旁车文件，先仅清理这个生成目录。
+if (Test-Path -LiteralPath $McpOutput) { Remove-Item -LiteralPath $McpOutput -Recurse -Force }
+New-Item -ItemType Directory -Path $McpOutput -Force | Out-Null
+& dotnet publish $McpProject --no-restore -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o $McpOutput
+if ($LASTEXITCODE -ne 0) { throw "MCP Server 发布失败（$LASTEXITCODE）" }
+Remove-Item -LiteralPath (Join-Path $McpOutput 'WPEMcpServer.pdb') -Force -ErrorAction SilentlyContinue
+
 & (Join-Path $Repo 'WPELauncher\New-LauncherPackage.ps1') `
     -SourceDir (Join-Path $Main 'bin\Release') `
     -DistDir (Join-Path $Repo 'dist') `
@@ -57,6 +69,7 @@ if (-not $SkipBuild) {
         'x64\SunnyNet64.dll', 'x64\SQLite.Interop.dll', 'x86\SQLite.Interop.dll',
         'SuperSocket.SocketEngine.dll', 'Microsoft.Owin.Host.HttpListener.dll',
         'runtimes\win-x64\native\WebView2Loader.dll',
-        'IPLocation\qqwry.dat', 'Web\index.html', 'wwwroot\index.html', 'wpe-data.ico'
+        'IPLocation\qqwry.dat', 'Web\index.html', 'wwwroot\index.html', 'wpe-data.ico',
+        'McpServer\WPEMcpServer.exe'
     )
 if (-not $?) { exit 1 }

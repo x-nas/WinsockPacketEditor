@@ -20,8 +20,26 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { call } from '../bridge'
 import { lang, t } from '../i18n'
+import InstanceView from './InstanceView.vue'
+import McpSetting from './proxy/McpSetting.vue'
+import toolSource from '../../../../WPEMcpServer/WpeTools.cs?raw'
 
-const emit = defineEmits<{ (e: 'enter', mode: 'proxy' | 'instance' | 'inject'): void }>()
+const emit = defineEmits<{ (e: 'enter', mode: 'proxy' | 'inject'): void }>()
+const mcpOpen = ref(false)
+const instanceOpen = ref(false)
+const mcpToolCount = Array.from(toolSource.matchAll(/\[McpServerTool\(Name = "[^"]+"\), Description\("[^"]*"\)\]/g)).length
+
+function mcpAvailability(): string {
+  switch (lang.value) {
+    case 'zh': return `${mcpToolCount} 个工具可用`
+    case 'tw': return `${mcpToolCount} 個工具可用`
+    case 'ja': return `${mcpToolCount} 個のツールを利用可能`
+    case 'ko': return `${mcpToolCount}개 도구 사용 가능`
+    case 'vi': return `${mcpToolCount} công cụ khả dụng`
+    case 'ru': return `Доступно инструментов: ${mcpToolCount}`
+    default: return `${mcpToolCount} tools available`
+  }
+}
 
 interface SystemCheck {
   isAdmin: boolean
@@ -74,7 +92,7 @@ function enterProxy(): void {
 }
 
 function enterInstance(): void {
-  emit('enter', 'instance')
+  instanceOpen.value = true
 }
 
 /** 条目数加千分位，1512917 这种数字不分组基本读不出量级。 */
@@ -248,7 +266,20 @@ onMounted(async () => {
         <span class="cur">{{ sys?.dbInstance || '—' }}</span>
         <span class="ar">→</span>
       </button>
+      <button class="inst mcp-entry" @click="mcpOpen = true">
+        <svg class="ico" viewBox="0 0 24 24">
+          <path d="M12 3a9 9 0 1 0 9 9" />
+          <path d="M12 7v5l3 2" />
+          <path d="M16 4h5v5" />
+        </svg>
+        <span class="nm">MCP 设置</span>
+        <span class="ds">本机 AI 自动化权限</span>
+        <span class="cur">{{ mcpAvailability() }}</span>
+        <span class="ar">→</span>
+      </button>
     </div>
+    <McpSetting :open="mcpOpen" @update:open="mcpOpen = $event" />
+    <InstanceView :open="instanceOpen" @update:open="instanceOpen = $event" />
 
     <!-- 系统自检 -->
     <div class="term">

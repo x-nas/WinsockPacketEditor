@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wpe64.com/schemas/mcp/readonly-tools-v1.json",
+  "title": "WPE x64 MCP phase 1 contracts",
+  "definitions": {
+    "pageFields": {
+      "type": "object",
+      "properties": {
+        "limit": { "type": "integer", "minimum": 1, "maximum": 200, "default": 50 },
+        "cursor": { "type": "string", "minLength": 1, "maxLength": 512 }
+      }
+    },
+    "page": { "allOf": [{ "$ref": "#/definitions/pageFields" }], "unevaluatedProperties": false },
+    "packetMode": { "type": "string", "enum": ["proxy", "inject"] },
+    "packetId": { "type": "integer", "minimum": 1 },
+    "packetSummary": {
+      "type": "object",
+      "required": ["id", "time", "type", "length", "preview"],
+      "properties": {
+        "id": { "$ref": "#/definitions/packetId" },
+        "time": { "type": "string" },
+        "type": { "type": "integer" },
+        "length": { "type": "integer", "minimum": 0 },
+        "preview": { "type": "string", "maxLength": 192 },
+        "from": { "type": "string" },
+        "to": { "type": "string" },
+        "action": { "type": "integer" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "tools": {
+    "wpe_proxy_runtime_get": {
+      "input": { "type": "object", "additionalProperties": false },
+      "output": {
+        "type": "object",
+        "required": ["running", "sessionCount", "capturedPackets", "sampledAtUtc"],
+        "properties": {
+          "running": { "type": "boolean" },
+          "sessionCount": { "type": "integer", "minimum": 0 },
+          "capturedPackets": { "type": "integer", "minimum": 0 },
+          "sampledAtUtc": { "type": "string", "format": "date-time" },
+          "socks5Enabled": { "type": "boolean" }, "socks5Port": { "type": "integer" },
+          "httpEnabled": { "type": "boolean" }, "httpPort": { "type": "integer" },
+          "externalProxyEnabled": { "type": "boolean" }, "externalProxyIp": { "type": "string" }, "externalProxyPort": { "type": "integer" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "wpe_remote_management_get": { "input": { "type": "object", "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_setting_get": { "input": { "type": "object", "required": ["page"], "properties": { "page": { "type": "string" }, "mode": { "type": ["string", "null"] } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_wpc_servers_list": { "input": { "type": "object", "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_wpc_server_rules_list": { "input": { "type": "object", "required": ["serverId"], "properties": { "serverId": { "type": "string", "description": "Exact visible WPC server name or GUID." } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_connections_summary_get": {
+      "input": { "type": "object", "additionalProperties": false },
+      "output": {
+        "type": "object",
+        "required": ["total", "tcp", "udp", "wpcControl", "ordinary", "sampledAtUtc"],
+        "properties": {
+          "total": { "type": "integer", "minimum": 0 }, "tcp": { "type": "integer", "minimum": 0 }, "udp": { "type": "integer", "minimum": 0 },
+          "wpcControl": { "type": "integer", "minimum": 0 }, "ordinary": { "type": "integer", "minimum": 0 },
+          "sampledAtUtc": { "type": "string", "format": "date-time" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "wpe_status_get": {
+      "input": { "type": "object", "additionalProperties": false },
+      "output": { "type": "object", "required": ["version", "mode", "proxyRunning"], "properties": { "version": { "type": "string" }, "mode": { "type": "string" }, "proxyRunning": { "type": "boolean" }, "queue": { "type": "integer" }, "captured": { "type": "integer" } }, "additionalProperties": false }
+    },
+    "wpe_capture_search": {
+      "input": { "allOf": [{ "$ref": "#/definitions/pageFields" }, { "type": "object", "properties": { "mode": { "$ref": "#/definitions/packetMode" }, "pattern": { "type": "string", "maxLength": 4096 }, "hex": { "type": "boolean", "default": false }, "direction": { "type": "string", "enum": ["any", "send", "receive"], "default": "any" } } }], "unevaluatedProperties": false },
+      "output": { "type": "object", "required": ["rows"], "properties": { "rows": { "type": "array", "items": { "$ref": "#/definitions/packetSummary" } }, "nextCursor": { "type": ["string", "null"] } }, "additionalProperties": false }
+    },
+    "wpe_capture_find_next": { "input": { "type": "object", "required": ["pattern"], "properties": { "pattern": { "type": "string", "minLength": 1, "maxLength": 4096 }, "hex": { "type": "boolean", "default": false }, "mode": { "$ref": "#/definitions/packetMode" }, "fromIndex": { "type": "integer", "minimum": 0, "default": 0 }, "fromPosition": { "type": "integer", "minimum": 0, "default": 0 } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_packet_get": {
+      "input": { "type": "object", "required": ["id"], "properties": { "id": { "$ref": "#/definitions/packetId" }, "mode": { "$ref": "#/definitions/packetMode" }, "includePayload": { "type": "boolean", "default": true, "description": "Legacy compatibility argument. Packet payload is always returned." } }, "additionalProperties": false },
+      "output": { "type": "object", "required": ["id", "found", "truncated"], "properties": { "id": { "$ref": "#/definitions/packetId" }, "found": { "type": "boolean" }, "truncated": { "type": "boolean" }, "sha256": { "type": ["string", "null"] }, "payloadBase64": { "type": ["string", "null"] }, "rawPayloadBase64": { "type": ["string", "null"] }, "modified": { "type": "boolean" } }, "additionalProperties": false }
+    },
+    "wpe_logs_list": { "input": { "allOf": [{ "$ref": "#/definitions/pageFields" }, { "type": "object", "required": ["kind"], "properties": { "kind": { "type": "string", "enum": ["system", "filter", "proxy", "mcp"] } } }], "unevaluatedProperties": false }, "output": { "type": "object" } },
+    "wpe_logs_all_list": { "input": { "$ref": "#/definitions/page" }, "output": { "type": "object" } },
+    "wpe_filters_list": { "input": { "$ref": "#/definitions/page" }, "output": { "type": "object" } },
+    "wpe_filter_get": { "input": { "type": "object", "required": ["id"], "properties": { "id": { "type": "string", "description": "Exact visible filter name or GUID." } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_filter_stats_get": { "input": { "type": "object", "required": ["id"], "properties": { "id": { "type": "string", "description": "Exact visible filter name or GUID." } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_executors_list": { "input": { "type": "object", "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_connections_list": { "input": { "$ref": "#/definitions/page" }, "output": { "type": "object" } },
+    "wpe_accounts_list": { "input": { "allOf": [{ "$ref": "#/definitions/pageFields" }, { "type": "object", "properties": { "userName": { "type": "string", "minLength": 1, "maxLength": 128, "description": "Optional case-insensitive login-name text search. Read the returned Id GUID before calling other account tools." } } }], "unevaluatedProperties": false }, "output": { "type": "object" } },
+    "wpe_account_get": { "input": { "type": "object", "required": ["id"], "properties": { "id": { "type": "string", "format": "uuid", "description": "Account record GUID returned in wpe_accounts_list.rows[].Id. This is not the userName." } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_account_logins_list": { "input": { "allOf": [{ "$ref": "#/definitions/pageFields" }, { "type": "object", "required": ["id"], "properties": { "id": { "type": "string", "format": "uuid", "description": "Account record GUID returned in wpe_accounts_list.rows[].Id. This is not the userName." } } }], "unevaluatedProperties": false }, "output": { "type": "object" } },
+    "wpe_firewall_get": { "input": { "type": "object", "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_proxy_settings_get": { "input": { "type": "object", "additionalProperties": false }, "output": { "type": "object", "additionalProperties": true } },
+    "wpe_proxy_config_get": { "input": { "type": "object", "additionalProperties": false }, "output": { "type": "object", "additionalProperties": true } },
+    "wpe_firewall_rules_list": { "input": { "$ref": "#/definitions/page" }, "output": { "type": "object", "additionalProperties": true } },
+    "wpe_bytes_transcode": { "input": { "type": "object", "required": ["text", "decode"], "properties": { "text": { "type": "string", "maxLength": 1048576 }, "decode": { "type": "boolean" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_bytes_compare": { "input": { "type": "object", "required": ["left", "right"], "properties": { "left": { "type": "string", "maxLength": 1048576 }, "right": { "type": "string", "maxLength": 1048576 }, "minimumRun": { "type": "integer", "minimum": 1, "maximum": 4096, "default": 2 } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_bytes_extract": { "input": { "type": "object", "required": ["kind", "contentBase64"], "properties": { "kind": { "type": "integer", "minimum": 0, "maximum": 32 }, "contentBase64": { "type": "string", "maxLength": 5592408 } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_sends_list": { "input": { "$ref": "#/definitions/page" }, "output": { "type": "object" } },
+    "wpe_send_get": { "input": { "type": "object", "required": ["id"], "properties": { "id": { "type": "string", "description": "Exact visible send-task name or GUID." } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_send_collection_list": { "input": { "allOf": [{ "$ref": "#/definitions/pageFields" }, { "type": "object", "required": ["id"], "properties": { "id": { "type": "string", "description": "Exact visible send-task name or GUID." } } }], "unevaluatedProperties": false }, "output": { "type": "object" } },
+    "wpe_robots_list": { "input": { "$ref": "#/definitions/page" }, "output": { "type": "object" } },
+    "wpe_robot_get": { "input": { "type": "object", "required": ["id"], "properties": { "id": { "type": "string", "description": "Exact visible robot name or GUID." } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_warehouse_list": { "input": { "$ref": "#/definitions/page" }, "output": { "type": "object" } },
+    "wpe_warehouse_get": { "input": { "allOf": [{ "$ref": "#/definitions/pageFields" }, { "type": "object", "required": ["id"], "properties": { "id": { "type": "string", "description": "Required warehouse GUID: first call wpe_warehouse_list, then pass the returned row.Id. Display names are not accepted." } } }], "unevaluatedProperties": false }, "output": { "type": "object" } },
+    "wpe_auto_stores_list": { "input": { "type": "object", "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_packet_edit_get": { "input": { "type": "object", "required": ["list", "id"], "properties": { "list": { "type": "string", "enum": ["proxy", "packet"] }, "id": { "type": "integer", "minimum": 1 } }, "additionalProperties": false }, "output": { "type": "object" } }
+  }
+}

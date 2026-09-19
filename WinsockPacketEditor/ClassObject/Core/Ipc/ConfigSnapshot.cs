@@ -143,10 +143,10 @@ namespace WinsockPacketEditor.Ipc
             int n = r.I32();
 
             //先把旧计数按 GUID 存下来
-            var oldCounts = new Dictionary<Guid, long>();
+            var oldCounts = new Dictionary<Guid, FilterInfo>();
             foreach (FilterInfo old in Operate.FilterConfig.List.lstFilterInfo)
             {
-                oldCounts[old.FID] = old.ExecutionCount;
+                oldCounts[old.FID] = old;
             }
 
             var fresh = new List<FilterInfo>(n);
@@ -209,9 +209,25 @@ namespace WinsockPacketEditor.Ipc
                     excludePosition, randomPosition,
                     fsearch, fmodify);
 
-                long keep;
-                if (oldCounts.TryGetValue(fid, out keep)) { fi.ExecutionCount = keep; }
+                FilterInfo keep;
+                if (oldCounts.TryGetValue(fid, out keep))
+                {
+                    fi.State = keep.State;
+                    if (keep.ProgressionPosition != fi.ProgressionPosition ||
+                        keep.ProgressionStep != fi.ProgressionStep ||
+                        keep.IsProgressionContinuous != fi.IsProgressionContinuous ||
+                        keep.IsProgressionCarry != fi.IsProgressionCarry ||
+                        keep.ProgressionCarryNumber != fi.ProgressionCarryNumber)
+                    {
+                        lock (fi.State)
+                        {
+                            fi.ProgressionCount = 0;
+                            fi.IsProgressionDone = false;
+                        }
+                    }
+                }
 
+                Operate.FilterConfig.Filter.WarmRules(fi);
                 fresh.Add(fi);
             }
 

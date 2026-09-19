@@ -10,18 +10,10 @@
   三个视图：启动页（模式选择）· 多开设置 · 代理模式。
   注入模式要等 IPC 改造完成才能进来。
 
-  【选完模式就<b>回不去</b>了，与主程序一致】
-  WinForms 的 StartForm 选完模式直接 this.Close()，启动页窗体就销毁了，
-  换模式只能重启程序。外壳照搬这个模式，所以标题栏没有「返回启动页」。
-
-  这不只是为了像：进代理模式会加载 14 份列表、设 SelectMode、并可能已经把
-  SOCKS5 服务起起来了 —— 退回一个写着「Ready」的启动页，而后台正在监听端口，
-  是在骗人。真要换模式，重启是最干净的。
-
-  <b>多开设置不受这条限制</b>：它不是模式，是启动页上的一屏设置
-  （WinForms 那边是浮在 StartForm 上的弹窗），所以它照常能返回。
+  注入模式允许回到启动页；这只切换 WebUI 的导航视图，
+  不会卸载已附加的钩子或停止用户已经启动的服务。
 */
-import { onMounted, ref, watchEffect } from 'vue'
+import { onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import { call, inHost, on } from './bridge'
 import { attachUiHost, busy, modalOpen } from './bridge/host'
 import { anyModalOpen } from './useModal'
@@ -30,7 +22,6 @@ import { httpAddr, injectHooked, injectTarget, proxyRunning, socks5Addr } from '
 import { initTheme } from './stores/theme'
 import StartView from './components/StartView.vue'
 import ProxyView from './components/ProxyView.vue'
-import InstanceView from './components/InstanceView.vue'
 import InjectView from './components/InjectView.vue'
 import BetaNotice from './components/BetaNotice.vue'
 import EncryptPassword from './components/EncryptPassword.vue'
@@ -39,15 +30,24 @@ import BusyMask from './components/BusyMask.vue'
 import ConfirmDialog from './components/ConfirmDialog.vue'
 import AppSetting from './components/AppSetting.vue'
 
-type View = 'start' | 'proxy' | 'instance' | 'inject'
+type View = 'start' | 'proxy' | 'inject'
 
 const view = ref<View>('start')
 const version = ref('')
 const isBeta = ref(false)
 const maximized = ref(false)
+const mcpEnabled = ref(false)
+const mcpNeedsConfirmation = ref(false)
+let mcpTimer: number | undefined
 
-/** 数据库<b>目录</b>名 —— 多开时区分实例靠的是它，不是文件名（文件名由版本号推导）。 */
-const dbInstance = ref('')
+async function refreshMcpStatus(): Promise<void> {
+  if (!inHost) return
+  try {
+    const s = await call<{ enabled: boolean; requiresConfirmation: boolean; available: boolean }>('getMcpStatus')
+    mcpEnabled.value = s.available && s.enabled
+    mcpNeedsConfirmation.value = mcpEnabled.value && s.requiresConfirmation
+  } catch { mcpEnabled.value = false; mcpNeedsConfirmation.value = false }
+}
 
 onMounted(async () => {
   if (!inHost) return
@@ -56,6 +56,10 @@ onMounted(async () => {
 
   // 最大化状态由 C# 推 —— 用户也可能通过双击拖动区、贴边吸附改变它
   on('window:state', (d: { maximized: boolean }) => { maximized.value = d.maximized })
+  on('mcp:start-mode', (d: { mode?: string }) => {
+    if (view.value !== 'start') return
+    if (d.mode === 'proxy' || d.mode === 'inject') view.value = d.mode
+  })
 
   try {
     const s = await call<any>('getSystemCheck')
@@ -66,6 +70,12 @@ onMounted(async () => {
       不为它单开一次 getPrefs。
     */
     initLang(s.language)
+
+    //MCP 的模式选择可能发生在本页刚加载、事件监听尚未登记的极短窗口内。
+    //事件负责即时切换；这里读取 C# 中已提交的状态，保证不会因错过事件停留在启动页。
+    if (view.value === 'start' && (s.selectedMode === 'proxy' || s.selectedMode === 'inject')) {
+      view.value = s.selectedMode
+    }
 
     /*
       主题与语言同一条理由：要在任何像素画出来之前定好。
@@ -79,7 +89,6 @@ onMounted(async () => {
 
     version.value = s.version
     isBeta.value = s.isBeta
-    dbInstance.value = s.dbInstance || ''
     socks5Addr.value = s.socks5Addr || ''
     //空串 = HTTP 代理没启用，不是取不到
     httpAddr.value = s.httpAddr || ''
@@ -97,7 +106,11 @@ onMounted(async () => {
     先于父组件，所以走到这一行时处理器一定已经登记好了。
   */
   call('uiReady').catch(() => {})
+  await refreshMcpStatus()
+  mcpTimer = window.setInterval(refreshMcpStatus, 1000)
 })
+
+onUnmounted(() => { if (mcpTimer !== undefined) window.clearInterval(mcpTimer) })
 
 /*
   拖动。
@@ -155,6 +168,10 @@ function fireBtn(e: MouseEvent, run: () => void): void {
   }
 
   run()
+}
+
+function returnToStart(): void {
+  view.value = 'start'
 }
 
 async function toggleMax(): Promise<void> {
@@ -252,6 +269,11 @@ watchEffect(() => {
         </div>
 
         <div class="tbright">
+          <button v-if="view === 'inject'" class="wb back" :title="t('win.backStart')"
+                  @mousedown="armBtn" @click="fireBtn($event, returnToStart)">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M14 5l-7 7 7 7M8 12h11" /></svg>
+          </button>
+
           <!--
             软件设置（语言 + 主题）。
 
@@ -327,16 +349,6 @@ watchEffect(() => {
 
       <StartView v-else-if="view === 'start'" @enter="view = $event" />
 
-      <!--
-        多开设置。用 v-if 而不是 keep-alive：每次进来都该重新读一次当前库位置
-        （用户可能刚在别处切过），组件重挂载正好把这件事做了。
-      -->
-      <InstanceView v-else-if="view === 'instance'" @back="view = 'start'" />
-
-      <!--
-        注入模式。与代理模式一样<b>进去就回不来</b> ——
-        进来会附加到目标、装钩子，退回一个写着「Ready」的启动页而钩子还在目标里，是在骗人。
-      -->
       <InjectView v-else-if="view === 'inject'" />
 
       <ProxyView v-else />
@@ -362,10 +374,6 @@ watchEffect(() => {
             <span class="dot" />
             {{ t('foot.ready') }}
           </template>
-          <template v-else-if="view === 'instance'">
-            <span class="dot mg" />
-            Instance <span class="addr">{{ dbInstance || '—' }}</span>
-          </template>
           <template v-else-if="view === 'inject'">
             <span class="dot" :class="{ off: !injectHooked }" />
             Inject <span class="addr">{{ injectTarget || '—' }}</span>
@@ -377,11 +385,18 @@ watchEffect(() => {
           <template v-else>
             <span class="dot" :class="{ off: !proxyRunning }" />
             Socks5 <span class="addr">{{ socks5Addr || '—' }}</span>
-            <span class="sep">//</span>
+            <span class="sep">-</span>
             <span :class="proxyRunning ? 'on' : 'off-t'">
               {{ proxyRunning ? t('foot.running') : t('foot.stopped') }}
             </span>
           </template>
+          <span class="sep">//</span>
+          <span class="dot" :class="{ off: !mcpEnabled, confirm: mcpNeedsConfirmation }" />
+          MCP
+          <span class="sep">-</span>
+          <span :class="mcpEnabled ? (mcpNeedsConfirmation ? 'confirm-t' : 'on') : 'off-t'">
+            {{ isEn ? (mcpEnabled ? (mcpNeedsConfirmation ? 'CONFIRM' : 'RUNNING') : 'STOPPED') : (mcpEnabled ? (mcpNeedsConfirmation ? '需确认' : '运行中') : '已停止') }}
+          </span>
         </div>
       </footer>
     </div>
@@ -523,6 +538,7 @@ watchEffect(() => {
 }
 
 .wb:hover { color: var(--green); background: rgb(var(--green-rgb) / 8%); }
+.wb.back:hover { color: var(--cyan); background: rgb(var(--cyan-rgb) / 8%); }
 .wb.close:hover { color: var(--danger); background: rgb(var(--danger-rgb) / 12%); }
 
 /*
@@ -631,6 +647,8 @@ watchEffect(() => {
 .sb-right .sep { color: var(--border); }
 .sb-right .on { color: var(--green); }
 .sb-right .off-t { color: var(--muted); }
+.dot.confirm { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+.sb-right .confirm-t { color: var(--amber); }
 
 .dot { width: 7px; margin-top: -1px;   /* 状态栏顶部补了 1px 内边距，圆点不受字形偏移影响、要退回去 */ height: 7px; background: var(--green); box-shadow: 0 0 6px var(--green); }
 

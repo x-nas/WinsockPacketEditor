@@ -183,7 +183,7 @@ namespace WinsockPacketEditor
             [In] IntPtr lpBuffer,
             [In] Int32 Length,
             [In] SocketFlags Flags,
-            [In] ref Operate.PacketConfig.Packet.SockAddr To,
+            [In] IntPtr To,
             [In] Int32 ToLen
             );
 
@@ -192,11 +192,11 @@ namespace WinsockPacketEditor
             [In] IntPtr lpBuffer,
             [In] Int32 Length,
             [In] SocketFlags Flags,
-            [In] ref Operate.PacketConfig.Packet.SockAddr To,
+            [In] IntPtr To,
             [In] Int32 ToLen)
         {
             Operate.PacketConfig.Packet.PacketType ptType = Operate.PacketConfig.Packet.PacketType.WS2_SendTo;
-            return WinSockHook.SendTo_Hook(ptType, Socket, lpBuffer, Length, Flags, ref To, ToLen);
+            return WinSockHook.SendTo_Hook(ptType, Socket, lpBuffer, Length, Flags, To, ToLen);
         }
 
         #endregion
@@ -220,7 +220,7 @@ namespace WinsockPacketEditor
             [Out] IntPtr lpBuffer,
             [In] Int32 Length,
             [In] SocketFlags Flags,
-            [In, Out] ref Operate.PacketConfig.Packet.SockAddr From,
+            [In, Out] IntPtr From,
             [In, Out, Optional] IntPtr FromLen
             );
 
@@ -229,11 +229,11 @@ namespace WinsockPacketEditor
             [Out] IntPtr lpBuffer,
             [In] Int32 Length,
             [In] SocketFlags Flags,
-            [In, Out] ref Operate.PacketConfig.Packet.SockAddr From,
+            [In, Out] IntPtr From,
             [In, Out, Optional] IntPtr FromLen)
         {
             Operate.PacketConfig.Packet.PacketType ptType = Operate.PacketConfig.Packet.PacketType.WS2_RecvFrom;
-            return WinSockHook.RecvFrom_Hook(ptType, Socket, lpBuffer, Length, Flags, ref From, FromLen);
+            return WinSockHook.RecvFrom_Hook(ptType, Socket, lpBuffer, Length, Flags, From, FromLen);
         }
 
         #endregion
@@ -314,8 +314,8 @@ namespace WinsockPacketEditor
             [In] Int32 BufferCount,
             [Out] IntPtr lpNumberOfBytesSend,
             [In] SocketFlags Flags,
-            [In] ref Operate.PacketConfig.Packet.SockAddr To,
-            [In] IntPtr lpToLen,
+            [In] IntPtr To,
+            [In] Int32 lpToLen,
             [In] IntPtr lpOverlapped,
             [In] IntPtr lpCompletionRoutine
             );
@@ -345,7 +345,7 @@ namespace WinsockPacketEditor
             [In] Int32 BufferCount,
             [Out] IntPtr lpNumberOfBytesRecvd,
             [In, Out] ref SocketFlags Flags,
-            [In, Out] ref Operate.PacketConfig.Packet.SockAddr From,
+            [In, Out] IntPtr From,
             [In, Out] IntPtr lpFromlen,
             [In] IntPtr lpOverlapped,
             [In] IntPtr lpCompletionRoutine

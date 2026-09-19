@@ -44,6 +44,8 @@ import RemoteSetting from './RemoteSetting.vue'
 import ActionColor from './ActionColor.vue'
 import type { SettingKey } from './settings'
 
+const props = withDefaults(defineProps<{ visible?: boolean }>(), { visible: true })
+
 const prefs = ref<Prefs | null>(null)
 const stats = ref<Stats | null>(null)
 const selected = ref<ProxyRow | null>(null)
@@ -855,6 +857,7 @@ const cells = computed(() => {
         :selected-id="selectedId"
         :picked="picked"
         :follow="autoRoll"
+        :visible="props.visible"
         @select="onSelect"
       @open="(r: any) => (editTarget = { list: 'proxy', id: r.Id })"
         @menu="onMenu"
