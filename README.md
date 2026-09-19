@@ -83,8 +83,8 @@
 ### ⬇️ 下载与运行
 
 1. 到 **[下载中心](https://www.wpe64.com/downloads.html)** 的 WPE64 标签页下载最新版压缩包 `WPE64 v2.3.zip`（**免安装**，蓝奏云 / 百度网盘任选）。
-2. **解压之前**先在 zip 上右键「属性 → 解除锁定 → 应用」，再解压 —— 里面是 `WPE64 2.3.exe` 和校验文件 `WPE64 2.3.exe.sha256.txt`（核对方法见下载中心）。
-3. 双击 `WPE64 2.3.exe`，在权限提示上选「是」即可（需要管理员权限）。首次运行会先释放程序文件。
+2. **解压之前**先在 zip 上右键「属性 → 解除锁定 → 应用」，再解压 —— 里面是 `WPE64 v2.3.exe` 和校验文件 `WPE64 v2.3.exe.sha256.txt`（核对方法见下载中心）。
+3. 双击 `WPE64 v2.3.exe`，在权限提示上选「是」即可（需要管理员权限）。首次运行会先释放程序文件。
 
 > ⚠️ **从旧版本升级**：配置按版本分开存放、不会自动继承。升级前请先用旧版的「备份设置」导出全部数据，装好新版再导入。
 
@@ -163,8 +163,8 @@ A **network packet capture-and-edit tool** for Windows. It lists every packet a 
 ### ⬇️ Download & run
 
 1. Download the latest zip, `WPE64 v2.3.zip` (**no installer**), from the WPE64 tab of the **[download center](https://www.wpe64.com/en/downloads.html)** — Lanzou or Baidu Pan.
-2. **Before unzipping**, right-click the zip → Properties → **Unblock** → Apply, then unzip it. Inside are `WPE64 2.3.exe` and its checksum file `WPE64 2.3.exe.sha256.txt` (see the download center for how to check it).
-3. Double-click `WPE64 2.3.exe` and choose Yes at the prompt (administrator rights are required). The first run unpacks the program files.
+2. **Before unzipping**, right-click the zip → Properties → **Unblock** → Apply, then unzip it. Inside are `WPE64 v2.3.exe` and its checksum file `WPE64 v2.3.exe.sha256.txt` (see the download center for how to check it).
+3. Double-click `WPE64 v2.3.exe` and choose Yes at the prompt (administrator rights are required). The first run unpacks the program files.
 
 > ⚠️ **Upgrading from an older version**: settings are stored per version and are not carried over. Export all your data from the old version with Backup settings first, then import it into 2.3.
 

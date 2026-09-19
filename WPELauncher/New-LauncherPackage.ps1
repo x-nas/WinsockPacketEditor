@@ -6,7 +6,7 @@
         ② 校验 -Required 里的文件都在
         ③ 打 payload.zip + payload.txt（Version / Hash / Exe / Name / Title / Files / Bytes）
         ④ 构建本目录的 WPELauncher.csproj，把载荷嵌进去
-        ⑤ 输出 <DistDir>\<OutBaseName> <版本>.exe 及其 .sha256.txt
+        ⑤ 输出 <DistDir>\<OutBaseName> <-VersionPrefix><版本>.exe 及其 .sha256.txt
 
     用户双击那个 exe：第一次解压到 %LOCALAPPDATA%\<Name>\app\<版本>-<哈希>\，之后直接启动 <Exe>。
 #>
@@ -20,6 +20,9 @@ param(
     [Parameter(Mandatory = $true)][string]$OutBaseName,
     [Parameter(Mandatory = $true)][string]$Icon,
     [string]$LauncherAssembly = 'Launcher',
+    # 只加在「输出的 exe 文件名」上（WPE 传 'v' → WPE64 v2.3.exe）。
+    # payload.txt 的 Version 与解压目录 <版本>-<哈希> 不带它：那是版本号，不是给人看的名字。
+    [string]$VersionPrefix = '',
     [string[]]$AllowedExe = @(),
     [string[]]$ExcludeRx = @(),
     [string[]]$Required = @()
@@ -146,12 +149,12 @@ Step '输出'
 $built = Join-Path $LauncherOut "$LauncherAssembly.exe"
 if (-not (Test-Path -LiteralPath $built)) { throw "没有 $built" }
 
-$OutExe = Join-Path $DistDir "$OutBaseName $short.exe"
+$OutExe = Join-Path $DistDir "$OutBaseName $VersionPrefix$short.exe"
 Copy-Item -LiteralPath $built -Destination $OutExe -Force
 
 $outLen = (Get-Item -LiteralPath $OutExe).Length
 $outHash = (Get-FileHash -LiteralPath $OutExe -Algorithm SHA256).Hash.ToLowerInvariant()
-[IO.File]::WriteAllText("$OutExe.sha256.txt", "$outHash  $OutBaseName $short.exe`r`n", (New-Object Text.UTF8Encoding($false)))
+[IO.File]::WriteAllText("$OutExe.sha256.txt", "$outHash  $OutBaseName $VersionPrefix$short.exe`r`n", (New-Object Text.UTF8Encoding($false)))
 
 Write-Host ("{0}  ({1:N2} MB)" -f $OutExe, ($outLen / 1MB)) -ForegroundColor Green
 Write-Host "SHA256 $outHash"
