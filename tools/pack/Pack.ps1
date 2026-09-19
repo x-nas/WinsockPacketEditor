@@ -6,7 +6,8 @@
         powershell -ExecutionPolicy Bypass -File tools\pack\Pack.ps1 -SkipBuild   # 直接用现有的 bin\Release
 
     流程：npm run build → MSBuild 解决方案 Release → WPELauncher\New-LauncherPackage.ps1
-    输出：dist\WPE64 <版本>.exe（首次运行解压到 %LOCALAPPDATA%\WPE64\app\<版本>-<哈希>\）
+    输出：dist\WPE64 v<版本>.exe（首次运行解压到 %LOCALAPPDATA%\WPE64\app\<版本>-<哈希>\）
+          文件名里的 v 由 -VersionPrefix 传下去，只影响输出文件名（payload.txt 的 Version 仍是 2.3）
 #>
 [CmdletBinding()]
 param(
@@ -53,7 +54,7 @@ Remove-Item -LiteralPath (Join-Path $McpOutput 'WPEMcpServer.pdb') -Force -Error
     -SourceDir (Join-Path $Main 'bin\Release') `
     -DistDir (Join-Path $Repo 'dist') `
     -Name 'WPE64' -Title 'WPE x64' -Exe 'WinsockPacketEditor.exe' `
-    -OutBaseName 'WPE64' -LauncherAssembly 'WPE64' `
+    -OutBaseName 'WPE64' -LauncherAssembly 'WPE64' -VersionPrefix 'v' `
     -Icon (Join-Path $Main 'wpe.ico') `
     -AllowedExe @('EasyHook32Svc.exe', 'EasyHook64Svc.exe', 'SuperSocket.SocketService.exe') `
     -ExcludeRx @(
