@@ -11,7 +11,7 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { call } from '../../bridge'
 import { t } from '../../i18n'
-import { httpAddr, proxyRunning, socks5Addr } from '../../stores/runtime'
+import { proxyRunning, socks5Addr, tunReady } from '../../stores/runtime'
 // 设置清单与 SettingKey 在独立模块里 —— <script setup> 不能写 export
 import { SETTINGS, type SettingKey } from './settings'
 import ContextMenu from '../ContextMenu.vue'
@@ -37,25 +37,6 @@ function openMenu(e: MouseEvent): void {
 function onPick(id: string): void {
   emit('openSetting', id as SettingKey)
 }
-
-/*
-  HTTP 那块端口牌：与 SOCKS5 同一个 IP 时只显示「:端口」，完整地址进悬停提示。
-
-  两个地址本来就是 ShellForm.ProxyAddresses 用<b>同一个</b> GetLocalIPAddress() 拼出来的，
-  IP 恒相同 —— 并排写两遍，占掉的一百多像素正是 125% 缩放下把右端按钮挤到第二行的那一截
-  （2026-09-11 按要求收成一行）。万一哪天两边不同了（改成各自绑定），这里自动退回完整地址。
-*/
-function hostOf(addr: string): string {
-  const i = addr.lastIndexOf(':')
-  return i > 0 ? addr.slice(0, i) : addr
-}
-
-const httpShort = computed(() => {
-  const h = httpAddr.value
-  if (!h) return ''
-  const s = socks5Addr.value
-  return s && hostOf(s) === hostOf(h) ? h.slice(hostOf(h).length) : h
-})
 
 const busy = ref(false)
 
@@ -115,9 +96,9 @@ async function toggle(): Promise<void> {
       <span class="port">
         <b class="pk">SOCKS5</b><span class="pv">{{ socks5Addr || '—' }}</span>
       </span>
-      <!-- httpAddr 空串 = 代理设置里没开 HTTP，不是取不到 —— 显示「未启用」并压暗 -->
-      <span class="port" :class="{ off: !httpAddr }" :title="httpAddr && httpShort !== httpAddr ? 'HTTP ' + httpAddr : undefined">
-        <b class="pk">HTTP</b><span class="pv">{{ httpShort || t('proxy.notEnabled') }}</span>
+      <!-- TUN：内置 mihomo 内核是否已接管进程流量（未就绪压暗） -->
+      <span class="port" :class="{ off: !tunReady }" :title="t('mh.tunHint')">
+        <b class="pk">TUN</b><span class="pv">{{ tunReady ? t('ps.s4.on') : t('ps.s4.off') }}</span>
       </span>
     </span>
 

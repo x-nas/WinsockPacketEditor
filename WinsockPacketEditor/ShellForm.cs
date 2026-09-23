@@ -1137,8 +1137,8 @@ namespace WPEHybrid
                     外壳没了而驱动还把它们的连接转到一个已经不存在的端口上，表现是「关掉 WPE 之后目标进程断网」。
                     驱动本身不卸（卸载会重启电脑）。UDP 那头的 SOCKS5 关联一并收掉。
                 */
-                Operate.ProxyConfig.Proxy.ReleaseDriverProcesses();
-                Operate.ProxyConfig.Proxy.CloseAllUDPProxy();
+                //内置 mihomo 内核必须停：不停会留下 TUN 路由，退出后整机断网
+                MihomoKernel.Stop();
 
                 //远程管理与启动时的 StartRemoteMGT 成对（在 EnsureProxyConfigLoaded 里）
                 Operate.SystemConfig.StopRemoteMGT(true);
@@ -4084,6 +4084,17 @@ namespace WPEHybrid
 
             this.bridge.Register("getProcessSetting", args => Operate.ProxyConfig.Proxy.GetProcessSetting());
 
+            //「mihomo 模式设置」页（2026-09-23 起取代旧的进程设置）
+            this.bridge.Register("getMihomoSetting", args => Operate.ProxyConfig.Proxy.GetMihomoSetting());
+
+            this.bridge.Register("saveMihomoSetting", async args =>
+            {
+                string tunStack = args["tunStack"] == null ? null : (string)args["tunStack"];
+                string dnsMode = args["dnsMode"] == null ? null : (string)args["dnsMode"];
+                string error = await Operate.ProxyConfig.Proxy.SaveMihomoSetting(tunStack, dnsMode);
+                return new { error = error ?? string.Empty };
+            });
+
             //进程枚举要几百毫秒，别卡 UI 线程
             this.bridge.Register("getProcessRows", async args => new { rows = await Task.Run(() => Operate.ProxyConfig.Proxy.GetProcessRows()) });
 
@@ -5200,6 +5211,9 @@ namespace WPEHybrid
                     socks5Port = Operate.ProxyConfig.Proxy.SOCKS5_Port,
                     socks5Addr = socks5Addr,
                     httpAddr = httpAddr,
+                    //内置 mihomo 内核状态（2026-09-23）：RunBar 的 TUN 灯读这两个
+                    tunReady = MihomoKernel.IsReady,
+                    kernelRunning = MihomoKernel.IsRunning,
                     /*
                         IP 归属地库的版本与条目数，由 Operate 暴露成 string / int ——
                         外壳因此不用引用 QQWry 程序集（直接读 ipSearch.Version 会 CS0012）。

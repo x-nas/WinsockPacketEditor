@@ -174,7 +174,7 @@ export const DICT = {
   // ── 设置弹窗（12 项，目前只做了代理设置）────────────
   'set.save': { zh: '保存', en: 'Save' },
   'set.proxy': { zh: '代理设置', en: 'Proxy Settings' },
-  'set.process': { zh: '进程设置', en: 'Process Settings' },
+  'set.process': { zh: 'mihomo 模式', en: 'mihomo mode' },
   'set.leach': { zh: '过滤设置', en: 'Leach Settings' },
   'set.hook': { zh: '拦截设置', en: 'Hook Settings' },
   'set.list': { zh: '列表设置', en: 'List Settings' },
@@ -1587,6 +1587,18 @@ export const DICT = {
   'dlg.close': { zh: '关闭', en: 'Close' },
   'beta.warn': { zh: '未经完整回归验证的构建', en: 'build not fully regression-tested' },
   'beta.ok': { zh: '知道了', en: 'Got it' },
+  'mh.kernel': { zh: "内核", en: "Kernel" },
+  'mh.ready': { zh: "已就绪", en: "Ready" },
+  'mh.notReady': { zh: "未就绪", en: "Not ready" },
+  'mh.version': { zh: "版本", en: "Version" },
+  'mh.stack': { zh: "TUN 栈", en: "TUN stack" },
+  'mh.stackHint': { zh: "内核接管进程流量的方式。system 兼容性最好；gvisor 更稳但更吃 CPU；mixed 介于两者之间。", en: "How the kernel takes over process traffic. system is the most compatible; gvisor is steadier but uses more CPU; mixed sits between them." },
+  'mh.dns': { zh: "DNS 模式", en: "DNS mode" },
+  'mh.dnsHint': { zh: "fake-ip 让 WPE 看得到域名（推荐）；redir-host 副作用更小，但列表里多半只剩 IP。", en: "fake-ip keeps domain names visible to WPE (recommended); redir-host has fewer side effects but usually leaves only IPs in the list." },
+  'mh.procs': { zh: "拦截进程", en: "Intercepted processes" },
+  'mh.loop': { zh: "WPE 自身、启动器与内核已固定走直连（断环），不可关闭。", en: "WPE itself, the launcher and the kernel are always routed direct (loop-break); this cannot be turned off." },
+  'mh.needProxy': { zh: "代理服务还没启动。启动后内核才会接管进程流量。", en: "The proxy service is not running yet. The kernel takes over process traffic only after it starts." },
+  'mh.tunHint': { zh: "TUN 是否已接管进程流量", en: "Whether TUN has taken over process traffic" },
 } satisfies Record<string, Entry>
 
 export type Key = keyof typeof DICT

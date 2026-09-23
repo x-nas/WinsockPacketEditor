@@ -4239,7 +4239,9 @@ namespace WinsockPacketEditor
                         new XElement("FireWall_AutoBlackList_Minutes", ProxyConfig.Proxy.FireWall_AutoBlackList_Minutes),
                         new XElement("FireWall_AutoClear_Expiry", ProxyConfig.Proxy.FireWall_AutoClear_Expiry),
                         new XElement("DriverType", ProxyConfig.Proxy.DriverType),
-                        new XElement("SelectProcessNames", ProxyConfig.Proxy.SerializeSelectProcessNames())
+                        new XElement("SelectProcessNames", ProxyConfig.Proxy.SerializeSelectProcessNames()),
+                        new XElement("TunStack", ProxyConfig.Proxy.TunStack),
+                        new XElement("DnsMode", ProxyConfig.Proxy.DnsMode)
                         );
 
                     return xeProxyMode;
@@ -4314,6 +4316,19 @@ namespace WinsockPacketEditor
                         if (ProxyMode.Columns.Contains("SelectProcessNames"))
                         {
                             ProxyConfig.Proxy.LoadSelectProcessNames(ProxyMode.Rows[0]["SelectProcessNames"] as string);
+                        }
+
+                        //2026-09-23 加的列：老库靠 EnsureColumn 补，读取端再兜一层
+                        if (ProxyMode.Columns.Contains("TunStack") && ProxyMode.Rows[0]["TunStack"] != DBNull.Value)
+                        {
+                            string ts = ProxyMode.Rows[0]["TunStack"].ToString();
+                            if (!string.IsNullOrEmpty(ts)) { ProxyConfig.Proxy.TunStack = ts; }
+                        }
+
+                        if (ProxyMode.Columns.Contains("DnsMode") && ProxyMode.Rows[0]["DnsMode"] != DBNull.Value)
+                        {
+                            string dm = ProxyMode.Rows[0]["DnsMode"].ToString();
+                            if (!string.IsNullOrEmpty(dm)) { ProxyConfig.Proxy.DnsMode = dm; }
                         }
                     }
                 }
@@ -4560,6 +4575,12 @@ namespace WinsockPacketEditor
                     {
                         ProxyConfig.Proxy.LoadSelectProcessNames(SelectProcessNames.Value);
                     }
+
+                    XElement TunStack = xeProxyMode.Element("TunStack");
+                    if (TunStack != null && !string.IsNullOrEmpty(TunStack.Value)) { ProxyConfig.Proxy.TunStack = TunStack.Value; }
+
+                    XElement DnsMode = xeProxyMode.Element("DnsMode");
+                    if (DnsMode != null && !string.IsNullOrEmpty(DnsMode.Value)) { ProxyConfig.Proxy.DnsMode = DnsMode.Value; }
                 }
                 catch (Exception ex)
                 {
@@ -5561,6 +5582,10 @@ namespace WinsockPacketEditor
                 public static bool Enable_SOCKS5 = true, Enable_Auth = true;
                 public static bool Enable_HTTP = true, MustTCP_AppointPort = false, MustTCP_Auth = false;
                 public static bool MustTCP = true;
+
+                //内置 mihomo 内核（2026-09-23 起取代 SunnyNet 的进程抓取）
+                public static string TunStack = "system";   // TUN 栈：system / gvisor / mixed
+                public static string DnsMode = "fake-ip";   // DNS 模式：fake-ip / redir-host
                 public static string MustTCP_IP = "127.0.0.1";
                 public static ushort MustTCP_Port = 1080;
                 public static string MustTCP_UserName = string.Empty, MustTCP_PassWord = string.Empty;
@@ -5996,23 +6021,68 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                /// <summary>装驱动 + 把进程交给驱动 + 落库。跑在 UI.Busy 的后台线程上，不碰界面。</summary>
+                /// <summary>
+                /// 过渡期（P1）：进程抓取已改由内置 mihomo 内核完成，这里只把进程名单落库，
+                /// <b>不再加载 SunnyNet 驱动</b>（它与 mihomo 的 TUN 会互相抢流量）。
+                /// SunnyNet 的驱动相关代码在 P4 一起删。
+                /// </summary>
                 private static string ApplyProcessSetting(int DriverTypeNew)
                 {
-                    if (!IsLoadDriver)
-                    {
-                        DriverType = DriverTypeNew >= 0 && DriverTypeNew <= 2 ? DriverTypeNew : 1;
-                        IsLoadDriver = syNet.LoadDriver(DriverType);
-                    }
-
-                    if (!IsLoadDriver)
-                    {
-                        return UI.T("ProcessSetting.LoadDriver.Error", "加载驱动失败, 请检查是否管理员权限运行");
-                    }
-
-                    ApplyProcessesToDriver();
                     SystemConfig.SaveProxyMode_ToDB();
                     return string.Empty;
+                }
+
+                /// <summary>「mihomo 模式设置」页读取的整包状态。</summary>
+                public static MihomoSettingRow GetMihomoSetting()
+                {
+                    return new MihomoSettingRow
+                    {
+                        ProxyRunning = IsRunning,
+                        KernelRunning = MihomoKernel.IsRunning,
+                        KernelReady = MihomoKernel.IsReady,
+                        KernelVersion = MihomoKernel.Version ?? string.Empty,
+                        EnableSocks5 = Enable_SOCKS5,
+                        Socks5Port = SOCKS5_Port,
+                        EnableAuth = Enable_Auth,
+                        IsAdmin = SystemConfig.IsAdministrator(),
+                        LastError = MihomoKernel.LastLine ?? string.Empty,
+                        TunStack = NormalizeTunStack(TunStack),
+                        DnsMode = NormalizeDnsMode(DnsMode),
+                    };
+                }
+
+                /// <summary>
+                /// 保存 mihomo 模式设置。进程名单由 addSelectProcessName / removeSelectProcessName 单独维护；
+                /// 这里只落库 TUN 栈 / DNS 模式，内核在跑就按新设置重启一次。
+                /// </summary>
+                public static async Task<string> SaveMihomoSetting(string tunStack, string dnsMode)
+                {
+                    try
+                    {
+                        TunStack = NormalizeTunStack(tunStack);
+                        DnsMode = NormalizeDnsMode(dnsMode);
+                        SystemConfig.SaveProxyMode_ToDB();
+
+                        if (IsRunning)
+                        {
+                            string restartErr = await UI.Busy(UI.T("Loading", "正在加载..."), () =>
+                            {
+                                MihomoKernel.Stop();
+                                string e;
+                                StartMihomoKernel(out e);
+                                return e;
+                            });
+
+                            if (!string.IsNullOrEmpty(restartErr)) { return restartErr; }
+                        }
+
+                        return string.Empty;
+                    }
+                    catch (Exception ex)
+                    {
+                        DoLog(nameof(SaveMihomoSetting), ex);
+                        return ex.Message;
+                    }
                 }
 
                 /// <summary>
@@ -6421,7 +6491,17 @@ namespace WinsockPacketEditor
                             return false;
                         }
 
-                        return InitSocks5Proxy() && InitHttpProxy();
+                        if (!InitSocks5Proxy())
+                        {
+                            return false;
+                        }
+
+                        /*
+                            过渡期（P1）：不再启动 SunnyNet 的 HTTP 代理与驱动，
+                            抓包改由内置 mihomo 内核把勾选的进程经 TUN 转到本机 SOCKS5。
+                            SunnyNet 的代码与界面在 P3/P4 才删。
+                        */
+                        return StartMihomoKernel();
                     }
                     catch (Exception ex)
                     {
@@ -6859,18 +6939,70 @@ namespace WinsockPacketEditor
                     return false;
                 }
 
-                /// <summary>停止代理服务。SOCKS5 与 HTTP 各自独立，一个没起也不影响另一个停。</summary>
+                /// <summary>
+                /// 启动内置 mihomo 内核，把「按名称拦截」勾选的进程经 TUN 转到本机 SOCKS5。
+                /// 断环规则由内核配置保证（WPE 自身走 DIRECT）。
+                /// </summary>
+                private static bool StartMihomoKernel()
+                {
+                    string err;
+                    return StartMihomoKernel(out err);
+                }
+
+                private static bool StartMihomoKernel(out string error)
+                {
+                    error = string.Empty;
+                    try
+                    {
+                        //SOCKS5 监听 0.0.0.0 时内核连回环；绑了具体地址就连那个地址
+                        string server = (ProxyTCP_IP == null
+                            || ProxyTCP_IP.Equals(IPAddress.Any)
+                            || ProxyTCP_IP.Equals(IPAddress.IPv6Any))
+                            ? "127.0.0.1"
+                            : ProxyTCP_IP.ToString();
+
+                        if (!MihomoKernel.Start(SOCKS5_Port, server, Enable_Auth, NormalizeTunStack(TunStack), NormalizeDnsMode(DnsMode), lstSelectProcessName, out error))
+                        {
+                            DoLog(nameof(StartMihomoKernel), error);
+                            UI.Toast(UiIcon.Error, error);
+                            return false;
+                        }
+
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        DoLog(nameof(StartMihomoKernel), ex);
+                        error = ex.Message;
+                        return false;
+                    }
+                }
+
+                /// <summary>TUN 栈只认这三个，别的落回 system —— 写错会让内核整份配置加载失败。</summary>
+                public static string NormalizeTunStack(string v)
+                {
+                    if (string.Equals(v, "gvisor", StringComparison.OrdinalIgnoreCase)) { return "gvisor"; }
+                    if (string.Equals(v, "mixed", StringComparison.OrdinalIgnoreCase)) { return "mixed"; }
+                    return "system";
+                }
+
+                /// <summary>DNS 模式只认这两个，别的落回 fake-ip。</summary>
+                public static string NormalizeDnsMode(string v)
+                {
+                    if (string.Equals(v, "redir-host", StringComparison.OrdinalIgnoreCase)) { return "redir-host"; }
+                    return "fake-ip";
+                }
+
+                /// <summary>停止代理服务。SOCKS5 与 mihomo 内核各自独立，一个没起也不影响另一个停。</summary>
                 public static void StopProxy()
                 {
                     try
                     {
                         /*
-                            先把进程从驱动上摘掉，再关端口。顺序反了会有一小段时间目标进程的连接被转到一个已经不存在的端口上。
-                            驱动本身不卸（卸载会重启电脑）；名单留在内存里，StartProxy 时 ApplyProcessesToDriver 装回去。
-                            UDP 那头的关联也一起收掉 —— 服务停了它们迟早会因控制连接断开而自己收掉，这里只是不等。
+                            过渡期（P1）：SunnyNet 的驱动与 HTTP 代理已不再启动，
+                            这里只停 SOCKS5 与内置 mihomo 内核。
                         */
-                        ReleaseDriverProcesses();
-                        CloseAllUDPProxy();
+                        MihomoKernel.Stop();
 
                         if (ProxyServer != null && ProxyServer.State == ServerState.Running)
                         {
@@ -6883,14 +7015,6 @@ namespace WinsockPacketEditor
                             WPCConfig.Device.Clear();
 
                             UI.Toast(UiIcon.Warn, UI.T("ProxyModeForm.StopProxy", "停止 SOCKS5 代理"));
-                        }
-
-                        if (syNet != null && Enable_HTTP)
-                        {
-                            if (syNet.Stop())
-                            {
-                                UI.Toast(UiIcon.Warn, UI.T("ProxyModeForm.StopProxy", "停止 HTTP 代理"));
-                            }
                         }
                     }
                     catch (Exception ex)
@@ -7226,6 +7350,15 @@ namespace WinsockPacketEditor
                                     psSession.WpcVersion = dev.Version;
                                     psSession.WpcOs = dev.Os;
                                 }
+                            }
+                            else if (MihomoKernel.TryAuthKernel(sUserName, sPassWord))
+                            {
+                                /*
+                                    内置 mihomo 内核：本机回环 + 每次启动随机口令（见 MihomoKernel）。
+                                    不占用户账号 / 设备槽 / 连接数 —— AccountID 留空，
+                                    CheckLimitLinks / CheckLimitDevices / Devices.Add 对空 AID 都会直接放行。
+                                */
+                                bAuthOK = true;
                             }
                             else if (Operate.ProxyConfig.Proxy.Only_WPC_Client)
                             {
@@ -31672,6 +31805,8 @@ namespace WinsockPacketEditor
                         sql += "FireWall_AutoClear_Expiry BOOLEAN DEFAULT 0,";//代理模式 - 自动清理过期的规则
                         sql += "DriverType INTEGER DEFAULT 1,";//代理模式 - 进程拦截的驱动类型（0 Proxifier · 1 NFAPI · 2 WinDivert）
                         sql += "SelectProcessNames TEXT,";//代理模式 - 按名称拦截的进程表（一行一条 "模块名|路径"，见 SerializeSelectProcessNames）
+                        sql += "TunStack TEXT DEFAULT 'system',";//代理模式 - 内置 mihomo 内核的 TUN 栈（2026-09-23）
+                        sql += "DnsMode TEXT DEFAULT 'fake-ip',";//代理模式 - 内置 mihomo 内核的 DNS 模式（2026-09-23）
                         sql += "Only_WPC_Client BOOLEAN DEFAULT 0";//代理模式 - 只允许 WPC 客户端连接（2026-09-14）
                         sql += ");";
 
@@ -31684,6 +31819,8 @@ namespace WinsockPacketEditor
                             EnsureColumn(conn, "ProxyMode", "DriverType", "INTEGER DEFAULT 1");
                             EnsureColumn(conn, "ProxyMode", "SelectProcessNames", "TEXT");
                             EnsureColumn(conn, "ProxyMode", "Only_WPC_Client", "BOOLEAN DEFAULT 0");
+                            EnsureColumn(conn, "ProxyMode", "TunStack", "TEXT DEFAULT 'system'");
+                            EnsureColumn(conn, "ProxyMode", "DnsMode", "TEXT DEFAULT 'fake-ip'");
                         }
                     }
 
@@ -31787,7 +31924,9 @@ namespace WinsockPacketEditor
                         sql += "FireWall_AutoBlackList_Minutes,";
                         sql += "FireWall_AutoClear_Expiry,";
                         sql += "DriverType,";
-                        sql += "SelectProcessNames";
+                        sql += "SelectProcessNames,";
+                        sql += "TunStack,";
+                        sql += "DnsMode";
                         sql += ") VALUES (";
                         sql += "@ProxyIP_Auto,";
                         sql += "@Enable_SOCKS5,";
@@ -31827,7 +31966,9 @@ namespace WinsockPacketEditor
                         sql += "@FireWall_AutoBlackList_Minutes,";
                         sql += "@FireWall_AutoClear_Expiry,";
                         sql += "@DriverType,";
-                        sql += "@SelectProcessNames";
+                        sql += "@SelectProcessNames,";
+                        sql += "@TunStack,";
+                        sql += "@DnsMode";
                         sql += ");";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
@@ -31871,6 +32012,8 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@FireWall_AutoClear_Expiry", ProxyConfig.Proxy.FireWall_AutoClear_Expiry);
                             cmd.Parameters.AddWithValue("@DriverType", ProxyConfig.Proxy.DriverType);
                             cmd.Parameters.AddWithValue("@SelectProcessNames", ProxyConfig.Proxy.SerializeSelectProcessNames());
+                            cmd.Parameters.AddWithValue("@TunStack", ProxyConfig.Proxy.TunStack ?? "system");
+                            cmd.Parameters.AddWithValue("@DnsMode", ProxyConfig.Proxy.DnsMode ?? "fake-ip");
 
                             conn.Open();
                             cmd.ExecuteNonQuery();

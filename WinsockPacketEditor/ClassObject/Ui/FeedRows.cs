@@ -801,6 +801,28 @@ namespace WinsockPacketEditor
         public bool IsAdmin;            // 装驱动要管理员权限
     }
 
+    /// <summary>
+    /// 「mihomo 模式设置」页的数据（2026-09-23 起取代旧的 ProcessSettingRow）。
+    /// 只读环境状态 + 两个可改设置（TUN 栈 / DNS 模式）；进程名单走原有的 getProcessRows / SelectProcess 列表。
+    /// </summary>
+    public sealed class MihomoSettingRow
+    {
+        /* 只读状态 */
+        public bool ProxyRunning;       // 代理服务（SOCKS5）在跑
+        public bool KernelRunning;      // mihomo 内核进程在跑
+        public bool KernelReady;        // TUN 已就绪
+        public string KernelVersion = string.Empty;
+        public bool EnableSocks5;
+        public int Socks5Port;
+        public bool EnableAuth;
+        public bool IsAdmin;
+        public string LastError = string.Empty;
+
+        /* 可改设置 */
+        public string TunStack = "system";  // system / gvisor / mixed
+        public string DnsMode = "fake-ip";  // fake-ip / redir-host
+    }
+
     public sealed class ExtProxySettingRow
     {
         public bool Enable;

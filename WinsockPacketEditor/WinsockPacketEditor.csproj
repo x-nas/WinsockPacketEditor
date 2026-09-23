@@ -137,6 +137,18 @@
   </ItemGroup>
 
   <!--
+    mihomo 内核与配置模板。
+    · wpe-mihomo.exe：58MB 的第三方二进制、从不变，用 PreserveNewest（Always 等于每次构建白拷 58MB）。
+    · base-mihomo.yaml：内嵌进程序集，LogicalName 固定资源名（MihomoConfig.TemplateName 按它取）。
+  -->
+  <ItemGroup>
+    <Content Include="wpe-mihomo.exe" CopyToOutputDirectory="PreserveNewest" Condition="Exists('wpe-mihomo.exe')" />
+    <EmbeddedResource Include="App_Data\base-mihomo.yaml">
+      <LogicalName>base-mihomo.yaml</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <!--
     随程序发布的非托管文件与数据。这些文件本来就在默认 None 通配里，这里只补「拷到输出目录」这一条。
     写成 None 而不是 Content：两者都会经 ProjectReference 传给 WPEHookTest（跑测要它们），None 不会在工程里多出一份重复项。
   -->

@@ -18,7 +18,7 @@ import { call, inHost, on } from './bridge'
 import { attachUiHost, busy, modalOpen } from './bridge/host'
 import { anyModalOpen } from './useModal'
 import { defOf, initLang, isEn, lang, t } from './i18n'
-import { httpAddr, injectHooked, injectTarget, proxyRunning, socks5Addr } from './stores/runtime'
+import { injectHooked, injectTarget, kernelRunning, proxyRunning, socks5Addr, tunReady } from './stores/runtime'
 import { initTheme } from './stores/theme'
 import StartView from './components/StartView.vue'
 import ProxyView from './components/ProxyView.vue'
@@ -90,8 +90,9 @@ onMounted(async () => {
     version.value = s.version
     isBeta.value = s.isBeta
     socks5Addr.value = s.socks5Addr || ''
-    //空串 = HTTP 代理没启用，不是取不到
-    httpAddr.value = s.httpAddr || ''
+    //内置 mihomo 内核状态（运行状态条的 TUN 灯）
+    tunReady.value = !!s.tunReady
+    kernelRunning.value = !!s.kernelRunning
     nativeDrag.value = s.nativeDrag !== false
   } catch (e) {
     console.error('[app] 取自检信息失败', e)

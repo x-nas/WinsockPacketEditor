@@ -17,13 +17,15 @@ export const gotoPage = ref<string | null>(null)
 export const socks5Addr = ref('')
 
 /**
- * HTTP 代理（SunnyNet）的监听地址，同上。
+ * 内置 mihomo 内核的 TUN 是否就绪（进程流量已开始经 TUN 转到本机 SOCKS5）。
  *
- * ⚠️ **空串 = 没启用 HTTP 代理**，不是「取不到」—— C# 侧 `ProxyAddresses` 在
- * `Enable_HTTP` 为 false 时就返回空串，界面据此显示「未启用」而不是一个连不上的地址。
- * 它与 socks5Addr 共用同一次 GetLocalIPAddress()（70ms），所以两者总是一起取、一起写。
+ * ⚠️ 「就绪」以日志出现 `Tun adapter listening` 为准 —— 控制器能连上不代表 TUN 建好了
+ * （实测上一次内核被强杀后可能先失败一次、重试约 16s 才成功，见 MihomoKernel）。
  */
-export const httpAddr = ref('')
+export const tunReady = ref(false)
+
+/** 内置 mihomo 内核进程是否在跑（与 tunReady 可能不同：起来的过程中前者先为 true）。 */
+export const kernelRunning = ref(false)
 
 /**
  * SOCKS5 服务在不在跑。由 ProxyData 的 getStats 轮询写入，RunBar 的启停按钮也写它。

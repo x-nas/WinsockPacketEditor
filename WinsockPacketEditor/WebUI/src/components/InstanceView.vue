@@ -15,7 +15,7 @@
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { call } from '../bridge'
 import { lang, normalize } from '../i18n'
-import { httpAddr, socks5Addr } from '../stores/runtime'
+import { kernelRunning, socks5Addr, tunReady } from '../stores/runtime'
 import SettingsModal from './proxy/SettingsModal.vue'
 
 const props = defineProps<{ open: boolean }>()
@@ -106,13 +106,14 @@ async function save(): Promise<void> {
 
     /*
       配置换了一份，两处缓存要跟着刷新：
-        · socks5Addr / httpAddr 在状态栏与运行状态条上（新库里的代理配置可能不同）
+        · socks5Addr / TUN 状态在状态栏与运行状态条上（新库里的代理配置可能不同）
         · 语言：C# 侧 ApplyAll 已经把 AntdUI 切过去了，前端字典也得跟上，
           否则会出现「弹窗英文、页面中文」。
       这里不调 setLang —— 那个会反过来再写一次 C#，绕一圈还可能把值写反。
     */
     socks5Addr.value = r.socks5Addr || ''
-    httpAddr.value = r.httpAddr || ''
+    tunReady.value = !!r.tunReady
+    kernelRunning.value = !!r.kernelRunning
     lang.value = normalize(r.language)
 
     emit('update:open', false)

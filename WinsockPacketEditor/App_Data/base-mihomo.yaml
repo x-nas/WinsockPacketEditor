@@ -1,0 +1,44 @@
+# WPE · mihomo 内核配置模板（由 MihomoConfig 替换占位符后写入 config.yaml，请勿手改）
+#
+# 断环规则写在下面 rules 块的最前面且不可关闭：WPE 自身的 SOCKS5 出站若被 TUN 再抓回来，
+# 会经 mihomo 送回 WPE，形成死环（表现为直接断网）。
+mixed-port: 0
+allow-lan: false
+mode: rule
+log-level: warning
+external-controller: 127.0.0.1:{ctlPort}
+secret: {secret}
+
+tun:
+  enable: true
+  stack: {tunStack}
+  auto-route: true
+  auto-detect-interface: true
+  exclude-interface: ["lo"]
+
+dns:
+  enable: true
+  enhanced-mode: {dnsMode}
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter:
+    - "localhost"
+    - "*.local"
+    - "127.0.0.0/8"
+    - "10.0.0.0/8"
+    - "172.16.0.0/12"
+    - "192.168.0.0/16"
+  nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+
+proxies:
+  - name: WPE
+    type: socks5
+    server: {server}
+    port: {socks5Port}
+{authLines}    udp: true
+
+find-process-mode: always
+
+rules:
+{rules}

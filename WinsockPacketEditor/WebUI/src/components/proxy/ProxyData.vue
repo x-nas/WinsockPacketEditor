@@ -35,7 +35,7 @@ import LeachSetting from './LeachSetting.vue'
 import FireWallSetting from './FireWallSetting.vue'
 import HookSetting from './HookSetting.vue'
 import SystemSetting from './SystemSetting.vue'
-import ProcessSetting from './ProcessSetting.vue'
+import MihomoSetting from './MihomoSetting.vue'
 import MapSetting from './MapSetting.vue'
 import ExtProxySetting from './ExtProxySetting.vue'
 import HotkeySetting from './HotkeySetting.vue'
@@ -726,7 +726,7 @@ const cells = computed(() => {
     />
 
     <!-- goto：进程设置第 4 步的「打开代理设置」—— 只是导航，那一屏不代管别人的配置 -->
-    <ProcessSetting :open="setting === 'process'" @update:open="setting = $event ? 'process' : null" @goto="setting = $event" />
+    <MihomoSetting :open="setting === 'mihomo'" @update:open="setting = $event ? 'mihomo' : null" />
     <MapSetting :open="setting === 'map'" @update:open="setting = $event ? 'map' : null" />
     <ExtProxySetting :open="setting === 'extproxy'" @update:open="setting = $event ? 'extproxy' : null" />
     <HotkeySetting :open="setting === 'hotkey'" @update:open="setting = $event ? 'hotkey' : null" />

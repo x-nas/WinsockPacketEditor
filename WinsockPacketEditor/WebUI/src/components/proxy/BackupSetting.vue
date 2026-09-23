@@ -9,7 +9,7 @@
 import { computed, ref } from 'vue'
 import { call } from '../../bridge'
 import { lang, normalize, t } from '../../i18n'
-import { httpAddr, refreshHotkey, socks5Addr } from '../../stores/runtime'
+import { kernelRunning, refreshHotkey, socks5Addr, tunReady } from '../../stores/runtime'
 import { initTheme } from '../../stores/theme'
 import SettingsModal from './SettingsModal.vue'
 
@@ -89,10 +89,10 @@ async function importBackup(): Promise<void> {
     void refreshHotkey()
     //监听地址可能跟着代理配置一起换了
     try {
-      const s = await call<{ socks5Addr?: string; httpAddr?: string }>('getSystemCheck')
+      const s = await call<{ socks5Addr?: string; tunReady?: boolean; kernelRunning?: boolean }>('getSystemCheck')
       if (s?.socks5Addr) socks5Addr.value = s.socks5Addr
-      //httpAddr 要无条件写：备份里可能把 HTTP 代理关掉了，那时它就该变回空串
-      if (s) httpAddr.value = s.httpAddr || ''
+      //内核状态要无条件写：备份里可能换了代理配置，旧值不能留
+      if (s) { tunReady.value = !!s.tunReady; kernelRunning.value = !!s.kernelRunning }
     } catch { /* 取不到就留旧值 */ }
   } catch (e) {
     console.error('[bk] 导入失败', e)
