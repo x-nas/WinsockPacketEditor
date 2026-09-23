@@ -328,6 +328,15 @@ namespace WinsockPacketEditor
         private static void RemoveStaleTunDevices()
         {
             const int DIGCF_ALLCLASSES = 0x4;
+
+            /*
+                设备实例不在场。这里刻意<b>没带</b> DIGCF_PRESENT —— 要把「上次强杀留下的、还在占名字的设备」
+                一并列出来删掉，而那些设备的状态未必是 present。代价是列表里会混进真正的幽灵设备，
+                SetupDiRemoveDevice 对它们返回的就是这个错误码：那不是失败，是「它已经不在了」，跳过即可
+                （2026-09-23 日志里那条「移除 WINTUN 残留设备失败（Win32 错误 -536870389）」就是它）。
+            */
+            const int ERROR_NO_SUCH_DEVINST = unchecked((int)0xE000020B);
+
             IntPtr set = IntPtr.Zero;
 
             try
@@ -335,19 +344,29 @@ namespace WinsockPacketEditor
                 set = SetupDiGetClassDevs(IntPtr.Zero, "SWD\\WINTUN", IntPtr.Zero, DIGCF_ALLCLASSES);
                 if (set == IntPtr.Zero || set == new IntPtr(-1)) { return; }
 
-                //移除会改变枚举下标，所以每次都取第 0 个，直到没有
-                for (int guard = 0; guard < 16; guard++)
+                /*
+                    删成功会让后面的下标整体前移，所以删掉一个就回到下标 0 重来；
+                    删不掉的（幽灵设备）跳过它继续看下一个。
+                    ⚠️ 原来这里是 break —— 一个幽灵挡在第 0 位，后面真正要删的设备就一个都清不掉，
+                    而「上次强杀留下的设备占着名字」正是这个函数存在的理由。
+                */
+                int index = 0;
+                for (int guard = 0; guard < 64; guard++)
                 {
                     SP_DEVINFO_DATA data = new SP_DEVINFO_DATA();
                     data.cbSize = Marshal.SizeOf(typeof(SP_DEVINFO_DATA));
 
-                    if (!SetupDiEnumDeviceInfo(set, 0, ref data)) { break; }
+                    if (!SetupDiEnumDeviceInfo(set, index, ref data)) { break; }
 
-                    if (!SetupDiRemoveDevice(set, ref data))
+                    if (SetupDiRemoveDevice(set, ref data)) { index = 0; continue; }
+
+                    int err = Marshal.GetLastWin32Error();
+                    if (err != ERROR_NO_SUCH_DEVINST)
                     {
-                        Operate.DoLog(nameof(MihomoKernel) + ".CleanTun", "移除 WINTUN 残留设备失败（Win32 错误 " + Marshal.GetLastWin32Error() + "）");
-                        break;
+                        Operate.DoLog(nameof(MihomoKernel) + ".CleanTun", "移除 WINTUN 残留设备失败（Win32 错误 " + err + "）");
                     }
+
+                    index++;
                 }
             }
             catch (Exception ex)
