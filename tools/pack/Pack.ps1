@@ -7,7 +7,7 @@
 
     流程：npm run build → MSBuild 解决方案 Release → WPELauncher\New-LauncherPackage.ps1
     输出：dist\WPE64 v<版本>.exe（首次运行解压到 %LOCALAPPDATA%\WPE64\app\<版本>-<哈希>\）
-          文件名里的 v 由 -VersionPrefix 传下去，只影响输出文件名（payload.txt 的 Version 仍是 2.3）
+          文件名里的 v 由 -VersionPrefix 传下去，只影响输出文件名（payload.txt 的 Version 仍是 2.4）
 #>
 [CmdletBinding()]
 param(

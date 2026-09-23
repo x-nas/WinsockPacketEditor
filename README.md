@@ -7,7 +7,7 @@
 **看清、改写并重放程序的网络封包**
 *See, edit and replay the network packets a program sends and receives*
 
-<img src="https://img.shields.io/badge/version-2.3-00c853?style=flat-square" alt="version">&nbsp;
+<img src="https://img.shields.io/badge/version-2.4-00c853?style=flat-square" alt="version">&nbsp;
 <img src="https://img.shields.io/badge/platform-Windows%2010%20%2F%2011-2a2a3a?style=flat-square" alt="platform">&nbsp;
 <img src="https://img.shields.io/badge/languages-7-2a2a3a?style=flat-square" alt="languages">&nbsp;
 <img src="https://img.shields.io/github/stars/x-nas/WinsockPacketEditor?style=flat-square&color=00c853" alt="stars">
@@ -82,9 +82,9 @@
 
 ### ⬇️ 下载与运行
 
-1. 到 **[下载中心](https://www.wpe64.com/downloads.html)** 的 WPE64 标签页下载最新版压缩包 `WPE64 v2.3.zip`（**免安装**，蓝奏云 / 百度网盘任选）。
-2. **解压之前**先在 zip 上右键「属性 → 解除锁定 → 应用」，再解压 —— 里面是 `WPE64 v2.3.exe` 和校验文件 `WPE64 v2.3.exe.sha256.txt`（核对方法见下载中心）。
-3. 双击 `WPE64 v2.3.exe`，在权限提示上选「是」即可（需要管理员权限）。首次运行会先释放程序文件。
+1. 到 **[下载中心](https://www.wpe64.com/downloads.html)** 的 WPE64 标签页下载最新版压缩包 `WPE64 v2.4.zip`（**免安装**，蓝奏云 / 百度网盘任选）。
+2. **解压之前**先在 zip 上右键「属性 → 解除锁定 → 应用」，再解压 —— 里面是 `WPE64 v2.4.exe` 和校验文件 `WPE64 v2.4.exe.sha256.txt`（核对方法见下载中心）。
+3. 双击 `WPE64 v2.4.exe`，在权限提示上选「是」即可（需要管理员权限）。首次运行会先释放程序文件。
 
 > ⚠️ **从旧版本升级**：配置按版本分开存放、不会自动继承。升级前请先用旧版的「备份设置」导出全部数据，装好新版再导入。
 
@@ -162,11 +162,11 @@ A **network packet capture-and-edit tool** for Windows. It lists every packet a 
 
 ### ⬇️ Download & run
 
-1. Download the latest zip, `WPE64 v2.3.zip` (**no installer**), from the WPE64 tab of the **[download center](https://www.wpe64.com/en/downloads.html)** — Lanzou or Baidu Pan.
-2. **Before unzipping**, right-click the zip → Properties → **Unblock** → Apply, then unzip it. Inside are `WPE64 v2.3.exe` and its checksum file `WPE64 v2.3.exe.sha256.txt` (see the download center for how to check it).
-3. Double-click `WPE64 v2.3.exe` and choose Yes at the prompt (administrator rights are required). The first run unpacks the program files.
+1. Download the latest zip, `WPE64 v2.4.zip` (**no installer**), from the WPE64 tab of the **[download center](https://www.wpe64.com/en/downloads.html)** — Lanzou or Baidu Pan.
+2. **Before unzipping**, right-click the zip → Properties → **Unblock** → Apply, then unzip it. Inside are `WPE64 v2.4.exe` and its checksum file `WPE64 v2.4.exe.sha256.txt` (see the download center for how to check it).
+3. Double-click `WPE64 v2.4.exe` and choose Yes at the prompt (administrator rights are required). The first run unpacks the program files.
 
-> ⚠️ **Upgrading from an older version**: settings are stored per version and are not carried over. Export all your data from the old version with Backup settings first, then import it into 2.3.
+> ⚠️ **Upgrading from an older version**: settings are stored per version and are not carried over. Export all your data from the old version with Backup settings first, then import it into 2.4.
 
 **Requirements**: Windows 10 / 11 (or Server 2019 / 2022), 64-bit. If the first launch is blank, the interface runtime is missing — the program shows a one-click installer; install it and reopen.
 
