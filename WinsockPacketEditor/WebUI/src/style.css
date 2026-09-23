@@ -1780,6 +1780,12 @@ body.col-resizing * {
   line-height: 1.5;
   /* 长句要能折行；换行符照原样显示（有几条文案是分行写的） */
   white-space: pre-wrap;
+  /*
+    ⚠️ <b>没有空格的长串也要能在框内断开</b>（进程路径就是典型：C:\...\game.exe 里一个空格都没有）。
+    pre-wrap 只在空白处折行，这种长串本来会整条冲出 340px 的框、跑到页面外面
+    （进程列表悬停提示撞到的就是这条，2026-09-23）。
+  */
+  overflow-wrap: anywhere;
   pointer-events: none;
 }
 
