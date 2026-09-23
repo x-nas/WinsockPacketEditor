@@ -60,6 +60,8 @@ interface Row {
   ProcessID: number
   ProcessPath: string
   running: boolean
+  /** 同名进程的个数（0 = 已保存但当前没在跑）。>1 时在名字后面显示 ×N */
+  count: number
 }
 
 const procs = shallowRef<ProcessRow[]>([])
@@ -79,22 +81,37 @@ const intercepted = computed<Set<string>>(() => {
   return s
 })
 
+/*
+  一行 = 一个进程名（一条 PROCESS-NAME 规则）。
+  ⚠️ <b>运行中那段必须按 ModuleName 去重</b>：同名进程（7 个 msedge）只留一行、只计个数。
+  漏掉这个判断会让同名进程各占一行，而 v-for 的 :key 用的就是 ModuleName —— key 一重复，
+  Vue 就复用 DOM，点击绑到别的行上（「点一行、下面几行被选中」2026-09-23 撞到）。
+*/
 const rows = computed<Row[]>(() => {
   const out: Row[] = []
-  const seen = new Set<string>()
+  const at = new Map<string, Row>()
 
   for (const p of procs.value) {
     const k = (p.ModuleName || '').toLowerCase()
     if (!k) { continue }
-    seen.add(k)
-    out.push({ ModuleName: p.ModuleName, ProcessName: p.ProcessName, ProcessID: p.ProcessID, ProcessPath: p.ProcessPath, running: true })
+
+    const hit = at.get(k)
+    if (hit) { hit.count++; continue }
+
+    const row: Row = { ModuleName: p.ModuleName, ProcessName: p.ProcessName, ProcessID: p.ProcessID, ProcessPath: p.ProcessPath, running: true, count: 1 }
+    at.set(k, row)
+    out.push(row)
   }
+
   for (const p of names.value) {
     const k = (p.ModuleName || '').toLowerCase()
-    if (!k || seen.has(k)) { continue }
-    seen.add(k)
-    out.push({ ModuleName: p.ModuleName, ProcessName: p.ProcessName || p.ModuleName, ProcessID: 0, ProcessPath: p.ProcessPath, running: false })
+    if (!k || at.has(k)) { continue }
+
+    const row: Row = { ModuleName: p.ModuleName, ProcessName: p.ProcessName || p.ModuleName, ProcessID: 0, ProcessPath: p.ProcessPath, running: false, count: 0 }
+    at.set(k, row)
+    out.push(row)
   }
+
   return out
 })
 
@@ -288,7 +305,7 @@ async function save(): Promise<void> {
             >
               <span class="ck"><button class="chk" :disabled="!on" :class="{ on: intercepted.has(r.ModuleName.toLowerCase()) }" @click.stop="toggleRow(r)"><i /></button></span>
               <span class="ico"><img v-if="iconOf(r.ProcessPath)" :src="iconOf(r.ProcessPath)" alt=""><i v-else class="ph" /></span>
-              <span class="name">{{ r.ProcessName }}</span>
+              <span class="name">{{ r.ProcessName }}<i v-if="r.count > 1" class="dup">×{{ r.count }}</i></span>
               <span class="pid">{{ r.running ? r.ProcessID : '—' }}</span>
             </div>
           </div>
@@ -362,6 +379,8 @@ async function save(): Promise<void> {
 .ico .ph { width: 16px; height: 16px; }
 .pid { font-family: var(--mono); font-size: var(--fs-body); color: var(--muted); font-variant-numeric: tabular-nums; }
 .name { color: var(--gray); }
+/* 同名进程的个数：一行就是一条按名规则，×N 提示它同时管着几个进程 */
+.name .dup { margin-left: 6px; font-style: normal; font-family: var(--mono); font-size: var(--fs-caption); color: var(--dim3); }
 
 /* 没启用进程拦截：整卡压暗，行点击在 JS 里也挡了 */
 .sec.off .tr { cursor: default; }
