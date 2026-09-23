@@ -1129,6 +1129,8 @@ export const tw: Record<Key, string> = {
   'dlg.close': '關閉',
   'beta.warn': '未經完整迴歸驗證的構建',
   'beta.ok': '知道了',
+  'mh.enable': "啟用處理程序攔截",
+  'mh.enableHint': "勾選的處理程序會經 TUN 轉到本機 SOCKS5。關掉即卸載核心，網路立刻恢復。",
   'ps.appointPort': "指定連接埠",
   'ps.auth': "需要認證",
   'ps.userPh': "代理帳號",

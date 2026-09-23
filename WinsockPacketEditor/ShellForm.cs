@@ -4081,9 +4081,10 @@ namespace WPEHybrid
 
             this.bridge.Register("saveMihomoSetting", async args =>
             {
+                bool enable = args["enable"] != null && (bool)args["enable"];
                 string tunStack = args["tunStack"] == null ? null : (string)args["tunStack"];
                 string dnsMode = args["dnsMode"] == null ? null : (string)args["dnsMode"];
-                string error = await Operate.ProxyConfig.Proxy.SaveMihomoSetting(tunStack, dnsMode);
+                string error = await Operate.ProxyConfig.Proxy.SaveMihomoSetting(enable, tunStack, dnsMode);
                 return new { error = error ?? string.Empty };
             });
 

@@ -8,13 +8,15 @@
 
       勾选的进程 ── TUN ──▶ mihomo ── SOCKS5 ──▶ WPE 的 SOCKS5（抓包 / 滤镜）──▶ 互联网
 
-  ⚠️ <b>只有一块进程表。</b>旧屏分「按编号拦截」和「按名称拦截」两份，是因为 SunnyNet 同时支持
-  PID 与进程名两种拦截方式；而 mihomo 的规则只有 PROCESS-NAME / PROCESS-PATH（及其正则版），
-  <b>没有按 PID 的规则</b>（PID 每次启动都变）。所以表里一行 = 一个进程名，勾上就是一条
-  PROCESS-NAME 规则；已保存但当前没启动的进程也列出来（编号显示 —），取消勾选即移除。
+  【内核不再随「启动代理」加载】
+  内核只在需要「把进程强制转代理」时才用得上。所以这里第一步是「启用进程拦截」开关：
+  打开并保存 → 内核加载（代理没起时先落库，启动代理再加载）；关掉保存 → 内核卸载、网络立刻恢复。
+  「启动代理」只在开关已打开时才顺带把内核拉起来。
 
-  数据：getMihomoSetting（内核状态 + TUN 栈/DNS 模式）；getProcessRows（运行中的进程，IsCheck = 是否已拦截）；
-  FeedList.SelectProcess（已保存的拦截名单）。名单落库在 ProxyMode.SelectProcessNames。
+  ⚠️ <b>只有一块进程表。</b>旧屏分「按编号拦截」和「按名称拦截」，是因为 SunnyNet 同时支持
+  PID 与进程名两种拦截；而 mihomo 的规则只有 PROCESS-NAME / PROCESS-PATH（及正则版），
+  <b>没有按 PID 的规则</b>（PID 每次启动都变）。所以一行 = 一个进程名，勾上就是一条 PROCESS-NAME 规则；
+  已保存但当前没启动的进程也列出来（编号显示 —），取消勾选即移除。
 */
 import { computed, ref, shallowRef, watch } from 'vue'
 import { call } from '../../bridge'
@@ -31,13 +33,13 @@ const emit = defineEmits<{ (e: 'update:open', v: boolean): void }>()
 interface Setting {
   ProxyRunning: boolean; KernelRunning: boolean; KernelReady: boolean; KernelVersion: string
   EnableSocks5: boolean; Socks5Port: number; EnableAuth: boolean; IsAdmin: boolean; LastError: string
-  TunStack: string; DnsMode: string
+  EnableMihomo: boolean; TunStack: string; DnsMode: string
 }
 
 const EMPTY: Setting = {
   ProxyRunning: false, KernelRunning: false, KernelReady: false, KernelVersion: '',
   EnableSocks5: true, Socks5Port: 1080, EnableAuth: true, IsAdmin: true, LastError: '',
-  TunStack: 'system', DnsMode: 'fake-ip',
+  EnableMihomo: false, TunStack: 'system', DnsMode: 'fake-ip',
 }
 
 const busy = ref(false)
@@ -194,6 +196,7 @@ async function save(): Promise<void> {
   error.value = ''
   try {
     const r = await call<{ error: string }>('saveMihomoSetting', {
+      enable: f.value.EnableMihomo,
       tunStack: f.value.TunStack,
       dnsMode: f.value.DnsMode,
     })
@@ -225,14 +228,24 @@ async function save(): Promise<void> {
         <span class="sv dim">SOCKS5 :{{ f.Socks5Port }}</span>
       </div>
 
-      <p v-if="!f.ProxyRunning" class="hint warn">{{ t('mh.needProxy') }}</p>
       <p v-if="f.LastError" class="hint bad">{{ f.LastError }}</p>
 
-      <!-- TUN 模式 -->
+      <!-- 第一步：启用进程拦截（= 加载内核） -->
       <section class="sec">
-        <div class="grp">{{ t('mh.stack') }}</div>
+        <div class="grp">{{ t('mh.kernel') }}</div>
 
         <div class="row">
+          <div class="k">{{ t('mh.enable') }}</div>
+          <div class="v">
+            <button class="chk" :class="{ on: f.EnableMihomo }" @click="f.EnableMihomo = !f.EnableMihomo">
+              <i />{{ f.EnableMihomo ? t('ps.s4.on') : t('ps.s4.off') }}
+            </button>
+          </div>
+        </div>
+        <p class="hint">{{ t('mh.enableHint') }}</p>
+        <p v-if="f.EnableMihomo && !f.ProxyRunning" class="hint warn">{{ t('mh.needProxy') }}</p>
+
+        <div class="row" :class="{ off: !f.EnableMihomo }">
           <div class="k">{{ t('mh.stack') }}</div>
           <div class="v">
             <button v-for="s in STACKS" :key="s" class="rd" :class="{ on: f.TunStack === s }" @click="f.TunStack = s"><i />{{ s }}</button>
@@ -240,7 +253,7 @@ async function save(): Promise<void> {
         </div>
         <p class="hint">{{ t('mh.stackHint') }}</p>
 
-        <div class="row">
+        <div class="row" :class="{ off: !f.EnableMihomo }">
           <div class="k">{{ t('mh.dns') }}</div>
           <div class="v">
             <button v-for="d in DNSMODES" :key="d" class="rd" :class="{ on: f.DnsMode === d }" @click="f.DnsMode = d"><i />{{ d }}</button>
@@ -249,8 +262,8 @@ async function save(): Promise<void> {
         <p class="hint">{{ t('mh.dnsHint') }}</p>
       </section>
 
-      <!-- 拦截进程（一块表） -->
-      <section class="sec">
+      <!-- 第二步：拦截进程（一块表） -->
+      <section class="sec" :class="{ off: !f.EnableMihomo }">
         <div class="grp">{{ t('mh.procs') }}</div>
 
         <div class="tbl">
@@ -296,10 +309,10 @@ async function save(): Promise<void> {
 /*
   竖直呼吸量：窗口矮就收进程表高度。默认 1280×800 在 125% 缩放下只有 640 CSS 高。
 */
-.ps { --tall: 300px; }
+.ps { --tall: 280px; }
 
-@media (max-height: 760px) { .ps { --tall: 220px; } }
-@media (max-height: 620px) { .ps { --tall: 170px; } }
+@media (max-height: 760px) { .ps { --tall: 200px; } }
+@media (max-height: 620px) { .ps { --tall: 150px; } }
 
 /* 内核状态条 */
 .stat {

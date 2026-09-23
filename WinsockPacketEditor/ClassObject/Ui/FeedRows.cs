@@ -819,6 +819,7 @@ namespace WinsockPacketEditor
         public string LastError = string.Empty;
 
         /* 可改设置 */
+        public bool EnableMihomo;           // 是否启用进程拦截（= 加载内核）
         public string TunStack = "system";  // system / gvisor / mixed
         public string DnsMode = "fake-ip";  // fake-ip / redir-host
     }

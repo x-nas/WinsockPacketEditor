@@ -1138,6 +1138,8 @@ export const ja: Record<Key, string> = {
   'dlg.close': '閉じる',
   'beta.warn': '完全な回帰検証を経ていないビルドです',
   'beta.ok': '了解',
+  'mh.enable': "プロセス傍受を有効化",
+  'mh.enableHint': "チェックしたプロセスの通信は TUN 経由でローカル SOCKS5 に転送されます。オフにするとカーネルを停止し、ネットワークはすぐ戻ります。",
   'ps.appointPort': "指定ポート",
   'ps.auth': "認証が必要",
   'ps.userPh': "ユーザー名",

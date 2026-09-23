@@ -1136,6 +1136,8 @@ export const ko: Record<Key, string> = {
   'dlg.close': '닫기',
   'beta.warn': '완전한 회귀 검증을 거치지 않은 빌드',
   'beta.ok': '확인했습니다',
+  'mh.enable': "프로세스 가로채기 사용",
+  'mh.enableHint': "선택한 프로세스는 TUN을 거쳐 로컬 SOCKS5로 전달됩니다. 끄면 커널이 내려가고 네트워크가 즉시 복구됩니다.",
   'ps.appointPort': "지정 포트",
   'ps.auth': "인증 필요",
   'ps.userPh': "사용자 이름",

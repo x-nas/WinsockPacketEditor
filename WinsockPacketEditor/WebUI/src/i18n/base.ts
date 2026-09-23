@@ -1522,6 +1522,8 @@ export const DICT = {
   'dlg.close': { zh: '关闭', en: 'Close' },
   'beta.warn': { zh: '未经完整回归验证的构建', en: 'build not fully regression-tested' },
   'beta.ok': { zh: '知道了', en: 'Got it' },
+  'mh.enable': { zh: "启用进程拦截", en: "Enable process interception" },
+  'mh.enableHint': { zh: "勾选的进程会经 TUN 转到本机 SOCKS5。关掉即卸载内核，网络立刻恢复。", en: "Checked processes go through TUN to the local SOCKS5. Turning this off unloads the kernel and the network recovers immediately." },
   'ps.appointPort': { zh: "指定端口", en: "Only ports" },
   'ps.auth': { zh: "需要认证", en: "Auth" },
   'ps.userPh': { zh: "代理账号", en: "User name" },

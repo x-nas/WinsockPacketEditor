@@ -1136,6 +1136,8 @@ export const vi: Record<Key, string> = {
   'dlg.close': 'Đóng',
   'beta.warn': 'bản dựng chưa qua kiểm thử hồi quy đầy đủ',
   'beta.ok': 'Đã hiểu',
+  'mh.enable': "Bật chặn tiến trình",
+  'mh.enableHint': "Tiến trình được chọn sẽ đi qua TUN tới SOCKS5 cục bộ. Tắt sẽ gỡ nhân và mạng phục hồi ngay.",
   'ps.appointPort': "Chỉ cổng",
   'ps.auth': "Cần xác thực",
   'ps.userPh': "Tên đăng nhập",
