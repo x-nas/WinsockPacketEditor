@@ -31,6 +31,7 @@ import { FeedList, type ProcessRow } from '../../bridge/types'
 import { t } from '../../i18n'
 import { useList } from '../../stores/lists'
 import { useSort } from '../../useSort'
+import { pushToast } from '../../stores/toast'
 import SettingsModal from './SettingsModal.vue'
 
 const props = defineProps<{ open: boolean }>()
@@ -245,11 +246,20 @@ async function save(): Promise<void> {
       dnsMode: f.value.DnsMode,
       processNames: processNames(),
     })
-    if (r?.error) { error.value = r.error; return }
+
+    //成功 / 失败都给一条轻提示（与「启动代理」同一种反馈）；系统日志由 C# 那边记
+    if (r?.error) {
+      error.value = r.error
+      pushToast('error', r.error)
+      return
+    }
+
+    pushToast('success', t('mh.saved'))
     emit('update:open', false)
   } catch (e) {
     console.error('[ps] 保存失败', e)
     error.value = String(e)
+    pushToast('error', String(e))
   } finally {
     busy.value = false
   }
@@ -365,7 +375,7 @@ async function save(): Promise<void> {
 */
 .cols {
   display: grid;
-  grid-template-columns: minmax(300px, 360px) minmax(0, 1fr);
+  grid-template-columns: minmax(300px, 380px) minmax(0, 1fr);
   gap: 0 12px;
   padding: 0 20px;
   /*
@@ -376,8 +386,13 @@ async function save(): Promise<void> {
 
 /* 卡片自己撑成 flex 列，好把内容顶到上、把最后一句钉到下 */
 .ps .cols > .sec { margin: 10px 0 12px; display: flex; flex-direction: column; }
-/* 左卡窄：标签列收窄，给 system/gvisor/mixed 三个选项留出宽度 */
-.ps .cols > .sec:first-child { --setf-k: 96px; }
+/*
+  左卡窄：标签列收窄，给 system/gvisor/mixed 三个选项留出宽度。
+  88px 是量出来的：宽语言 ×1.3 = 114px，装得下最长那条标签（vi「Chặn tiến trình」85px），
+  而右侧值列还剩 380-40-114-12 = 214px —— 三个单选钮一共要 205px，刚好不折行。
+  改这里的值之前先把七种语言量一遍（见 dev-probe 的 __scan）。
+*/
+.ps .cols > .sec:first-child { --setf-k: 88px; }
 /* 断环说明钉在 01 卡最下部 */
 .ps .cols .loop { margin-top: auto; padding-top: 6px; padding-bottom: 2px; }
 

@@ -1129,7 +1129,7 @@ export const tw: Record<Key, string> = {
   'dlg.close': '關閉',
   'beta.warn': '未經完整迴歸驗證的構建',
   'beta.ok': '知道了',
-  'mh.enable': "啟用處理程序攔截",
+  'mh.enable': '處理程序攔截',
   'mh.enableHint': "勾選的處理程序會經 TUN 轉到本機 SOCKS5。關掉即卸載核心，網路立刻恢復。",
   'ps.appointPort': "指定連接埠",
   'ps.auth': "需要認證",
@@ -1147,6 +1147,7 @@ export const tw: Record<Key, string> = {
   'mh.dnsHint': "fake-ip 讓 WPE 看得到網域（推薦）；redir-host 副作用較小，但清單裡多半只剩 IP。",
   'mh.procs': "攔截處理程序",
   'mh.loop': "WPE 自身、啟動器與核心已固定走直連（斷環），不可關閉。",
+  'mh.saved': '處理程序設定已儲存',
   'mh.needProxy': "代理服務還沒啟動。啟動後核心才會接管處理程序流量。",
   'mh.tunHint': "TUN 是否已接管處理程序流量",
 }

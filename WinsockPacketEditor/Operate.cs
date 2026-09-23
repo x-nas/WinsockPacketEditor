@@ -5867,6 +5867,9 @@ namespace WinsockPacketEditor
                 /// <summary>
                 /// 保存「进程设置」页。<b>整屏一起提交</b>：开关 / TUN 栈 / DNS 模式 / 整份进程名单
                 /// （界面上是草稿，点保存才送过来）。落库后内核在跑就按新设置重启一次。
+                ///
+                /// 成功 / 失败都往系统日志记一条（与「启动代理」同一个口径）；界面上的轻提示由前端弹
+                /// （那边七种语言的文案是全的，C# 的 L10n 表是生成物、标注了别手改）。
                 /// </summary>
                 public static async Task<string> SaveMihomoSetting(bool enable, string tunStack, string dnsMode, string[] processNames)
                 {
@@ -5880,6 +5883,10 @@ namespace WinsockPacketEditor
                         ApplySelectProcessNames(processNames);
 
                         SystemConfig.SaveProxyMode_ToDB();
+
+                        DoLog(nameof(SaveMihomoSetting), string.Format(
+                            "进程设置已保存：进程拦截{0} · TUN 栈 {1} · DNS {2} · 拦截进程 {3} 个",
+                            Enable_Mihomo ? "开启" : "关闭", TunStack, DnsMode, lstSelectProcessName.Count));
 
                         if (!enable)
                         {
@@ -5899,11 +5906,16 @@ namespace WinsockPacketEditor
                             return e;
                         });
 
+                        if (!string.IsNullOrEmpty(restartErr))
+                        {
+                            DoLog(nameof(SaveMihomoSetting), "进程设置已保存，但内核重启失败：" + restartErr);
+                        }
+
                         return restartErr ?? string.Empty;
                     }
                     catch (Exception ex)
                     {
-                        DoLog(nameof(SaveMihomoSetting), ex);
+                        DoLog(nameof(SaveMihomoSetting), "保存进程设置失败：" + ex.Message);
                         return ex.Message;
                     }
                 }

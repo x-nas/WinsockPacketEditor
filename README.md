@@ -36,7 +36,7 @@
 - 🎨 **规则自动改**：设好「滤镜」，符合条件的封包自动替换 / 拦截 / 改长度，命中的行按颜色标出来。
 - 🤖 **自动化**：用「机器人」把一串动作（发包、延迟、循环、模拟键鼠）排成流程自动跑。
 - 🔍 **对比与查找**：并排看改写前后、按字节或按行找不同，列表支持文本 / 十六进制 / 正则搜索。
-- 🔒 **看清加密流量**：代理模式下连 **HTTPS** 这类加密内容也能以明文呈现。
+- 🔒 **按进程抓取**：代理模式下只接管你勾选的那几个进程，它们的 TCP / UDP 封包照样能看、能改。
 - 🌍 **随身即用**：免安装，单个文件双击就能跑，退出时自己收拾干净。
 
 ### 🎯 两种工作方式，按场景选
@@ -44,7 +44,7 @@
 | | 适合 | 说明 |
 |---|---|---|
 | 🎯 **注入模式** | 单个程序、模拟器、手游 | 附着到目标程序上，从内部把它的封包读出来；对模拟器尤其好用，连启动瞬间的封包都抓得到。 |
-| 🌐 **代理模式** | 手机、另一台电脑、要看 HTTPS 明文 | 让程序（或整台设备）把流量经过 WPE 转发，途中就能看到、改写；加密的 HTTPS 也能解开看。 |
+| 🌐 **代理模式** | 手机、另一台电脑、按进程抓 | 让选定进程（或整台设备）的流量经过 WPE 转发，途中就能看到、改写；HTTP 明文会解析成请求 / 响应，HTTPS 只呈现密文。 |
 
 ### 🧰 主要功能一览
 
@@ -116,7 +116,7 @@ A **network packet capture-and-edit tool** for Windows. It lists every packet a 
 - 🎨 **Rewrite by rule** — set up a *filter* and matching packets are replaced / blocked / resized automatically, with matched rows color-coded.
 - 🤖 **Automation** — a *robot* runs a sequence of steps (send, delay, loop, simulate keyboard and mouse) for you.
 - 🔍 **Compare & search** — view before/after side by side, diff by byte or by line; search the list as text, hex or regex.
-- 🔒 **See encrypted traffic** — in proxy mode even **HTTPS** shows up in the clear.
+- 🔒 **Per-process capture** — in proxy mode you can watch just the processes you pick; their TCP / UDP packets stay fully visible and editable.
 - 🌍 **Portable** — no installer; one file, double-click to run, and it cleans up after itself on exit.
 
 ### 🎯 Two ways to work, pick per situation
@@ -124,7 +124,7 @@ A **network packet capture-and-edit tool** for Windows. It lists every packet a 
 | | Best for | How it works |
 |---|---|---|
 | 🎯 **Inject Mode** | a single program, emulators, mobile games | Attaches to the target and reads its packets from the inside; great with emulators, and it even catches the packets sent the instant it launches. |
-| 🌐 **Proxy Mode** | phones, another PC, seeing HTTPS in the clear | Routes the program's (or a whole device's) traffic through WPE, where you can watch and rewrite it; encrypted HTTPS is decrypted for you. |
+| 🌐 **Proxy Mode** | phones, another PC, per-process capture | Routes the selected processes' (or a whole device's) traffic through WPE, where you can watch and rewrite it; plain HTTP is parsed into requests / responses, while HTTPS stays encrypted. |
 
 ### 🧰 Feature tour
 

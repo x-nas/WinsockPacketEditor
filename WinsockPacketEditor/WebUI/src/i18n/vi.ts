@@ -1136,7 +1136,7 @@ export const vi: Record<Key, string> = {
   'dlg.close': 'Đóng',
   'beta.warn': 'bản dựng chưa qua kiểm thử hồi quy đầy đủ',
   'beta.ok': 'Đã hiểu',
-  'mh.enable': "Bật chặn tiến trình",
+  'mh.enable': 'Chặn tiến trình',
   'mh.enableHint': "Tiến trình được chọn sẽ đi qua TUN tới SOCKS5 cục bộ. Tắt sẽ gỡ nhân và mạng phục hồi ngay.",
   'ps.appointPort': "Chỉ cổng",
   'ps.auth': "Cần xác thực",
@@ -1154,6 +1154,7 @@ export const vi: Record<Key, string> = {
   'mh.dnsHint': "fake-ip giúp WPE thấy được tên miền (khuyến nghị); redir-host ít tác dụng phụ hơn nhưng danh sách thường chỉ còn IP.",
   'mh.procs': "Tiến trình bị chặn",
   'mh.loop': "Bản thân WPE, trình khởi chạy và nhân luôn đi trực tiếp (chống vòng lặp); không thể tắt.",
+  'mh.saved': 'Đã lưu cài đặt tiến trình',
   'mh.needProxy': "Dịch vụ proxy chưa chạy. Nhân chỉ tiếp quản lưu lượng tiến trình sau khi dịch vụ khởi động.",
   'mh.tunHint': "TUN đã tiếp quản lưu lượng tiến trình hay chưa",
 }

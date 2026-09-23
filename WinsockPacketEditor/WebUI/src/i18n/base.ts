@@ -1522,7 +1522,7 @@ export const DICT = {
   'dlg.close': { zh: '关闭', en: 'Close' },
   'beta.warn': { zh: '未经完整回归验证的构建', en: 'build not fully regression-tested' },
   'beta.ok': { zh: '知道了', en: 'Got it' },
-  'mh.enable': { zh: "启用进程拦截", en: "Enable process interception" },
+  'mh.enable': { zh: "进程拦截", en: "Interception" },
   'mh.enableHint': { zh: "勾选的进程会经 TUN 转到本机 SOCKS5。关掉即卸载内核，网络立刻恢复。", en: "Checked processes go through TUN to the local SOCKS5. Turning this off unloads the kernel and the network recovers immediately." },
   'ps.appointPort': { zh: "指定端口", en: "Only ports" },
   'ps.auth': { zh: "需要认证", en: "Auth" },
@@ -1540,6 +1540,7 @@ export const DICT = {
   'mh.dnsHint': { zh: "fake-ip 让 WPE 看得到域名（推荐）；redir-host 副作用更小，但列表里多半只剩 IP。", en: "fake-ip keeps domain names visible to WPE (recommended); redir-host has fewer side effects but usually leaves only IPs in the list." },
   'mh.procs': { zh: "拦截进程", en: "Intercepted processes" },
   'mh.loop': { zh: "WPE 自身、启动器与内核已固定走直连（断环），不可关闭。", en: "WPE itself, the launcher and the kernel are always routed direct (loop-break); this cannot be turned off." },
+  'mh.saved': { zh: "进程设置已保存", en: "Process settings saved" },
   'mh.needProxy': { zh: "代理服务还没启动。启动后内核才会接管进程流量。", en: "The proxy service is not running yet. The kernel takes over process traffic only after it starts." },
   'mh.tunHint': { zh: "TUN 是否已接管进程流量", en: "Whether TUN has taken over process traffic" },
 } satisfies Record<string, Entry>

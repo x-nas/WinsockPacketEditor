@@ -1138,7 +1138,7 @@ export const ja: Record<Key, string> = {
   'dlg.close': '閉じる',
   'beta.warn': '完全な回帰検証を経ていないビルドです',
   'beta.ok': '了解',
-  'mh.enable': "プロセス傍受を有効化",
+  'mh.enable': 'プロセス傍受',
   'mh.enableHint': "チェックしたプロセスの通信は TUN 経由でローカル SOCKS5 に転送されます。オフにするとカーネルを停止し、ネットワークはすぐ戻ります。",
   'ps.appointPort': "指定ポート",
   'ps.auth': "認証が必要",
@@ -1156,6 +1156,7 @@ export const ja: Record<Key, string> = {
   'mh.dnsHint': "fake-ip なら WPE からドメイン名が見えます（推奨）。redir-host は副作用が少ない代わりに、一覧には多くの場合 IP しか残りません。",
   'mh.procs': "傍受するプロセス",
   'mh.loop': "WPE 本体・ランチャー・カーネルは常に直接接続（ループ防止）で、オフにできません。",
+  'mh.saved': 'プロセス設定を保存しました',
   'mh.needProxy': "プロキシサービスがまだ起動していません。起動後にカーネルがプロセスの通信を引き継ぎます。",
   'mh.tunHint': "TUN がプロセスの通信を引き継いだかどうか",
 }

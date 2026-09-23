@@ -1307,7 +1307,16 @@ body.col-resizing * {
   行高参差不齐。乘数由 App.vue 按语言给（方块字 1，拉丁 / 西里尔 1.3），
   这样八个弹窗各自的比例还在，只是整体宽一档 —— 比逐个去改那八个数可靠。
 */
-.setf .row { display: grid; grid-template-columns: calc(var(--setf-k, 112px) * var(--setf-kx, 1)) 1fr; align-items: center; gap: 12px; padding: 5px 20px; min-height: 32px; }
+/*
+  ⚠️ 末尾的 height / border-bottom 是<b>压掉 .list-page .row 的泄漏</b>，别删。
+
+  设置弹窗的根元素同时带 `setf` 与 `list-page`（借 `.list-page .head` 给弹窗里那张小表用），
+  于是表单行也被按「虚拟滚动表格的行」渲染：定高 34px + 一条下边框。
+  单行时行高刚好也是 34，看不出来；中文一行的标签换成英语 / 俄语 / 越南语就折成两行，
+  行高不跟着涨 —— 内容直接溢出、压住下面那句说明（2026-09-23 用户报「其他语言排版错乱」）。
+  `.list-page .row` 在 1177 行、这里在 1310 行，同特异度下后写的赢。
+*/
+.setf .row { display: grid; grid-template-columns: calc(var(--setf-k, 112px) * var(--setf-kx, 1)) 1fr; align-items: center; gap: 12px; padding: 5px 20px; min-height: 32px; height: auto; border-bottom: 0; }
 .setf .row > .k { font-size: var(--fs-body); color: var(--muted); }
 .setf .row > .v { display: flex; align-items: center; gap: 10px; min-width: 0; flex-wrap: wrap; }
 .setf .row.off > .k, .setf .row.off > .v { opacity: .45; }

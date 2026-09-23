@@ -1136,7 +1136,7 @@ export const ko: Record<Key, string> = {
   'dlg.close': '닫기',
   'beta.warn': '완전한 회귀 검증을 거치지 않은 빌드',
   'beta.ok': '확인했습니다',
-  'mh.enable': "프로세스 가로채기 사용",
+  'mh.enable': '가로채기',
   'mh.enableHint': "선택한 프로세스는 TUN을 거쳐 로컬 SOCKS5로 전달됩니다. 끄면 커널이 내려가고 네트워크가 즉시 복구됩니다.",
   'ps.appointPort': "지정 포트",
   'ps.auth': "인증 필요",
@@ -1154,6 +1154,7 @@ export const ko: Record<Key, string> = {
   'mh.dnsHint': "fake-ip는 WPE에서 도메인 이름을 볼 수 있습니다(권장). redir-host는 부작용이 적지만 목록에는 대개 IP만 남습니다.",
   'mh.procs': "가로챌 프로세스",
   'mh.loop': "WPE 자체, 런처, 커널은 항상 직접 연결(루프 방지)이며 끌 수 없습니다.",
+  'mh.saved': '프로세스 설정을 저장했습니다',
   'mh.needProxy': "프록시 서비스가 아직 실행되지 않았습니다. 시작해야 커널이 프로세스 트래픽을 가로챕니다.",
   'mh.tunHint': "TUN이 프로세스 트래픽을 가로챘는지 여부",
 }
