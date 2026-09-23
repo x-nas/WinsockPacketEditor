@@ -5639,7 +5639,13 @@ namespace WinsockPacketEditor
                 /// <summary>上一次 GetProcessRows 拿到的进程快照，「双击添加到名称」按 Pid 从这里找（ProcessInfo 带图标字段，不出给外壳）。</summary>
                 private static List<ProcessInfo> lastProcessList = new List<ProcessInfo>();
 
-                /// <summary>当前进程表（按名字排序），IsCheck 按 lstSelectProcessID 勾好。图标不在这里，外壳按路径自己取。</summary>
+                /// <summary>
+                /// 当前进程表（按名字排序）。<b>IsCheck 按「拦截名单」勾</b>（进程名，不分大小写）。
+                ///
+                /// ⚠️ 内置 mihomo 只支持按进程名 / 路径拦截（PROCESS-NAME / PROCESS-PATH），
+                /// <b>没有按 PID 的规则</b>（PID 每次启动都变，做规则没有意义），所以不再有「按编号拦截」那一份。
+                /// 图标不在这里，外壳按路径自己取。
+                /// </summary>
                 public static ProcessRow[] GetProcessRows()
                 {
                     try
@@ -5648,12 +5654,18 @@ namespace WinsockPacketEditor
                         var rows = new List<ProcessRow>();
                         int self = SelfProcessId;
 
+                        var selected = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                        foreach (ProcessInfo x in lstSelectProcessName)
+                        {
+                            if (!string.IsNullOrEmpty(x.ModuleName)) { selected.Add(x.ModuleName); }
+                        }
+
                         foreach (ProcessInfo pi in lastProcessList)
                         {
-                            //自己不进表：勾了自己，驱动会把 WPE 往目标发的连接也抓回来，成环
+                            //自己不进表：勾了自己，mihomo 会把 WPE 往目标发的连接也抓回来（配置里已按进程名兜了断环，这里再加一道）
                             if (pi.ProcessID == self) { continue; }
 
-                            pi.IsCheck = lstSelectProcessID.Contains(pi.ProcessID);
+                            pi.IsCheck = !string.IsNullOrEmpty(pi.ModuleName) && selected.Contains(pi.ModuleName);
                             rows.Add(ProcessRow.From_(pi));
                         }
 

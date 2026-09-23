@@ -174,7 +174,7 @@ export const DICT = {
   // ── 设置弹窗（12 项，目前只做了代理设置）────────────
   'set.save': { zh: '保存', en: 'Save' },
   'set.proxy': { zh: '代理设置', en: 'Proxy Settings' },
-  'set.process': { zh: 'mihomo 模式', en: 'mihomo mode' },
+  'set.process': { zh: '进程设置', en: 'Process Settings' },
   'set.leach': { zh: '过滤设置', en: 'Leach Settings' },
   'set.hook': { zh: '拦截设置', en: 'Hook Settings' },
   'set.list': { zh: '列表设置', en: 'List Settings' },
@@ -1200,7 +1200,7 @@ export const DICT = {
   'ps.byPid': { zh: '按进程编号拦截', en: 'By process ID' },
   'ps.byName': { zh: '按进程名称拦截', en: 'By process name' },
   'ps.byPidHint': { zh: '勾选 = 按编号拦截（进程重启编号会变）；双击一行加到右边按名称拦截。', en: 'Check = intercept by ID (IDs change on restart); double-click a row to add it by name on the right.' },
-  'ps.byNameHint': { zh: '按名称拦截：目标进程重启也照样拦；名单随「代理设置」落库，下次启动 WPE 还在。双击或点 × 删除。', en: 'By name: still intercepted after the target process restarts; the list is saved with the proxy settings and survives WPE restarts. Double-click or × to remove.' },
+  'ps.byNameHint': { zh: '勾选要拦截的进程（按进程名匹配，进程重启后仍生效）；名单随设置保存，下次打开 WPE 还在。没在运行的进程也会列出（编号显示 —），取消勾选即移除。', en: 'Check the processes to intercept (matched by process name, so it still works after the process restarts). The list is saved with the settings and survives WPE restarts. Processes that are not running are listed too (shown as —); uncheck to remove.' },
   'ps.filterPh': { zh: '筛选进程', en: 'Filter' },
   'ps.refresh': { zh: '刷新进程', en: 'Refresh' },
   'ps.pid': { zh: '编号', en: 'PID' },

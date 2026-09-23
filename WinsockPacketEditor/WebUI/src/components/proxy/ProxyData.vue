@@ -726,7 +726,7 @@ const cells = computed(() => {
     />
 
     <!-- goto：进程设置第 4 步的「打开代理设置」—— 只是导航，那一屏不代管别人的配置 -->
-    <MihomoSetting :open="setting === 'mihomo'" @update:open="setting = $event ? 'mihomo' : null" />
+    <MihomoSetting :open="setting === 'process'" @update:open="setting = $event ? 'process' : null" />
     <MapSetting :open="setting === 'map'" @update:open="setting = $event ? 'map' : null" />
     <ExtProxySetting :open="setting === 'extproxy'" @update:open="setting = $event ? 'extproxy' : null" />
     <HotkeySetting :open="setting === 'hotkey'" @update:open="setting = $event ? 'hotkey' : null" />

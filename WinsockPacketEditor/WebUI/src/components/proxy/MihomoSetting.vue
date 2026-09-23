@@ -1,22 +1,22 @@
 <script setup lang="ts">
 /*
-  mihomo 模式设置 —— 2026-09-23 由「进程设置」重做而来。
+  进程设置 —— 2026-09-23 由旧屏重做而来（内置 mihomo 内核接管进程抓取）。
 
-  【这一版换掉了什么】
-  旧屏讲的是「进程 → 驱动 → SunnyNet → 强制转代理 → WPE 的 SOCKS5」一条链路，四张步骤卡。
+  【与旧屏的区别】
+  旧屏是「进程 → 驱动 → SunnyNet → 强制转代理 → WPE 的 SOCKS5」一条链路 + 四张步骤卡。
   现在抓取改由内置 mihomo 内核完成，链路固定为：
 
       勾选的进程 ── TUN ──▶ mihomo ── SOCKS5 ──▶ WPE 的 SOCKS5（抓包 / 滤镜）──▶ 互联网
 
-  所以这一屏只剩两件事：① 选哪些进程；② 内核怎么接管（TUN 栈 / DNS 模式）。
-  驱动类型、转代理地址 / 认证、指定端口、卸载驱动全部随 SunnyNet 一起去掉。
-  断环（WPE 自身 / 启动器 / 内核固定直连）由 C# 写进内核配置，界面上只作说明。
+  ⚠️ <b>只有一块进程表。</b>旧屏分「按编号拦截」和「按名称拦截」两份，是因为 SunnyNet 同时支持
+  PID 与进程名两种拦截方式；而 mihomo 的规则只有 PROCESS-NAME / PROCESS-PATH（及其正则版），
+  <b>没有按 PID 的规则</b>（PID 每次启动都变）。所以表里一行 = 一个进程名，勾上就是一条
+  PROCESS-NAME 规则；已保存但当前没启动的进程也列出来（编号显示 —），取消勾选即移除。
 
-  数据：getMihomoSetting（MihomoSettingRow）。进程名单走原有的 getProcessRows +
-  addSelectProcessName / removeSelectProcessName（落库在 ProxyMode.SelectProcessNames）。
-  图标按去重路径一次批量取（getProcessIcons）、按路径记忆化 —— DTO 里不带 Image。
+  数据：getMihomoSetting（内核状态 + TUN 栈/DNS 模式）；getProcessRows（运行中的进程，IsCheck = 是否已拦截）；
+  FeedList.SelectProcess（已保存的拦截名单）。名单落库在 ProxyMode.SelectProcessNames。
 */
-import { computed, onBeforeUnmount, ref, shallowRef, watch } from 'vue'
+import { computed, ref, shallowRef, watch } from 'vue'
 import { call } from '../../bridge'
 import { FeedList, type ProcessRow } from '../../bridge/types'
 import { t } from '../../i18n'
@@ -45,25 +45,63 @@ const loading = ref(false)
 const error = ref('')
 const f = ref<Setting>({ ...EMPTY })
 
+/* 合并后的进程行：运行中的 + 已保存但没启动的 */
+interface Row {
+  ModuleName: string
+  ProcessName: string
+  ProcessID: number
+  ProcessPath: string
+  running: boolean
+}
+
 const procs = shallowRef<ProcessRow[]>([])
-const checked = ref<Set<number>>(new Set())
-const filter = ref('')
 const names = useList<ProcessRow>(FeedList.SelectProcess)
+const intercepted = ref<Set<string>>(new Set())
+const filter = ref('')
+
+/** 拦截名单（小写进程名集合）：已保存的 ∪ 运行中且 IsCheck 的。 */
+function rebuildIntercepted(): void {
+  const s = new Set<string>()
+  for (const p of names.value) { if (p.ModuleName) s.add(p.ModuleName.toLowerCase()) }
+  for (const p of procs.value) { if (p.IsCheck && p.ModuleName) s.add(p.ModuleName.toLowerCase()) }
+  intercepted.value = s
+}
+
+watch([procs, names], rebuildIntercepted, { immediate: true })
+
+const rows = computed<Row[]>(() => {
+  const out: Row[] = []
+  const seen = new Set<string>()
+
+  for (const p of procs.value) {
+    const k = (p.ModuleName || '').toLowerCase()
+    if (!k) { continue }
+    seen.add(k)
+    out.push({ ModuleName: p.ModuleName, ProcessName: p.ProcessName, ProcessID: p.ProcessID, ProcessPath: p.ProcessPath, running: true })
+  }
+  for (const p of names.value) {
+    const k = (p.ModuleName || '').toLowerCase()
+    if (!k || seen.has(k)) { continue }
+    seen.add(k)
+    out.push({ ModuleName: p.ModuleName, ProcessName: p.ProcessName || p.ModuleName, ProcessID: 0, ProcessPath: p.ProcessPath, running: false })
+  }
+  return out
+})
 
 const filtered = computed(() => {
   const q = filter.value.trim().toLowerCase()
-  return q ? procs.value.filter((p) => p.ProcessName.toLowerCase().includes(q) || String(p.ProcessID).includes(q)) : procs.value
+  if (!q) { return rows.value }
+  return rows.value.filter((r) => r.ProcessName.toLowerCase().includes(q) || r.ModuleName.toLowerCase().includes(q) || String(r.ProcessID).includes(q))
 })
 
-/* 表头排序（编号 / 进程名称两列）—— 接在过滤之后 */
-const sort = useSort<ProcessRow>(filtered, {
-  pid: (p) => p.ProcessID,
-  name: (p) => p.ProcessName || '',
+/* 表头排序（编号 / 进程名称）—— 接在过滤之后 */
+const sort = useSort<Row>(filtered, {
+  pid: (r) => r.ProcessID,
+  name: (r) => r.ProcessName || '',
 })
-
 const shown = sort.sorted
 
-/* TUN 栈 / DNS 模式的可选项：技术名词，直接照原样显示（system / gvisor / mixed / fake-ip / redir-host） */
+/* TUN 栈 / DNS 模式的可选项：技术名词，照原样显示 */
 const STACKS = ['system', 'gvisor', 'mixed'] as const
 const DNSMODES = ['fake-ip', 'redir-host'] as const
 
@@ -75,9 +113,9 @@ function iconOf(path: string): string {
   return path ? (icons.value[path] ?? '') : ''
 }
 
-async function fetchIcons(rows: ProcessRow[]): Promise<void> {
+async function fetchIcons(list: { ProcessPath: string }[]): Promise<void> {
   const want = new Set<string>()
-  for (const p of rows) if (p.ProcessPath && icons.value[p.ProcessPath] === undefined) want.add(p.ProcessPath)
+  for (const p of list) if (p.ProcessPath && icons.value[p.ProcessPath] === undefined) want.add(p.ProcessPath)
   if (!want.size) return
   try {
     const r = await call<{ icons: Record<string, string> }>('getProcessIcons', { paths: [...want] })
@@ -88,12 +126,11 @@ async function fetchIcons(rows: ProcessRow[]): Promise<void> {
     }
     icons.value = next
   } catch (e) {
-    console.error('[mh] 取进程图标失败', e)
+    console.error('[ps] 取进程图标失败', e)
   }
 }
 
-/* 右表（按名称拦截）的路径来自库里存的那份，也要一起取 */
-watch(names, (rows) => { void fetchIcons(rows) }, { immediate: true })
+watch(names, (list) => { void fetchIcons(list) }, { immediate: true })
 
 watch(() => props.open, async (on) => {
   if (!on) return
@@ -102,7 +139,7 @@ watch(() => props.open, async (on) => {
     f.value = { ...EMPTY, ...(await call<Setting>('getMihomoSetting')) }
     await refresh()
   } catch (e) {
-    console.error('[mh] 读取设置失败', e)
+    console.error('[ps] 读取设置失败', e)
   }
 }, { immediate: true })
 
@@ -111,58 +148,45 @@ async function refresh(): Promise<void> {
   try {
     const r = await call<{ rows: ProcessRow[] }>('getProcessRows')
     procs.value = r?.rows ?? []
-    //保留本地已勾但还在表里的；进程退出了它的 Pid 就该从勾选集里走
-    const alive = new Set(procs.value.map((p) => p.ProcessID))
-    const next = new Set<number>()
-    for (const pid of checked.value) if (alive.has(pid)) next.add(pid)
-    for (const p of procs.value) if (p.IsCheck) next.add(p.ProcessID)
-    checked.value = next
     void fetchIcons(procs.value)
   } catch (e) {
-    console.error('[mh] 取进程列表失败', e)
+    console.error('[ps] 取进程列表失败', e)
   } finally {
     loading.value = false
   }
 }
 
-function toggle(p: ProcessRow): void {
-  const s = new Set(checked.value)
-  if (s.has(p.ProcessID)) s.delete(p.ProcessID)
-  else s.add(p.ProcessID)
-  checked.value = s
-}
-
 /*
-  单击勾选、双击加到右表。行上的单击推迟一拍（220ms）再执行，dblclick 到了就取消；
-  第 2 次 click 的 detail 是 2，直接忽略。勾选框本身（.chk，@click.stop）仍是即时的。
+  勾选 / 取消：勾上 = 加一条 PROCESS-NAME 规则（走桥 addSelectProcessName，按 Pid 取到名字与路径）；
+  取消 = 从名单里删掉。已保存但没启动的行 pid 为 0，只能取消、不能再勾上。
+  前端先乐观改 intercepted，桥失败再退回。
 */
-let rowClickTimer = 0
-onBeforeUnmount(() => window.clearTimeout(rowClickTimer))
+async function toggleRow(r: Row): Promise<void> {
+  const k = r.ModuleName.toLowerCase()
+  const on = intercepted.value.has(k)
 
-function onRowClick(p: ProcessRow, e: MouseEvent): void {
-  if (e.detail > 1) return
-  window.clearTimeout(rowClickTimer)
-  rowClickTimer = window.setTimeout(() => { rowClickTimer = 0; toggle(p) }, 220)
-}
+  if (!on && (!r.running || r.ProcessID <= 0)) { return }
 
-function onRowDblClick(p: ProcessRow): void {
-  window.clearTimeout(rowClickTimer)
-  rowClickTimer = 0
-  void addName(p)
-}
+  const next = new Set(intercepted.value)
+  if (on) next.delete(k)
+  else next.add(k)
+  intercepted.value = next
 
-async function addName(p: ProcessRow): Promise<void> {
   try {
-    const r = await call<{ ok: boolean }>('addSelectProcessName', { pid: p.ProcessID })
-    if (!r?.ok) pushToast('warning', t('ps.noModule'))
+    if (on) {
+      await call('removeSelectProcessName', { name: r.ModuleName })
+    } else {
+      const res = await call<{ ok: boolean }>('addSelectProcessName', { pid: r.ProcessID })
+      if (!res?.ok) {
+        const back = new Set(intercepted.value)
+        back.delete(k)
+        intercepted.value = back
+        pushToast('warning', t('ps.noModule'))
+      }
+    }
   } catch (e) {
-    console.error('[mh] 添加名称失败', e)
+    console.error('[ps] 切换拦截失败', e)
   }
-}
-
-async function removeName(p: ProcessRow): Promise<void> {
-  try { await call('removeSelectProcessName', { name: p.ModuleName }) }
-  catch (e) { console.error('[mh] 删除名称失败', e) }
 }
 
 async function save(): Promise<void> {
@@ -176,7 +200,7 @@ async function save(): Promise<void> {
     if (r?.error) { error.value = r.error; return }
     emit('update:open', false)
   } catch (e) {
-    console.error('[mh] 保存失败', e)
+    console.error('[ps] 保存失败', e)
     error.value = String(e)
   } finally {
     busy.value = false
@@ -187,7 +211,7 @@ async function save(): Promise<void> {
 <template>
   <SettingsModal :open="props.open" :title="t('set.process')" subtitle="mihomo · TUN" :busy="busy" :error="error" :width="980"
                  @update:open="emit('update:open', $event)" @save="save">
-    <div class="setf list-page mh">
+    <div class="setf list-page ps">
 
       <!-- 内核状态条 -->
       <div class="stat">
@@ -225,73 +249,41 @@ async function save(): Promise<void> {
         <p class="hint">{{ t('mh.dnsHint') }}</p>
       </section>
 
-      <!-- 拦截进程 -->
+      <!-- 拦截进程（一块表） -->
       <section class="sec">
         <div class="grp">{{ t('mh.procs') }}</div>
 
-        <div class="two">
-          <div class="tbl">
-            <div class="tbar">
-              <span class="cap">{{ t('ps.byPid') }}</span>
-              <input v-model="filter" class="inp sm" spellcheck="false" :placeholder="t('ps.filterPh')">
-              <span class="grow" />
-              <span class="cnt">{{ checked.size }} / {{ procs.length }}</span>
-              <button class="sbtn" :disabled="loading" @click="refresh">{{ loading ? t('proxy.working') : t('ps.refresh') }}</button>
-            </div>
-            <div class="tbody tall">
-              <div class="head hp">
-                <span class="ck" />
-                <span class="ico" />
-                <span class="pid so" :class="{ on: sort.active('pid') }" @click="sort.toggle('pid')">{{ t('ps.pid') }}<i class="ar">{{ sort.mark('pid') }}</i></span>
-                <span class="name so" :class="{ on: sort.active('name') }" @click="sort.toggle('name')">{{ t('ps.processName') }}<i class="ar">{{ sort.mark('name') }}</i></span>
-              </div>
-              <div v-if="!shown.length" class="empty">{{ loading ? t('proxy.working') : t('ps.emptyProcs') }}</div>
-              <div
-                v-for="p in shown"
-                v-else
-                :key="p.ProcessID"
-                class="tr hp"
-                :class="{ sel: checked.has(p.ProcessID) }"
-                :title="p.ProcessPath"
-                @click="onRowClick(p, $event)"
-                @dblclick="onRowDblClick(p)"
-              >
-                <span class="ck"><button class="chk" :class="{ on: checked.has(p.ProcessID) }" @click.stop="toggle(p)"><i /></button></span>
-                <span class="ico"><img v-if="iconOf(p.ProcessPath)" :src="iconOf(p.ProcessPath)" alt=""><i v-else class="ph" /></span>
-                <span class="pid">{{ p.ProcessID }}</span>
-                <span class="name">{{ p.ProcessName }}</span>
-              </div>
-            </div>
-            <div class="tf">{{ t('ps.byPidHint') }}</div>
+        <div class="tbl">
+          <div class="tbar">
+            <input v-model="filter" class="inp sm" spellcheck="false" :placeholder="t('ps.filterPh')">
+            <span class="grow" />
+            <span class="cnt">{{ intercepted.size }} / {{ rows.length }}</span>
+            <button class="sbtn" :disabled="loading" @click="refresh">{{ loading ? t('proxy.working') : t('ps.refresh') }}</button>
           </div>
-
-          <div class="tbl">
-            <div class="tbar">
-              <span class="cap">{{ t('ps.byName') }}</span>
-              <span class="grow" />
-              <span class="cnt">{{ names.length }}</span>
+          <div class="tbody tall">
+            <div class="head hp">
+              <span class="ck" />
+              <span class="ico" />
+              <span class="name so" :class="{ on: sort.active('name') }" @click="sort.toggle('name')">{{ t('ps.processName') }}<i class="ar">{{ sort.mark('name') }}</i></span>
+              <span class="pid so" :class="{ on: sort.active('pid') }" @click="sort.toggle('pid')">{{ t('ps.pid') }}<i class="ar">{{ sort.mark('pid') }}</i></span>
             </div>
-            <div class="tbody tall">
-              <div class="head hn">
-                <span class="no">{{ t('col.id') }}</span>
-                <span class="ico" />
-                <span class="name">{{ t('ps.moduleName') }}</span>
-                <span class="ops">{{ t('col.ops') }}</span>
-              </div>
-              <div v-if="!names.length" class="empty">{{ t('ps.emptyNames') }}</div>
-              <div v-for="(p, i) in names" v-else :key="p.ModuleName + i" class="tr hn" :title="p.ProcessPath" @dblclick="removeName(p)">
-                <span class="no">{{ i + 1 }}</span>
-                <span class="ico"><img v-if="iconOf(p.ProcessPath)" :src="iconOf(p.ProcessPath)" alt=""><i v-else class="ph" /></span>
-                <span class="name">{{ p.ModuleName }}</span>
-                <span class="ops">
-                  <button class="op del" :title="t('acct.op.del')" @click.stop="removeName(p)">
-                    <svg class="ico" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg>
-                  </button>
-                </span>
-              </div>
+            <div v-if="!shown.length" class="empty">{{ loading ? t('proxy.working') : t('ps.emptyProcs') }}</div>
+            <div
+              v-for="r in shown"
+              v-else
+              :key="r.ModuleName.toLowerCase()"
+              class="tr hp"
+              :class="{ sel: intercepted.has(r.ModuleName.toLowerCase()), off: !r.running }"
+              :title="r.ProcessPath"
+              @click="toggleRow(r)"
+            >
+              <span class="ck"><button class="chk" :class="{ on: intercepted.has(r.ModuleName.toLowerCase()) }" @click.stop="toggleRow(r)"><i /></button></span>
+              <span class="ico"><img v-if="iconOf(r.ProcessPath)" :src="iconOf(r.ProcessPath)" alt=""><i v-else class="ph" /></span>
+              <span class="name">{{ r.ProcessName }}</span>
+              <span class="pid">{{ r.running ? r.ProcessID : '—' }}</span>
             </div>
-            <div class="tf">{{ t('ps.byNameHint') }}</div>
           </div>
+          <div class="tf">{{ t('ps.byNameHint') }}</div>
         </div>
       </section>
 
@@ -302,13 +294,12 @@ async function save(): Promise<void> {
 
 <style scoped>
 /*
-  竖直呼吸量：窗口矮就收进程表高度。默认 1280×800 在 125% 缩放下只有 640 CSS 高，
-  扣掉弹窗头尾，两张表是唯一能收的地方。
+  竖直呼吸量：窗口矮就收进程表高度。默认 1280×800 在 125% 缩放下只有 640 CSS 高。
 */
-.mh { --tall: 300px; }
+.ps { --tall: 300px; }
 
-@media (max-height: 760px) { .mh { --tall: 220px; } }
-@media (max-height: 620px) { .mh { --tall: 170px; } }
+@media (max-height: 760px) { .ps { --tall: 220px; } }
+@media (max-height: 620px) { .ps { --tall: 170px; } }
 
 /* 内核状态条 */
 .stat {
@@ -332,26 +323,22 @@ async function save(): Promise<void> {
 .stat .sv.warn { color: var(--amber); }
 .stat .sv.dim { color: var(--dim); font-family: var(--mono); }
 
-/* 两张进程表 */
+/* 进程表（一块） */
 .cap { position: relative; top: 1px; font-family: var(--share); font-size: var(--fs-label); letter-spacing: .12em; text-transform: uppercase; color: var(--cyan); white-space: nowrap; }
 .cnt { font-family: var(--mono); font-size: var(--fs-small); color: var(--muted); }
-.two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.two > .tbl { margin: 0; }
 .tbody.tall { height: var(--tall); max-height: var(--tall); }
 .tf { padding: 6px 12px; border-top: 1px solid var(--border); font-size: var(--fs-small); color: var(--dim2); }
 
-.mh .head.hp, .mh .tr.hp { grid-template-columns: 34px 26px 64px minmax(100px, 1fr); }
-.mh .head.hn, .mh .tr.hn { grid-template-columns: 40px 26px minmax(100px, 1fr) 104px; }
-.mh .tr { height: 30px; cursor: pointer; }
-.mh .head > span, .mh .tr > span { text-align: left; }
-.mh .head > span.pid, .mh .tr > span.pid, .mh .head > span.no, .mh .tr > span.no { text-align: center; }
+.ps .head.hp, .ps .tr.hp { grid-template-columns: 34px 26px minmax(120px, 1fr) 64px; }
+.ps .tr { height: 30px; cursor: pointer; }
+.ps .head > span, .ps .tr > span { text-align: left; }
+.ps .head > span.pid, .ps .tr > span.pid { text-align: center; }
 
 .ico { display: flex; align-items: center; justify-content: center; }
 .ico img { width: 16px; height: 16px; image-rendering: auto; }
 .ico .ph { width: 16px; height: 16px; }
 .pid { font-family: var(--mono); font-size: var(--fs-body); color: var(--muted); font-variant-numeric: tabular-nums; }
 .name { color: var(--gray); }
-.no { color: var(--dim); font-variant-numeric: tabular-nums; }
 
 .tail { padding: 0 20px; margin: 2px 0 6px; }
 </style>

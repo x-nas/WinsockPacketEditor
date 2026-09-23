@@ -8,7 +8,7 @@
 import type { Key } from '../../i18n'
 
 export type SettingKey =
-  | 'proxy' | 'mihomo' | 'leach' | 'hook' | 'list' | 'map'
+  | 'proxy' | 'process' | 'leach' | 'hook' | 'list' | 'map'
   | 'extproxy' | 'hotkey' | 'backup' | 'remote' | 'firewall' | 'system'
 
 export interface SettingDef {
@@ -18,7 +18,7 @@ export interface SettingDef {
 
 export const SETTINGS: SettingDef[] = [
   { key: 'proxy', label: 'set.proxy' },
-  { key: 'mihomo', label: 'set.process' },
+  { key: 'process', label: 'set.process' },
   { key: 'leach', label: 'set.leach' },
   { key: 'hook', label: 'set.hook' },
   { key: 'list', label: 'set.list' },
