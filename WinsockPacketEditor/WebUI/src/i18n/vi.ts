@@ -890,6 +890,7 @@ export const vi: Record<Key, string> = {
   'ps.byNameHint': 'Tích chọn tiến trình cần chặn (khớp theo tên tiến trình nên vẫn hiệu lực sau khi khởi động lại). Danh sách được lưu cùng cài đặt và giữ lại khi mở lại WPE. Tiến trình không chạy cũng được liệt kê (số hiện —); bỏ tích để xóa.',
   'ps.filterPh': 'Lọc',
   'ps.refresh': 'Làm mới',
+  'ps.selectedCount': 'Đã chọn {0} tiến trình',
   'ps.pid': 'PID',
   'ps.processName': 'Tiến trình',
   'ps.moduleName': 'Mô-đun',

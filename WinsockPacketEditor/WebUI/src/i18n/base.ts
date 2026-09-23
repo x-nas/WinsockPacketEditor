@@ -1203,6 +1203,7 @@ export const DICT = {
   'ps.byNameHint': { zh: '勾选要拦截的进程（按进程名匹配，进程重启后仍生效）；名单随设置保存，下次打开 WPE 还在。没在运行的进程也会列出（编号显示 —），取消勾选即移除。', en: 'Check the processes to intercept (matched by process name, so it still works after the process restarts). The list is saved with the settings and survives WPE restarts. Processes that are not running are listed too (shown as —); uncheck to remove.' },
   'ps.filterPh': { zh: '筛选进程', en: 'Filter' },
   'ps.refresh': { zh: '刷新进程', en: 'Refresh' },
+  'ps.selectedCount': { zh: '已选中 {0} 个进程', en: '{0} process(es) selected' },
   'ps.pid': { zh: '编号', en: 'PID' },
   'ps.processName': { zh: '进程名称', en: 'Process' },
   'ps.moduleName': { zh: '模块名称', en: 'Module' },

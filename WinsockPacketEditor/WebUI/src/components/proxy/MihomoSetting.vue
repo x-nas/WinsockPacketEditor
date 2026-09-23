@@ -306,9 +306,15 @@ async function save(): Promise<void> {
 
         <div class="tbl">
           <div class="tbar">
-            <input v-model="filter" class="inp sm" spellcheck="false" :disabled="!on" :placeholder="t('ps.filterPh')">
+            <span class="sw">
+              <input v-model="filter" class="inp sm" spellcheck="false" :disabled="!on" :placeholder="t('ps.filterPh')" @keydown.esc="filter = ''">
+              <button v-if="filter" class="x" :disabled="!on" :title="t('sp.clear')" @click="filter = ''">
+                <svg class="ico" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg>
+              </button>
+            </span>
             <span class="grow" />
-            <span class="cnt">{{ intercepted.size }} / {{ rows.length }}</span>
+            <span class="sel" :class="{ on: intercepted.size > 0 }">{{ t('ps.selectedCount').replace('{0}', String(intercepted.size)) }}</span>
+            <span class="cnt">/ {{ rows.length }}</span>
             <button class="sbtn" :disabled="!on || loading" @click="refresh">{{ loading ? t('proxy.working') : t('ps.refresh') }}</button>
           </div>
           <div class="tbody tall">
@@ -390,7 +396,40 @@ async function save(): Promise<void> {
 
 /* 02 卡里的进程表 */
 .cnt { font-family: var(--mono); font-size: var(--fs-small); color: var(--muted); }
-.ps .tbody.tall { max-height: var(--tall); }
+
+/*
+  搜索框：清除叉相对它绝对定位（与账号列表同一套做法）。
+  ⚠️ 覆盖 style.css 的 .setf .inp.sm（那边是定宽 160 + flex: none），
+  所以这里要写到 .sw .inp.sm —— 平局时 style.css 后加载，会赢。
+*/
+.sw { position: relative; display: flex; flex: 0 1 200px; min-width: 120px; }
+.sw .inp.sm { flex: 1; width: auto; min-width: 0; padding-right: 24px; }
+.sw .x {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  cursor: pointer;
+}
+.sw .x:hover:not(:disabled) { color: var(--danger); }
+.sw .x .ico { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2; }
+
+/* 已选中几个：选了是绿的（醒目），一个没选压暗 */
+.sel { font-size: var(--fs-small); color: var(--dim); white-space: nowrap; }
+.sel.on { color: var(--green); }
+
+/*
+  ⚠️ 表格高度<b>写死</b>（不是 max-height）：筛选后行数变少时，整个弹窗不能跟着缩 ——
+  用户报的就是「筛选一下整页突然变小」。定高之后表头 / 边框 / 底部说明都不动，只有行在变。
+  ⚠️ 必须连 max-height 一起写：style.css 的 .setf .tbl .tbody 是 max-height: 260px，
+  只写 height 会被它夹到 260。
+*/
+.ps .tbody.tall { height: var(--tall); max-height: var(--tall); }
 /* 说明文字离表格底边的距离，与卡内最后一句 hint 的下内边距一致 */
 .tf { padding: 6px 14px 8px; border-top: 1px solid var(--border); font-size: var(--fs-small); color: var(--dim2); }
 

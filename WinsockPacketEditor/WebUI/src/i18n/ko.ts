@@ -890,6 +890,7 @@ export const ko: Record<Key, string> = {
   'ps.byNameHint': '가로챌 프로세스를 선택하세요(프로세스 이름으로 매칭하므로 재시작 후에도 유지). 목록은 설정과 함께 저장되어 WPE를 다시 열어도 남습니다. 실행 중이 아닌 프로세스도 표시되며(번호는 —), 선택을 해제하면 제거됩니다.',
   'ps.filterPh': '프로세스 거르기',
   'ps.refresh': '프로세스 새로 고침',
+  'ps.selectedCount': '프로세스 {0}개 선택됨',
   'ps.pid': '번호',
   'ps.processName': '프로세스',
   'ps.moduleName': '모듈 이름',

@@ -883,6 +883,7 @@ export const tw: Record<Key, string> = {
   'ps.byNameHint': '勾選要攔截的處理程序（按處理程序名稱比對，重新啟動後仍生效）；名單隨設定保存，下次開啟 WPE 還在。沒在執行的也會列出（編號顯示 —），取消勾選即移除。',
   'ps.filterPh': '篩選程序',
   'ps.refresh': '重新整理程序',
+  'ps.selectedCount': '已選取 {0} 個處理程序',
   'ps.pid': '編號',
   'ps.processName': '處理程序名稱',
   'ps.moduleName': '模組名稱',

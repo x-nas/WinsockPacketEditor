@@ -890,6 +890,7 @@ export const ja: Record<Key, string> = {
   'ps.byNameHint': '傍受するプロセスにチェック（プロセス名で照合するため再起動後も有効）。一覧は設定と一緒に保存され、次回 WPE を開いても残ります。起動していないプロセスも表示され（番号は —）、チェックを外すと削除されます。',
   'ps.filterPh': 'プロセスを絞り込む',
   'ps.refresh': 'プロセスを再取得',
+  'ps.selectedCount': '{0} 個のプロセスを選択中',
   'ps.pid': '番号',
   'ps.processName': 'プロセス名',
   'ps.moduleName': 'モジュール名',
