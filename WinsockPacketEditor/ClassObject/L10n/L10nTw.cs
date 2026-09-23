@@ -295,7 +295,7 @@ namespace WinsockPacketEditor
             d["FilterEditForm.AppointLength.Error"] = "指定長度錯誤";
             d["FilterEditForm.Change.Error"] = "換包資料錯誤";
             d["SendList.SystemSocket.Blocked"] = "傳送「{0}」勾了「使用系統通訊端」，但系統通訊端還沒設定 —— 請先在封包列表裡按右鍵「設定系統通訊端」。";
-            d["SendExecute.Socket.Missing"] = "傳送「{0}」裡有封包沒有通訊端（HTTP / HTTPS / WebSocket 走的是工作階段編號，通訊端恆為 0）—— 這些封包送不出去，請勾選「使用系統通訊端」並先在封包列表裡按右鍵設定它。";
+            d["SendExecute.Socket.Missing"] = "傳送清單「{0}」裡有封包沒有套接字（套接字號為 0）—— 這些封包送不出去，請勾選「使用系統套接字」，或在傳送清單上按右鍵設定它。";
             d["SendList.LoopCount.Fixed"] = "傳送「{0}」的迴圈次數不正確（{1}），已按 1 次處理。";
             d["SendEditForm.SendName.Empty"] = "傳送名稱為空";
             d["RobotEditForm.SendList.Error"] = "傳送列表不正確";

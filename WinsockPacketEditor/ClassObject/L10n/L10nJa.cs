@@ -289,7 +289,7 @@ namespace WinsockPacketEditor
             d["FilterEditForm.AppointLength.Error"] = "長さ指定が不正です";
             d["FilterEditForm.Change.Error"] = "差し替えの設定が不正です";
             d["SendList.SystemSocket.Blocked"] = "送信「{0}」で「システムソケットを使用」がオンですが、システムソケットが未設定です —— パケット一覧で右クリックし「システムソケットを設定」を先に行ってください。";
-            d["SendExecute.Socket.Missing"] = "送信「{0}」にソケットのないパケットがあります（HTTP / HTTPS / WebSocket はセッション番号で送るためソケットは常に 0）—— これらは送信できません。「システムソケットを使用」をオンにし、パケット一覧の右クリックから先に設定してください。";
+            d["SendExecute.Socket.Missing"] = "送信リスト「{0}」にソケットのないパケットがあります（ソケット番号 0）—— 送信できません。「システムソケットを使う」を有効にするか、一覧の右クリックから設定してください。";
             d["SendList.LoopCount.Fixed"] = "送信「{0}」のループ回数が不正です（{1}）。1 回として扱います。";
             d["SendEditForm.SendName.Empty"] = "送信名が空です";
             d["RobotEditForm.SendList.Error"] = "送信一覧の指定が不正です";

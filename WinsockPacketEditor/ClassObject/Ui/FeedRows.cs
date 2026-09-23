@@ -68,7 +68,6 @@ namespace WinsockPacketEditor
         public int Socket;
         public long TheologyID;
         public int Type;
-        public long WebSocketType;
         public string ClientAddr;
         public string ClientLocation;
         public string ServerAddr;
@@ -90,7 +89,6 @@ namespace WinsockPacketEditor
                 Socket = Src.PacketSocket,
                 TheologyID = Src.TheologyID,
                 Type = (int)Src.PacketType,
-                WebSocketType = Src.WebSocketType,
                 ClientAddr = Src.ClientAddr,
                 ClientLocation = Src.ClientLocation,
                 ServerAddr = Src.ServerAddr,

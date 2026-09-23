@@ -289,7 +289,7 @@ namespace WinsockPacketEditor
             d["FilterEditForm.AppointLength.Error"] = "Appoint Length Error";
             d["FilterEditForm.Change.Error"] = "Change Error";
             d["SendList.SystemSocket.Blocked"] = "Send “{0}” has “Use system socket” checked, but the system socket has not been set — right-click a packet in the packet list and choose “Set system socket” first.";
-            d["SendExecute.Socket.Missing"] = "Send “{0}” contains packets with no socket (HTTP / HTTPS / WebSocket are replayed by session id, so their socket is always 0) — those packets cannot be sent. Check “Use system socket” and set it first from the packet list context menu.";
+            d["SendExecute.Socket.Missing"] = "Send list \"{0}\" has packets with no socket (socket 0); they cannot be sent — turn on \"Use system socket\" or set one from the list's right-click menu.";
             d["SendList.LoopCount.Fixed"] = "Loop count of send “{0}” is invalid ({1}); treated as 1.";
             d["SendEditForm.SendName.Empty"] = "Send Name Empty";
             d["RobotEditForm.SendList.Error"] = "Send List Error";

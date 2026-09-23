@@ -672,9 +672,9 @@ const cells = computed(() => {
     { k: 'TCP Resp', z: t('proxy.st.tcpResp'), v: n(s.tcpResp), tone: 'g' },
     { k: 'UDP Req', z: t('proxy.st.udpReq'), v: n(s.udpReq), tone: 'g' },
     { k: 'UDP Resp', z: t('proxy.st.udpResp'), v: n(s.udpResp), tone: 'g' },
-    //这两格含 WebSocket（类型 21 / 22 并进了 HTTP 计数，见 Operate 里那段说明）
-    { k: 'HTTP / WS Req', z: t('proxy.st.httpReq'), v: n(s.httpReq), tone: 'g' },
-    { k: 'HTTP / WS Resp', z: t('proxy.st.httpResp'), v: n(s.httpResp), tone: 'g' },
+    //这两格含 HTTPS（HTTP_Req/Resp 计数器把 HTTP / HTTPS 并在一起；WebSocket 已无产出者）
+    { k: 'HTTP(S) Req', z: t('proxy.st.httpReq'), v: n(s.httpReq), tone: 'g' },
+    { k: 'HTTP(S) Resp', z: t('proxy.st.httpResp'), v: n(s.httpResp), tone: 'g' },
     /*
       实时网速。与总流量那格同一种排法（大字给合计、小字给拆分），
       两格分别落在两行的末尾，视觉上成对。

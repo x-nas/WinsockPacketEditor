@@ -10735,7 +10735,6 @@ namespace WinsockPacketEditor
                     int PacketSocket,
                     long TheologyID,
                     PacketConfig.Packet.PacketType PacketType,
-                    long WebSocketType,
                     string ClientAddr,
                     string ServerAddr,
                     string ServerDomain,
@@ -10795,7 +10794,7 @@ namespace WinsockPacketEditor
 
                                     在此之前这个 switch 只有 TCP / UDP / HTTP / HTTPS 六个 case、
                                     <b>也没有 default</b>，于是 WebSocket 请求 / 响应（类型 21 / 22，
-                                    由 SunnyNetCallback 在中间人那条路上产出）：
+                                    WebSocket 请求 / 响应（类型 21 / 22）—— SunnyNet 的中间人移除后已无产出者，保留这两支只为统计口径完整）：
                                       · 拿得到 ProxyInfo.Id（那是构造函数里发的），也进得了列表；
                                       · 但<b>六个计数器一个都不进</b> —— 界面上「代理总数」是那六个相加，
                                         于是最大序号会一直跑在总数前面（实测抓 28,979 个包时差 97 个）；
@@ -10862,7 +10861,6 @@ namespace WinsockPacketEditor
                                     PacketSocket,
                                     TheologyID,
                                     PacketType,
-                                    WebSocketType,
                                     ClientAddr,
                                     ClientLocation,
                                     ServerAddr,
@@ -14389,7 +14387,6 @@ namespace WinsockPacketEditor
                             psSession.SocketSession.Client.Handle.ToInt32(),
                             0,
                             ptType,
-                            0,
                             ClientAddr,
                             ServerAddr,
                             psSession.ServerAddress,
@@ -18045,7 +18042,7 @@ namespace WinsockPacketEditor
 
                         string from, to;
                         PacketConfig.Packet.PacketType type;
-                        long theology = 0, wsType = 0;
+                        long theology = 0;
 
                         if (List == ListSend || List == ListPacket)
                         {
@@ -18061,7 +18058,7 @@ namespace WinsockPacketEditor
                             ProxyInfo pi = FindProxy(Id);
                             if (pi == null) { return UI.T("PacketEditForm.Gone", "这条封包已经不在列表里了"); }
                             from = pi.ClientAddr; to = pi.ServerAddr; type = pi.PacketType;
-                            theology = pi.TheologyID; wsType = pi.WebSocketType;
+                            theology = pi.TheologyID;
                         }
 
                         if (Socket <= 0 && theology == 0)
@@ -18130,7 +18127,7 @@ namespace WinsockPacketEditor
                                 {
                                     while (!token.IsCancellationRequested)
                                     {
-                                        DoSend(Socket, type, from, to, buf, theology, wsType,
+                                        DoSend(Socket, type, from, to, buf,
                                             Progression, ProgressionPosition, ProgressionStep, Carry, CarryCount);
 
                                         if (interval > 0 && token.WaitHandle.WaitOne(interval)) { break; }
@@ -18140,7 +18137,7 @@ namespace WinsockPacketEditor
                                 {
                                     for (int i = 0; i < times && !token.IsCancellationRequested; i++)
                                     {
-                                        DoSend(Socket, type, from, to, buf, theology, wsType,
+                                        DoSend(Socket, type, from, to, buf,
                                             Progression, ProgressionPosition, ProgressionStep, Carry, CarryCount);
 
                                         if (interval > 0 && token.WaitHandle.WaitOne(interval)) { break; }
@@ -18181,7 +18178,6 @@ namespace WinsockPacketEditor
             /// <summary>发一次。逻辑逐行照 WinForms 的 DoSendPacket：先递进（含进位），再按套接字 / 会话两条路发。</summary>
             private static void DoSend(
                 int Socket, PacketConfig.Packet.PacketType type, string from, string to, byte[] buf,
-                long theology, long wsType,
                 bool Progression, int pos, int step, bool carry, int carryCount)
             {
                 try
@@ -19992,7 +19988,6 @@ namespace WinsockPacketEditor
                                         SocketID,
                                         0,
                                         httpType,
-                                        0,
                                         $"{psSession.ClientIP}:{psSession.ClientPort}",
                                         $"{psSession.ServerIP}:{psSession.ServerPort}",
                                         psSession.ServerAddress,
@@ -20013,7 +20008,6 @@ namespace WinsockPacketEditor
                             SocketID,
                             0,
                             ptType,
-                            0,
                             $"{psSession.ClientIP}:{psSession.ClientPort}",
                             $"{psSession.ServerIP}:{psSession.ServerPort}",
                             psSession.ServerAddress,
@@ -20078,7 +20072,6 @@ namespace WinsockPacketEditor
                             iSocket,
                             0,
                             ptType,
-                            0,
                             ClientAddr,
                             ServerAddr,
                             ServerAddr,

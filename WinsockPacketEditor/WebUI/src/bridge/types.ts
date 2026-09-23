@@ -63,7 +63,6 @@ export interface ProxyRow {
   //界面上没有这一列 —— 恒为 0 的列比空着更误导，见 PacketList 里的说明
   TheologyID: number
   Type: number // PacketType
-  WebSocketType: number
   ClientAddr: string
   ClientLocation: string
   ServerAddr: string
@@ -103,8 +102,8 @@ export const DOMAIN_TYPE: Record<number, string> = {
 
   ⚠️ <b>这张表必须覆盖 C# 枚举的每一个取值。</b>漏掉的那个值查出来是 undefined，
   「类型」列就是<b>一片空白</b>，而且不报任何错。21 / 22（WebSocket 请求 / 响应）
-  就这么漏过一次 —— 它们由 SunnyNetCallback 在代理模式的 WebSocket 中间人那条路上产出，
-  平时抓 TCP/UDP 撞不上，一抓 WebSocket 就整列空。
+  ⚠️ 21 / 22（WebSocket 请求 / 响应）<b>现在没有产出者</b>了 —— SunnyNet 的中间人已随 2.4 移除。
+  保留这两个映射与 C# 枚举值，是为了让升级前存档里的那几条还能显示类型名，而不是一片空白。
 */
 export const PACKET_TYPE: Record<number, string> = {
   0: 'pt.ws1Send',

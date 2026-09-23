@@ -289,7 +289,7 @@ namespace WinsockPacketEditor
             d["FilterEditForm.AppointLength.Error"] = "길이 지정이 올바르지 않습니다";
             d["FilterEditForm.Change.Error"] = "패킷 교체 설정이 올바르지 않습니다";
             d["SendList.SystemSocket.Blocked"] = "전송 「{0}」에 「시스템 소켓 사용」이 켜져 있지만 시스템 소켓이 설정되지 않았습니다 — 패킷 목록에서 마우스 오른쪽 버튼으로 「시스템 소켓 설정」을 먼저 하세요.";
-            d["SendExecute.Socket.Missing"] = "전송 「{0}」에 소켓이 없는 패킷이 있습니다(HTTP / HTTPS / WebSocket 은 세션 번호로 보내므로 소켓이 항상 0) —— 이 패킷들은 보낼 수 없습니다. 「시스템 소켓 사용」을 켜고 패킷 목록에서 먼저 설정하세요.";
+            d["SendExecute.Socket.Missing"] = "보내기 목록 「{0}」에 소켓이 없는 패킷이 있습니다(소켓 번호 0) — 보낼 수 없습니다. 「시스템 소켓 사용」을 켜거나 목록에서 마우스 오른쪽 클릭으로 설정하세요.";
             d["SendList.LoopCount.Fixed"] = "전송 「{0}」의 반복 횟수가 올바르지 않습니다({1}). 1 회로 처리했습니다.";
             d["SendEditForm.SendName.Empty"] = "전송 이름이 비어 있습니다";
             d["RobotEditForm.SendList.Error"] = "전송 목록 지정이 올바르지 않습니다";

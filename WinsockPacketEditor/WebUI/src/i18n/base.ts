@@ -143,9 +143,9 @@ export const DICT = {
   'proxy.st.tcpResp': { zh: 'TCP 响应', en: 'TCP resp' },
   'proxy.st.udpReq': { zh: 'UDP 请求', en: 'UDP req' },
   'proxy.st.udpResp': { zh: 'UDP 响应', en: 'UDP resp' },
-  //含 WebSocket —— 类型 21 / 22 并进了 HTTP 计数，见 Operate 的 ProxyInfo_ToQueue
-  'proxy.st.httpReq': { zh: 'HTTP / WS 请求', en: 'HTTP / WS req' },
-  'proxy.st.httpResp': { zh: 'HTTP / WS 响应', en: 'HTTP / WS resp' },
+  //HTTP_Req/Resp 计数器把 HTTP / HTTPS 并在一起（WebSocket 已无产出者，见 bridge/types.ts 的 PACKET_TYPE 注释）
+  'proxy.st.httpReq': { zh: 'HTTP(S) 请求', en: 'HTTP(S) req' },
+  'proxy.st.httpResp': { zh: 'HTTP(S) 响应', en: 'HTTP(S) resp' },
 
   // ── 代理模式：工具条与快捷面板 ──────────────────────
   'proxy.search': { zh: '在封包内容中查找…', en: 'Search in packet data…' },

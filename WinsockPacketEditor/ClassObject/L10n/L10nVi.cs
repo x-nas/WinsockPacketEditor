@@ -289,7 +289,7 @@ namespace WinsockPacketEditor
             d["FilterEditForm.AppointLength.Error"] = "Độ dài chỉ định không hợp lệ";
             d["FilterEditForm.Change.Error"] = "Cài đặt đổi gói không hợp lệ";
             d["SendList.SystemSocket.Blocked"] = "Mục gửi “{0}” đã bật “Dùng socket hệ thống” nhưng socket hệ thống chưa được đặt — hãy chuột phải một gói tin trong danh sách và chọn “Đặt socket hệ thống” trước.";
-            d["SendExecute.Socket.Missing"] = "Mục gửi “{0}” có gói tin không có socket (HTTP / HTTPS / WebSocket gửi theo số phiên nên socket luôn là 0) — những gói này không gửi được. Hãy bật “Dùng socket hệ thống” và đặt nó trước từ menu chuột phải của danh sách gói tin.";
+            d["SendExecute.Socket.Missing"] = "Danh sách gửi “{0}” có gói không có socket (số socket là 0) — không gửi được: hãy bật “Dùng socket hệ thống” hoặc đặt nó từ menu chuột phải của danh sách.";
             d["SendList.LoopCount.Fixed"] = "Số vòng lặp của mục gửi “{0}” không hợp lệ ({1}); coi như 1.";
             d["SendEditForm.SendName.Empty"] = "Chưa nhập tên mục gửi";
             d["RobotEditForm.SendList.Error"] = "Danh sách gửi không hợp lệ";
