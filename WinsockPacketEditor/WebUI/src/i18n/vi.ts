@@ -1144,7 +1144,7 @@ export const vi: Record<Key, string> = {
   'ps.passPh': "Mật khẩu",
   'ps.detect': "Kiểm tra",
   'ps.connected': "Kết nối máy chủ proxy thành công",
-  'mh.kernel': "Nhân",
+  'mh.kernel': 'Nhân Mihomo',
   'mh.ready': "Sẵn sàng",
   'mh.notReady': "Chưa sẵn sàng",
   'mh.version': "Phiên bản",

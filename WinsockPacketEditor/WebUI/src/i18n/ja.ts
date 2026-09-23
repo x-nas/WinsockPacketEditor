@@ -1146,7 +1146,7 @@ export const ja: Record<Key, string> = {
   'ps.passPh': "パスワード",
   'ps.detect': "接続テスト",
   'ps.connected': "プロキシサーバーに接続しました",
-  'mh.kernel': "カーネル",
+  'mh.kernel': 'Mihomo カーネル',
   'mh.ready': "準備完了",
   'mh.notReady': "未準備",
   'mh.version': "バージョン",

@@ -1146,7 +1146,7 @@ export const ru: Record<Key, string> = {
   'ps.passPh': "Пароль",
   'ps.detect': "Проверить",
   'ps.connected': "Прокси-сервер доступен",
-  'mh.kernel': "Ядро",
+  'mh.kernel': 'Ядро Mihomo',
   'mh.ready': "Готово",
   'mh.notReady': "Не готово",
   'mh.version': "Версия",

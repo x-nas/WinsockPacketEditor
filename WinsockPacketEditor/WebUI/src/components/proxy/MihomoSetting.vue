@@ -219,7 +219,8 @@ async function save(): Promise<void> {
 </script>
 
 <template>
-  <SettingsModal :open="props.open" :title="t('set.process')" subtitle="mihomo · TUN" :busy="busy" :error="error" :width="980"
+  <SettingsModal :open="props.open" :title="t('set.process')" subtitle="mihomo · TUN" :busy="busy" :error="error"
+                 :hint="on && !f.ProxyRunning ? t('mh.needProxy') : ''" :width="980"
                  @update:open="emit('update:open', $event)" @save="save">
     <div class="setf list-page ps">
 
@@ -236,7 +237,6 @@ async function save(): Promise<void> {
             </span>
           </div>
           <p class="hint">{{ t('mh.enableHint') }}</p>
-          <p v-if="on && !f.ProxyRunning" class="hint warn">{{ t('mh.needProxy') }}</p>
 
           <div class="row" :class="{ off: !on }">
             <div class="k">{{ t('mh.stack') }}</div>
@@ -323,7 +323,11 @@ async function save(): Promise<void> {
 .ps .cols .row { padding-left: 0; padding-right: 0; }
 .ps .cols .hint { padding-left: 0; padding-right: 0; margin: 2px 0 8px; }
 .ps .cols .tbl { margin: 0; }
-.ps .cols .tbody.tall { height: var(--tall); max-height: var(--tall); }
+/*
+  进程表高度<b>自适应</b>：最多 --tall 高，行少时贴着内容收起来，
+  不在列表底部留一大片空白（原来是写死 height: --tall）。
+*/
+.ps .cols .tbody.tall { max-height: var(--tall); }
 
 /* 启用开关一行：勾选框 + 一枚内核状态小标 */
 .swrow { display: flex; align-items: center; gap: 10px; padding: 4px 0; min-height: 30px; flex-wrap: wrap; }
@@ -347,7 +351,8 @@ async function save(): Promise<void> {
 /* 进程表列 */
 .cap { position: relative; top: 1px; font-family: var(--share); font-size: var(--fs-label); letter-spacing: .12em; text-transform: uppercase; color: var(--cyan); white-space: nowrap; }
 .cnt { font-family: var(--mono); font-size: var(--fs-small); color: var(--muted); }
-.tf { padding: 6px 12px; border-top: 1px solid var(--border); font-size: var(--fs-small); color: var(--dim2); }
+/* 说明文字离表格底边的距离，与左列最后一句 hint 到列的底边一致（都是 8px） */
+.tf { padding: 6px 12px 8px; border-top: 1px solid var(--border); font-size: var(--fs-small); color: var(--dim2); }
 
 .ps .head.hp, .ps .tr.hp { grid-template-columns: 34px 26px minmax(120px, 1fr) 64px; }
 .ps .tr { height: 30px; cursor: pointer; }

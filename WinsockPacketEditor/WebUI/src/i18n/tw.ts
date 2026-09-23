@@ -1137,7 +1137,7 @@ export const tw: Record<Key, string> = {
   'ps.passPh': "代理密碼",
   'ps.detect': "檢測代理",
   'ps.connected': "代理伺服器連線成功",
-  'mh.kernel': "核心",
+  'mh.kernel': 'Mihomo 核心',
   'mh.ready': "已就緒",
   'mh.notReady': "未就緒",
   'mh.version': "版本",

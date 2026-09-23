@@ -1530,7 +1530,7 @@ export const DICT = {
   'ps.passPh': { zh: "代理密码", en: "Password" },
   'ps.detect': { zh: "检测代理", en: "Test" },
   'ps.connected': { zh: "代理服务器连接成功", en: "Proxy server reachable" },
-  'mh.kernel': { zh: "内核", en: "Kernel" },
+  'mh.kernel': { zh: 'Mihomo 内核', en: 'Mihomo Kernel' },
   'mh.ready': { zh: "已就绪", en: "Ready" },
   'mh.notReady': { zh: "未就绪", en: "Not ready" },
   'mh.version': { zh: "版本", en: "Version" },

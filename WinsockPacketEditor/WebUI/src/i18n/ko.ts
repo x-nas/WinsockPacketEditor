@@ -1144,7 +1144,7 @@ export const ko: Record<Key, string> = {
   'ps.passPh': "비밀번호",
   'ps.detect': "프록시 테스트",
   'ps.connected': "프록시 서버에 연결되었습니다",
-  'mh.kernel': "커널",
+  'mh.kernel': 'Mihomo 커널',
   'mh.ready': "준비됨",
   'mh.notReady': "준비 안 됨",
   'mh.version': "버전",
