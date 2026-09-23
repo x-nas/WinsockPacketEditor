@@ -916,10 +916,10 @@ export const DICT = {
   'pe.gone': { zh: '这条封包已经不在列表里了', en: 'This packet is no longer in the list' },
   'pe.socket': { zh: '使用套接字', en: 'Socket' },
   'pe.socketHint': {
-    zh: '0 = 按抓到它的会话回发（仅 HTTP / HTTPS / WebSocket 中间人抓到的包）；否则填要发出去的套接字号',
-    en: '0 = reply through the session it was captured on (MITM packets only); otherwise the socket to send on',
+    zh: '要发出去的套接字号（必须大于 0）',
+    en: 'Socket number to send on (must be greater than 0)',
   },
-  'pe.noSession': { zh: '这条包没有会话号，套接字填 0 发不出去', en: 'No session on this packet — socket 0 will not send' },
+  'pe.sockZero': { zh: '套接字号不能填 0', en: 'Socket number cannot be 0' },
   'pe.useSys': { zh: '用系统套接字', en: 'Use system socket' },
   'pe.to': { zh: '远端地址', en: 'Remote' },
   'pe.from': { zh: '本机地址', en: 'Local' },

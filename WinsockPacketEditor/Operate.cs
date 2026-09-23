@@ -17785,7 +17785,6 @@ namespace WinsockPacketEditor
                             To = pi.PacketTo ?? string.Empty,
                             Buffer = pi.PacketBuffer ?? new byte[0],
                             //PacketInfo 没有 TheologyID —— 注入模式与发送集都只能按套接字发
-                            CanSendBySession = false,
                             SystemSocket = SystemConfig.SystemSocket,
                         };
                     }
@@ -17803,8 +17802,6 @@ namespace WinsockPacketEditor
                             From = pi.ClientAddr ?? string.Empty,
                             To = pi.ServerAddr ?? string.Empty,
                             Buffer = pi.PacketBuffer ?? new byte[0],
-                            //SOCKS5 那条路上 TheologyID 恒为 0，只有 SunnyNet 中间人抓到的包能按会话回发
-                            CanSendBySession = pi.TheologyID != 0,
                             SystemSocket = SystemConfig.SystemSocket,
                         };
                     }

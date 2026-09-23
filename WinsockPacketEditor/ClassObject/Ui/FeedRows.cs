@@ -597,8 +597,6 @@ namespace WinsockPacketEditor
         public string From = string.Empty;
         public string To = string.Empty;
         public byte[] Buffer = new byte[0];
-        /// <summary>套接字填 0 时能不能走 SunnyNet 的会话发送 —— 只有 HTTP / HTTPS / WebSocket 那条路抓到的包有会话号。</summary>
-        public bool CanSendBySession;
         public int SystemSocket;
     }
 
