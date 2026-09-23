@@ -1146,7 +1146,7 @@ export const tw: Record<Key, string> = {
   'mh.dns': "DNS 模式",
   'mh.dnsHint': "fake-ip 讓 WPE 看得到網域（推薦）；redir-host 副作用較小，但清單裡多半只剩 IP。",
   'mh.procs': "攔截處理程序",
-  'mh.loop': "WPE 自身、啟動器與核心已固定走直連（斷環），不可關閉。",
+  'mh.loop': 'WPE 自身、啟動器與核心固定走直連（斷環），內網與本機位址也不進核心 —— 區域網路裡的流量抓不到；兩者都不可關閉。',
   'mh.needProxy': "代理服務還沒啟動。啟動後核心才會接管處理程序流量。",
   'mh.tunHint': "TUN 是否已接管處理程序流量",
 }

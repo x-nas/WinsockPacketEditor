@@ -1153,7 +1153,7 @@ export const vi: Record<Key, string> = {
   'mh.dns': "Chế độ DNS",
   'mh.dnsHint': "fake-ip giúp WPE thấy được tên miền (khuyến nghị); redir-host ít tác dụng phụ hơn nhưng danh sách thường chỉ còn IP.",
   'mh.procs': "Tiến trình bị chặn",
-  'mh.loop': "Bản thân WPE, trình khởi chạy và nhân luôn đi trực tiếp (chống vòng lặp); không thể tắt.",
+  'mh.loop': 'WPE, trình khởi chạy và nhân luôn đi trực tiếp (cắt vòng lặp), địa chỉ LAN/cục bộ cũng không vào nhân — nên lưu lượng trong LAN không được bắt. Cả hai đều không thể tắt.',
   'mh.needProxy': "Dịch vụ proxy chưa chạy. Nhân chỉ tiếp quản lưu lượng tiến trình sau khi dịch vụ khởi động.",
   'mh.tunHint': "TUN đã tiếp quản lưu lượng tiến trình hay chưa",
 }

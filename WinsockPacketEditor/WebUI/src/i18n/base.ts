@@ -1539,7 +1539,7 @@ export const DICT = {
   'mh.dns': { zh: "DNS 模式", en: "DNS mode" },
   'mh.dnsHint': { zh: "fake-ip 让 WPE 看得到域名（推荐）；redir-host 副作用更小，但列表里多半只剩 IP。", en: "fake-ip keeps domain names visible to WPE (recommended); redir-host has fewer side effects but usually leaves only IPs in the list." },
   'mh.procs': { zh: "拦截进程", en: "Intercepted processes" },
-  'mh.loop': { zh: "WPE 自身、启动器与内核已固定走直连（断环），不可关闭。", en: "WPE itself, the launcher and the kernel are always routed direct (loop-break); this cannot be turned off." },
+  'mh.loop': { zh: "WPE 自身、启动器与内核固定走直连（断环），内网与本机地址也不进内核 —— 局域网里的流量抓不到；两条都不可关闭。", en: "WPE itself, the launcher and the kernel always go direct (loop-break), and LAN/local addresses never enter the kernel, so LAN traffic is not captured. Neither can be turned off." },
   'mh.needProxy': { zh: "代理服务还没启动。启动后内核才会接管进程流量。", en: "The proxy service is not running yet. The kernel takes over process traffic only after it starts." },
   'mh.tunHint': { zh: "TUN 是否已接管进程流量", en: "Whether TUN has taken over process traffic" },
 } satisfies Record<string, Entry>

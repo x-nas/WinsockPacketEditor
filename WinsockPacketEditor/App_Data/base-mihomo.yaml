@@ -2,10 +2,13 @@
 #
 # 断环规则写在下面 rules 块的最前面且不可关闭：WPE 自身的 SOCKS5 出站若被 TUN 再抓回来，
 # 会经 mihomo 送回 WPE，形成死环（表现为直接断网）。
+#
+# log-level 用 error：warning 会把「某个系统进程直连某地址超时」这类
+# 与 WPE 无关的噪声一起打进来（KMS、遥测、投屏…），刷满系统日志。
 mixed-port: 0
 allow-lan: false
 mode: rule
-log-level: warning
+log-level: error
 external-controller: 127.0.0.1:{ctlPort}
 secret: {secret}
 
@@ -15,6 +18,16 @@ tun:
   auto-route: true
   auto-detect-interface: true
   exclude-interface: ["lo"]
+  #内网 / 本机地址不进 TUN（= 不经过 mihomo、不走代理）：
+  #系统后台服务（KMS、打印机、NAS、投屏…）与局域网内的游戏都不该被内核接管，
+  #顺带也就不会再有那些「直连超时」的日志。
+  #⚠️ <b>不能加 198.18.0.0/16</b> —— 那是 TUN 自己的 DNS（fake-ip 段），排掉域名就看不见了。
+  route-exclude-address:
+    - 127.0.0.0/8
+    - 10.0.0.0/8
+    - 172.16.0.0/12
+    - 192.168.0.0/16
+    - 169.254.0.0/16
 
 dns:
   enable: true
