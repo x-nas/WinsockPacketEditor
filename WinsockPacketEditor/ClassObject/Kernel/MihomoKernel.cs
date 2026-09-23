@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -20,7 +22,10 @@ namespace WinsockPacketEditor
     {
         private const string ExeName = "wpe-mihomo.exe";
         private const string ProcessName = "wpe-mihomo";
-        private const int ReadyTimeoutMs = 45000;
+        private const int ReadyTimeoutMs = 60000;
+
+        /// <summary>mihomo（sing-tun）在 Windows 上固定的 TUN 适配器名。</summary>
+        private const string TunName = "Meta";
 
         /// <summary>内核连接自身 SOCKS5 时用的固定用户名（口令每次启动随机）。</summary>
         public const string KernelUser = "__wpe_kernel__";
@@ -143,6 +148,9 @@ namespace WinsockPacketEditor
                     stopRequested = false;
                     lastLine = string.Empty;
 
+                    //没有可用的 Meta 网卡时，清掉上次强杀留下的半死 WINTUN 设备（否则创建会撞车、要等重试）
+                    if (!TunInterfaceUp()) { RemoveStaleTunDevices(); }
+
                     Process p = new Process();
                     p.StartInfo.FileName = exePath;
                     p.StartInfo.Arguments = "-d \"" + workDir + "\"";
@@ -172,18 +180,22 @@ namespace WinsockPacketEditor
             }
 
             // 等 TUN 就绪（不持锁，避免阻塞 IsRunning / Stop）
+            //
+            // 判据：Meta 网卡已 Up（主）+ 日志出现 Tun adapter listening（兜底）。
+            // ⚠️ 不能只看日志 —— 模板的 log-level 是 warning，而那条是 info，会被压掉，
+            // 于是「内核其实已经工作」也会被当成启动失败（2026-09-23 修）。
             int waited = 0;
             while (waited < ReadyTimeoutMs)
             {
-                if (ready) { return true; }
+                if (ready || TunInterfaceUp()) { return true; }
                 if (!IsRunning)
                 {
                     error = "内核启动失败：" + (string.IsNullOrEmpty(lastLine) ? "进程已退出" : lastLine);
                     SafeKill();
                     return false;
                 }
-                Thread.Sleep(200);
-                waited += 200;
+                Thread.Sleep(250);
+                waited += 250;
             }
 
             error = "内核启动超时（等 TUN 就绪超过 " + (ReadyTimeoutMs / 1000) + " 秒）";
@@ -236,6 +248,9 @@ namespace WinsockPacketEditor
                 Operate.DoLog(nameof(MihomoKernel) + ".Stop.Stray", ex);
             }
 
+            //等 Meta 网卡消失（最多 5 秒）—— 强杀来不及自己摘，留着会让下次启动撞车
+            for (int i = 0; i < 20 && TunInterfaceUp(); i++) { Thread.Sleep(250); }
+
             ready = false;
         }
 
@@ -273,6 +288,88 @@ namespace WinsockPacketEditor
             Operate.DoLog("Mihomo", msg);
             try { UI.Toast(UiIcon.Error, msg); } catch { }
         }
+
+        /// <summary>Meta（mihomo 的 TUN 网卡）是否已经在用。</summary>
+        private static bool TunInterfaceUp()
+        {
+            try
+            {
+                foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
+                {
+                    if (ni.OperationalStatus != OperationalStatus.Up) { continue; }
+                    if (string.Equals(ni.Name, TunName, StringComparison.OrdinalIgnoreCase)) { return true; }
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(MihomoKernel) + ".TunInterfaceUp", ex);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 移除 SWD\WINTUN 下残留的设备 —— 上次强杀 mihomo 会留下「设备还在、打不开」的状态，
+        /// 会让下一次创建撞车（create adapter: Cannot create a file when that file already exists）。
+        /// 只在没有可用的 Meta 网卡时调用；best-effort，失败只记日志。
+        /// </summary>
+        private static void RemoveStaleTunDevices()
+        {
+            const int DIGCF_ALLCLASSES = 0x4;
+            IntPtr set = IntPtr.Zero;
+
+            try
+            {
+                set = SetupDiGetClassDevs(IntPtr.Zero, "SWD\\WINTUN", IntPtr.Zero, DIGCF_ALLCLASSES);
+                if (set == IntPtr.Zero || set == new IntPtr(-1)) { return; }
+
+                //移除会改变枚举下标，所以每次都取第 0 个，直到没有
+                for (int guard = 0; guard < 16; guard++)
+                {
+                    SP_DEVINFO_DATA data = new SP_DEVINFO_DATA();
+                    data.cbSize = Marshal.SizeOf(typeof(SP_DEVINFO_DATA));
+
+                    if (!SetupDiEnumDeviceInfo(set, 0, ref data)) { break; }
+
+                    if (!SetupDiRemoveDevice(set, ref data))
+                    {
+                        Operate.DoLog(nameof(MihomoKernel) + ".CleanTun", "移除 WINTUN 残留设备失败（Win32 错误 " + Marshal.GetLastWin32Error() + "）");
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(MihomoKernel) + ".CleanTun", ex);
+            }
+            finally
+            {
+                if (set != IntPtr.Zero && set != new IntPtr(-1))
+                {
+                    try { SetupDiDestroyDeviceInfoList(set); } catch { }
+                }
+            }
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct SP_DEVINFO_DATA
+        {
+            public int cbSize;
+            public Guid ClassGuid;
+            public int DevInst;
+            public IntPtr Reserved;
+        }
+
+        [DllImport("setupapi.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static extern IntPtr SetupDiGetClassDevs(IntPtr ClassGuid, string Enumerator, IntPtr hwndParent, int Flags);
+
+        [DllImport("setupapi.dll", SetLastError = true)]
+        private static extern bool SetupDiEnumDeviceInfo(IntPtr DeviceInfoSet, int MemberIndex, ref SP_DEVINFO_DATA DeviceInfoData);
+
+        [DllImport("setupapi.dll", SetLastError = true)]
+        private static extern bool SetupDiRemoveDevice(IntPtr DeviceInfoSet, ref SP_DEVINFO_DATA DeviceInfoData);
+
+        [DllImport("setupapi.dll", SetLastError = true)]
+        private static extern bool SetupDiDestroyDeviceInfoList(IntPtr DeviceInfoSet);
 
         private static void SafeKill()
         {
