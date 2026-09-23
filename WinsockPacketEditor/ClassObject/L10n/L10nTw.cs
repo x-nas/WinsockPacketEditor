@@ -131,8 +131,6 @@ namespace WinsockPacketEditor
             d["ExportRobotList.Error"] = "匯出機器人列表失敗";
             d["DeleteAccounts"] = "確定刪除 {0} 個賬號嗎?";
             d["InstallCertificate.Success"] = "WPE64 證書安裝成功";
-            d["UninstallDriver"] = "解除安裝驅動";
-            d["UninstallDriver.Alert"] = "解除安裝驅動會立即重啟電腦，若非必要請勿解除安裝!";
             d["CerFile"] = "CER 檔案";
             d["CrtFile"] = "CRT 檔案";
             d["PemFile"] = "PEM 檔案";

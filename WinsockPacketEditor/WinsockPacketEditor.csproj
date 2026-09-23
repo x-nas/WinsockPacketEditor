@@ -156,9 +156,6 @@
     <None Update="EasyHook32.dll;EasyHook32Svc.exe;EasyHook64.dll;EasyHook64Svc.exe;EasyLoad32.dll;EasyLoad64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="x86\SunnyNet.dll;x64\SunnyNet64.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <!--
       SQLite.Interop 两份：Stub.System.Data.SQLite.Core.NetFramework 的 targets 也会往 x86\ / x64\ 拷同一对文件
       （字节完全相同，2026-09-11 核过哈希），老式工程时代也是两路并存。留着工程里这一对，是因为包的 build 资产

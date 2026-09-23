@@ -2077,8 +2077,6 @@ namespace WPEHybrid
                     maxConnectionDefault = Operate.ProxyConfig.Proxy.DefaultMaxConnectionNumber,
                     connBufferKB = Operate.ProxyConfig.Proxy.ProxyReceiveBufferBytes / 1024,
                     memoryGB = Math.Round(Kernel32.TotalPhysicalMemory() / 1073741824.0, 1),
-                    enableHttp = ProxyCfg.Enable_HTTP,
-                    httpPort = (int)ProxyCfg.HTTP_Port,
                     enableSystemProxy = ProxyCfg.Enable_SystemProxy,
                     //服务在跑时改端口没有意义，界面据此禁用相关输入
                     running = ProxyCfg.IsRunning,
@@ -2097,9 +2095,7 @@ namespace WPEHybrid
             this.bridge.Register("saveProxySetting", args =>
             {
                 bool enableSocks5 = args["enableSocks5"] != null && (bool)args["enableSocks5"];
-                bool enableHttp = args["enableHttp"] != null && (bool)args["enableHttp"];
                 int socks5Port = args["socks5Port"] == null ? 1080 : (int)args["socks5Port"];
-                int httpPort = args["httpPort"] == null ? 1081 : (int)args["httpPort"];
 
                 bool proxyIpAuto = args["proxyIpAuto"] != null && (bool)args["proxyIpAuto"];
                 string proxyIp = args["proxyIp"] == null ? string.Empty : ((string)args["proxyIp"]).Trim();
@@ -2109,7 +2105,7 @@ namespace WPEHybrid
 
                 try
                 {
-                    string error = ProxyCfg.SaveProxySettings(proxyIpAuto, proxyIp, enableSocks5, socks5Port, enableAuth, onlyWpc, maxConnection, enableHttp, httpPort);
+                    string error = ProxyCfg.SaveProxySettings(proxyIpAuto, proxyIp, enableSocks5, socks5Port, enableAuth, onlyWpc, maxConnection);
                     if (!string.IsNullOrEmpty(error)) return new { ok = false, error = error };
 
                     UI.Toast(UiIcon.Success, UI.T("ProxySettingsForm.Success", "代理设置保存成功"));
@@ -4080,11 +4076,7 @@ namespace WPEHybrid
 
             #region//设置页 II：进程 / 映射 / 外部代理 / 快捷键 / 备份 / 远程管理
 
-            //── 进程设置 ──
-
-            this.bridge.Register("getProcessSetting", args => Operate.ProxyConfig.Proxy.GetProcessSetting());
-
-            //「mihomo 模式设置」页（2026-09-23 起取代旧的进程设置）
+            //── mihomo 模式设置 ──
             this.bridge.Register("getMihomoSetting", args => Operate.ProxyConfig.Proxy.GetMihomoSetting());
 
             this.bridge.Register("saveMihomoSetting", async args =>
@@ -4155,32 +4147,7 @@ namespace WPEHybrid
                 ok = Operate.ProxyConfig.Proxy.RemoveSelectProcessName(args["name"] == null ? string.Empty : (string)args["name"]),
             });
 
-            this.bridge.Register("uninstallDriver", async args => new { ok = await Operate.ProxyConfig.Proxy.UninstallDriver_Dialog() });
-
-            //保存是异步的：先真连一次转代理服务器，装驱动那一段走 UI.Busy 在后台跑（首次装驱动要几秒）
-            this.bridge.Register("saveProcessSetting", async args =>
-            {
-                var pids = new List<int>();
-                var arr = args["pids"] as Newtonsoft.Json.Linq.JArray;
-                if (arr != null) { foreach (var x in arr) { pids.Add((int)x); } }
-
-                return new
-                {
-                    error = await Operate.ProxyConfig.Proxy.SaveProcessSetting(
-                        args["driverType"] == null ? 1 : (int)args["driverType"],
-                        args["mustTcp"] != null && (bool)args["mustTcp"],
-                        args["ip"] == null ? null : (string)args["ip"],
-                        args["port"] == null ? 1080 : (int)args["port"],
-                        args["appointPort"] != null && (bool)args["appointPort"],
-                        args["appointPortContent"] == null ? null : (string)args["appointPortContent"],
-                        args["auth"] != null && (bool)args["auth"],
-                        args["userName"] == null ? null : (string)args["userName"],
-                        args["passWord"] == null ? null : (string)args["passWord"],
-                        pids),
-                };
-            });
-
-            //进程设置与外部代理的「检测代理」共用
+            //外部代理的「检测代理」
             this.bridge.Register("testSocksProxy", async args => new
             {
                 error = await Operate.ProxyConfig.Proxy.TestSocksProxy(
@@ -6490,23 +6457,6 @@ namespace WPEHybrid
                 if (action == "inject.startHook") await Task.Run(() => { link.PushHookFlags(); link.PushFilters(); link.PushRuntime(); link.StartHook(); });
                 else await Task.Run(() => link.StopHook());
                 return Newtonsoft.Json.Linq.JObject.FromObject(InjectStatus());
-            }
-            if (action == "driver.uninstall")
-            {
-                var ok = await Operate.ProxyConfig.Proxy.UninstallDriver_Dialog();
-                return new Newtonsoft.Json.Linq.JObject { ["uninstalled"] = ok, ["changed"] = ok };
-            }
-            if (action == "processProxy.save")
-            {
-                var pids = new List<int>(); var values = args["pids"] as Newtonsoft.Json.Linq.JArray;
-                if (values != null) foreach (var value in values) { var pid = (int?)value; if (!pid.HasValue || pid.Value <= 0) throw new InvalidOperationException("Every pid must be positive."); pids.Add(pid.Value); }
-                var error = await Operate.ProxyConfig.Proxy.SaveProcessSetting(
-                    (int?)args["driverType"] ?? 1, (bool?)args["mustTcp"] ?? false,
-                    (string)args["ip"], (int?)args["port"] ?? 1080,
-                    (bool?)args["appointPort"] ?? false, (string)args["appointPortContent"],
-                    (bool?)args["auth"] ?? false, (string)args["userName"], (string)args["passWord"], pids);
-                if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
-                return new Newtonsoft.Json.Linq.JObject { ["changed"] = true, ["processCount"] = pids.Count };
             }
             if (action == "packetEdit.sendStart")
             {

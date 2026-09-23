@@ -1,7 +1,6 @@
 ﻿using Microsoft.Owin.Hosting;
 using Microsoft.Win32;
 using QQWry;
-using SunnyNetlibray.Event;
 using SuperSocket.Common;
 using SuperSocket.SocketBase;
 using SuperSocket.SocketBase.Config;
@@ -2156,29 +2155,6 @@ namespace WinsockPacketEditor
             public static string GetUDPIPString(string UDPString)
             {
                 return Regex.Replace(UDPString, @"[\[\]]", "");
-            }
-
-            #endregion
-
-            #region//获取强制转代理的字符串
-
-            public static string GetMustTCP()
-            {
-                if (Operate.ProxyConfig.Proxy.MustTCP_Auth)
-                {
-                    //账号密码进 URL 的 userinfo 段要转义：密码里一个 @ 或 : 就会把地址切错
-                    return string.Format("socket5://{0}:{1}@{2}:{3}",
-                        Uri.EscapeDataString(Operate.ProxyConfig.Proxy.MustTCP_UserName ?? string.Empty),
-                        Uri.EscapeDataString(Operate.ProxyConfig.Proxy.MustTCP_PassWord ?? string.Empty),
-                        Operate.ProxyConfig.Proxy.MustTCP_IP,
-                        Operate.ProxyConfig.Proxy.MustTCP_Port);
-                }
-                else
-                {
-                    return string.Format("socket5://{0}:{1}",
-                        Operate.ProxyConfig.Proxy.MustTCP_IP,
-                        Operate.ProxyConfig.Proxy.MustTCP_Port);
-                }
             }
 
             #endregion
@@ -5564,9 +5540,6 @@ namespace WinsockPacketEditor
             public static class Proxy
             {
                 public static ProxyAppServer ProxyServer = null;
-                public static SunnyNetlibray.SunnyNet syNet = new SunnyNetlibray.SunnyNet();
-                public static SunnyNetlibray.CertManager syCert = new SunnyNetlibray.CertManager();
-                public static SunnyNetCallback syCallBack = new SunnyNetCallback();
                 public static bool IsLoadDriver = false;
                 public static int DriverType = 1;
                 public static IPConnectionFilter ipFilter = new IPConnectionFilter();
@@ -5665,33 +5638,6 @@ namespace WinsockPacketEditor
 
                 /// <summary>上一次 GetProcessRows 拿到的进程快照，「双击添加到名称」按 Pid 从这里找（ProcessInfo 带图标字段，不出给外壳）。</summary>
                 private static List<ProcessInfo> lastProcessList = new List<ProcessInfo>();
-
-                public static ProcessSettingRow GetProcessSetting()
-                {
-                    return new ProcessSettingRow
-                    {
-                        DriverType = DriverType,
-                        IsLoadDriver = IsLoadDriver,
-                        MustTCP = MustTCP,
-                        IP = MustTCP_IP ?? string.Empty,
-                        Port = MustTCP_Port,
-                        AppointPort = MustTCP_AppointPort,
-                        AppointPortContent = MustTCP_AppointPortContent ?? string.Empty,
-                        Auth = MustTCP_Auth,
-                        UserName = MustTCP_UserName ?? string.Empty,
-                        PassWord = MustTCP_PassWord ?? string.Empty,
-                        CheckedPids = lstSelectProcessID.ToArray(),
-
-                        //链路体检用的只读环境状态，见 ProcessSettingRow 上那段说明
-                        EnableHttp = Enable_HTTP,
-                        HttpPort = HTTP_Port,
-                        EnableSocks5 = Enable_SOCKS5,
-                        Socks5Port = SOCKS5_Port,
-                        EnableAuth = Enable_Auth,
-                        Running = IsRunning,
-                        IsAdmin = SystemConfig.IsAdministrator(),
-                    };
-                }
 
                 /// <summary>当前进程表（按名字排序），IsCheck 按 lstSelectProcessID 勾好。图标不在这里，外壳按路径自己取。</summary>
                 public static ProcessRow[] GetProcessRows()
@@ -5795,18 +5741,6 @@ namespace WinsockPacketEditor
                     return false;
                 }
 
-                /// <summary>卸载驱动（带确认框：会立即重启电脑）。返回 true = 用户确认并已执行。</summary>
-                public static async Task<bool> UninstallDriver_Dialog()
-                {
-                    if (!await UI.Confirm(UI.T("UninstallDriver", "卸载驱动"), UI.T("UninstallDriver.Alert", "卸载驱动会立即重启电脑，若非必要请勿卸载!")))
-                    {
-                        return false;
-                    }
-
-                    try { syNet.UnDriver(); return true; }
-                    catch (Exception ex) { Operate.DoLog(nameof(UninstallDriver_Dialog), ex); return false; }
-                }
-
                 #region//自身进程
 
                 private static int selfProcessId = -1;
@@ -5862,176 +5796,6 @@ namespace WinsockPacketEditor
                     return false;
                 }
 
-                /// <summary>
-                /// 保存前的校验 —— 纯函数、不碰驱动、不联网，跑测直接调它。返回空串 = 通过。
-                /// 通过时 NormalizedPorts 是规范化后的端口列表（"80,443"），保存要用它替换用户输入。
-                ///
-                /// 这里拦的都是「保存之后被拦截的进程会直接断网、而界面上看不出为什么」的情形：
-                ///   · HTTP 代理没开 —— 驱动把流量送进 SunnyNet，而 SunnyNet 是随 HTTP 代理起的；
-                ///   · 转代理端口是 SunnyNet 自己的端口 —— 成环；
-                ///   · 转到本机 SOCKS5，而它开着身份认证、这边却没勾「需要认证」—— 握手当场被拒。
-                /// 最后那一条正是默认配置（EnableAuth 默认 1、MustTCP_Auth 默认 0）会撞上的。
-                /// </summary>
-                public static string ValidateProcessSetting(bool MustTCPNew, string IP, int Port, bool AppointPort, string AppointPortContent, bool Auth, string UserName, string PassWord, out string NormalizedPorts)
-                {
-                    NormalizedPorts = (AppointPortContent ?? string.Empty).Trim();
-                    IP = (IP ?? string.Empty).Trim();
-                    UserName = (UserName ?? string.Empty).Trim();
-                    PassWord = (PassWord ?? string.Empty).Trim();
-
-                    if (!Enable_HTTP)
-                    {
-                        return UI.T("ProcessSetting.NeedHttpProxy", "拦截进程的数据要经过 HTTP 代理，请先在「代理设置」里启用 HTTP 代理");
-                    }
-
-                    if (AppointPort)
-                    {
-                        NormalizedPorts = NormalizeAppointPorts(AppointPortContent, out List<string> bad);
-
-                        if (bad.Count > 0)
-                        {
-                            return string.Format(UI.T("ProcessSetting.Port.Invalid", "指定端口里有认不出来的内容：{0}（只能是 1~65535 的数字，用逗号分隔）"), string.Join(" ", bad));
-                        }
-
-                        if (NormalizedPorts.Length == 0)
-                        {
-                            return UI.T("ProcessSetting.Port.Empty", "勾了「指定端口」就要填至少一个端口");
-                        }
-                    }
-
-                    if (!MustTCPNew)
-                    {
-                        return string.Empty;
-                    }
-
-                    if (IP.Length == 0)
-                    {
-                        return UI.T("ProcessSetting.IP.Empty", "转代理地址为空");
-                    }
-
-                    //IsValidDomain 要求至少一个点，"localhost" 会被它拒掉 —— 它是转到本机最常见的写法，单独放行
-                    AddressType at = GetAddressType_ByString(IP);
-                    if (at != AddressType.IPv4 && at != AddressType.Domain && !string.Equals(IP, "localhost", StringComparison.OrdinalIgnoreCase))
-                    {
-                        return UI.T("ProcessSetting.IP.Error", "转代理地址错误（要 IPv4 地址或域名）");
-                    }
-
-                    if (Port < 1 || Port > 65535)
-                    {
-                        return UI.T("ProcessSetting.Port.Error", "转代理端口要在 1~65535 之间");
-                    }
-
-                    if (Auth && (UserName.Length == 0 || PassWord.Length == 0))
-                    {
-                        return UI.T("ProcessSetting.Auth.Empty", "勾了「需要认证」就要填账号和密码");
-                    }
-
-                    if (IsLocalProxyAddress(IP))
-                    {
-                        if (Port == HTTP_Port)
-                        {
-                            return string.Format(UI.T("ProcessSetting.Port.Loop", "转代理端口不能是 HTTP 代理自己的端口 {0}：那会把流量转回 SunnyNet 自己，成环"), HTTP_Port);
-                        }
-
-                        if (Port == SOCKS5_Port)
-                        {
-                            if (!Enable_SOCKS5)
-                            {
-                                return UI.T("ProcessSetting.Socks5.Off", "本机 SOCKS5 代理没有启用，转过去也没有人接");
-                            }
-
-                            if (Enable_Auth && !Auth)
-                            {
-                                return UI.T("ProcessSetting.Auth.Required", "本机 SOCKS5 代理开着身份认证，转代理必须勾选「需要认证」并填一个代理账号，否则被拦截的进程会直接断网");
-                            }
-                        }
-                    }
-
-                    return string.Empty;
-                }
-
-                /// <summary>
-                /// 保存进程设置，逐步照 WinForms 的 ProcessSetting.bSave_Click，前面多了两道：
-                /// 校验（ValidateProcessSetting）→ 真连一次转代理服务器 → 写字段 → 没装驱动就按选的类型装 →
-                /// 把勾选的 Pid 与名称表交给 SunnyNet → 落库。返回空串 = 成功。
-                ///
-                /// 装驱动那一段（首次要复制 sys 文件、起服务，几秒钟）走 UI.Busy 丢到后台，UI 线程不卡；
-                /// SunnyNet 的调用本来就是跨到 Go 侧的，UI.Toast 也自己 marshal，后台跑是安全的。
-                /// </summary>
-                public static async Task<string> SaveProcessSetting(int DriverTypeNew, bool MustTCPNew, string IP, int Port, bool AppointPort, string AppointPortContent, bool Auth, string UserName, string PassWord, IList<int> CheckedPids)
-                {
-                    try
-                    {
-                        string err = ValidateProcessSetting(MustTCPNew, IP, Port, AppointPort, AppointPortContent, Auth, UserName, PassWord, out string ports);
-                        if (!string.IsNullOrEmpty(err))
-                        {
-                            return err;
-                        }
-
-                        IP = (IP ?? string.Empty).Trim();
-                        UserName = (UserName ?? string.Empty).Trim();
-                        PassWord = (PassWord ?? string.Empty).Trim();
-
-                        /*
-                            真连一次：地址、端口、凭据三样对不对，只有握手才知道；原先只有用户主动点「检测代理」才会发现。
-                            本机 SOCKS5 还没起的时候跳过 —— 那时连不上不说明配置错，而认证那一条上面的静态检查已经拦了。
-                        */
-                        if (MustTCPNew && (IsRunning || !IsLocalProxyAddress(IP) || Port != SOCKS5_Port))
-                        {
-                            string t = await TestSocksProxy(Auth, IP, Port, UserName, PassWord);
-                            if (!string.IsNullOrEmpty(t))
-                            {
-                                return string.Format(UI.T("ProcessSetting.Detect.Before", "转代理服务器连不上，没有保存：{0}"), t);
-                            }
-                        }
-
-                        MustTCP = MustTCPNew;
-                        MustTCP_IP = IP;
-                        MustTCP_Port = (ushort)Math.Max(1, Math.Min(65535, Port));
-                        MustTCP_AppointPort = AppointPort;
-                        MustTCP_AppointPortContent = ports;
-                        MustTCP_Auth = Auth;
-                        MustTCP_UserName = UserName;
-                        MustTCP_PassWord = PassWord;
-
-                        lstSelectProcessID.Clear();
-                        foreach (int pid in CheckedPids ?? new List<int>())
-                        {
-                            //自己不收：驱动会把 WPE 往目标发的连接也抓回来，成环（界面上已经不出这一行，这里是业务层的兜底）
-                            if (pid == SelfProcessId) { continue; }
-                            if (!lstSelectProcessID.Contains(pid)) { lstSelectProcessID.Add(pid); }
-                        }
-
-                        string applyErr = await UI.Busy(UI.T("Loading", "正在加载..."), () => ApplyProcessSetting(DriverTypeNew));
-                        if (!string.IsNullOrEmpty(applyErr))
-                        {
-                            return applyErr;
-                        }
-
-                        //换了转代理设置：已有的 UDP 关联收掉，下一个数据报按新设置重连
-                        CloseAllUDPProxy();
-
-                        UI.Toast(UiIcon.Success, UI.T("ProcessSetting.Save.Success", "进程设置保存成功"));
-                        return string.Empty;
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(SaveProcessSetting), ex);
-                        return ex.Message;
-                    }
-                }
-
-                /// <summary>
-                /// 过渡期（P1）：进程抓取已改由内置 mihomo 内核完成，这里只把进程名单落库，
-                /// <b>不再加载 SunnyNet 驱动</b>（它与 mihomo 的 TUN 会互相抢流量）。
-                /// SunnyNet 的驱动相关代码在 P4 一起删。
-                /// </summary>
-                private static string ApplyProcessSetting(int DriverTypeNew)
-                {
-                    SystemConfig.SaveProxyMode_ToDB();
-                    return string.Empty;
-                }
-
                 /// <summary>「mihomo 模式设置」页读取的整包状态。</summary>
                 public static MihomoSettingRow GetMihomoSetting()
                 {
@@ -6082,60 +5846,6 @@ namespace WinsockPacketEditor
                     {
                         DoLog(nameof(SaveMihomoSetting), ex);
                         return ex.Message;
-                    }
-                }
-
-                /// <summary>
-                /// 把勾选的 Pid 与名称表交给驱动（先清再加）。
-                /// 保存时调；StartProxy 成功后也调一次 —— StopProxy 会把它们摘掉（见 ReleaseDriverProcesses），
-                /// 再启动时要装回去，否则「停了再开」之后进程不再被拦截。
-                /// </summary>
-                public static void ApplyProcessesToDriver()
-                {
-                    if (!IsLoadDriver)
-                    {
-                        return;
-                    }
-
-                    try
-                    {
-                        syNet.RemoveAllProcesses();
-
-                        foreach (int pid in lstSelectProcessID)
-                        {
-                            syNet.AddProcessPid(pid);
-                        }
-
-                        foreach (ProcessInfo pi in lstSelectProcessName)
-                        {
-                            if (!string.IsNullOrEmpty(pi.ModuleName)) { syNet.AddProcessName(pi.ModuleName); }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(ApplyProcessesToDriver), ex);
-                    }
-                }
-
-                /// <summary>
-                /// 停止代理 / 退出时把进程从驱动上摘掉。驱动本身留着（卸载会重启电脑），
-                /// 只是不再把这些进程的连接转到一个已经关掉的端口上 —— 否则 WPE 停了，目标进程也跟着断网。
-                /// 名单留在内存里，再启动时 ApplyProcessesToDriver 装回去。
-                /// </summary>
-                public static void ReleaseDriverProcesses()
-                {
-                    if (!IsLoadDriver)
-                    {
-                        return;
-                    }
-
-                    try
-                    {
-                        syNet.RemoveAllProcesses();
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(ReleaseDriverProcesses), ex);
                     }
                 }
 
@@ -6615,12 +6325,11 @@ namespace WinsockPacketEditor
                 // These setters are the single business boundary for the proxy-settings UI
                 // and local automation.  They validate, mutate and persist as one operation;
                 // callers must not assign these fields and save ProxyMode themselves.
-                public static string SaveProxySettings(bool proxyIpAuto, string proxyIp, bool enableSocks5, int socks5Port, bool enableAuth, bool onlyWpc, int maxConnection, bool enableHttp, int httpPort)
+                public static string SaveProxySettings(bool proxyIpAuto, string proxyIp, bool enableSocks5, int socks5Port, bool enableAuth, bool onlyWpc, int maxConnection)
                 {
                     proxyIp = (proxyIp ?? string.Empty).Trim();
                     if (!enableSocks5) return UI.T("ProxySettingsForm.ProxyType.Error", "代理类型未设置");
-                    if (socks5Port < 1 || socks5Port > 65535 || httpPort < 1 || httpPort > 65535) return UI.T("ProxySettingsForm.Port.Error", "端口必须在 1 ~ 65535 之间");
-                    if (enableHttp && socks5Port == httpPort) return UI.T("ProxySettingsForm.ProxyType.Error", "SOCKS 和 HTTP 端口不能相同");
+                    if (socks5Port < 1 || socks5Port > 65535) return UI.T("ProxySettingsForm.Port.Error", "端口必须在 1 ~ 65535 之间");
                     if (!proxyIpAuto && !IPAddress.TryParse(proxyIp, out IPAddress _)) return UI.T("ProxySettingsForm.ProxyIP.Empty", "请选择监听地址，或勾上「自动检测」");
                     if (onlyWpc && !enableAuth) return UI.T("ProxySettingsForm.OnlyWpc.NeedAuth", "「只允许 WPC 客户端连接」需要先启用身份认证");
 
@@ -6637,8 +6346,7 @@ namespace WinsockPacketEditor
                     Enable_Auth = enableAuth;
                     Only_WPC_Client = onlyWpc;
                     MaxConnectionNumber = maxConnection;
-                    Enable_HTTP = enableHttp;
-                    HTTP_Port = (ushort)httpPort;
+                    //Enable_HTTP / HTTP_Port 不再由界面维护：SunnyNet 的 HTTP 代理已随中间件一起移除
                     SystemConfig.SaveProxyMode_ToDB();
                     return string.Empty;
                 }
@@ -6648,15 +6356,6 @@ namespace WinsockPacketEditor
                     changed = Enable_Auth != enabled;
                     if (!enabled && Only_WPC_Client) return "Proxy authentication cannot be disabled while Only-WPC mode is enabled.";
                     if (changed) { Enable_Auth = enabled; SystemConfig.SaveProxyMode_ToDB(); }
-                    return string.Empty;
-                }
-
-                public static string SetProxyHttpEnabled(bool enabled, out bool changed)
-                {
-                    changed = Enable_HTTP != enabled;
-                    if (enabled && !Enable_SOCKS5) return "HTTP proxy requires SOCKS5 to be enabled.";
-                    if (enabled && HTTP_Port == SOCKS5_Port) return "HTTP and SOCKS5 proxy ports must be different.";
-                    if (changed) { Enable_HTTP = enabled; SystemConfig.SaveProxyMode_ToDB(); }
                     return string.Empty;
                 }
 
@@ -6675,16 +6374,6 @@ namespace WinsockPacketEditor
                     if (port < 1 || port > 65535) return "The SOCKS5 port must be between 1 and 65535.";
                     if (Enable_HTTP && port == HTTP_Port) return "SOCKS5 and HTTP proxy ports must be different.";
                     if (changed) { SOCKS5_Port = (ushort)port; SystemConfig.SaveProxyMode_ToDB(); }
-                    return string.Empty;
-                }
-
-                public static string SetProxyHttpPort(int port, out bool changed)
-                {
-                    changed = HTTP_Port != port;
-                    if (port < 1 || port > 65535) return "The HTTP port must be between 1 and 65535.";
-                    if (!Enable_HTTP) return "The HTTP proxy is disabled; enable it before changing its port.";
-                    if (Enable_SOCKS5 && port == SOCKS5_Port) return "HTTP and SOCKS5 proxy ports must be different.";
-                    if (changed) { HTTP_Port = (ushort)port; SystemConfig.SaveProxyMode_ToDB(); }
                     return string.Empty;
                 }
 
@@ -6888,55 +6577,6 @@ namespace WinsockPacketEditor
                         DoLog(nameof(InitSocks5Proxy), ex);
                         return false;
                     }
-                }
-
-                private static bool InitHttpProxy()
-                {
-                    try
-                    {
-                        if (!Enable_HTTP)
-                        {
-                            return true;
-                        }
-
-                        syNet.BindPort(HTTP_Port);
-                        syNet.BindCallback(syCallBack);
-
-                        if (syNet.Start())
-                        {
-                            UI.Toast(UiIcon.Success, UI.T("ProxyModeForm.StartHTTPProxy", "开始 HTTP 代理"));
-
-                            string sProxyIP = string.Format(
-                                UI.T("ProxyModeForm.ProxyServerIP", "HTTP 代理地址 : {0}:{1}"),
-                                ProxyUDP_IP, HTTP_Port);
-                            DoLog(nameof(InitHttpProxy), sProxyIP);
-
-                            //StopProxy 把进程从驱动上摘了（不摘的话 WPE 一停目标就断网），这里装回去
-                            ApplyProcessesToDriver();
-                        }
-                        else
-                        {
-                            DoLog(nameof(InitHttpProxy), syNet.GetError());
-                        }
-
-                        if (syCert.LoadX509Certificate(Properties.Resources.Cert_Ca, Properties.Resources.Cert_Key))
-                        {
-                            syNet.SetCustomCACertificate(syCert);
-                        }
-
-                        if (syNet.InstallCertificate())
-                        {
-                            DoLog(nameof(InitHttpProxy), UI.T("InstallCertificate.Success", "WPE64 证书安装成功"));
-                        }
-
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        DoLog(nameof(InitHttpProxy), ex);
-                    }
-
-                    return false;
                 }
 
                 /// <summary>
@@ -7702,9 +7342,6 @@ namespace WinsockPacketEditor
                     {
                         var now = DateTime.Now;
                         var UDPToRemove = new List<Guid>();
-
-                        //「强制转代理」那头的 UDP 关联也在这一拍回收（静置超过 UDPTimeout 的）
-                        udpRelay?.SweepIdle();
 
                         foreach (var pair in ProxyConfig.List.cdProxyUDP.ToList())
                         {
@@ -8591,84 +8228,6 @@ namespace WinsockPacketEditor
                         "Connection: close\r\n\r\n";
 
                     return Encoding.UTF8.GetBytes(response);
-                }
-
-                #endregion
-
-                #region//设置 UDP 使用代理
-
-                /*
-                    UDP 那一路的中继客户端（ClassObject/MustTcpUdpRelay.cs）：目标进程的一个 UDP 套接字对应一条 SOCKS5 UDP 关联，
-                    应答由关联自己交还给那个套接字。旧写法是每个数据报新开一条关联、发完就把 TCP 与 UdpClient 一起关掉，
-                    应答永远回不来 —— 详见那个文件头上的说明。
-
-                    懒建：第一个被截下来的 UDP 数据报到达时才建。代理地址与凭据每次建关联时现取，
-                    所以改了「强制转代理」的设置不必重建中继器；SaveProcessSetting 会 CloseAllUDPProxy 让已有关联按新设置重连。
-                */
-                private static MustTcpUdpRelay udpRelay = null;
-                private static readonly object udpRelayLock = new object();
-
-                public static MustTcpUdpRelay UdpRelay
-                {
-                    get
-                    {
-                        MustTcpUdpRelay r = udpRelay;
-                        if (r != null) { return r; }
-
-                        lock (udpRelayLock)
-                        {
-                            if (udpRelay == null)
-                            {
-                                udpRelay = new MustTcpUdpRelay(
-                                    () => new MustTcpUdpRelay.Target
-                                    {
-                                        Auth = MustTCP_Auth,
-                                        IP = MustTCP_IP,
-                                        Port = MustTCP_Port,
-                                        UserName = MustTCP_UserName,
-                                        PassWord = MustTCP_PassWord,
-                                    },
-                                    (theology, data) => SunnyNetlibray.Tools.UDPTools.SendMessage(SunnyNetlibray.Tools.UDPTools.SendToClient, theology, data),
-                                    (where, text) => SystemConfig.LogThrottled(where, text))
-                                {
-                                    IdleTimeout = UDPTimeout,
-                                };
-                            }
-
-                            return udpRelay;
-                        }
-                    }
-                }
-
-                /// <summary>被驱动截下来的一个 UDP 数据报：交给中继送出去。调用方已经把事件的 Body 置空，SunnyNet 不会再直发。</summary>
-                public static void SetUDPProxy(UDPEvent Conn, byte[] bSendData)
-                {
-                    try
-                    {
-                        IPEndPoint targetEndPoint = ParseIPEndPoint(Conn.RemoteAddr());
-                        if (targetEndPoint == null || bSendData == null || bSendData.Length == 0)
-                        {
-                            return;
-                        }
-
-                        _ = UdpRelay.SendAsync(Conn.TheologyID(), targetEndPoint, bSendData);
-                    }
-                    catch (Exception ex)
-                    {
-                        DoLog(nameof(SetUDPProxy), ex);
-                    }
-                }
-
-                /// <summary>目标进程关了这个 UDP 套接字（UDP_Closed 事件），把它那条关联收掉。</summary>
-                public static void CloseUDPProxy(long TheologyID)
-                {
-                    udpRelay?.Close(TheologyID);
-                }
-
-                /// <summary>停止代理 / 换了转代理设置：全部收掉，下一个数据报会按当前设置重建。</summary>
-                public static void CloseAllUDPProxy()
-                {
-                    udpRelay?.CloseAll();
                 }
 
                 #endregion
@@ -18575,32 +18134,8 @@ namespace WinsockPacketEditor
 
                     if (Socket <= 0)
                     {
-                        //套接字 0：走 SunnyNet 的会话回发（只有中间人那条路抓到的包有会话号）
-                        switch (type)
-                        {
-                            case PacketConfig.Packet.PacketType.TCP_Req:
-                                ok = SunnyNetlibray.Tools.TCPTools.SendMessage(SunnyNetlibray.Tools.TCPTools.SendToServer, theology, buf);
-                                break;
-                            case PacketConfig.Packet.PacketType.TCP_Resp:
-                                ok = SunnyNetlibray.Tools.TCPTools.SendMessage(SunnyNetlibray.Tools.TCPTools.SendToClient, theology, buf);
-                                break;
-                            case PacketConfig.Packet.PacketType.UDP_Req:
-                                ok = SunnyNetlibray.Tools.UDPTools.SendMessage(SunnyNetlibray.Tools.UDPTools.SendToServer, theology, buf);
-                                break;
-                            case PacketConfig.Packet.PacketType.UDP_Resp:
-                                ok = SunnyNetlibray.Tools.UDPTools.SendMessage(SunnyNetlibray.Tools.UDPTools.SendToClient, theology, buf);
-                                break;
-                            case PacketConfig.Packet.PacketType.WebSocket_Req:
-                                ok = SunnyNetlibray.Tools.WebSocketTools.SendMessage(SunnyNetlibray.Tools.WebSocketTools.SendToServer, theology, wsType, buf);
-                                break;
-                            case PacketConfig.Packet.PacketType.WebSocket_Resp:
-                                ok = SunnyNetlibray.Tools.WebSocketTools.SendMessage(SunnyNetlibray.Tools.WebSocketTools.SendToClient, theology, wsType, buf);
-                                break;
-                            default:
-                                //HTTP / HTTPS 不能整包重发，WinForms 也是直接计失败
-                                ok = false;
-                                break;
-                        }
+                        //会话回发（SunnyNet 中间件那条路）已随中间件一起移除：套接字无效只能计失败
+                        ok = false;
                     }
                     else
                     {
@@ -20354,6 +19889,46 @@ namespace WinsockPacketEditor
                                 case Operate.PacketConfig.Packet.PacketType.TCP_Resp:
                                     psSession.SendToClient(bNewBuffer, 0, bNewBuffer.Length);
                                     break;
+                            }
+                        }
+
+                        /*
+                            HTTP 会话：把字节流拼成完整的请求 / 响应，按 HTTP_Req / HTTP_Resp 入列表，
+                            替代逐段 TCP 条目（只影响展示 —— 线上仍是上面逐段过滤后的字节）。
+                            非 HTTP 会话 Sniffer 返回 null，走原来的 TCP 条目。
+                        */
+                        HttpSniffer sniffer = psSession.Sniffer(ptType == Operate.PacketConfig.Packet.PacketType.TCP_Req);
+                        if (sniffer != null)
+                        {
+                            List<byte[]> msgs = sniffer.Feed(bRawBuffer);
+
+                            if (sniffer.IsHttp)
+                            {
+                                Operate.PacketConfig.Packet.PacketType httpType =
+                                    ptType == Operate.PacketConfig.Packet.PacketType.TCP_Req
+                                        ? Operate.PacketConfig.Packet.PacketType.HTTP_Req
+                                        : Operate.PacketConfig.Packet.PacketType.HTTP_Resp;
+
+                                foreach (byte[] msg in msgs)
+                                {
+                                    _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
+                                        DateTime.Now,
+                                        Operate.FilterConfig.Filter.FilterAction.None,
+                                        msg.Length,
+                                        SocketID,
+                                        0,
+                                        httpType,
+                                        0,
+                                        $"{psSession.ClientIP}:{psSession.ClientPort}",
+                                        $"{psSession.ServerIP}:{psSession.ServerPort}",
+                                        psSession.ServerAddress,
+                                        psSession.DomainType,
+                                        msg,
+                                        msg,
+                                        null);
+                                }
+
+                                return;
                             }
                         }
 

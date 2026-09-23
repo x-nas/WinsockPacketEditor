@@ -42,6 +42,28 @@ namespace WinsockPacketEditor
         public Operate.ProxyConfig.Proxy.AddressType AddressType;
         public Operate.ProxyConfig.Proxy.DomainType DomainType;
 
+        /*
+            HTTP 结构化嗅探（2026-09-23）：只在 DomainType == HTTP（端口 80/8080）的会话上启用，按方向各一个。
+            拼出来的完整请求/响应按 HTTP_Req / HTTP_Resp 入列表，替代逐段 TCP 条目（只影响展示，不改线上字节）。
+        */
+        internal HttpSniffer HttpReqSniffer;
+        internal HttpSniffer HttpRespSniffer;
+
+        /// <summary>取（或建）本会话某个方向的 HTTP 嗅探器；非 HTTP 会话返回 null。</summary>
+        internal HttpSniffer Sniffer(bool request)
+        {
+            if (DomainType != Operate.ProxyConfig.Proxy.DomainType.HTTP) { return null; }
+
+            if (request)
+            {
+                if (HttpReqSniffer == null) { HttpReqSniffer = new HttpSniffer(true); }
+                return HttpReqSniffer;
+            }
+
+            if (HttpRespSniffer == null) { HttpRespSniffer = new HttpSniffer(false); }
+            return HttpRespSniffer;
+        }
+
         public Operate.ProxyConfig.Proxy.ProxyType ProxyType { get; internal set; }
 
         public new ProxyAppServer AppServer

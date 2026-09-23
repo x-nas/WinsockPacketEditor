@@ -4,7 +4,7 @@
     WPE x64 的单文件启动器（方案 B）。
 
     产品本体仍是 WinsockPacketEditor\bin\Release 那个多文件目录 —— 注入要按路径把 WPEHook.dll /
-    EasyHook*.dll 交给目标进程、WebView2 要按文件夹映射 wwwroot、SunnyNet / SQLite.Interop 是原生库，
+    EasyHook*.dll 交给目标进程、WebView2 要按文件夹映射 wwwroot、SQLite.Interop 是原生库，
     这些都必须是硬盘上的真实文件，所以不做「内存里运行」，而是：
       把整个目录压成 zip 嵌进本 exe → 第一次运行（或版本变了、文件被删了）解压到
       %LOCALAPPDATA%\WPE64\app\<版本>-<哈希>\ → 之后每次只核对文件、直接启动。

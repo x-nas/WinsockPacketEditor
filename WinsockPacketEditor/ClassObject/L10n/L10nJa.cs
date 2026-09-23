@@ -1,4 +1,4 @@
-﻿// 日本語（ja-JP）的对照表，由 L10n.Get 查（外壳经 CoreL10n，即 UI.T）。
+// 日本語（ja-JP）的对照表，由 L10n.Get 查（外壳经 CoreL10n，即 UI.T）。
 //
 // ⚠️ <b>这个文件是生成出来的</b>，别手改。
 //
@@ -125,8 +125,6 @@ namespace WinsockPacketEditor
             d["ExportRobotList.Error"] = "ロボット一覧の書き出しに失敗しました";
             d["DeleteAccounts"] = "{0} 件のアカウントを削除してもよろしいですか？";
             d["InstallCertificate.Success"] = "WPE64 証明書のインストールに成功しました";
-            d["UninstallDriver"] = "ドライバーをアンインストール";
-            d["UninstallDriver.Alert"] = "ドライバーをアンインストールすると、コンピューターがすぐに再起動します。\r\n必要がなければアンインストールしないでください！";
             d["CerFile"] = "CER ファイル";
             d["CrtFile"] = "CRT ファイル";
             d["PemFile"] = "PEM ファイル";

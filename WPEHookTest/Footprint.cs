@@ -35,7 +35,7 @@ namespace WPEHookTest
 
         private static readonly string[] WatchNative =
         {
-            "SunnyNet.dll", "SQLite.Interop.dll", "System.Data.SQLite.dll",
+            "SQLite.Interop.dll", "System.Data.SQLite.dll",
         };
 
         public static int Run(string[] args)

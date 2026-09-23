@@ -1,4 +1,4 @@
-﻿// 한국어（ko-KR）的对照表，由 L10n.Get 查（外壳经 CoreL10n，即 UI.T）。
+// 한국어（ko-KR）的对照表，由 L10n.Get 查（外壳经 CoreL10n，即 UI.T）。
 //
 // ⚠️ <b>这个文件是生成出来的</b>，别手改。
 //
@@ -125,8 +125,6 @@ namespace WinsockPacketEditor
             d["ExportRobotList.Error"] = "로봇 목록을 내보내지 못했습니다";
             d["DeleteAccounts"] = "계정 {0} 개를 삭제하시겠습니까?";
             d["InstallCertificate.Success"] = "WPE64 인증서를 설치했습니다";
-            d["UninstallDriver"] = "드라이버 제거";
-            d["UninstallDriver.Alert"] = "드라이버를 제거하면 컴퓨터가 즉시 다시 시작됩니다.\r\n꼭 필요한 경우가 아니면 제거하지 마세요!";
             d["CerFile"] = "CER 파일";
             d["CrtFile"] = "CRT 파일";
             d["PemFile"] = "PEM 파일";

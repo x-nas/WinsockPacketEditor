@@ -1,4 +1,4 @@
-﻿// Tiếng Việt（vi-VN）的对照表，由 L10n.Get 查（外壳经 CoreL10n，即 UI.T）。
+// Tiếng Việt（vi-VN）的对照表，由 L10n.Get 查（外壳经 CoreL10n，即 UI.T）。
 //
 // ⚠️ <b>这个文件是生成出来的</b>，别手改。
 //
@@ -125,8 +125,6 @@ namespace WinsockPacketEditor
             d["ExportRobotList.Error"] = "Xuất danh sách robot thất bại";
             d["DeleteAccounts"] = "Xóa {0} tài khoản?";
             d["InstallCertificate.Success"] = "Cài chứng chỉ WPE64 thành công";
-            d["UninstallDriver"] = "Gỡ driver";
-            d["UninstallDriver.Alert"] = "Gỡ driver sẽ khởi động lại máy tính ngay lập tức.\r\nĐừng gỡ nếu không thật sự cần!";
             d["CerFile"] = "Tệp CER";
             d["CrtFile"] = "Tệp CRT";
             d["PemFile"] = "Tệp PEM";
