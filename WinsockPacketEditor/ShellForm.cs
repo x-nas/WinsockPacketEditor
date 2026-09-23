@@ -4392,6 +4392,11 @@ namespace WPEHybrid
                 text = Operate.ProxyConfig.List.GetProxyHex_ByIds(ReadLongIds(args)),
             });
 
+            this.bridge.Register("copyProxyHexMerged", args => new
+            {
+                text = Operate.ProxyConfig.List.GetProxyHexMerged_ByIds(ReadLongIds(args)),
+            });
+
             this.bridge.Register("addProxyToSend", args => new
             {
                 count = Operate.ProxyConfig.List.AddToSend_ByProxyIds(
@@ -4417,10 +4422,10 @@ namespace WPEHybrid
             });
 
             //ids 为空就是导整张表 —— SaveProxyList_Dialog 本来就这么写的
-            this.bridge.Register("exportProxyExcel", async args =>
+            this.bridge.Register("exportProxyCsv", async args =>
             {
-                await Operate.ProxyConfig.List.ExportProxyExcel_ByIds(ReadLongIds(args));
-                return new { ok = true };
+                string path = await Operate.ProxyConfig.List.ExportProxyCsv_ByIds(ReadLongIds(args));
+                return new { ok = path != null, path = path ?? string.Empty };
             });
 
             /*
@@ -4432,6 +4437,11 @@ namespace WPEHybrid
             this.bridge.Register("copyPacketHex", args => new
             {
                 text = Operate.PacketConfig.List.GetPacketHex_ByIds(ReadLongIds(args)),
+            });
+
+            this.bridge.Register("copyPacketHexMerged", args => new
+            {
+                text = Operate.PacketConfig.List.GetPacketHexMerged_ByIds(ReadLongIds(args)),
             });
 
             this.bridge.Register("addPacketToSend", args => new
@@ -4478,11 +4488,11 @@ namespace WPEHybrid
                 return new { ok = true };
             });
 
-            //ids 为空就是导整张表 —— SavePacketListToExcel 本来就这么写的
-            this.bridge.Register("exportPacketExcel", async args =>
+            //ids 为空就是导整张表 —— SavePacketList_Dialog 本来就这么写的
+            this.bridge.Register("exportPacketCsv", async args =>
             {
-                await Operate.PacketConfig.List.ExportPacketExcel_ByIds(ReadLongIds(args));
-                return new { ok = true };
+                string path = await Operate.PacketConfig.List.ExportPacketCsv_ByIds(ReadLongIds(args));
+                return new { ok = path != null, path = path ?? string.Empty };
             });
 
             #endregion
@@ -6224,8 +6234,8 @@ namespace WPEHybrid
                 if (values != null) foreach (var value in values) { var id = (long?)value; if (!id.HasValue || id.Value < 1) throw new InvalidOperationException("Every packetId must be positive."); ids.Add(id.Value); }
                 string path;
                 var fileName = (string)args["fileName"];
-                if (list == "proxy") path = await Operate.ProxyConfig.List.ExportProxyExcel_ByIds(ids, fileName);
-                else if (list == "packet") path = await Operate.PacketConfig.List.ExportPacketExcel_ByIds(ids, fileName);
+                if (list == "proxy") path = await Operate.ProxyConfig.List.ExportProxyCsv_ByIds(ids, fileName);
+                else if (list == "packet") path = await Operate.PacketConfig.List.ExportPacketCsv_ByIds(ids, fileName);
                 else throw new InvalidOperationException("list must be proxy or packet.");
                 return new Newtonsoft.Json.Linq.JObject { ["list"] = list, ["requested"] = ids.Count, ["saved"] = !string.IsNullOrEmpty(path), ["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path };
             }
@@ -6262,8 +6272,8 @@ namespace WPEHybrid
                     var ids = new List<long>(); var values = args["capturePacketIds"] as Newtonsoft.Json.Linq.JArray;
                     if (values != null) foreach (var value in values) { var id = (long?)value; if (!id.HasValue || id.Value < 1) throw new InvalidOperationException("Every capturePacketId must be positive."); ids.Add(id.Value); }
                     string path;
-                    if (list == "proxy") path = await Operate.ProxyConfig.List.ExportProxyExcel_ByIds(ids, fileName);
-                    else if (list == "packet") path = await Operate.PacketConfig.List.ExportPacketExcel_ByIds(ids, fileName);
+                    if (list == "proxy") path = await Operate.ProxyConfig.List.ExportProxyCsv_ByIds(ids, fileName);
+                    else if (list == "packet") path = await Operate.PacketConfig.List.ExportPacketCsv_ByIds(ids, fileName);
                     else throw new InvalidOperationException("captureList must be proxy or packet.");
                     result["list"] = list; result["requested"] = ids.Count; result["saved"] = !string.IsNullOrEmpty(path); result["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path;
                     return result;

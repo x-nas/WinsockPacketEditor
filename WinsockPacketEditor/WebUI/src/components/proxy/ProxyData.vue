@@ -436,6 +436,7 @@ const menuItems = computed<MenuItem[]>(() => {
     { divider: true },
 
     { id: 'copy', label: t('lst.copy') + tag, icon: ICON.copy },
+    { id: 'copyMerge', label: t('pm.copyMerge') + tag, icon: ICON.merge },
     { divider: true },
     //与 WinForms 一样一条一行（十六进制），写进文本对比页那两个框；带条数
     { id: 'toTextA', label: t('pm.toTextA') + tag, icon: ICON.text },
@@ -453,7 +454,7 @@ const menuItems = computed<MenuItem[]>(() => {
     { id: 'sysSocket', label: t('pm.setSysSocket'), icon: ICON.check },
     { divider: true },
     //ids 为空就是导整张表，所以不选也能点
-    { id: 'excel', label: t('pm.toExcel') + tag, icon: ICON.save },
+    { id: 'csv', label: t('pm.toCsv') + tag, icon: ICON.save },
     { divider: true },
     /*
       这一项<b>永远是全选</b>，不是开关 —— 所以标签不能用「全选 / 取消全选」，
@@ -499,9 +500,9 @@ async function onMenuPick(id: string): Promise<void> {
       pickTrimmed.value = false
       return
 
-    //导出不要求先选：ids 为空时 C# 侧会导整张表
-    case 'excel':
-      try { await call('exportProxyExcel', { ids }) } catch (e) { console.error('[pm] 导出失败', e) }
+    //导出不要求先选：ids 为空时 C# 侧会导整张表；成功/失败/空列表的提示由 C# 侧负责（Notify/Toast）
+    case 'csv':
+      try { await call<{ ok: boolean; path: string }>('exportProxyCsv', { ids }) } catch (e) { console.error('[pm] 导出失败', e) }
       return
   }
 
@@ -514,6 +515,14 @@ async function onMenuPick(id: string): Promise<void> {
     switch (id) {
       case 'copy': {
         const r = await call<{ text: string }>('copyProxyHex', { ids })
+        if (!r?.text) { pushToast('error', t('pm.copyFail')); return }
+        await call('clipboardWrite', { text: r.text })
+        pushToast('success', t('pm.copied'))
+        return
+      }
+
+      case 'copyMerge': {
+        const r = await call<{ text: string }>('copyProxyHexMerged', { ids })
         if (!r?.text) { pushToast('error', t('pm.copyFail')); return }
         await call('clipboardWrite', { text: r.text })
         pushToast('success', t('pm.copied'))

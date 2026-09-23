@@ -11220,6 +11220,7 @@ namespace WinsockPacketEditor
                 ///
                 /// 由 C# 拼好整段文本再交给前端写剪贴板 —— 让前端逐条取字节再自己转十六进制，
                 /// 既多几十次往返，格式还会和 WinForms 那份不一致。
+                /// 空包（没有字节）跳过不占一行；行间用换行分隔，末尾不带换行。
                 /// </summary>
                 public static string GetProxyHex_ByIds(IList<long> Ids)
                 {
@@ -11229,7 +11230,10 @@ namespace WinsockPacketEditor
 
                         foreach (ProxyInfo pi in ProxyConfig.List.PickProxies(Ids))
                         {
-                            sb.AppendLine(SystemConfig.BytesToString(
+                            if (pi.PacketBuffer == null || pi.PacketBuffer.Length == 0) { continue; }
+
+                            if (sb.Length > 0) { sb.AppendLine(); }
+                            sb.Append(SystemConfig.BytesToString(
                                 PacketConfig.Packet.EncodingFormat.Hex, pi.PacketBuffer));
                         }
 
@@ -11238,6 +11242,45 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(GetProxyHex_ByIds), ex);
+                        return string.Empty;
+                    }
+                }
+
+                /// <summary>
+                /// 「合并复制」：把选中那几条的字节<b>按列表顺序首尾拼接成一个封包</b>，
+                /// 转成一段十六进制（空格分隔、大写、单行）。空包跳过（拼进去也是零字节）。
+                /// </summary>
+                public static string GetProxyHexMerged_ByIds(IList<long> Ids)
+                {
+                    try
+                    {
+                        List<ProxyInfo> picked = ProxyConfig.List.PickProxies(Ids);
+
+                        int total = 0;
+                        foreach (ProxyInfo pi in picked)
+                        {
+                            if (pi.PacketBuffer != null) { total += pi.PacketBuffer.Length; }
+                        }
+
+                        if (total == 0) { return string.Empty; }
+
+                        byte[] merged = new byte[total];
+                        int pos = 0;
+
+                        foreach (ProxyInfo pi in picked)
+                        {
+                            byte[] buf = pi.PacketBuffer;
+                            if (buf == null || buf.Length == 0) { continue; }
+
+                            Buffer.BlockCopy(buf, 0, merged, pos, buf.Length);
+                            pos += buf.Length;
+                        }
+
+                        return SystemConfig.ToHexString(merged);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetProxyHexMerged_ByIds), ex);
                         return string.Empty;
                     }
                 }
@@ -11392,11 +11435,11 @@ namespace WinsockPacketEditor
                 }
 
                 /// <summary>
-                /// 「导出到 Excel」。<b>Ids 为空时导整张表</b> ——
+                /// 「导出到 CSV」。<b>Ids 为空时导整张表</b> ——
                 /// 这不是这里的特例，SaveProxyList_Dialog 本来就是这么写的
                 /// （piList 为空则退回 lstProxyInfo），所以「什么都不选 = 导全部」。
                 /// </summary>
-                public static async Task<string> ExportProxyExcel_ByIds(IList<long> Ids, string FileName = null)
+                public static async Task<string> ExportProxyCsv_ByIds(IList<long> Ids, string FileName = null)
                 {
                     try
                     {
@@ -11406,7 +11449,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ExportProxyExcel_ByIds), ex);
+                        Operate.DoLog(nameof(ExportProxyCsv_ByIds), ex);
                     }
                     return null;
                 }
@@ -11712,95 +11755,28 @@ namespace WinsockPacketEditor
 
                 #endregion                
 
-                #region//保存代理列表为Excel（对话框）
+                #region//保存代理列表为CSV（对话框）
 
                 public static async Task<string> SaveProxyList_Dialog(string FileName, List<ProxyInfo> piList)
                 {
-                    try
-                    {
-                        if (ProxyConfig.List.lstProxyInfo.Count > 0)
+                    List<ProxyInfo> all = ProxyConfig.List.lstProxyInfo.ToList();
+                    List<ProxyInfo> data = piList.Count > 0 ? piList : all;
+
+                    return await PacketConfig.List.SaveListToCsv_Dialog(
+                        all.Count,
+                        FileName,
+                        UI.T("CsvColumn.Proxy", "时间戳,类别,套接字,客户端地址,服务端地址,长度,数据"),
+                        data,
+                        (ProxyInfo p) => new[]
                         {
-                            int SaveCount = ProxyConfig.List.lstProxyInfo.Count;
-
-                            FilePick sfdSaveToExcel = new FilePick();
-                            sfdSaveToExcel.Filter = UI.T("ExcelFile", "Excel 文件") + "Excel (*.xls)|*.xls";
-
-                            if (!string.IsNullOrEmpty(FileName))
-                            {
-                                sfdSaveToExcel.FileName = FileName;
-                            }
-
-                            string sPickedPath = await UI.PickSave(sfdSaveToExcel);
-                            if (!string.IsNullOrEmpty(sPickedPath))
-                            {
-                                string FilePath = sPickedPath;
-                                if (!string.IsNullOrEmpty(FilePath))
-                                {
-                                    bool bOK = ProxyConfig.List.SaveProxyListToExcel(FilePath, piList);
-                                    if (bOK)
-                                    {
-                                        string Title = UI.T("ExportToExcel.Success", "导出到Excel成功");
-                                        UI.Notify(UiIcon.Success, Title, FilePath);
-                                        Operate.DoLog(nameof(SaveProxyList_Dialog), Title + ": " + FilePath);
-                                        return FilePath;
-                                    }
-                                    else
-                                    {
-                                        string Title = UI.T("ExportToExcel.Error", "导出到Excel失败");
-                                        string Content = UI.T("CheckSystemLog", "请检查系统日志");
-                                        UI.Notify(UiIcon.Error, Title, Content);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(SaveProxyList_Dialog), ex);
-                }
-                return null;
-                }
-
-                private static bool SaveProxyListToExcel(string filePath, List<ProxyInfo> piList)
-                {
-                    try
-                    {
-                        using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                        using (var writer = new StreamWriter(stream, Encoding.Default))
-                        {
-                            writer.WriteLine(UI.T("ExcelColumn.Proxy", "时间戳\t类别\t套接字\t客户端地址\t服务端地址\t长度\t数据\t"));
-
-                            var dataSource = piList.Count > 0 ? piList : ProxyConfig.List.lstProxyInfo.ToList();
-                            foreach (var proxy in dataSource)
-                            {
-                                try
-                                {
-                                    var lineBuilder = new StringBuilder();
-
-                                    lineBuilder.Append(proxy.ProxyTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff")).Append('\t');
-                                    lineBuilder.Append(proxy.PacketType).Append('\t');
-                                    lineBuilder.Append(proxy.PacketSocket).Append('\t');
-                                    lineBuilder.Append(proxy.ClientAddr).Append('\t');
-                                    lineBuilder.Append(proxy.ServerAddr).Append('\t');
-                                    lineBuilder.Append(proxy.PacketLen).Append('\t');
-                                    lineBuilder.Append(SystemConfig.BytesToString(PacketConfig.Packet.EncodingFormat.Hex, proxy.PacketBuffer)).Append('\t');
-
-                                    writer.WriteLine(lineBuilder.ToString());
-                                }
-                                catch (Exception ex)
-                                {
-                                    Operate.DoLog(nameof(SaveProxyListToExcel), ex);
-                                }
-                            }
-                        }
-
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(SaveProxyListToExcel), ex);
-                        return false;
-                    }
+                            p.ProxyTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff"),
+                            PacketConfig.Packet.GetName_ByPacketType(p.PacketType),
+                            p.PacketSocket.ToString(),
+                            p.ClientAddr ?? string.Empty,
+                            p.ServerAddr ?? string.Empty,
+                            p.PacketLen.ToString(),
+                            SystemConfig.BytesToString(PacketConfig.Packet.EncodingFormat.Hex, p.PacketBuffer),
+                        });
                 }
 
                 #endregion
@@ -13751,86 +13727,23 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//保存批量创建的账号到Excel（对话框）
+                #region//保存批量创建的账号到CSV（对话框）
 
                 public static async Task SaveBatchAccounts_Dialog(string FileName, BindingList<AccountInfo> aiList)
                 {
-                    try
-                    {
-                        if (aiList.Count > 0)
+                    List<AccountInfo> data = aiList != null ? new List<AccountInfo>(aiList) : new List<AccountInfo>();
+
+                    await PacketConfig.List.SaveListToCsv_Dialog(
+                        data.Count,
+                        FileName,
+                        UI.T("CsvColumn.BatchAccounts", "账号,密码,到期时间"),
+                        data,
+                        (AccountInfo ai) => new[]
                         {
-                            int SaveCount = aiList.Count;
-
-                            FilePick sfdSaveToExcel = new FilePick();
-                            sfdSaveToExcel.Filter = UI.T("ExcelFile", "Excel 文件") + "Excel (*.xls)|*.xls";
-
-                            if (!string.IsNullOrEmpty(FileName))
-                            {
-                                sfdSaveToExcel.FileName = FileName;
-                            }
-
-                            string sPickedPath = await UI.PickSave(sfdSaveToExcel);
-                            if (!string.IsNullOrEmpty(sPickedPath))
-                            {
-                                string FilePath = sPickedPath;
-                                if (!string.IsNullOrEmpty(FilePath))
-                                {
-                                    bool bOK = ProxyConfig.Account.SaveBatchAccountsToExcel(FilePath, aiList);
-                                    if (bOK)
-                                    {
-                                        string Title = UI.T("ExportToExcel.Success", "导出到Excel成功");
-                                        UI.Notify(UiIcon.Success, Title, FilePath);
-                                        Operate.DoLog(nameof(SaveBatchAccounts_Dialog), Title + ": " + FilePath);
-                                    }
-                                    else
-                                    {
-                                        string Title = UI.T("ExportToExcel.Error", "导出到Excel失败");
-                                        string Content = UI.T("CheckSystemLog", "请检查系统日志");
-                                        UI.Notify(UiIcon.Error, Title, Content);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(SaveBatchAccounts_Dialog), ex);
-                    }
-                }
-
-                private static bool SaveBatchAccountsToExcel(string filePath, BindingList<AccountInfo> aiList)
-                {
-                    try
-                    {
-                        using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                        using (var writer = new StreamWriter(stream, Encoding.Default))
-                        {
-                            writer.WriteLine(UI.T("ExcelColumn.BatchAccounts", "账号\t密码\t到期时间\t"));
-
-                            foreach (AccountInfo ai in aiList)
-                            {
-                                try
-                                {
-                                    var lineBuilder = new StringBuilder();
-                                    lineBuilder.Append(ai.UserName).Append('\t');
-                                    lineBuilder.Append(Operate.SystemConfig.PassWord_Decrypt(ai.Password)).Append('\t');
-                                    lineBuilder.Append(ai.ExpiryTime).Append('\t');
-                                    writer.WriteLine(lineBuilder.ToString());
-                                }
-                                catch (Exception ex)
-                                {
-                                    Operate.DoLog(nameof(SaveBatchAccountsToExcel), ex);
-                                }
-                            }
-                        }
-
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(SaveBatchAccountsToExcel), ex);
-                        return false;
-                    }
+                            ai.UserName ?? string.Empty,
+                            Operate.SystemConfig.PassWord_Decrypt(ai.Password) ?? string.Empty,
+                            ai.ExpiryTime.ToString("yyyy-MM-dd HH:mm:ss"),
+                        });
                 }
 
                 #endregion
@@ -16273,6 +16186,42 @@ namespace WinsockPacketEditor
                     public static string WebSocket_Resp => UI.T("HookSettingsForm.WebSocket_Resp", "WebSocket 响应");
                 }
 
+                /// <summary>
+                /// PacketType → 本地化名称（"TCP 请求" / "TCP Request"…）。
+                /// 导出 CSV 的「类别」列、以及任何需要把枚举转成可读名称的地方都用它；
+                /// 与前端 PACKET_TYPE 同一套口径。未知值退回数字，避免静默空白。
+                /// </summary>
+                public static string GetName_ByPacketType(PacketType type)
+                {
+                    switch (type)
+                    {
+                        case PacketType.WS1_Send: return PacketTypeNames.WS1_Send;
+                        case PacketType.WS2_Send: return PacketTypeNames.WS2_Send;
+                        case PacketType.WS1_SendTo: return PacketTypeNames.WS1_SendTo;
+                        case PacketType.WS2_SendTo: return PacketTypeNames.WS2_SendTo;
+                        case PacketType.WS1_Recv: return PacketTypeNames.WS1_Recv;
+                        case PacketType.WS2_Recv: return PacketTypeNames.WS2_Recv;
+                        case PacketType.WS1_RecvFrom: return PacketTypeNames.WS1_RecvFrom;
+                        case PacketType.WS2_RecvFrom: return PacketTypeNames.WS2_RecvFrom;
+                        case PacketType.WSASend: return PacketTypeNames.WSASend;
+                        case PacketType.WSASendTo: return PacketTypeNames.WSASendTo;
+                        case PacketType.WSARecv: return PacketTypeNames.WSARecv;
+                        case PacketType.WSARecvEx: return PacketTypeNames.WSARecvEx;
+                        case PacketType.WSARecvFrom: return PacketTypeNames.WSARecvFrom;
+                        case PacketType.TCP_Req: return PacketTypeNames.TCP_Req;
+                        case PacketType.UDP_Req: return PacketTypeNames.UDP_Req;
+                        case PacketType.TCP_Resp: return PacketTypeNames.TCP_Resp;
+                        case PacketType.UDP_Resp: return PacketTypeNames.UDP_Resp;
+                        case PacketType.HTTP_Req: return PacketTypeNames.HTTP_Req;
+                        case PacketType.HTTP_Resp: return PacketTypeNames.HTTP_Resp;
+                        case PacketType.HTTPS_Req: return PacketTypeNames.HTTPS_Req;
+                        case PacketType.HTTPS_Resp: return PacketTypeNames.HTTPS_Resp;
+                        case PacketType.WebSocket_Req: return PacketTypeNames.WebSocket_Req;
+                        case PacketType.WebSocket_Resp: return PacketTypeNames.WebSocket_Resp;
+                        default: return ((int)type).ToString();
+                    }
+                }
+
                 #endregion
 
                 #region//是否显示封包（过滤条件）
@@ -17130,6 +17079,7 @@ namespace WinsockPacketEditor
                 ///
                 /// 由 C# 拼好整段文本再交给前端写剪贴板 —— 让前端逐条取字节再自己转十六进制，
                 /// 既多几十次往返，格式还会和 WinForms 那份不一致。
+                /// 空包（没有字节）跳过不占一行；行间用换行分隔，末尾不带换行。
                 /// </summary>
                 public static string GetPacketHex_ByIds(IList<long> Ids)
                 {
@@ -17139,7 +17089,10 @@ namespace WinsockPacketEditor
 
                         foreach (PacketInfo pi in PacketConfig.List.PickPackets(Ids))
                         {
-                            sb.AppendLine(SystemConfig.BytesToString(
+                            if (pi.PacketBuffer == null || pi.PacketBuffer.Length == 0) { continue; }
+
+                            if (sb.Length > 0) { sb.AppendLine(); }
+                            sb.Append(SystemConfig.BytesToString(
                                 PacketConfig.Packet.EncodingFormat.Hex, pi.PacketBuffer));
                         }
 
@@ -17148,6 +17101,45 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(GetPacketHex_ByIds), ex);
+                        return string.Empty;
+                    }
+                }
+
+                /// <summary>
+                /// 「合并复制」：把选中那几条的字节<b>按列表顺序首尾拼接成一个封包</b>，
+                /// 转成一段十六进制（空格分隔、大写、单行）。空包跳过（拼进去也是零字节）。
+                /// </summary>
+                public static string GetPacketHexMerged_ByIds(IList<long> Ids)
+                {
+                    try
+                    {
+                        List<PacketInfo> picked = PacketConfig.List.PickPackets(Ids);
+
+                        int total = 0;
+                        foreach (PacketInfo pi in picked)
+                        {
+                            if (pi.PacketBuffer != null) { total += pi.PacketBuffer.Length; }
+                        }
+
+                        if (total == 0) { return string.Empty; }
+
+                        byte[] merged = new byte[total];
+                        int pos = 0;
+
+                        foreach (PacketInfo pi in picked)
+                        {
+                            byte[] buf = pi.PacketBuffer;
+                            if (buf == null || buf.Length == 0) { continue; }
+
+                            Buffer.BlockCopy(buf, 0, merged, pos, buf.Length);
+                            pos += buf.Length;
+                        }
+
+                        return SystemConfig.ToHexString(merged);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetPacketHexMerged_ByIds), ex);
                         return string.Empty;
                     }
                 }
@@ -17302,11 +17294,11 @@ namespace WinsockPacketEditor
                 }
 
                 /// <summary>
-                /// 「导出到 Excel」。<b>Ids 为空时导整张表</b> ——
-                /// 这不是这里的特例，SavePacketListToExcel 本来就是这么写的
+                /// 「导出到 CSV」。<b>Ids 为空时导整张表</b> ——
+                /// 这不是这里的特例，SavePacketList_Dialog 本来就是这么写的
                 /// （piList 为空则退回 lstPacketInfo），所以「什么都不选 = 导全部」。
                 /// </summary>
-                public static async Task<string> ExportPacketExcel_ByIds(IList<long> Ids, string FileName = null)
+                public static async Task<string> ExportPacketCsv_ByIds(IList<long> Ids, string FileName = null)
                 {
                     try
                     {
@@ -17316,7 +17308,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ExportPacketExcel_ByIds), ex);
+                        Operate.DoLog(nameof(ExportPacketCsv_ByIds), ex);
                     }
                     return null;
                 }
@@ -17845,95 +17837,114 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//保存封包列表为Excel（对话框）
+                #region//保存封包列表为CSV（对话框）
+
+                /*
+                    导出 CSV 的通用核心。代理列表（ProxyConfig.List）与封包列表共用：
+                    判空 → 弹保存框 → 后台线程写文件（不阻塞 UI）→ 通知。
+
+                    <param name="totalCount">全表条数，用于「没有可导出的数据」判空。</param>
+                    <param name="dataSource">已物化的数据源（选中集或全表快照）。后台线程只读它，安全。</param>
+                    <param name="toRow">行投影：把一条记录变成 string[]（在后台线程调用，含 hex 转换等重活）。</param>
+                */
+                internal static async Task<string> SaveListToCsv_Dialog<T>(
+                    int totalCount, string defaultName, string header, List<T> dataSource, Func<T, string[]> toRow)
+                {
+                    if (totalCount <= 0)
+                    {
+                        UI.Toast(UiIcon.Warn, UI.T("ExportToCsv.Empty", "没有可导出的数据"));
+                        return null;
+                    }
+
+                    FilePick sfd = new FilePick();
+                    sfd.Filter = UI.T("CsvFile", "CSV 文件") + " (*.csv)|*.csv";
+                    if (!string.IsNullOrEmpty(defaultName)) { sfd.FileName = defaultName; }
+
+                    string path = await UI.PickSave(sfd);
+                    if (string.IsNullOrEmpty(path)) { return null; }
+
+                    // 写文件（含逐行 hex 转换等重活）在后台线程，遮罩给「正在导出」反馈，不阻塞 UI
+                    bool ok = await UI.Busy(UI.T("Exporting", "正在导出..."), () =>
+                    {
+                        try { return WriteCsv(path, header, dataSource, toRow); }
+                        catch (Exception ex) { Operate.DoLog(nameof(SaveListToCsv_Dialog), ex); return false; }
+                    });
+
+                    if (ok)
+                    {
+                        string title = UI.T("ExportToCsv.Success", "导出到CSV成功");
+                        UI.Notify(UiIcon.Success, title, path);
+                        Operate.DoLog(nameof(SaveListToCsv_Dialog), title + ": " + path);
+                        return path;
+                    }
+                    else
+                    {
+                        string title = UI.T("ExportToCsv.Error", "导出到CSV失败");
+                        UI.Notify(UiIcon.Error, title, UI.T("CheckSystemLog", "请检查系统日志"));
+                        return null;
+                    }
+                }
+
+                /// <summary>把一组行写成 CSV：UTF-8 带 BOM（Excel 正确识别中文），逗号分隔 + RFC 4180 转义。</summary>
+                private static bool WriteCsv<T>(string filePath, string header, List<T> dataSource, Func<T, string[]> toRow)
+                {
+                    using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                    using (var writer = new StreamWriter(stream, new UTF8Encoding(true)))
+                    {
+                        writer.WriteLine(header);
+
+                        foreach (T item in dataSource)
+                        {
+                            writer.WriteLine(JoinCsvRow(toRow(item)));
+                        }
+                    }
+                    return true;
+                }
+
+                private static readonly char[] CsvSpecial = { ',', '"', '\r', '\n' };
+
+                /// <summary>RFC 4180：含逗号 / 引号 / 换行的字段用引号包裹，内部引号翻倍。</summary>
+                private static string CsvEscape(string field)
+                {
+                    if (string.IsNullOrEmpty(field)) { return string.Empty; }
+                    if (field.IndexOfAny(CsvSpecial) >= 0)
+                    {
+                        return "\"" + field.Replace("\"", "\"\"") + "\"";
+                    }
+                    return field;
+                }
+
+                private static string JoinCsvRow(string[] fields)
+                {
+                    var sb = new StringBuilder();
+                    for (int i = 0; i < fields.Length; i++)
+                    {
+                        if (i > 0) { sb.Append(','); }
+                        sb.Append(CsvEscape(fields[i]));
+                    }
+                    return sb.ToString();
+                }
 
                 public static async Task<string> SavePacketList_Dialog(string FileName, List<PacketInfo> piList)
                 {
-                    try
-                    {
-                        if (PacketConfig.List.lstPacketInfo.Count > 0)
+                    List<PacketInfo> all = PacketConfig.List.lstPacketInfo.ToList();
+                    List<PacketInfo> data = piList.Count > 0 ? piList : all;
+
+                    return await SaveListToCsv_Dialog(
+                        all.Count,
+                        FileName,
+                        UI.T("CsvColumn.Packet", "时间戳,类别,套接字,源地址,目的地址,长度,数据"),
+                        data,
+                        (PacketInfo p) => new[]
                         {
-                            int SaveCount = PacketConfig.List.lstPacketInfo.Count;
-
-                            FilePick sfdSaveToExcel = new FilePick();
-                            sfdSaveToExcel.Filter = UI.T("ExcelFile", "Excel 文件") + " (*.xls)|*.xls";                            
-
-                            if (!string.IsNullOrEmpty(FileName))
-                            {
-                                sfdSaveToExcel.FileName = FileName;
-                            }
-
-                            string sPickedPath = await UI.PickSave(sfdSaveToExcel);
-                            if (!string.IsNullOrEmpty(sPickedPath))
-                            {
-                                string FilePath = sPickedPath;
-                                if (!string.IsNullOrEmpty(FilePath))
-                                {
-                                    bool bOK = SavePacketListToExcel(FilePath, piList);
-                                    if (bOK)
-                                    {
-                                        string Title = UI.T("ExportToExcel.Success", "导出到Excel成功");
-                                        UI.Notify(UiIcon.Success, Title, FilePath);
-                                        Operate.DoLog(nameof(SavePacketList_Dialog), Title + ": " + FilePath);
-                                        return FilePath;
-                                    }
-                                    else
-                                    {
-                                        string Title = UI.T("ExportToExcel.Error", "导出到Excel失败");
-                                        string Content = UI.T("CheckSystemLog", "请检查系统日志");
-                                        UI.Notify(UiIcon.Error, Title, Content);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(SavePacketList_Dialog), ex);
-                }
-                return null;
-                }
-
-                private static bool SavePacketListToExcel(string filePath, List<PacketInfo> piList)
-                {
-                    try
-                    {
-                        using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                        using (var writer = new StreamWriter(stream, Encoding.Default))
-                        {
-                            writer.WriteLine(UI.T("ExcelColumn.Packet", "时间戳\t类别\t套接字\t源地址\t目的地址\t长度\t数据\t"));
-
-                            var dataSource = piList.Count > 0 ? piList : PacketConfig.List.lstPacketInfo.ToList();
-                            foreach (var packet in dataSource)
-                            {
-                                try
-                                {
-                                    var lineBuilder = new StringBuilder();
-
-                                    lineBuilder.Append(packet.PacketTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff")).Append('\t');
-                                    lineBuilder.Append(packet.PacketType).Append('\t');
-                                    lineBuilder.Append(packet.PacketSocket).Append('\t');
-                                    lineBuilder.Append(packet.PacketFrom).Append('\t');
-                                    lineBuilder.Append(packet.PacketTo).Append('\t');
-                                    lineBuilder.Append(packet.PacketLen).Append('\t');
-                                    lineBuilder.Append(SystemConfig.BytesToString(PacketConfig.Packet.EncodingFormat.Hex, packet.PacketBuffer)).Append('\t');
-
-                                    writer.WriteLine(lineBuilder.ToString());
-                                }
-                                catch (Exception ex)
-                                {
-                                    Operate.DoLog(nameof(SavePacketListToExcel), ex);
-                                }
-                            }
-                        }
-
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(SavePacketListToExcel), ex);
-                        return false;
-                    }
+                            p.PacketTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff"),
+                            PacketConfig.Packet.GetName_ByPacketType(p.PacketType),
+                            p.PacketSocket.ToString(),
+                            p.PacketFrom ?? string.Empty,
+                            p.PacketTo ?? string.Empty,
+                            p.PacketLen.ToString(),
+                            SystemConfig.BytesToString(PacketConfig.Packet.EncodingFormat.Hex, p.PacketBuffer),
+                        });
                 }
 
                 #endregion
@@ -30675,7 +30686,7 @@ namespace WinsockPacketEditor
                 #region//日志列表 - 外壳入口（三路日志按 Kind 区分，只出基础类型）
 
                 /*
-                    对应 WinForms 的 GetCMS_LogList 那三项动作（复制 / 导出到 Excel / 清空日志列表），
+                    对应 WinForms 的 GetCMS_LogList 那三项动作（复制 / 导出到 CSV / 清空日志列表），
                     动作本身散在 Controls/LogList.cs 的三段 switch 里 —— 三路日志各抄了一遍。
                     这里按 Kind 收成一份，两套 UI 都能调。
 
@@ -30746,7 +30757,7 @@ namespace WinsockPacketEditor
                 }
 
                 /// <summary>
-                /// 「导出到 Excel」。<b>整张表</b>，不分选中 ——
+                /// 「导出到 CSV」。<b>整张表</b>，不分选中 ——
                 /// WinForms 那边三个 Save*LogList_Dialog 收的就是整个 lst*，右键菜单也没往里传选中行。
                 /// </summary>
                 public static async Task ExportLog_Dialog(int Kind)
@@ -30782,273 +30793,69 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//保存系统日志列表为Excel（对话框）
+                #region//保存系统日志列表为CSV（对话框）
 
                 public static async Task SaveLogList_Dialog(string FileName, List<LogInfo> liList)
                 {
-                    try
-                    {
-                        if (liList != null && liList.Count > 0)
+                    List<LogInfo> data = (liList != null && liList.Count > 0) ? liList : LogConfig.List.lstLogInfo.ToList();
+
+                    await PacketConfig.List.SaveListToCsv_Dialog(
+                        data.Count,
+                        FileName,
+                        UI.T("CsvColumn.Log", "记录时间,模块,日志内容"),
+                        data,
+                        (LogInfo l) => new[]
                         {
-                            int SaveCount = liList.Count;
-
-                            FilePick sfdSaveToExcel = new FilePick();
-                            sfdSaveToExcel.Filter = UI.T("ExcelFile", "Excel 文件") + " (*.xls)|*.xls";
-
-                            if (!string.IsNullOrEmpty(FileName))
-                            {
-                                sfdSaveToExcel.FileName = FileName;
-                            }
-
-                            string sPickedPath = await UI.PickSave(sfdSaveToExcel);
-                            if (!string.IsNullOrEmpty(sPickedPath))
-                            {
-                                string FilePath = sPickedPath;
-                                if (!string.IsNullOrEmpty(FilePath))
-                                {
-                                    bool bOK = false;
-                                    bOK = await UI.Busy(UI.T("Exporting", "正在导出..."), () => SaveLogListToExcel(FilePath, liList));
-
-                                    if (bOK)
-                                    {
-                                        string Title = UI.T("ExportToExcel.Success", "导出到 Excel 成功");
-                                        UI.Notify(UiIcon.Success, Title, FilePath);
-                                        Operate.DoLog(nameof(SaveLogList_Dialog), Title + ": " + FilePath);
-                                    }
-                                    else
-                                    {
-                                        string Title = UI.T("ExportToExcel.Error", "导出到 Excel 失败");
-                                        string Content = UI.T("CheckSystemLog", "请检查系统日志");
-                                        UI.Notify(UiIcon.Error, Title, Content);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(SaveLogList_Dialog), ex);
-                    }
-                }
-
-                private static bool SaveLogListToExcel(string filePath, List<LogInfo> liList)
-                {
-                    try
-                    {
-                        using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                        using (var writer = new StreamWriter(stream, Encoding.Default))
-                        {
-                            writer.WriteLine(UI.T("ExcelColumn.Log", "记录时间\t模块\t日志内容\t"));
-
-                            var dataSource = liList.Count > 0 ? liList : LogConfig.List.lstLogInfo.ToList();
-                            foreach (var log in dataSource)
-                            {
-                                try
-                                {
-                                    var lineBuilder = new StringBuilder();
-
-                                    lineBuilder.Append(log.LogTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff")).Append('\t');
-                                    lineBuilder.Append(log.FuncName).Append('\t');
-                                    lineBuilder.Append(log.LogContent).Append('\t');
-
-                                    writer.WriteLine(lineBuilder.ToString());
-                                }
-                                catch (Exception ex)
-                                {
-                                    Operate.DoLog(nameof(SaveLogListToExcel), ex);
-                                }
-                            }
-                        }
-
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        DoLog(nameof(SaveLogListToExcel), ex);
-                        return false;
-                    }
+                            l.LogTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff"),
+                            l.FuncName ?? string.Empty,
+                            l.LogContent ?? string.Empty,
+                        });
                 }
 
                 #endregion                
 
-                #region//保存滤镜日志列表为Excel（对话框）
+                #region//保存滤镜日志列表为CSV（对话框）
 
                 public static async Task SaveFilterLogList_Dialog(string FileName, List<FilterLogInfo> liList)
                 {
-                    try
-                    {
-                        if (LogConfig.List.lstFilterLogInfo.Count > 0)
+                    List<FilterLogInfo> data = (liList != null && liList.Count > 0) ? liList : LogConfig.List.lstFilterLogInfo.ToList();
+
+                    await PacketConfig.List.SaveListToCsv_Dialog(
+                        data.Count,
+                        FileName,
+                        UI.T("CsvColumn.FilterLog", "记录时间,滤镜名称,动作,匹配数,类别,长度"),
+                        data,
+                        (FilterLogInfo l) => new[]
                         {
-                            int SaveCount = LogConfig.List.lstFilterLogInfo.Count;
-
-                            FilePick sfdSaveToExcel = new FilePick();
-                            sfdSaveToExcel.Filter = UI.T("ExcelFile", "Excel 文件") + " (*.xls)|*.xls";
-
-                            if (!string.IsNullOrEmpty(FileName))
-                            {
-                                sfdSaveToExcel.FileName = FileName;
-                            }
-
-                            string sPickedPath = await UI.PickSave(sfdSaveToExcel);
-                            if (!string.IsNullOrEmpty(sPickedPath))
-                            {
-                                string FilePath = sPickedPath;
-                                if (!string.IsNullOrEmpty(FilePath))
-                                {
-                                    bool bOK = false;
-                                    bOK = await UI.Busy(UI.T("Exporting", "正在导出..."), () => SaveFilterLogListToExcel(FilePath, liList));
-
-                                    if (bOK)
-                                    {
-                                        string Title = UI.T("ExportToExcel.Success", "导出到 Excel 成功");
-                                        UI.Notify(UiIcon.Success, Title, FilePath);
-                                        Operate.DoLog(nameof(SaveFilterLogList_Dialog), Title + ": " + FilePath);
-                                    }
-                                    else
-                                    {
-                                        string Title = UI.T("ExportToExcel.Error", "导出到 Excel 失败");
-                                        string Content = UI.T("CheckSystemLog", "请检查系统日志");
-                                        UI.Notify(UiIcon.Error, Title, Content);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(SaveFilterLogList_Dialog), ex);
-                    }
-                }
-
-                private static bool SaveFilterLogListToExcel(string filePath, List<FilterLogInfo> liList)
-                {
-                    try
-                    {
-                        using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                        using (var writer = new StreamWriter(stream, Encoding.Default))
-                        {
-                            writer.WriteLine(UI.T("ExcelColumn.FilterLog", "记录时间\t滤镜名称\t动作\t匹配数\t类别\t长度\t"));
-
-                            var dataSource = liList.Count > 0 ? liList : LogConfig.List.lstFilterLogInfo.ToList();
-                            foreach (var log in dataSource)
-                            {
-                                try
-                                {
-                                    var lineBuilder = new StringBuilder();
-
-                                    lineBuilder.Append(log.LogTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff")).Append('\t');
-                                    lineBuilder.Append(log.FName).Append('\t');
-                                    lineBuilder.Append(log.FAction).Append('\t');
-                                    lineBuilder.Append(log.MatchNum).Append('\t');
-                                    lineBuilder.Append(log.PacketType).Append('\t');
-                                    lineBuilder.Append(log.PacketLen).Append('\t');
-
-                                    writer.WriteLine(lineBuilder.ToString());
-                                }
-                                catch (Exception ex)
-                                {
-                                    Operate.DoLog(nameof(SaveFilterLogListToExcel), ex);
-                                }
-                            }
-                        }
-
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        DoLog(nameof(SaveFilterLogListToExcel), ex);
-                        return false;
-                    }
+                            l.LogTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff"),
+                            l.FName ?? string.Empty,
+                            l.FAction.ToString(),
+                            l.MatchNum.ToString(),
+                            PacketConfig.Packet.GetName_ByPacketType(l.PacketType),
+                            l.PacketLen.ToString(),
+                        });
                 }
 
                 #endregion                
 
-                #region//保存滤镜日志列表为Excel（对话框）
+                #region//保存代理日志列表为CSV（对话框）
 
                 public static async Task SaveProxyLogList_Dialog(string FileName, List<ProxyLogInfo> liList)
                 {
-                    try
-                    {
-                        if (LogConfig.List.lstProxyLogInfo.Count > 0)
+                    List<ProxyLogInfo> data = (liList != null && liList.Count > 0) ? liList : LogConfig.List.lstProxyLogInfo.ToList();
+
+                    await PacketConfig.List.SaveListToCsv_Dialog(
+                        data.Count,
+                        FileName,
+                        UI.T("CsvColumn.ProxyLog", "记录时间,账号,IP地址,日志内容"),
+                        data,
+                        (ProxyLogInfo l) => new[]
                         {
-                            int SaveCount = LogConfig.List.lstProxyLogInfo.Count;
-
-                            FilePick sfdSaveToExcel = new FilePick();
-                            sfdSaveToExcel.Filter = UI.T("ExcelFile", "Excel 文件") + " (*.xls)|*.xls";
-
-                            if (!string.IsNullOrEmpty(FileName))
-                            {
-                                sfdSaveToExcel.FileName = FileName;
-                            }
-
-                            string sPickedPath = await UI.PickSave(sfdSaveToExcel);
-                            if (!string.IsNullOrEmpty(sPickedPath))
-                            {
-                                string FilePath = sPickedPath;
-                                if (!string.IsNullOrEmpty(FilePath))
-                                {
-                                    bool bOK = false;
-                                    bOK = await UI.Busy(UI.T("Exporting", "正在导出..."), () => SaveProxyLogListToExcel(FilePath, liList));
-
-                                    if (bOK)
-                                    {
-                                        string Title = UI.T("ExportToExcel.Success", "导出到 Excel 成功");
-                                        UI.Notify(UiIcon.Success, Title, FilePath);
-                                        Operate.DoLog(nameof(SaveProxyLogList_Dialog), Title + ": " + FilePath);
-                                    }
-                                    else
-                                    {
-                                        string Title = UI.T("ExportToExcel.Error", "导出到 Excel 失败");
-                                        string Content = UI.T("CheckSystemLog", "请检查系统日志");
-                                        UI.Notify(UiIcon.Error, Title, Content);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(SaveProxyLogList_Dialog), ex);
-                    }
-                }
-
-                private static bool SaveProxyLogListToExcel(string filePath, List<ProxyLogInfo> liList)
-                {
-                    try
-                    {
-                        using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                        using (var writer = new StreamWriter(stream, Encoding.Default))
-                        {
-                            writer.WriteLine(UI.T("ExcelColumn.ProxyLog", "记录时间\t账号\tIP地址\t日志内容\t"));
-
-                            var dataSource = liList.Count > 0 ? liList : LogConfig.List.lstProxyLogInfo.ToList();
-                            foreach (var log in dataSource)
-                            {
-                                try
-                                {
-                                    var lineBuilder = new StringBuilder();
-
-                                    lineBuilder.Append(log.LogTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff")).Append('\t');
-                                    lineBuilder.Append(log.UserName).Append('\t');
-                                    lineBuilder.Append(log.LoginIP).Append('\t');
-                                    lineBuilder.Append(log.LogContent).Append('\t');
-
-                                    writer.WriteLine(lineBuilder.ToString());
-                                }
-                                catch (Exception ex)
-                                {
-                                    Operate.DoLog(nameof(SaveProxyLogListToExcel), ex);
-                                }
-                            }
-                        }
-
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        DoLog(nameof(SaveProxyLogListToExcel), ex);
-                        return false;
-                    }
+                            l.LogTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff"),
+                            l.UserName ?? string.Empty,
+                            l.LoginIP ?? string.Empty,
+                            l.LogContent ?? string.Empty,
+                        });
                 }
 
                 #endregion                

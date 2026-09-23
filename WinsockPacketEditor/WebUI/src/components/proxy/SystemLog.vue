@@ -259,7 +259,7 @@ async function doExport(): Promise<void> {
         >
       </span>
       <!-- 导出的是<b>整张表</b>，不分选中 —— WinForms 那三个 Save*LogList_Dialog 收的也是整个列表 -->
-      <button class="btn" :disabled="!hasRows || busy" @click="doExport">{{ t('pm.toExcel') }}</button>
+      <button class="btn" :disabled="!hasRows || busy" @click="doExport">{{ t('pm.toCsv') }}</button>
       <button class="btn" :disabled="!hasRows || busy" @click="doClear">{{ t('proxy.clear') }}</button>
     </div>
 
