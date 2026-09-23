@@ -4216,7 +4216,6 @@ namespace WinsockPacketEditor
                         new XElement("FireWall_AutoClear_Expiry", ProxyConfig.Proxy.FireWall_AutoClear_Expiry),
                         new XElement("DriverType", ProxyConfig.Proxy.DriverType),
                         new XElement("SelectProcessNames", ProxyConfig.Proxy.SerializeSelectProcessNames()),
-                        new XElement("Enable_Mihomo", ProxyConfig.Proxy.Enable_Mihomo),
                         new XElement("TunStack", ProxyConfig.Proxy.TunStack),
                         new XElement("DnsMode", ProxyConfig.Proxy.DnsMode)
                         );
@@ -4296,11 +4295,7 @@ namespace WinsockPacketEditor
                         }
 
                         //2026-09-23 加的列：老库靠 EnsureColumn 补，读取端再兜一层
-                        if (ProxyMode.Columns.Contains("Enable_Mihomo") && ProxyMode.Rows[0]["Enable_Mihomo"] != DBNull.Value)
-                        {
-                            ProxyConfig.Proxy.Enable_Mihomo = Convert.ToBoolean(ProxyMode.Rows[0]["Enable_Mihomo"]);
-                        }
-
+                        //（Enable_Mihomo 刻意不落库，每次启动默认关，见字段上的说明）
                         if (ProxyMode.Columns.Contains("TunStack") && ProxyMode.Rows[0]["TunStack"] != DBNull.Value)
                         {
                             string ts = ProxyMode.Rows[0]["TunStack"].ToString();
@@ -4557,9 +4552,6 @@ namespace WinsockPacketEditor
                     {
                         ProxyConfig.Proxy.LoadSelectProcessNames(SelectProcessNames.Value);
                     }
-
-                    XElement Enable_Mihomo = xeProxyMode.Element("Enable_Mihomo");
-                    if (Enable_Mihomo != null && bool.TryParse(Enable_Mihomo.Value, out bool em)) { ProxyConfig.Proxy.Enable_Mihomo = em; }
 
                     XElement TunStack = xeProxyMode.Element("TunStack");
                     if (TunStack != null && !string.IsNullOrEmpty(TunStack.Value)) { ProxyConfig.Proxy.TunStack = TunStack.Value; }
@@ -5566,7 +5558,11 @@ namespace WinsockPacketEditor
                 public static bool MustTCP = true;
 
                 //内置 mihomo 内核（2026-09-23 起取代 SunnyNet 的进程抓取）
-                public static bool Enable_Mihomo = false;   // 是否启用进程拦截（= 要不要加载内核）。只在「进程设置」里改
+                /*
+                    是否启用进程拦截（= 要不要加载内核）。只在「进程设置」里改。
+                    ⚠️ <b>刻意不落库</b>：不是每次启动都需要拦进程，所以每次开 WPE 都默认关闭，要用再手动打开。
+                */
+                public static bool Enable_Mihomo = false;
                 public static string TunStack = "system";   // TUN 栈：system / gvisor / mixed
                 public static string DnsMode = "fake-ip";   // DNS 模式：fake-ip / redir-host
                 public static string MustTCP_IP = "127.0.0.1";
@@ -31415,7 +31411,6 @@ namespace WinsockPacketEditor
                         sql += "FireWall_AutoClear_Expiry BOOLEAN DEFAULT 0,";//代理模式 - 自动清理过期的规则
                         sql += "DriverType INTEGER DEFAULT 1,";//代理模式 - 进程拦截的驱动类型（0 Proxifier · 1 NFAPI · 2 WinDivert）
                         sql += "SelectProcessNames TEXT,";//代理模式 - 按名称拦截的进程表（一行一条 "模块名|路径"，见 SerializeSelectProcessNames）
-                        sql += "Enable_Mihomo BOOLEAN DEFAULT 0,";//代理模式 - 是否启用进程拦截（加载 mihomo 内核，2026-09-23）
                         sql += "TunStack TEXT DEFAULT 'system',";//代理模式 - 内置 mihomo 内核的 TUN 栈（2026-09-23）
                         sql += "DnsMode TEXT DEFAULT 'fake-ip',";//代理模式 - 内置 mihomo 内核的 DNS 模式（2026-09-23）
                         sql += "Only_WPC_Client BOOLEAN DEFAULT 0";//代理模式 - 只允许 WPC 客户端连接（2026-09-14）
@@ -31432,7 +31427,6 @@ namespace WinsockPacketEditor
                             EnsureColumn(conn, "ProxyMode", "Only_WPC_Client", "BOOLEAN DEFAULT 0");
                             EnsureColumn(conn, "ProxyMode", "TunStack", "TEXT DEFAULT 'system'");
                             EnsureColumn(conn, "ProxyMode", "DnsMode", "TEXT DEFAULT 'fake-ip'");
-                            EnsureColumn(conn, "ProxyMode", "Enable_Mihomo", "BOOLEAN DEFAULT 0");
                         }
                     }
 
@@ -31537,7 +31531,6 @@ namespace WinsockPacketEditor
                         sql += "FireWall_AutoClear_Expiry,";
                         sql += "DriverType,";
                         sql += "SelectProcessNames,";
-                        sql += "Enable_Mihomo,";
                         sql += "TunStack,";
                         sql += "DnsMode";
                         sql += ") VALUES (";
@@ -31580,7 +31573,6 @@ namespace WinsockPacketEditor
                         sql += "@FireWall_AutoClear_Expiry,";
                         sql += "@DriverType,";
                         sql += "@SelectProcessNames,";
-                        sql += "@Enable_Mihomo,";
                         sql += "@TunStack,";
                         sql += "@DnsMode";
                         sql += ");";
@@ -31626,7 +31618,6 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@FireWall_AutoClear_Expiry", ProxyConfig.Proxy.FireWall_AutoClear_Expiry);
                             cmd.Parameters.AddWithValue("@DriverType", ProxyConfig.Proxy.DriverType);
                             cmd.Parameters.AddWithValue("@SelectProcessNames", ProxyConfig.Proxy.SerializeSelectProcessNames());
-                            cmd.Parameters.AddWithValue("@Enable_Mihomo", ProxyConfig.Proxy.Enable_Mihomo);
                             cmd.Parameters.AddWithValue("@TunStack", ProxyConfig.Proxy.TunStack ?? "system");
                             cmd.Parameters.AddWithValue("@DnsMode", ProxyConfig.Proxy.DnsMode ?? "fake-ip");
 
