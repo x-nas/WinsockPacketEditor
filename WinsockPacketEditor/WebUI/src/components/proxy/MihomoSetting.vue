@@ -258,6 +258,9 @@ async function save(): Promise<void> {
           </div>
         </div>
         <p class="hint">{{ t('mh.dnsHint') }}</p>
+
+        <!-- 断环说明：钉在 01 卡的最下部（卡高度铺满整行，见 .cols 的 stretch） -->
+        <p class="hint loop">{{ t('mh.loop') }}</p>
       </section>
 
       <!-- 02 · 拦截进程 -->
@@ -298,8 +301,6 @@ async function save(): Promise<void> {
         </div>
       </section>
       </div>
-
-      <p class="hint tail">{{ t('mh.loop') }}</p>
     </div>
   </SettingsModal>
 </template>
@@ -324,12 +325,18 @@ async function save(): Promise<void> {
   grid-template-columns: minmax(300px, 360px) minmax(0, 1fr);
   gap: 0 12px;
   padding: 0 20px;
-  align-items: start;
+  /*
+    ⚠️ 不写 align-items: start —— 默认 stretch，两张卡才会铺满整行高度，
+    于是 01 与 02 的底边齐平；01 卡里最后那句断环说明靠 margin-top: auto 顶到底部。
+  */
 }
 
-.ps .cols > .sec { margin: 10px 0 12px; }
+/* 卡片自己撑成 flex 列，好把内容顶到上、把最后一句钉到下 */
+.ps .cols > .sec { margin: 10px 0 12px; display: flex; flex-direction: column; }
 /* 左卡窄：标签列收窄，给 system/gvisor/mixed 三个选项留出宽度 */
 .ps .cols > .sec:first-child { --setf-k: 96px; }
+/* 断环说明钉在 01 卡最下部 */
+.ps .cols .loop { margin-top: auto; padding-top: 6px; padding-bottom: 2px; }
 
 /* 内核状态小标（跟在启用开关后面，不做成单独区域） */
 .tag {
@@ -363,6 +370,4 @@ async function save(): Promise<void> {
 
 /* 没启用进程拦截：整卡压暗，行点击在 JS 里也挡了 */
 .sec.off .tr { cursor: default; }
-
-.tail { padding: 0 20px; margin: 2px 0 6px; }
 </style>
