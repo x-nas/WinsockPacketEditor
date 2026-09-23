@@ -224,6 +224,8 @@ async function save(): Promise<void> {
                  :hint="on && !f.ProxyRunning ? t('mh.needProxy') : ''" :width="980"
                  @update:open="emit('update:open', $event)" @save="save">
     <div class="setf list-page ps">
+      <!-- 01 / 02 并排：左列内核设置窄，右列进程表吃剩余宽度（一次能看更多进程） -->
+      <div class="cols">
 
       <!-- 01 · Mihomo 内核 -->
       <section class="sec">
@@ -295,6 +297,7 @@ async function save(): Promise<void> {
           <div class="tf">{{ t('ps.byNameHint') }}</div>
         </div>
       </section>
+      </div>
 
       <p class="hint tail">{{ t('mh.loop') }}</p>
     </div>
@@ -310,6 +313,23 @@ async function save(): Promise<void> {
 
 @media (max-height: 760px) { .ps { --tall: 250px; } }
 @media (max-height: 620px) { .ps { --tall: 190px; } }
+
+/*
+  01 / 02 两张编号卡并排。编号仍是 CSS counter 按 DOM 顺序生成（左 01、右 02）。
+  ⚠️ .setf .sec 自带 margin: 10px 20px 12px，卡片进网格后左右外边距要归零（否则卡间凭空多 40px），
+  由容器统一的 20px 内边距与 12px 列间距负责。
+*/
+.cols {
+  display: grid;
+  grid-template-columns: minmax(300px, 360px) minmax(0, 1fr);
+  gap: 0 12px;
+  padding: 0 20px;
+  align-items: start;
+}
+
+.ps .cols > .sec { margin: 10px 0 12px; }
+/* 左卡窄：标签列收窄，给 system/gvisor/mixed 三个选项留出宽度 */
+.ps .cols > .sec:first-child { --setf-k: 96px; }
 
 /* 内核状态小标（跟在启用开关后面，不做成单独区域） */
 .tag {
