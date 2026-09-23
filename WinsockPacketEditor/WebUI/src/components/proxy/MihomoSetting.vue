@@ -8,10 +8,12 @@
 
       勾选的进程 ── TUN ──▶ mihomo ── SOCKS5 ──▶ WPE 的 SOCKS5（抓包 / 滤镜）──▶ 互联网
 
-  【内核不再随「启动代理」加载】
-  内核只在需要「把进程强制转代理」时才用得上。所以这里第一步是「启用进程拦截」开关：
-  打开并保存 → 内核加载（代理没起时先落库，启动代理再加载）；关掉保存 → 内核卸载、网络立刻恢复。
-  「启动代理」只在开关已打开时才顺带把内核拉起来。
+  【布局】左列 = 内核设置（启用开关 + TUN 栈 + DNS 模式），右列 = 拦截进程表。
+  并排是为了让进程表一次能看到更多行；没勾「启用进程拦截」时，右边的列表与栈/DNS 全部置灰不可调。
+
+  【内核不再随「启动代理」加载】内核只在需要「把进程强制转代理」时才用得上，所以这里第一步是
+  「启用进程拦截」开关：打开并保存 → 内核加载（代理没起时先落库，启动代理再加载）；关掉保存 → 内核卸载。
+  开关本身不落库，每次开 WPE 默认关闭。
 
   ⚠️ <b>只有一块进程表。</b>旧屏分「按编号拦截」和「按名称拦截」，是因为 SunnyNet 同时支持
   PID 与进程名两种拦截；而 mihomo 的规则只有 PROCESS-NAME / PROCESS-PATH（及正则版），
@@ -46,6 +48,9 @@ const busy = ref(false)
 const loading = ref(false)
 const error = ref('')
 const f = ref<Setting>({ ...EMPTY })
+
+/** 没启用进程拦截时，栈 / DNS / 进程表全部置灰不可调。 */
+const on = computed(() => f.value.EnableMihomo)
 
 /* 合并后的进程行：运行中的 + 已保存但没启动的 */
 interface Row {
@@ -134,8 +139,8 @@ async function fetchIcons(list: { ProcessPath: string }[]): Promise<void> {
 
 watch(names, (list) => { void fetchIcons(list) }, { immediate: true })
 
-watch(() => props.open, async (on) => {
-  if (!on) return
+watch(() => props.open, async (on2) => {
+  if (!on2) return
   error.value = ''
   try {
     f.value = { ...EMPTY, ...(await call<Setting>('getMihomoSetting')) }
@@ -164,18 +169,20 @@ async function refresh(): Promise<void> {
   前端先乐观改 intercepted，桥失败再退回。
 */
 async function toggleRow(r: Row): Promise<void> {
-  const k = r.ModuleName.toLowerCase()
-  const on = intercepted.value.has(k)
+  if (!on.value) { return }   // 没启用进程拦截时整块只读
 
-  if (!on && (!r.running || r.ProcessID <= 0)) { return }
+  const k = r.ModuleName.toLowerCase()
+  const isOn = intercepted.value.has(k)
+
+  if (!isOn && (!r.running || r.ProcessID <= 0)) { return }
 
   const next = new Set(intercepted.value)
-  if (on) next.delete(k)
+  if (isOn) next.delete(k)
   else next.add(k)
   intercepted.value = next
 
   try {
-    if (on) {
+    if (isOn) {
       await call('removeSelectProcessName', { name: r.ModuleName })
     } else {
       const res = await call<{ ok: boolean }>('addSelectProcessName', { pid: r.ProcessID })
@@ -216,89 +223,76 @@ async function save(): Promise<void> {
                  @update:open="emit('update:open', $event)" @save="save">
     <div class="setf list-page ps">
 
-      <!-- 内核状态条 -->
-      <div class="stat">
-        <span class="led" :class="f.KernelReady ? 'on' : (f.KernelRunning ? 'wait' : 'off')" />
-        <span class="sl">{{ t('mh.kernel') }}</span>
-        <span class="sv" :class="f.KernelReady ? 'ok' : (f.KernelRunning ? 'warn' : 'dim')">
-          {{ f.KernelReady ? t('mh.ready') : t('mh.notReady') }}
-        </span>
-        <span v-if="f.KernelVersion" class="sv dim">{{ t('mh.version') }} {{ f.KernelVersion }}</span>
-        <span class="grow" />
-        <span class="sv dim">SOCKS5 :{{ f.Socks5Port }}</span>
+      <div class="cols">
+        <!-- 左：内核设置 -->
+        <div class="col">
+          <div class="grp">{{ t('mh.kernel') }}</div>
+
+          <div class="swrow">
+            <button class="chk" :class="{ on }" @click="f.EnableMihomo = !f.EnableMihomo"><i />{{ t('mh.enable') }}</button>
+            <!-- 内核跑到哪一步：小灯 + 一句，不做成单独一块区域 -->
+            <span class="tag" :class="f.KernelReady ? 'ok' : (f.KernelRunning ? 'warn' : 'dim')">
+              {{ f.KernelReady ? t('mh.ready') : t('mh.notReady') }}
+            </span>
+          </div>
+          <p class="hint">{{ t('mh.enableHint') }}</p>
+          <p v-if="on && !f.ProxyRunning" class="hint warn">{{ t('mh.needProxy') }}</p>
+
+          <div class="row" :class="{ off: !on }">
+            <div class="k">{{ t('mh.stack') }}</div>
+            <div class="v">
+              <button v-for="s in STACKS" :key="s" class="rd" :class="{ on: f.TunStack === s }" :disabled="!on" @click="f.TunStack = s"><i />{{ s }}</button>
+            </div>
+          </div>
+          <p class="hint">{{ t('mh.stackHint') }}</p>
+
+          <div class="row" :class="{ off: !on }">
+            <div class="k">{{ t('mh.dns') }}</div>
+            <div class="v">
+              <button v-for="d in DNSMODES" :key="d" class="rd" :class="{ on: f.DnsMode === d }" :disabled="!on" @click="f.DnsMode = d"><i />{{ d }}</button>
+            </div>
+          </div>
+          <p class="hint">{{ t('mh.dnsHint') }}</p>
+        </div>
+
+        <!-- 右：拦截进程 -->
+        <div class="col">
+          <div class="grp">{{ t('mh.procs') }}</div>
+
+          <div class="tbl" :class="{ off: !on }">
+            <div class="tbar">
+              <input v-model="filter" class="inp sm" spellcheck="false" :disabled="!on" :placeholder="t('ps.filterPh')">
+              <span class="grow" />
+              <span class="cnt">{{ intercepted.size }} / {{ rows.length }}</span>
+              <button class="sbtn" :disabled="!on || loading" @click="refresh">{{ loading ? t('proxy.working') : t('ps.refresh') }}</button>
+            </div>
+            <div class="tbody tall">
+              <div class="head hp">
+                <span class="ck" />
+                <span class="ico" />
+                <span class="name so" :class="{ on: sort.active('name') }" @click="sort.toggle('name')">{{ t('ps.processName') }}<i class="ar">{{ sort.mark('name') }}</i></span>
+                <span class="pid so" :class="{ on: sort.active('pid') }" @click="sort.toggle('pid')">{{ t('ps.pid') }}<i class="ar">{{ sort.mark('pid') }}</i></span>
+              </div>
+              <div v-if="!shown.length" class="empty">{{ loading ? t('proxy.working') : t('ps.emptyProcs') }}</div>
+              <div
+                v-for="r in shown"
+                v-else
+                :key="r.ModuleName.toLowerCase()"
+                class="tr hp"
+                :class="{ sel: intercepted.has(r.ModuleName.toLowerCase()), off: !r.running }"
+                :title="r.ProcessPath"
+                @click="toggleRow(r)"
+              >
+                <span class="ck"><button class="chk" :disabled="!on" :class="{ on: intercepted.has(r.ModuleName.toLowerCase()) }" @click.stop="toggleRow(r)"><i /></button></span>
+                <span class="ico"><img v-if="iconOf(r.ProcessPath)" :src="iconOf(r.ProcessPath)" alt=""><i v-else class="ph" /></span>
+                <span class="name">{{ r.ProcessName }}</span>
+                <span class="pid">{{ r.running ? r.ProcessID : '—' }}</span>
+              </div>
+            </div>
+            <div class="tf">{{ t('ps.byNameHint') }}</div>
+          </div>
+        </div>
       </div>
-
-      <p v-if="f.LastError" class="hint bad">{{ f.LastError }}</p>
-
-      <!-- 第一步：启用进程拦截（= 加载内核） -->
-      <section class="sec">
-        <div class="grp">{{ t('mh.kernel') }}</div>
-
-        <div class="row">
-          <div class="k">{{ t('mh.enable') }}</div>
-          <div class="v">
-            <button class="chk" :class="{ on: f.EnableMihomo }" @click="f.EnableMihomo = !f.EnableMihomo">
-              <i />{{ f.EnableMihomo ? t('ps.s4.on') : t('ps.s4.off') }}
-            </button>
-          </div>
-        </div>
-        <p class="hint">{{ t('mh.enableHint') }}</p>
-        <p v-if="f.EnableMihomo && !f.ProxyRunning" class="hint warn">{{ t('mh.needProxy') }}</p>
-
-        <div class="row" :class="{ off: !f.EnableMihomo }">
-          <div class="k">{{ t('mh.stack') }}</div>
-          <div class="v">
-            <button v-for="s in STACKS" :key="s" class="rd" :class="{ on: f.TunStack === s }" @click="f.TunStack = s"><i />{{ s }}</button>
-          </div>
-        </div>
-        <p class="hint">{{ t('mh.stackHint') }}</p>
-
-        <div class="row" :class="{ off: !f.EnableMihomo }">
-          <div class="k">{{ t('mh.dns') }}</div>
-          <div class="v">
-            <button v-for="d in DNSMODES" :key="d" class="rd" :class="{ on: f.DnsMode === d }" @click="f.DnsMode = d"><i />{{ d }}</button>
-          </div>
-        </div>
-        <p class="hint">{{ t('mh.dnsHint') }}</p>
-      </section>
-
-      <!-- 第二步：拦截进程（一块表） -->
-      <section class="sec" :class="{ off: !f.EnableMihomo }">
-        <div class="grp">{{ t('mh.procs') }}</div>
-
-        <div class="tbl">
-          <div class="tbar">
-            <input v-model="filter" class="inp sm" spellcheck="false" :placeholder="t('ps.filterPh')">
-            <span class="grow" />
-            <span class="cnt">{{ intercepted.size }} / {{ rows.length }}</span>
-            <button class="sbtn" :disabled="loading" @click="refresh">{{ loading ? t('proxy.working') : t('ps.refresh') }}</button>
-          </div>
-          <div class="tbody tall">
-            <div class="head hp">
-              <span class="ck" />
-              <span class="ico" />
-              <span class="name so" :class="{ on: sort.active('name') }" @click="sort.toggle('name')">{{ t('ps.processName') }}<i class="ar">{{ sort.mark('name') }}</i></span>
-              <span class="pid so" :class="{ on: sort.active('pid') }" @click="sort.toggle('pid')">{{ t('ps.pid') }}<i class="ar">{{ sort.mark('pid') }}</i></span>
-            </div>
-            <div v-if="!shown.length" class="empty">{{ loading ? t('proxy.working') : t('ps.emptyProcs') }}</div>
-            <div
-              v-for="r in shown"
-              v-else
-              :key="r.ModuleName.toLowerCase()"
-              class="tr hp"
-              :class="{ sel: intercepted.has(r.ModuleName.toLowerCase()), off: !r.running }"
-              :title="r.ProcessPath"
-              @click="toggleRow(r)"
-            >
-              <span class="ck"><button class="chk" :class="{ on: intercepted.has(r.ModuleName.toLowerCase()) }" @click.stop="toggleRow(r)"><i /></button></span>
-              <span class="ico"><img v-if="iconOf(r.ProcessPath)" :src="iconOf(r.ProcessPath)" alt=""><i v-else class="ph" /></span>
-              <span class="name">{{ r.ProcessName }}</span>
-              <span class="pid">{{ r.running ? r.ProcessID : '—' }}</span>
-            </div>
-          </div>
-          <div class="tf">{{ t('ps.byNameHint') }}</div>
-        </div>
-      </section>
 
       <p class="hint tail">{{ t('mh.loop') }}</p>
     </div>
@@ -307,39 +301,52 @@ async function save(): Promise<void> {
 
 <style scoped>
 /*
-  竖直呼吸量：窗口矮就收进程表高度。默认 1280×800 在 125% 缩放下只有 640 CSS 高。
+  竖直呼吸量：窗口矮就把进程表收矮。默认 1280×800 在 125% 缩放下只有 640 CSS 高。
+  两列并排，左列窄（内核设置），右列吃掉剩余宽度（进程表）。
 */
-.ps { --tall: 280px; }
+.ps { --tall: 360px; --col-l: 340px; }
 
-@media (max-height: 760px) { .ps { --tall: 200px; } }
-@media (max-height: 620px) { .ps { --tall: 150px; } }
+@media (max-height: 760px) { .ps { --tall: 300px; } }
+@media (max-height: 620px) { .ps { --tall: 230px; --col-l: 300px; } }
 
-/* 内核状态条 */
-.stat {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 0 20px 8px;
-  padding: 8px 12px;
-  border: 1px solid var(--border);
-  background: var(--sink);
+.cols {
+  display: grid;
+  grid-template-columns: minmax(280px, var(--col-l)) minmax(0, 1fr);
+  gap: 12px;
+  padding: 4px 20px 0;
+  align-items: start;
 }
 
-.stat .led { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--dim3); }
-.stat .led.on { background: var(--green); box-shadow: 0 0 7px var(--green); }
-.stat .led.wait { background: var(--amber); }
-.stat .led.off { background: var(--dim3); }
-.stat .grow { flex: 1; }
-.stat .sl { font-family: var(--share); font-size: var(--fs-label); letter-spacing: .12em; text-transform: uppercase; color: var(--cyan); }
-.stat .sv { font-size: var(--fs-small); color: var(--soft); }
-.stat .sv.ok { color: var(--green); }
-.stat .sv.warn { color: var(--amber); }
-.stat .sv.dim { color: var(--dim); font-family: var(--mono); }
+/* 列内把 .setf 的左右内边距归零（那是给整页留的），标签列也收窄 */
+.ps .cols .col { min-width: 0; --setf-k: 92px; }
+.ps .cols .grp { padding: 6px 0 6px; }
+.ps .cols .row { padding-left: 0; padding-right: 0; }
+.ps .cols .hint { padding-left: 0; padding-right: 0; margin: 2px 0 8px; }
+.ps .cols .tbl { margin: 0; }
+.ps .cols .tbody.tall { height: var(--tall); max-height: var(--tall); }
 
-/* 进程表（一块） */
+/* 启用开关一行：勾选框 + 一枚内核状态小标 */
+.swrow { display: flex; align-items: center; gap: 10px; padding: 4px 0; min-height: 30px; flex-wrap: wrap; }
+
+.tag {
+  font-family: var(--share);
+  font-size: var(--fs-label);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--dim);
+  white-space: nowrap;
+}
+.tag.ok { color: var(--green); }
+.tag.warn { color: var(--amber); }
+.tag.dim { color: var(--dim); }
+
+/* 没启用进程拦截：右列整块压暗并禁止交互（按钮自己 disabled，行点击在 JS 里也挡了） */
+.ps .cols .tbl.off { opacity: .45; }
+.ps .cols .tbl.off .tr { cursor: default; }
+
+/* 进程表列 */
 .cap { position: relative; top: 1px; font-family: var(--share); font-size: var(--fs-label); letter-spacing: .12em; text-transform: uppercase; color: var(--cyan); white-space: nowrap; }
 .cnt { font-family: var(--mono); font-size: var(--fs-small); color: var(--muted); }
-.tbody.tall { height: var(--tall); max-height: var(--tall); }
 .tf { padding: 6px 12px; border-top: 1px solid var(--border); font-size: var(--fs-small); color: var(--dim2); }
 
 .ps .head.hp, .ps .tr.hp { grid-template-columns: 34px 26px minmax(120px, 1fr) 64px; }
