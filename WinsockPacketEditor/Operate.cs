@@ -5441,7 +5441,18 @@ namespace WinsockPacketEditor
                         catch
                         { 
                             //
-                        }                        
+                        }
+
+                        /*
+                            取不到主模块的（受保护 / 系统进程，如 svchost / csrss / services）退回「进程名 + .exe」——
+                            那仍然是一条合法的 PROCESS-NAME 规则。不然这些进程在「进程设置」里点了也没反应
+                            （AddSelectProcessName_ByPid 见到空 ModuleName 直接返回 false）。
+                            进程名带空格的是 Idle / Memory Compression 这类伪进程，保留空串让前端跳过。
+                        */
+                        if (string.IsNullOrEmpty(ModuleName) && !string.IsNullOrEmpty(p.ProcessName) && p.ProcessName.IndexOf(' ') < 0)
+                        {
+                            ModuleName = p.ProcessName + ".exe";
+                        }
 
                         ProcessInfo processInfo = new ProcessInfo(null, p.ProcessName, p.Id, ModuleName, ProcessPath);
                         piReturn.Add(processInfo);

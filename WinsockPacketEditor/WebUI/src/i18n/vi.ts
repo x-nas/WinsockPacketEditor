@@ -895,7 +895,7 @@ export const vi: Record<Key, string> = {
   'ps.moduleName': 'Mô-đun',
   'ps.emptyProcs': 'Không có tiến trình nào khớp.',
   'ps.emptyNames': 'Chưa có mục nào theo tên.',
-  'ps.noModule': 'Không lấy được tên mô-đun của tiến trình này; chỉ bắt theo mã được',
+  'ps.noModule': 'Không lấy được tên chương trình của tiến trình này nên không thể chặn theo tên',
   'ps.s4.on': 'Đã bật',
   'ps.s4.off': 'Chưa bật',
   'map.local': 'Ánh xạ cục bộ',

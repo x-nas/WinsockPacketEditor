@@ -1208,7 +1208,7 @@ export const DICT = {
   'ps.moduleName': { zh: '模块名称', en: 'Module' },
   'ps.emptyProcs': { zh: '没有匹配的进程。', en: 'No matching processes.' },
   'ps.emptyNames': { zh: '还没有按名称拦截的进程。', en: 'No name-based entries yet.' },
-  'ps.noModule': { zh: '这个进程取不到模块名，只能按编号拦截', en: 'No module name for this process; intercept it by ID' },
+  'ps.noModule': { zh: '这个进程取不到程序名，没法按名称拦截', en: 'No program name available for this process, so it cannot be intercepted by name' },
   'ps.s4.on': { zh: '已启用', en: 'Enabled' },
   'ps.s4.off': { zh: '未启用', en: 'Disabled' },
 

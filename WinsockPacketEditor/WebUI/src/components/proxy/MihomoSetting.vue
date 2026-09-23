@@ -64,18 +64,20 @@ interface Row {
 
 const procs = shallowRef<ProcessRow[]>([])
 const names = useList<ProcessRow>(FeedList.SelectProcess)
-const intercepted = ref<Set<string>>(new Set())
 const filter = ref('')
 
-/** 拦截名单（小写进程名集合）：已保存的 ∪ 运行中且 IsCheck 的。 */
-function rebuildIntercepted(): void {
+/*
+  拦截名单（小写进程名集合）。
+  ⚠️ <b>唯一真源是后端推来的 SelectProcess 列表</b>（FeedPump 每拍整表 Replace），
+  前端<b>不做</b>乐观更新 —— 之前那版点一下先本地勾上、再用 watch 从「procs 快照 + names」重建，
+  重建时若 procs 快照还没算上刚加的条目，就会把勾选<b>抹掉</b>（点了没反应，而同名那条因为
+  后端 IsCheck=true 反倒显示已选中）。现在点击只调桥，等列表推回来自然点亮，不存在这个竞态。
+*/
+const intercepted = computed<Set<string>>(() => {
   const s = new Set<string>()
   for (const p of names.value) { if (p.ModuleName) s.add(p.ModuleName.toLowerCase()) }
-  for (const p of procs.value) { if (p.IsCheck && p.ModuleName) s.add(p.ModuleName.toLowerCase()) }
-  intercepted.value = s
-}
-
-watch([procs, names], rebuildIntercepted, { immediate: true })
+  return s
+})
 
 const rows = computed<Row[]>(() => {
   const out: Row[] = []
@@ -172,30 +174,23 @@ async function refresh(): Promise<void> {
 async function toggleRow(r: Row): Promise<void> {
   if (!on.value) { return }   // 没启用进程拦截时整块只读
 
-  const k = r.ModuleName.toLowerCase()
-  const isOn = intercepted.value.has(k)
+  const isOn = intercepted.value.has(r.ModuleName.toLowerCase())
 
-  if (!isOn && (!r.running || r.ProcessID <= 0)) { return }
+  //取消：从名单里删掉（运行中 / 已保存没跑的都走这条）
+  if (isOn) {
+    try { await call('removeSelectProcessName', { name: r.ModuleName }) }
+    catch (e) { console.error('[ps] 移除拦截失败', e) }
+    return
+  }
 
-  const next = new Set(intercepted.value)
-  if (isOn) next.delete(k)
-  else next.add(k)
-  intercepted.value = next
+  //勾上：只有运行中的、拿得到 Pid 的才能加（加的是「进程名」，同名进程一起生效）
+  if (!r.running || r.ProcessID <= 0) { return }
 
   try {
-    if (isOn) {
-      await call('removeSelectProcessName', { name: r.ModuleName })
-    } else {
-      const res = await call<{ ok: boolean }>('addSelectProcessName', { pid: r.ProcessID })
-      if (!res?.ok) {
-        const back = new Set(intercepted.value)
-        back.delete(k)
-        intercepted.value = back
-        pushToast('warning', t('ps.noModule'))
-      }
-    }
+    const res = await call<{ ok: boolean }>('addSelectProcessName', { pid: r.ProcessID })
+    if (!res?.ok) { pushToast('warning', t('ps.noModule')) }
   } catch (e) {
-    console.error('[ps] 切换拦截失败', e)
+    console.error('[ps] 添加拦截失败', e)
   }
 }
 
