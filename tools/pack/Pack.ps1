@@ -56,7 +56,7 @@ Remove-Item -LiteralPath (Join-Path $McpOutput 'WPEMcpServer.pdb') -Force -Error
     -Name 'WPE64' -Title 'WPE x64' -Exe 'WinsockPacketEditor.exe' `
     -OutBaseName 'WPE64' -LauncherAssembly 'WPE64' -VersionPrefix 'v' `
     -Icon (Join-Path $Main 'wpe.ico') `
-    -AllowedExe @('EasyHook32Svc.exe', 'EasyHook64Svc.exe', 'SuperSocket.SocketService.exe') `
+    -AllowedExe @('EasyHook32Svc.exe', 'EasyHook64Svc.exe', 'SuperSocket.SocketService.exe', 'wpe-mihomo.exe') `
     -ExcludeRx @(
         '^WebView2\\',          # 本机运行过留下的 WebView2 用户数据
         '\.WebView2\\',         # 跑测探针的 WebView2 数据目录

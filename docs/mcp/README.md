@@ -24,7 +24,7 @@
 
 ## 当前发布状态
 
-- WPE 本地 Named Pipe 网关与 stdio MCP Sidecar 已完成；当前注册 **125** 个工具。
+- WPE 本地 Named Pipe 网关与 stdio MCP Sidecar 已完成；当前注册 **123** 个工具。
 - 打包会把自包含单文件 `WPEMcpServer.exe` 作为 `McpServer/` 载荷发布；启动器每次启动同步它到固定路径 `C:\WPE64DB\McpServer\WPEMcpServer.exe`。状态栏使用灰灯/黄灯/绿灯分别表示关闭、需要确认和可自动执行。
 - Phase 6 已接入 `wpe_executors_stop_all` 和 `wpe_start_mode_select`：前者只停止现有发送器/机器人执行器，后者只在启动页选择代理或注入页面；两者均不主动发包、不自动注入。真实发布包已验证停止工具在无任务、原生运行态机器人和仅本机回环发送器的停止、UUID 校验和幂等；启动模式已验证首次选择、幂等重放及离开启动页后的新请求拒绝。
 - MCP 设置已移至启动页，关闭总开关后仍可从启动页重新开启；多开设置也统一为启动页弹窗，并采用与其他设置页一致的分区布局。
