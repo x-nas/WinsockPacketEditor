@@ -888,7 +888,6 @@ export const tw: Record<Key, string> = {
   'ps.moduleName': '模組名稱',
   'ps.emptyProcs': '沒有匹配的程序。',
   'ps.emptyNames': '還沒有按名稱攔截的程序。',
-  'ps.noModule': '這個處理程序取不到程式名稱，無法按名稱攔截',
   'ps.s4.on': '已啟用',
   'ps.s4.off': '未啟用',
   'map.local': '本地對映',

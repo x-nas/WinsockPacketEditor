@@ -4084,7 +4084,13 @@ namespace WPEHybrid
                 bool enable = args["enable"] != null && (bool)args["enable"];
                 string tunStack = args["tunStack"] == null ? null : (string)args["tunStack"];
                 string dnsMode = args["dnsMode"] == null ? null : (string)args["dnsMode"];
-                string error = await Operate.ProxyConfig.Proxy.SaveMihomoSetting(enable, tunStack, dnsMode);
+
+                //进程名单是界面上的草稿，点保存时整份送来（勾选过程不落库、不改内存）
+                var arr = args["processNames"] as Newtonsoft.Json.Linq.JArray;
+                var names = new List<string>();
+                if (arr != null) { foreach (var x in arr) { string n = (string)x; if (!string.IsNullOrEmpty(n)) { names.Add(n); } } }
+
+                string error = await Operate.ProxyConfig.Proxy.SaveMihomoSetting(enable, tunStack, dnsMode, names.ToArray());
                 return new { error = error ?? string.Empty };
             });
 
@@ -4136,16 +4142,6 @@ namespace WPEHybrid
                 });
 
                 return new { icons = icons };
-            });
-
-            this.bridge.Register("addSelectProcessName", args => new
-            {
-                ok = Operate.ProxyConfig.Proxy.AddSelectProcessName_ByPid(args["pid"] == null ? 0 : (int)args["pid"]),
-            });
-
-            this.bridge.Register("removeSelectProcessName", args => new
-            {
-                ok = Operate.ProxyConfig.Proxy.RemoveSelectProcessName(args["name"] == null ? string.Empty : (string)args["name"]),
             });
 
             //外部代理的「检测代理」

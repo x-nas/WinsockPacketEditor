@@ -895,7 +895,6 @@ export const ko: Record<Key, string> = {
   'ps.moduleName': '모듈 이름',
   'ps.emptyProcs': '일치하는 프로세스가 없습니다.',
   'ps.emptyNames': '이름으로 지정한 프로세스가 아직 없습니다.',
-  'ps.noModule': '이 프로세스의 프로그램 이름을 가져올 수 없어 이름으로 가로챌 수 없습니다',
   'ps.s4.on': '사용함',
   'ps.s4.off': '사용 안 함',
   'map.local': '로컬 매핑',

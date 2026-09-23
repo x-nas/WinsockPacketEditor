@@ -5446,8 +5446,8 @@ namespace WinsockPacketEditor
                         /*
                             取不到主模块的（受保护 / 系统进程，如 svchost / csrss / services）退回「进程名 + .exe」——
                             那仍然是一条合法的 PROCESS-NAME 规则。不然这些进程在「进程设置」里点了也没反应
-                            （AddSelectProcessName_ByPid 见到空 ModuleName 直接返回 false）。
-                            进程名带空格的是 Idle / Memory Compression 这类伪进程，保留空串让前端跳过。
+                            （ModuleName 为空就没法按名拦截）。进程名带空格的是 Idle / Memory Compression
+                            这类伪进程，保留空串让前端跳过。
                         */
                         if (string.IsNullOrEmpty(ModuleName) && !string.IsNullOrEmpty(p.ProcessName) && p.ProcessName.IndexOf(' ') < 0)
                         {
@@ -5695,20 +5695,51 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                /// <summary>「按进程名称拦截」加一条（WinForms 是双击左表）。同名已在就不重复加。</summary>
-                public static bool AddSelectProcessName_ByPid(int Pid)
+                /// <summary>已保存的拦截名单（进程名，原样大小写）。界面打开时抄成草稿。</summary>
+                public static string[] SelectProcessNames()
                 {
-                    ProcessInfo pi = lastProcessList.FirstOrDefault(x => x.ProcessID == Pid);
-                    if (pi == null || string.IsNullOrEmpty(pi.ModuleName)) { return false; }
-                    if (IsSelfProcess(Pid, pi.ModuleName)) { return false; }
+                    var list = new List<string>();
 
-                    foreach (ProcessInfo x in lstSelectProcessName)
+                    foreach (ProcessInfo pi in lstSelectProcessName)
                     {
-                        if (string.Equals(x.ModuleName, pi.ModuleName, StringComparison.OrdinalIgnoreCase)) { return true; }
+                        if (!string.IsNullOrEmpty(pi.ModuleName)) { list.Add(pi.ModuleName); }
                     }
 
-                    lstSelectProcessName.Add(pi);
-                    return true;
+                    return list.ToArray();
+                }
+
+                /// <summary>
+                /// 用界面上那份草稿<b>整体替换</b>拦截名单（点「保存」时调用）。
+                ///
+                /// ⚠️ 勾选过程不碰这里 —— 只改界面草稿，保存时一次提交。所以这里要能接受
+                /// 任意一份名单（增、删、清空都在这一次里完成）。同名只留一条、自身进程不收；
+                /// 能从上一次进程快照里查到路径的就带上（界面取图标用，查不到留空）。
+                /// </summary>
+                public static void ApplySelectProcessNames(string[] Names)
+                {
+                    var next = new List<ProcessInfo>();
+                    var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+                    if (Names != null)
+                    {
+                        foreach (string raw in Names)
+                        {
+                            string name = (raw ?? string.Empty).Trim();
+                            if (name.Length == 0 || !seen.Add(name) || IsSelfProcess(0, name)) { continue; }
+
+                            ProcessInfo hit = lastProcessList.FirstOrDefault(x => string.Equals(x.ModuleName, name, StringComparison.OrdinalIgnoreCase));
+
+                            next.Add(new ProcessInfo(
+                                null,
+                                Path.GetFileNameWithoutExtension(name),
+                                hit == null ? 0 : hit.ProcessID,
+                                name,
+                                hit == null ? string.Empty : hit.ProcessPath));
+                        }
+                    }
+
+                    lstSelectProcessName.Clear();
+                    foreach (ProcessInfo pi in next) { lstSelectProcessName.Add(pi); }
                 }
 
                 #region//按名称拦截的进程表：落库与读回
@@ -5756,19 +5787,6 @@ namespace WinsockPacketEditor
                 }
 
                 #endregion
-
-                public static bool RemoveSelectProcessName(string ModuleName)
-                {
-                    for (int i = 0; i < lstSelectProcessName.Count; i++)
-                    {
-                        if (string.Equals(lstSelectProcessName[i].ModuleName, ModuleName, StringComparison.OrdinalIgnoreCase))
-                        {
-                            lstSelectProcessName.RemoveAt(i);
-                            return true;
-                        }
-                    }
-                    return false;
-                }
 
                 #region//自身进程
 
@@ -5825,7 +5843,7 @@ namespace WinsockPacketEditor
                     return false;
                 }
 
-                /// <summary>「mihomo 模式设置」页读取的整包状态。</summary>
+                /// <summary>「进程设置」页读取的整包状态。</summary>
                 public static MihomoSettingRow GetMihomoSetting()
                 {
                     return new MihomoSettingRow
@@ -5842,20 +5860,25 @@ namespace WinsockPacketEditor
                         EnableMihomo = Enable_Mihomo,
                         TunStack = NormalizeTunStack(TunStack),
                         DnsMode = NormalizeDnsMode(DnsMode),
+                        ProcessNames = SelectProcessNames(),
                     };
                 }
 
                 /// <summary>
-                /// 保存 mihomo 模式设置。进程名单由 addSelectProcessName / removeSelectProcessName 单独维护；
-                /// 这里只落库 TUN 栈 / DNS 模式，内核在跑就按新设置重启一次。
+                /// 保存「进程设置」页。<b>整屏一起提交</b>：开关 / TUN 栈 / DNS 模式 / 整份进程名单
+                /// （界面上是草稿，点保存才送过来）。落库后内核在跑就按新设置重启一次。
                 /// </summary>
-                public static async Task<string> SaveMihomoSetting(bool enable, string tunStack, string dnsMode)
+                public static async Task<string> SaveMihomoSetting(bool enable, string tunStack, string dnsMode, string[] processNames)
                 {
                     try
                     {
                         Enable_Mihomo = enable;
                         TunStack = NormalizeTunStack(tunStack);
                         DnsMode = NormalizeDnsMode(dnsMode);
+
+                        //进程名单整体替换（勾选过程只动界面草稿，不碰这里）
+                        ApplySelectProcessNames(processNames);
+
                         SystemConfig.SaveProxyMode_ToDB();
 
                         if (!enable)

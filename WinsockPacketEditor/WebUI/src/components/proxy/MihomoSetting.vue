@@ -16,6 +16,10 @@
   【内核不随「启动代理」加载】它只在需要「把进程强制转代理」时才用得上，所以这里要手动开。
   开关本身不落库，每次开 WPE 默认关闭。
 
+  【整屏都是草稿，点「保存」才生效】01 的开关 / TUN 栈 / DNS 与 02 的勾选都只改本地状态，
+  不碰后端、不落库；点「保存」一次性提交（含整份进程名单），取消 / 关窗即丢弃。
+  所以勾选过程不会影响正在跑的内核，也不会出现「点一下就已经改了」的错觉。
+
   ⚠️ <b>只有一块进程表。</b>旧屏分「按编号拦截」和「按名称拦截」，是因为 SunnyNet 同时支持
   PID 与进程名两种拦截；而 mihomo 的规则只有 PROCESS-NAME / PROCESS-PATH（及正则版），
   <b>没有按 PID 的规则</b>（PID 每次启动都变）。所以一行 = 一个进程名，勾上就是一条 PROCESS-NAME 规则；
@@ -27,7 +31,6 @@ import { FeedList, type ProcessRow } from '../../bridge/types'
 import { t } from '../../i18n'
 import { useList } from '../../stores/lists'
 import { useSort } from '../../useSort'
-import { pushToast } from '../../stores/toast'
 import SettingsModal from './SettingsModal.vue'
 
 const props = defineProps<{ open: boolean }>()
@@ -37,12 +40,15 @@ interface Setting {
   ProxyRunning: boolean; KernelRunning: boolean; KernelReady: boolean; KernelVersion: string
   EnableSocks5: boolean; Socks5Port: number; EnableAuth: boolean; IsAdmin: boolean; LastError: string
   EnableMihomo: boolean; TunStack: string; DnsMode: string
+  /** 已保存的拦截名单（进程名）。打开时抄成草稿，保存时整体提交 */
+  ProcessNames: string[]
 }
 
 const EMPTY: Setting = {
   ProxyRunning: false, KernelRunning: false, KernelReady: false, KernelVersion: '',
   EnableSocks5: true, Socks5Port: 1080, EnableAuth: true, IsAdmin: true, LastError: '',
   EnableMihomo: false, TunStack: 'system', DnsMode: 'fake-ip',
+  ProcessNames: [],
 }
 
 const busy = ref(false)
@@ -69,17 +75,20 @@ const names = useList<ProcessRow>(FeedList.SelectProcess)
 const filter = ref('')
 
 /*
-  拦截名单（小写进程名集合）。
-  ⚠️ <b>唯一真源是后端推来的 SelectProcess 列表</b>（FeedPump 每拍整表 Replace），
-  前端<b>不做</b>乐观更新 —— 之前那版点一下先本地勾上、再用 watch 从「procs 快照 + names」重建，
-  重建时若 procs 快照还没算上刚加的条目，就会把勾选<b>抹掉</b>（点了没反应，而同名那条因为
-  后端 IsCheck=true 反倒显示已选中）。现在点击只调桥，等列表推回来自然点亮，不存在这个竞态。
+  拦截名单 = 一份<b>草稿</b>（小写进程名集合）。
+
+  ⚠️ 勾选 / 取消只改这份草稿，<b>不调桥、不改内存、不落库</b>；点「保存」时把整份名单交给
+  后端（saveMihomoSetting 带 processNames）。取消 / 关窗即丢弃。这样勾选过程不会影响
+  正在跑的内核，也不会出现「点一下就已经改了」的错觉。
+
+  草稿的初始值取自 getMihomoSetting.ProcessNames（权威的已保存名单），
+  <b>不</b>取推送来的 SelectProcess 列表 —— 那份可能晚一拍到，拿它当草稿会在保存时把名单洗掉。
 */
-const intercepted = computed<Set<string>>(() => {
-  const s = new Set<string>()
-  for (const p of names.value) { if (p.ModuleName) s.add(p.ModuleName.toLowerCase()) }
-  return s
-})
+const saved = ref<string[]>([])
+const draft = ref<Set<string>>(new Set())
+
+/** 模板只读草稿：勾选状态与计数都看它。 */
+const intercepted = computed(() => draft.value)
 
 /*
   一行 = 一个进程名（一条 PROCESS-NAME 规则）。
@@ -103,11 +112,26 @@ const rows = computed<Row[]>(() => {
     out.push(row)
   }
 
+  //已保存但当前没在跑：以 saved（权威名单）为准，名字 / 路径能从推送列表里补就补（图标用）
+  const feed = new Map<string, ProcessRow>()
   for (const p of names.value) {
     const k = (p.ModuleName || '').toLowerCase()
+    if (k) { feed.set(k, p) }
+  }
+
+  for (const name of saved.value) {
+    const k = name.toLowerCase()
     if (!k || at.has(k)) { continue }
 
-    const row: Row = { ModuleName: p.ModuleName, ProcessName: p.ProcessName || p.ModuleName, ProcessID: 0, ProcessPath: p.ProcessPath, running: false, count: 0 }
+    const f = feed.get(k)
+    const row: Row = {
+      ModuleName: f?.ModuleName || name,
+      ProcessName: f?.ProcessName || name.replace(/\.exe$/i, ''),
+      ProcessID: 0,
+      ProcessPath: f?.ProcessPath || '',
+      running: false,
+      count: 0,
+    }
     at.set(k, row)
     out.push(row)
   }
@@ -163,7 +187,10 @@ watch(() => props.open, async (opened) => {
   if (!opened) return
   error.value = ''
   try {
-    f.value = { ...EMPTY, ...(await call<Setting>('getMihomoSetting')) }
+    const s = await call<Setting>('getMihomoSetting')
+    f.value = { ...EMPTY, ...s }
+    saved.value = s?.ProcessNames ?? []
+    draft.value = new Set(saved.value.map((x) => x.toLowerCase()))
     await refresh()
   } catch (e) {
     console.error('[ps] 读取设置失败', e)
@@ -184,31 +211,28 @@ async function refresh(): Promise<void> {
 }
 
 /*
-  勾选 / 取消：勾上 = 加一条 PROCESS-NAME 规则（走桥 addSelectProcessName，按 Pid 取到名字与路径）；
-  取消 = 从名单里删掉。已保存但没启动的行 pid 为 0，只能取消、不能再勾上。
-  前端先乐观改 intercepted，桥失败再退回。
+  勾选 / 取消：只改草稿（见 intercepted 那段），点「保存」才提交。
+  按「进程名」勾 —— mihomo 只有 PROCESS-NAME 规则，同名进程一起生效。
 */
-async function toggleRow(r: Row): Promise<void> {
+function toggleRow(r: Row): void {
   if (!on.value) { return }   // 没启用进程拦截时整块只读
 
-  const isOn = intercepted.value.has(r.ModuleName.toLowerCase())
+  const k = r.ModuleName.toLowerCase()
+  const next = new Set(draft.value)
+  if (next.has(k)) { next.delete(k) } else { next.add(k) }
+  draft.value = next
+}
 
-  //取消：从名单里删掉（运行中 / 已保存没跑的都走这条）
-  if (isOn) {
-    try { await call('removeSelectProcessName', { name: r.ModuleName }) }
-    catch (e) { console.error('[ps] 移除拦截失败', e) }
-    return
+/*
+  提交给后端的名单：按 rows 里的原始大小写写回（草稿里存的是小写）。
+  草稿里的每一项都来自 rows（运行中或已保存），所以一定找得到。
+*/
+function processNames(): string[] {
+  const out: string[] = []
+  for (const r of rows.value) {
+    if (draft.value.has(r.ModuleName.toLowerCase())) { out.push(r.ModuleName) }
   }
-
-  //勾上：只有运行中的、拿得到 Pid 的才能加（加的是「进程名」，同名进程一起生效）
-  if (!r.running || r.ProcessID <= 0) { return }
-
-  try {
-    const res = await call<{ ok: boolean }>('addSelectProcessName', { pid: r.ProcessID })
-    if (!res?.ok) { pushToast('warning', t('ps.noModule')) }
-  } catch (e) {
-    console.error('[ps] 添加拦截失败', e)
-  }
+  return out
 }
 
 async function save(): Promise<void> {
@@ -219,6 +243,7 @@ async function save(): Promise<void> {
       enable: f.value.EnableMihomo,
       tunStack: f.value.TunStack,
       dnsMode: f.value.DnsMode,
+      processNames: processNames(),
     })
     if (r?.error) { error.value = r.error; return }
     emit('update:open', false)

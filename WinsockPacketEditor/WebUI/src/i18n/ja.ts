@@ -895,7 +895,6 @@ export const ja: Record<Key, string> = {
   'ps.moduleName': 'モジュール名',
   'ps.emptyProcs': '一致するプロセスがありません。',
   'ps.emptyNames': '名前で指定したプロセスはまだありません。',
-  'ps.noModule': 'このプロセスのプログラム名が取得できず、名前で傍受できません',
   'ps.s4.on': '有効',
   'ps.s4.off': '無効',
   'map.local': 'ローカルマッピング',

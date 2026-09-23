@@ -802,8 +802,9 @@ namespace WinsockPacketEditor
     }
 
     /// <summary>
-    /// 「mihomo 模式设置」页的数据（2026-09-23 起取代旧的 ProcessSettingRow）。
-    /// 只读环境状态 + 两个可改设置（TUN 栈 / DNS 模式）；进程名单走原有的 getProcessRows / SelectProcess 列表。
+    /// 「进程设置」页的数据（2026-09-23 起取代旧的 ProcessSettingRow）。
+    /// 只读环境状态 + 可改设置（开关 / TUN 栈 / DNS 模式 / 整份进程名单）。
+    /// ⚠️ 进程名单也走这里：界面打开时抄成草稿，点「保存」时整体提交（SaveMihomoSetting 的 processNames）。
     /// </summary>
     public sealed class MihomoSettingRow
     {
@@ -822,6 +823,9 @@ namespace WinsockPacketEditor
         public bool EnableMihomo;           // 是否启用进程拦截（= 加载内核）
         public string TunStack = "system";  // system / gvisor / mixed
         public string DnsMode = "fake-ip";  // fake-ip / redir-host
+
+        /// <summary>当前已保存的拦截名单（进程名）。界面抄成草稿，保存时整体提交。</summary>
+        public string[] ProcessNames = new string[0];
     }
 
     public sealed class ExtProxySettingRow
