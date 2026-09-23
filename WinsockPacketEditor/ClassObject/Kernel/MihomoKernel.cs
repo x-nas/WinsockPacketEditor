@@ -187,7 +187,20 @@ namespace WinsockPacketEditor
             int waited = 0;
             while (waited < ReadyTimeoutMs)
             {
-                if (ready || TunInterfaceUp()) { return true; }
+                if (ready || TunInterfaceUp())
+                {
+                    /*
+                        ⚠️ <b>命中网卡也要把 ready 立起来。</b>
+
+                        就绪有两份判据：日志里那句 info「Tun adapter listening」与「Meta 网卡已 Up」。
+                        但 ready 只有前者会置位 —— 而模板的 log-level 是 warning，那句 info 根本不打，
+                        于是内核明明已经接管流量，IsReady 仍是 false：
+                        界面（进程设置的状态标）显示「未就绪」、RunBar 的 TUN 灯不亮。
+                        2026-09-23 用户报「启用进程拦截后面出现黄色的『未就绪』」就是这条。
+                    */
+                    ready = true;
+                    return true;
+                }
                 if (!IsRunning)
                 {
                     error = "内核启动失败：" + (string.IsNullOrEmpty(lastLine) ? "进程已退出" : lastLine);

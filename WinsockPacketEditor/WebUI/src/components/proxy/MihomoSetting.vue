@@ -272,8 +272,8 @@ async function save(): Promise<void> {
           <div class="k">{{ t('mh.enable') }}</div>
           <div class="v">
             <button class="chk" :class="{ on }" @click="f.EnableMihomo = !f.EnableMihomo"><i />{{ on ? t('ps.s4.on') : t('ps.s4.off') }}</button>
-            <!-- 内核跑到哪一步：一枚小标，不做成单独一块 -->
-            <span class="tag" :class="f.KernelReady ? 'ok' : (f.KernelRunning ? 'warn' : 'dim')">
+            <!-- 内核跑到哪一步：一枚小标，不做成单独一块。悬停解释「TUN 有没有接管进程流量」 -->
+            <span class="tag" :class="f.KernelReady ? 'ok' : (f.KernelRunning ? 'warn' : 'dim')" :title="t('mh.tunHint')">
               {{ f.KernelReady ? t('mh.ready') : t('mh.notReady') }}
             </span>
           </div>
