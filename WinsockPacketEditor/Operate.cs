@@ -1756,42 +1756,42 @@ namespace WinsockPacketEditor
                             case Operate.PacketConfig.Packet.EncodingFormat.Short:
                                 if (buffer.Length >= 2)
                                 {
-                                    sReturn = BitConverter.ToInt16(buffer.ToArray(), 0).ToString();
+                                    sReturn = MemoryMarshal.Read<short>(buffer).ToString();
                                 }
                                 break;
 
                             case Operate.PacketConfig.Packet.EncodingFormat.UShort:
                                 if (buffer.Length >= 2)
                                 {
-                                    sReturn = BitConverter.ToUInt16(buffer.ToArray(), 0).ToString();
+                                    sReturn = MemoryMarshal.Read<ushort>(buffer).ToString();
                                 }
                                 break;
 
                             case Operate.PacketConfig.Packet.EncodingFormat.Int32:
                                 if (buffer.Length >= 4)
                                 {
-                                    sReturn = BitConverter.ToInt32(buffer.ToArray(), 0).ToString();
+                                    sReturn = MemoryMarshal.Read<int>(buffer).ToString();
                                 }
                                 break;
 
                             case Operate.PacketConfig.Packet.EncodingFormat.UInt32:
                                 if (buffer.Length >= 4)
                                 {
-                                    sReturn = BitConverter.ToUInt32(buffer.ToArray(), 0).ToString();
+                                    sReturn = MemoryMarshal.Read<uint>(buffer).ToString();
                                 }
                                 break;
 
                             case Operate.PacketConfig.Packet.EncodingFormat.Int64:
                                 if (buffer.Length >= 8)
                                 {
-                                    sReturn = BitConverter.ToInt64(buffer.ToArray(), 0).ToString();
+                                    sReturn = MemoryMarshal.Read<long>(buffer).ToString();
                                 }
                                 break;
 
                             case Operate.PacketConfig.Packet.EncodingFormat.UInt64:
                                 if (buffer.Length >= 8)
                                 {
-                                    sReturn = BitConverter.ToUInt64(buffer.ToArray(), 0).ToString();
+                                    sReturn = MemoryMarshal.Read<ulong>(buffer).ToString();
                                 }
                                 break;
 
