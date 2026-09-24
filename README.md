@@ -36,7 +36,7 @@
 - 🎨 **规则自动改**：设好「滤镜」，符合条件的封包自动替换 / 拦截 / 改长度，命中的行按颜色标出来。
 - 🤖 **自动化**：用「机器人」把一串动作（发包、延迟、循环、模拟键鼠）排成流程自动跑。
 - 🔍 **对比与查找**：并排看改写前后、按字节或按行找不同，列表支持文本 / 十六进制 / 正则搜索。
-- 🔒 **按进程抓取**：代理模式下只接管你勾选的那几个进程，它们的 TCP / UDP 封包照样能看、能改。
+- 🔒 **按进程抓取**：代理模式下只接管你勾选（或手动指定）的那几个进程，它们的 TCP / UDP 封包照样能看、能改。
 - 🌍 **随身即用**：免安装，单个文件双击就能跑，退出时自己收拾干净。
 
 ### 🎯 两种工作方式，按场景选
@@ -116,7 +116,7 @@ A **network packet capture-and-edit tool** for Windows. It lists every packet a 
 - 🎨 **Rewrite by rule** — set up a *filter* and matching packets are replaced / blocked / resized automatically, with matched rows color-coded.
 - 🤖 **Automation** — a *robot* runs a sequence of steps (send, delay, loop, simulate keyboard and mouse) for you.
 - 🔍 **Compare & search** — view before/after side by side, diff by byte or by line; search the list as text, hex or regex.
-- 🔒 **Per-process capture** — in proxy mode you can watch just the processes you pick; their TCP / UDP packets stay fully visible and editable.
+- 🔒 **Per-process capture** — in proxy mode you can watch just the processes you pick (or type in by hand); their TCP / UDP packets stay fully visible and editable.
 - 🌍 **Portable** — no installer; one file, double-click to run, and it cleans up after itself on exit.
 
 ### 🎯 Two ways to work, pick per situation
