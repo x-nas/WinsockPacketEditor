@@ -27,7 +27,7 @@ namespace WPEHookTest
         /// <summary>WPE 自己带的那些依赖 —— 它们出现在目标里就是 R2 说的检测面与冲突面。</summary>
         private static readonly string[] Watch =
         {
-            "AntdUI", "Newtonsoft.Json", "EntityFramework", "System.Data.SQLite",
+            "AntdUI", "Newtonsoft.Json", "EntityFramework", "Microsoft.Data.Sqlite",
             "Microsoft.Owin", "Owin", "System.Web.Http", "SuperSocket",
             "QQWry", "WindowsInput", "DiffPlex", "Be.Windows.Forms.HexBox",
             "System.Windows.Forms", "System.Drawing",
@@ -35,7 +35,7 @@ namespace WPEHookTest
 
         private static readonly string[] WatchNative =
         {
-            "SQLite.Interop.dll", "System.Data.SQLite.dll",
+            "e_sqlite3.dll", "Microsoft.Data.Sqlite.dll",
         };
 
         public static int Run(string[] args)

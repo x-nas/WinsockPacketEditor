@@ -18,6 +18,7 @@ const ALLOW = [
   ['components/InjectView.vue', /\.foot \.ar/, '→ 箭头字形'],
   ['components/proxy/StatData.vue', /^\.sep$/, '› 分隔字形'],
   ['components/proxy/AccountList.vue', /\.op \.n/, '图标角标，贴在 16px 图标上'],
+  ['components/proxy/ProxySide.vue', /\.side\.collapsed \.sb-cap/, '折叠时的分组占位线（font-size: 0 收掉文字，靠 ::after 画线）'],
   ['style.css', /\.gtool \.sx/, '× 清除字形'],
   ['reset.css', /./, '第三方全局 reset（ant-design-vue 4.2.6 原样搬来），不属于本项目的字号层级'],
 ]

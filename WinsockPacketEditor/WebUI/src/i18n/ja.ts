@@ -1159,4 +1159,7 @@ export const ja: Record<Key, string> = {
   'mh.saved': 'プロセス設定を保存しました',
   'mh.needProxy': "プロキシサービスがまだ起動していません。起動後にカーネルがプロセスの通信を引き継ぎます。",
   'mh.tunHint': "TUN がプロセスの通信を引き継いだかどうか",
+  'mh.manual': "プロセス名を手動指定",
+  'mh.manualPh': "複数のプロセス名は ; で区切ります（例: game.exe;launcher.exe）",
+  'mh.manualHint': "プロセス一覧を取得できない場合は、ここにプロセス名を直接入力できます。入力した名前はチェックした一覧と統合され、mihomo の PROCESS-NAME ルールとして生成されます。設定と一緒に保存されます。",
 }

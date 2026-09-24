@@ -43,13 +43,15 @@ interface Setting {
   EnableMihomo: boolean; TunStack: string; DnsMode: string
   /** 已保存的拦截名单（进程名）。打开时抄成草稿，保存时整体提交 */
   ProcessNames: string[]
+  /** 手动指定的进程名（; 分隔）。与勾选名单合并出规则，随设置保存 */
+  ManualProcessNames: string
 }
 
 const EMPTY: Setting = {
   ProxyRunning: false, KernelRunning: false, KernelReady: false, KernelVersion: '',
   EnableSocks5: true, Socks5Port: 1080, EnableAuth: true, IsAdmin: true, LastError: '',
   EnableMihomo: false, TunStack: 'system', DnsMode: 'fake-ip',
-  ProcessNames: [],
+  ProcessNames: [], ManualProcessNames: '',
 }
 
 const busy = ref(false)
@@ -245,6 +247,7 @@ async function save(): Promise<void> {
       tunStack: f.value.TunStack,
       dnsMode: f.value.DnsMode,
       processNames: processNames(),
+      manualProcessNames: f.value.ManualProcessNames,
     })
 
     //成功 / 失败都给一条轻提示（与「启动代理」同一种反馈）；系统日志由 C# 那边记
@@ -354,6 +357,19 @@ async function save(): Promise<void> {
         </div>
       </section>
       </div>
+
+      <!-- 03 · 手动指定进程（进程列表枚举不出来时的兜底入口） -->
+      <section class="sec manual" :class="{ off: !on }">
+        <div class="grp">{{ t('mh.manual') }}</div>
+        <div class="row">
+          <div class="k">{{ t('ps.processName') }}</div>
+          <div class="v">
+            <input v-model="f.ManualProcessNames" class="inp" spellcheck="false" :disabled="!on"
+                   :placeholder="t('mh.manualPh')" @keydown.enter.prevent>
+          </div>
+        </div>
+        <p class="hint">{{ t('mh.manualHint') }}</p>
+      </section>
     </div>
   </SettingsModal>
 </template>
@@ -395,6 +411,17 @@ async function save(): Promise<void> {
 .ps .cols > .sec:first-child { --setf-k: 88px; }
 /* 断环说明钉在 01 卡最下部 */
 .ps .cols .loop { margin-top: auto; padding-top: 6px; padding-bottom: 2px; }
+
+/*
+  用户（2026-09-24）：02 卡里「搜索框 + 进程表」上下不要留空 ——
+  ① 抬头与表之间：.grp 的 margin-bottom(4px) 与 .tbl 的 margin-top(6px) 一起归零；
+  ② 表与卡底之间：去掉本卡（:last-child = 02 卡）的 padding-bottom(8px)，01 卡不受影响。
+  表本来就通栏（左右无边框 / 无外边距），上下贴齐后读成卡里的一整条带；
+  表的上下边框也去掉，避免与抬头的下边框、卡自己的下边框叠成双线。
+*/
+.ps .cols > .sec:last-child { padding-bottom: 0; }
+.ps .cols > .sec:last-child > .grp { margin-bottom: 0; }
+.ps .cols > .sec > .tbl { margin-top: 0; border-top: 0; border-bottom: 0; }
 
 /* 内核状态小标（跟在启用开关后面，不做成单独区域） */
 .tag {

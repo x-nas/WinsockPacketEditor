@@ -1157,4 +1157,7 @@ export const vi: Record<Key, string> = {
   'mh.saved': 'Đã lưu cài đặt tiến trình',
   'mh.needProxy': "Dịch vụ proxy chưa chạy. Nhân chỉ tiếp quản lưu lượng tiến trình sau khi dịch vụ khởi động.",
   'mh.tunHint': "TUN đã tiếp quản lưu lượng tiến trình hay chưa",
+  'mh.manual': "Chỉ định tên tiến trình thủ công",
+  'mh.manualPh': "Nhiều tên tiến trình cách nhau bằng ;  ví dụ: game.exe;launcher.exe",
+  'mh.manualHint': "Khi không liệt kê được danh sách tiến trình, bạn có thể nhập tên tiến trình trực tiếp vào đây. Các tên này được gộp với danh sách đã chọn để tạo quy tắc PROCESS-NAME cho mihomo và được lưu cùng cài đặt.",
 }

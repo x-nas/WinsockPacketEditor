@@ -1543,6 +1543,9 @@ export const DICT = {
   'mh.saved': { zh: "进程设置已保存", en: "Process settings saved" },
   'mh.needProxy': { zh: "代理服务还没启动。启动后内核才会接管进程流量。", en: "The proxy service is not running yet. The kernel takes over process traffic only after it starts." },
   'mh.tunHint': { zh: "TUN 是否已接管进程流量", en: "Whether TUN has taken over process traffic" },
+  'mh.manual': { zh: "手动指定进程", en: "Manual processes" },
+  'mh.manualPh': { zh: "多个进程名用 ; 分隔，例如：game.exe;launcher.exe", en: "Separate with ;  e.g. game.exe;launcher.exe" },
+  'mh.manualHint': { zh: "进程列表枚举不出来时，可以在这里直接填进程名。这些名字会与勾选的名单合并，一起生成 mihomo 的 PROCESS-NAME 规则；名单随设置保存。", en: "If the process list cannot be enumerated, you can type process names here. They are merged with the checked list to build mihomo PROCESS-NAME rules and are saved with the settings." },
 } satisfies Record<string, Entry>
 
 export type Key = keyof typeof DICT

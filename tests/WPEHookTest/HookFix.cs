@@ -54,6 +54,7 @@ namespace WPEHookTest
                 T("A3", "滤镜执行自己 / 互相执行不栈溢出", CaseFilterRecursion),
                 T("A14", "递进计数与执行次数在并发命中下不丢", CaseProgressionRace),
                 T("A15", "高级滤镜首个条件带通配也能匹配", CaseAdvancedWildcardFirst),
+                T("A18", "高级替换多命中、末次越界：动作不吞成 None", CaseAdvancedMultiMatchLastOutOfRange),
                 T("B8", "按套接字过滤时不再每包做系统调用（同结果）", CasePortFilterStillWorks),
                 T("A13", "换滤镜快照不把目标里的连续递进计数清零", CaseSnapshotKeepsProgression),
                 T("Bparse", "预解析保持通配、排除、修改顺序及编辑后失效语义", CaseParsedRules),
@@ -954,6 +955,28 @@ namespace WPEHookTest
             var miss = Operate.FilterConfig.Filter.CheckFilter_IsMatch_Advanced(fi, new byte[] { 0x99, 0x32, 0x43 });
             rep.AppendLine("- 条件 `0|*1,1|42`：99 31 42 命中位置 [" + string.Join(",", hit) + "]（必须 [1]），99 32 43 命中 " + miss.Count + " 处（必须 0）");
             return hit.Count == 1 && hit[0] == 1 && miss.Count == 0;
+        }
+
+        private static bool CaseAdvancedMultiMatchLastOutOfRange()
+        {
+            /*
+                高级替换多命中：DoFilterCore 里 bDoFilter 曾经写成「赋值」而不是「|=」，
+                只记最后一次匹配的结果。末次匹配的改写越界返回 false 时，前面的匹配其实已经改了字节，
+                动作却会回 None、执行次数不增、bNewBuffer 不设（旧代码靠 DoFilterListCore 末尾的兜底拷贝掩盖字节，动作仍是错的）。
+                这里必须用 Position（相对匹配位置）：Head 时 CheckFilter_IsMatch_Advanced 命中第一个就 break，MatchIndex 恒 1 个，触发不了。
+            */
+            var fi = AddFilter("高级多命中", FA.Replace, "0|41", "1|FF", SendFunctions());
+            fi.FMode = Operate.FilterConfig.Filter.FilterMode.Advanced;
+            fi.FStartFrom = Operate.FilterConfig.Filter.FilterStartFrom.Position;
+
+            byte[] buf = { 0x41, 0x42, 0x41 };   // 命中 0、2；matchIndex=2 时改「+1」→ 索引 3 越界
+            byte[] nb;
+            FA action = Operate.FilterConfig.List.DoFilterList(0, buf, out nb, PT.WS2_Send, new Operate.PacketConfig.Packet.SockAddr());
+
+            bool bytesOk = nb != null && nb.Length == 3 && nb[0] == 0x41 && nb[1] == 0xFF && nb[2] == 0x41;
+            rep.AppendLine("- 命中 [0,2]、末次改 +1 越界：动作 " + action + "（必须 Replace）、执行次数 " + fi.ExecutionCount + "（必须 1）");
+            rep.AppendLine("- 改后字节 " + (nb == null ? "<null>" : BitConverter.ToString(nb)) + "（必须 41-FF-41）");
+            return action == FA.Replace && fi.ExecutionCount == 1 && bytesOk;
         }
 
         private static bool CasePortFilterStillWorks()

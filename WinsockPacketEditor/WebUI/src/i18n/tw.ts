@@ -1150,4 +1150,7 @@ export const tw: Record<Key, string> = {
   'mh.saved': '處理程序設定已儲存',
   'mh.needProxy': "代理服務還沒啟動。啟動後核心才會接管處理程序流量。",
   'mh.tunHint': "TUN 是否已接管處理程序流量",
+  'mh.manual': "手動指定處理程序",
+  'mh.manualPh': "多個處理程序名稱用 ; 分隔，例如：game.exe;launcher.exe",
+  'mh.manualHint': "當處理程序清單列舉不出來時，可以在這裡直接填處理程序名稱。這些名稱會與勾選的清單合併，一起產生 mihomo 的 PROCESS-NAME 規則；清單隨設定儲存。",
 }

@@ -403,8 +403,6 @@ namespace WinsockPacketEditor
                 int bytesRead = targetSocket.EndReceive(ar);
                 if (bytesRead > 0)
                 {
-                    byte[] bData = this.bBuffer.AsSpan(0, bytesRead).ToArray();
-
                     if (this.CommandType != Operate.ProxyConfig.Proxy.CommandType.Connect)
                     {
                         return;
@@ -412,6 +410,7 @@ namespace WinsockPacketEditor
 
                     if (!Operate.ProxyConfig.Proxy.HookTCP_Resp)
                     {
+                        byte[] bData = this.bBuffer.AsSpan(0, bytesRead).ToArray();
                         this.SendToClient(bData, 0, bData.Length);
                         this.StartReceivingFromTarget();
                         return;
@@ -419,6 +418,7 @@ namespace WinsockPacketEditor
 
                     if (Operate.ProxyConfig.Proxy.Enable_UnPack)
                     {
+                        byte[] bData = this.bBuffer.AsSpan(0, bytesRead).ToArray();
                         byte[][] packets = Operate.ProxyConfig.Proxy.ProcessResponseData(bData);
                         foreach (byte[] packet in packets)
                         {
@@ -431,8 +431,13 @@ namespace WinsockPacketEditor
                     }
                     else
                     {
-                        Operate.FilterConfig.Filter.DoFilter_SOCKS_TCP(this, bData.AsSpan(), Operate.PacketConfig.Packet.PacketType.TCP_Resp);
-                        Operate.ProxyConfig.Account.AddTraffic(this.AID, this.ClientIP, bData.Length);
+                        /*
+                            直接把接收缓冲这一段交给滤镜：DoFilter_SOCKS_TCP 自己会为「原始字节」拷一份，
+                            这里再拷一份纯属多余。缓冲在 StartReceivingFromTarget 重新挂接收前不会被复用，
+                            滤镜的就地改写也只会写回这块马上要被覆盖的缓冲。
+                        */
+                        Operate.FilterConfig.Filter.DoFilter_SOCKS_TCP(this, this.bBuffer.AsSpan(0, bytesRead), Operate.PacketConfig.Packet.PacketType.TCP_Resp);
+                        Operate.ProxyConfig.Account.AddTraffic(this.AID, this.ClientIP, bytesRead);
                     }
 
                     this.StartReceivingFromTarget();
@@ -461,20 +466,20 @@ namespace WinsockPacketEditor
 
         #region//发送和接收 UDP 数据
 
-        public int SendUdpData(Socket clientSocket, ReadOnlySpan<byte> bData, IPEndPoint ep)
+        /// <summary>
+        /// 数据面发一个 UDP 报文。<b>直接发调用方给的缓冲（可带 offset），不再另租一块再拷一遍</b> ——
+        /// 调用方保证这次 SendTo 返回前那段字节不会被改写（都是同步发送，见各调用点）。
+        /// 失败按 UDP 语义静默丢弃。
+        /// </summary>
+        public int SendUdpData(Socket clientSocket, byte[] buffer, int offset, int length, IPEndPoint ep)
         {
             int iReturn = 0;
 
             try
             {
-                if (clientSocket != null && !bData.IsEmpty && ep != null)
+                if (clientSocket != null && buffer != null && length > 0 && ep != null)
                 {
-                    byte[] sendBuffer = ArrayPool<byte>.Shared.Rent(bData.Length);
-                    bData.CopyTo(sendBuffer);
-
-                    iReturn = clientSocket.SendTo(sendBuffer, 0, bData.Length, SocketFlags.None, ep);
-
-                    ArrayPool<byte>.Shared.Return(sendBuffer);
+                    iReturn = clientSocket.SendTo(buffer, offset, length, SocketFlags.None, ep);
                 }
             }
             catch
@@ -557,7 +562,7 @@ namespace WinsockPacketEditor
 
                 if (fromClient)
                 {
-                    Operate.ProxyConfig.Proxy.ProcessUdpRequest(this, pu, epRemote, bData);
+                    Operate.ProxyConfig.Proxy.ProcessUdpRequest(this, pu, epRemote, e.Buffer, e.Offset, e.BytesTransferred);
                 }
                 else
                 {

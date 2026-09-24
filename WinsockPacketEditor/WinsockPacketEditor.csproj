@@ -29,7 +29,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <!--
       必须显式写死：SDK 会给 net48 的 exe 默认 PlatformTarget=x86（_UsingDefaultPlatformTarget），
-      那样产品被编成 32 位进程 —— SQLite.Interop / SunnyNet 的原生 DLL 位数对不上，
+      那样产品被编成 32 位进程 —— e_sqlite3 等原生 DLL 的位数对不上，
       WebView2 的 targets 也只拷 x86 那一份 loader。置成 AnyCPU 才走 IsManagedPlatformAnyCpu 那支，三种架构都拷。
     -->
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -96,6 +96,22 @@
       编译期没有任何引用。本工程直接引用这两个包，所以它们照样被拷进输出目录；
       漏了的症状是「开始代理 / 启动远程管理」当场 FileNotFoundException —— 改包引用时先想这一条。
     -->
+    <!--
+      SQLite provider（2026-09-24 从 System.Data.SQLite 1.0.119 迁到 Microsoft.Data.Sqlite，与 WPC webapi 保持一致）。
+      · Microsoft.Data.Sqlite 10.0.12 只有托管层；引擎走 SQLitePCLRaw（P/Invoke e_sqlite3.dll），可独立升级，
+        不再像 1.0.119 那样把 SQLite 3.46.1 静态编进 SQLite.Interop.dll。
+      · ⚠️ 必须把 SQLitePCLRaw.* 钉在 2.1.13：10.0.12 传递进来的是 2.1.12，而它 net461 的 targets 引用了
+        runtimes\win-arm\native\e_sqlite3.dll，包里却没有 win-arm（只有 win-x86/x64/arm64），
+        net48 下直接 MSB3030 编不过。2.1.13 已修掉这一条。
+      · ⛔ 别单独把 SQLitePCLRaw.* 升到 3.x（VS 的「更新」会提示 core/bundle→3.0.5、lib→3.53.3）：
+        那是 Microsoft.Data.Sqlite 11 的线，而 11 的 Core 只有 net10 目标、WPE 是 net48。留下 2.1.x
+        是唯一自洽的组合（10 版 provider 按 2.1.x 编译）。要升就连 provider 一起升、且 WPE 先脱离 net48。
+        引擎不落后：2.1.13 实测 `select sqlite_version()` = 3.53.3，已覆盖 sqlite.org 全部已修的 CVE。
+    -->
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.12" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.13" />
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.13" />
+    <PackageReference Include="SQLitePCLRaw.core" Version="2.1.13" />
     <PackageReference Include="Microsoft.Owin.Host.HttpListener" Version="4.2.3" />
     <PackageReference Include="Microsoft.Owin.Hosting" Version="4.2.3" />
     <PackageReference Include="Microsoft.Owin.StaticFiles" Version="4.2.3" />
@@ -104,7 +120,6 @@
     <PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.3" />
     <PackageReference Include="Owin" Version="1.0.0" />
     <PackageReference Include="QQWry" Version="1.3.1" />
-    <PackageReference Include="Stub.System.Data.SQLite.Core.NetFramework" Version="1.0.119.0" />
     <PackageReference Include="SuperSocket" Version="1.6.6.1" />
     <PackageReference Include="SuperSocket.Engine" Version="1.6.6.1" />
     <!--
@@ -117,7 +132,6 @@
     -->
     <PackageReference Include="log4net" Version="3.4.0" ExcludeAssets="all" PrivateAssets="all" />
     <PackageReference Include="System.Buffers" Version="4.6.1" />
-    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.119.0" />
     <PackageReference Include="System.Memory" Version="4.6.3" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.6.1" />
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2" />
@@ -155,14 +169,6 @@
   <ItemGroup>
     <None Update="EasyHook32.dll;EasyHook32Svc.exe;EasyHook64.dll;EasyHook64Svc.exe;EasyLoad32.dll;EasyLoad64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <!--
-      SQLite.Interop 两份：Stub.System.Data.SQLite.Core.NetFramework 的 targets 也会往 x86\ / x64\ 拷同一对文件
-      （字节完全相同，2026-09-11 核过哈希），老式工程时代也是两路并存。留着工程里这一对，是因为包的 build 资产
-      不向引用方传递 —— 去掉它们，WPEHookTest 的输出目录里就没有 SQLite.Interop 了。
-    -->
-    <None Update="x86\SQLite.Interop.dll;x64\SQLite.Interop.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="IPLocation\qqwry.dat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

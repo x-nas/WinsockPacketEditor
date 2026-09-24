@@ -789,6 +789,9 @@ namespace WinsockPacketEditor
 
         /// <summary>当前已保存的拦截名单（进程名）。界面抄成草稿，保存时整体提交。</summary>
         public string[] ProcessNames = new string[0];
+
+        /// <summary>手动指定的进程名（; 分隔）。与勾选名单合并出规则，随设置保存。</summary>
+        public string ManualProcessNames = string.Empty;
     }
 
     public sealed class ExtProxySettingRow
