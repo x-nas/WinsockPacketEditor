@@ -67,7 +67,7 @@ Remove-Item -LiteralPath (Join-Path $McpOutput 'WPEMcpServer.pdb') -Force -Error
         'WinsockPacketEditor.exe.config', 'WPEHook.dll',
         'EasyHook.dll', 'EasyHook32.dll', 'EasyHook64.dll', 'EasyLoad32.dll', 'EasyLoad64.dll',
         'EasyHook32Svc.exe', 'EasyHook64Svc.exe',
-        'x64\SQLite.Interop.dll', 'x86\SQLite.Interop.dll',
+        'runtimes\win-x64\native\e_sqlite3.dll', 'runtimes\win-x86\native\e_sqlite3.dll',
         'wpe-mihomo.exe',
         'SuperSocket.SocketEngine.dll', 'Microsoft.Owin.Host.HttpListener.dll',
         'runtimes\win-x64\native\WebView2Loader.dll',

@@ -8,7 +8,7 @@
     以及 IHookHost 这条接缝 —— 每个阶段改完跑一次，输出可以逐字对比。
 
     ⚠️ 位数必须与主工程一致（AnyCPU + Prefer32Bit=false），
-    否则 SQLite.Interop 的位数对不上，这个坑 WPEHybrid 已经踩过一次。
+    否则 e_sqlite3 的原生库位数对不上，这个坑 WPEHybrid 已经踩过一次。
   -->
   <PropertyGroup>
     <OutputType>Exe</OutputType>

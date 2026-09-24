@@ -3,6 +3,29 @@ $bin = 'C:\Users\Gary\Desktop\程序源代码\x-nas\WinsockPacketEditor\WinsockP
 Set-Location $bin
 [Environment]::CurrentDirectory = $bin
 
+# ---- SQLite provider（2026-09-24 起是 Microsoft.Data.Sqlite + SQLitePCLRaw）----
+# 跑测在 PowerShell 进程里加载主程序集并调用 DataBase，所以 provider 的装载要在 PS 里成立：
+#  ① SQLitePCLRaw.core 是强命名：Microsoft.Data.Sqlite 引用 2.1.12，输出里是 2.1.13
+#     （主程序靠自动生成的 binding redirect 接上），PowerShell 没有重定向 ——
+#     用 AssemblyResolve 把请求指回输出目录。
+#  ② e_sqlite3.dll 是原生库，在 runtimes\win-<arch>\native\；PS 进程的 BaseDirectory 不是
+#     输出目录，先在输出目录里预加载一次，之后按名加载就会命中已加载的模块。
+Add-Type -Namespace WpeTest -Name Native -MemberDefinition '[DllImport("kernel32", SetLastError=true, CharSet=CharSet.Unicode)] public static extern IntPtr LoadLibraryW(string path);' -ErrorAction SilentlyContinue
+$nativeDir = Join-Path $bin ("runtimes\win-{0}\native" -f $(if ([Environment]::Is64BitProcess) { 'x64' } else { 'x86' }))
+[WpeTest.Native]::LoadLibraryW((Join-Path $nativeDir 'e_sqlite3.dll')) | Out-Null
+
+$global:WpeResolveBin = $bin
+[AppDomain]::CurrentDomain.add_AssemblyResolve({
+    param($sender, $e)
+    try {
+        $name = (New-Object Reflection.AssemblyName $e.Name).Name
+        $path = Join-Path $global:WpeResolveBin ($name + '.dll')
+        if (Test-Path $path) { return [Reflection.Assembly]::LoadFrom($path) }
+    } catch { }
+    return $null
+}) | Out-Null
+[Reflection.Assembly]::LoadFrom((Join-Path $bin 'Microsoft.Data.Sqlite.dll')) | Out-Null
+
 # 合并 WPEHybrid 之后主程序集是 WinsockPacketEditor.exe（不再有独立的 .dll）
 $asmFile = Join-Path $bin 'WinsockPacketEditor.exe'
 if (-not (Test-Path $asmFile)) { $asmFile = Join-Path $bin 'WinsockPacketEditor.dll' }
@@ -75,8 +98,7 @@ T '整表保存 · 方式' ((Get-V $sc 'LastInjectMethod') -eq 1) (Get-V $sc 'La
 $old = Join-Path $env:TEMP ('wpe-oldlib-' + [Guid]::NewGuid().ToString('N').Substring(0, 8))
 New-Item -ItemType Directory -Path $old | Out-Null
 $dbFile = Join-Path $old ((Get-V $db 'dbName'))
-Add-Type -Path (Join-Path $bin 'System.Data.SQLite.dll')
-$cn = New-Object System.Data.SQLite.SQLiteConnection ("Data Source=" + $dbFile + ";Version=3;")
+$cn = New-Object Microsoft.Data.Sqlite.SqliteConnection ("Data Source=" + $dbFile)
 $cn.Open()
 $cmd = $cn.CreateCommand()
 $cmd.CommandText = "CREATE TABLE SystemConfig (IsAnimation BOOLEAN, IsShadowEnabled BOOLEAN, IsShowInWindow BOOLEAN, IsScrollBarHide BOOLEAN, IsTextRenderingHighQuality BOOLEAN, IsDark BOOLEAN, DefaultLanguage TEXT, LastInjection TEXT);"
@@ -86,13 +108,13 @@ $cn.Close()
 Set-V $db 'dbPath' $old
 $db.GetMethod('InitDB').Invoke($null, @()) | Out-Null
 
-$cn2 = New-Object System.Data.SQLite.SQLiteConnection ("Data Source=" + $dbFile + ";Version=3;")
+$cn2 = New-Object Microsoft.Data.Sqlite.SqliteConnection ("Data Source=" + $dbFile)
 $cn2.Open()
 $c2 = $cn2.CreateCommand()
 $c2.CommandText = "PRAGMA table_info(SystemConfig);"
 $rd = $c2.ExecuteReader()
 $cols = @()
-while ($rd.Read()) { $cols += $rd['name'] }
+while ($rd.Read()) { $cols += [string]$rd['name'] }
 $rd.Close(); $cn2.Close()
 
 foreach ($c in @('LastInjectMethod', 'LastInjectPath', 'LastInjectArgs', 'LastInjectTime')) {

@@ -10,7 +10,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Data.SQLite;
+using Microsoft.Data.Sqlite;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -44,7 +44,7 @@ namespace WinsockPacketEditor
                 ⚠️ 它也进了库文件名（DataBase.dbName ＝ AssemblyVersion + ".db"）：
                 2.1.9 正式版是「2.1.9.db」，测过的「2.1.9 Beta.db」不会被读到 —— 要带过去用备份导出 / 导入。
             */
-            public static bool IsBeta = false;
+            public static bool IsBeta = true;
             /// <summary>MCP 操作需要 WPE 本机确认；默认 false。</summary>
             public static bool McpRequiresConfirmation = false;
             public static bool McpEnabled = true;
@@ -3302,11 +3302,11 @@ namespace WinsockPacketEditor
                 try
                 {
                     DataBase.InitConStr();
-                    using (var conn = new SQLiteConnection(DataBase.conStr))
-                    using (var cmd = new SQLiteCommand("UPDATE SystemConfig SET McpEnabled=@enabled, McpRequiresConfirmation=@value", conn))
+                    using (var conn = new SqliteConnection(DataBase.conStr))
+                    using (var cmd = new SqliteCommand("UPDATE SystemConfig SET McpEnabled=@enabled, McpRequiresConfirmation=@value", conn))
                     {
-                        cmd.Parameters.AddWithValue("@enabled", SystemConfig.McpEnabled);
-                        cmd.Parameters.AddWithValue("@value", SystemConfig.McpRequiresConfirmation);
+                        AddParam(cmd, "@enabled", SystemConfig.McpEnabled);
+                        AddParam(cmd, "@value", SystemConfig.McpRequiresConfirmation);
                         conn.Open();
                         if (cmd.ExecuteNonQuery() == 0) SaveSystemConfig_ToDB();
                     }
@@ -10204,7 +10204,7 @@ namespace WinsockPacketEditor
                                 string IPAddress = dataRow["IPAddress"].ToString();
                                 long StartIP = long.Parse(dataRow["StartIP"].ToString());
                                 long EndIP = long.Parse(dataRow["EndIP"].ToString());
-                                bool IsExpiry = bool.Parse(dataRow["IsExpiry"].ToString());
+                                bool IsExpiry = Convert.ToBoolean(dataRow["IsExpiry"]);
                                 DateTime ExpiryTime = DateTime.Parse(dataRow["ExpiryTime"].ToString());
                                 DateTime CreateTime = DateTime.Parse(dataRow["CreateTime"].ToString());
 
@@ -10235,7 +10235,7 @@ namespace WinsockPacketEditor
                                 string IPAddress = dataRow["IPAddress"].ToString();
                                 long StartIP = long.Parse(dataRow["StartIP"].ToString());
                                 long EndIP = long.Parse(dataRow["EndIP"].ToString());
-                                bool IsExpiry = bool.Parse(dataRow["IsExpiry"].ToString());
+                                bool IsExpiry = Convert.ToBoolean(dataRow["IsExpiry"]);
                                 DateTime ExpiryTime = DateTime.Parse(dataRow["ExpiryTime"].ToString());
                                 DateTime CreateTime = DateTime.Parse(dataRow["CreateTime"].ToString());
 
@@ -13531,7 +13531,7 @@ namespace WinsockPacketEditor
                             登录记录<b>整张表一次读完，再按账号分桶</b>。
 
                             原来是每个账号一次 SelectTable_ProxyAccountIPInfo(AID) ——
-                            那是个 N+1，而且每次都新开一个 SQLiteConnection。
+                            那是个 N+1，而且每次都新开一个 SqliteConnection。
                             2026-09-07 实测：1019 个账号、<b>那张表还是空的</b>，
                             光开连接就花掉 <b>1183ms</b>，占了「进代理模式」那一秒多的绝大部分。
 
@@ -30702,6 +30702,18 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        /// <summary>
+        /// AddWithValue 的 null 兜底。
+        ///
+        /// ⚠️ Microsoft.Data.Sqlite 把「参数的 Value 是 null」当成错误（执行时抛
+        /// InvalidOperationException: Value must be set.），而 System.Data.SQLite 会写成 NULL。
+        /// Operate 里大量字段允许为 null，所以凡经 AddWithValue 的参数一律走这里：null 换成 DBNull.Value。
+        /// </summary>
+        private static void AddParam(SqliteCommand command, string parameterName, object value)
+        {
+            command.Parameters.AddWithValue(parameterName, value ?? DBNull.Value);
+        }
+
         #region//数据库配置
 
         public static class DataBase
@@ -30710,11 +30722,59 @@ namespace WinsockPacketEditor
             public static string dbName = SystemConfig.AssemblyVersion + ".db";
             public static string conStr = string.Empty;
 
+            #region//SqliteDataAdapter 兼容壳
+
+            /// <summary>
+            /// Microsoft.Data.Sqlite 没有 DataAdapter（那是 System.Data.SQLite 专有的），
+            /// 而 Operate 里查表统一只有「adapter.Fill(DataTable)」这一种形状。
+            /// 这个小壳顶住这一个形状：内部就是 SqliteCommand + DataTable.Load。
+            ///
+            /// ⚠️ 原来的 System.Data.SQLite 版在连接关闭时会自己开连接，这里必须照做 ——
+            /// SelectTable_* 一律没写 conn.Open()，靠的就是这个自动行为。
+            /// </summary>
+            private sealed class SqliteDataAdapter : IDisposable
+            {
+                private readonly SqliteCommand _command;
+
+                public SqliteDataAdapter(string sql, SqliteConnection connection)
+                {
+                    _command = new SqliteCommand(sql, connection);
+                }
+
+                public SqliteDataAdapter(SqliteCommand command)
+                {
+                    _command = command;
+                }
+
+                public int Fill(DataTable table)
+                {
+                    SqliteConnection connection = _command.Connection;
+                    if (connection != null && connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+
+                    using (SqliteDataReader reader = _command.ExecuteReader())
+                    {
+                        table.Load(reader);
+                    }
+
+                    return table.Rows.Count;
+                }
+
+                public void Dispose()
+                {
+                    _command.Dispose();
+                }
+            }
+
+            #endregion
+
             #region//初始化
 
             public static void InitConStr()
             {
-                DataBase.conStr = string.Format("Data Source={0}\\{1};Version=3;", DataBase.dbPath, DataBase.dbName);
+                DataBase.conStr = string.Format("Data Source={0}\\{1};", DataBase.dbPath, DataBase.dbName);
             }
 
             public static void InitDB()
@@ -30759,7 +30819,7 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "CREATE TABLE IF NOT EXISTS SystemConfig (";
                         sql += "IsAnimation BOOLEAN DEFAULT 0,";//系统设置 - 启用动画效果
@@ -30829,7 +30889,7 @@ namespace WinsockPacketEditor
                         sql += "ThemeFollowSystem BOOLEAN DEFAULT 0";//系统设置 - 主题跟随系统
                         sql += ");";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -30876,14 +30936,14 @@ namespace WinsockPacketEditor
             ///
             /// <b>以后往任何一张表加列，都在对应的 CreateTable_* 末尾补一句这个。</b>
             /// </summary>
-            private static void EnsureColumn(SQLiteConnection Conn, string Table, string Column, string Declare)
+            private static void EnsureColumn(SqliteConnection Conn, string Table, string Column, string Declare)
             {
                 try
                 {
                     bool exists = false;
 
-                    using (SQLiteCommand cmd = new SQLiteCommand("PRAGMA table_info(" + Table + ");", Conn))
-                    using (SQLiteDataReader r = cmd.ExecuteReader())
+                    using (SqliteCommand cmd = new SqliteCommand("PRAGMA table_info(" + Table + ");", Conn))
+                    using (SqliteDataReader r = cmd.ExecuteReader())
                     {
                         while (r.Read())
                         {
@@ -30900,7 +30960,7 @@ namespace WinsockPacketEditor
 
                     string sql = "ALTER TABLE " + Table + " ADD COLUMN " + Column + " " + Declare + ";";
 
-                    using (SQLiteCommand cmd = new SQLiteCommand(sql, Conn))
+                    using (SqliteCommand cmd = new SqliteCommand(sql, Conn))
                     {
                         cmd.ExecuteNonQuery();
                     }
@@ -30920,11 +30980,11 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "SELECT * FROM SystemConfig;";
 
-                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        using (SqliteDataAdapter adapter = new SqliteDataAdapter(sql, conn))
                         {
                             adapter.Fill(dtReturn);
                         }
@@ -30942,11 +31002,11 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "DELETE FROM SystemConfig;";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -30963,7 +31023,7 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "INSERT INTO SystemConfig (";
                         sql += "IsAnimation,";
@@ -31103,81 +31163,81 @@ namespace WinsockPacketEditor
                         sql += "@ThemeFollowSystem";
                         sql += ");";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {
-                            cmd.Parameters.AddWithValue("@IsAnimation", UI.Prefs.IsAnimation);
-                            cmd.Parameters.AddWithValue("@IsShadowEnabled", UI.Prefs.IsShadowEnabled);
-                            cmd.Parameters.AddWithValue("@IsShowInWindow", UI.Prefs.IsShowInWindow);
-                            cmd.Parameters.AddWithValue("@IsScrollBarHide", UI.Prefs.IsScrollBarHide);
-                            cmd.Parameters.AddWithValue("@IsTextRenderingHighQuality", UI.Prefs.IsTextRenderingHighQuality);
+                            AddParam(cmd, "@IsAnimation", UI.Prefs.IsAnimation);
+                            AddParam(cmd, "@IsShadowEnabled", UI.Prefs.IsShadowEnabled);
+                            AddParam(cmd, "@IsShowInWindow", UI.Prefs.IsShowInWindow);
+                            AddParam(cmd, "@IsScrollBarHide", UI.Prefs.IsScrollBarHide);
+                            AddParam(cmd, "@IsTextRenderingHighQuality", UI.Prefs.IsTextRenderingHighQuality);
                             /*
                                 IsDark 存的是<b>解析后的实际主题</b>，不是「用户选了什么」——
                                 跟随系统时它是那一刻系统给出的值。这样 WinForms 那半边
                                 （AntdUI 只认深浅两态）拿到的一直是个能用的值。
                                 「是不是跟着系统走」由 ThemeFollowSystem 单独记。
                             */
-                            cmd.Parameters.AddWithValue("@IsDark", UI.Prefs.IsDark);
-                            cmd.Parameters.AddWithValue("@ThemeFollowSystem", UI.Prefs.FollowSystemTheme);
-                            cmd.Parameters.AddWithValue("@McpEnabled", SystemConfig.McpEnabled);
-                            cmd.Parameters.AddWithValue("@McpRequiresConfirmation", SystemConfig.McpRequiresConfirmation);
-                            cmd.Parameters.AddWithValue("@DefaultLanguage", UI.Prefs.Language);
-                            cmd.Parameters.AddWithValue("@LastInjection", SystemConfig.LastInjection);
-                            cmd.Parameters.AddWithValue("@LastInjectMethod", SystemConfig.LastInjectMethod);
-                            cmd.Parameters.AddWithValue("@LastInjectPath", SystemConfig.LastInjectPath);
-                            cmd.Parameters.AddWithValue("@LastInjectArgs", SystemConfig.LastInjectArgs);
-                            cmd.Parameters.AddWithValue("@LastInjectTime", SystemConfig.LastInjectTime);
-                            cmd.Parameters.AddWithValue("@Remote_IsEnable", SystemConfig.IsRemote);
-                            cmd.Parameters.AddWithValue("@Remote_UserName", SystemConfig.Remote_UserName);
-                            cmd.Parameters.AddWithValue("@Remote_PassWord", SystemConfig.Remote_PassWord);
-                            cmd.Parameters.AddWithValue("@Remote_Port", SystemConfig.Remote_Port);
-                            cmd.Parameters.AddWithValue("@Remote_IP", SystemConfig.Remote_IP);
-                            cmd.Parameters.AddWithValue("@IsShow_FloatButton", SystemConfig.IsShow_FloatButton);
-                            cmd.Parameters.AddWithValue("@ListExecute", SystemConfig.ListExecute);
-                            cmd.Parameters.AddWithValue("@FilterExecute", FilterConfig.Filter.FilterExecute);
-                            cmd.Parameters.AddWithValue("@LogList_AutoRoll", LogConfig.List.AutoRoll);
-                            cmd.Parameters.AddWithValue("@LogList_AutoClear", LogConfig.List.AutoClear);
-                            cmd.Parameters.AddWithValue("@LogList_AutoClear_Value", LogConfig.List.AutoClear_Value);
-                            cmd.Parameters.AddWithValue("@ScanLine", UI.Prefs.ScanLine);
-                            cmd.Parameters.AddWithValue("@StoresLimit", WareHouseConfig.WareHouse.StoresLimit);
-                            cmd.Parameters.AddWithValue("@StoresLimit_Value", WareHouseConfig.WareHouse.StoresLimit_Value);
-                            cmd.Parameters.AddWithValue("@CheckNotShow", SystemConfig.CheckNotShow);
-                            cmd.Parameters.AddWithValue("@CheckSocket", SystemConfig.CheckSocket);
-                            cmd.Parameters.AddWithValue("@CheckSocket_Value", SystemConfig.CheckSocket_Value);
-                            cmd.Parameters.AddWithValue("@CheckIP", SystemConfig.CheckIP);
-                            cmd.Parameters.AddWithValue("@CheckIP_Value", SystemConfig.CheckIP_Value);
-                            cmd.Parameters.AddWithValue("@CheckPort", SystemConfig.CheckPort);
-                            cmd.Parameters.AddWithValue("@CheckPort_Value", SystemConfig.CheckPort_Value);
-                            cmd.Parameters.AddWithValue("@CheckHead", SystemConfig.CheckHead);
-                            cmd.Parameters.AddWithValue("@CheckHead_Value", SystemConfig.CheckHead_Value);
-                            cmd.Parameters.AddWithValue("@CheckData", SystemConfig.CheckData);
-                            cmd.Parameters.AddWithValue("@CheckData_Value", SystemConfig.CheckData_Value);
-                            cmd.Parameters.AddWithValue("@CheckSize", SystemConfig.CheckLen);
-                            cmd.Parameters.AddWithValue("@CheckLength_Value", SystemConfig.CheckLength_Value);
-                            cmd.Parameters.AddWithValue("@CheckType", SystemConfig.CheckType);
-                            cmd.Parameters.AddWithValue("@CheckType_Value", FilterConfig.Filter.GetFilterFunctionString(SystemConfig.CheckType_Value));
-                            cmd.Parameters.AddWithValue("@HotKeyType", SystemConfig.HotKeyType);
-                            cmd.Parameters.AddWithValue("@HotKey1", SystemConfig.HotKey1);
-                            cmd.Parameters.AddWithValue("@HotKey2", SystemConfig.HotKey2);
-                            cmd.Parameters.AddWithValue("@HotKey3", SystemConfig.HotKey3);
-                            cmd.Parameters.AddWithValue("@HotKey4", SystemConfig.HotKey4);
-                            cmd.Parameters.AddWithValue("@HotKey5", SystemConfig.HotKey5);
-                            cmd.Parameters.AddWithValue("@HotKey6", SystemConfig.HotKey6);
-                            cmd.Parameters.AddWithValue("@HotKey7", SystemConfig.HotKey7);
-                            cmd.Parameters.AddWithValue("@HotKey8", SystemConfig.HotKey8);
-                            cmd.Parameters.AddWithValue("@HotKey9", SystemConfig.HotKey9);
-                            cmd.Parameters.AddWithValue("@HotKey10", SystemConfig.HotKey10);
-                            cmd.Parameters.AddWithValue("@HotKey11", SystemConfig.HotKey11);
-                            cmd.Parameters.AddWithValue("@HotKey12", SystemConfig.HotKey12);
-                            cmd.Parameters.AddWithValue("@SystemColor", UI.Prefs.SystemColor.Argb);
-                            cmd.Parameters.AddWithValue("@SpeedMode", SystemConfig.SpeedMode);
-                            cmd.Parameters.AddWithValue("@FilterReplace_BackColor", UI.Prefs.FilterReplace_BackColor.Argb);
-                            cmd.Parameters.AddWithValue("@FilterReplace_ForeColor", UI.Prefs.FilterReplace_ForeColor.Argb);
-                            cmd.Parameters.AddWithValue("@FilterIntercept_BackColor", UI.Prefs.FilterIntercept_BackColor.Argb);
-                            cmd.Parameters.AddWithValue("@FilterIntercept_ForeColor", UI.Prefs.FilterIntercept_ForeColor.Argb);
-                            cmd.Parameters.AddWithValue("@FilterChange_BackColor", UI.Prefs.FilterChange_BackColor.Argb);
-                            cmd.Parameters.AddWithValue("@FilterChange_ForeColor", UI.Prefs.FilterChange_ForeColor.Argb);
-                            cmd.Parameters.AddWithValue("@FilterDisplay_BackColor", UI.Prefs.FilterDisplay_BackColor.Argb);
-                            cmd.Parameters.AddWithValue("@FilterDisplay_ForeColor", UI.Prefs.FilterDisplay_ForeColor.Argb);
+                            AddParam(cmd, "@IsDark", UI.Prefs.IsDark);
+                            AddParam(cmd, "@ThemeFollowSystem", UI.Prefs.FollowSystemTheme);
+                            AddParam(cmd, "@McpEnabled", SystemConfig.McpEnabled);
+                            AddParam(cmd, "@McpRequiresConfirmation", SystemConfig.McpRequiresConfirmation);
+                            AddParam(cmd, "@DefaultLanguage", UI.Prefs.Language);
+                            AddParam(cmd, "@LastInjection", SystemConfig.LastInjection);
+                            AddParam(cmd, "@LastInjectMethod", SystemConfig.LastInjectMethod);
+                            AddParam(cmd, "@LastInjectPath", SystemConfig.LastInjectPath);
+                            AddParam(cmd, "@LastInjectArgs", SystemConfig.LastInjectArgs);
+                            AddParam(cmd, "@LastInjectTime", SystemConfig.LastInjectTime);
+                            AddParam(cmd, "@Remote_IsEnable", SystemConfig.IsRemote);
+                            AddParam(cmd, "@Remote_UserName", SystemConfig.Remote_UserName);
+                            AddParam(cmd, "@Remote_PassWord", SystemConfig.Remote_PassWord);
+                            AddParam(cmd, "@Remote_Port", SystemConfig.Remote_Port);
+                            AddParam(cmd, "@Remote_IP", SystemConfig.Remote_IP);
+                            AddParam(cmd, "@IsShow_FloatButton", SystemConfig.IsShow_FloatButton);
+                            AddParam(cmd, "@ListExecute", SystemConfig.ListExecute);
+                            AddParam(cmd, "@FilterExecute", FilterConfig.Filter.FilterExecute);
+                            AddParam(cmd, "@LogList_AutoRoll", LogConfig.List.AutoRoll);
+                            AddParam(cmd, "@LogList_AutoClear", LogConfig.List.AutoClear);
+                            AddParam(cmd, "@LogList_AutoClear_Value", LogConfig.List.AutoClear_Value);
+                            AddParam(cmd, "@ScanLine", UI.Prefs.ScanLine);
+                            AddParam(cmd, "@StoresLimit", WareHouseConfig.WareHouse.StoresLimit);
+                            AddParam(cmd, "@StoresLimit_Value", WareHouseConfig.WareHouse.StoresLimit_Value);
+                            AddParam(cmd, "@CheckNotShow", SystemConfig.CheckNotShow);
+                            AddParam(cmd, "@CheckSocket", SystemConfig.CheckSocket);
+                            AddParam(cmd, "@CheckSocket_Value", SystemConfig.CheckSocket_Value);
+                            AddParam(cmd, "@CheckIP", SystemConfig.CheckIP);
+                            AddParam(cmd, "@CheckIP_Value", SystemConfig.CheckIP_Value);
+                            AddParam(cmd, "@CheckPort", SystemConfig.CheckPort);
+                            AddParam(cmd, "@CheckPort_Value", SystemConfig.CheckPort_Value);
+                            AddParam(cmd, "@CheckHead", SystemConfig.CheckHead);
+                            AddParam(cmd, "@CheckHead_Value", SystemConfig.CheckHead_Value);
+                            AddParam(cmd, "@CheckData", SystemConfig.CheckData);
+                            AddParam(cmd, "@CheckData_Value", SystemConfig.CheckData_Value);
+                            AddParam(cmd, "@CheckSize", SystemConfig.CheckLen);
+                            AddParam(cmd, "@CheckLength_Value", SystemConfig.CheckLength_Value);
+                            AddParam(cmd, "@CheckType", SystemConfig.CheckType);
+                            AddParam(cmd, "@CheckType_Value", FilterConfig.Filter.GetFilterFunctionString(SystemConfig.CheckType_Value));
+                            AddParam(cmd, "@HotKeyType", SystemConfig.HotKeyType);
+                            AddParam(cmd, "@HotKey1", SystemConfig.HotKey1);
+                            AddParam(cmd, "@HotKey2", SystemConfig.HotKey2);
+                            AddParam(cmd, "@HotKey3", SystemConfig.HotKey3);
+                            AddParam(cmd, "@HotKey4", SystemConfig.HotKey4);
+                            AddParam(cmd, "@HotKey5", SystemConfig.HotKey5);
+                            AddParam(cmd, "@HotKey6", SystemConfig.HotKey6);
+                            AddParam(cmd, "@HotKey7", SystemConfig.HotKey7);
+                            AddParam(cmd, "@HotKey8", SystemConfig.HotKey8);
+                            AddParam(cmd, "@HotKey9", SystemConfig.HotKey9);
+                            AddParam(cmd, "@HotKey10", SystemConfig.HotKey10);
+                            AddParam(cmd, "@HotKey11", SystemConfig.HotKey11);
+                            AddParam(cmd, "@HotKey12", SystemConfig.HotKey12);
+                            AddParam(cmd, "@SystemColor", UI.Prefs.SystemColor.Argb);
+                            AddParam(cmd, "@SpeedMode", SystemConfig.SpeedMode);
+                            AddParam(cmd, "@FilterReplace_BackColor", UI.Prefs.FilterReplace_BackColor.Argb);
+                            AddParam(cmd, "@FilterReplace_ForeColor", UI.Prefs.FilterReplace_ForeColor.Argb);
+                            AddParam(cmd, "@FilterIntercept_BackColor", UI.Prefs.FilterIntercept_BackColor.Argb);
+                            AddParam(cmd, "@FilterIntercept_ForeColor", UI.Prefs.FilterIntercept_ForeColor.Argb);
+                            AddParam(cmd, "@FilterChange_BackColor", UI.Prefs.FilterChange_BackColor.Argb);
+                            AddParam(cmd, "@FilterChange_ForeColor", UI.Prefs.FilterChange_ForeColor.Argb);
+                            AddParam(cmd, "@FilterDisplay_BackColor", UI.Prefs.FilterDisplay_BackColor.Argb);
+                            AddParam(cmd, "@FilterDisplay_ForeColor", UI.Prefs.FilterDisplay_ForeColor.Argb);
                             
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -31195,7 +31255,7 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         /*
                             ⚠️⚠️ 这条 SQL 原来写的是 `SET SystemConfig_LastInjection = …`，
@@ -31213,13 +31273,13 @@ namespace WinsockPacketEditor
                             + " LastInjectArgs = @LastInjectArgs,"
                             + " LastInjectTime = @LastInjectTime;";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {
-                            cmd.Parameters.AddWithValue("@LastInjection", SystemConfig.LastInjection);
-                            cmd.Parameters.AddWithValue("@LastInjectMethod", SystemConfig.LastInjectMethod);
-                            cmd.Parameters.AddWithValue("@LastInjectPath", SystemConfig.LastInjectPath);
-                            cmd.Parameters.AddWithValue("@LastInjectArgs", SystemConfig.LastInjectArgs);
-                            cmd.Parameters.AddWithValue("@LastInjectTime", SystemConfig.LastInjectTime);
+                            AddParam(cmd, "@LastInjection", SystemConfig.LastInjection);
+                            AddParam(cmd, "@LastInjectMethod", SystemConfig.LastInjectMethod);
+                            AddParam(cmd, "@LastInjectPath", SystemConfig.LastInjectPath);
+                            AddParam(cmd, "@LastInjectArgs", SystemConfig.LastInjectArgs);
+                            AddParam(cmd, "@LastInjectTime", SystemConfig.LastInjectTime);
 
                             conn.Open();
                             return cmd.ExecuteNonQuery();
@@ -31245,7 +31305,7 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "CREATE TABLE IF NOT EXISTS InjectMode (";                        
                         sql += "HookWS1_Send BOOLEAN DEFAULT 1,";//发送1.1
@@ -31265,7 +31325,7 @@ namespace WinsockPacketEditor
                         sql += "PacketList_AutoClear_Value INTEGER DEFAULT 5000";//封包列表自动清理数值
                         sql += ");";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -31288,11 +31348,11 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "SELECT * FROM InjectMode;";
 
-                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        using (SqliteDataAdapter adapter = new SqliteDataAdapter(sql, conn))
                         {
                             adapter.Fill(dtReturn);
                         }
@@ -31310,11 +31370,11 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "DELETE FROM InjectMode;";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -31331,7 +31391,7 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "INSERT INTO InjectMode (";
                         sql += "HookWS1_Send,";
@@ -31367,23 +31427,23 @@ namespace WinsockPacketEditor
                         sql += "@PacketList_AutoClear_Value";
                         sql += ");";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {  
-                            cmd.Parameters.AddWithValue("@HookWS1_Send", PacketConfig.Packet.HookWS1_Send);
-                            cmd.Parameters.AddWithValue("@HookWS1_SendTo", PacketConfig.Packet.HookWS1_SendTo);
-                            cmd.Parameters.AddWithValue("@HookWS1_Recv", PacketConfig.Packet.HookWS1_Recv);
-                            cmd.Parameters.AddWithValue("@HookWS1_RecvFrom", PacketConfig.Packet.HookWS1_RecvFrom);
-                            cmd.Parameters.AddWithValue("@HookWS2_Send", PacketConfig.Packet.HookWS2_Send);
-                            cmd.Parameters.AddWithValue("@HookWS2_SendTo", PacketConfig.Packet.HookWS2_SendTo);
-                            cmd.Parameters.AddWithValue("@HookWS2_Recv", PacketConfig.Packet.HookWS2_Recv);
-                            cmd.Parameters.AddWithValue("@HookWS2_RecvFrom", PacketConfig.Packet.HookWS2_RecvFrom);
-                            cmd.Parameters.AddWithValue("@HookWSA_Send", PacketConfig.Packet.HookWSA_Send);
-                            cmd.Parameters.AddWithValue("@HookWSA_SendTo", PacketConfig.Packet.HookWSA_SendTo);
-                            cmd.Parameters.AddWithValue("@HookWSA_Recv", PacketConfig.Packet.HookWSA_Recv);
-                            cmd.Parameters.AddWithValue("@HookWSA_RecvFrom", PacketConfig.Packet.HookWSA_RecvFrom);                            
-                            cmd.Parameters.AddWithValue("@PacketList_AutoRoll", PacketConfig.List.AutoRoll);
-                            cmd.Parameters.AddWithValue("@PacketList_AutoClear", PacketConfig.List.AutoClear);
-                            cmd.Parameters.AddWithValue("@PacketList_AutoClear_Value", PacketConfig.List.AutoClear_Value);  
+                            AddParam(cmd, "@HookWS1_Send", PacketConfig.Packet.HookWS1_Send);
+                            AddParam(cmd, "@HookWS1_SendTo", PacketConfig.Packet.HookWS1_SendTo);
+                            AddParam(cmd, "@HookWS1_Recv", PacketConfig.Packet.HookWS1_Recv);
+                            AddParam(cmd, "@HookWS1_RecvFrom", PacketConfig.Packet.HookWS1_RecvFrom);
+                            AddParam(cmd, "@HookWS2_Send", PacketConfig.Packet.HookWS2_Send);
+                            AddParam(cmd, "@HookWS2_SendTo", PacketConfig.Packet.HookWS2_SendTo);
+                            AddParam(cmd, "@HookWS2_Recv", PacketConfig.Packet.HookWS2_Recv);
+                            AddParam(cmd, "@HookWS2_RecvFrom", PacketConfig.Packet.HookWS2_RecvFrom);
+                            AddParam(cmd, "@HookWSA_Send", PacketConfig.Packet.HookWSA_Send);
+                            AddParam(cmd, "@HookWSA_SendTo", PacketConfig.Packet.HookWSA_SendTo);
+                            AddParam(cmd, "@HookWSA_Recv", PacketConfig.Packet.HookWSA_Recv);
+                            AddParam(cmd, "@HookWSA_RecvFrom", PacketConfig.Packet.HookWSA_RecvFrom);                            
+                            AddParam(cmd, "@PacketList_AutoRoll", PacketConfig.List.AutoRoll);
+                            AddParam(cmd, "@PacketList_AutoClear", PacketConfig.List.AutoClear);
+                            AddParam(cmd, "@PacketList_AutoClear_Value", PacketConfig.List.AutoClear_Value);  
 
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -31406,7 +31466,7 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "CREATE TABLE IF NOT EXISTS ProxyMode (";
                         sql += "ProxyIP_Auto BOOLEAN DEFAULT 1,";//代理模式 - 自动检测IP                        
@@ -31452,7 +31512,7 @@ namespace WinsockPacketEditor
                         sql += "Only_WPC_Client BOOLEAN DEFAULT 0";//代理模式 - 只允许 WPC 客户端连接（2026-09-14）
                         sql += ");";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -31482,11 +31542,11 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "SELECT * FROM ProxyMode;";
 
-                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        using (SqliteDataAdapter adapter = new SqliteDataAdapter(sql, conn))
                         {
                             adapter.Fill(dtReturn);
                         }
@@ -31504,11 +31564,11 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "DELETE FROM ProxyMode;";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -31525,7 +31585,7 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "INSERT INTO ProxyMode (";
                         sql += "ProxyIP_Auto,";
@@ -31613,49 +31673,49 @@ namespace WinsockPacketEditor
                         sql += "@DnsMode";
                         sql += ");";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {
-                            cmd.Parameters.AddWithValue("@ProxyIP_Auto", ProxyConfig.Proxy.ProxyIP_Auto);
-                            cmd.Parameters.AddWithValue("@Enable_SOCKS5", ProxyConfig.Proxy.Enable_SOCKS5);
-                            cmd.Parameters.AddWithValue("@Enable_HTTP", ProxyConfig.Proxy.Enable_HTTP);
-                            cmd.Parameters.AddWithValue("@ProxyIP", ProxyConfig.Proxy.ProxyIP);
-                            cmd.Parameters.AddWithValue("@SOCKS5_Port", ProxyConfig.Proxy.SOCKS5_Port);
-                            cmd.Parameters.AddWithValue("@HTTP_Port", ProxyConfig.Proxy.HTTP_Port);
-                            cmd.Parameters.AddWithValue("@EnableAuth", ProxyConfig.Proxy.Enable_Auth);
-                            cmd.Parameters.AddWithValue("@MaxConnectionNumber", ProxyConfig.Proxy.MaxConnectionNumber);
-                            cmd.Parameters.AddWithValue("@Enable_UnPack", ProxyConfig.Proxy.Enable_UnPack);
-                            cmd.Parameters.AddWithValue("@UnPack_Head", ProxyConfig.Proxy.UnPack_Head);
-                            cmd.Parameters.AddWithValue("@UnPack_Length", ProxyConfig.Proxy.UnPack_Length);
-                            cmd.Parameters.AddWithValue("@Enable_MapLocal", ProxyConfig.Mapping.Enable_MapLocal);
-                            cmd.Parameters.AddWithValue("@Enable_MapRemote", ProxyConfig.Mapping.Enable_MapRemote);
-                            cmd.Parameters.AddWithValue("@Enable_ExternalProxy", ProxyConfig.Proxy.Enable_ExternalProxy);
-                            cmd.Parameters.AddWithValue("@ExternalProxy_IP", ProxyConfig.Proxy.ExternalProxy_IP);
-                            cmd.Parameters.AddWithValue("@ExternalProxy_Port", ProxyConfig.Proxy.ExternalProxy_Port);
-                            cmd.Parameters.AddWithValue("@Enable_ExternalProxy_AppointPort", ProxyConfig.Proxy.Enable_ExternalProxy_AppointPort);
-                            cmd.Parameters.AddWithValue("@ExternalProxy_AppointPort", ProxyConfig.Proxy.ExternalProxy_AppointPort);
-                            cmd.Parameters.AddWithValue("@Enable_ExternalProxy_Auth", ProxyConfig.Proxy.Enable_ExternalProxy_Auth);
-                            cmd.Parameters.AddWithValue("@ExternalProxy_UserName", ProxyConfig.Proxy.ExternalProxy_UserName);
-                            cmd.Parameters.AddWithValue("@ExternalProxy_PassWord", ProxyConfig.Proxy.ExternalProxy_PassWord);
-                            cmd.Parameters.AddWithValue("@MustTCP", ProxyConfig.Proxy.MustTCP);
-                            cmd.Parameters.AddWithValue("@MustTCP_IP", ProxyConfig.Proxy.MustTCP_IP);
-                            cmd.Parameters.AddWithValue("@MustTCP_Port", ProxyConfig.Proxy.MustTCP_Port);
-                            cmd.Parameters.AddWithValue("@MustTCP_Auth", ProxyConfig.Proxy.MustTCP_Auth);
-                            cmd.Parameters.AddWithValue("@MustTCP_UserName", ProxyConfig.Proxy.MustTCP_UserName);
-                            cmd.Parameters.AddWithValue("@MustTCP_PassWord", ProxyConfig.Proxy.MustTCP_PassWord);
-                            cmd.Parameters.AddWithValue("@MustTCP_AppointPort", ProxyConfig.Proxy.MustTCP_AppointPort);
-                            cmd.Parameters.AddWithValue("@MustTCP_AppointPortContent", ProxyConfig.Proxy.MustTCP_AppointPortContent);
-                            cmd.Parameters.AddWithValue("@EnableFireWall", ProxyConfig.Proxy.EnableFireWall);
-                            cmd.Parameters.AddWithValue("@Only_WPC_Client", ProxyConfig.Proxy.Only_WPC_Client);
-                            cmd.Parameters.AddWithValue("@WhiteListMode", ProxyConfig.Proxy.WhiteListMode);
-                            cmd.Parameters.AddWithValue("@FireWall_AutoWhiteList_AuthSuccess", ProxyConfig.Proxy.FireWall_AutoWhiteList_AuthSuccess);
-                            cmd.Parameters.AddWithValue("@FireWall_AutoBlackList_UnSupport", ProxyConfig.Proxy.FireWall_AutoBlackList_UnSupport);
-                            cmd.Parameters.AddWithValue("@FireWall_AutoBlackList_AuthFail", ProxyConfig.Proxy.FireWall_AutoBlackList_AuthFail);
-                            cmd.Parameters.AddWithValue("@FireWall_AutoBlackList_Minutes", ProxyConfig.Proxy.FireWall_AutoBlackList_Minutes);
-                            cmd.Parameters.AddWithValue("@FireWall_AutoClear_Expiry", ProxyConfig.Proxy.FireWall_AutoClear_Expiry);
-                            cmd.Parameters.AddWithValue("@DriverType", ProxyConfig.Proxy.DriverType);
-                            cmd.Parameters.AddWithValue("@SelectProcessNames", ProxyConfig.Proxy.SerializeSelectProcessNames());
-                            cmd.Parameters.AddWithValue("@TunStack", ProxyConfig.Proxy.TunStack ?? "system");
-                            cmd.Parameters.AddWithValue("@DnsMode", ProxyConfig.Proxy.DnsMode ?? "fake-ip");
+                            AddParam(cmd, "@ProxyIP_Auto", ProxyConfig.Proxy.ProxyIP_Auto);
+                            AddParam(cmd, "@Enable_SOCKS5", ProxyConfig.Proxy.Enable_SOCKS5);
+                            AddParam(cmd, "@Enable_HTTP", ProxyConfig.Proxy.Enable_HTTP);
+                            AddParam(cmd, "@ProxyIP", ProxyConfig.Proxy.ProxyIP);
+                            AddParam(cmd, "@SOCKS5_Port", ProxyConfig.Proxy.SOCKS5_Port);
+                            AddParam(cmd, "@HTTP_Port", ProxyConfig.Proxy.HTTP_Port);
+                            AddParam(cmd, "@EnableAuth", ProxyConfig.Proxy.Enable_Auth);
+                            AddParam(cmd, "@MaxConnectionNumber", ProxyConfig.Proxy.MaxConnectionNumber);
+                            AddParam(cmd, "@Enable_UnPack", ProxyConfig.Proxy.Enable_UnPack);
+                            AddParam(cmd, "@UnPack_Head", ProxyConfig.Proxy.UnPack_Head);
+                            AddParam(cmd, "@UnPack_Length", ProxyConfig.Proxy.UnPack_Length);
+                            AddParam(cmd, "@Enable_MapLocal", ProxyConfig.Mapping.Enable_MapLocal);
+                            AddParam(cmd, "@Enable_MapRemote", ProxyConfig.Mapping.Enable_MapRemote);
+                            AddParam(cmd, "@Enable_ExternalProxy", ProxyConfig.Proxy.Enable_ExternalProxy);
+                            AddParam(cmd, "@ExternalProxy_IP", ProxyConfig.Proxy.ExternalProxy_IP);
+                            AddParam(cmd, "@ExternalProxy_Port", ProxyConfig.Proxy.ExternalProxy_Port);
+                            AddParam(cmd, "@Enable_ExternalProxy_AppointPort", ProxyConfig.Proxy.Enable_ExternalProxy_AppointPort);
+                            AddParam(cmd, "@ExternalProxy_AppointPort", ProxyConfig.Proxy.ExternalProxy_AppointPort);
+                            AddParam(cmd, "@Enable_ExternalProxy_Auth", ProxyConfig.Proxy.Enable_ExternalProxy_Auth);
+                            AddParam(cmd, "@ExternalProxy_UserName", ProxyConfig.Proxy.ExternalProxy_UserName);
+                            AddParam(cmd, "@ExternalProxy_PassWord", ProxyConfig.Proxy.ExternalProxy_PassWord);
+                            AddParam(cmd, "@MustTCP", ProxyConfig.Proxy.MustTCP);
+                            AddParam(cmd, "@MustTCP_IP", ProxyConfig.Proxy.MustTCP_IP);
+                            AddParam(cmd, "@MustTCP_Port", ProxyConfig.Proxy.MustTCP_Port);
+                            AddParam(cmd, "@MustTCP_Auth", ProxyConfig.Proxy.MustTCP_Auth);
+                            AddParam(cmd, "@MustTCP_UserName", ProxyConfig.Proxy.MustTCP_UserName);
+                            AddParam(cmd, "@MustTCP_PassWord", ProxyConfig.Proxy.MustTCP_PassWord);
+                            AddParam(cmd, "@MustTCP_AppointPort", ProxyConfig.Proxy.MustTCP_AppointPort);
+                            AddParam(cmd, "@MustTCP_AppointPortContent", ProxyConfig.Proxy.MustTCP_AppointPortContent);
+                            AddParam(cmd, "@EnableFireWall", ProxyConfig.Proxy.EnableFireWall);
+                            AddParam(cmd, "@Only_WPC_Client", ProxyConfig.Proxy.Only_WPC_Client);
+                            AddParam(cmd, "@WhiteListMode", ProxyConfig.Proxy.WhiteListMode);
+                            AddParam(cmd, "@FireWall_AutoWhiteList_AuthSuccess", ProxyConfig.Proxy.FireWall_AutoWhiteList_AuthSuccess);
+                            AddParam(cmd, "@FireWall_AutoBlackList_UnSupport", ProxyConfig.Proxy.FireWall_AutoBlackList_UnSupport);
+                            AddParam(cmd, "@FireWall_AutoBlackList_AuthFail", ProxyConfig.Proxy.FireWall_AutoBlackList_AuthFail);
+                            AddParam(cmd, "@FireWall_AutoBlackList_Minutes", ProxyConfig.Proxy.FireWall_AutoBlackList_Minutes);
+                            AddParam(cmd, "@FireWall_AutoClear_Expiry", ProxyConfig.Proxy.FireWall_AutoClear_Expiry);
+                            AddParam(cmd, "@DriverType", ProxyConfig.Proxy.DriverType);
+                            AddParam(cmd, "@SelectProcessNames", ProxyConfig.Proxy.SerializeSelectProcessNames());
+                            AddParam(cmd, "@TunStack", ProxyConfig.Proxy.TunStack ?? "system");
+                            AddParam(cmd, "@DnsMode", ProxyConfig.Proxy.DnsMode ?? "fake-ip");
 
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -31678,7 +31738,7 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "CREATE TABLE IF NOT EXISTS Filter (";
                         sql += "GUID TEXT NOT NULL PRIMARY KEY,";
@@ -31710,7 +31770,7 @@ namespace WinsockPacketEditor
                         sql += "Modify TEXT";
                         sql += ");";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -31733,11 +31793,11 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "SELECT * FROM Filter;";
 
-                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        using (SqliteDataAdapter adapter = new SqliteDataAdapter(sql, conn))
                         {
                             adapter.Fill(dtReturn);
                         }
@@ -31764,16 +31824,16 @@ namespace WinsockPacketEditor
             /// 拆成这样而不是另写一份批量版：那段 SQL 与 26 个参数赋值有一百行，
             /// 复制一份就等于以后每加一个字段都要改两处，迟早走岔。
             /// </summary>
-            public static void InsertTable_Filter(FilterInfo fi, SQLiteConnection Conn, SQLiteTransaction Tx)
+            public static void InsertTable_Filter(FilterInfo fi, SqliteConnection Conn, SqliteTransaction Tx)
             {
-                SQLiteConnection conn = Conn;
+                SqliteConnection conn = Conn;
                 bool own = conn == null;
 
                 try
                 {
                     if (own)
                     {
-                        conn = new SQLiteConnection(conStr);
+                        conn = new SqliteConnection(conStr);
                     }
 
                     {
@@ -31835,38 +31895,38 @@ namespace WinsockPacketEditor
                         sql += "@Modify";
                         sql += ");";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {
                             //借来的事务要挂上去，否则这条 INSERT 会自成一个事务、脱离整批
                             if (Tx != null) { cmd.Transaction = Tx; }
 
-                            cmd.Parameters.AddWithValue("@GUID", fi.FID.ToString().ToUpper());
-                            cmd.Parameters.AddWithValue("@IsEnable", fi.IsEnable);
-                            cmd.Parameters.AddWithValue("@Name", fi.FName);
-                            cmd.Parameters.AddWithValue("@AppointHeader", fi.AppointHeader);
-                            cmd.Parameters.AddWithValue("@HeaderContent", fi.HeaderContent);
-                            cmd.Parameters.AddWithValue("@AppointSocket", fi.AppointSocket);
-                            cmd.Parameters.AddWithValue("@SocketContent", fi.SocketContent);
-                            cmd.Parameters.AddWithValue("@AppointLength", fi.AppointLength);
-                            cmd.Parameters.AddWithValue("@LengthContent", fi.LengthContent);
-                            cmd.Parameters.AddWithValue("@AppointPort", fi.AppointPort);
-                            cmd.Parameters.AddWithValue("@PortContent", fi.PortContent);
-                            cmd.Parameters.AddWithValue("@Mode", fi.FMode);
-                            cmd.Parameters.AddWithValue("@Action", fi.FAction);
-                            cmd.Parameters.AddWithValue("@IsExecute", fi.IsExecute);
-                            cmd.Parameters.AddWithValue("@ExecuteType", fi.FEType);
-                            cmd.Parameters.AddWithValue("@ExecuteGUID", fi.Execute_GUID.ToString().ToUpper());
-                            cmd.Parameters.AddWithValue("@Function", FilterConfig.Filter.GetFilterFunctionString(fi.FFunction));
-                            cmd.Parameters.AddWithValue("@StartFrom", fi.FStartFrom);
-                            cmd.Parameters.AddWithValue("@IsProgressionContinuous",fi.IsProgressionContinuous);
-                            cmd.Parameters.AddWithValue("@ProgressionStep", fi.ProgressionStep);
-                            cmd.Parameters.AddWithValue("@IsProgressionCarry", fi.IsProgressionCarry);
-                            cmd.Parameters.AddWithValue("@ProgressionCarryNumber", fi.ProgressionCarryNumber);
-                            cmd.Parameters.AddWithValue("@ProgressionPosition", fi.ProgressionPosition);
-                            cmd.Parameters.AddWithValue("@ExcludePosition", fi.ExcludePosition);
-                            cmd.Parameters.AddWithValue("@RandomPosition", fi.RandomPosition);
-                            cmd.Parameters.AddWithValue("@Search", fi.FSearch);
-                            cmd.Parameters.AddWithValue("@Modify", fi.FModify);
+                            AddParam(cmd, "@GUID", fi.FID.ToString().ToUpper());
+                            AddParam(cmd, "@IsEnable", fi.IsEnable);
+                            AddParam(cmd, "@Name", fi.FName);
+                            AddParam(cmd, "@AppointHeader", fi.AppointHeader);
+                            AddParam(cmd, "@HeaderContent", fi.HeaderContent);
+                            AddParam(cmd, "@AppointSocket", fi.AppointSocket);
+                            AddParam(cmd, "@SocketContent", fi.SocketContent);
+                            AddParam(cmd, "@AppointLength", fi.AppointLength);
+                            AddParam(cmd, "@LengthContent", fi.LengthContent);
+                            AddParam(cmd, "@AppointPort", fi.AppointPort);
+                            AddParam(cmd, "@PortContent", fi.PortContent);
+                            AddParam(cmd, "@Mode", fi.FMode);
+                            AddParam(cmd, "@Action", fi.FAction);
+                            AddParam(cmd, "@IsExecute", fi.IsExecute);
+                            AddParam(cmd, "@ExecuteType", fi.FEType);
+                            AddParam(cmd, "@ExecuteGUID", fi.Execute_GUID.ToString().ToUpper());
+                            AddParam(cmd, "@Function", FilterConfig.Filter.GetFilterFunctionString(fi.FFunction));
+                            AddParam(cmd, "@StartFrom", fi.FStartFrom);
+                            AddParam(cmd, "@IsProgressionContinuous",fi.IsProgressionContinuous);
+                            AddParam(cmd, "@ProgressionStep", fi.ProgressionStep);
+                            AddParam(cmd, "@IsProgressionCarry", fi.IsProgressionCarry);
+                            AddParam(cmd, "@ProgressionCarryNumber", fi.ProgressionCarryNumber);
+                            AddParam(cmd, "@ProgressionPosition", fi.ProgressionPosition);
+                            AddParam(cmd, "@ExcludePosition", fi.ExcludePosition);
+                            AddParam(cmd, "@RandomPosition", fi.RandomPosition);
+                            AddParam(cmd, "@Search", fi.FSearch);
+                            AddParam(cmd, "@Modify", fi.FModify);
 
                             //借来的连接已经是开着的，再 Open 一次会抛
                             if (own) { conn.Open(); }
@@ -31906,13 +31966,13 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         conn.Open();
 
-                        using (SQLiteTransaction tx = conn.BeginTransaction())
+                        using (SqliteTransaction tx = conn.BeginTransaction())
                         {
-                            using (SQLiteCommand del = new SQLiteCommand("DELETE FROM Filter;", conn, tx))
+                            using (SqliteCommand del = new SqliteCommand("DELETE FROM Filter;", conn, tx))
                             {
                                 del.ExecuteNonQuery();
                             }
@@ -31949,7 +32009,7 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "CREATE TABLE IF NOT EXISTS Send (";
                         sql += "GUID TEXT NOT NULL PRIMARY KEY,";
@@ -31971,7 +32031,7 @@ namespace WinsockPacketEditor
                         sql += "FOREIGN KEY (GUID) REFERENCES Send(GUID)";
                         sql += ");";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -31994,11 +32054,11 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "SELECT * FROM Send;";
 
-                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        using (SqliteDataAdapter adapter = new SqliteDataAdapter(sql, conn))
                         {
                             adapter.Fill(dtReturn);
                         }
@@ -32016,7 +32076,7 @@ namespace WinsockPacketEditor
             /// 整张 SendCollection 表一次读完，配合 <see cref="GroupRowsBy"/> 用。
             ///
             /// ⚠️ <b>加载列表时必须用这个，别按发送一条条查。</b>
-            /// 下面那个按主键的重载每调一次就新开一个 SQLiteConnection，
+            /// 下面那个按主键的重载每调一次就新开一个 SqliteConnection，
             /// <b>开连接就是全部代价</b>（账号那份实测：1019 条、子表还是空的，
             /// 逐条查 1183ms → 整表读一次 46ms）。
             ///
@@ -32028,11 +32088,11 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
-                        using (SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM SendCollection;", conn))
+                        using (SqliteCommand cmd = new SqliteCommand("SELECT * FROM SendCollection;", conn))
                         {
-                            SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                            SqliteDataAdapter adapter = new SqliteDataAdapter(cmd);
                             adapter.Fill(dtReturn);
                         }
                     }
@@ -32051,15 +32111,15 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "SELECT * FROM SendCollection WHERE GUID = @GUID;";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {
-                            cmd.Parameters.AddWithValue("@GUID", guid.ToString().ToUpper());
+                            AddParam(cmd, "@GUID", guid.ToString().ToUpper());
 
-                            SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                            SqliteDataAdapter adapter = new SqliteDataAdapter(cmd);
                             adapter.Fill(dtReturn);
                         }
                     }
@@ -32076,11 +32136,11 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         conn.Open();
 
-                        using (SQLiteTransaction tx = conn.BeginTransaction())
+                        using (SqliteTransaction tx = conn.BeginTransaction())
                         {
                             InsertTable_Send(si, conn, tx);
                             tx.Commit();
@@ -32094,21 +32154,21 @@ namespace WinsockPacketEditor
             }
 
             /// <summary>用<b>调用方的连接与事务</b>插一条发送 + 它的发送集（不提交）。SQL 只有这一份。</summary>
-            public static bool InsertTable_Send(SendInfo si, SQLiteConnection conn, SQLiteTransaction tx)
+            public static bool InsertTable_Send(SendInfo si, SqliteConnection conn, SqliteTransaction tx)
             {
                 try
                 {
                     string sql = "INSERT INTO Send (GUID, IsEnable, Name, SystemSocket, LoopCNT, LoopINT, Notes) VALUES (@GUID, @IsEnable, @Name, @SystemSocket, @LoopCNT, @LoopINT, @Notes);";
 
-                    using (SQLiteCommand cmd = new SQLiteCommand(sql, conn, tx))
+                    using (SqliteCommand cmd = new SqliteCommand(sql, conn, tx))
                     {
-                        cmd.Parameters.AddWithValue("@GUID", si.SID.ToString().ToUpper());
-                        cmd.Parameters.AddWithValue("@IsEnable", si.IsEnable);
-                        cmd.Parameters.AddWithValue("@Name", si.SName);
-                        cmd.Parameters.AddWithValue("@SystemSocket", false);   //不过库，见 LoadSendList_FromDB
-                        cmd.Parameters.AddWithValue("@LoopCNT", si.SLoopCNT);
-                        cmd.Parameters.AddWithValue("@LoopINT", si.SLoopINT);
-                        cmd.Parameters.AddWithValue("@Notes", si.SNotes);
+                        AddParam(cmd, "@GUID", si.SID.ToString().ToUpper());
+                        AddParam(cmd, "@IsEnable", si.IsEnable);
+                        AddParam(cmd, "@Name", si.SName);
+                        AddParam(cmd, "@SystemSocket", false);   //不过库，见 LoadSendList_FromDB
+                        AddParam(cmd, "@LoopCNT", si.SLoopCNT);
+                        AddParam(cmd, "@LoopINT", si.SLoopINT);
+                        AddParam(cmd, "@Notes", si.SNotes);
                         cmd.ExecuteNonQuery();
                     }
 
@@ -32116,23 +32176,23 @@ namespace WinsockPacketEditor
                     {
                         string sqlPacket = "INSERT INTO SendCollection (GUID, Socket, Type, IPFrom, IPTo, Buffer) VALUES (@GUID, @Socket, @Type, @IPFrom, @IPTo, @Buffer);";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sqlPacket, conn, tx))
+                        using (SqliteCommand cmd = new SqliteCommand(sqlPacket, conn, tx))
                         {
-                            cmd.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
-                            cmd.Parameters.Add(new SQLiteParameter("@Socket", DbType.Int32));
-                            cmd.Parameters.Add(new SQLiteParameter("@Type", DbType.Int32));
-                            cmd.Parameters.Add(new SQLiteParameter("@IPFrom", DbType.String));
-                            cmd.Parameters.Add(new SQLiteParameter("@IPTo", DbType.String));
-                            cmd.Parameters.Add(new SQLiteParameter("@Buffer", DbType.Binary));
+                            cmd.Parameters.Add(new SqliteParameter("@GUID", SqliteType.Text));
+                            cmd.Parameters.Add(new SqliteParameter("@Socket", SqliteType.Integer));
+                            cmd.Parameters.Add(new SqliteParameter("@Type", SqliteType.Integer));
+                            cmd.Parameters.Add(new SqliteParameter("@IPFrom", SqliteType.Text));
+                            cmd.Parameters.Add(new SqliteParameter("@IPTo", SqliteType.Text));
+                            cmd.Parameters.Add(new SqliteParameter("@Buffer", SqliteType.Blob));
 
                             foreach (PacketInfo pi in si.SCollection)
                             {
-                                cmd.Parameters["@GUID"].Value = si.SID.ToString().ToUpper();
-                                cmd.Parameters["@Socket"].Value = pi.PacketSocket;
-                                cmd.Parameters["@Type"].Value = pi.PacketType;
-                                cmd.Parameters["@IPFrom"].Value = pi.PacketFrom;
-                                cmd.Parameters["@IPTo"].Value = pi.PacketTo;
-                                cmd.Parameters["@Buffer"].Value = pi.PacketBuffer;
+                                cmd.Parameters["@GUID"].Value = (object)si.SID.ToString().ToUpper() ?? DBNull.Value;
+                                cmd.Parameters["@Socket"].Value = (object)pi.PacketSocket ?? DBNull.Value;
+                                cmd.Parameters["@Type"].Value = (object)pi.PacketType ?? DBNull.Value;
+                                cmd.Parameters["@IPFrom"].Value = (object)pi.PacketFrom ?? DBNull.Value;
+                                cmd.Parameters["@IPTo"].Value = (object)pi.PacketTo ?? DBNull.Value;
+                                cmd.Parameters["@Buffer"].Value = (object)pi.PacketBuffer ?? DBNull.Value;
                                 cmd.ExecuteNonQuery();
                             }
                         }
@@ -32152,13 +32212,13 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         conn.Open();
 
-                        using (SQLiteTransaction tx = conn.BeginTransaction())
+                        using (SqliteTransaction tx = conn.BeginTransaction())
                         {
-                            using (SQLiteCommand del = new SQLiteCommand("DELETE FROM SendCollection; DELETE FROM Send;", conn, tx))
+                            using (SqliteCommand del = new SqliteCommand("DELETE FROM SendCollection; DELETE FROM Send;", conn, tx))
                             {
                                 del.ExecuteNonQuery();
                             }
@@ -32191,7 +32251,7 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "CREATE TABLE IF NOT EXISTS Robot (";
                         sql += "GUID TEXT NOT NULL PRIMARY KEY,";
@@ -32206,7 +32266,7 @@ namespace WinsockPacketEditor
                         sql += "FOREIGN KEY (GUID) REFERENCES Robot(GUID)";
                         sql += ");";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -32229,11 +32289,11 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "SELECT * FROM Robot;";
 
-                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        using (SqliteDataAdapter adapter = new SqliteDataAdapter(sql, conn))
                         {
                             adapter.Fill(dtReturn);
                         }
@@ -32251,7 +32311,7 @@ namespace WinsockPacketEditor
             /// 整张 RobotInstruction 表一次读完，配合 <see cref="GroupRowsBy"/> 用。
             ///
             /// ⚠️ <b>加载列表时必须用这个，别按机器人一条条查。</b>
-            /// 下面那个按主键的重载每调一次就新开一个 SQLiteConnection，
+            /// 下面那个按主键的重载每调一次就新开一个 SqliteConnection，
             /// <b>开连接就是全部代价</b>（账号那份实测：1019 条、子表还是空的，
             /// 逐条查 1183ms → 整表读一次 46ms）。
             ///
@@ -32263,11 +32323,11 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
-                        using (SQLiteCommand cmd = new SQLiteCommand("SELECT GUID, Type, Content FROM RobotInstruction;", conn))
+                        using (SqliteCommand cmd = new SqliteCommand("SELECT GUID, Type, Content FROM RobotInstruction;", conn))
                         {
-                            SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                            SqliteDataAdapter adapter = new SqliteDataAdapter(cmd);
                             adapter.Fill(dtReturn);
                         }
                     }
@@ -32286,15 +32346,15 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "SELECT Type, Content FROM RobotInstruction WHERE GUID = @GUID;";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {
-                            cmd.Parameters.AddWithValue("@GUID", guid.ToString().ToUpper());
+                            AddParam(cmd, "@GUID", guid.ToString().ToUpper());
 
-                            SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                            SqliteDataAdapter adapter = new SqliteDataAdapter(cmd);
                             adapter.Fill(dtReturn);
                         }
                     }
@@ -32317,16 +32377,16 @@ namespace WinsockPacketEditor
             /// <b>Conn / Tx 传进来就复用</b>（整表保存时全部装进一个事务），传 null 则自己开连接、
             /// 自动提交，与原来的行为一致。SQL 只有一份（同 InsertTable_Filter / InsertTable_WareHouse）。
             /// </summary>
-            public static bool InsertTable_Robot(RobotInfo ri, SQLiteConnection Conn, SQLiteTransaction Tx)
+            public static bool InsertTable_Robot(RobotInfo ri, SqliteConnection Conn, SqliteTransaction Tx)
             {
-                SQLiteConnection conn = Conn;
+                SqliteConnection conn = Conn;
                 bool own = conn == null;
 
                 try
                 {
                     if (own)
                     {
-                        conn = new SQLiteConnection(conStr);
+                        conn = new SqliteConnection(conStr);
                         conn.Open();
                     }
 
@@ -32340,11 +32400,11 @@ namespace WinsockPacketEditor
                     sql += "@Name";
                     sql += ");";
 
-                    using (SQLiteCommand cmd = new SQLiteCommand(sql, conn, Tx))
+                    using (SqliteCommand cmd = new SqliteCommand(sql, conn, Tx))
                     {
-                        cmd.Parameters.AddWithValue("@GUID", ri.RID.ToString().ToUpper());
-                        cmd.Parameters.AddWithValue("@IsEnable", ri.IsEnable);
-                        cmd.Parameters.AddWithValue("@Name", ri.RName);
+                        AddParam(cmd, "@GUID", ri.RID.ToString().ToUpper());
+                        AddParam(cmd, "@IsEnable", ri.IsEnable);
+                        AddParam(cmd, "@Name", ri.RName);
                         cmd.ExecuteNonQuery();
                     }
 
@@ -32362,11 +32422,11 @@ namespace WinsockPacketEditor
                             sql += "@Content";
                             sql += ");";
 
-                            using (SQLiteCommand cmd = new SQLiteCommand(sql, conn, Tx))
+                            using (SqliteCommand cmd = new SqliteCommand(sql, conn, Tx))
                             {
-                                cmd.Parameters.AddWithValue("@GUID", ri.RID.ToString().ToUpper());
-                                cmd.Parameters.AddWithValue("@Type", ii.InstType);
-                                cmd.Parameters.AddWithValue("@Content", ii.InstContent);
+                                AddParam(cmd, "@GUID", ri.RID.ToString().ToUpper());
+                                AddParam(cmd, "@Type", ii.InstType);
+                                AddParam(cmd, "@Content", ii.InstContent);
                                 cmd.ExecuteNonQuery();
                             }
                         }
@@ -32396,13 +32456,13 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         conn.Open();
 
-                        using (SQLiteTransaction tx = conn.BeginTransaction())
+                        using (SqliteTransaction tx = conn.BeginTransaction())
                         {
-                            using (SQLiteCommand del = new SQLiteCommand("DELETE FROM RobotInstruction; DELETE FROM Robot;", conn, tx))
+                            using (SqliteCommand del = new SqliteCommand("DELETE FROM RobotInstruction; DELETE FROM Robot;", conn, tx))
                             {
                                 del.ExecuteNonQuery();
                             }
@@ -32438,7 +32498,7 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "CREATE TABLE IF NOT EXISTS WareHouse (";
                         sql += "GUID TEXT NOT NULL PRIMARY KEY,";
@@ -32451,7 +32511,7 @@ namespace WinsockPacketEditor
                         sql += "FOREIGN KEY (GUID) REFERENCES WareHouse(GUID)";
                         sql += ");";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -32474,11 +32534,11 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "SELECT * FROM WareHouse;";
 
-                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        using (SqliteDataAdapter adapter = new SqliteDataAdapter(sql, conn))
                         {
                             adapter.Fill(dtReturn);
                         }
@@ -32496,7 +32556,7 @@ namespace WinsockPacketEditor
             /// 整张 WareHouseData 表一次读完，配合 <see cref="GroupRowsBy"/> 用。
             ///
             /// ⚠️ <b>加载列表时必须用这个，别按仓库一条条查。</b>
-            /// 下面那个按主键的重载每调一次就新开一个 SQLiteConnection，
+            /// 下面那个按主键的重载每调一次就新开一个 SqliteConnection，
             /// <b>开连接就是全部代价</b>（账号那份实测：1019 条、子表还是空的，
             /// 逐条查 1183ms → 整表读一次 46ms）。
             ///
@@ -32508,11 +32568,11 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
-                        using (SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM WareHouseData;", conn))
+                        using (SqliteCommand cmd = new SqliteCommand("SELECT * FROM WareHouseData;", conn))
                         {
-                            SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                            SqliteDataAdapter adapter = new SqliteDataAdapter(cmd);
                             adapter.Fill(dtReturn);
                         }
                     }
@@ -32531,15 +32591,15 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "SELECT * FROM WareHouseData WHERE GUID = @GUID;";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {
-                            cmd.Parameters.AddWithValue("@GUID", guid.ToString().ToUpper());
+                            AddParam(cmd, "@GUID", guid.ToString().ToUpper());
 
-                            SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                            SqliteDataAdapter adapter = new SqliteDataAdapter(cmd);
                             adapter.Fill(dtReturn);
                         }
                     }
@@ -32564,19 +32624,19 @@ namespace WinsockPacketEditor
             ///
             /// 拆成这样而不是另写一份批量版：SQL 与参数只有一份，加字段只改一处（同 InsertTable_Filter）。
             /// </summary>
-            public static bool InsertTable_WareHouse(WareHouseInfo whi, SQLiteConnection Conn, SQLiteTransaction Tx)
+            public static bool InsertTable_WareHouse(WareHouseInfo whi, SqliteConnection Conn, SqliteTransaction Tx)
             {
                 bool bReturn = false;
 
-                SQLiteConnection conn = Conn;
-                SQLiteTransaction tx = Tx;
+                SqliteConnection conn = Conn;
+                SqliteTransaction tx = Tx;
                 bool own = conn == null;
 
                 try
                 {
                     if (own)
                     {
-                        conn = new SQLiteConnection(conStr);
+                        conn = new SqliteConnection(conStr);
                         conn.Open();
                         tx = conn.BeginTransaction();
                     }
@@ -32597,14 +32657,14 @@ namespace WinsockPacketEditor
                             @GUID, @Buffer
                         );";
 
-                    using (SQLiteCommand cmdCheck = new SQLiteCommand(sqlCheck, conn, tx))
-                    using (SQLiteCommand cmdWareHouse = new SQLiteCommand(sqlWareHouse, conn, tx))
-                    using (SQLiteCommand cmdData = new SQLiteCommand(sqlData, conn, tx))
+                    using (SqliteCommand cmdCheck = new SqliteCommand(sqlCheck, conn, tx))
+                    using (SqliteCommand cmdWareHouse = new SqliteCommand(sqlWareHouse, conn, tx))
+                    using (SqliteCommand cmdData = new SqliteCommand(sqlData, conn, tx))
                     {
-                        cmdCheck.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
+                        cmdCheck.Parameters.Add(new SqliteParameter("@GUID", SqliteType.Text));
 
                         string guid = whi.WID.ToString().ToUpper();
-                        cmdCheck.Parameters["@GUID"].Value = guid;
+                        cmdCheck.Parameters["@GUID"].Value = (object)guid ?? DBNull.Value;
 
                         long existingCount = (long)cmdCheck.ExecuteScalar();
                         if (existingCount > 0)
@@ -32613,14 +32673,14 @@ namespace WinsockPacketEditor
                             return false;
                         }
 
-                        cmdWareHouse.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
-                        cmdWareHouse.Parameters.Add(new SQLiteParameter("@Name", DbType.String));
+                        cmdWareHouse.Parameters.Add(new SqliteParameter("@GUID", SqliteType.Text));
+                        cmdWareHouse.Parameters.Add(new SqliteParameter("@Name", SqliteType.Text));
 
-                        cmdData.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
-                        cmdData.Parameters.Add(new SQLiteParameter("@Buffer", DbType.Binary));
+                        cmdData.Parameters.Add(new SqliteParameter("@GUID", SqliteType.Text));
+                        cmdData.Parameters.Add(new SqliteParameter("@Buffer", SqliteType.Blob));
 
-                        cmdWareHouse.Parameters["@GUID"].Value = guid;
-                        cmdWareHouse.Parameters["@Name"].Value = whi.WName;
+                        cmdWareHouse.Parameters["@GUID"].Value = (object)guid ?? DBNull.Value;
+                        cmdWareHouse.Parameters["@Name"].Value = (object)whi.WName ?? DBNull.Value;
 
                         int rowsAffected = cmdWareHouse.ExecuteNonQuery();
 
@@ -32630,8 +32690,8 @@ namespace WinsockPacketEditor
                             {
                                 foreach (DataInfo di in whi.Stores)
                                 {
-                                    cmdData.Parameters["@GUID"].Value = guid;
-                                    cmdData.Parameters["@Buffer"].Value = di.PacketBuffer;
+                                    cmdData.Parameters["@GUID"].Value = (object)guid ?? DBNull.Value;
+                                    cmdData.Parameters["@Buffer"].Value = (object)di.PacketBuffer ?? DBNull.Value;
 
                                     cmdData.ExecuteNonQuery();
                                 }
@@ -32677,13 +32737,13 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         conn.Open();
 
-                        using (SQLiteTransaction tx = conn.BeginTransaction())
+                        using (SqliteTransaction tx = conn.BeginTransaction())
                         {
-                            using (SQLiteCommand del = new SQLiteCommand("DELETE FROM WareHouseData; DELETE FROM WareHouse;", conn, tx))
+                            using (SqliteCommand del = new SqliteCommand("DELETE FROM WareHouseData; DELETE FROM WareHouse;", conn, tx))
                             {
                                 del.ExecuteNonQuery();
                             }
@@ -32719,7 +32779,7 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "CREATE TABLE IF NOT EXISTS AutoStores (";
                         sql += "IsEnable BOOLEAN DEFAULT 0,";
@@ -32727,7 +32787,7 @@ namespace WinsockPacketEditor
                         sql += "WID TEXT NOT NULL";
                         sql += ");";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -32750,11 +32810,11 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "SELECT * FROM AutoStores;";
 
-                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        using (SqliteDataAdapter adapter = new SqliteDataAdapter(sql, conn))
                         {
                             adapter.Fill(dtReturn);
                         }
@@ -32780,19 +32840,19 @@ namespace WinsockPacketEditor
             /// 这张表没有主键，<b>PacketHead 是事实上的唯一键</b>：同包头的第二条会被这里拒掉（返回 false）。
             /// 所以 SaveAutoStores_Shell 在内存里就先查重，别让它走到这一步才被静默丢掉。
             /// </summary>
-            public static bool InsertTable_AutoStores(AutoStoresInfo asi, SQLiteConnection Conn, SQLiteTransaction Tx)
+            public static bool InsertTable_AutoStores(AutoStoresInfo asi, SqliteConnection Conn, SqliteTransaction Tx)
             {
                 bool bReturn = false;
 
-                SQLiteConnection conn = Conn;
-                SQLiteTransaction tx = Tx;
+                SqliteConnection conn = Conn;
+                SqliteTransaction tx = Tx;
                 bool own = conn == null;
 
                 try
                 {
                     if (own)
                     {
-                        conn = new SQLiteConnection(conStr);
+                        conn = new SqliteConnection(conStr);
                         conn.Open();
                         tx = conn.BeginTransaction();
                     }
@@ -32806,11 +32866,11 @@ namespace WinsockPacketEditor
                             @IsEnable, @PacketHead, @WID
                         );";
 
-                    using (SQLiteCommand cmdCheck = new SQLiteCommand(sqlCheck, conn, tx))
-                    using (SQLiteCommand cmdInsert = new SQLiteCommand(sqlInsert, conn, tx))
+                    using (SqliteCommand cmdCheck = new SqliteCommand(sqlCheck, conn, tx))
+                    using (SqliteCommand cmdInsert = new SqliteCommand(sqlInsert, conn, tx))
                     {
-                        cmdCheck.Parameters.Add(new SQLiteParameter("@PacketHead", DbType.String));
-                        cmdCheck.Parameters["@PacketHead"].Value = asi.PacketHead;
+                        cmdCheck.Parameters.Add(new SqliteParameter("@PacketHead", SqliteType.Text));
+                        cmdCheck.Parameters["@PacketHead"].Value = (object)asi.PacketHead ?? DBNull.Value;
 
                         long existingCount = (long)cmdCheck.ExecuteScalar();
                         if (existingCount > 0)
@@ -32819,13 +32879,13 @@ namespace WinsockPacketEditor
                             return false;
                         }
 
-                        cmdInsert.Parameters.Add(new SQLiteParameter("@IsEnable", DbType.Boolean));
-                        cmdInsert.Parameters.Add(new SQLiteParameter("@PacketHead", DbType.String));
-                        cmdInsert.Parameters.Add(new SQLiteParameter("@WID", DbType.String));
+                        cmdInsert.Parameters.Add(new SqliteParameter("@IsEnable", SqliteType.Integer));
+                        cmdInsert.Parameters.Add(new SqliteParameter("@PacketHead", SqliteType.Text));
+                        cmdInsert.Parameters.Add(new SqliteParameter("@WID", SqliteType.Text));
 
-                        cmdInsert.Parameters["@IsEnable"].Value = asi.IsEnable;
-                        cmdInsert.Parameters["@PacketHead"].Value = asi.PacketHead;
-                        cmdInsert.Parameters["@WID"].Value = asi.WID.ToString().ToUpper();
+                        cmdInsert.Parameters["@IsEnable"].Value = (object)asi.IsEnable ?? DBNull.Value;
+                        cmdInsert.Parameters["@PacketHead"].Value = (object)asi.PacketHead ?? DBNull.Value;
+                        cmdInsert.Parameters["@WID"].Value = (object)asi.WID.ToString().ToUpper() ?? DBNull.Value;
 
                         int rowsAffected = cmdInsert.ExecuteNonQuery();
 
@@ -32867,13 +32927,13 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         conn.Open();
 
-                        using (SQLiteTransaction tx = conn.BeginTransaction())
+                        using (SqliteTransaction tx = conn.BeginTransaction())
                         {
-                            using (SQLiteCommand del = new SQLiteCommand("DELETE FROM AutoStores;", conn, tx))
+                            using (SqliteCommand del = new SqliteCommand("DELETE FROM AutoStores;", conn, tx))
                             {
                                 del.ExecuteNonQuery();
                             }
@@ -32909,7 +32969,7 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "CREATE TABLE IF NOT EXISTS ProxyAccount (";
                         sql += "GUID TEXT NOT NULL PRIMARY KEY,";
@@ -32933,7 +32993,7 @@ namespace WinsockPacketEditor
                         sql += "UNIQUE (GUID, LoginIP)";
                         sql += ");";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -32956,11 +33016,11 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "SELECT * FROM ProxyAccount;";
 
-                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        using (SqliteDataAdapter adapter = new SqliteDataAdapter(sql, conn))
                         {
                             adapter.Fill(dtReturn);
                         }
@@ -33026,11 +33086,11 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
-                        using (SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM ProxyAccountIPInfo;", conn))
+                        using (SqliteCommand cmd = new SqliteCommand("SELECT * FROM ProxyAccountIPInfo;", conn))
                         {
-                            SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                            SqliteDataAdapter adapter = new SqliteDataAdapter(cmd);
                             adapter.Fill(dtReturn);
                         }
                     }
@@ -33049,15 +33109,15 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "SELECT * FROM ProxyAccountIPInfo WHERE GUID = @GUID;";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {
-                            cmd.Parameters.AddWithValue("@GUID", guid.ToString().ToUpper());
+                            AddParam(cmd, "@GUID", guid.ToString().ToUpper());
 
-                            SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                            SqliteDataAdapter adapter = new SqliteDataAdapter(cmd);
                             adapter.Fill(dtReturn);
                         }
                     }
@@ -33076,11 +33136,11 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    using (SqliteConnection conn = new SqliteConnection(DataBase.conStr))
                     {
                         conn.Open();
 
-                        using (SQLiteTransaction transaction = conn.BeginTransaction())
+                        using (SqliteTransaction transaction = conn.BeginTransaction())
                         {
                             string sqlDeleteIPInfo = @"
                                 DELETE FROM ProxyAccountIPInfo 
@@ -33090,15 +33150,15 @@ namespace WinsockPacketEditor
                                 DELETE FROM ProxyAccount 
                                 WHERE GUID = @GUID;";
 
-                            using (SQLiteCommand cmdDeleteIPInfo = new SQLiteCommand(sqlDeleteIPInfo, conn, transaction))
-                            using (SQLiteCommand cmdDeleteAccount = new SQLiteCommand(sqlDeleteAccount, conn, transaction))
+                            using (SqliteCommand cmdDeleteIPInfo = new SqliteCommand(sqlDeleteIPInfo, conn, transaction))
+                            using (SqliteCommand cmdDeleteAccount = new SqliteCommand(sqlDeleteAccount, conn, transaction))
                             {
-                                cmdDeleteIPInfo.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
-                                cmdDeleteAccount.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
+                                cmdDeleteIPInfo.Parameters.Add(new SqliteParameter("@GUID", SqliteType.Text));
+                                cmdDeleteAccount.Parameters.Add(new SqliteParameter("@GUID", SqliteType.Text));
 
                                 string formattedGuid = guid.ToString().ToUpper();
-                                cmdDeleteIPInfo.Parameters["@GUID"].Value = formattedGuid;
-                                cmdDeleteAccount.Parameters["@GUID"].Value = formattedGuid;
+                                cmdDeleteIPInfo.Parameters["@GUID"].Value = (object)formattedGuid ?? DBNull.Value;
+                                cmdDeleteAccount.Parameters["@GUID"].Value = (object)formattedGuid ?? DBNull.Value;
 
                                 cmdDeleteIPInfo.ExecuteNonQuery();
 
@@ -33131,11 +33191,11 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    using (SqliteConnection conn = new SqliteConnection(DataBase.conStr))
                     {
                         conn.Open();
 
-                        using (SQLiteTransaction transaction = conn.BeginTransaction())
+                        using (SqliteTransaction transaction = conn.BeginTransaction())
                         {
                             string sqlDeleteIPInfo = @"
                                 DELETE FROM ProxyAccountIPInfo;";
@@ -33143,8 +33203,8 @@ namespace WinsockPacketEditor
                             string sqlDeleteAccount = @"
                                 DELETE FROM ProxyAccount;";
 
-                            using (SQLiteCommand cmdDeleteIPInfo = new SQLiteCommand(sqlDeleteIPInfo, conn, transaction))
-                            using (SQLiteCommand cmdDeleteAccount = new SQLiteCommand(sqlDeleteAccount, conn, transaction))
+                            using (SqliteCommand cmdDeleteIPInfo = new SqliteCommand(sqlDeleteIPInfo, conn, transaction))
+                            using (SqliteCommand cmdDeleteAccount = new SqliteCommand(sqlDeleteAccount, conn, transaction))
                             {
                                 cmdDeleteIPInfo.ExecuteNonQuery();
 
@@ -33170,11 +33230,11 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    using (SqliteConnection conn = new SqliteConnection(DataBase.conStr))
                     {
                         conn.Open();
 
-                        using (SQLiteTransaction transaction = conn.BeginTransaction())
+                        using (SqliteTransaction transaction = conn.BeginTransaction())
                         {
                             string sqlCheck = @"
                                 SELECT COUNT(1) FROM ProxyAccount 
@@ -33198,16 +33258,16 @@ namespace WinsockPacketEditor
                                     @GUID, @LoginTime, @LoginIP
                                 );";
 
-                            using (SQLiteCommand cmdCheck = new SQLiteCommand(sqlCheck, conn, transaction))
-                            using (SQLiteCommand cmdAccount = new SQLiteCommand(sqlAccount, conn, transaction))
-                            using (SQLiteCommand cmdIPInfo = new SQLiteCommand(sqlIPInfo, conn, transaction))
+                            using (SqliteCommand cmdCheck = new SqliteCommand(sqlCheck, conn, transaction))
+                            using (SqliteCommand cmdAccount = new SqliteCommand(sqlAccount, conn, transaction))
+                            using (SqliteCommand cmdIPInfo = new SqliteCommand(sqlIPInfo, conn, transaction))
                             {
-                                cmdCheck.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
-                                cmdCheck.Parameters.Add(new SQLiteParameter("@UserName", DbType.String));
+                                cmdCheck.Parameters.Add(new SqliteParameter("@GUID", SqliteType.Text));
+                                cmdCheck.Parameters.Add(new SqliteParameter("@UserName", SqliteType.Text));
 
                                 string guid = ai.AID.ToString().ToUpper();
-                                cmdCheck.Parameters["@GUID"].Value = guid;
-                                cmdCheck.Parameters["@UserName"].Value = ai.UserName;
+                                cmdCheck.Parameters["@GUID"].Value = (object)guid ?? DBNull.Value;
+                                cmdCheck.Parameters["@UserName"].Value = (object)ai.UserName ?? DBNull.Value;
 
                                 long existingCount = (long)cmdCheck.ExecuteScalar();
                                 if (existingCount > 0)
@@ -33216,33 +33276,33 @@ namespace WinsockPacketEditor
                                     return false;
                                 }
 
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@IsEnable", DbType.Boolean));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@UserName", DbType.String));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@PassWord", DbType.String));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@IsLimitLinks", DbType.Boolean));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@LimitLinks", DbType.Int32));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@IsLimitDevices", DbType.Boolean));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@LimitDevices", DbType.Int32));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@IsExpiry", DbType.Boolean));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@ExpiryTime", DbType.DateTime));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@CreateTime", DbType.DateTime));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@GUID", SqliteType.Text));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@IsEnable", SqliteType.Integer));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@UserName", SqliteType.Text));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@PassWord", SqliteType.Text));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@IsLimitLinks", SqliteType.Integer));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@LimitLinks", SqliteType.Integer));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@IsLimitDevices", SqliteType.Integer));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@LimitDevices", SqliteType.Integer));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@IsExpiry", SqliteType.Integer));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@ExpiryTime", SqliteType.Text));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@CreateTime", SqliteType.Text));
 
-                                cmdIPInfo.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
-                                cmdIPInfo.Parameters.Add(new SQLiteParameter("@LoginTime", DbType.DateTime));
-                                cmdIPInfo.Parameters.Add(new SQLiteParameter("@LoginIP", DbType.String));
+                                cmdIPInfo.Parameters.Add(new SqliteParameter("@GUID", SqliteType.Text));
+                                cmdIPInfo.Parameters.Add(new SqliteParameter("@LoginTime", SqliteType.Text));
+                                cmdIPInfo.Parameters.Add(new SqliteParameter("@LoginIP", SqliteType.Text));
 
-                                cmdAccount.Parameters["@GUID"].Value = guid;
-                                cmdAccount.Parameters["@IsEnable"].Value = ai.IsEnable;
-                                cmdAccount.Parameters["@UserName"].Value = ai.UserName;
-                                cmdAccount.Parameters["@PassWord"].Value = ai.Password;
-                                cmdAccount.Parameters["@IsLimitLinks"].Value = ai.IsLimitLinks;
-                                cmdAccount.Parameters["@LimitLinks"].Value = ai.LimitLinks;
-                                cmdAccount.Parameters["@IsLimitDevices"].Value = ai.IsLimitDevices;
-                                cmdAccount.Parameters["@LimitDevices"].Value = ai.LimitDevices;
-                                cmdAccount.Parameters["@IsExpiry"].Value = ai.IsExpiry;
-                                cmdAccount.Parameters["@ExpiryTime"].Value = ai.ExpiryTime;
-                                cmdAccount.Parameters["@CreateTime"].Value = ai.CreateTime;
+                                cmdAccount.Parameters["@GUID"].Value = (object)guid ?? DBNull.Value;
+                                cmdAccount.Parameters["@IsEnable"].Value = (object)ai.IsEnable ?? DBNull.Value;
+                                cmdAccount.Parameters["@UserName"].Value = (object)ai.UserName ?? DBNull.Value;
+                                cmdAccount.Parameters["@PassWord"].Value = (object)ai.Password ?? DBNull.Value;
+                                cmdAccount.Parameters["@IsLimitLinks"].Value = (object)ai.IsLimitLinks ?? DBNull.Value;
+                                cmdAccount.Parameters["@LimitLinks"].Value = (object)ai.LimitLinks ?? DBNull.Value;
+                                cmdAccount.Parameters["@IsLimitDevices"].Value = (object)ai.IsLimitDevices ?? DBNull.Value;
+                                cmdAccount.Parameters["@LimitDevices"].Value = (object)ai.LimitDevices ?? DBNull.Value;
+                                cmdAccount.Parameters["@IsExpiry"].Value = (object)ai.IsExpiry ?? DBNull.Value;
+                                cmdAccount.Parameters["@ExpiryTime"].Value = (object)ai.ExpiryTime ?? DBNull.Value;
+                                cmdAccount.Parameters["@CreateTime"].Value = (object)ai.CreateTime ?? DBNull.Value;
 
                                 int rowsAffected = cmdAccount.ExecuteNonQuery();
 
@@ -33252,9 +33312,9 @@ namespace WinsockPacketEditor
                                     {
                                         foreach (AccountIPInfo ipInfo in ai.AIPInfo)
                                         {
-                                            cmdIPInfo.Parameters["@GUID"].Value = guid;
-                                            cmdIPInfo.Parameters["@LoginTime"].Value = ipInfo.LoginTime;
-                                            cmdIPInfo.Parameters["@LoginIP"].Value = ipInfo.LoginIP;
+                                            cmdIPInfo.Parameters["@GUID"].Value = (object)guid ?? DBNull.Value;
+                                            cmdIPInfo.Parameters["@LoginTime"].Value = (object)ipInfo.LoginTime ?? DBNull.Value;
+                                            cmdIPInfo.Parameters["@LoginIP"].Value = (object)ipInfo.LoginIP ?? DBNull.Value;
 
                                             cmdIPInfo.ExecuteNonQuery();
                                         }
@@ -33308,11 +33368,11 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    using (SqliteConnection conn = new SqliteConnection(DataBase.conStr))
                     {
                         conn.Open();
 
-                        using (SQLiteTransaction transaction = conn.BeginTransaction())
+                        using (SqliteTransaction transaction = conn.BeginTransaction())
                         {
                             string sqlCheck = @"
                                 SELECT COUNT(1) FROM ProxyAccount
@@ -33338,31 +33398,31 @@ namespace WinsockPacketEditor
 
                             /*
                                 三个命令建一次、参数建一次，循环里只换值。
-                                SQLiteCommand 每次 new 都要重新 prepare 一遍语句，
+                                SqliteCommand 每次 new 都要重新 prepare 一遍语句，
                                 一千条就是三千次白做的解析。
                             */
-                            using (SQLiteCommand cmdCheck = new SQLiteCommand(sqlCheck, conn, transaction))
-                            using (SQLiteCommand cmdAccount = new SQLiteCommand(sqlAccount, conn, transaction))
-                            using (SQLiteCommand cmdIPInfo = new SQLiteCommand(sqlIPInfo, conn, transaction))
+                            using (SqliteCommand cmdCheck = new SqliteCommand(sqlCheck, conn, transaction))
+                            using (SqliteCommand cmdAccount = new SqliteCommand(sqlAccount, conn, transaction))
+                            using (SqliteCommand cmdIPInfo = new SqliteCommand(sqlIPInfo, conn, transaction))
                             {
-                                cmdCheck.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
-                                cmdCheck.Parameters.Add(new SQLiteParameter("@UserName", DbType.String));
+                                cmdCheck.Parameters.Add(new SqliteParameter("@GUID", SqliteType.Text));
+                                cmdCheck.Parameters.Add(new SqliteParameter("@UserName", SqliteType.Text));
 
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@IsEnable", DbType.Boolean));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@UserName", DbType.String));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@PassWord", DbType.String));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@IsLimitLinks", DbType.Boolean));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@LimitLinks", DbType.Int32));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@IsLimitDevices", DbType.Boolean));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@LimitDevices", DbType.Int32));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@IsExpiry", DbType.Boolean));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@ExpiryTime", DbType.DateTime));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@CreateTime", DbType.DateTime));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@GUID", SqliteType.Text));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@IsEnable", SqliteType.Integer));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@UserName", SqliteType.Text));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@PassWord", SqliteType.Text));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@IsLimitLinks", SqliteType.Integer));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@LimitLinks", SqliteType.Integer));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@IsLimitDevices", SqliteType.Integer));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@LimitDevices", SqliteType.Integer));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@IsExpiry", SqliteType.Integer));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@ExpiryTime", SqliteType.Text));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@CreateTime", SqliteType.Text));
 
-                                cmdIPInfo.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
-                                cmdIPInfo.Parameters.Add(new SQLiteParameter("@LoginTime", DbType.DateTime));
-                                cmdIPInfo.Parameters.Add(new SQLiteParameter("@LoginIP", DbType.String));
+                                cmdIPInfo.Parameters.Add(new SqliteParameter("@GUID", SqliteType.Text));
+                                cmdIPInfo.Parameters.Add(new SqliteParameter("@LoginTime", SqliteType.Text));
+                                cmdIPInfo.Parameters.Add(new SqliteParameter("@LoginIP", SqliteType.Text));
 
                                 foreach (AccountInfo ai in aiList)
                                 {
@@ -33374,25 +33434,25 @@ namespace WinsockPacketEditor
                                     string guid = ai.AID.ToString().ToUpper();
 
                                     //与单条版同一条判重：GUID 或用户名撞上就跳过这一条，不是整批失败
-                                    cmdCheck.Parameters["@GUID"].Value = guid;
-                                    cmdCheck.Parameters["@UserName"].Value = ai.UserName;
+                                    cmdCheck.Parameters["@GUID"].Value = (object)guid ?? DBNull.Value;
+                                    cmdCheck.Parameters["@UserName"].Value = (object)ai.UserName ?? DBNull.Value;
 
                                     if ((long)cmdCheck.ExecuteScalar() > 0)
                                     {
                                         continue;
                                     }
 
-                                    cmdAccount.Parameters["@GUID"].Value = guid;
-                                    cmdAccount.Parameters["@IsEnable"].Value = ai.IsEnable;
-                                    cmdAccount.Parameters["@UserName"].Value = ai.UserName;
-                                    cmdAccount.Parameters["@PassWord"].Value = ai.Password;
-                                    cmdAccount.Parameters["@IsLimitLinks"].Value = ai.IsLimitLinks;
-                                    cmdAccount.Parameters["@LimitLinks"].Value = ai.LimitLinks;
-                                    cmdAccount.Parameters["@IsLimitDevices"].Value = ai.IsLimitDevices;
-                                    cmdAccount.Parameters["@LimitDevices"].Value = ai.LimitDevices;
-                                    cmdAccount.Parameters["@IsExpiry"].Value = ai.IsExpiry;
-                                    cmdAccount.Parameters["@ExpiryTime"].Value = ai.ExpiryTime;
-                                    cmdAccount.Parameters["@CreateTime"].Value = ai.CreateTime;
+                                    cmdAccount.Parameters["@GUID"].Value = (object)guid ?? DBNull.Value;
+                                    cmdAccount.Parameters["@IsEnable"].Value = (object)ai.IsEnable ?? DBNull.Value;
+                                    cmdAccount.Parameters["@UserName"].Value = (object)ai.UserName ?? DBNull.Value;
+                                    cmdAccount.Parameters["@PassWord"].Value = (object)ai.Password ?? DBNull.Value;
+                                    cmdAccount.Parameters["@IsLimitLinks"].Value = (object)ai.IsLimitLinks ?? DBNull.Value;
+                                    cmdAccount.Parameters["@LimitLinks"].Value = (object)ai.LimitLinks ?? DBNull.Value;
+                                    cmdAccount.Parameters["@IsLimitDevices"].Value = (object)ai.IsLimitDevices ?? DBNull.Value;
+                                    cmdAccount.Parameters["@LimitDevices"].Value = (object)ai.LimitDevices ?? DBNull.Value;
+                                    cmdAccount.Parameters["@IsExpiry"].Value = (object)ai.IsExpiry ?? DBNull.Value;
+                                    cmdAccount.Parameters["@ExpiryTime"].Value = (object)ai.ExpiryTime ?? DBNull.Value;
+                                    cmdAccount.Parameters["@CreateTime"].Value = (object)ai.CreateTime ?? DBNull.Value;
 
                                     if (cmdAccount.ExecuteNonQuery() <= 0)
                                     {
@@ -33403,9 +33463,9 @@ namespace WinsockPacketEditor
                                     {
                                         foreach (AccountIPInfo ipInfo in ai.AIPInfo)
                                         {
-                                            cmdIPInfo.Parameters["@GUID"].Value = guid;
-                                            cmdIPInfo.Parameters["@LoginTime"].Value = ipInfo.LoginTime;
-                                            cmdIPInfo.Parameters["@LoginIP"].Value = ipInfo.LoginIP;
+                                            cmdIPInfo.Parameters["@GUID"].Value = (object)guid ?? DBNull.Value;
+                                            cmdIPInfo.Parameters["@LoginTime"].Value = (object)ipInfo.LoginTime ?? DBNull.Value;
+                                            cmdIPInfo.Parameters["@LoginIP"].Value = (object)ipInfo.LoginIP ?? DBNull.Value;
 
                                             cmdIPInfo.ExecuteNonQuery();
                                         }
@@ -33434,11 +33494,11 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    using (SqliteConnection conn = new SqliteConnection(DataBase.conStr))
                     {
                         conn.Open();
 
-                        using (SQLiteTransaction transaction = conn.BeginTransaction())
+                        using (SqliteTransaction transaction = conn.BeginTransaction())
                         {
                             string sqlAccount = @"
                                 UPDATE ProxyAccount 
@@ -33453,27 +33513,27 @@ namespace WinsockPacketEditor
                                     ExpiryTime = @ExpiryTime
                                 WHERE GUID = @GUID;";
 
-                            using (SQLiteCommand cmdAccount = new SQLiteCommand(sqlAccount, conn, transaction))
+                            using (SqliteCommand cmdAccount = new SqliteCommand(sqlAccount, conn, transaction))
                             {
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@IsEnable", DbType.Boolean));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@PassWord", DbType.String));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@IsLimitLinks", DbType.Boolean));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@LimitLinks", DbType.Int32));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@IsLimitDevices", DbType.Boolean));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@LimitDevices", DbType.Int32));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@IsExpiry", DbType.Boolean));
-                                cmdAccount.Parameters.Add(new SQLiteParameter("@ExpiryTime", DbType.DateTime));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@GUID", SqliteType.Text));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@IsEnable", SqliteType.Integer));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@PassWord", SqliteType.Text));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@IsLimitLinks", SqliteType.Integer));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@LimitLinks", SqliteType.Integer));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@IsLimitDevices", SqliteType.Integer));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@LimitDevices", SqliteType.Integer));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@IsExpiry", SqliteType.Integer));
+                                cmdAccount.Parameters.Add(new SqliteParameter("@ExpiryTime", SqliteType.Text));
 
-                                cmdAccount.Parameters["@GUID"].Value = ai.AID.ToString().ToUpper();
-                                cmdAccount.Parameters["@IsEnable"].Value = ai.IsEnable;
-                                cmdAccount.Parameters["@PassWord"].Value = ai.Password;
-                                cmdAccount.Parameters["@IsLimitLinks"].Value = ai.IsLimitLinks;
-                                cmdAccount.Parameters["@LimitLinks"].Value = ai.LimitLinks;
-                                cmdAccount.Parameters["@IsLimitDevices"].Value = ai.IsLimitDevices;
-                                cmdAccount.Parameters["@LimitDevices"].Value = ai.LimitDevices;
-                                cmdAccount.Parameters["@IsExpiry"].Value = ai.IsExpiry;
-                                cmdAccount.Parameters["@ExpiryTime"].Value = ai.ExpiryTime;
+                                cmdAccount.Parameters["@GUID"].Value = (object)ai.AID.ToString().ToUpper() ?? DBNull.Value;
+                                cmdAccount.Parameters["@IsEnable"].Value = (object)ai.IsEnable ?? DBNull.Value;
+                                cmdAccount.Parameters["@PassWord"].Value = (object)ai.Password ?? DBNull.Value;
+                                cmdAccount.Parameters["@IsLimitLinks"].Value = (object)ai.IsLimitLinks ?? DBNull.Value;
+                                cmdAccount.Parameters["@LimitLinks"].Value = (object)ai.LimitLinks ?? DBNull.Value;
+                                cmdAccount.Parameters["@IsLimitDevices"].Value = (object)ai.IsLimitDevices ?? DBNull.Value;
+                                cmdAccount.Parameters["@LimitDevices"].Value = (object)ai.LimitDevices ?? DBNull.Value;
+                                cmdAccount.Parameters["@IsExpiry"].Value = (object)ai.IsExpiry ?? DBNull.Value;
+                                cmdAccount.Parameters["@ExpiryTime"].Value = (object)ai.ExpiryTime ?? DBNull.Value;
 
                                 int rowsAffected = cmdAccount.ExecuteNonQuery();
 
@@ -33508,7 +33568,7 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "CREATE TABLE IF NOT EXISTS ProxyMapLocal (";
                         sql += "IsEnable BOOLEAN DEFAULT 0,";
@@ -33519,7 +33579,7 @@ namespace WinsockPacketEditor
                         sql += "LocalPath TEXT NOT NULL";
                         sql += ");";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -33542,11 +33602,11 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "SELECT * FROM ProxyMapLocal;";
 
-                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        using (SqliteDataAdapter adapter = new SqliteDataAdapter(sql, conn))
                         {
                             adapter.Fill(dtReturn);
                         }
@@ -33564,11 +33624,11 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    using (SqliteConnection conn = new SqliteConnection(DataBase.conStr))
                     {
                         conn.Open();
 
-                        using (SQLiteTransaction tx = conn.BeginTransaction())
+                        using (SqliteTransaction tx = conn.BeginTransaction())
                         {
                             InsertTable_ProxyMapLocal(conn, tx);
                             tx.Commit();
@@ -33582,29 +33642,29 @@ namespace WinsockPacketEditor
             }
 
             /// <summary>把整份列表插进去，用<b>调用方的连接与事务</b>（不提交）。返回插了几条。SQL 只有这一份。</summary>
-            public static int InsertTable_ProxyMapLocal(SQLiteConnection conn, SQLiteTransaction tx)
+            public static int InsertTable_ProxyMapLocal(SqliteConnection conn, SqliteTransaction tx)
             {
                 int n = 0;
 
                 string sql = "INSERT INTO ProxyMapLocal (IsEnable, ProtocolType, Host, Port, RemotePath, LocalPath) VALUES (@IsEnable, @ProtocolType, @Host, @Port, @RemotePath, @LocalPath);";
 
-                using (SQLiteCommand cmd = new SQLiteCommand(sql, conn, tx))
+                using (SqliteCommand cmd = new SqliteCommand(sql, conn, tx))
                 {
-                    cmd.Parameters.Add(new SQLiteParameter("@IsEnable", DbType.Boolean));
-                    cmd.Parameters.Add(new SQLiteParameter("@ProtocolType", DbType.String));
-                    cmd.Parameters.Add(new SQLiteParameter("@Host", DbType.String));
-                    cmd.Parameters.Add(new SQLiteParameter("@Port", DbType.Int32));
-                    cmd.Parameters.Add(new SQLiteParameter("@RemotePath", DbType.String));
-                    cmd.Parameters.Add(new SQLiteParameter("@LocalPath", DbType.String));
+                    cmd.Parameters.Add(new SqliteParameter("@IsEnable", SqliteType.Integer));
+                    cmd.Parameters.Add(new SqliteParameter("@ProtocolType", SqliteType.Text));
+                    cmd.Parameters.Add(new SqliteParameter("@Host", SqliteType.Text));
+                    cmd.Parameters.Add(new SqliteParameter("@Port", SqliteType.Integer));
+                    cmd.Parameters.Add(new SqliteParameter("@RemotePath", SqliteType.Text));
+                    cmd.Parameters.Add(new SqliteParameter("@LocalPath", SqliteType.Text));
 
                     foreach (MapLocal pml in ProxyConfig.Mapping.lstMapLocal)
                     {
-                        cmd.Parameters["@IsEnable"].Value = pml.IsEnable;
-                        cmd.Parameters["@ProtocolType"].Value = pml.ProtocolType;
-                        cmd.Parameters["@Host"].Value = pml.Host;
-                        cmd.Parameters["@Port"].Value = pml.Port;
+                        cmd.Parameters["@IsEnable"].Value = (object)pml.IsEnable ?? DBNull.Value;
+                        cmd.Parameters["@ProtocolType"].Value = (object)pml.ProtocolType ?? DBNull.Value;
+                        cmd.Parameters["@Host"].Value = (object)pml.Host ?? DBNull.Value;
+                        cmd.Parameters["@Port"].Value = (object)pml.Port ?? DBNull.Value;
                         cmd.Parameters["@RemotePath"].Value = pml.RemotePath ?? (object)DBNull.Value;
-                        cmd.Parameters["@LocalPath"].Value = pml.LocalPath;
+                        cmd.Parameters["@LocalPath"].Value = (object)pml.LocalPath ?? DBNull.Value;
 
                         cmd.ExecuteNonQuery();
                         n++;
@@ -33619,13 +33679,13 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    using (SqliteConnection conn = new SqliteConnection(DataBase.conStr))
                     {
                         conn.Open();
 
-                        using (SQLiteTransaction tx = conn.BeginTransaction())
+                        using (SqliteTransaction tx = conn.BeginTransaction())
                         {
-                            using (SQLiteCommand del = new SQLiteCommand("DELETE FROM ProxyMapLocal;", conn, tx))
+                            using (SqliteCommand del = new SqliteCommand("DELETE FROM ProxyMapLocal;", conn, tx))
                             {
                                 del.ExecuteNonQuery();
                             }
@@ -33653,7 +33713,7 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "CREATE TABLE IF NOT EXISTS ProxyMapRemote (";
                         sql += "IsEnable BOOLEAN DEFAULT 0,";
@@ -33667,7 +33727,7 @@ namespace WinsockPacketEditor
                         sql += "Path_To TEXT";
                         sql += ");";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -33690,11 +33750,11 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "SELECT * FROM ProxyMapRemote;";
 
-                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        using (SqliteDataAdapter adapter = new SqliteDataAdapter(sql, conn))
                         {
                             adapter.Fill(dtReturn);
                         }
@@ -33712,11 +33772,11 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    using (SqliteConnection conn = new SqliteConnection(DataBase.conStr))
                     {
                         conn.Open();
 
-                        using (SQLiteTransaction tx = conn.BeginTransaction())
+                        using (SqliteTransaction tx = conn.BeginTransaction())
                         {
                             InsertTable_ProxyMapRemote(conn, tx);
                             tx.Commit();
@@ -33730,34 +33790,34 @@ namespace WinsockPacketEditor
             }
 
             /// <summary>把整份列表插进去，用<b>调用方的连接与事务</b>（不提交）。返回插了几条。SQL 只有这一份。</summary>
-            public static int InsertTable_ProxyMapRemote(SQLiteConnection conn, SQLiteTransaction tx)
+            public static int InsertTable_ProxyMapRemote(SqliteConnection conn, SqliteTransaction tx)
             {
                 int n = 0;
 
                 string sql = "INSERT INTO ProxyMapRemote (IsEnable, ProtocolType_From, Host_From, Port_From, Path_From, ProtocolType_To, Host_To, Port_To, Path_To) VALUES (@IsEnable, @ProtocolType_From, @Host_From, @Port_From, @Path_From, @ProtocolType_To, @Host_To, @Port_To, @Path_To);";
 
-                using (SQLiteCommand cmd = new SQLiteCommand(sql, conn, tx))
+                using (SqliteCommand cmd = new SqliteCommand(sql, conn, tx))
                 {
-                    cmd.Parameters.Add(new SQLiteParameter("@IsEnable", DbType.Boolean));
-                    cmd.Parameters.Add(new SQLiteParameter("@ProtocolType_From", DbType.String));
-                    cmd.Parameters.Add(new SQLiteParameter("@Host_From", DbType.String));
-                    cmd.Parameters.Add(new SQLiteParameter("@Port_From", DbType.Int32));
-                    cmd.Parameters.Add(new SQLiteParameter("@Path_From", DbType.String));
-                    cmd.Parameters.Add(new SQLiteParameter("@ProtocolType_To", DbType.String));
-                    cmd.Parameters.Add(new SQLiteParameter("@Host_To", DbType.String));
-                    cmd.Parameters.Add(new SQLiteParameter("@Port_To", DbType.Int32));
-                    cmd.Parameters.Add(new SQLiteParameter("@Path_To", DbType.String));
+                    cmd.Parameters.Add(new SqliteParameter("@IsEnable", SqliteType.Integer));
+                    cmd.Parameters.Add(new SqliteParameter("@ProtocolType_From", SqliteType.Text));
+                    cmd.Parameters.Add(new SqliteParameter("@Host_From", SqliteType.Text));
+                    cmd.Parameters.Add(new SqliteParameter("@Port_From", SqliteType.Integer));
+                    cmd.Parameters.Add(new SqliteParameter("@Path_From", SqliteType.Text));
+                    cmd.Parameters.Add(new SqliteParameter("@ProtocolType_To", SqliteType.Text));
+                    cmd.Parameters.Add(new SqliteParameter("@Host_To", SqliteType.Text));
+                    cmd.Parameters.Add(new SqliteParameter("@Port_To", SqliteType.Integer));
+                    cmd.Parameters.Add(new SqliteParameter("@Path_To", SqliteType.Text));
 
                     foreach (MapRemote pmr in ProxyConfig.Mapping.lstMapRemote)
                     {
-                        cmd.Parameters["@IsEnable"].Value = pmr.IsEnable;
-                        cmd.Parameters["@ProtocolType_From"].Value = pmr.ProtocolTypeFrom.ToString();
-                        cmd.Parameters["@Host_From"].Value = pmr.HostFrom;
-                        cmd.Parameters["@Port_From"].Value = pmr.PortFrom;
+                        cmd.Parameters["@IsEnable"].Value = (object)pmr.IsEnable ?? DBNull.Value;
+                        cmd.Parameters["@ProtocolType_From"].Value = (object)pmr.ProtocolTypeFrom.ToString() ?? DBNull.Value;
+                        cmd.Parameters["@Host_From"].Value = (object)pmr.HostFrom ?? DBNull.Value;
+                        cmd.Parameters["@Port_From"].Value = (object)pmr.PortFrom ?? DBNull.Value;
                         cmd.Parameters["@Path_From"].Value = pmr.PathFrom ?? (object)DBNull.Value;
-                        cmd.Parameters["@ProtocolType_To"].Value = pmr.ProtocolTypeTo.ToString();
-                        cmd.Parameters["@Host_To"].Value = pmr.HostTo;
-                        cmd.Parameters["@Port_To"].Value = pmr.PortTo;
+                        cmd.Parameters["@ProtocolType_To"].Value = (object)pmr.ProtocolTypeTo.ToString() ?? DBNull.Value;
+                        cmd.Parameters["@Host_To"].Value = (object)pmr.HostTo ?? DBNull.Value;
+                        cmd.Parameters["@Port_To"].Value = (object)pmr.PortTo ?? DBNull.Value;
                         cmd.Parameters["@Path_To"].Value = pmr.PathTo ?? (object)DBNull.Value;
 
                         cmd.ExecuteNonQuery();
@@ -33773,13 +33833,13 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    using (SqliteConnection conn = new SqliteConnection(DataBase.conStr))
                     {
                         conn.Open();
 
-                        using (SQLiteTransaction tx = conn.BeginTransaction())
+                        using (SqliteTransaction tx = conn.BeginTransaction())
                         {
-                            using (SQLiteCommand del = new SQLiteCommand("DELETE FROM ProxyMapRemote;", conn, tx))
+                            using (SqliteCommand del = new SqliteCommand("DELETE FROM ProxyMapRemote;", conn, tx))
                             {
                                 del.ExecuteNonQuery();
                             }
@@ -33807,7 +33867,7 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "CREATE TABLE IF NOT EXISTS WhiteList (";
                         sql += "IPAddress TEXT NOT NULL UNIQUE,";
@@ -33818,7 +33878,7 @@ namespace WinsockPacketEditor
                         sql += "CreateTime TIMESTAMP";
                         sql += ");";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -33841,11 +33901,11 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "SELECT * FROM WhiteList;";
 
-                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        using (SqliteDataAdapter adapter = new SqliteDataAdapter(sql, conn))
                         {
                             adapter.Fill(dtReturn);
                         }
@@ -33863,11 +33923,11 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    using (SqliteConnection conn = new SqliteConnection(DataBase.conStr))
                     {
                         conn.Open();
 
-                        using (SQLiteTransaction tx = conn.BeginTransaction())
+                        using (SqliteTransaction tx = conn.BeginTransaction())
                         {
                             InsertTable_WhiteList(conn, tx);
                             tx.Commit();
@@ -33881,29 +33941,29 @@ namespace WinsockPacketEditor
             }
 
             /// <summary>把整份列表插进去，用<b>调用方的连接与事务</b>（不提交）。返回插了几条。SQL 只有这一份。</summary>
-            public static int InsertTable_WhiteList(SQLiteConnection conn, SQLiteTransaction tx)
+            public static int InsertTable_WhiteList(SqliteConnection conn, SqliteTransaction tx)
             {
                 int n = 0;
 
                 string sql = "INSERT INTO WhiteList (IPAddress, StartIP, EndIP, IsExpiry, ExpiryTime, CreateTime) VALUES (@IPAddress, @StartIP, @EndIP, @IsExpiry, @ExpiryTime, @CreateTime);";
 
-                using (SQLiteCommand cmd = new SQLiteCommand(sql, conn, tx))
+                using (SqliteCommand cmd = new SqliteCommand(sql, conn, tx))
                 {
-                    cmd.Parameters.Add(new SQLiteParameter("@IPAddress", DbType.String));
-                    cmd.Parameters.Add(new SQLiteParameter("@StartIP", DbType.Int64));
-                    cmd.Parameters.Add(new SQLiteParameter("@EndIP", DbType.Int64));
-                    cmd.Parameters.Add(new SQLiteParameter("@IsExpiry", DbType.Boolean));
-                    cmd.Parameters.Add(new SQLiteParameter("@ExpiryTime", DbType.DateTime));
-                    cmd.Parameters.Add(new SQLiteParameter("@CreateTime", DbType.DateTime));
+                    cmd.Parameters.Add(new SqliteParameter("@IPAddress", SqliteType.Text));
+                    cmd.Parameters.Add(new SqliteParameter("@StartIP", SqliteType.Integer));
+                    cmd.Parameters.Add(new SqliteParameter("@EndIP", SqliteType.Integer));
+                    cmd.Parameters.Add(new SqliteParameter("@IsExpiry", SqliteType.Integer));
+                    cmd.Parameters.Add(new SqliteParameter("@ExpiryTime", SqliteType.Text));
+                    cmd.Parameters.Add(new SqliteParameter("@CreateTime", SqliteType.Text));
 
                     foreach (WhiteListInfo wli in Operate.ProxyConfig.Proxy.lstWhiteList)
                     {
-                        cmd.Parameters["@IPAddress"].Value = wli.IPAddress;
-                        cmd.Parameters["@StartIP"].Value = wli.StartIP;
-                        cmd.Parameters["@EndIP"].Value = wli.EndIP;
-                        cmd.Parameters["@IsExpiry"].Value = wli.IsExpiry;
-                        cmd.Parameters["@ExpiryTime"].Value = wli.ExpiryTime;
-                        cmd.Parameters["@CreateTime"].Value = wli.CreateTime;
+                        cmd.Parameters["@IPAddress"].Value = (object)wli.IPAddress ?? DBNull.Value;
+                        cmd.Parameters["@StartIP"].Value = (object)wli.StartIP ?? DBNull.Value;
+                        cmd.Parameters["@EndIP"].Value = (object)wli.EndIP ?? DBNull.Value;
+                        cmd.Parameters["@IsExpiry"].Value = (object)wli.IsExpiry ?? DBNull.Value;
+                        cmd.Parameters["@ExpiryTime"].Value = (object)wli.ExpiryTime ?? DBNull.Value;
+                        cmd.Parameters["@CreateTime"].Value = (object)wli.CreateTime ?? DBNull.Value;
 
                         cmd.ExecuteNonQuery();
                         n++;
@@ -33918,13 +33978,13 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    using (SqliteConnection conn = new SqliteConnection(DataBase.conStr))
                     {
                         conn.Open();
 
-                        using (SQLiteTransaction tx = conn.BeginTransaction())
+                        using (SqliteTransaction tx = conn.BeginTransaction())
                         {
-                            using (SQLiteCommand del = new SQLiteCommand("DELETE FROM WhiteList;", conn, tx))
+                            using (SqliteCommand del = new SqliteCommand("DELETE FROM WhiteList;", conn, tx))
                             {
                                 del.ExecuteNonQuery();
                             }
@@ -33952,7 +34012,7 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "CREATE TABLE IF NOT EXISTS BlackList (";
                         sql += "IPAddress TEXT NOT NULL UNIQUE,";
@@ -33963,7 +34023,7 @@ namespace WinsockPacketEditor
                         sql += "CreateTime TIMESTAMP";
                         sql += ");";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -33986,11 +34046,11 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "SELECT * FROM BlackList;";
 
-                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        using (SqliteDataAdapter adapter = new SqliteDataAdapter(sql, conn))
                         {
                             adapter.Fill(dtReturn);
                         }
@@ -34008,11 +34068,11 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    using (SqliteConnection conn = new SqliteConnection(DataBase.conStr))
                     {
                         conn.Open();
 
-                        using (SQLiteTransaction tx = conn.BeginTransaction())
+                        using (SqliteTransaction tx = conn.BeginTransaction())
                         {
                             InsertTable_BlackList(conn, tx);
                             tx.Commit();
@@ -34026,29 +34086,29 @@ namespace WinsockPacketEditor
             }
 
             /// <summary>把整份列表插进去，用<b>调用方的连接与事务</b>（不提交）。返回插了几条。SQL 只有这一份。</summary>
-            public static int InsertTable_BlackList(SQLiteConnection conn, SQLiteTransaction tx)
+            public static int InsertTable_BlackList(SqliteConnection conn, SqliteTransaction tx)
             {
                 int n = 0;
 
                 string sql = "INSERT INTO BlackList (IPAddress, StartIP, EndIP, IsExpiry, ExpiryTime, CreateTime) VALUES (@IPAddress, @StartIP, @EndIP, @IsExpiry, @ExpiryTime, @CreateTime);";
 
-                using (SQLiteCommand cmd = new SQLiteCommand(sql, conn, tx))
+                using (SqliteCommand cmd = new SqliteCommand(sql, conn, tx))
                 {
-                    cmd.Parameters.Add(new SQLiteParameter("@IPAddress", DbType.String));
-                    cmd.Parameters.Add(new SQLiteParameter("@StartIP", DbType.Int64));
-                    cmd.Parameters.Add(new SQLiteParameter("@EndIP", DbType.Int64));
-                    cmd.Parameters.Add(new SQLiteParameter("@IsExpiry", DbType.Boolean));
-                    cmd.Parameters.Add(new SQLiteParameter("@ExpiryTime", DbType.DateTime));
-                    cmd.Parameters.Add(new SQLiteParameter("@CreateTime", DbType.DateTime));
+                    cmd.Parameters.Add(new SqliteParameter("@IPAddress", SqliteType.Text));
+                    cmd.Parameters.Add(new SqliteParameter("@StartIP", SqliteType.Integer));
+                    cmd.Parameters.Add(new SqliteParameter("@EndIP", SqliteType.Integer));
+                    cmd.Parameters.Add(new SqliteParameter("@IsExpiry", SqliteType.Integer));
+                    cmd.Parameters.Add(new SqliteParameter("@ExpiryTime", SqliteType.Text));
+                    cmd.Parameters.Add(new SqliteParameter("@CreateTime", SqliteType.Text));
 
                     foreach (BlackListInfo bli in Operate.ProxyConfig.Proxy.lstBlackList)
                     {
-                        cmd.Parameters["@IPAddress"].Value = bli.IPAddress;
-                        cmd.Parameters["@StartIP"].Value = bli.StartIP;
-                        cmd.Parameters["@EndIP"].Value = bli.EndIP;
-                        cmd.Parameters["@IsExpiry"].Value = bli.IsExpiry;
-                        cmd.Parameters["@ExpiryTime"].Value = bli.ExpiryTime;
-                        cmd.Parameters["@CreateTime"].Value = bli.CreateTime;
+                        cmd.Parameters["@IPAddress"].Value = (object)bli.IPAddress ?? DBNull.Value;
+                        cmd.Parameters["@StartIP"].Value = (object)bli.StartIP ?? DBNull.Value;
+                        cmd.Parameters["@EndIP"].Value = (object)bli.EndIP ?? DBNull.Value;
+                        cmd.Parameters["@IsExpiry"].Value = (object)bli.IsExpiry ?? DBNull.Value;
+                        cmd.Parameters["@ExpiryTime"].Value = (object)bli.ExpiryTime ?? DBNull.Value;
+                        cmd.Parameters["@CreateTime"].Value = (object)bli.CreateTime ?? DBNull.Value;
 
                         cmd.ExecuteNonQuery();
                         n++;
@@ -34063,13 +34123,13 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    using (SqliteConnection conn = new SqliteConnection(DataBase.conStr))
                     {
                         conn.Open();
 
-                        using (SQLiteTransaction tx = conn.BeginTransaction())
+                        using (SqliteTransaction tx = conn.BeginTransaction())
                         {
-                            using (SQLiteCommand del = new SQLiteCommand("DELETE FROM BlackList;", conn, tx))
+                            using (SqliteCommand del = new SqliteCommand("DELETE FROM BlackList;", conn, tx))
                             {
                                 del.ExecuteNonQuery();
                             }
@@ -34097,7 +34157,7 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "CREATE TABLE IF NOT EXISTS ServerInfo (";
                         sql += "SID TEXT NOT NULL PRIMARY KEY,";
@@ -34120,7 +34180,7 @@ namespace WinsockPacketEditor
                         sql += "FOREIGN KEY (SID) REFERENCES ServerInfo(SID) ON DELETE CASCADE";
                         sql += ");";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -34143,11 +34203,11 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "SELECT * FROM ServerInfo;";
 
-                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        using (SqliteDataAdapter adapter = new SqliteDataAdapter(sql, conn))
                         {
                             adapter.Fill(dtReturn);
                         }
@@ -34165,7 +34225,7 @@ namespace WinsockPacketEditor
             /// 整张 ServerRuleInfo 表一次读完，配合 <see cref="GroupRowsBy"/> 用。
             ///
             /// ⚠️ <b>加载列表时必须用这个，别按服务器一条条查。</b>
-            /// 下面那个按主键的重载每调一次就新开一个 SQLiteConnection，
+            /// 下面那个按主键的重载每调一次就新开一个 SqliteConnection，
             /// <b>开连接就是全部代价</b>（账号那份实测：1019 条、子表还是空的，
             /// 逐条查 1183ms → 整表读一次 46ms）。
             ///
@@ -34177,11 +34237,11 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
-                        using (SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM ServerRuleInfo;", conn))
+                        using (SqliteCommand cmd = new SqliteCommand("SELECT * FROM ServerRuleInfo;", conn))
                         {
-                            SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                            SqliteDataAdapter adapter = new SqliteDataAdapter(cmd);
                             adapter.Fill(dtReturn);
                         }
                     }
@@ -34200,15 +34260,15 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "SELECT * FROM ServerRuleInfo WHERE SID = @SID;";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {
-                            cmd.Parameters.AddWithValue("@SID", sid.ToString().ToUpper());
+                            AddParam(cmd, "@SID", sid.ToString().ToUpper());
 
-                            SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                            SqliteDataAdapter adapter = new SqliteDataAdapter(cmd);
                             adapter.Fill(dtReturn);
                         }
                     }
@@ -34225,11 +34285,11 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    using (SqliteConnection conn = new SqliteConnection(DataBase.conStr))
                     {
                         conn.Open();
 
-                        using (SQLiteTransaction tx = conn.BeginTransaction())
+                        using (SqliteTransaction tx = conn.BeginTransaction())
                         {
                             if (InsertTable_ServerInfo(si, conn, tx))
                             {
@@ -34250,29 +34310,29 @@ namespace WinsockPacketEditor
             }
 
             /// <summary>用<b>调用方的连接与事务</b>插一台服务器 + 它的全部规则（不提交）。SID 已存在返回 false（查重照原来的写法）。</summary>
-            public static bool InsertTable_ServerInfo(ServerInfo si, SQLiteConnection conn, SQLiteTransaction tx)
+            public static bool InsertTable_ServerInfo(ServerInfo si, SqliteConnection conn, SqliteTransaction tx)
             {
                 try
                 {
                     string sqlCheck = "SELECT COUNT(1) FROM ServerInfo WHERE SID = @SID;";
                     string sql = "INSERT INTO ServerInfo (SID, IsEnable, ServerName, ServerIP, ServerPort, ForgotURL, RegisterURL, VerifyURL) VALUES (@SID, @IsEnable, @ServerName, @ServerIP, @ServerPort, @ForgotURL, @RegisterURL, @VerifyURL);";
 
-                    using (SQLiteCommand cmdCheck = new SQLiteCommand(sqlCheck, conn, tx))
-                    using (SQLiteCommand cmd = new SQLiteCommand(sql, conn, tx))
+                    using (SqliteCommand cmdCheck = new SqliteCommand(sqlCheck, conn, tx))
+                    using (SqliteCommand cmd = new SqliteCommand(sql, conn, tx))
                     {
                         string sid = si.SID.ToString().ToUpper();
 
-                        cmdCheck.Parameters.AddWithValue("@SID", sid);
+                        AddParam(cmdCheck, "@SID", sid);
                         if ((long)cmdCheck.ExecuteScalar() > 0) { return false; }
 
-                        cmd.Parameters.AddWithValue("@SID", sid);
-                        cmd.Parameters.AddWithValue("@IsEnable", si.IsEnable);
-                        cmd.Parameters.AddWithValue("@ServerName", si.ServerName);
-                        cmd.Parameters.AddWithValue("@ServerIP", si.ServerIP);
-                        cmd.Parameters.AddWithValue("@ServerPort", si.ServerPort);
-                        cmd.Parameters.AddWithValue("@ForgotURL", string.IsNullOrEmpty(si.ForgotURL) ? "" : si.ForgotURL);
-                        cmd.Parameters.AddWithValue("@RegisterURL", string.IsNullOrEmpty(si.RegisterURL) ? "" : si.RegisterURL);
-                        cmd.Parameters.AddWithValue("@VerifyURL", string.IsNullOrEmpty(si.VerifyURL) ? "" : si.VerifyURL);
+                        AddParam(cmd, "@SID", sid);
+                        AddParam(cmd, "@IsEnable", si.IsEnable);
+                        AddParam(cmd, "@ServerName", si.ServerName);
+                        AddParam(cmd, "@ServerIP", si.ServerIP);
+                        AddParam(cmd, "@ServerPort", si.ServerPort);
+                        AddParam(cmd, "@ForgotURL", string.IsNullOrEmpty(si.ForgotURL) ? "" : si.ForgotURL);
+                        AddParam(cmd, "@RegisterURL", string.IsNullOrEmpty(si.RegisterURL) ? "" : si.RegisterURL);
+                        AddParam(cmd, "@VerifyURL", string.IsNullOrEmpty(si.VerifyURL) ? "" : si.VerifyURL);
 
                         if (cmd.ExecuteNonQuery() <= 0) { return false; }
 
@@ -34299,13 +34359,13 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    using (SqliteConnection conn = new SqliteConnection(DataBase.conStr))
                     {
                         conn.Open();
 
-                        using (SQLiteTransaction tx = conn.BeginTransaction())
+                        using (SqliteTransaction tx = conn.BeginTransaction())
                         {
-                            using (SQLiteCommand del = new SQLiteCommand("DELETE FROM ServerRuleInfo; DELETE FROM ServerInfo;", conn, tx))
+                            using (SqliteCommand del = new SqliteCommand("DELETE FROM ServerRuleInfo; DELETE FROM ServerInfo;", conn, tx))
                             {
                                 del.ExecuteNonQuery();
                             }
@@ -34334,11 +34394,11 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    using (SqliteConnection conn = new SqliteConnection(DataBase.conStr))
                     {
                         conn.Open();
 
-                        using (SQLiteTransaction transaction = conn.BeginTransaction())
+                        using (SqliteTransaction transaction = conn.BeginTransaction())
                         {
                             if (DataBase.InsertTable_ServerRuleInfo(sid.ToString().ToUpper(), rule, transaction))
                             {
@@ -34360,7 +34420,7 @@ namespace WinsockPacketEditor
                 return bReturn;
             }
 
-            private static bool InsertTable_ServerRuleInfo(string sid, RuleInfo rule, SQLiteTransaction transaction)
+            private static bool InsertTable_ServerRuleInfo(string sid, RuleInfo rule, SqliteTransaction transaction)
             {
                 try
                 {
@@ -34371,16 +34431,16 @@ namespace WinsockPacketEditor
                             @RID, @SID, @IsEnable, @RuleType, @RuleArgument, @RuleAction
                         );";
 
-                    using (SQLiteCommand cmd = new SQLiteCommand(sql, transaction.Connection, transaction))
+                    using (SqliteCommand cmd = new SqliteCommand(sql, transaction.Connection, transaction))
                     {
                         string rid = Guid.NewGuid().ToString().ToUpper();
 
-                        cmd.Parameters.AddWithValue("@RID", rid);
-                        cmd.Parameters.AddWithValue("@SID", sid);
-                        cmd.Parameters.AddWithValue("@IsEnable", rule.IsEnable);
-                        cmd.Parameters.AddWithValue("@RuleType", (int)rule.RType);
-                        cmd.Parameters.AddWithValue("@RuleArgument", rule.RArgument);
-                        cmd.Parameters.AddWithValue("@RuleAction", (int)rule.RAction);
+                        AddParam(cmd, "@RID", rid);
+                        AddParam(cmd, "@SID", sid);
+                        AddParam(cmd, "@IsEnable", rule.IsEnable);
+                        AddParam(cmd, "@RuleType", (int)rule.RType);
+                        AddParam(cmd, "@RuleArgument", rule.RArgument);
+                        AddParam(cmd, "@RuleAction", (int)rule.RAction);
 
                         int rowsAffected = cmd.ExecuteNonQuery();
                         return rowsAffected > 0;
@@ -34403,7 +34463,7 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "CREATE TABLE IF NOT EXISTS NoticeInfo (";
                         sql += "NID TEXT NOT NULL PRIMARY KEY,";
@@ -34414,7 +34474,7 @@ namespace WinsockPacketEditor
                         sql += "NoticeTime TIMESTAMP NOT NULL";
                         sql += ");";
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                         {
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -34437,11 +34497,11 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
                     {
                         string sql = "SELECT * FROM NoticeInfo;";
 
-                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        using (SqliteDataAdapter adapter = new SqliteDataAdapter(sql, conn))
                         {
                             adapter.Fill(dtReturn);
                         }
@@ -34459,11 +34519,11 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    using (SqliteConnection conn = new SqliteConnection(DataBase.conStr))
                     {
                         conn.Open();
 
-                        using (SQLiteTransaction tx = conn.BeginTransaction())
+                        using (SqliteTransaction tx = conn.BeginTransaction())
                         {
                             if (InsertTable_NoticeInfo(ni, conn, tx))
                             {
@@ -34484,27 +34544,27 @@ namespace WinsockPacketEditor
             }
 
             /// <summary>用<b>调用方的连接与事务</b>插一条公告（不提交）。NID 已存在返回 false。</summary>
-            public static bool InsertTable_NoticeInfo(NoticeInfo ni, SQLiteConnection conn, SQLiteTransaction tx)
+            public static bool InsertTable_NoticeInfo(NoticeInfo ni, SqliteConnection conn, SqliteTransaction tx)
             {
                 try
                 {
                     string sqlCheck = "SELECT COUNT(1) FROM NoticeInfo WHERE NID = @NID;";
                     string sql = "INSERT INTO NoticeInfo (NID, NoticeType, NoticeTitle, NoticeContent, NoticeMore, NoticeTime) VALUES (@NID, @NoticeType, @NoticeTitle, @NoticeContent, @NoticeMore, @NoticeTime);";
 
-                    using (SQLiteCommand cmdCheck = new SQLiteCommand(sqlCheck, conn, tx))
-                    using (SQLiteCommand cmd = new SQLiteCommand(sql, conn, tx))
+                    using (SqliteCommand cmdCheck = new SqliteCommand(sqlCheck, conn, tx))
+                    using (SqliteCommand cmd = new SqliteCommand(sql, conn, tx))
                     {
                         string nid = ni.NID.ToString().ToUpper();
 
-                        cmdCheck.Parameters.AddWithValue("@NID", nid);
+                        AddParam(cmdCheck, "@NID", nid);
                         if ((long)cmdCheck.ExecuteScalar() > 0) { return false; }
 
-                        cmd.Parameters.AddWithValue("@NID", nid);
-                        cmd.Parameters.AddWithValue("@NoticeType", ni.NoticeType);
-                        cmd.Parameters.AddWithValue("@NoticeTitle", ni.NoticeTitle);
-                        cmd.Parameters.AddWithValue("@NoticeContent", ni.NoticeContent);
-                        cmd.Parameters.AddWithValue("@NoticeMore", string.IsNullOrEmpty(ni.NoticeMore) ? "" : ni.NoticeMore);
-                        cmd.Parameters.AddWithValue("@NoticeTime", ni.NoticeTime);
+                        AddParam(cmd, "@NID", nid);
+                        AddParam(cmd, "@NoticeType", ni.NoticeType);
+                        AddParam(cmd, "@NoticeTitle", ni.NoticeTitle);
+                        AddParam(cmd, "@NoticeContent", ni.NoticeContent);
+                        AddParam(cmd, "@NoticeMore", string.IsNullOrEmpty(ni.NoticeMore) ? "" : ni.NoticeMore);
+                        AddParam(cmd, "@NoticeTime", ni.NoticeTime);
 
                         return cmd.ExecuteNonQuery() > 0;
                     }
@@ -34521,13 +34581,13 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    using (SqliteConnection conn = new SqliteConnection(DataBase.conStr))
                     {
                         conn.Open();
 
-                        using (SQLiteTransaction tx = conn.BeginTransaction())
+                        using (SqliteTransaction tx = conn.BeginTransaction())
                         {
-                            using (SQLiteCommand del = new SQLiteCommand("DELETE FROM NoticeInfo;", conn, tx))
+                            using (SqliteCommand del = new SqliteCommand("DELETE FROM NoticeInfo;", conn, tx))
                             {
                                 del.ExecuteNonQuery();
                             }
