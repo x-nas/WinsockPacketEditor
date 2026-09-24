@@ -18,6 +18,9 @@ namespace WinsockPacketEditor
     /// 支持：Content-Length、Transfer-Encoding: chunked、无正文（204/304/1xx）。
     /// 其它情况（无长度、keep-alive 流式）退化成「头部 + 当前已到的字节」一条，
     /// 之后进入直通模式，下一次看到新的头再恢复解析。
+    ///
+    /// 缓冲用 <see cref="MemoryStream.GetBuffer"/> + 显式长度读写，<b>不再每次 Feed 都 ToArray 整份</b> ——
+    /// 否则大正文下载时每来一段就拷一次已累积的全部字节，是 O(n²)。
     /// </summary>
     internal sealed class HttpSniffer
     {
@@ -27,6 +30,8 @@ namespace WinsockPacketEditor
         {
             "GET ", "POST ", "HEAD ", "PUT ", "DELETE ", "OPTIONS ", "PATCH ", "TRACE ", "CONNECT ",
         };
+
+        private static readonly string[] HttpPrefix = { "HTTP/" };
 
         private readonly bool isRequest;
         private readonly MemoryStream buf = new MemoryStream();
@@ -65,7 +70,7 @@ namespace WinsockPacketEditor
 
             if (passthrough)
             {
-                if (LooksLikeHead(data)) { passthrough = false; }
+                if (LooksLikeHead(data, data.Length)) { passthrough = false; }
                 else { result.Add(data); return result; }
             }
 
@@ -73,9 +78,11 @@ namespace WinsockPacketEditor
 
             if (!IsHttp)
             {
-                byte[] head = buf.ToArray();
-                if (LooksLikeHead(head)) { IsHttp = true; }
-                else if (head.Length >= 8 || !IsPossiblyHead(head))
+                //看已收的字节，不再为每次 Feed 拷一份整缓冲
+                byte[] headBuf = buf.GetBuffer();
+                int headLen = (int)buf.Length;
+                if (LooksLikeHead(headBuf, headLen)) { IsHttp = true; }
+                else if (headLen >= 8 || !IsPossiblyHead(headBuf, headLen))
                 {
                     IsNotHttp = true;
                     buf.SetLength(0);
@@ -89,11 +96,12 @@ namespace WinsockPacketEditor
 
             while (true)
             {
-                byte[] all = buf.ToArray();
-                int headEnd = IndexOfCrlfCrlf(all);
+                byte[] all = buf.GetBuffer();
+                int len = (int)buf.Length;
+                int headEnd = IndexOfCrlfCrlf(all, len);
                 if (headEnd < 0)
                 {
-                    if (all.Length > MaxBuffer) { IsNotHttp = true; buf.SetLength(0); }
+                    if (len > MaxBuffer) { IsNotHttp = true; buf.SetLength(0); }
                     break;
                 }
 
@@ -103,10 +111,10 @@ namespace WinsockPacketEditor
                 int total = -1;
                 if (IsChunked(headers))
                 {
-                    total = ChunkedTotal(all, bodyStart);
+                    total = ChunkedTotal(all, len, bodyStart);
                     if (total < 0)
                     {
-                        if (all.Length > MaxBuffer) { IsNotHttp = true; buf.SetLength(0); }
+                        if (len > MaxBuffer) { IsNotHttp = true; buf.SetLength(0); }
                         break;   // 还没收完
                     }
                 }
@@ -115,13 +123,13 @@ namespace WinsockPacketEditor
                     int cl = ContentLength(headers);
                     if (cl >= 0)
                     {
-                        if (all.Length < bodyStart + cl) { break; }   // 还没收完
+                        if (len < bodyStart + cl) { break; }   // 还没收完
                         total = bodyStart + cl;
                     }
                     else
                     {
                         // 没有长度：头 + 当前已到的字节算一条，之后直通
-                        total = all.Length;
+                        total = len;
                         passthrough = true;
                     }
                 }
@@ -130,12 +138,10 @@ namespace WinsockPacketEditor
                 Array.Copy(all, 0, msg, 0, total);
                 result.Add(msg);
 
-                // 剩下的挪回缓冲
-                int rest = all.Length - total;
-                byte[] rem = new byte[rest];
-                Array.Copy(all, total, rem, 0, rest);
-                buf.SetLength(0);
-                buf.Write(rem, 0, rest);
+                // 剩下的挪回缓冲开头（同一数组内前移，Array.Copy 支持重叠），再把长度收到 rest
+                int rest = len - total;
+                if (rest > 0) { Array.Copy(all, total, all, 0, rest); }
+                buf.SetLength(rest);
 
                 if (passthrough || rest == 0) { break; }
             }
@@ -143,27 +149,27 @@ namespace WinsockPacketEditor
             return result;
         }
 
-        private bool LooksLikeHead(byte[] b)
+        private bool LooksLikeHead(byte[] b, int len)
         {
-            if (b == null || b.Length < 4) { return false; }
+            if (b == null || len < 4) { return false; }
 
             if (isRequest)
             {
-                if (!LooksLikePrefix(b, Methods)) { return false; }
+                if (!LooksLikePrefix(b, len, Methods)) { return false; }
                 // 方法之后要看到 "HTTP/" 才认（避免把以 "GET " 开头的二进制当 HTTP）
-                return Encoding.ASCII.GetString(b, 0, Math.Min(b.Length, 64)).IndexOf("HTTP/", StringComparison.Ordinal) > 0
-                    || b.Length < 16;
+                return Encoding.ASCII.GetString(b, 0, Math.Min(len, 64)).IndexOf("HTTP/", StringComparison.Ordinal) > 0
+                    || len < 16;
             }
 
-            return LooksLikePrefix(b, new[] { "HTTP/" });
+            return LooksLikePrefix(b, len, HttpPrefix);
         }
 
-        /// <summary>b 是否是某个候选串的前缀（或已完整匹配）。</summary>
-        private static bool LooksLikePrefix(byte[] b, string[] candidates)
+        /// <summary>b 的前 len 个字节是否是某个候选串的前缀（或已完整匹配）。</summary>
+        private static bool LooksLikePrefix(byte[] b, int len, string[] candidates)
         {
             foreach (string c in candidates)
             {
-                int n = Math.Min(b.Length, c.Length);
+                int n = Math.Min(len, c.Length);
                 bool ok = true;
                 for (int i = 0; i < n; i++)
                 {
@@ -175,16 +181,16 @@ namespace WinsockPacketEditor
         }
 
         /// <summary>还可能是头部开头（字节太少，且与某个候选串前缀一致）。</summary>
-        private bool IsPossiblyHead(byte[] b)
+        private bool IsPossiblyHead(byte[] b, int len)
         {
-            if (b.Length == 0) { return true; }
-            if (isRequest) { return LooksLikePrefix(b, Methods); }
-            return LooksLikePrefix(b, new[] { "HTTP/" });
+            if (len == 0) { return true; }
+            if (isRequest) { return LooksLikePrefix(b, len, Methods); }
+            return LooksLikePrefix(b, len, HttpPrefix);
         }
 
-        private static int IndexOfCrlfCrlf(byte[] b)
+        private static int IndexOfCrlfCrlf(byte[] b, int len)
         {
-            for (int i = 0; i + 3 < b.Length; i++)
+            for (int i = 0; i + 3 < len; i++)
             {
                 if (b[i] == 13 && b[i + 1] == 10 && b[i + 2] == 13 && b[i + 3] == 10) { return i; }
             }
@@ -213,12 +219,12 @@ namespace WinsockPacketEditor
         }
 
         /// <summary>分块编码的总长度（含结尾 0 块）；没收完返回 -1。</summary>
-        private static int ChunkedTotal(byte[] b, int start)
+        private static int ChunkedTotal(byte[] b, int len, int start)
         {
             int pos = start;
             while (true)
             {
-                int lineEnd = IndexOfCrlf(b, pos);
+                int lineEnd = IndexOfCrlf(b, len, pos);
                 if (lineEnd < 0) { return -1; }
 
                 string sizeLine = Encoding.ASCII.GetString(b, pos, lineEnd - pos).Trim();
@@ -233,20 +239,20 @@ namespace WinsockPacketEditor
 
                 if (size == 0)
                 {
-                    // 结尾：0\r\n 之后再一个 CRLF（允许有 trailer，简化处理：找下一个 CRLFCRLF 或空行）
-                    int endPos = IndexOfCrlf(b, pos);
+                    // 结尾：0\r\n 之后再一个 CRLF（允许有 trailer，简化处理：找下一个 CRLF 或空行）
+                    int endPos = IndexOfCrlf(b, len, pos);
                     if (endPos < 0) { return -1; }
                     return endPos + 2;
                 }
 
-                if (b.Length < pos + size + 2) { return -1; }
+                if (len < pos + size + 2) { return -1; }
                 pos += size + 2;   // 数据 + 结尾 CRLF
             }
         }
 
-        private static int IndexOfCrlf(byte[] b, int from)
+        private static int IndexOfCrlf(byte[] b, int len, int from)
         {
-            for (int i = from; i + 1 < b.Length; i++)
+            for (int i = from; i + 1 < len; i++)
             {
                 if (b[i] == 13 && b[i + 1] == 10) { return i; }
             }

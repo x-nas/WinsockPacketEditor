@@ -7774,32 +7774,36 @@ namespace WinsockPacketEditor
 
                 #region//处理 UDP 请求数据
 
-                public static void ProcessUdpRequest(ProxySession psSession, ProxyUDP pu, IPEndPoint epRemote, Span<byte> bData)
+                public static void ProcessUdpRequest(ProxySession psSession, ProxyUDP pu, IPEndPoint epRemote, byte[] buffer, int offset, int length)
                 {
                     try
                     {
-                        Operate.ProxyConfig.Proxy.AddressType addressType = (Operate.ProxyConfig.Proxy.AddressType)bData[3];
+                        if (buffer == null || length < 4) { return; }
+
+                        Operate.ProxyConfig.Proxy.AddressType addressType = (Operate.ProxyConfig.Proxy.AddressType)buffer[offset + 3];
 
                         if (addressType == Operate.ProxyConfig.Proxy.AddressType.IPv4 ||
                             addressType == Operate.ProxyConfig.Proxy.AddressType.IPv6 ||
                             addressType == Operate.ProxyConfig.Proxy.AddressType.Domain)
                         {
                             pu.ClientEndPoint = epRemote;
-                            byte[] bADDRESS = bData.Slice(4, bData.Length - 4).ToArray();
+                            byte[] bADDRESS = new byte[length - 4];
+                            Buffer.BlockCopy(buffer, offset + 4, bADDRESS, 0, bADDRESS.Length);
 
                             /*
                                 目标地址能同步定下来（IP 字面量、或域名已在缓存里）就直接转；
                                 只有「第一次见到的域名」要查 DNS，那一包拷一份出来异步解析后再转 ——
                                 以前是 GetAwaiter().GetResult() 同步等 DNS，把 UDP 接收的 IOCP 线程卡住几十到几百毫秒。
-                                bData 指向的是 SocketAsyncEventArgs 的缓冲，返回后就会被下一次接收复用，所以异步那条路必须先拷贝。
+                                buffer 是 SocketAsyncEventArgs 的接收缓冲，返回后就会被下一次接收复用，所以异步那条路必须先拷贝。
                             */
                             if (Operate.ProxyConfig.Proxy.TryGetIPEndPoint_Sync(addressType, bADDRESS, out IPEndPoint targetEndPoint))
                             {
-                                RelayUdpRequest(psSession, pu, targetEndPoint, addressType, bData);
+                                RelayUdpRequest(psSession, pu, targetEndPoint, addressType, buffer, offset, length);
                                 return;
                             }
 
-                            byte[] copy = bData.ToArray();
+                            byte[] copy = new byte[length];
+                            Buffer.BlockCopy(buffer, offset, copy, 0, length);
                             _ = Task.Run(async () =>
                             {
                                 try
@@ -7807,7 +7811,7 @@ namespace WinsockPacketEditor
                                     var (ep, _) = await Operate.ProxyConfig.Proxy.GetIPEndPoint_ByAddressType(addressType, bADDRESS);
                                     if (ep != null && pu.IsActive)
                                     {
-                                        RelayUdpRequest(psSession, pu, ep, addressType, copy);
+                                        RelayUdpRequest(psSession, pu, ep, addressType, copy, 0, copy.Length);
                                     }
                                 }
                                 catch (Exception ex)
@@ -7823,19 +7827,23 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                private static void RelayUdpRequest(ProxySession psSession, ProxyUDP pu, IPEndPoint targetEndPoint, Operate.ProxyConfig.Proxy.AddressType addressType, Span<byte> bData)
+                private static void RelayUdpRequest(ProxySession psSession, ProxyUDP pu, IPEndPoint targetEndPoint, Operate.ProxyConfig.Proxy.AddressType addressType, byte[] buffer, int offset, int length)
                 {
-                    Span<byte> bRequestData = Operate.ProxyConfig.Proxy.GetUDPData_ByAddressType(addressType, bData);
+                    ReadOnlySpan<byte> datagram = buffer.AsSpan(offset, length);
+                    ReadOnlySpan<byte> bRequestData = Operate.ProxyConfig.Proxy.GetUDPData_ByAddressType(addressType, datagram);
                     if (bRequestData.IsEmpty) { return; }
+
+                    //payload 是 datagram 的后缀：它在 buffer 里的绝对偏移就是「整段长度 − payload 长度」
+                    int payloadOffset = offset + (length - bRequestData.Length);
 
                     if (Operate.ProxyConfig.Proxy.HookUDP_Req)
                     {
-                        Operate.FilterConfig.Filter.DoFilter_SOCKS_UDP(psSession, pu, targetEndPoint, bRequestData, Operate.PacketConfig.Packet.PacketType.UDP_Req);
+                        Operate.FilterConfig.Filter.DoFilter_SOCKS_UDP(psSession, pu, targetEndPoint, buffer.AsSpan(payloadOffset, bRequestData.Length), Operate.PacketConfig.Packet.PacketType.UDP_Req);
                         Operate.ProxyConfig.Account.AddTraffic(psSession.AID, psSession.ClientIP, bRequestData.Length);
                     }
                     else
                     {
-                        psSession.SendUdpData(pu.ClientSocket, bRequestData, targetEndPoint);
+                        psSession.SendUdpData(pu.ClientSocket, buffer, payloadOffset, bRequestData.Length, targetEndPoint);
                     }
 
                     pu.UpdateActivity();
@@ -7873,7 +7881,7 @@ namespace WinsockPacketEditor
                                     if (bData.Length < 1) { return false; }
                                     int length = bData[0];
                                     if (bData.Length < 1 + length + 2) { return false; }
-                                    string host = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF8, bData.AsSpan(1, length).ToArray());
+                                    string host = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF8, bData.AsSpan(1, length));
                                     if (IPAddress.TryParse(host, out IPAddress literal)) { ip = literal; }
                                     else if (!Operate.ProxyConfig.Proxy.DnsCache.TryGetValue(host, out ip)) { return false; }
                                     portPosition = 1 + length;
@@ -7886,7 +7894,7 @@ namespace WinsockPacketEditor
 
                         if (ip == null) { return false; }
 
-                        ushort port = Operate.SystemConfig.ByteArrayToInt16BigEndian(bData.AsSpan(portPosition, 2).ToArray());
+                        ushort port = Operate.SystemConfig.ByteArrayToInt16BigEndian(bData.AsSpan(portPosition, 2));
                         EndPoint = new IPEndPoint(ip, port);
                         return true;
                     }
@@ -7903,13 +7911,14 @@ namespace WinsockPacketEditor
 
                 public static void ProcessUdpResponse(ProxySession psSession, ProxyUDP pu, IPEndPoint epRemote, Span<byte> bData)
                 {
+                    if (pu.ClientEndPoint == null)
+                    {
+                        return;
+                    }
+
+                    byte[] responseBuffer = null;
                     try
                     {
-                        if (pu.ClientEndPoint == null)
-                        {
-                            return;
-                        }
-
                         /*
                             RFC 1928 第 7 节：UDP 应答头里的 DST.ADDR / DST.PORT 是「这个数据报从哪儿来」—— 目标服务器的地址。
                             以前写成了客户端自己的地址：mihomo 把它当回包的源地址写回 TUN，
@@ -7920,8 +7929,9 @@ namespace WinsockPacketEditor
                         ushort port = ((ushort)epRemote.Port);
                         ReadOnlySpan<byte> bPort = stackalloc byte[2] { (byte)(port >> 8), (byte)port };
 
-                        byte[] responseBuffer = ArrayPool<byte>.Shared.Rent(4 + bIP.Length + bPort.Length + bData.Length);
-                        Span<byte> bResponseData = responseBuffer.AsSpan(0, 4 + bIP.Length + bPort.Length + bData.Length);
+                        int responseLength = 4 + bIP.Length + bPort.Length + bData.Length;
+                        responseBuffer = ArrayPool<byte>.Shared.Rent(responseLength);
+                        Span<byte> bResponseData = responseBuffer.AsSpan(0, responseLength);
 
                         bResponseData[0] = 0x00;
                         bResponseData[1] = 0x00;
@@ -7931,26 +7941,27 @@ namespace WinsockPacketEditor
                         bPort.CopyTo(bResponseData.Slice(4 + bIP.Length, bPort.Length));
                         bData.CopyTo(bResponseData.Slice(4 + bIP.Length + bPort.Length, bData.Length));
 
-                        if (!bResponseData.IsEmpty)
+                        if (Operate.ProxyConfig.Proxy.HookUDP_Resp)
                         {
-                            if (Operate.ProxyConfig.Proxy.HookUDP_Resp)
-                            {
-                                Operate.FilterConfig.Filter.DoFilter_SOCKS_UDP(psSession, pu, epRemote, bResponseData, Operate.PacketConfig.Packet.PacketType.UDP_Resp);
-                                Operate.ProxyConfig.Account.AddTraffic(psSession.AID, psSession.ClientIP, bResponseData.Length);
-                            }
-                            else
-                            {
-                                psSession.SendUdpData(pu.ClientSocket, bResponseData, pu.ClientEndPoint);
-                            }
-                            
-                            pu.UpdateActivity();
+                            Operate.FilterConfig.Filter.DoFilter_SOCKS_UDP(psSession, pu, epRemote, bResponseData, Operate.PacketConfig.Packet.PacketType.UDP_Resp);
+                            Operate.ProxyConfig.Account.AddTraffic(psSession.AID, psSession.ClientIP, responseLength);
+                        }
+                        else
+                        {
+                            //responseBuffer 本身就是 byte[]，直接发，不必再租一块拷一遍
+                            psSession.SendUdpData(pu.ClientSocket, responseBuffer, 0, responseLength, pu.ClientEndPoint);
                         }
 
-                        ArrayPool<byte>.Shared.Return(responseBuffer);
+                        pu.UpdateActivity();
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(ProcessUdpResponse), ex);
+                    }
+                    finally
+                    {
+                        //异常路径也必须还，否则共享池会被反复重新分配
+                        if (responseBuffer != null) { ArrayPool<byte>.Shared.Return(responseBuffer); }
                     }
                 }
 
@@ -8929,10 +8940,9 @@ namespace WinsockPacketEditor
 
                             case Operate.ProxyConfig.Proxy.AddressType.Domain:
                                 byte length = bData[0];
-                                var domainBytes = bData.AsSpan(1, length).ToArray();
                                 addressString = Operate.SystemConfig.BytesToString(
                                     Operate.PacketConfig.Packet.EncodingFormat.UTF8,
-                                    domainBytes);
+                                    bData.AsSpan(1, length));
                                 ip = await ProxyConfig.Proxy.ResolveAddress(addressString);
                                 portPosition = 1 + length;
                                 break;
@@ -8940,7 +8950,7 @@ namespace WinsockPacketEditor
 
                         if (ip != null)
                         {
-                            port = Operate.SystemConfig.ByteArrayToInt16BigEndian(bData.AsSpan(portPosition, 2).ToArray());
+                            port = Operate.SystemConfig.ByteArrayToInt16BigEndian(bData.AsSpan(portPosition, 2));
                             endPoint = new IPEndPoint(ip, port);
                         }
                     }
@@ -9003,37 +9013,37 @@ namespace WinsockPacketEditor
 
                 #region//获取 UDP 数据包
 
-                public static Span<byte> GetUDPData_ByAddressType(Operate.ProxyConfig.Proxy.AddressType addressType, Span<byte> bData)
+                public static ReadOnlySpan<byte> GetUDPData_ByAddressType(Operate.ProxyConfig.Proxy.AddressType addressType, ReadOnlySpan<byte> bData)
                 {
                     try
                     {
                         switch (addressType)
                         {
                             case Operate.ProxyConfig.Proxy.AddressType.IPv4:
-                                return bData.Length >= 10 ? bData.Slice(10) : Span<byte>.Empty;
+                                return bData.Length >= 10 ? bData.Slice(10) : ReadOnlySpan<byte>.Empty;
 
                             case Operate.ProxyConfig.Proxy.AddressType.Domain:
 
                                 if (bData.Length < 5)
                                 {
-                                    return Span<byte>.Empty;
+                                    return ReadOnlySpan<byte>.Empty;
                                 }
 
                                 byte domainLength = bData[4];
                                 int domainStart = 5 + domainLength + 2;
-                                return bData.Length >= domainStart ? bData.Slice(domainStart) : Span<byte>.Empty;
+                                return bData.Length >= domainStart ? bData.Slice(domainStart) : ReadOnlySpan<byte>.Empty;
 
                             case Operate.ProxyConfig.Proxy.AddressType.IPv6:
-                                return bData.Length >= 22 ? bData.Slice(22) : Span<byte>.Empty;
+                                return bData.Length >= 22 ? bData.Slice(22) : ReadOnlySpan<byte>.Empty;
 
                             default:
-                                return Span<byte>.Empty;
+                                return ReadOnlySpan<byte>.Empty;
                         }
                     }
                     catch (Exception ex)
                     {
                         DoLog(nameof(GetUDPData_ByAddressType), ex);
-                        return Span<byte>.Empty;
+                        return ReadOnlySpan<byte>.Empty;
                     }
                 }
 
@@ -19937,9 +19947,14 @@ namespace WinsockPacketEditor
                                 }
                                 else if (fi.FMode == FilterConfig.Filter.FilterMode.Advanced && MatchIndex != null)
                                 {
+                                    /*
+                                        多命中时<b>必须按位或</b>：Replace_Advanced 的返回值是「这一次匹配有没有真改到字节」。
+                                        写成赋值（bDoFilter = ...）只留最后一次匹配的结果 —— 末次匹配的改写越界返回 false 时，
+                                        前面几次已经改过字节，这里却会判成「没执行」：动作回 None、执行次数不增、bNewBuffer 不设。
+                                    */
                                     foreach (int iIndex in MatchIndex)
                                     {
-                                        bDoFilter = FilterConfig.Filter.Replace_Advanced(fi, iIndex, bufferSpan);
+                                        bDoFilter |= FilterConfig.Filter.Replace_Advanced(fi, iIndex, bufferSpan);
                                     }
 
                                     tempBuffer = bufferSpan.ToArray();
@@ -20109,16 +20124,19 @@ namespace WinsockPacketEditor
                                 ptType,
                                 new Operate.PacketConfig.Packet.SockAddr());
 
+                        //DoFilterList 在「没有滤镜改动」时回 null，表示与原始字节相同，用 bRawBuffer 即可
+                        byte[] bEffective = bNewBuffer ?? bRawBuffer;
+
                         if (FilterAction != Operate.FilterConfig.Filter.FilterAction.Intercept)
                         {
                             switch (ptType)
                             {
                                 case Operate.PacketConfig.Packet.PacketType.TCP_Req:
-                                    psSession.TargetSocket.Send(bNewBuffer);
+                                    psSession.TargetSocket.Send(bEffective);
                                     break;
 
                                 case Operate.PacketConfig.Packet.PacketType.TCP_Resp:
-                                    psSession.SendToClient(bNewBuffer, 0, bNewBuffer.Length);
+                                    psSession.SendToClient(bEffective, 0, bEffective.Length);
                                     break;
                             }
                         }
@@ -20165,7 +20183,7 @@ namespace WinsockPacketEditor
                         _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
                             DateTime.Now,
                             FilterAction,
-                            bNewBuffer.Length,
+                            bEffective.Length,
                             SocketID,
                             0,
                             ptType,
@@ -20174,7 +20192,7 @@ namespace WinsockPacketEditor
                             psSession.ServerAddress,
                             psSession.DomainType,
                             bRawBuffer,
-                            bNewBuffer,
+                            bEffective,
                             null);
                     }
                     catch (Exception ex)
@@ -20218,9 +20236,12 @@ namespace WinsockPacketEditor
                                 ptType,
                                 new Operate.PacketConfig.Packet.SockAddr());
 
+                        //DoFilterList 在「没有滤镜改动」时回 null，表示与原始字节相同，用 bRawBuffer 即可
+                        byte[] bEffective = bNewBuffer ?? bRawBuffer;
+
                         if (FilterAction != Operate.FilterConfig.Filter.FilterAction.Intercept)
                         {
-                            res = psSession.SendUdpData(pu.ClientSocket, bNewBuffer, epSend);
+                            res = psSession.SendUdpData(pu.ClientSocket, bEffective, 0, bEffective.Length, epSend);
                         }
 
                         string ClientAddr = $"{pu.ClientEndPoint.Address.ToString()}:{pu.ClientEndPoint.Port.ToString()}";
@@ -20238,7 +20259,7 @@ namespace WinsockPacketEditor
                             ServerAddr,
                             Operate.ProxyConfig.Proxy.DomainType.External,
                             bRawBuffer,
-                            bNewBuffer,
+                            bEffective,
                             null);
                     }
                     catch (Exception ex)
@@ -21678,12 +21699,29 @@ namespace WinsockPacketEditor
 
                 #region//执行滤镜列表
 
+                /// <summary>
+                /// 跑一遍滤镜列表。
+                /// <b>列表为空</b>时直接回 <c>bNewBuffer = null</c>（表示「与输入字节相同」），调用方用自己那份原始缓冲即可 ——
+                /// 这时不可能有任何改动，省一次整包拷贝。有滤镜时行为与改造前一致（始终回非 null）。
+                ///
+                /// ⚠️ <b>不要扩展成「有滤镜但没命中也不拷」</b>：滤镜的返回值<b>不足以证明「没改过字节」</b> ——
+                /// 高级替换多命中时 <c>DoFilterCore</c> 只记最后一次的结果（末次越界返回 false 时前面已经改过），
+                /// <c>FAction = None</c> 的执行器也会改字节却回 None。此时回 null 会让调用方用原始字节发出去，
+                /// 真实改动被丢掉。少一次拷贝不值得这个风险。
+                /// </summary>
                 public static FilterConfig.Filter.FilterAction DoFilterList(
                     Int32 iSocket, Span<byte> bufferSpan, out byte[] bNewBuffer,
                     PacketConfig.Packet.PacketType ptType, PacketConfig.Packet.SockAddr sAddr)
                 {
+                    var filters = Ipc.FilterEngine.Filters;
+                    if (filters.Count == 0)
+                    {
+                        bNewBuffer = null;
+                        return FilterConfig.Filter.FilterAction.None;
+                    }
+
                     using (Ipc.HookPorts.Enter())
-                        return DoFilterListCore(iSocket, bufferSpan, out bNewBuffer, ptType, sAddr, Ipc.FilterEngine.Filters, null);
+                        return DoFilterListCore(iSocket, bufferSpan, out bNewBuffer, ptType, sAddr, filters, null);
                 }
 
                 internal static FilterConfig.Filter.FilterAction FilterHookPacket(
