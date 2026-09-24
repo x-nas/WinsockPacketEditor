@@ -4090,7 +4090,10 @@ namespace WPEHybrid
                 var names = new List<string>();
                 if (arr != null) { foreach (var x in arr) { string n = (string)x; if (!string.IsNullOrEmpty(n)) { names.Add(n); } } }
 
-                string error = await Operate.ProxyConfig.Proxy.SaveMihomoSetting(enable, tunStack, dnsMode, names.ToArray());
+                //手动指定的进程名（; 分隔）——进程列表枚举不出来时的兜底入口
+                string manualProcessNames = args["manualProcessNames"] == null ? null : (string)args["manualProcessNames"];
+
+                string error = await Operate.ProxyConfig.Proxy.SaveMihomoSetting(enable, tunStack, dnsMode, names.ToArray(), manualProcessNames);
                 return new { error = error ?? string.Empty };
             });
 

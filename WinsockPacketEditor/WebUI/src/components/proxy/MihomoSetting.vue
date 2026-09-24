@@ -43,13 +43,15 @@ interface Setting {
   EnableMihomo: boolean; TunStack: string; DnsMode: string
   /** 已保存的拦截名单（进程名）。打开时抄成草稿，保存时整体提交 */
   ProcessNames: string[]
+  /** 手动指定的进程名（; 分隔）。与勾选名单合并出规则，随设置保存 */
+  ManualProcessNames: string
 }
 
 const EMPTY: Setting = {
   ProxyRunning: false, KernelRunning: false, KernelReady: false, KernelVersion: '',
   EnableSocks5: true, Socks5Port: 1080, EnableAuth: true, IsAdmin: true, LastError: '',
   EnableMihomo: false, TunStack: 'system', DnsMode: 'fake-ip',
-  ProcessNames: [],
+  ProcessNames: [], ManualProcessNames: '',
 }
 
 const busy = ref(false)
@@ -245,6 +247,7 @@ async function save(): Promise<void> {
       tunStack: f.value.TunStack,
       dnsMode: f.value.DnsMode,
       processNames: processNames(),
+      manualProcessNames: f.value.ManualProcessNames,
     })
 
     //成功 / 失败都给一条轻提示（与「启动代理」同一种反馈）；系统日志由 C# 那边记
@@ -354,6 +357,19 @@ async function save(): Promise<void> {
         </div>
       </section>
       </div>
+
+      <!-- 03 · 手动指定进程（进程列表枚举不出来时的兜底入口） -->
+      <section class="sec manual" :class="{ off: !on }">
+        <div class="grp">{{ t('mh.manual') }}</div>
+        <div class="row">
+          <div class="k">{{ t('ps.processName') }}</div>
+          <div class="v">
+            <input v-model="f.ManualProcessNames" class="inp" spellcheck="false" :disabled="!on"
+                   :placeholder="t('mh.manualPh')" @keydown.enter.prevent>
+          </div>
+        </div>
+        <p class="hint">{{ t('mh.manualHint') }}</p>
+      </section>
     </div>
   </SettingsModal>
 </template>

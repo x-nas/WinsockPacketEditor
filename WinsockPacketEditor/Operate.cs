@@ -4217,7 +4217,8 @@ namespace WinsockPacketEditor
                         new XElement("DriverType", ProxyConfig.Proxy.DriverType),
                         new XElement("SelectProcessNames", ProxyConfig.Proxy.SerializeSelectProcessNames()),
                         new XElement("TunStack", ProxyConfig.Proxy.TunStack),
-                        new XElement("DnsMode", ProxyConfig.Proxy.DnsMode)
+                        new XElement("DnsMode", ProxyConfig.Proxy.DnsMode),
+                        new XElement("ManualProcessNames", ProxyConfig.Proxy.ManualProcessNames)
                         );
 
                     return xeProxyMode;
@@ -4306,6 +4307,12 @@ namespace WinsockPacketEditor
                         {
                             string dm = ProxyMode.Rows[0]["DnsMode"].ToString();
                             if (!string.IsNullOrEmpty(dm)) { ProxyConfig.Proxy.DnsMode = dm; }
+                        }
+
+                        //2026-09-24 加的列：手动进程名（; 分隔）
+                        if (ProxyMode.Columns.Contains("ManualProcessNames") && ProxyMode.Rows[0]["ManualProcessNames"] != DBNull.Value)
+                        {
+                            ProxyConfig.Proxy.ManualProcessNames = ProxyMode.Rows[0]["ManualProcessNames"].ToString();
                         }
                     }
                 }
@@ -4558,6 +4565,9 @@ namespace WinsockPacketEditor
 
                     XElement DnsMode = xeProxyMode.Element("DnsMode");
                     if (DnsMode != null && !string.IsNullOrEmpty(DnsMode.Value)) { ProxyConfig.Proxy.DnsMode = DnsMode.Value; }
+
+                    XElement ManualProcessNames = xeProxyMode.Element("ManualProcessNames");
+                    if (ManualProcessNames != null) { ProxyConfig.Proxy.ManualProcessNames = ManualProcessNames.Value ?? string.Empty; }
                 }
                 catch (Exception ex)
                 {
@@ -5425,40 +5435,39 @@ namespace WinsockPacketEditor
                 try
                 {
                     Process[] procesArr = Process.GetProcesses();
-                    int pCNT = procesArr.Length;
 
                     foreach (Process p in procesArr)
                     {
-                        //图标不在这里生成：Operate 只出数据，图标由外壳按路径去取（getProcessIcons）
-                        string ProcessPath = GetProcessPath(p);
-
-                        string ModuleName = string.Empty;
+                        string processName = string.Empty;
+                        int processId = 0;
 
                         try
                         {
-                            ModuleName = p.MainModule?.ModuleName ?? string.Empty;
+                            processName = p.ProcessName;
+                            processId = p.Id;
                         }
                         catch
-                        { 
-                            //
+                        {
+                            //进程在枚举与读取之间退出了 —— 跳过这一条
+                            continue;
                         }
+
+                        if (string.IsNullOrEmpty(processName)) { continue; }
 
                         /*
-                            取不到主模块的（受保护 / 系统进程，如 svchost / csrss / services）退回「进程名 + .exe」——
-                            那仍然是一条合法的 PROCESS-NAME 规则。不然这些进程在「进程设置」里点了也没反应
-                            （ModuleName 为空就没法按名拦截）。进程名带空格的是 Idle / Memory Compression
-                            这类伪进程，保留空串让前端跳过。
+                            主模块名先用「进程名 + .exe」兜底（那仍然是一条合法的 PROCESS-NAME 规则），
+                            取到映像路径后再由 FillProcessPaths 覆盖成真实文件名。进程名带空格的是
+                            Idle / Memory Compression 这类伪进程，保留空串让前端跳过。
                         */
-                        if (string.IsNullOrEmpty(ModuleName) && !string.IsNullOrEmpty(p.ProcessName) && p.ProcessName.IndexOf(' ') < 0)
-                        {
-                            ModuleName = p.ProcessName + ".exe";
-                        }
+                        string ModuleName = processName.IndexOf(' ') < 0 ? processName + ".exe" : string.Empty;
 
-                        ProcessInfo processInfo = new ProcessInfo(null, p.ProcessName, p.Id, ModuleName, ProcessPath);
-                        piReturn.Add(processInfo);
+                        piReturn.Add(new ProcessInfo(null, processName, processId, ModuleName, string.Empty));
                     }
 
                     piReturn.Sort((x, y) => x.ProcessName.CompareTo(y.ProcessName));
+
+                    //路径单独补：整批限时，超时 / 失败的留空（不再逐进程读 MainModule）
+                    FillProcessPaths(piReturn);
                 }
                 catch (Exception ex)
                 {
@@ -5514,15 +5523,79 @@ namespace WinsockPacketEditor
 
             #region//获取进程的路径
 
-            public static string GetProcessPath(Process process)
+            /// <summary>路径解析的整批时间预算（毫秒）。正常几十毫秒跑完；只有被驱动挂住时才会撞到它。</summary>
+            private const int ProcessPathBudgetMs = 2500;
+
+            /// <summary>
+            /// 给进程补上映像路径（并顺带把主模块名修正成真实文件名）。
+            ///
+            /// ⚠️ 用 QueryFullProcessImageName（内核返回路径，不读目标内存）替掉 Process.MainModule ——
+            /// 后者要读目标进程的 PEB / 模块链表，在受保护、被挂起或页面被换出的进程上会<b>无限阻塞</b>，
+            /// 而且没有超时：一个坏进程就能让整张进程表永远出不来（进程设置页一直「处理中…」、
+            /// 注入选进程页一直「没有枚举到任何进程」）。
+            ///
+            /// 整批放在一条后台线程上、主线程最多等 ProcessPathBudgetMs：万一某个 OpenProcess 被
+            /// 驱动挂住，到点就返回已填好的部分，其余路径留空（界面只是少个图标 / 路径），不会卡死。
+            /// 被放弃的线程是 IsBackground，进程退出时不会被它拖住。
+            /// </summary>
+            private static void FillProcessPaths(List<ProcessInfo> list)
             {
+                if (list == null || list.Count == 0) { return; }
+
+                Thread worker = new Thread(() =>
+                {
+                    foreach (ProcessInfo pi in list)
+                    {
+                        if (pi == null || pi.ProcessID <= 0) { continue; }
+
+                        string path = GetProcessPath(pi.ProcessID);
+                        if (string.IsNullOrEmpty(path)) { continue; }
+
+                        pi.ProcessPath = path;
+
+                        string module = Path.GetFileName(path);
+                        if (!string.IsNullOrEmpty(module)) { pi.ModuleName = module; }
+                    }
+                });
+                worker.IsBackground = true;
+                worker.Name = "wpe-proc-path";
+                worker.Start();
+                worker.Join(ProcessPathBudgetMs);
+            }
+
+            /// <summary>
+            /// 按 Pid 取映像完整路径。用内核返回的 QueryFullProcessImageName，<b>不读目标进程内存</b>，
+            /// 所以不会像 Process.MainModule 那样在受保护 / 挂起的进程上阻塞。取不到返回空串。
+            /// </summary>
+            public static string GetProcessPath(int processId)
+            {
+                IntPtr h = IntPtr.Zero;
+
                 try
                 {
-                    return process.MainModule.FileName;
+                    h = Kernel32.OpenProcess(Kernel32.PROCESS_QUERY_LIMITED_INFORMATION, false, processId);
+                    if (h == IntPtr.Zero) { return string.Empty; }
+
+                    int size = 1024;
+                    StringBuilder sb = new StringBuilder(size);
+                    if (Kernel32.QueryFullProcessImageName(h, 0, sb, ref size)) { return sb.ToString(); }
+
+                    //缓冲区不够时内核会把需要的长度写回 size，按它再来一次
+                    if (size > 1024)
+                    {
+                        sb = new StringBuilder(size);
+                        if (Kernel32.QueryFullProcessImageName(h, 0, sb, ref size)) { return sb.ToString(); }
+                    }
+
+                    return string.Empty;
                 }
                 catch
                 {
                     return string.Empty;
+                }
+                finally
+                {
+                    if (h != IntPtr.Zero) { Kernel32.CloseHandle(h); }
                 }
             }
 
@@ -5576,6 +5649,14 @@ namespace WinsockPacketEditor
                 public static bool Enable_Mihomo = false;
                 public static string TunStack = "system";   // TUN 栈：system / gvisor / mixed
                 public static string DnsMode = "fake-ip";   // DNS 模式：fake-ip / redir-host
+
+                /*
+                    手动指定的进程名（; 分隔），与「从进程列表勾选」的 SelectProcessNames 并存，
+                    出规则时取并集。存在的意义：进程枚举被第三方钩子 / 驱动干扰、列表为空时，
+                    仍能靠名字把进程强制转代理。原样落库；拆名 / 补 .exe 在 ParseManualProcessNames。
+                */
+                public static string ManualProcessNames = string.Empty;
+
                 public static string MustTCP_IP = "127.0.0.1";
                 public static ushort MustTCP_Port = 1080;
                 public static string MustTCP_UserName = string.Empty, MustTCP_PassWord = string.Empty;
@@ -5742,6 +5823,74 @@ namespace WinsockPacketEditor
                     foreach (ProcessInfo pi in next) { lstSelectProcessName.Add(pi); }
                 }
 
+                /* ── 手动指定的进程名（; 分隔）──────────────────────────── */
+
+                private static readonly char[] ManualNameSeparators = { ';', '；', ',', '，', '\r', '\n', '\t' };
+
+                /// <summary>
+                /// 手动进程名 → 规范化列表：分隔符认 ; ； , ， 换行与制表符；补 .exe；不分大小写去重；
+                /// 自身进程不收。名字里带空格的收进 Invalid（mihomo 那条规则写错会让整份配置加载失败）。
+                /// </summary>
+                public static List<string> ParseManualProcessNames(string Text, out List<string> Invalid)
+                {
+                    var list = new List<string>();
+                    var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                    Invalid = new List<string>();
+
+                    if (string.IsNullOrEmpty(Text)) { return list; }
+
+                    foreach (string raw in Text.Split(ManualNameSeparators, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        string name = raw.Trim();
+                        if (name.Length == 0) { continue; }
+
+                        //空格 / 制表符会让 mihomo 那条规则写坏、整份配置加载失败 —— 不收，报给用户
+                        if (name.IndexOf(' ') >= 0 || name.IndexOf('\t') >= 0)
+                        {
+                            Invalid.Add(name);
+                            continue;
+                        }
+
+                        if (name.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) == false) { name += ".exe"; }
+                        if (IsSelfProcess(0, name)) { continue; }
+
+                        if (seen.Add(name)) { list.Add(name); }
+                    }
+
+                    return list;
+                }
+
+                /// <summary>手动名单的规范化文本（; 分隔）。保存时用它替换用户输入；Invalid 里的名字要报错。</summary>
+                public static string NormalizeManualProcessNames(string Text, out List<string> Invalid)
+                {
+                    List<string> list = ParseManualProcessNames(Text, out Invalid);
+                    return string.Join(";", list.ToArray());
+                }
+
+                /// <summary>
+                /// 内核实际要拦截的进程：勾选名单 + 手动名字，并集去重。
+                /// 手动名字没有路径 / PID（多半没在跑），只带 ModuleName。
+                /// </summary>
+                public static List<ProcessInfo> GetInterceptProcesses()
+                {
+                    var list = new List<ProcessInfo>(lstSelectProcessName);
+
+                    var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                    foreach (ProcessInfo pi in lstSelectProcessName)
+                    {
+                        if (pi != null && !string.IsNullOrEmpty(pi.ModuleName)) { seen.Add(pi.ModuleName); }
+                    }
+
+                    List<string> invalid;
+                    foreach (string name in ParseManualProcessNames(ManualProcessNames, out invalid))
+                    {
+                        if (!seen.Add(name)) { continue; }
+                        list.Add(new ProcessInfo(null, Path.GetFileNameWithoutExtension(name), 0, name, string.Empty));
+                    }
+
+                    return list;
+                }
+
                 #region//按名称拦截的进程表：落库与读回
 
                 /*
@@ -5861,6 +6010,7 @@ namespace WinsockPacketEditor
                         TunStack = NormalizeTunStack(TunStack),
                         DnsMode = NormalizeDnsMode(DnsMode),
                         ProcessNames = SelectProcessNames(),
+                        ManualProcessNames = ManualProcessNames,
                     };
                 }
 
@@ -5871,22 +6021,33 @@ namespace WinsockPacketEditor
                 /// 成功 / 失败都往系统日志记一条（与「启动代理」同一个口径）；界面上的轻提示由前端弹
                 /// （那边七种语言的文案是全的，C# 的 L10n 表是生成物、标注了别手改）。
                 /// </summary>
-                public static async Task<string> SaveMihomoSetting(bool enable, string tunStack, string dnsMode, string[] processNames)
+                public static async Task<string> SaveMihomoSetting(bool enable, string tunStack, string dnsMode, string[] processNames, string manualProcessNames)
                 {
                     try
                     {
+                        //手动名单先校验：名字带空格会让 mihomo 整份配置加载失败，报错而不是静默丢掉
+                        List<string> invalid;
+                        string manual = NormalizeManualProcessNames(manualProcessNames, out invalid);
+                        if (invalid.Count > 0)
+                        {
+                            return "进程名不能包含空格：" + string.Join("、", invalid.ToArray());
+                        }
+
                         Enable_Mihomo = enable;
                         TunStack = NormalizeTunStack(tunStack);
                         DnsMode = NormalizeDnsMode(dnsMode);
 
                         //进程名单整体替换（勾选过程只动界面草稿，不碰这里）
                         ApplySelectProcessNames(processNames);
+                        ManualProcessNames = manual;
 
                         SystemConfig.SaveProxyMode_ToDB();
 
+                        int manualCount = string.IsNullOrEmpty(manual) ? 0 : manual.Split(';').Length;
+
                         DoLog(nameof(SaveMihomoSetting), string.Format(
-                            "进程设置已保存：进程拦截{0} · TUN 栈 {1} · DNS {2} · 拦截进程 {3} 个",
-                            Enable_Mihomo ? "开启" : "关闭", TunStack, DnsMode, lstSelectProcessName.Count));
+                            "进程设置已保存：进程拦截{0} · TUN 栈 {1} · DNS {2} · 拦截进程 {3} 个（手动 {4} 个）",
+                            Enable_Mihomo ? "开启" : "关闭", TunStack, DnsMode, GetInterceptProcesses().Count, manualCount));
 
                         if (!enable)
                         {
@@ -6678,7 +6839,7 @@ namespace WinsockPacketEditor
                             ? "127.0.0.1"
                             : ProxyTCP_IP.ToString();
 
-                        if (!MihomoKernel.Start(SOCKS5_Port, server, Enable_Auth, NormalizeTunStack(TunStack), NormalizeDnsMode(DnsMode), lstSelectProcessName, out error))
+                        if (!MihomoKernel.Start(SOCKS5_Port, server, Enable_Auth, NormalizeTunStack(TunStack), NormalizeDnsMode(DnsMode), GetInterceptProcesses(), out error))
                         {
                             DoLog(nameof(StartMihomoKernel), error);
                             UI.Toast(UiIcon.Error, error);
@@ -31509,6 +31670,7 @@ namespace WinsockPacketEditor
                         sql += "SelectProcessNames TEXT,";//代理模式 - 按名称拦截的进程表（一行一条 "模块名|路径"，见 SerializeSelectProcessNames）
                         sql += "TunStack TEXT DEFAULT 'system',";//代理模式 - 内置 mihomo 内核的 TUN 栈（2026-09-23）
                         sql += "DnsMode TEXT DEFAULT 'fake-ip',";//代理模式 - 内置 mihomo 内核的 DNS 模式（2026-09-23）
+                        sql += "ManualProcessNames TEXT,";//代理模式 - 手动指定的进程名（; 分隔，2026-09-24）
                         sql += "Only_WPC_Client BOOLEAN DEFAULT 0";//代理模式 - 只允许 WPC 客户端连接（2026-09-14）
                         sql += ");";
 
@@ -31523,6 +31685,7 @@ namespace WinsockPacketEditor
                             EnsureColumn(conn, "ProxyMode", "Only_WPC_Client", "BOOLEAN DEFAULT 0");
                             EnsureColumn(conn, "ProxyMode", "TunStack", "TEXT DEFAULT 'system'");
                             EnsureColumn(conn, "ProxyMode", "DnsMode", "TEXT DEFAULT 'fake-ip'");
+                            EnsureColumn(conn, "ProxyMode", "ManualProcessNames", "TEXT");
                         }
                     }
 
@@ -31628,7 +31791,8 @@ namespace WinsockPacketEditor
                         sql += "DriverType,";
                         sql += "SelectProcessNames,";
                         sql += "TunStack,";
-                        sql += "DnsMode";
+                        sql += "DnsMode,";
+                        sql += "ManualProcessNames";
                         sql += ") VALUES (";
                         sql += "@ProxyIP_Auto,";
                         sql += "@Enable_SOCKS5,";
@@ -31670,7 +31834,8 @@ namespace WinsockPacketEditor
                         sql += "@DriverType,";
                         sql += "@SelectProcessNames,";
                         sql += "@TunStack,";
-                        sql += "@DnsMode";
+                        sql += "@DnsMode,";
+                        sql += "@ManualProcessNames";
                         sql += ");";
 
                         using (SqliteCommand cmd = new SqliteCommand(sql, conn))
@@ -31716,6 +31881,7 @@ namespace WinsockPacketEditor
                             AddParam(cmd, "@SelectProcessNames", ProxyConfig.Proxy.SerializeSelectProcessNames());
                             AddParam(cmd, "@TunStack", ProxyConfig.Proxy.TunStack ?? "system");
                             AddParam(cmd, "@DnsMode", ProxyConfig.Proxy.DnsMode ?? "fake-ip");
+                            AddParam(cmd, "@ManualProcessNames", ProxyConfig.Proxy.ManualProcessNames ?? string.Empty);
 
                             conn.Open();
                             cmd.ExecuteNonQuery();

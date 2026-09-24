@@ -1157,4 +1157,7 @@ export const ko: Record<Key, string> = {
   'mh.saved': '프로세스 설정을 저장했습니다',
   'mh.needProxy': "프록시 서비스가 아직 실행되지 않았습니다. 시작해야 커널이 프로세스 트래픽을 가로챕니다.",
   'mh.tunHint': "TUN이 프로세스 트래픽을 가로챘는지 여부",
+  'mh.manual': "프로세스 이름 직접 지정",
+  'mh.manualPh': "여러 프로세스 이름은 ; 로 구분합니다(예: game.exe;launcher.exe)",
+  'mh.manualHint': "프로세스 목록을 가져올 수 없을 때 여기에 프로세스 이름을 직접 입력할 수 있습니다. 입력한 이름은 선택한 목록과 합쳐져 mihomo PROCESS-NAME 규칙으로 생성되며 설정과 함께 저장됩니다.",
 }

@@ -897,7 +897,8 @@ async function clearList(): Promise<void> {
           </div>
 
           <div v-if="!shownProcs.length" class="empty">
-            {{ procs.length ? t('inject.pick.none') : t('inject.pick.noneAll') }}
+            {{ loadingProcs ? t('inject.pick.loading')
+               : procs.length ? t('inject.pick.none') : t('inject.pick.noneAll') }}
           </div>
         </div>
       </div>

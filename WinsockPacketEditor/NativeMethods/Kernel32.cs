@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using System.Text;
 
 namespace WinsockPacketEditor
 {
@@ -57,5 +58,31 @@ namespace WinsockPacketEditor
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool GlobalMemoryStatusEx(ref MEMORYSTATUSEX lpBuffer);
+
+        /* ── 取进程映像路径（替代 Process.MainModule）────────────────────────
+           Process.MainModule 要读目标进程的 PEB / 模块链表，在受保护、被挂起或页面被换出的
+           进程上会无限阻塞，而且没有超时。QueryFullProcessImageName 由内核直接返回路径、
+           不读目标内存，因此不会卡；权限只要 PROCESS_QUERY_LIMITED_INFORMATION。 */
+
+        /// <summary>PROCESS_QUERY_LIMITED_INFORMATION —— 取映像路径所需的最小权限。</summary>
+        public const uint PROCESS_QUERY_LIMITED_INFORMATION = 0x1000;
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [SuppressUnmanagedCodeSecurity]
+        public static extern IntPtr OpenProcess(uint dwDesiredAccess, [MarshalAs(UnmanagedType.Bool)] bool bInheritHandle, int dwProcessId);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [SuppressUnmanagedCodeSecurity]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool CloseHandle(IntPtr hObject);
+
+        /// <summary>
+        /// 取进程映像的完整 Win32 路径（dwFlags=0）。lpdwSize 传缓冲区字符容量，
+        /// 成功时写回实际字符数（不含结尾 \0）。
+        /// </summary>
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        [SuppressUnmanagedCodeSecurity]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool QueryFullProcessImageName(IntPtr hProcess, uint dwFlags, [Out] StringBuilder lpExeName, ref int lpdwSize);
     }
 }
