@@ -26,6 +26,8 @@ const props = defineProps<{
   busy?: boolean
   /** 校验失败时由父组件填，显示在底部 */
   error?: string
+  /** 页脚左侧的提醒（琥珀色）。用于「还差一步才能保存」之类的提示；有 error 时让位给 error */
+  hint?: string
   /**
    * 只读弹窗：藏掉「保存」，把「取消」改成「关闭」。
    * 账号的登录记录就是这种 —— 它只是把一份明细摊开看，没有可保存的东西。
@@ -107,6 +109,10 @@ const { covered } = useModal(() => props.open)
         <span v-if="props.error" class="err">
           <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M12 8v5M12 16h.01" /></svg>
           {{ props.error }}
+        </span>
+        <span v-else-if="props.hint" class="warn">
+          <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M12 7v6M12 16h.01" /></svg>
+          {{ props.hint }}
         </span>
         <span class="grow" />
         <button class="btn" :class="{ primary: props.readonly }" :disabled="props.busy" @click="close">
@@ -230,6 +236,20 @@ const { covered } = useModal(() => props.open)
 }
 
 .err .ico { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2; fill: none; flex: none; }
+
+/* 页脚左侧的提醒（琥珀色）：与 .err 同一套「自己折行、不挤按钮」的规则 */
+.warn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex: 0 1 auto;
+  min-width: 0;
+  font-size: var(--fs-small);
+  line-height: 1.5;
+  color: var(--amber);
+}
+
+.warn .ico { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2; fill: none; flex: none; }
 
 .btn {
   flex: none;                /* 页脚的错误文字再长也不许挤压按钮（见 .err） */

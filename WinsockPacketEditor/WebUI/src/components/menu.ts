@@ -41,6 +41,8 @@ export const ICON = {
   //粘贴的两种形态：剪贴板里写一个 T / 一个 x
   pasteText: '<rect x="6" y="4" width="12" height="16" rx="1"/><path d="M9 4V3h6v1M9.5 10h5M12 10v6"/>',
   pasteHex: '<rect x="6" y="4" width="12" height="16" rx="1"/><path d="M9 4V3h6v1M9.5 10l5 6M14.5 10l-5 6"/>',
+  //合并：两条输入在左侧竖线汇合，从右边单线输出 —— 「合并复制」用
+  merge: '<path d="M3 5h6M3 19h6M9 5v14M9 12h12"/>',
   del: '<path d="M5 7h14M9 7V5h6v2M7 7l1 13h8l1-13"/>',
   clear: '<path d="M18 6L6 18M6 6l12 12"/>',
   save: '<path d="M5 4h10l4 4v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z M8 20v-6h8v6"/>',

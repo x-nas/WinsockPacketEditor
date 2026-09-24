@@ -20,7 +20,7 @@ param(
     [Parameter(Mandatory = $true)][string]$OutBaseName,
     [Parameter(Mandatory = $true)][string]$Icon,
     [string]$LauncherAssembly = 'Launcher',
-    # 只加在「输出的 exe 文件名」上（WPE 传 'v' → WPE64 v2.3.exe）。
+    # 只加在「输出的 exe 文件名」上（WPE 传 'v' → WPE64 v2.4.exe）。
     # payload.txt 的 Version 与解压目录 <版本>-<哈希> 不带它：那是版本号，不是给人看的名字。
     [string]$VersionPrefix = '',
     [string[]]$AllowedExe = @(),

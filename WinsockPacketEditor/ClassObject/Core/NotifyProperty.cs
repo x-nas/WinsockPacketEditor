@@ -15,7 +15,7 @@ namespace WinsockPacketEditor
     ///
     ///   ① <b>注入模式的目标进程里被迫加载 AntdUI</b>。实测（WPEHookTest --footprint）
     ///      无头核心注入之后，WPE 带进目标的托管程序集<b>只剩 AntdUI 这一个</b> ——
-    ///      Newtonsoft / EF6 / SQLite / OWIN / SuperSocket / QQWry / SunnyNet 全都没加载。
+    ///      Newtonsoft / EF6 / SQLite / OWIN / SuperSocket / QQWry 全都没加载。
     ///      也就是说风险清单 R2（DLL 与运行时冲突）到最后只剩这一项，
     ///      换掉这个基类就归零了。
     ///

@@ -68,7 +68,6 @@ namespace WinsockPacketEditor
         public int Socket;
         public long TheologyID;
         public int Type;
-        public long WebSocketType;
         public string ClientAddr;
         public string ClientLocation;
         public string ServerAddr;
@@ -90,7 +89,6 @@ namespace WinsockPacketEditor
                 Socket = Src.PacketSocket,
                 TheologyID = Src.TheologyID,
                 Type = (int)Src.PacketType,
-                WebSocketType = Src.WebSocketType,
                 ClientAddr = Src.ClientAddr,
                 ClientLocation = Src.ClientLocation,
                 ServerAddr = Src.ServerAddr,
@@ -597,8 +595,6 @@ namespace WinsockPacketEditor
         public string From = string.Empty;
         public string To = string.Empty;
         public byte[] Buffer = new byte[0];
-        /// <summary>套接字填 0 时能不能走 SunnyNet 的会话发送 —— 只有 HTTP / HTTPS / WebSocket 那条路抓到的包有会话号。</summary>
-        public bool CanSendBySession;
         public int SystemSocket;
     }
 
@@ -766,39 +762,33 @@ namespace WinsockPacketEditor
         public string Name = string.Empty;
     }
 
-    #region//设置页 DTO（WPEHybrid 的六个设置弹窗）
+    #region//设置页 DTO（各设置弹窗的只读 / 可改字段）
 
-    public sealed class ProcessSettingRow
+    /// <summary>
+    /// 「进程设置」页的数据（2026-09-23 起取代旧的 ProcessSettingRow）。
+    /// 只读环境状态 + 可改设置（开关 / TUN 栈 / DNS 模式 / 整份进程名单）。
+    /// ⚠️ 进程名单也走这里：界面打开时抄成草稿，点「保存」时整体提交（SaveMihomoSetting 的 processNames）。
+    /// </summary>
+    public sealed class MihomoSettingRow
     {
-        public int DriverType;          // 0 Proxifier · 1 NFAPI · 2 WinDivert
-        public bool IsLoadDriver;       // 驱动已加载后就不能再换
-        public bool MustTCP;
-        public string IP = string.Empty;
-        public int Port;
-        public bool AppointPort;
-        public string AppointPortContent = string.Empty;
-        public bool Auth;
-        public string UserName = string.Empty;
-        public string PassWord = string.Empty;
-        public int[] CheckedPids = new int[0];
-
-        /*
-            2026-09-10 加的一组「环境状态」—— 界面上那条链路体检要读它们。
-
-            这一屏是「把某个进程的流量转进 WPE 改包」的总入口，但那条链路上只有前半截归它管
-            （驱动 + 进程 + 转代理）；后半截（SunnyNet 随 HTTP 代理起、SOCKS5 接住转过来的连接、
-            服务在不在跑）归<b>代理设置</b>与状态条。不把它们一起给出来，这一屏就只能说
-            「保存成功」，说不出「保存了也不会有数据」—— 而后者才是用户真正撞上的那件事。
-
-            ⚠️ 这些字段<b>只读</b>：SaveProcessSetting 一个都不写回去。要改得去代理设置。
-        */
-        public bool EnableHttp;         // SunnyNet 是随 HTTP 代理起的，关着就没人接驱动送来的流量
-        public int HttpPort;
+        /* 只读状态 */
+        public bool ProxyRunning;       // 代理服务（SOCKS5）在跑
+        public bool KernelRunning;      // mihomo 内核进程在跑
+        public bool KernelReady;        // TUN 已就绪
+        public string KernelVersion = string.Empty;
         public bool EnableSocks5;
         public int Socks5Port;
-        public bool EnableAuth;         // 本机 SOCKS5 开着认证时，转代理必须填账号
-        public bool Running;            // 代理服务在不在跑
-        public bool IsAdmin;            // 装驱动要管理员权限
+        public bool EnableAuth;
+        public bool IsAdmin;
+        public string LastError = string.Empty;
+
+        /* 可改设置 */
+        public bool EnableMihomo;           // 是否启用进程拦截（= 加载内核）
+        public string TunStack = "system";  // system / gvisor / mixed
+        public string DnsMode = "fake-ip";  // fake-ip / redir-host
+
+        /// <summary>当前已保存的拦截名单（进程名）。界面抄成草稿，保存时整体提交。</summary>
+        public string[] ProcessNames = new string[0];
     }
 
     public sealed class ExtProxySettingRow

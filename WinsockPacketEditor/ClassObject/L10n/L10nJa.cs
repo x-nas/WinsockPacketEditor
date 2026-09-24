@@ -1,4 +1,4 @@
-﻿// 日本語（ja-JP）的对照表，由 L10n.Get 查（外壳经 CoreL10n，即 UI.T）。
+// 日本語（ja-JP）的对照表，由 L10n.Get 查（外壳经 CoreL10n，即 UI.T）。
 //
 // ⚠️ <b>这个文件是生成出来的</b>，别手改。
 //
@@ -50,7 +50,7 @@ namespace WinsockPacketEditor
             d["WSASendTo"] = "WSASendTo";
             d["WSARecvFrom"] = "WSARecvFrom";
             d["SureToDelete"] = "データを削除してもよろしいですか？";
-            d["ExcelFile"] = "Excel ファイル";
+            d["CsvFile"] = "CSV ファイル";
             d["Exporting"] = "書き出し中…";
             d["IPAddress"] = "IP アドレス";
             d["PacketHead"] = "パケット先頭";
@@ -67,15 +67,16 @@ namespace WinsockPacketEditor
             d["BetaVersion"] = "これはベータ版です";
             d["BetaVersionContent"] = "\r\nベータ版には未知の不具合が残っている可能性があります。ご注意のうえお使いください。\r\n正式版が必要な場合は、公式サイトから最新版をダウンロードしてください。";
             d["GotIt"] = "了解";
-            d["ExportToExcel.Success"] = "Excel への書き出しに成功しました";
-            d["ExportToExcel.Error"] = "Excel への書き出しに失敗しました";
+            d["ExportToCsv.Success"] = "CSV への書き出しに成功しました";
+            d["ExportToCsv.Error"] = "CSV への書き出しに失敗しました";
+            d["ExportToCsv.Empty"] = "エクスポートするデータがありません";
             d["CheckSystemLog"] = "システムログを確認してください";
-            d["ExcelColumn.Log"] = "時刻\\tモジュール\\t内容\\t";
-            d["ExcelColumn.FilterLog"] = "時刻\\tフィルター名\\t動作\\t一致\\t種別\\t長さ\\t";
-            d["ExcelColumn.ProxyLog"] = "時刻\\tアカウント\\tIP アドレス\\t内容\\t";
-            d["ExcelColumn.Proxy"] = "時刻\\t種別\\tソケット\\tクライアント\\tサーバー\\t長さ\\tデータ\\t";
-            d["ExcelColumn.Packet"] = "時刻\\t種別\\tソケット\\t送信元\\t宛先\\t長さ\\tデータ\\t";
-            d["ExcelColumn.BatchAccounts"] = "ユーザー名\\tパスワード\\t有効期限\\t";
+            d["CsvColumn.Log"] = "時刻,モジュール,内容";
+            d["CsvColumn.FilterLog"] = "時刻,フィルター名,動作,一致,種別,長さ";
+            d["CsvColumn.ProxyLog"] = "時刻,アカウント,IP アドレス,内容";
+            d["CsvColumn.Proxy"] = "時刻,種別,ソケット,クライアント,サーバー,長さ,データ";
+            d["CsvColumn.Packet"] = "時刻,種別,ソケット,送信元,宛先,長さ,データ";
+            d["CsvColumn.BatchAccounts"] = "ユーザー名,パスワード,有効期限";
             d["FilterListFile"] = "フィルター一覧ファイル";
             d["Password.Incorrect"] = "パスワードが違います";
             d["BatchSuccess"] = "一括調整が完了しました";
@@ -124,8 +125,6 @@ namespace WinsockPacketEditor
             d["ExportRobotList.Error"] = "ロボット一覧の書き出しに失敗しました";
             d["DeleteAccounts"] = "{0} 件のアカウントを削除してもよろしいですか？";
             d["InstallCertificate.Success"] = "WPE64 証明書のインストールに成功しました";
-            d["UninstallDriver"] = "ドライバーをアンインストール";
-            d["UninstallDriver.Alert"] = "ドライバーをアンインストールすると、コンピューターがすぐに再起動します。\r\n必要がなければアンインストールしないでください！";
             d["CerFile"] = "CER ファイル";
             d["CrtFile"] = "CRT ファイル";
             d["PemFile"] = "PEM ファイル";
@@ -290,7 +289,7 @@ namespace WinsockPacketEditor
             d["FilterEditForm.AppointLength.Error"] = "長さ指定が不正です";
             d["FilterEditForm.Change.Error"] = "差し替えの設定が不正です";
             d["SendList.SystemSocket.Blocked"] = "送信「{0}」で「システムソケットを使用」がオンですが、システムソケットが未設定です —— パケット一覧で右クリックし「システムソケットを設定」を先に行ってください。";
-            d["SendExecute.Socket.Missing"] = "送信「{0}」にソケットのないパケットがあります（HTTP / HTTPS / WebSocket はセッション番号で送るためソケットは常に 0）—— これらは送信できません。「システムソケットを使用」をオンにし、パケット一覧の右クリックから先に設定してください。";
+            d["SendExecute.Socket.Missing"] = "送信リスト「{0}」にソケットのないパケットがあります（ソケット番号 0）—— 送信できません。「システムソケットを使う」を有効にするか、一覧の右クリックから設定してください。";
             d["SendList.LoopCount.Fixed"] = "送信「{0}」のループ回数が不正です（{1}）。1 回として扱います。";
             d["SendEditForm.SendName.Empty"] = "送信名が空です";
             d["RobotEditForm.SendList.Error"] = "送信一覧の指定が不正です";
@@ -340,19 +339,6 @@ namespace WinsockPacketEditor
             d["RobotEditForm.INST.MoveTo"] = "座標へ移動 ( {0} )";
             d["RobotEditForm.INST.MoveBy"] = "相対移動 ( {0} )";
             d["RobotEditForm.RName.Empty"] = "ロボット名が空です";
-            d["ProcessSetting.Save.Success"] = "プロセス設定を保存しました";
-            d["ProcessSetting.LoadDriver.Error"] = "ドライバーの読み込みに失敗しました。管理者権限で実行しているか確認してください";
-            d["ProcessSetting.NeedHttpProxy"] = "プロセスのデータは HTTP プロキシを経由します。先にプロキシ設定で HTTP プロキシを有効にしてください";
-            d["ProcessSetting.Port.Invalid"] = "ポート指定に認識できない内容があります：{0}（1～65535 の数字をカンマ区切りで）";
-            d["ProcessSetting.Port.Empty"] = "「ポート指定」がオンですがポートが入力されていません";
-            d["ProcessSetting.IP.Empty"] = "転送先プロキシのアドレスが空です";
-            d["ProcessSetting.IP.Error"] = "転送先プロキシのアドレスが不正です（IPv4 アドレスかドメイン名）";
-            d["ProcessSetting.Port.Error"] = "転送先プロキシのポートは 1～65535 の範囲で指定してください";
-            d["ProcessSetting.Auth.Empty"] = "「認証が必要」がオンですがユーザー名かパスワードが空です";
-            d["ProcessSetting.Port.Loop"] = "転送先ポートに HTTP プロキシ自身のポート {0} は使えません：SunnyNet 自身に戻ってループします";
-            d["ProcessSetting.Socks5.Off"] = "ローカルの SOCKS5 プロキシが無効です。転送しても受け取る相手がいません";
-            d["ProcessSetting.Auth.Required"] = "ローカルの SOCKS5 プロキシは認証が有効です。「認証が必要」をオンにしてプロキシアカウントを入力してください。そうしないと捕捉したプロセスは通信できなくなります";
-            d["ProcessSetting.Detect.Before"] = "転送先プロキシに接続できないため保存しませんでした：{0}";
             d["WPCConfig.ServerList"] = "サーバー一覧";
             d["WPCConfig.NoticeList"] = "お知らせ一覧";
             d["WPCConfig.RuleList"] = "ルール一覧";

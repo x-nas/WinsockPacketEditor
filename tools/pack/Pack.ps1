@@ -7,7 +7,7 @@
 
     流程：npm run build → MSBuild 解决方案 Release → WPELauncher\New-LauncherPackage.ps1
     输出：dist\WPE64 v<版本>.exe（首次运行解压到 %LOCALAPPDATA%\WPE64\app\<版本>-<哈希>\）
-          文件名里的 v 由 -VersionPrefix 传下去，只影响输出文件名（payload.txt 的 Version 仍是 2.3）
+          文件名里的 v 由 -VersionPrefix 传下去，只影响输出文件名（payload.txt 的 Version 仍是 2.4）
 #>
 [CmdletBinding()]
 param(
@@ -56,7 +56,7 @@ Remove-Item -LiteralPath (Join-Path $McpOutput 'WPEMcpServer.pdb') -Force -Error
     -Name 'WPE64' -Title 'WPE x64' -Exe 'WinsockPacketEditor.exe' `
     -OutBaseName 'WPE64' -LauncherAssembly 'WPE64' -VersionPrefix 'v' `
     -Icon (Join-Path $Main 'wpe.ico') `
-    -AllowedExe @('EasyHook32Svc.exe', 'EasyHook64Svc.exe', 'SuperSocket.SocketService.exe') `
+    -AllowedExe @('EasyHook32Svc.exe', 'EasyHook64Svc.exe', 'SuperSocket.SocketService.exe', 'wpe-mihomo.exe') `
     -ExcludeRx @(
         '^WebView2\\',          # 本机运行过留下的 WebView2 用户数据
         '\.WebView2\\',         # 跑测探针的 WebView2 数据目录
@@ -67,7 +67,8 @@ Remove-Item -LiteralPath (Join-Path $McpOutput 'WPEMcpServer.pdb') -Force -Error
         'WinsockPacketEditor.exe.config', 'WPEHook.dll',
         'EasyHook.dll', 'EasyHook32.dll', 'EasyHook64.dll', 'EasyLoad32.dll', 'EasyLoad64.dll',
         'EasyHook32Svc.exe', 'EasyHook64Svc.exe',
-        'x64\SunnyNet64.dll', 'x64\SQLite.Interop.dll', 'x86\SQLite.Interop.dll',
+        'x64\SQLite.Interop.dll', 'x86\SQLite.Interop.dll',
+        'wpe-mihomo.exe',
         'SuperSocket.SocketEngine.dll', 'Microsoft.Owin.Host.HttpListener.dll',
         'runtimes\win-x64\native\WebView2Loader.dll',
         'IPLocation\qqwry.dat', 'Web\index.html', 'wwwroot\index.html', 'wpe-data.ico',

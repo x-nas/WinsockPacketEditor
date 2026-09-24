@@ -1,0 +1,50 @@
+# WPE · mihomo 内核配置模板（由 MihomoConfig 替换占位符后写入 config.yaml，请勿手改）
+#
+# 断环规则写在下面 rules 块的最前面且不可关闭：WPE 自身的 SOCKS5 出站若被 TUN 再抓回来，
+# 会经 mihomo 送回 WPE，形成死环（表现为直接断网）。
+#
+# log-level 用 error：warning 会把「某个系统进程直连某地址超时」这类
+# 与 WPE 无关的噪声一起打进来（KMS、遥测、投屏…），刷满系统日志。
+mixed-port: 0
+allow-lan: false
+mode: rule
+log-level: error
+external-controller: 127.0.0.1:{ctlPort}
+secret: {secret}
+
+tun:
+  enable: true
+  stack: {tunStack}
+  auto-route: true
+  auto-detect-interface: true
+  exclude-interface: ["lo"]
+  #刻意<b>不</b>用 route-exclude-address 排内网段：排掉之后内网里的游戏 / 私服抓不到包，
+  #而且若 DNS 是走路由器解析的，把 192.168.0.0/16 一起排掉会让抓包列表里只剩 IP、看不见域名。
+  #（2026-09-23 试过一轮，撤回了。）
+
+dns:
+  enable: true
+  enhanced-mode: {dnsMode}
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter:
+    - "localhost"
+    - "*.local"
+    - "127.0.0.0/8"
+    - "10.0.0.0/8"
+    - "172.16.0.0/12"
+    - "192.168.0.0/16"
+  nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+
+proxies:
+  - name: WPE
+    type: socks5
+    server: {server}
+    port: {socks5Port}
+{authLines}    udp: true
+
+find-process-mode: always
+
+rules:
+{rules}

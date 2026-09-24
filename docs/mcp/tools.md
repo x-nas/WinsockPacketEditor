@@ -75,10 +75,8 @@ For filters and WPC servers, reference fields accept an exact visible name or a 
 | `wpe_account_update` | `accounts.update` | `write.account` | `id` is the GUID returned by `wpe_accounts_list`, never `userName`; username is immutable and omitting password preserves it |
 | `wpe_account_delete` | `accounts.delete` | `write.account` | `id` is the GUID returned by `wpe_accounts_list`, never `userName` |
 | `wpe_proxy_auth_set_enabled` | `proxy.auth.setEnabled` | `write.proxy` | Boolean-only setting, rejects incompatible Only-WPC state and persists after WPE-local confirmation |
-| `wpe_proxy_http_set_enabled` | `proxy.http.setEnabled` | `write.proxy` | Boolean-only setting, validates SOCKS5/HTTP port compatibility, persists after WPE-local confirmation |
 | `wpe_proxy_max_connections_set` | `proxy.maxConnections.set` | `write.proxy` | Integer setting validated against the live machine cap; persists after WPE-local confirmation |
 | `wpe_proxy_socks5_port_set` | `proxy.socks5Port.set` | `write.proxy` | Integer port setting, validates range and HTTP conflict, persists after WPE-local confirmation |
-| `wpe_proxy_http_port_set` | `proxy.httpPort.set` | `write.proxy` | Integer port setting, requires HTTP enabled and validates SOCKS5 conflict, persists after WPE-local confirmation |
 | `wpe_firewall_set_enabled` | `firewall.setEnabled` | `write.firewall` | Boolean-only firewall switch, persists after WPE-local confirmation |
 | `wpe_proxy_only_wpc_set_enabled` | `proxy.onlyWpc.setEnabled` | `write.proxy` | Boolean-only setting, requires authentication when enabled, persists after WPE-local confirmation |
 | `wpe_external_proxy_set_enabled` | `proxy.external.setEnabled` | `write.proxy` | Boolean-only external proxy switch; validates configured host/port when enabling |

@@ -16,7 +16,7 @@
 import { computed, ref, watch } from 'vue'
 import { call } from '../../bridge'
 import { t } from '../../i18n'
-import { httpAddr, socks5Addr } from '../../stores/runtime'
+import { socks5Addr } from '../../stores/runtime'
 import CyberSelect from '../CyberSelect.vue'
 import SettingsModal from './SettingsModal.vue'
 
@@ -39,8 +39,6 @@ interface Setting {
   /** 每个连接预留多少 KB（SuperSocket 启动时按 连接数 × 这个值 一次性分配） */
   connBufferKB: number
   memoryGB: number
-  enableHttp: boolean
-  httpPort: number
   enableSystemProxy: boolean
   running: boolean
 }
@@ -63,14 +61,6 @@ const maxConnHint = computed(() => {
     .replace('{gb}', String(s.value.memoryGB))
     .replace('{cap}', String(s.value.maxConnectionCap))
 })
-
-/** 证书格式，顺序与 C# 的 SaveCertToFile_Dialog 的 CerType 严格对应（0..5）。 */
-const CERTS = [
-  'set.cert.cerBin', 'set.cert.cerB64', 'set.cert.crtBin',
-  'set.cert.crtB64', 'set.cert.pemB64', 'set.cert.android',
-] as const
-
-const certType = ref(0)
 
 watch(() => props.open, async (on) => {
   if (!on) return
@@ -106,8 +96,6 @@ async function save(): Promise<void> {
       enableAuth: s.value.enableAuth,
       onlyWpc: s.value.enableAuth && s.value.onlyWpc,
       maxConnection: Number(s.value.maxConnection),
-      enableHttp: s.value.enableHttp,
-      httpPort: Number(s.value.httpPort),
     })
 
     if (!r?.ok) {
@@ -117,8 +105,6 @@ async function save(): Promise<void> {
 
     // 监听地址可能变了，状态栏与运行状态条都在读它
     if (r.socks5Addr) socks5Addr.value = r.socks5Addr
-    //⚠️ httpAddr 无条件写 —— 这一屏正是关掉 HTTP 代理的地方，那时它必须变回空串
-    httpAddr.value = r.httpAddr || ''
 
     emit('update:open', false)
   } catch (e) {
@@ -141,13 +127,6 @@ async function toggleSystemProxy(): Promise<void> {
   }
 }
 
-async function exportCert(): Promise<void> {
-  try {
-    await call('exportCert', { type: certType.value })
-  } catch (e) {
-    console.error('[set] 导出证书失败', e)
-  }
-}
 </script>
 
 <template>
@@ -239,28 +218,7 @@ async function exportCert(): Promise<void> {
       </div>
 
       </section>
-      <!-- HTTP -->
-      <section class="sec">
-      <div class="grp">{{ t('set.grp.http') }}</div>
-
-      <div class="row">
-        <div class="k">{{ t('set.enableHttp') }}</div>
-        <div class="v">
-          <button class="chk" :class="{ on: s.enableHttp }" :disabled="locked"
-                  @click="s.enableHttp = !s.enableHttp"><i />HTTP</button>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="k">{{ t('set.httpPort') }}</div>
-        <div class="v">
-          <input v-model.number="s.httpPort" class="inp num" type="number" min="1" max="65535" :disabled="!s.enableHttp || locked">
-          <span class="tip">{{ t('set.portDiffer') }}</span>
-        </div>
-      </div>
-
-      </section>
-      <!-- 系统代理 / 证书 -->
+      <!-- 系统代理 -->
       <section class="sec">
       <div class="grp">{{ t('set.grp.system') }}</div>
 
@@ -273,13 +231,6 @@ async function exportCert(): Promise<void> {
         </div>
       </div>
 
-      <div class="row">
-        <div class="k">{{ t('set.cert') }}</div>
-        <div class="v">
-          <CyberSelect v-model="certType" class="sel" :options="CERTS.map((c, i) => ({ value: i, label: t(c) }))" />
-          <button class="mini" @click="exportCert">{{ t('set.exportCert') }}</button>
-        </div>
-      </div>
       </section>
     </template>
 

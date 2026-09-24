@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    32 位的靶子。验证矩阵要求「每一项都要在 32 位与 64 位目标各跑一遍」，
+    而真实的注入目标里 32 位的游戏仍占多数。
+
+    64 位的外壳注 32 位的目标要经 EasyHook 的 EasyHook32Svc.exe 辅助进程 ——
+    那条路与老路径完全一样，但<b>无头核心从来没在上面跑过</b>，得单独验。
+
+    ⚠️ 刻意<b>不</b>引用主工程：靶子只需要会做 TCP 收发，
+    引主工程会把一堆 x64 的原生依赖（SQLite.Interop 等）拖进 32 位进程。
+    这里全走裸 P/Invoke，零依赖。
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <PlatformTarget>x86</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>WPETarget32</AssemblyName>
+    <RootNamespace>WPETarget32</RootNamespace>
+  </PropertyGroup>
+
+</Project>

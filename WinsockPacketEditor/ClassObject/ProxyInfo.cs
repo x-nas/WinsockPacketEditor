@@ -85,23 +85,6 @@ namespace WinsockPacketEditor
 
         #endregion                
 
-        #region//WebSocket类型
-
-        long _WebSocketType;
-
-        public long WebSocketType
-        {
-            get => _WebSocketType;
-            set
-            {
-                if (_WebSocketType == value) return;
-                _WebSocketType = value;
-                OnPropertyChanged();
-            }
-        }
-
-        #endregion
-
         #region//客户端地址
 
         string _ClientAddr;
@@ -301,7 +284,6 @@ namespace WinsockPacketEditor
             int PacketSocket,
             long TheologyID,
             Operate.PacketConfig.Packet.PacketType PacketType,
-            long WebSocketType,
             string ClientAddr,
             string ClientLocation,
             string ServerAddr,
@@ -318,7 +300,6 @@ namespace WinsockPacketEditor
             this._PacketSocket = PacketSocket;
             this._TheologyID = TheologyID;
             this._PacketType = PacketType;
-            this._WebSocketType = WebSocketType;
             this._ClientAddr = ClientAddr;
             this._ClientLocation = ClientLocation;
             this._ServerAddr = ServerAddr;

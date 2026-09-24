@@ -1,7 +1,6 @@
 ﻿using Microsoft.Owin.Hosting;
 using Microsoft.Win32;
 using QQWry;
-using SunnyNetlibray.Event;
 using SuperSocket.Common;
 using SuperSocket.SocketBase;
 using SuperSocket.SocketBase.Config;
@@ -2160,29 +2159,6 @@ namespace WinsockPacketEditor
 
             #endregion
 
-            #region//获取强制转代理的字符串
-
-            public static string GetMustTCP()
-            {
-                if (Operate.ProxyConfig.Proxy.MustTCP_Auth)
-                {
-                    //账号密码进 URL 的 userinfo 段要转义：密码里一个 @ 或 : 就会把地址切错
-                    return string.Format("socket5://{0}:{1}@{2}:{3}",
-                        Uri.EscapeDataString(Operate.ProxyConfig.Proxy.MustTCP_UserName ?? string.Empty),
-                        Uri.EscapeDataString(Operate.ProxyConfig.Proxy.MustTCP_PassWord ?? string.Empty),
-                        Operate.ProxyConfig.Proxy.MustTCP_IP,
-                        Operate.ProxyConfig.Proxy.MustTCP_Port);
-                }
-                else
-                {
-                    return string.Format("socket5://{0}:{1}",
-                        Operate.ProxyConfig.Proxy.MustTCP_IP,
-                        Operate.ProxyConfig.Proxy.MustTCP_Port);
-                }
-            }
-
-            #endregion
-
             #region//获取一个随机十六进制字节
 
             private static readonly Random rdHex = new Random();
@@ -4239,7 +4215,9 @@ namespace WinsockPacketEditor
                         new XElement("FireWall_AutoBlackList_Minutes", ProxyConfig.Proxy.FireWall_AutoBlackList_Minutes),
                         new XElement("FireWall_AutoClear_Expiry", ProxyConfig.Proxy.FireWall_AutoClear_Expiry),
                         new XElement("DriverType", ProxyConfig.Proxy.DriverType),
-                        new XElement("SelectProcessNames", ProxyConfig.Proxy.SerializeSelectProcessNames())
+                        new XElement("SelectProcessNames", ProxyConfig.Proxy.SerializeSelectProcessNames()),
+                        new XElement("TunStack", ProxyConfig.Proxy.TunStack),
+                        new XElement("DnsMode", ProxyConfig.Proxy.DnsMode)
                         );
 
                     return xeProxyMode;
@@ -4314,6 +4292,20 @@ namespace WinsockPacketEditor
                         if (ProxyMode.Columns.Contains("SelectProcessNames"))
                         {
                             ProxyConfig.Proxy.LoadSelectProcessNames(ProxyMode.Rows[0]["SelectProcessNames"] as string);
+                        }
+
+                        //2026-09-23 加的列：老库靠 EnsureColumn 补，读取端再兜一层
+                        //（Enable_Mihomo 刻意不落库，每次启动默认关，见字段上的说明）
+                        if (ProxyMode.Columns.Contains("TunStack") && ProxyMode.Rows[0]["TunStack"] != DBNull.Value)
+                        {
+                            string ts = ProxyMode.Rows[0]["TunStack"].ToString();
+                            if (!string.IsNullOrEmpty(ts)) { ProxyConfig.Proxy.TunStack = ts; }
+                        }
+
+                        if (ProxyMode.Columns.Contains("DnsMode") && ProxyMode.Rows[0]["DnsMode"] != DBNull.Value)
+                        {
+                            string dm = ProxyMode.Rows[0]["DnsMode"].ToString();
+                            if (!string.IsNullOrEmpty(dm)) { ProxyConfig.Proxy.DnsMode = dm; }
                         }
                     }
                 }
@@ -4560,6 +4552,12 @@ namespace WinsockPacketEditor
                     {
                         ProxyConfig.Proxy.LoadSelectProcessNames(SelectProcessNames.Value);
                     }
+
+                    XElement TunStack = xeProxyMode.Element("TunStack");
+                    if (TunStack != null && !string.IsNullOrEmpty(TunStack.Value)) { ProxyConfig.Proxy.TunStack = TunStack.Value; }
+
+                    XElement DnsMode = xeProxyMode.Element("DnsMode");
+                    if (DnsMode != null && !string.IsNullOrEmpty(DnsMode.Value)) { ProxyConfig.Proxy.DnsMode = DnsMode.Value; }
                 }
                 catch (Exception ex)
                 {
@@ -5443,7 +5441,18 @@ namespace WinsockPacketEditor
                         catch
                         { 
                             //
-                        }                        
+                        }
+
+                        /*
+                            取不到主模块的（受保护 / 系统进程，如 svchost / csrss / services）退回「进程名 + .exe」——
+                            那仍然是一条合法的 PROCESS-NAME 规则。不然这些进程在「进程设置」里点了也没反应
+                            （ModuleName 为空就没法按名拦截）。进程名带空格的是 Idle / Memory Compression
+                            这类伪进程，保留空串让前端跳过。
+                        */
+                        if (string.IsNullOrEmpty(ModuleName) && !string.IsNullOrEmpty(p.ProcessName) && p.ProcessName.IndexOf(' ') < 0)
+                        {
+                            ModuleName = p.ProcessName + ".exe";
+                        }
 
                         ProcessInfo processInfo = new ProcessInfo(null, p.ProcessName, p.Id, ModuleName, ProcessPath);
                         piReturn.Add(processInfo);
@@ -5543,9 +5552,6 @@ namespace WinsockPacketEditor
             public static class Proxy
             {
                 public static ProxyAppServer ProxyServer = null;
-                public static SunnyNetlibray.SunnyNet syNet = new SunnyNetlibray.SunnyNet();
-                public static SunnyNetlibray.CertManager syCert = new SunnyNetlibray.CertManager();
-                public static SunnyNetCallback syCallBack = new SunnyNetCallback();
                 public static bool IsLoadDriver = false;
                 public static int DriverType = 1;
                 public static IPConnectionFilter ipFilter = new IPConnectionFilter();
@@ -5561,6 +5567,15 @@ namespace WinsockPacketEditor
                 public static bool Enable_SOCKS5 = true, Enable_Auth = true;
                 public static bool Enable_HTTP = true, MustTCP_AppointPort = false, MustTCP_Auth = false;
                 public static bool MustTCP = true;
+
+                //内置 mihomo 内核（2026-09-23 起取代 SunnyNet 的进程抓取）
+                /*
+                    是否启用进程拦截（= 要不要加载内核）。只在「进程设置」里改。
+                    ⚠️ <b>刻意不落库</b>：不是每次启动都需要拦进程，所以每次开 WPE 都默认关闭，要用再手动打开。
+                */
+                public static bool Enable_Mihomo = false;
+                public static string TunStack = "system";   // TUN 栈：system / gvisor / mixed
+                public static string DnsMode = "fake-ip";   // DNS 模式：fake-ip / redir-host
                 public static string MustTCP_IP = "127.0.0.1";
                 public static ushort MustTCP_Port = 1080;
                 public static string MustTCP_UserName = string.Empty, MustTCP_PassWord = string.Empty;
@@ -5641,34 +5656,13 @@ namespace WinsockPacketEditor
                 /// <summary>上一次 GetProcessRows 拿到的进程快照，「双击添加到名称」按 Pid 从这里找（ProcessInfo 带图标字段，不出给外壳）。</summary>
                 private static List<ProcessInfo> lastProcessList = new List<ProcessInfo>();
 
-                public static ProcessSettingRow GetProcessSetting()
-                {
-                    return new ProcessSettingRow
-                    {
-                        DriverType = DriverType,
-                        IsLoadDriver = IsLoadDriver,
-                        MustTCP = MustTCP,
-                        IP = MustTCP_IP ?? string.Empty,
-                        Port = MustTCP_Port,
-                        AppointPort = MustTCP_AppointPort,
-                        AppointPortContent = MustTCP_AppointPortContent ?? string.Empty,
-                        Auth = MustTCP_Auth,
-                        UserName = MustTCP_UserName ?? string.Empty,
-                        PassWord = MustTCP_PassWord ?? string.Empty,
-                        CheckedPids = lstSelectProcessID.ToArray(),
-
-                        //链路体检用的只读环境状态，见 ProcessSettingRow 上那段说明
-                        EnableHttp = Enable_HTTP,
-                        HttpPort = HTTP_Port,
-                        EnableSocks5 = Enable_SOCKS5,
-                        Socks5Port = SOCKS5_Port,
-                        EnableAuth = Enable_Auth,
-                        Running = IsRunning,
-                        IsAdmin = SystemConfig.IsAdministrator(),
-                    };
-                }
-
-                /// <summary>当前进程表（按名字排序），IsCheck 按 lstSelectProcessID 勾好。图标不在这里，外壳按路径自己取。</summary>
+                /// <summary>
+                /// 当前进程表（按名字排序）。<b>IsCheck 按「拦截名单」勾</b>（进程名，不分大小写）。
+                ///
+                /// ⚠️ 内置 mihomo 只支持按进程名 / 路径拦截（PROCESS-NAME / PROCESS-PATH），
+                /// <b>没有按 PID 的规则</b>（PID 每次启动都变，做规则没有意义），所以不再有「按编号拦截」那一份。
+                /// 图标不在这里，外壳按路径自己取。
+                /// </summary>
                 public static ProcessRow[] GetProcessRows()
                 {
                     try
@@ -5677,12 +5671,18 @@ namespace WinsockPacketEditor
                         var rows = new List<ProcessRow>();
                         int self = SelfProcessId;
 
+                        var selected = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                        foreach (ProcessInfo x in lstSelectProcessName)
+                        {
+                            if (!string.IsNullOrEmpty(x.ModuleName)) { selected.Add(x.ModuleName); }
+                        }
+
                         foreach (ProcessInfo pi in lastProcessList)
                         {
-                            //自己不进表：勾了自己，驱动会把 WPE 往目标发的连接也抓回来，成环
+                            //自己不进表：勾了自己，mihomo 会把 WPE 往目标发的连接也抓回来（配置里已按进程名兜了断环，这里再加一道）
                             if (pi.ProcessID == self) { continue; }
 
-                            pi.IsCheck = lstSelectProcessID.Contains(pi.ProcessID);
+                            pi.IsCheck = !string.IsNullOrEmpty(pi.ModuleName) && selected.Contains(pi.ModuleName);
                             rows.Add(ProcessRow.From_(pi));
                         }
 
@@ -5695,20 +5695,51 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                /// <summary>「按进程名称拦截」加一条（WinForms 是双击左表）。同名已在就不重复加。</summary>
-                public static bool AddSelectProcessName_ByPid(int Pid)
+                /// <summary>已保存的拦截名单（进程名，原样大小写）。界面打开时抄成草稿。</summary>
+                public static string[] SelectProcessNames()
                 {
-                    ProcessInfo pi = lastProcessList.FirstOrDefault(x => x.ProcessID == Pid);
-                    if (pi == null || string.IsNullOrEmpty(pi.ModuleName)) { return false; }
-                    if (IsSelfProcess(Pid, pi.ModuleName)) { return false; }
+                    var list = new List<string>();
 
-                    foreach (ProcessInfo x in lstSelectProcessName)
+                    foreach (ProcessInfo pi in lstSelectProcessName)
                     {
-                        if (string.Equals(x.ModuleName, pi.ModuleName, StringComparison.OrdinalIgnoreCase)) { return true; }
+                        if (!string.IsNullOrEmpty(pi.ModuleName)) { list.Add(pi.ModuleName); }
                     }
 
-                    lstSelectProcessName.Add(pi);
-                    return true;
+                    return list.ToArray();
+                }
+
+                /// <summary>
+                /// 用界面上那份草稿<b>整体替换</b>拦截名单（点「保存」时调用）。
+                ///
+                /// ⚠️ 勾选过程不碰这里 —— 只改界面草稿，保存时一次提交。所以这里要能接受
+                /// 任意一份名单（增、删、清空都在这一次里完成）。同名只留一条、自身进程不收；
+                /// 能从上一次进程快照里查到路径的就带上（界面取图标用，查不到留空）。
+                /// </summary>
+                public static void ApplySelectProcessNames(string[] Names)
+                {
+                    var next = new List<ProcessInfo>();
+                    var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+                    if (Names != null)
+                    {
+                        foreach (string raw in Names)
+                        {
+                            string name = (raw ?? string.Empty).Trim();
+                            if (name.Length == 0 || !seen.Add(name) || IsSelfProcess(0, name)) { continue; }
+
+                            ProcessInfo hit = lastProcessList.FirstOrDefault(x => string.Equals(x.ModuleName, name, StringComparison.OrdinalIgnoreCase));
+
+                            next.Add(new ProcessInfo(
+                                null,
+                                Path.GetFileNameWithoutExtension(name),
+                                hit == null ? 0 : hit.ProcessID,
+                                name,
+                                hit == null ? string.Empty : hit.ProcessPath));
+                        }
+                    }
+
+                    lstSelectProcessName.Clear();
+                    foreach (ProcessInfo pi in next) { lstSelectProcessName.Add(pi); }
                 }
 
                 #region//按名称拦截的进程表：落库与读回
@@ -5756,31 +5787,6 @@ namespace WinsockPacketEditor
                 }
 
                 #endregion
-
-                public static bool RemoveSelectProcessName(string ModuleName)
-                {
-                    for (int i = 0; i < lstSelectProcessName.Count; i++)
-                    {
-                        if (string.Equals(lstSelectProcessName[i].ModuleName, ModuleName, StringComparison.OrdinalIgnoreCase))
-                        {
-                            lstSelectProcessName.RemoveAt(i);
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-
-                /// <summary>卸载驱动（带确认框：会立即重启电脑）。返回 true = 用户确认并已执行。</summary>
-                public static async Task<bool> UninstallDriver_Dialog()
-                {
-                    if (!await UI.Confirm(UI.T("UninstallDriver", "卸载驱动"), UI.T("UninstallDriver.Alert", "卸载驱动会立即重启电脑，若非必要请勿卸载!")))
-                    {
-                        return false;
-                    }
-
-                    try { syNet.UnDriver(); return true; }
-                    catch (Exception ex) { Operate.DoLog(nameof(UninstallDriver_Dialog), ex); return false; }
-                }
 
                 #region//自身进程
 
@@ -5837,235 +5843,80 @@ namespace WinsockPacketEditor
                     return false;
                 }
 
-                /// <summary>
-                /// 保存前的校验 —— 纯函数、不碰驱动、不联网，跑测直接调它。返回空串 = 通过。
-                /// 通过时 NormalizedPorts 是规范化后的端口列表（"80,443"），保存要用它替换用户输入。
-                ///
-                /// 这里拦的都是「保存之后被拦截的进程会直接断网、而界面上看不出为什么」的情形：
-                ///   · HTTP 代理没开 —— 驱动把流量送进 SunnyNet，而 SunnyNet 是随 HTTP 代理起的；
-                ///   · 转代理端口是 SunnyNet 自己的端口 —— 成环；
-                ///   · 转到本机 SOCKS5，而它开着身份认证、这边却没勾「需要认证」—— 握手当场被拒。
-                /// 最后那一条正是默认配置（EnableAuth 默认 1、MustTCP_Auth 默认 0）会撞上的。
-                /// </summary>
-                public static string ValidateProcessSetting(bool MustTCPNew, string IP, int Port, bool AppointPort, string AppointPortContent, bool Auth, string UserName, string PassWord, out string NormalizedPorts)
+                /// <summary>「进程设置」页读取的整包状态。</summary>
+                public static MihomoSettingRow GetMihomoSetting()
                 {
-                    NormalizedPorts = (AppointPortContent ?? string.Empty).Trim();
-                    IP = (IP ?? string.Empty).Trim();
-                    UserName = (UserName ?? string.Empty).Trim();
-                    PassWord = (PassWord ?? string.Empty).Trim();
-
-                    if (!Enable_HTTP)
+                    return new MihomoSettingRow
                     {
-                        return UI.T("ProcessSetting.NeedHttpProxy", "拦截进程的数据要经过 HTTP 代理，请先在「代理设置」里启用 HTTP 代理");
-                    }
-
-                    if (AppointPort)
-                    {
-                        NormalizedPorts = NormalizeAppointPorts(AppointPortContent, out List<string> bad);
-
-                        if (bad.Count > 0)
-                        {
-                            return string.Format(UI.T("ProcessSetting.Port.Invalid", "指定端口里有认不出来的内容：{0}（只能是 1~65535 的数字，用逗号分隔）"), string.Join(" ", bad));
-                        }
-
-                        if (NormalizedPorts.Length == 0)
-                        {
-                            return UI.T("ProcessSetting.Port.Empty", "勾了「指定端口」就要填至少一个端口");
-                        }
-                    }
-
-                    if (!MustTCPNew)
-                    {
-                        return string.Empty;
-                    }
-
-                    if (IP.Length == 0)
-                    {
-                        return UI.T("ProcessSetting.IP.Empty", "转代理地址为空");
-                    }
-
-                    //IsValidDomain 要求至少一个点，"localhost" 会被它拒掉 —— 它是转到本机最常见的写法，单独放行
-                    AddressType at = GetAddressType_ByString(IP);
-                    if (at != AddressType.IPv4 && at != AddressType.Domain && !string.Equals(IP, "localhost", StringComparison.OrdinalIgnoreCase))
-                    {
-                        return UI.T("ProcessSetting.IP.Error", "转代理地址错误（要 IPv4 地址或域名）");
-                    }
-
-                    if (Port < 1 || Port > 65535)
-                    {
-                        return UI.T("ProcessSetting.Port.Error", "转代理端口要在 1~65535 之间");
-                    }
-
-                    if (Auth && (UserName.Length == 0 || PassWord.Length == 0))
-                    {
-                        return UI.T("ProcessSetting.Auth.Empty", "勾了「需要认证」就要填账号和密码");
-                    }
-
-                    if (IsLocalProxyAddress(IP))
-                    {
-                        if (Port == HTTP_Port)
-                        {
-                            return string.Format(UI.T("ProcessSetting.Port.Loop", "转代理端口不能是 HTTP 代理自己的端口 {0}：那会把流量转回 SunnyNet 自己，成环"), HTTP_Port);
-                        }
-
-                        if (Port == SOCKS5_Port)
-                        {
-                            if (!Enable_SOCKS5)
-                            {
-                                return UI.T("ProcessSetting.Socks5.Off", "本机 SOCKS5 代理没有启用，转过去也没有人接");
-                            }
-
-                            if (Enable_Auth && !Auth)
-                            {
-                                return UI.T("ProcessSetting.Auth.Required", "本机 SOCKS5 代理开着身份认证，转代理必须勾选「需要认证」并填一个代理账号，否则被拦截的进程会直接断网");
-                            }
-                        }
-                    }
-
-                    return string.Empty;
+                        ProxyRunning = IsRunning,
+                        KernelRunning = MihomoKernel.IsRunning,
+                        KernelReady = MihomoKernel.IsReady,
+                        KernelVersion = MihomoKernel.Version ?? string.Empty,
+                        EnableSocks5 = Enable_SOCKS5,
+                        Socks5Port = SOCKS5_Port,
+                        EnableAuth = Enable_Auth,
+                        IsAdmin = SystemConfig.IsAdministrator(),
+                        LastError = MihomoKernel.LastLine ?? string.Empty,
+                        EnableMihomo = Enable_Mihomo,
+                        TunStack = NormalizeTunStack(TunStack),
+                        DnsMode = NormalizeDnsMode(DnsMode),
+                        ProcessNames = SelectProcessNames(),
+                    };
                 }
 
                 /// <summary>
-                /// 保存进程设置，逐步照 WinForms 的 ProcessSetting.bSave_Click，前面多了两道：
-                /// 校验（ValidateProcessSetting）→ 真连一次转代理服务器 → 写字段 → 没装驱动就按选的类型装 →
-                /// 把勾选的 Pid 与名称表交给 SunnyNet → 落库。返回空串 = 成功。
+                /// 保存「进程设置」页。<b>整屏一起提交</b>：开关 / TUN 栈 / DNS 模式 / 整份进程名单
+                /// （界面上是草稿，点保存才送过来）。落库后内核在跑就按新设置重启一次。
                 ///
-                /// 装驱动那一段（首次要复制 sys 文件、起服务，几秒钟）走 UI.Busy 丢到后台，UI 线程不卡；
-                /// SunnyNet 的调用本来就是跨到 Go 侧的，UI.Toast 也自己 marshal，后台跑是安全的。
+                /// 成功 / 失败都往系统日志记一条（与「启动代理」同一个口径）；界面上的轻提示由前端弹
+                /// （那边七种语言的文案是全的，C# 的 L10n 表是生成物、标注了别手改）。
                 /// </summary>
-                public static async Task<string> SaveProcessSetting(int DriverTypeNew, bool MustTCPNew, string IP, int Port, bool AppointPort, string AppointPortContent, bool Auth, string UserName, string PassWord, IList<int> CheckedPids)
+                public static async Task<string> SaveMihomoSetting(bool enable, string tunStack, string dnsMode, string[] processNames)
                 {
                     try
                     {
-                        string err = ValidateProcessSetting(MustTCPNew, IP, Port, AppointPort, AppointPortContent, Auth, UserName, PassWord, out string ports);
-                        if (!string.IsNullOrEmpty(err))
+                        Enable_Mihomo = enable;
+                        TunStack = NormalizeTunStack(tunStack);
+                        DnsMode = NormalizeDnsMode(dnsMode);
+
+                        //进程名单整体替换（勾选过程只动界面草稿，不碰这里）
+                        ApplySelectProcessNames(processNames);
+
+                        SystemConfig.SaveProxyMode_ToDB();
+
+                        DoLog(nameof(SaveMihomoSetting), string.Format(
+                            "进程设置已保存：进程拦截{0} · TUN 栈 {1} · DNS {2} · 拦截进程 {3} 个",
+                            Enable_Mihomo ? "开启" : "关闭", TunStack, DnsMode, lstSelectProcessName.Count));
+
+                        if (!enable)
                         {
-                            return err;
+                            //关掉进程拦截：内核立刻停，否则勾选的进程会一直走 TUN
+                            MihomoKernel.Stop();
+                            return string.Empty;
                         }
 
-                        IP = (IP ?? string.Empty).Trim();
-                        UserName = (UserName ?? string.Empty).Trim();
-                        PassWord = (PassWord ?? string.Empty).Trim();
+                        //开着但代理服务没起：只落库，等「启动代理」时再加载（那时 SOCKS5 才有人接）
+                        if (!IsRunning) { return string.Empty; }
 
-                        /*
-                            真连一次：地址、端口、凭据三样对不对，只有握手才知道；原先只有用户主动点「检测代理」才会发现。
-                            本机 SOCKS5 还没起的时候跳过 —— 那时连不上不说明配置错，而认证那一条上面的静态检查已经拦了。
-                        */
-                        if (MustTCPNew && (IsRunning || !IsLocalProxyAddress(IP) || Port != SOCKS5_Port))
+                        string restartErr = await UI.Busy(UI.T("Loading", "正在加载..."), () =>
                         {
-                            string t = await TestSocksProxy(Auth, IP, Port, UserName, PassWord);
-                            if (!string.IsNullOrEmpty(t))
-                            {
-                                return string.Format(UI.T("ProcessSetting.Detect.Before", "转代理服务器连不上，没有保存：{0}"), t);
-                            }
+                            MihomoKernel.Stop();
+                            string e;
+                            StartMihomoKernel(out e);
+                            return e;
+                        });
+
+                        if (!string.IsNullOrEmpty(restartErr))
+                        {
+                            DoLog(nameof(SaveMihomoSetting), "进程设置已保存，但内核重启失败：" + restartErr);
                         }
 
-                        MustTCP = MustTCPNew;
-                        MustTCP_IP = IP;
-                        MustTCP_Port = (ushort)Math.Max(1, Math.Min(65535, Port));
-                        MustTCP_AppointPort = AppointPort;
-                        MustTCP_AppointPortContent = ports;
-                        MustTCP_Auth = Auth;
-                        MustTCP_UserName = UserName;
-                        MustTCP_PassWord = PassWord;
-
-                        lstSelectProcessID.Clear();
-                        foreach (int pid in CheckedPids ?? new List<int>())
-                        {
-                            //自己不收：驱动会把 WPE 往目标发的连接也抓回来，成环（界面上已经不出这一行，这里是业务层的兜底）
-                            if (pid == SelfProcessId) { continue; }
-                            if (!lstSelectProcessID.Contains(pid)) { lstSelectProcessID.Add(pid); }
-                        }
-
-                        string applyErr = await UI.Busy(UI.T("Loading", "正在加载..."), () => ApplyProcessSetting(DriverTypeNew));
-                        if (!string.IsNullOrEmpty(applyErr))
-                        {
-                            return applyErr;
-                        }
-
-                        //换了转代理设置：已有的 UDP 关联收掉，下一个数据报按新设置重连
-                        CloseAllUDPProxy();
-
-                        UI.Toast(UiIcon.Success, UI.T("ProcessSetting.Save.Success", "进程设置保存成功"));
-                        return string.Empty;
+                        return restartErr ?? string.Empty;
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveProcessSetting), ex);
+                        DoLog(nameof(SaveMihomoSetting), "保存进程设置失败：" + ex.Message);
                         return ex.Message;
-                    }
-                }
-
-                /// <summary>装驱动 + 把进程交给驱动 + 落库。跑在 UI.Busy 的后台线程上，不碰界面。</summary>
-                private static string ApplyProcessSetting(int DriverTypeNew)
-                {
-                    if (!IsLoadDriver)
-                    {
-                        DriverType = DriverTypeNew >= 0 && DriverTypeNew <= 2 ? DriverTypeNew : 1;
-                        IsLoadDriver = syNet.LoadDriver(DriverType);
-                    }
-
-                    if (!IsLoadDriver)
-                    {
-                        return UI.T("ProcessSetting.LoadDriver.Error", "加载驱动失败, 请检查是否管理员权限运行");
-                    }
-
-                    ApplyProcessesToDriver();
-                    SystemConfig.SaveProxyMode_ToDB();
-                    return string.Empty;
-                }
-
-                /// <summary>
-                /// 把勾选的 Pid 与名称表交给驱动（先清再加）。
-                /// 保存时调；StartProxy 成功后也调一次 —— StopProxy 会把它们摘掉（见 ReleaseDriverProcesses），
-                /// 再启动时要装回去，否则「停了再开」之后进程不再被拦截。
-                /// </summary>
-                public static void ApplyProcessesToDriver()
-                {
-                    if (!IsLoadDriver)
-                    {
-                        return;
-                    }
-
-                    try
-                    {
-                        syNet.RemoveAllProcesses();
-
-                        foreach (int pid in lstSelectProcessID)
-                        {
-                            syNet.AddProcessPid(pid);
-                        }
-
-                        foreach (ProcessInfo pi in lstSelectProcessName)
-                        {
-                            if (!string.IsNullOrEmpty(pi.ModuleName)) { syNet.AddProcessName(pi.ModuleName); }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(ApplyProcessesToDriver), ex);
-                    }
-                }
-
-                /// <summary>
-                /// 停止代理 / 退出时把进程从驱动上摘掉。驱动本身留着（卸载会重启电脑），
-                /// 只是不再把这些进程的连接转到一个已经关掉的端口上 —— 否则 WPE 停了，目标进程也跟着断网。
-                /// 名单留在内存里，再启动时 ApplyProcessesToDriver 装回去。
-                /// </summary>
-                public static void ReleaseDriverProcesses()
-                {
-                    if (!IsLoadDriver)
-                    {
-                        return;
-                    }
-
-                    try
-                    {
-                        syNet.RemoveAllProcesses();
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(ReleaseDriverProcesses), ex);
                     }
                 }
 
@@ -6421,7 +6272,23 @@ namespace WinsockPacketEditor
                             return false;
                         }
 
-                        return InitSocks5Proxy() && InitHttpProxy();
+                        if (!InitSocks5Proxy())
+                        {
+                            return false;
+                        }
+
+                        /*
+                            进程拦截（mihomo 内核）不再随「启动代理」无条件加载 ——
+                            它只在「进程设置」里开了「启用进程拦截」时才起（那种情况一开始就加载）。
+                            内核起不来不影响 SOCKS5 服务本身，只记一条日志。
+                        */
+                        if (Enable_Mihomo)
+                        {
+                            string kerr;
+                            if (!StartMihomoKernel(out kerr)) { DoLog(nameof(StartProxy), "进程拦截内核未启动：" + kerr); }
+                        }
+
+                        return true;
                     }
                     catch (Exception ex)
                     {
@@ -6535,12 +6402,11 @@ namespace WinsockPacketEditor
                 // These setters are the single business boundary for the proxy-settings UI
                 // and local automation.  They validate, mutate and persist as one operation;
                 // callers must not assign these fields and save ProxyMode themselves.
-                public static string SaveProxySettings(bool proxyIpAuto, string proxyIp, bool enableSocks5, int socks5Port, bool enableAuth, bool onlyWpc, int maxConnection, bool enableHttp, int httpPort)
+                public static string SaveProxySettings(bool proxyIpAuto, string proxyIp, bool enableSocks5, int socks5Port, bool enableAuth, bool onlyWpc, int maxConnection)
                 {
                     proxyIp = (proxyIp ?? string.Empty).Trim();
                     if (!enableSocks5) return UI.T("ProxySettingsForm.ProxyType.Error", "代理类型未设置");
-                    if (socks5Port < 1 || socks5Port > 65535 || httpPort < 1 || httpPort > 65535) return UI.T("ProxySettingsForm.Port.Error", "端口必须在 1 ~ 65535 之间");
-                    if (enableHttp && socks5Port == httpPort) return UI.T("ProxySettingsForm.ProxyType.Error", "SOCKS 和 HTTP 端口不能相同");
+                    if (socks5Port < 1 || socks5Port > 65535) return UI.T("ProxySettingsForm.Port.Error", "端口必须在 1 ~ 65535 之间");
                     if (!proxyIpAuto && !IPAddress.TryParse(proxyIp, out IPAddress _)) return UI.T("ProxySettingsForm.ProxyIP.Empty", "请选择监听地址，或勾上「自动检测」");
                     if (onlyWpc && !enableAuth) return UI.T("ProxySettingsForm.OnlyWpc.NeedAuth", "「只允许 WPC 客户端连接」需要先启用身份认证");
 
@@ -6557,8 +6423,7 @@ namespace WinsockPacketEditor
                     Enable_Auth = enableAuth;
                     Only_WPC_Client = onlyWpc;
                     MaxConnectionNumber = maxConnection;
-                    Enable_HTTP = enableHttp;
-                    HTTP_Port = (ushort)httpPort;
+                    //Enable_HTTP / HTTP_Port 不再由界面维护：SunnyNet 的 HTTP 代理已随中间件一起移除
                     SystemConfig.SaveProxyMode_ToDB();
                     return string.Empty;
                 }
@@ -6568,15 +6433,6 @@ namespace WinsockPacketEditor
                     changed = Enable_Auth != enabled;
                     if (!enabled && Only_WPC_Client) return "Proxy authentication cannot be disabled while Only-WPC mode is enabled.";
                     if (changed) { Enable_Auth = enabled; SystemConfig.SaveProxyMode_ToDB(); }
-                    return string.Empty;
-                }
-
-                public static string SetProxyHttpEnabled(bool enabled, out bool changed)
-                {
-                    changed = Enable_HTTP != enabled;
-                    if (enabled && !Enable_SOCKS5) return "HTTP proxy requires SOCKS5 to be enabled.";
-                    if (enabled && HTTP_Port == SOCKS5_Port) return "HTTP and SOCKS5 proxy ports must be different.";
-                    if (changed) { Enable_HTTP = enabled; SystemConfig.SaveProxyMode_ToDB(); }
                     return string.Empty;
                 }
 
@@ -6595,16 +6451,6 @@ namespace WinsockPacketEditor
                     if (port < 1 || port > 65535) return "The SOCKS5 port must be between 1 and 65535.";
                     if (Enable_HTTP && port == HTTP_Port) return "SOCKS5 and HTTP proxy ports must be different.";
                     if (changed) { SOCKS5_Port = (ushort)port; SystemConfig.SaveProxyMode_ToDB(); }
-                    return string.Empty;
-                }
-
-                public static string SetProxyHttpPort(int port, out bool changed)
-                {
-                    changed = HTTP_Port != port;
-                    if (port < 1 || port > 65535) return "The HTTP port must be between 1 and 65535.";
-                    if (!Enable_HTTP) return "The HTTP proxy is disabled; enable it before changing its port.";
-                    if (Enable_SOCKS5 && port == SOCKS5_Port) return "HTTP and SOCKS5 proxy ports must be different.";
-                    if (changed) { HTTP_Port = (ushort)port; SystemConfig.SaveProxyMode_ToDB(); }
                     return string.Empty;
                 }
 
@@ -6810,67 +6656,70 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                private static bool InitHttpProxy()
+                /// <summary>
+                /// 启动内置 mihomo 内核，把「按名称拦截」勾选的进程经 TUN 转到本机 SOCKS5。
+                /// 断环规则由内核配置保证（WPE 自身走 DIRECT）。
+                /// </summary>
+                private static bool StartMihomoKernel()
                 {
+                    string err;
+                    return StartMihomoKernel(out err);
+                }
+
+                private static bool StartMihomoKernel(out string error)
+                {
+                    error = string.Empty;
                     try
                     {
-                        if (!Enable_HTTP)
+                        //SOCKS5 监听 0.0.0.0 时内核连回环；绑了具体地址就连那个地址
+                        string server = (ProxyTCP_IP == null
+                            || ProxyTCP_IP.Equals(IPAddress.Any)
+                            || ProxyTCP_IP.Equals(IPAddress.IPv6Any))
+                            ? "127.0.0.1"
+                            : ProxyTCP_IP.ToString();
+
+                        if (!MihomoKernel.Start(SOCKS5_Port, server, Enable_Auth, NormalizeTunStack(TunStack), NormalizeDnsMode(DnsMode), lstSelectProcessName, out error))
                         {
-                            return true;
-                        }
-
-                        syNet.BindPort(HTTP_Port);
-                        syNet.BindCallback(syCallBack);
-
-                        if (syNet.Start())
-                        {
-                            UI.Toast(UiIcon.Success, UI.T("ProxyModeForm.StartHTTPProxy", "开始 HTTP 代理"));
-
-                            string sProxyIP = string.Format(
-                                UI.T("ProxyModeForm.ProxyServerIP", "HTTP 代理地址 : {0}:{1}"),
-                                ProxyUDP_IP, HTTP_Port);
-                            DoLog(nameof(InitHttpProxy), sProxyIP);
-
-                            //StopProxy 把进程从驱动上摘了（不摘的话 WPE 一停目标就断网），这里装回去
-                            ApplyProcessesToDriver();
-                        }
-                        else
-                        {
-                            DoLog(nameof(InitHttpProxy), syNet.GetError());
-                        }
-
-                        if (syCert.LoadX509Certificate(Properties.Resources.Cert_Ca, Properties.Resources.Cert_Key))
-                        {
-                            syNet.SetCustomCACertificate(syCert);
-                        }
-
-                        if (syNet.InstallCertificate())
-                        {
-                            DoLog(nameof(InitHttpProxy), UI.T("InstallCertificate.Success", "WPE64 证书安装成功"));
+                            DoLog(nameof(StartMihomoKernel), error);
+                            UI.Toast(UiIcon.Error, error);
+                            return false;
                         }
 
                         return true;
                     }
                     catch (Exception ex)
                     {
-                        DoLog(nameof(InitHttpProxy), ex);
+                        DoLog(nameof(StartMihomoKernel), ex);
+                        error = ex.Message;
+                        return false;
                     }
-
-                    return false;
                 }
 
-                /// <summary>停止代理服务。SOCKS5 与 HTTP 各自独立，一个没起也不影响另一个停。</summary>
+                /// <summary>TUN 栈只认这三个，别的落回 system —— 写错会让内核整份配置加载失败。</summary>
+                public static string NormalizeTunStack(string v)
+                {
+                    if (string.Equals(v, "gvisor", StringComparison.OrdinalIgnoreCase)) { return "gvisor"; }
+                    if (string.Equals(v, "mixed", StringComparison.OrdinalIgnoreCase)) { return "mixed"; }
+                    return "system";
+                }
+
+                /// <summary>DNS 模式只认这两个，别的落回 fake-ip。</summary>
+                public static string NormalizeDnsMode(string v)
+                {
+                    if (string.Equals(v, "redir-host", StringComparison.OrdinalIgnoreCase)) { return "redir-host"; }
+                    return "fake-ip";
+                }
+
+                /// <summary>停止代理服务。SOCKS5 与 mihomo 内核各自独立，一个没起也不影响另一个停。</summary>
                 public static void StopProxy()
                 {
                     try
                     {
                         /*
-                            先把进程从驱动上摘掉，再关端口。顺序反了会有一小段时间目标进程的连接被转到一个已经不存在的端口上。
-                            驱动本身不卸（卸载会重启电脑）；名单留在内存里，StartProxy 时 ApplyProcessesToDriver 装回去。
-                            UDP 那头的关联也一起收掉 —— 服务停了它们迟早会因控制连接断开而自己收掉，这里只是不等。
+                            过渡期（P1）：SunnyNet 的驱动与 HTTP 代理已不再启动，
+                            这里只停 SOCKS5 与内置 mihomo 内核。
                         */
-                        ReleaseDriverProcesses();
-                        CloseAllUDPProxy();
+                        MihomoKernel.Stop();
 
                         if (ProxyServer != null && ProxyServer.State == ServerState.Running)
                         {
@@ -6883,14 +6732,6 @@ namespace WinsockPacketEditor
                             WPCConfig.Device.Clear();
 
                             UI.Toast(UiIcon.Warn, UI.T("ProxyModeForm.StopProxy", "停止 SOCKS5 代理"));
-                        }
-
-                        if (syNet != null && Enable_HTTP)
-                        {
-                            if (syNet.Stop())
-                            {
-                                UI.Toast(UiIcon.Warn, UI.T("ProxyModeForm.StopProxy", "停止 HTTP 代理"));
-                            }
                         }
                     }
                     catch (Exception ex)
@@ -7226,6 +7067,15 @@ namespace WinsockPacketEditor
                                     psSession.WpcVersion = dev.Version;
                                     psSession.WpcOs = dev.Os;
                                 }
+                            }
+                            else if (MihomoKernel.TryAuthKernel(sUserName, sPassWord))
+                            {
+                                /*
+                                    内置 mihomo 内核：本机回环 + 每次启动随机口令（见 MihomoKernel）。
+                                    不占用户账号 / 设备槽 / 连接数 —— AccountID 留空，
+                                    CheckLimitLinks / CheckLimitDevices / Devices.Add 对空 AID 都会直接放行。
+                                */
+                                bAuthOK = true;
                             }
                             else if (Operate.ProxyConfig.Proxy.Only_WPC_Client)
                             {
@@ -7569,9 +7419,6 @@ namespace WinsockPacketEditor
                     {
                         var now = DateTime.Now;
                         var UDPToRemove = new List<Guid>();
-
-                        //「强制转代理」那头的 UDP 关联也在这一拍回收（静置超过 UDPTimeout 的）
-                        udpRelay?.SweepIdle();
 
                         foreach (var pair in ProxyConfig.List.cdProxyUDP.ToList())
                         {
@@ -8458,84 +8305,6 @@ namespace WinsockPacketEditor
                         "Connection: close\r\n\r\n";
 
                     return Encoding.UTF8.GetBytes(response);
-                }
-
-                #endregion
-
-                #region//设置 UDP 使用代理
-
-                /*
-                    UDP 那一路的中继客户端（ClassObject/MustTcpUdpRelay.cs）：目标进程的一个 UDP 套接字对应一条 SOCKS5 UDP 关联，
-                    应答由关联自己交还给那个套接字。旧写法是每个数据报新开一条关联、发完就把 TCP 与 UdpClient 一起关掉，
-                    应答永远回不来 —— 详见那个文件头上的说明。
-
-                    懒建：第一个被截下来的 UDP 数据报到达时才建。代理地址与凭据每次建关联时现取，
-                    所以改了「强制转代理」的设置不必重建中继器；SaveProcessSetting 会 CloseAllUDPProxy 让已有关联按新设置重连。
-                */
-                private static MustTcpUdpRelay udpRelay = null;
-                private static readonly object udpRelayLock = new object();
-
-                public static MustTcpUdpRelay UdpRelay
-                {
-                    get
-                    {
-                        MustTcpUdpRelay r = udpRelay;
-                        if (r != null) { return r; }
-
-                        lock (udpRelayLock)
-                        {
-                            if (udpRelay == null)
-                            {
-                                udpRelay = new MustTcpUdpRelay(
-                                    () => new MustTcpUdpRelay.Target
-                                    {
-                                        Auth = MustTCP_Auth,
-                                        IP = MustTCP_IP,
-                                        Port = MustTCP_Port,
-                                        UserName = MustTCP_UserName,
-                                        PassWord = MustTCP_PassWord,
-                                    },
-                                    (theology, data) => SunnyNetlibray.Tools.UDPTools.SendMessage(SunnyNetlibray.Tools.UDPTools.SendToClient, theology, data),
-                                    (where, text) => SystemConfig.LogThrottled(where, text))
-                                {
-                                    IdleTimeout = UDPTimeout,
-                                };
-                            }
-
-                            return udpRelay;
-                        }
-                    }
-                }
-
-                /// <summary>被驱动截下来的一个 UDP 数据报：交给中继送出去。调用方已经把事件的 Body 置空，SunnyNet 不会再直发。</summary>
-                public static void SetUDPProxy(UDPEvent Conn, byte[] bSendData)
-                {
-                    try
-                    {
-                        IPEndPoint targetEndPoint = ParseIPEndPoint(Conn.RemoteAddr());
-                        if (targetEndPoint == null || bSendData == null || bSendData.Length == 0)
-                        {
-                            return;
-                        }
-
-                        _ = UdpRelay.SendAsync(Conn.TheologyID(), targetEndPoint, bSendData);
-                    }
-                    catch (Exception ex)
-                    {
-                        DoLog(nameof(SetUDPProxy), ex);
-                    }
-                }
-
-                /// <summary>目标进程关了这个 UDP 套接字（UDP_Closed 事件），把它那条关联收掉。</summary>
-                public static void CloseUDPProxy(long TheologyID)
-                {
-                    udpRelay?.Close(TheologyID);
-                }
-
-                /// <summary>停止代理 / 换了转代理设置：全部收掉，下一个数据报会按当前设置重建。</summary>
-                public static void CloseAllUDPProxy()
-                {
-                    udpRelay?.CloseAll();
                 }
 
                 #endregion
@@ -10966,7 +10735,6 @@ namespace WinsockPacketEditor
                     int PacketSocket,
                     long TheologyID,
                     PacketConfig.Packet.PacketType PacketType,
-                    long WebSocketType,
                     string ClientAddr,
                     string ServerAddr,
                     string ServerDomain,
@@ -11026,7 +10794,7 @@ namespace WinsockPacketEditor
 
                                     在此之前这个 switch 只有 TCP / UDP / HTTP / HTTPS 六个 case、
                                     <b>也没有 default</b>，于是 WebSocket 请求 / 响应（类型 21 / 22，
-                                    由 SunnyNetCallback 在中间人那条路上产出）：
+                                    WebSocket 请求 / 响应（类型 21 / 22）—— SunnyNet 的中间人移除后已无产出者，保留这两支只为统计口径完整）：
                                       · 拿得到 ProxyInfo.Id（那是构造函数里发的），也进得了列表；
                                       · 但<b>六个计数器一个都不进</b> —— 界面上「代理总数」是那六个相加，
                                         于是最大序号会一直跑在总数前面（实测抓 28,979 个包时差 97 个）；
@@ -11093,7 +10861,6 @@ namespace WinsockPacketEditor
                                     PacketSocket,
                                     TheologyID,
                                     PacketType,
-                                    WebSocketType,
                                     ClientAddr,
                                     ClientLocation,
                                     ServerAddr,
@@ -11220,6 +10987,7 @@ namespace WinsockPacketEditor
                 ///
                 /// 由 C# 拼好整段文本再交给前端写剪贴板 —— 让前端逐条取字节再自己转十六进制，
                 /// 既多几十次往返，格式还会和 WinForms 那份不一致。
+                /// 空包（没有字节）跳过不占一行；行间用换行分隔，末尾不带换行。
                 /// </summary>
                 public static string GetProxyHex_ByIds(IList<long> Ids)
                 {
@@ -11229,7 +10997,10 @@ namespace WinsockPacketEditor
 
                         foreach (ProxyInfo pi in ProxyConfig.List.PickProxies(Ids))
                         {
-                            sb.AppendLine(SystemConfig.BytesToString(
+                            if (pi.PacketBuffer == null || pi.PacketBuffer.Length == 0) { continue; }
+
+                            if (sb.Length > 0) { sb.AppendLine(); }
+                            sb.Append(SystemConfig.BytesToString(
                                 PacketConfig.Packet.EncodingFormat.Hex, pi.PacketBuffer));
                         }
 
@@ -11238,6 +11009,45 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(GetProxyHex_ByIds), ex);
+                        return string.Empty;
+                    }
+                }
+
+                /// <summary>
+                /// 「合并复制」：把选中那几条的字节<b>按列表顺序首尾拼接成一个封包</b>，
+                /// 转成一段十六进制（空格分隔、大写、单行）。空包跳过（拼进去也是零字节）。
+                /// </summary>
+                public static string GetProxyHexMerged_ByIds(IList<long> Ids)
+                {
+                    try
+                    {
+                        List<ProxyInfo> picked = ProxyConfig.List.PickProxies(Ids);
+
+                        int total = 0;
+                        foreach (ProxyInfo pi in picked)
+                        {
+                            if (pi.PacketBuffer != null) { total += pi.PacketBuffer.Length; }
+                        }
+
+                        if (total == 0) { return string.Empty; }
+
+                        byte[] merged = new byte[total];
+                        int pos = 0;
+
+                        foreach (ProxyInfo pi in picked)
+                        {
+                            byte[] buf = pi.PacketBuffer;
+                            if (buf == null || buf.Length == 0) { continue; }
+
+                            Buffer.BlockCopy(buf, 0, merged, pos, buf.Length);
+                            pos += buf.Length;
+                        }
+
+                        return SystemConfig.ToHexString(merged);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetProxyHexMerged_ByIds), ex);
                         return string.Empty;
                     }
                 }
@@ -11392,11 +11202,11 @@ namespace WinsockPacketEditor
                 }
 
                 /// <summary>
-                /// 「导出到 Excel」。<b>Ids 为空时导整张表</b> ——
+                /// 「导出到 CSV」。<b>Ids 为空时导整张表</b> ——
                 /// 这不是这里的特例，SaveProxyList_Dialog 本来就是这么写的
                 /// （piList 为空则退回 lstProxyInfo），所以「什么都不选 = 导全部」。
                 /// </summary>
-                public static async Task<string> ExportProxyExcel_ByIds(IList<long> Ids, string FileName = null)
+                public static async Task<string> ExportProxyCsv_ByIds(IList<long> Ids, string FileName = null)
                 {
                     try
                     {
@@ -11406,7 +11216,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ExportProxyExcel_ByIds), ex);
+                        Operate.DoLog(nameof(ExportProxyCsv_ByIds), ex);
                     }
                     return null;
                 }
@@ -11712,95 +11522,28 @@ namespace WinsockPacketEditor
 
                 #endregion                
 
-                #region//保存代理列表为Excel（对话框）
+                #region//保存代理列表为CSV（对话框）
 
                 public static async Task<string> SaveProxyList_Dialog(string FileName, List<ProxyInfo> piList)
                 {
-                    try
-                    {
-                        if (ProxyConfig.List.lstProxyInfo.Count > 0)
+                    List<ProxyInfo> all = ProxyConfig.List.lstProxyInfo.ToList();
+                    List<ProxyInfo> data = piList.Count > 0 ? piList : all;
+
+                    return await PacketConfig.List.SaveListToCsv_Dialog(
+                        all.Count,
+                        FileName,
+                        UI.T("CsvColumn.Proxy", "时间戳,类别,套接字,客户端地址,服务端地址,长度,数据"),
+                        data,
+                        (ProxyInfo p) => new[]
                         {
-                            int SaveCount = ProxyConfig.List.lstProxyInfo.Count;
-
-                            FilePick sfdSaveToExcel = new FilePick();
-                            sfdSaveToExcel.Filter = UI.T("ExcelFile", "Excel 文件") + "Excel (*.xls)|*.xls";
-
-                            if (!string.IsNullOrEmpty(FileName))
-                            {
-                                sfdSaveToExcel.FileName = FileName;
-                            }
-
-                            string sPickedPath = await UI.PickSave(sfdSaveToExcel);
-                            if (!string.IsNullOrEmpty(sPickedPath))
-                            {
-                                string FilePath = sPickedPath;
-                                if (!string.IsNullOrEmpty(FilePath))
-                                {
-                                    bool bOK = ProxyConfig.List.SaveProxyListToExcel(FilePath, piList);
-                                    if (bOK)
-                                    {
-                                        string Title = UI.T("ExportToExcel.Success", "导出到Excel成功");
-                                        UI.Notify(UiIcon.Success, Title, FilePath);
-                                        Operate.DoLog(nameof(SaveProxyList_Dialog), Title + ": " + FilePath);
-                                        return FilePath;
-                                    }
-                                    else
-                                    {
-                                        string Title = UI.T("ExportToExcel.Error", "导出到Excel失败");
-                                        string Content = UI.T("CheckSystemLog", "请检查系统日志");
-                                        UI.Notify(UiIcon.Error, Title, Content);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(SaveProxyList_Dialog), ex);
-                }
-                return null;
-                }
-
-                private static bool SaveProxyListToExcel(string filePath, List<ProxyInfo> piList)
-                {
-                    try
-                    {
-                        using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                        using (var writer = new StreamWriter(stream, Encoding.Default))
-                        {
-                            writer.WriteLine(UI.T("ExcelColumn.Proxy", "时间戳\t类别\t套接字\t客户端地址\t服务端地址\t长度\t数据\t"));
-
-                            var dataSource = piList.Count > 0 ? piList : ProxyConfig.List.lstProxyInfo.ToList();
-                            foreach (var proxy in dataSource)
-                            {
-                                try
-                                {
-                                    var lineBuilder = new StringBuilder();
-
-                                    lineBuilder.Append(proxy.ProxyTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff")).Append('\t');
-                                    lineBuilder.Append(proxy.PacketType).Append('\t');
-                                    lineBuilder.Append(proxy.PacketSocket).Append('\t');
-                                    lineBuilder.Append(proxy.ClientAddr).Append('\t');
-                                    lineBuilder.Append(proxy.ServerAddr).Append('\t');
-                                    lineBuilder.Append(proxy.PacketLen).Append('\t');
-                                    lineBuilder.Append(SystemConfig.BytesToString(PacketConfig.Packet.EncodingFormat.Hex, proxy.PacketBuffer)).Append('\t');
-
-                                    writer.WriteLine(lineBuilder.ToString());
-                                }
-                                catch (Exception ex)
-                                {
-                                    Operate.DoLog(nameof(SaveProxyListToExcel), ex);
-                                }
-                            }
-                        }
-
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(SaveProxyListToExcel), ex);
-                        return false;
-                    }
+                            p.ProxyTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff"),
+                            PacketConfig.Packet.GetName_ByPacketType(p.PacketType),
+                            p.PacketSocket.ToString(),
+                            p.ClientAddr ?? string.Empty,
+                            p.ServerAddr ?? string.Empty,
+                            p.PacketLen.ToString(),
+                            SystemConfig.BytesToString(PacketConfig.Packet.EncodingFormat.Hex, p.PacketBuffer),
+                        });
                 }
 
                 #endregion
@@ -13751,86 +13494,23 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//保存批量创建的账号到Excel（对话框）
+                #region//保存批量创建的账号到CSV（对话框）
 
                 public static async Task SaveBatchAccounts_Dialog(string FileName, BindingList<AccountInfo> aiList)
                 {
-                    try
-                    {
-                        if (aiList.Count > 0)
+                    List<AccountInfo> data = aiList != null ? new List<AccountInfo>(aiList) : new List<AccountInfo>();
+
+                    await PacketConfig.List.SaveListToCsv_Dialog(
+                        data.Count,
+                        FileName,
+                        UI.T("CsvColumn.BatchAccounts", "账号,密码,到期时间"),
+                        data,
+                        (AccountInfo ai) => new[]
                         {
-                            int SaveCount = aiList.Count;
-
-                            FilePick sfdSaveToExcel = new FilePick();
-                            sfdSaveToExcel.Filter = UI.T("ExcelFile", "Excel 文件") + "Excel (*.xls)|*.xls";
-
-                            if (!string.IsNullOrEmpty(FileName))
-                            {
-                                sfdSaveToExcel.FileName = FileName;
-                            }
-
-                            string sPickedPath = await UI.PickSave(sfdSaveToExcel);
-                            if (!string.IsNullOrEmpty(sPickedPath))
-                            {
-                                string FilePath = sPickedPath;
-                                if (!string.IsNullOrEmpty(FilePath))
-                                {
-                                    bool bOK = ProxyConfig.Account.SaveBatchAccountsToExcel(FilePath, aiList);
-                                    if (bOK)
-                                    {
-                                        string Title = UI.T("ExportToExcel.Success", "导出到Excel成功");
-                                        UI.Notify(UiIcon.Success, Title, FilePath);
-                                        Operate.DoLog(nameof(SaveBatchAccounts_Dialog), Title + ": " + FilePath);
-                                    }
-                                    else
-                                    {
-                                        string Title = UI.T("ExportToExcel.Error", "导出到Excel失败");
-                                        string Content = UI.T("CheckSystemLog", "请检查系统日志");
-                                        UI.Notify(UiIcon.Error, Title, Content);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(SaveBatchAccounts_Dialog), ex);
-                    }
-                }
-
-                private static bool SaveBatchAccountsToExcel(string filePath, BindingList<AccountInfo> aiList)
-                {
-                    try
-                    {
-                        using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                        using (var writer = new StreamWriter(stream, Encoding.Default))
-                        {
-                            writer.WriteLine(UI.T("ExcelColumn.BatchAccounts", "账号\t密码\t到期时间\t"));
-
-                            foreach (AccountInfo ai in aiList)
-                            {
-                                try
-                                {
-                                    var lineBuilder = new StringBuilder();
-                                    lineBuilder.Append(ai.UserName).Append('\t');
-                                    lineBuilder.Append(Operate.SystemConfig.PassWord_Decrypt(ai.Password)).Append('\t');
-                                    lineBuilder.Append(ai.ExpiryTime).Append('\t');
-                                    writer.WriteLine(lineBuilder.ToString());
-                                }
-                                catch (Exception ex)
-                                {
-                                    Operate.DoLog(nameof(SaveBatchAccountsToExcel), ex);
-                                }
-                            }
-                        }
-
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(SaveBatchAccountsToExcel), ex);
-                        return false;
-                    }
+                            ai.UserName ?? string.Empty,
+                            Operate.SystemConfig.PassWord_Decrypt(ai.Password) ?? string.Empty,
+                            ai.ExpiryTime.ToString("yyyy-MM-dd HH:mm:ss"),
+                        });
                 }
 
                 #endregion
@@ -14707,7 +14387,6 @@ namespace WinsockPacketEditor
                             psSession.SocketSession.Client.Handle.ToInt32(),
                             0,
                             ptType,
-                            0,
                             ClientAddr,
                             ServerAddr,
                             psSession.ServerAddress,
@@ -16273,6 +15952,42 @@ namespace WinsockPacketEditor
                     public static string WebSocket_Resp => UI.T("HookSettingsForm.WebSocket_Resp", "WebSocket 响应");
                 }
 
+                /// <summary>
+                /// PacketType → 本地化名称（"TCP 请求" / "TCP Request"…）。
+                /// 导出 CSV 的「类别」列、以及任何需要把枚举转成可读名称的地方都用它；
+                /// 与前端 PACKET_TYPE 同一套口径。未知值退回数字，避免静默空白。
+                /// </summary>
+                public static string GetName_ByPacketType(PacketType type)
+                {
+                    switch (type)
+                    {
+                        case PacketType.WS1_Send: return PacketTypeNames.WS1_Send;
+                        case PacketType.WS2_Send: return PacketTypeNames.WS2_Send;
+                        case PacketType.WS1_SendTo: return PacketTypeNames.WS1_SendTo;
+                        case PacketType.WS2_SendTo: return PacketTypeNames.WS2_SendTo;
+                        case PacketType.WS1_Recv: return PacketTypeNames.WS1_Recv;
+                        case PacketType.WS2_Recv: return PacketTypeNames.WS2_Recv;
+                        case PacketType.WS1_RecvFrom: return PacketTypeNames.WS1_RecvFrom;
+                        case PacketType.WS2_RecvFrom: return PacketTypeNames.WS2_RecvFrom;
+                        case PacketType.WSASend: return PacketTypeNames.WSASend;
+                        case PacketType.WSASendTo: return PacketTypeNames.WSASendTo;
+                        case PacketType.WSARecv: return PacketTypeNames.WSARecv;
+                        case PacketType.WSARecvEx: return PacketTypeNames.WSARecvEx;
+                        case PacketType.WSARecvFrom: return PacketTypeNames.WSARecvFrom;
+                        case PacketType.TCP_Req: return PacketTypeNames.TCP_Req;
+                        case PacketType.UDP_Req: return PacketTypeNames.UDP_Req;
+                        case PacketType.TCP_Resp: return PacketTypeNames.TCP_Resp;
+                        case PacketType.UDP_Resp: return PacketTypeNames.UDP_Resp;
+                        case PacketType.HTTP_Req: return PacketTypeNames.HTTP_Req;
+                        case PacketType.HTTP_Resp: return PacketTypeNames.HTTP_Resp;
+                        case PacketType.HTTPS_Req: return PacketTypeNames.HTTPS_Req;
+                        case PacketType.HTTPS_Resp: return PacketTypeNames.HTTPS_Resp;
+                        case PacketType.WebSocket_Req: return PacketTypeNames.WebSocket_Req;
+                        case PacketType.WebSocket_Resp: return PacketTypeNames.WebSocket_Resp;
+                        default: return ((int)type).ToString();
+                    }
+                }
+
                 #endregion
 
                 #region//是否显示封包（过滤条件）
@@ -17130,6 +16845,7 @@ namespace WinsockPacketEditor
                 ///
                 /// 由 C# 拼好整段文本再交给前端写剪贴板 —— 让前端逐条取字节再自己转十六进制，
                 /// 既多几十次往返，格式还会和 WinForms 那份不一致。
+                /// 空包（没有字节）跳过不占一行；行间用换行分隔，末尾不带换行。
                 /// </summary>
                 public static string GetPacketHex_ByIds(IList<long> Ids)
                 {
@@ -17139,7 +16855,10 @@ namespace WinsockPacketEditor
 
                         foreach (PacketInfo pi in PacketConfig.List.PickPackets(Ids))
                         {
-                            sb.AppendLine(SystemConfig.BytesToString(
+                            if (pi.PacketBuffer == null || pi.PacketBuffer.Length == 0) { continue; }
+
+                            if (sb.Length > 0) { sb.AppendLine(); }
+                            sb.Append(SystemConfig.BytesToString(
                                 PacketConfig.Packet.EncodingFormat.Hex, pi.PacketBuffer));
                         }
 
@@ -17148,6 +16867,45 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(GetPacketHex_ByIds), ex);
+                        return string.Empty;
+                    }
+                }
+
+                /// <summary>
+                /// 「合并复制」：把选中那几条的字节<b>按列表顺序首尾拼接成一个封包</b>，
+                /// 转成一段十六进制（空格分隔、大写、单行）。空包跳过（拼进去也是零字节）。
+                /// </summary>
+                public static string GetPacketHexMerged_ByIds(IList<long> Ids)
+                {
+                    try
+                    {
+                        List<PacketInfo> picked = PacketConfig.List.PickPackets(Ids);
+
+                        int total = 0;
+                        foreach (PacketInfo pi in picked)
+                        {
+                            if (pi.PacketBuffer != null) { total += pi.PacketBuffer.Length; }
+                        }
+
+                        if (total == 0) { return string.Empty; }
+
+                        byte[] merged = new byte[total];
+                        int pos = 0;
+
+                        foreach (PacketInfo pi in picked)
+                        {
+                            byte[] buf = pi.PacketBuffer;
+                            if (buf == null || buf.Length == 0) { continue; }
+
+                            Buffer.BlockCopy(buf, 0, merged, pos, buf.Length);
+                            pos += buf.Length;
+                        }
+
+                        return SystemConfig.ToHexString(merged);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetPacketHexMerged_ByIds), ex);
                         return string.Empty;
                     }
                 }
@@ -17302,11 +17060,11 @@ namespace WinsockPacketEditor
                 }
 
                 /// <summary>
-                /// 「导出到 Excel」。<b>Ids 为空时导整张表</b> ——
-                /// 这不是这里的特例，SavePacketListToExcel 本来就是这么写的
+                /// 「导出到 CSV」。<b>Ids 为空时导整张表</b> ——
+                /// 这不是这里的特例，SavePacketList_Dialog 本来就是这么写的
                 /// （piList 为空则退回 lstPacketInfo），所以「什么都不选 = 导全部」。
                 /// </summary>
-                public static async Task<string> ExportPacketExcel_ByIds(IList<long> Ids, string FileName = null)
+                public static async Task<string> ExportPacketCsv_ByIds(IList<long> Ids, string FileName = null)
                 {
                     try
                     {
@@ -17316,7 +17074,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ExportPacketExcel_ByIds), ex);
+                        Operate.DoLog(nameof(ExportPacketCsv_ByIds), ex);
                     }
                     return null;
                 }
@@ -17845,95 +17603,114 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//保存封包列表为Excel（对话框）
+                #region//保存封包列表为CSV（对话框）
+
+                /*
+                    导出 CSV 的通用核心。代理列表（ProxyConfig.List）与封包列表共用：
+                    判空 → 弹保存框 → 后台线程写文件（不阻塞 UI）→ 通知。
+
+                    <param name="totalCount">全表条数，用于「没有可导出的数据」判空。</param>
+                    <param name="dataSource">已物化的数据源（选中集或全表快照）。后台线程只读它，安全。</param>
+                    <param name="toRow">行投影：把一条记录变成 string[]（在后台线程调用，含 hex 转换等重活）。</param>
+                */
+                internal static async Task<string> SaveListToCsv_Dialog<T>(
+                    int totalCount, string defaultName, string header, List<T> dataSource, Func<T, string[]> toRow)
+                {
+                    if (totalCount <= 0)
+                    {
+                        UI.Toast(UiIcon.Warn, UI.T("ExportToCsv.Empty", "没有可导出的数据"));
+                        return null;
+                    }
+
+                    FilePick sfd = new FilePick();
+                    sfd.Filter = UI.T("CsvFile", "CSV 文件") + " (*.csv)|*.csv";
+                    if (!string.IsNullOrEmpty(defaultName)) { sfd.FileName = defaultName; }
+
+                    string path = await UI.PickSave(sfd);
+                    if (string.IsNullOrEmpty(path)) { return null; }
+
+                    // 写文件（含逐行 hex 转换等重活）在后台线程，遮罩给「正在导出」反馈，不阻塞 UI
+                    bool ok = await UI.Busy(UI.T("Exporting", "正在导出..."), () =>
+                    {
+                        try { return WriteCsv(path, header, dataSource, toRow); }
+                        catch (Exception ex) { Operate.DoLog(nameof(SaveListToCsv_Dialog), ex); return false; }
+                    });
+
+                    if (ok)
+                    {
+                        string title = UI.T("ExportToCsv.Success", "导出到CSV成功");
+                        UI.Notify(UiIcon.Success, title, path);
+                        Operate.DoLog(nameof(SaveListToCsv_Dialog), title + ": " + path);
+                        return path;
+                    }
+                    else
+                    {
+                        string title = UI.T("ExportToCsv.Error", "导出到CSV失败");
+                        UI.Notify(UiIcon.Error, title, UI.T("CheckSystemLog", "请检查系统日志"));
+                        return null;
+                    }
+                }
+
+                /// <summary>把一组行写成 CSV：UTF-8 带 BOM（Excel 正确识别中文），逗号分隔 + RFC 4180 转义。</summary>
+                private static bool WriteCsv<T>(string filePath, string header, List<T> dataSource, Func<T, string[]> toRow)
+                {
+                    using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                    using (var writer = new StreamWriter(stream, new UTF8Encoding(true)))
+                    {
+                        writer.WriteLine(header);
+
+                        foreach (T item in dataSource)
+                        {
+                            writer.WriteLine(JoinCsvRow(toRow(item)));
+                        }
+                    }
+                    return true;
+                }
+
+                private static readonly char[] CsvSpecial = { ',', '"', '\r', '\n' };
+
+                /// <summary>RFC 4180：含逗号 / 引号 / 换行的字段用引号包裹，内部引号翻倍。</summary>
+                private static string CsvEscape(string field)
+                {
+                    if (string.IsNullOrEmpty(field)) { return string.Empty; }
+                    if (field.IndexOfAny(CsvSpecial) >= 0)
+                    {
+                        return "\"" + field.Replace("\"", "\"\"") + "\"";
+                    }
+                    return field;
+                }
+
+                private static string JoinCsvRow(string[] fields)
+                {
+                    var sb = new StringBuilder();
+                    for (int i = 0; i < fields.Length; i++)
+                    {
+                        if (i > 0) { sb.Append(','); }
+                        sb.Append(CsvEscape(fields[i]));
+                    }
+                    return sb.ToString();
+                }
 
                 public static async Task<string> SavePacketList_Dialog(string FileName, List<PacketInfo> piList)
                 {
-                    try
-                    {
-                        if (PacketConfig.List.lstPacketInfo.Count > 0)
+                    List<PacketInfo> all = PacketConfig.List.lstPacketInfo.ToList();
+                    List<PacketInfo> data = piList.Count > 0 ? piList : all;
+
+                    return await SaveListToCsv_Dialog(
+                        all.Count,
+                        FileName,
+                        UI.T("CsvColumn.Packet", "时间戳,类别,套接字,源地址,目的地址,长度,数据"),
+                        data,
+                        (PacketInfo p) => new[]
                         {
-                            int SaveCount = PacketConfig.List.lstPacketInfo.Count;
-
-                            FilePick sfdSaveToExcel = new FilePick();
-                            sfdSaveToExcel.Filter = UI.T("ExcelFile", "Excel 文件") + " (*.xls)|*.xls";                            
-
-                            if (!string.IsNullOrEmpty(FileName))
-                            {
-                                sfdSaveToExcel.FileName = FileName;
-                            }
-
-                            string sPickedPath = await UI.PickSave(sfdSaveToExcel);
-                            if (!string.IsNullOrEmpty(sPickedPath))
-                            {
-                                string FilePath = sPickedPath;
-                                if (!string.IsNullOrEmpty(FilePath))
-                                {
-                                    bool bOK = SavePacketListToExcel(FilePath, piList);
-                                    if (bOK)
-                                    {
-                                        string Title = UI.T("ExportToExcel.Success", "导出到Excel成功");
-                                        UI.Notify(UiIcon.Success, Title, FilePath);
-                                        Operate.DoLog(nameof(SavePacketList_Dialog), Title + ": " + FilePath);
-                                        return FilePath;
-                                    }
-                                    else
-                                    {
-                                        string Title = UI.T("ExportToExcel.Error", "导出到Excel失败");
-                                        string Content = UI.T("CheckSystemLog", "请检查系统日志");
-                                        UI.Notify(UiIcon.Error, Title, Content);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(SavePacketList_Dialog), ex);
-                }
-                return null;
-                }
-
-                private static bool SavePacketListToExcel(string filePath, List<PacketInfo> piList)
-                {
-                    try
-                    {
-                        using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                        using (var writer = new StreamWriter(stream, Encoding.Default))
-                        {
-                            writer.WriteLine(UI.T("ExcelColumn.Packet", "时间戳\t类别\t套接字\t源地址\t目的地址\t长度\t数据\t"));
-
-                            var dataSource = piList.Count > 0 ? piList : PacketConfig.List.lstPacketInfo.ToList();
-                            foreach (var packet in dataSource)
-                            {
-                                try
-                                {
-                                    var lineBuilder = new StringBuilder();
-
-                                    lineBuilder.Append(packet.PacketTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff")).Append('\t');
-                                    lineBuilder.Append(packet.PacketType).Append('\t');
-                                    lineBuilder.Append(packet.PacketSocket).Append('\t');
-                                    lineBuilder.Append(packet.PacketFrom).Append('\t');
-                                    lineBuilder.Append(packet.PacketTo).Append('\t');
-                                    lineBuilder.Append(packet.PacketLen).Append('\t');
-                                    lineBuilder.Append(SystemConfig.BytesToString(PacketConfig.Packet.EncodingFormat.Hex, packet.PacketBuffer)).Append('\t');
-
-                                    writer.WriteLine(lineBuilder.ToString());
-                                }
-                                catch (Exception ex)
-                                {
-                                    Operate.DoLog(nameof(SavePacketListToExcel), ex);
-                                }
-                            }
-                        }
-
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(SavePacketListToExcel), ex);
-                        return false;
-                    }
+                            p.PacketTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff"),
+                            PacketConfig.Packet.GetName_ByPacketType(p.PacketType),
+                            p.PacketSocket.ToString(),
+                            p.PacketFrom ?? string.Empty,
+                            p.PacketTo ?? string.Empty,
+                            p.PacketLen.ToString(),
+                            SystemConfig.BytesToString(PacketConfig.Packet.EncodingFormat.Hex, p.PacketBuffer),
+                        });
                 }
 
                 #endregion
@@ -18005,7 +17782,6 @@ namespace WinsockPacketEditor
                             To = pi.PacketTo ?? string.Empty,
                             Buffer = pi.PacketBuffer ?? new byte[0],
                             //PacketInfo 没有 TheologyID —— 注入模式与发送集都只能按套接字发
-                            CanSendBySession = false,
                             SystemSocket = SystemConfig.SystemSocket,
                         };
                     }
@@ -18023,8 +17799,6 @@ namespace WinsockPacketEditor
                             From = pi.ClientAddr ?? string.Empty,
                             To = pi.ServerAddr ?? string.Empty,
                             Buffer = pi.PacketBuffer ?? new byte[0],
-                            //SOCKS5 那条路上 TheologyID 恒为 0，只有 SunnyNet 中间人抓到的包能按会话回发
-                            CanSendBySession = pi.TheologyID != 0,
                             SystemSocket = SystemConfig.SystemSocket,
                         };
                     }
@@ -18268,7 +18042,7 @@ namespace WinsockPacketEditor
 
                         string from, to;
                         PacketConfig.Packet.PacketType type;
-                        long theology = 0, wsType = 0;
+                        long theology = 0;
 
                         if (List == ListSend || List == ListPacket)
                         {
@@ -18284,7 +18058,7 @@ namespace WinsockPacketEditor
                             ProxyInfo pi = FindProxy(Id);
                             if (pi == null) { return UI.T("PacketEditForm.Gone", "这条封包已经不在列表里了"); }
                             from = pi.ClientAddr; to = pi.ServerAddr; type = pi.PacketType;
-                            theology = pi.TheologyID; wsType = pi.WebSocketType;
+                            theology = pi.TheologyID;
                         }
 
                         if (Socket <= 0 && theology == 0)
@@ -18353,7 +18127,7 @@ namespace WinsockPacketEditor
                                 {
                                     while (!token.IsCancellationRequested)
                                     {
-                                        DoSend(Socket, type, from, to, buf, theology, wsType,
+                                        DoSend(Socket, type, from, to, buf,
                                             Progression, ProgressionPosition, ProgressionStep, Carry, CarryCount);
 
                                         if (interval > 0 && token.WaitHandle.WaitOne(interval)) { break; }
@@ -18363,7 +18137,7 @@ namespace WinsockPacketEditor
                                 {
                                     for (int i = 0; i < times && !token.IsCancellationRequested; i++)
                                     {
-                                        DoSend(Socket, type, from, to, buf, theology, wsType,
+                                        DoSend(Socket, type, from, to, buf,
                                             Progression, ProgressionPosition, ProgressionStep, Carry, CarryCount);
 
                                         if (interval > 0 && token.WaitHandle.WaitOne(interval)) { break; }
@@ -18404,7 +18178,6 @@ namespace WinsockPacketEditor
             /// <summary>发一次。逻辑逐行照 WinForms 的 DoSendPacket：先递进（含进位），再按套接字 / 会话两条路发。</summary>
             private static void DoSend(
                 int Socket, PacketConfig.Packet.PacketType type, string from, string to, byte[] buf,
-                long theology, long wsType,
                 bool Progression, int pos, int step, bool carry, int carryCount)
             {
                 try
@@ -18431,32 +18204,8 @@ namespace WinsockPacketEditor
 
                     if (Socket <= 0)
                     {
-                        //套接字 0：走 SunnyNet 的会话回发（只有中间人那条路抓到的包有会话号）
-                        switch (type)
-                        {
-                            case PacketConfig.Packet.PacketType.TCP_Req:
-                                ok = SunnyNetlibray.Tools.TCPTools.SendMessage(SunnyNetlibray.Tools.TCPTools.SendToServer, theology, buf);
-                                break;
-                            case PacketConfig.Packet.PacketType.TCP_Resp:
-                                ok = SunnyNetlibray.Tools.TCPTools.SendMessage(SunnyNetlibray.Tools.TCPTools.SendToClient, theology, buf);
-                                break;
-                            case PacketConfig.Packet.PacketType.UDP_Req:
-                                ok = SunnyNetlibray.Tools.UDPTools.SendMessage(SunnyNetlibray.Tools.UDPTools.SendToServer, theology, buf);
-                                break;
-                            case PacketConfig.Packet.PacketType.UDP_Resp:
-                                ok = SunnyNetlibray.Tools.UDPTools.SendMessage(SunnyNetlibray.Tools.UDPTools.SendToClient, theology, buf);
-                                break;
-                            case PacketConfig.Packet.PacketType.WebSocket_Req:
-                                ok = SunnyNetlibray.Tools.WebSocketTools.SendMessage(SunnyNetlibray.Tools.WebSocketTools.SendToServer, theology, wsType, buf);
-                                break;
-                            case PacketConfig.Packet.PacketType.WebSocket_Resp:
-                                ok = SunnyNetlibray.Tools.WebSocketTools.SendMessage(SunnyNetlibray.Tools.WebSocketTools.SendToClient, theology, wsType, buf);
-                                break;
-                            default:
-                                //HTTP / HTTPS 不能整包重发，WinForms 也是直接计失败
-                                ok = false;
-                                break;
-                        }
+                        //会话回发（SunnyNet 中间件那条路）已随中间件一起移除：套接字无效只能计失败
+                        ok = false;
                     }
                     else
                     {
@@ -20213,6 +19962,45 @@ namespace WinsockPacketEditor
                             }
                         }
 
+                        /*
+                            HTTP 会话：把字节流拼成完整的请求 / 响应，按 HTTP_Req / HTTP_Resp 入列表，
+                            替代逐段 TCP 条目（只影响展示 —— 线上仍是上面逐段过滤后的字节）。
+                            非 HTTP 会话 Sniffer 返回 null，走原来的 TCP 条目。
+                        */
+                        HttpSniffer sniffer = psSession.Sniffer(ptType == Operate.PacketConfig.Packet.PacketType.TCP_Req);
+                        if (sniffer != null)
+                        {
+                            List<byte[]> msgs = sniffer.Feed(bRawBuffer);
+
+                            if (sniffer.IsHttp)
+                            {
+                                Operate.PacketConfig.Packet.PacketType httpType =
+                                    ptType == Operate.PacketConfig.Packet.PacketType.TCP_Req
+                                        ? Operate.PacketConfig.Packet.PacketType.HTTP_Req
+                                        : Operate.PacketConfig.Packet.PacketType.HTTP_Resp;
+
+                                foreach (byte[] msg in msgs)
+                                {
+                                    _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
+                                        DateTime.Now,
+                                        Operate.FilterConfig.Filter.FilterAction.None,
+                                        msg.Length,
+                                        SocketID,
+                                        0,
+                                        httpType,
+                                        $"{psSession.ClientIP}:{psSession.ClientPort}",
+                                        $"{psSession.ServerIP}:{psSession.ServerPort}",
+                                        psSession.ServerAddress,
+                                        psSession.DomainType,
+                                        msg,
+                                        msg,
+                                        null);
+                                }
+
+                                return;
+                            }
+                        }
+
                         _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
                             DateTime.Now,
                             FilterAction,
@@ -20220,7 +20008,6 @@ namespace WinsockPacketEditor
                             SocketID,
                             0,
                             ptType,
-                            0,
                             $"{psSession.ClientIP}:{psSession.ClientPort}",
                             $"{psSession.ServerIP}:{psSession.ServerPort}",
                             psSession.ServerAddress,
@@ -20285,7 +20072,6 @@ namespace WinsockPacketEditor
                             iSocket,
                             0,
                             ptType,
-                            0,
                             ClientAddr,
                             ServerAddr,
                             ServerAddr,
@@ -30675,7 +30461,7 @@ namespace WinsockPacketEditor
                 #region//日志列表 - 外壳入口（三路日志按 Kind 区分，只出基础类型）
 
                 /*
-                    对应 WinForms 的 GetCMS_LogList 那三项动作（复制 / 导出到 Excel / 清空日志列表），
+                    对应 WinForms 的 GetCMS_LogList 那三项动作（复制 / 导出到 CSV / 清空日志列表），
                     动作本身散在 Controls/LogList.cs 的三段 switch 里 —— 三路日志各抄了一遍。
                     这里按 Kind 收成一份，两套 UI 都能调。
 
@@ -30746,7 +30532,7 @@ namespace WinsockPacketEditor
                 }
 
                 /// <summary>
-                /// 「导出到 Excel」。<b>整张表</b>，不分选中 ——
+                /// 「导出到 CSV」。<b>整张表</b>，不分选中 ——
                 /// WinForms 那边三个 Save*LogList_Dialog 收的就是整个 lst*，右键菜单也没往里传选中行。
                 /// </summary>
                 public static async Task ExportLog_Dialog(int Kind)
@@ -30782,273 +30568,69 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//保存系统日志列表为Excel（对话框）
+                #region//保存系统日志列表为CSV（对话框）
 
                 public static async Task SaveLogList_Dialog(string FileName, List<LogInfo> liList)
                 {
-                    try
-                    {
-                        if (liList != null && liList.Count > 0)
+                    List<LogInfo> data = (liList != null && liList.Count > 0) ? liList : LogConfig.List.lstLogInfo.ToList();
+
+                    await PacketConfig.List.SaveListToCsv_Dialog(
+                        data.Count,
+                        FileName,
+                        UI.T("CsvColumn.Log", "记录时间,模块,日志内容"),
+                        data,
+                        (LogInfo l) => new[]
                         {
-                            int SaveCount = liList.Count;
-
-                            FilePick sfdSaveToExcel = new FilePick();
-                            sfdSaveToExcel.Filter = UI.T("ExcelFile", "Excel 文件") + " (*.xls)|*.xls";
-
-                            if (!string.IsNullOrEmpty(FileName))
-                            {
-                                sfdSaveToExcel.FileName = FileName;
-                            }
-
-                            string sPickedPath = await UI.PickSave(sfdSaveToExcel);
-                            if (!string.IsNullOrEmpty(sPickedPath))
-                            {
-                                string FilePath = sPickedPath;
-                                if (!string.IsNullOrEmpty(FilePath))
-                                {
-                                    bool bOK = false;
-                                    bOK = await UI.Busy(UI.T("Exporting", "正在导出..."), () => SaveLogListToExcel(FilePath, liList));
-
-                                    if (bOK)
-                                    {
-                                        string Title = UI.T("ExportToExcel.Success", "导出到 Excel 成功");
-                                        UI.Notify(UiIcon.Success, Title, FilePath);
-                                        Operate.DoLog(nameof(SaveLogList_Dialog), Title + ": " + FilePath);
-                                    }
-                                    else
-                                    {
-                                        string Title = UI.T("ExportToExcel.Error", "导出到 Excel 失败");
-                                        string Content = UI.T("CheckSystemLog", "请检查系统日志");
-                                        UI.Notify(UiIcon.Error, Title, Content);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(SaveLogList_Dialog), ex);
-                    }
-                }
-
-                private static bool SaveLogListToExcel(string filePath, List<LogInfo> liList)
-                {
-                    try
-                    {
-                        using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                        using (var writer = new StreamWriter(stream, Encoding.Default))
-                        {
-                            writer.WriteLine(UI.T("ExcelColumn.Log", "记录时间\t模块\t日志内容\t"));
-
-                            var dataSource = liList.Count > 0 ? liList : LogConfig.List.lstLogInfo.ToList();
-                            foreach (var log in dataSource)
-                            {
-                                try
-                                {
-                                    var lineBuilder = new StringBuilder();
-
-                                    lineBuilder.Append(log.LogTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff")).Append('\t');
-                                    lineBuilder.Append(log.FuncName).Append('\t');
-                                    lineBuilder.Append(log.LogContent).Append('\t');
-
-                                    writer.WriteLine(lineBuilder.ToString());
-                                }
-                                catch (Exception ex)
-                                {
-                                    Operate.DoLog(nameof(SaveLogListToExcel), ex);
-                                }
-                            }
-                        }
-
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        DoLog(nameof(SaveLogListToExcel), ex);
-                        return false;
-                    }
+                            l.LogTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff"),
+                            l.FuncName ?? string.Empty,
+                            l.LogContent ?? string.Empty,
+                        });
                 }
 
                 #endregion                
 
-                #region//保存滤镜日志列表为Excel（对话框）
+                #region//保存滤镜日志列表为CSV（对话框）
 
                 public static async Task SaveFilterLogList_Dialog(string FileName, List<FilterLogInfo> liList)
                 {
-                    try
-                    {
-                        if (LogConfig.List.lstFilterLogInfo.Count > 0)
+                    List<FilterLogInfo> data = (liList != null && liList.Count > 0) ? liList : LogConfig.List.lstFilterLogInfo.ToList();
+
+                    await PacketConfig.List.SaveListToCsv_Dialog(
+                        data.Count,
+                        FileName,
+                        UI.T("CsvColumn.FilterLog", "记录时间,滤镜名称,动作,匹配数,类别,长度"),
+                        data,
+                        (FilterLogInfo l) => new[]
                         {
-                            int SaveCount = LogConfig.List.lstFilterLogInfo.Count;
-
-                            FilePick sfdSaveToExcel = new FilePick();
-                            sfdSaveToExcel.Filter = UI.T("ExcelFile", "Excel 文件") + " (*.xls)|*.xls";
-
-                            if (!string.IsNullOrEmpty(FileName))
-                            {
-                                sfdSaveToExcel.FileName = FileName;
-                            }
-
-                            string sPickedPath = await UI.PickSave(sfdSaveToExcel);
-                            if (!string.IsNullOrEmpty(sPickedPath))
-                            {
-                                string FilePath = sPickedPath;
-                                if (!string.IsNullOrEmpty(FilePath))
-                                {
-                                    bool bOK = false;
-                                    bOK = await UI.Busy(UI.T("Exporting", "正在导出..."), () => SaveFilterLogListToExcel(FilePath, liList));
-
-                                    if (bOK)
-                                    {
-                                        string Title = UI.T("ExportToExcel.Success", "导出到 Excel 成功");
-                                        UI.Notify(UiIcon.Success, Title, FilePath);
-                                        Operate.DoLog(nameof(SaveFilterLogList_Dialog), Title + ": " + FilePath);
-                                    }
-                                    else
-                                    {
-                                        string Title = UI.T("ExportToExcel.Error", "导出到 Excel 失败");
-                                        string Content = UI.T("CheckSystemLog", "请检查系统日志");
-                                        UI.Notify(UiIcon.Error, Title, Content);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(SaveFilterLogList_Dialog), ex);
-                    }
-                }
-
-                private static bool SaveFilterLogListToExcel(string filePath, List<FilterLogInfo> liList)
-                {
-                    try
-                    {
-                        using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                        using (var writer = new StreamWriter(stream, Encoding.Default))
-                        {
-                            writer.WriteLine(UI.T("ExcelColumn.FilterLog", "记录时间\t滤镜名称\t动作\t匹配数\t类别\t长度\t"));
-
-                            var dataSource = liList.Count > 0 ? liList : LogConfig.List.lstFilterLogInfo.ToList();
-                            foreach (var log in dataSource)
-                            {
-                                try
-                                {
-                                    var lineBuilder = new StringBuilder();
-
-                                    lineBuilder.Append(log.LogTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff")).Append('\t');
-                                    lineBuilder.Append(log.FName).Append('\t');
-                                    lineBuilder.Append(log.FAction).Append('\t');
-                                    lineBuilder.Append(log.MatchNum).Append('\t');
-                                    lineBuilder.Append(log.PacketType).Append('\t');
-                                    lineBuilder.Append(log.PacketLen).Append('\t');
-
-                                    writer.WriteLine(lineBuilder.ToString());
-                                }
-                                catch (Exception ex)
-                                {
-                                    Operate.DoLog(nameof(SaveFilterLogListToExcel), ex);
-                                }
-                            }
-                        }
-
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        DoLog(nameof(SaveFilterLogListToExcel), ex);
-                        return false;
-                    }
+                            l.LogTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff"),
+                            l.FName ?? string.Empty,
+                            l.FAction.ToString(),
+                            l.MatchNum.ToString(),
+                            PacketConfig.Packet.GetName_ByPacketType(l.PacketType),
+                            l.PacketLen.ToString(),
+                        });
                 }
 
                 #endregion                
 
-                #region//保存滤镜日志列表为Excel（对话框）
+                #region//保存代理日志列表为CSV（对话框）
 
                 public static async Task SaveProxyLogList_Dialog(string FileName, List<ProxyLogInfo> liList)
                 {
-                    try
-                    {
-                        if (LogConfig.List.lstProxyLogInfo.Count > 0)
+                    List<ProxyLogInfo> data = (liList != null && liList.Count > 0) ? liList : LogConfig.List.lstProxyLogInfo.ToList();
+
+                    await PacketConfig.List.SaveListToCsv_Dialog(
+                        data.Count,
+                        FileName,
+                        UI.T("CsvColumn.ProxyLog", "记录时间,账号,IP地址,日志内容"),
+                        data,
+                        (ProxyLogInfo l) => new[]
                         {
-                            int SaveCount = LogConfig.List.lstProxyLogInfo.Count;
-
-                            FilePick sfdSaveToExcel = new FilePick();
-                            sfdSaveToExcel.Filter = UI.T("ExcelFile", "Excel 文件") + " (*.xls)|*.xls";
-
-                            if (!string.IsNullOrEmpty(FileName))
-                            {
-                                sfdSaveToExcel.FileName = FileName;
-                            }
-
-                            string sPickedPath = await UI.PickSave(sfdSaveToExcel);
-                            if (!string.IsNullOrEmpty(sPickedPath))
-                            {
-                                string FilePath = sPickedPath;
-                                if (!string.IsNullOrEmpty(FilePath))
-                                {
-                                    bool bOK = false;
-                                    bOK = await UI.Busy(UI.T("Exporting", "正在导出..."), () => SaveProxyLogListToExcel(FilePath, liList));
-
-                                    if (bOK)
-                                    {
-                                        string Title = UI.T("ExportToExcel.Success", "导出到 Excel 成功");
-                                        UI.Notify(UiIcon.Success, Title, FilePath);
-                                        Operate.DoLog(nameof(SaveProxyLogList_Dialog), Title + ": " + FilePath);
-                                    }
-                                    else
-                                    {
-                                        string Title = UI.T("ExportToExcel.Error", "导出到 Excel 失败");
-                                        string Content = UI.T("CheckSystemLog", "请检查系统日志");
-                                        UI.Notify(UiIcon.Error, Title, Content);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(SaveProxyLogList_Dialog), ex);
-                    }
-                }
-
-                private static bool SaveProxyLogListToExcel(string filePath, List<ProxyLogInfo> liList)
-                {
-                    try
-                    {
-                        using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                        using (var writer = new StreamWriter(stream, Encoding.Default))
-                        {
-                            writer.WriteLine(UI.T("ExcelColumn.ProxyLog", "记录时间\t账号\tIP地址\t日志内容\t"));
-
-                            var dataSource = liList.Count > 0 ? liList : LogConfig.List.lstProxyLogInfo.ToList();
-                            foreach (var log in dataSource)
-                            {
-                                try
-                                {
-                                    var lineBuilder = new StringBuilder();
-
-                                    lineBuilder.Append(log.LogTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff")).Append('\t');
-                                    lineBuilder.Append(log.UserName).Append('\t');
-                                    lineBuilder.Append(log.LoginIP).Append('\t');
-                                    lineBuilder.Append(log.LogContent).Append('\t');
-
-                                    writer.WriteLine(lineBuilder.ToString());
-                                }
-                                catch (Exception ex)
-                                {
-                                    Operate.DoLog(nameof(SaveProxyLogListToExcel), ex);
-                                }
-                            }
-                        }
-
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        DoLog(nameof(SaveProxyLogListToExcel), ex);
-                        return false;
-                    }
+                            l.LogTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff"),
+                            l.UserName ?? string.Empty,
+                            l.LoginIP ?? string.Empty,
+                            l.LogContent ?? string.Empty,
+                        });
                 }
 
                 #endregion                
@@ -31865,6 +31447,8 @@ namespace WinsockPacketEditor
                         sql += "FireWall_AutoClear_Expiry BOOLEAN DEFAULT 0,";//代理模式 - 自动清理过期的规则
                         sql += "DriverType INTEGER DEFAULT 1,";//代理模式 - 进程拦截的驱动类型（0 Proxifier · 1 NFAPI · 2 WinDivert）
                         sql += "SelectProcessNames TEXT,";//代理模式 - 按名称拦截的进程表（一行一条 "模块名|路径"，见 SerializeSelectProcessNames）
+                        sql += "TunStack TEXT DEFAULT 'system',";//代理模式 - 内置 mihomo 内核的 TUN 栈（2026-09-23）
+                        sql += "DnsMode TEXT DEFAULT 'fake-ip',";//代理模式 - 内置 mihomo 内核的 DNS 模式（2026-09-23）
                         sql += "Only_WPC_Client BOOLEAN DEFAULT 0";//代理模式 - 只允许 WPC 客户端连接（2026-09-14）
                         sql += ");";
 
@@ -31877,6 +31461,8 @@ namespace WinsockPacketEditor
                             EnsureColumn(conn, "ProxyMode", "DriverType", "INTEGER DEFAULT 1");
                             EnsureColumn(conn, "ProxyMode", "SelectProcessNames", "TEXT");
                             EnsureColumn(conn, "ProxyMode", "Only_WPC_Client", "BOOLEAN DEFAULT 0");
+                            EnsureColumn(conn, "ProxyMode", "TunStack", "TEXT DEFAULT 'system'");
+                            EnsureColumn(conn, "ProxyMode", "DnsMode", "TEXT DEFAULT 'fake-ip'");
                         }
                     }
 
@@ -31980,7 +31566,9 @@ namespace WinsockPacketEditor
                         sql += "FireWall_AutoBlackList_Minutes,";
                         sql += "FireWall_AutoClear_Expiry,";
                         sql += "DriverType,";
-                        sql += "SelectProcessNames";
+                        sql += "SelectProcessNames,";
+                        sql += "TunStack,";
+                        sql += "DnsMode";
                         sql += ") VALUES (";
                         sql += "@ProxyIP_Auto,";
                         sql += "@Enable_SOCKS5,";
@@ -32020,7 +31608,9 @@ namespace WinsockPacketEditor
                         sql += "@FireWall_AutoBlackList_Minutes,";
                         sql += "@FireWall_AutoClear_Expiry,";
                         sql += "@DriverType,";
-                        sql += "@SelectProcessNames";
+                        sql += "@SelectProcessNames,";
+                        sql += "@TunStack,";
+                        sql += "@DnsMode";
                         sql += ");";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
@@ -32064,6 +31654,8 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@FireWall_AutoClear_Expiry", ProxyConfig.Proxy.FireWall_AutoClear_Expiry);
                             cmd.Parameters.AddWithValue("@DriverType", ProxyConfig.Proxy.DriverType);
                             cmd.Parameters.AddWithValue("@SelectProcessNames", ProxyConfig.Proxy.SerializeSelectProcessNames());
+                            cmd.Parameters.AddWithValue("@TunStack", ProxyConfig.Proxy.TunStack ?? "system");
+                            cmd.Parameters.AddWithValue("@DnsMode", ProxyConfig.Proxy.DnsMode ?? "fake-ip");
 
                             conn.Open();
                             cmd.ExecuteNonQuery();

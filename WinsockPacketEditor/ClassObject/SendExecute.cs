@@ -147,9 +147,8 @@ namespace WinsockPacketEditor
                         /*
                             ⚠️⚠️ 套接字 <= 0 原来是<b>整条静默跳过</b>：不发、不计数、不记日志。
 
-                            而 <b>SunnyNet 那条中间人路上产出的封包套接字一律是 0</b>
-                            （HTTP / HTTPS / WebSocket —— 它们靠会话号回发，压根没有套接字；
-                            SunnyNetCallback 里 8 个入队调用点第 4 个参数都是字面量 0）。
+                            以前 SunnyNet 的中间人那条路产出的封包套接字一律是 0（靠会话号回发）；
+                            中间人移除后不会再产出这种包，但从升级前存下来的发送集里读出来的仍可能是 0。
                             而「代理数据页右键 → 添加到发送」正是把这种封包放进发送集最自然的一条路。
 
                             于是不勾「使用系统套接字」时：<b>一个包都发不出去，三个计数全是 0，
@@ -167,7 +166,7 @@ namespace WinsockPacketEditor
                             //⚠️ 必须节流：一条几百个包的发送集全是 0 的话，逐条记会把日志刷爆
                             Operate.SystemConfig.LogThrottled("SendNoSocket." + this.SendName, string.Format(
                                 UI.T("SendExecute.Socket.Missing",
-                                     "发送「{0}」里有封包没有套接字（HTTP / HTTPS / WebSocket 走的是会话号，套接字恒为 0）—— 这些封包发不出去，请勾上「使用系统套接字」并先在封包列表里右键设置它。"),
+                                     "发送「{0}」里有封包没有套接字（套接字号为 0）—— 这些封包发不出去，请勾上「使用系统套接字」并先在封包列表里右键设置它。"),
                                 this.SendName));
                         }
                         else

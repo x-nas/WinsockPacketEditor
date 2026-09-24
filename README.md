@@ -7,7 +7,7 @@
 **看清、改写并重放程序的网络封包**
 *See, edit and replay the network packets a program sends and receives*
 
-<img src="https://img.shields.io/badge/version-2.3-00c853?style=flat-square" alt="version">&nbsp;
+<img src="https://img.shields.io/badge/version-2.4-00c853?style=flat-square" alt="version">&nbsp;
 <img src="https://img.shields.io/badge/platform-Windows%2010%20%2F%2011-2a2a3a?style=flat-square" alt="platform">&nbsp;
 <img src="https://img.shields.io/badge/languages-7-2a2a3a?style=flat-square" alt="languages">&nbsp;
 <img src="https://img.shields.io/github/stars/x-nas/WinsockPacketEditor?style=flat-square&color=00c853" alt="stars">
@@ -36,7 +36,7 @@
 - 🎨 **规则自动改**：设好「滤镜」，符合条件的封包自动替换 / 拦截 / 改长度，命中的行按颜色标出来。
 - 🤖 **自动化**：用「机器人」把一串动作（发包、延迟、循环、模拟键鼠）排成流程自动跑。
 - 🔍 **对比与查找**：并排看改写前后、按字节或按行找不同，列表支持文本 / 十六进制 / 正则搜索。
-- 🔒 **看清加密流量**：代理模式下连 **HTTPS** 这类加密内容也能以明文呈现。
+- 🔒 **按进程抓取**：代理模式下只接管你勾选的那几个进程，它们的 TCP / UDP 封包照样能看、能改。
 - 🌍 **随身即用**：免安装，单个文件双击就能跑，退出时自己收拾干净。
 
 ### 🎯 两种工作方式，按场景选
@@ -44,7 +44,7 @@
 | | 适合 | 说明 |
 |---|---|---|
 | 🎯 **注入模式** | 单个程序、模拟器、手游 | 附着到目标程序上，从内部把它的封包读出来；对模拟器尤其好用，连启动瞬间的封包都抓得到。 |
-| 🌐 **代理模式** | 手机、另一台电脑、要看 HTTPS 明文 | 让程序（或整台设备）把流量经过 WPE 转发，途中就能看到、改写；加密的 HTTPS 也能解开看。 |
+| 🌐 **代理模式** | 手机、另一台电脑、按进程抓 | 让选定进程（或整台设备）的流量经过 WPE 转发，途中就能看到、改写；HTTP 明文会解析成请求 / 响应，HTTPS 只呈现密文。 |
 
 ### 🧰 主要功能一览
 
@@ -82,9 +82,9 @@
 
 ### ⬇️ 下载与运行
 
-1. 到 **[下载中心](https://www.wpe64.com/downloads.html)** 的 WPE64 标签页下载最新版压缩包 `WPE64 v2.3.zip`（**免安装**，蓝奏云 / 百度网盘任选）。
-2. **解压之前**先在 zip 上右键「属性 → 解除锁定 → 应用」，再解压 —— 里面是 `WPE64 v2.3.exe` 和校验文件 `WPE64 v2.3.exe.sha256.txt`（核对方法见下载中心）。
-3. 双击 `WPE64 v2.3.exe`，在权限提示上选「是」即可（需要管理员权限）。首次运行会先释放程序文件。
+1. 到 **[下载中心](https://www.wpe64.com/downloads.html)** 的 WPE64 标签页下载最新版压缩包 `WPE64 v2.4.zip`（**免安装**，蓝奏云 / 百度网盘任选）。
+2. **解压之前**先在 zip 上右键「属性 → 解除锁定 → 应用」，再解压 —— 里面是 `WPE64 v2.4.exe` 和校验文件 `WPE64 v2.4.exe.sha256.txt`（核对方法见下载中心）。
+3. 双击 `WPE64 v2.4.exe`，在权限提示上选「是」即可（需要管理员权限）。首次运行会先释放程序文件。
 
 > ⚠️ **从旧版本升级**：配置按版本分开存放、不会自动继承。升级前请先用旧版的「备份设置」导出全部数据，装好新版再导入。
 
@@ -116,7 +116,7 @@ A **network packet capture-and-edit tool** for Windows. It lists every packet a 
 - 🎨 **Rewrite by rule** — set up a *filter* and matching packets are replaced / blocked / resized automatically, with matched rows color-coded.
 - 🤖 **Automation** — a *robot* runs a sequence of steps (send, delay, loop, simulate keyboard and mouse) for you.
 - 🔍 **Compare & search** — view before/after side by side, diff by byte or by line; search the list as text, hex or regex.
-- 🔒 **See encrypted traffic** — in proxy mode even **HTTPS** shows up in the clear.
+- 🔒 **Per-process capture** — in proxy mode you can watch just the processes you pick; their TCP / UDP packets stay fully visible and editable.
 - 🌍 **Portable** — no installer; one file, double-click to run, and it cleans up after itself on exit.
 
 ### 🎯 Two ways to work, pick per situation
@@ -124,7 +124,7 @@ A **network packet capture-and-edit tool** for Windows. It lists every packet a 
 | | Best for | How it works |
 |---|---|---|
 | 🎯 **Inject Mode** | a single program, emulators, mobile games | Attaches to the target and reads its packets from the inside; great with emulators, and it even catches the packets sent the instant it launches. |
-| 🌐 **Proxy Mode** | phones, another PC, seeing HTTPS in the clear | Routes the program's (or a whole device's) traffic through WPE, where you can watch and rewrite it; encrypted HTTPS is decrypted for you. |
+| 🌐 **Proxy Mode** | phones, another PC, per-process capture | Routes the selected processes' (or a whole device's) traffic through WPE, where you can watch and rewrite it; plain HTTP is parsed into requests / responses, while HTTPS stays encrypted. |
 
 ### 🧰 Feature tour
 
@@ -162,11 +162,11 @@ A **network packet capture-and-edit tool** for Windows. It lists every packet a 
 
 ### ⬇️ Download & run
 
-1. Download the latest zip, `WPE64 v2.3.zip` (**no installer**), from the WPE64 tab of the **[download center](https://www.wpe64.com/en/downloads.html)** — Lanzou or Baidu Pan.
-2. **Before unzipping**, right-click the zip → Properties → **Unblock** → Apply, then unzip it. Inside are `WPE64 v2.3.exe` and its checksum file `WPE64 v2.3.exe.sha256.txt` (see the download center for how to check it).
-3. Double-click `WPE64 v2.3.exe` and choose Yes at the prompt (administrator rights are required). The first run unpacks the program files.
+1. Download the latest zip, `WPE64 v2.4.zip` (**no installer**), from the WPE64 tab of the **[download center](https://www.wpe64.com/en/downloads.html)** — Lanzou or Baidu Pan.
+2. **Before unzipping**, right-click the zip → Properties → **Unblock** → Apply, then unzip it. Inside are `WPE64 v2.4.exe` and its checksum file `WPE64 v2.4.exe.sha256.txt` (see the download center for how to check it).
+3. Double-click `WPE64 v2.4.exe` and choose Yes at the prompt (administrator rights are required). The first run unpacks the program files.
 
-> ⚠️ **Upgrading from an older version**: settings are stored per version and are not carried over. Export all your data from the old version with Backup settings first, then import it into 2.3.
+> ⚠️ **Upgrading from an older version**: settings are stored per version and are not carried over. Export all your data from the old version with Backup settings first, then import it into 2.4.
 
 **Requirements**: Windows 10 / 11 (or Server 2019 / 2022), 64-bit. If the first launch is blank, the interface runtime is missing — the program shows a one-click installer; install it and reopen.
 

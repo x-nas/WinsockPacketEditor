@@ -41,7 +41,6 @@
           "capturedPackets": { "type": "integer", "minimum": 0 },
           "sampledAtUtc": { "type": "string", "format": "date-time" },
           "socks5Enabled": { "type": "boolean" }, "socks5Port": { "type": "integer" },
-          "httpEnabled": { "type": "boolean" }, "httpPort": { "type": "integer" },
           "externalProxyEnabled": { "type": "boolean" }, "externalProxyIp": { "type": "string" }, "externalProxyPort": { "type": "integer" }
         },
         "additionalProperties": true

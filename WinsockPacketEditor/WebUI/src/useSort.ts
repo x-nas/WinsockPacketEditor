@@ -62,7 +62,7 @@ export interface UseSort<T> {
   dir: Ref<SortDir>
   /** 点表头：同一列 升 → 降 → 原始；换一列从升开始 */
   toggle: (k: string) => void
-  /** 表头要显示的箭头：'' / '↑' / '↓' */
+  /** 表头要显示的箭头：'↕'（未排序，可排序提示）/ '↑' / '↓' */
   mark: (k: string) => string
   /**
    * 这一列是不是当前排序列（表头据此点亮）。
@@ -96,7 +96,7 @@ export function useSort<T>(source: Ref<T[]> | ComputedRef<T[]>, getters: Record<
   }
 
   function mark(k: string): string {
-    if (key.value !== k) return ''
+    if (key.value !== k) return '↕'
     return dir.value === 'asc' ? '↑' : '↓'
   }
 

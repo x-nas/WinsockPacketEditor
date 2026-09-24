@@ -1,4 +1,4 @@
-﻿// English（en-US）的对照表，由 L10n.Get 查（外壳经 CoreL10n，即 UI.T）。
+// English（en-US）的对照表，由 L10n.Get 查（外壳经 CoreL10n，即 UI.T）。
 //
 // ⚠️ <b>这个文件是生成出来的</b>，别手改。
 //
@@ -50,7 +50,7 @@ namespace WinsockPacketEditor
             d["WSASendTo"] = "WSASendTo";
             d["WSARecvFrom"] = "WSARecvFrom";
             d["SureToDelete"] = "Are you sure to delete the data?";
-            d["ExcelFile"] = "Excel File";
+            d["CsvFile"] = "CSV File";
             d["Exporting"] = "Exporting...";
             d["IPAddress"] = "IP Address";
             d["PacketHead"] = "Packet Head";
@@ -67,15 +67,16 @@ namespace WinsockPacketEditor
             d["BetaVersion"] = "This is a beta version";
             d["BetaVersionContent"] = "\r\nThe beta version may have unknown bugs, please use it with caution! \r\n\r\nIf you need to use the official version, please download the latest version from the official website.";
             d["GotIt"] = "Got it";
-            d["ExportToExcel.Success"] = "Export To Excel Success";
-            d["ExportToExcel.Error"] = "Export To Excel Error";
+            d["ExportToCsv.Success"] = "Export To CSV Success";
+            d["ExportToCsv.Error"] = "Export To CSV Error";
+            d["ExportToCsv.Empty"] = "Nothing to export";
             d["CheckSystemLog"] = "Please Check System Log";
-            d["ExcelColumn.Log"] = "Log Time\\tModule\\tContent\\t";
-            d["ExcelColumn.FilterLog"] = "Log Time\\tFilter Name\\tAction\\tMatch\\tType\\tLength\\t";
-            d["ExcelColumn.ProxyLog"] = "Log Time\\tAccount\\tIP Address\\tContent\\t";
-            d["ExcelColumn.Proxy"] = "Time\\tType\\tSocket\\tClient Addr\\tServer Addr\\tLength\\tData\\t";
-            d["ExcelColumn.Packet"] = "Time\\tType\\tSocket\\tFrom\\tTo\\tLength\\tData\\t";
-            d["ExcelColumn.BatchAccounts"] = "Username\\tPassword\\tExpiry Time\\t";
+            d["CsvColumn.Log"] = "Log Time,Module,Content";
+            d["CsvColumn.FilterLog"] = "Log Time,Filter Name,Action,Match,Type,Length";
+            d["CsvColumn.ProxyLog"] = "Log Time,Account,IP Address,Content";
+            d["CsvColumn.Proxy"] = "Time,Type,Socket,Client Addr,Server Addr,Length,Data";
+            d["CsvColumn.Packet"] = "Time,Type,Socket,From,To,Length,Data";
+            d["CsvColumn.BatchAccounts"] = "Username,Password,Expiry Time";
             d["FilterListFile"] = "Filter List File";
             d["Password.Incorrect"] = "Incorrect password";
             d["BatchSuccess"] = "Batch adjustment successful";
@@ -124,8 +125,6 @@ namespace WinsockPacketEditor
             d["ExportRobotList.Error"] = "Export Robot List Failed";
             d["DeleteAccounts"] = "Sure to delete {0} accounts?";
             d["InstallCertificate.Success"] = "WPE64 certificate installation successful";
-            d["UninstallDriver"] = "Uninstall Driver";
-            d["UninstallDriver.Alert"] = "Uninstalling the driver will immediately restart the computer.\r\nDo not uninstall unless necessary!";
             d["CerFile"] = "CER File";
             d["CrtFile"] = "CRT File";
             d["PemFile"] = "PEM File";
@@ -290,7 +289,7 @@ namespace WinsockPacketEditor
             d["FilterEditForm.AppointLength.Error"] = "Appoint Length Error";
             d["FilterEditForm.Change.Error"] = "Change Error";
             d["SendList.SystemSocket.Blocked"] = "Send “{0}” has “Use system socket” checked, but the system socket has not been set — right-click a packet in the packet list and choose “Set system socket” first.";
-            d["SendExecute.Socket.Missing"] = "Send “{0}” contains packets with no socket (HTTP / HTTPS / WebSocket are replayed by session id, so their socket is always 0) — those packets cannot be sent. Check “Use system socket” and set it first from the packet list context menu.";
+            d["SendExecute.Socket.Missing"] = "Send list \"{0}\" has packets with no socket (socket 0); they cannot be sent — turn on \"Use system socket\" or set one from the list's right-click menu.";
             d["SendList.LoopCount.Fixed"] = "Loop count of send “{0}” is invalid ({1}); treated as 1.";
             d["SendEditForm.SendName.Empty"] = "Send Name Empty";
             d["RobotEditForm.SendList.Error"] = "Send List Error";
@@ -340,19 +339,6 @@ namespace WinsockPacketEditor
             d["RobotEditForm.INST.MoveTo"] = "Move To ( {0} )";
             d["RobotEditForm.INST.MoveBy"] = "Move By ( {0} )";
             d["RobotEditForm.RName.Empty"] = "Robot Name Empty";
-            d["ProcessSetting.Save.Success"] = "Process settings saved successfully";
-            d["ProcessSetting.LoadDriver.Error"] = "Failed to load driver, please check if it is running with admin privileges";
-            d["ProcessSetting.NeedHttpProxy"] = "Process traffic goes through the HTTP proxy. Enable the HTTP proxy in Proxy Settings first";
-            d["ProcessSetting.Port.Invalid"] = "Unrecognized entries in the port list: {0} (numbers 1-65535, comma-separated)";
-            d["ProcessSetting.Port.Empty"] = "\"Only ports\" is checked but no port is listed";
-            d["ProcessSetting.IP.Empty"] = "Forced proxy address is empty";
-            d["ProcessSetting.IP.Error"] = "Forced proxy address is invalid (IPv4 address or domain name)";
-            d["ProcessSetting.Port.Error"] = "Forced proxy port must be between 1 and 65535";
-            d["ProcessSetting.Auth.Empty"] = "\"Require Auth\" is checked but the user name or password is empty";
-            d["ProcessSetting.Port.Loop"] = "Forced proxy port cannot be the HTTP proxy own port {0}: traffic would loop back into SunnyNet";
-            d["ProcessSetting.Socks5.Off"] = "The local SOCKS5 proxy is disabled, nothing would accept the forwarded traffic";
-            d["ProcessSetting.Auth.Required"] = "The local SOCKS5 proxy requires authentication: check \"Require Auth\" and fill in a proxy account, otherwise the captured processes lose connectivity";
-            d["ProcessSetting.Detect.Before"] = "Cannot reach the forced proxy server, nothing was saved: {0}";
             d["WPCConfig.ServerList"] = "Server List";
             d["WPCConfig.NoticeList"] = "Notice List";
             d["WPCConfig.RuleList"] = "Rule List";

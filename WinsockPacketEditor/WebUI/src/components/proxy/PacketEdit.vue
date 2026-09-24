@@ -51,7 +51,6 @@ interface Head {
   From: string
   To: string
   Buffer: string   //base64
-  CanSendBySession: boolean
   SystemSocket: number
 }
 
@@ -303,7 +302,7 @@ const { covered } = useModal(() => !!props.target)
             <input v-model.number="socket" class="inp num" type="number" min="0" :disabled="running" :title="t('pe.socketHint')">
             <button class="mini" :disabled="running || !head.SystemSocket" @click="socket = head.SystemSocket"
                     :title="head.SystemSocket ? String(head.SystemSocket) : ''">{{ t('pe.useSys') }}</button>
-            <span v-if="socket === 0 && !head.CanSendBySession" class="warn">{{ t('pe.noSession') }}</span>
+            <span v-if="socket === 0" class="warn">{{ t('pe.sockZero') }}</span>
           </div>
           <div class="f"><span class="k">{{ t('col.type') }}</span><span class="v ty">{{ typeText }}</span></div>
           <div class="f"><span class="k">{{ t('pe.from') }}</span><span class="v mono">{{ head.From || '—' }}</span></div>

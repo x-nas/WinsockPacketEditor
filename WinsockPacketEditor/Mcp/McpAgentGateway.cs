@@ -229,10 +229,8 @@ namespace WinsockPacketEditor.Mcp
             if (operation == "accounts.update") return UpdateAccountAsync(arguments);
             if (operation == "accounts.delete") return DeleteAccountAsync(arguments);
             if (operation == "proxy.auth.setEnabled") return SetProxyAuthEnabledAsync(arguments);
-            if (operation == "proxy.http.setEnabled") return SetProxyHttpEnabledAsync(arguments);
             if (operation == "proxy.maxConnections.set") return SetProxyMaxConnectionsAsync(arguments);
             if (operation == "proxy.socks5Port.set") return SetProxySocks5PortAsync(arguments);
-            if (operation == "proxy.httpPort.set") return SetProxyHttpPortAsync(arguments);
             if (operation == "firewall.setEnabled") return SetFirewallEnabledAsync(arguments);
             if (operation == "proxy.onlyWpc.setEnabled") return SetOnlyWpcEnabledAsync(arguments);
             if (operation == "proxy.bindIp.set") return SetProxyBindIpAsync(arguments);
@@ -1102,31 +1100,6 @@ namespace WinsockPacketEditor.Mcp
                 })).ConfigureAwait(false);
         }
 
-        private static async Task<JToken> SetProxyHttpEnabledAsync(JObject arguments)
-        {
-            var enabledToken = arguments?["enabled"];
-            var idempotencyKey = (string)arguments?["idempotencyKey"];
-            if (enabledToken == null || enabledToken.Type != JTokenType.Boolean) throw new InvalidOperationException("A boolean enabled value is required.");
-            var enabled = enabledToken.Value<bool>();
-            JObject prior;
-            if (McpWriteGuard.TryGetCompleted("proxy.http.setEnabled", idempotencyKey, arguments, out prior)) return prior;
-
-            var config = ReadOnUi(() => new { httpPort = (int)Operate.ProxyConfig.Proxy.HTTP_Port });
-
-            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync(
-                "proxy.http.setEnabled",
-                idempotencyKey,
-                arguments,
-                (enabled ? "启用" : "停用") + " HTTP 代理（端口 " + config.httpPort + "）。",
-                () =>
-                {
-                    bool changed;
-                    var error = Operate.ProxyConfig.Proxy.SetProxyHttpEnabled(enabled, out changed);
-                    if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
-                    return new JObject { ["changed"] = changed, ["enabled"] = enabled, ["port"] = (int)Operate.ProxyConfig.Proxy.HTTP_Port };
-                })).ConfigureAwait(false);
-        }
-
         private static async Task<JToken> SetProxyMaxConnectionsAsync(JObject arguments)
         {
             var valueToken = arguments?["maxConnection"];
@@ -1171,30 +1144,6 @@ namespace WinsockPacketEditor.Mcp
                 {
                     bool changed;
                     var error = Operate.ProxyConfig.Proxy.SetProxySocks5Port(requested, out changed);
-                    if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
-                    return new JObject { ["changed"] = changed, ["port"] = requested };
-                })).ConfigureAwait(false);
-        }
-
-        private static async Task<JToken> SetProxyHttpPortAsync(JObject arguments)
-        {
-            var valueToken = arguments?["port"];
-            var idempotencyKey = (string)arguments?["idempotencyKey"];
-            if (valueToken == null || valueToken.Type != JTokenType.Integer) throw new InvalidOperationException("port must be an integer.");
-            var requested = valueToken.Value<int>();
-            JObject prior;
-            if (McpWriteGuard.TryGetCompleted("proxy.httpPort.set", idempotencyKey, arguments, out prior)) return prior;
-
-            var config = ReadOnUi(() => new { current = (int)Operate.ProxyConfig.Proxy.HTTP_Port });
-            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync(
-                "proxy.httpPort.set",
-                idempotencyKey,
-                arguments,
-                "将 HTTP 监听端口从 " + config.current + " 调整为 " + requested + "。",
-                () =>
-                {
-                    bool changed;
-                    var error = Operate.ProxyConfig.Proxy.SetProxyHttpPort(requested, out changed);
                     if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
                     return new JObject { ["changed"] = changed, ["port"] = requested };
                 })).ConfigureAwait(false);
@@ -1796,8 +1745,6 @@ namespace WinsockPacketEditor.Mcp
                 ["socks5Port"] = (int)Operate.ProxyConfig.Proxy.SOCKS5_Port,
                 ["proxyIpAuto"] = Operate.ProxyConfig.Proxy.ProxyIP_Auto,
                 ["proxyIp"] = Operate.ProxyConfig.Proxy.ProxyIP ?? string.Empty,
-                ["httpEnabled"] = Operate.ProxyConfig.Proxy.Enable_HTTP,
-                ["httpPort"] = (int)Operate.ProxyConfig.Proxy.HTTP_Port,
                 ["authEnabled"] = Operate.ProxyConfig.Proxy.Enable_Auth,
                 ["onlyWpc"] = Operate.ProxyConfig.Proxy.Only_WPC_Client,
                 ["maxConnection"] = Operate.ProxyConfig.Proxy.MaxConnectionNumber,
@@ -1853,7 +1800,7 @@ namespace WinsockPacketEditor.Mcp
             var page = ((string)arguments?["page"] ?? string.Empty).Trim().ToLowerInvariant();
             var mode = ((string)arguments?["mode"] ?? "proxy").Trim().ToLowerInvariant();
             if (page == "proxy") return GetProxySettings();
-            if (page == "process") return JObject.FromObject(Operate.ProxyConfig.Proxy.GetProcessSetting());
+            if (page == "mihomo") return JObject.FromObject(Operate.ProxyConfig.Proxy.GetMihomoSetting());
             if (page == "extproxy") return JObject.FromObject(Operate.ProxyConfig.Proxy.GetExtProxySetting());
             if (page == "remote") return GetRemoteManagement();
             if (page == "firewall") return GetFirewall();
@@ -1992,7 +1939,7 @@ namespace WinsockPacketEditor.Mcp
                 string Text(string n) { return ((string)values[n] ?? string.Empty).Trim(); }
                 if (page == "proxy")
                 {
-                    var error = Operate.ProxyConfig.Proxy.SaveProxySettings(Bool("proxyIpAuto"), Text("proxyIp"), Bool("enableSocks5"), Int("socks5Port", 1080), Bool("enableAuth"), Bool("onlyWpc"), Int("maxConnection", Operate.ProxyConfig.Proxy.DefaultMaxConnectionNumber), Bool("enableHttp"), Int("httpPort", 1081));
+                    var error = Operate.ProxyConfig.Proxy.SaveProxySettings(Bool("proxyIpAuto"), Text("proxyIp"), Bool("enableSocks5"), Int("socks5Port", 1080), Bool("enableAuth"), Bool("onlyWpc"), Int("maxConnection", Operate.ProxyConfig.Proxy.DefaultMaxConnectionNumber));
                     if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
                 }
                 else if (page == "extproxy")

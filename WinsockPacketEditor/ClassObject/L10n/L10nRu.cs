@@ -1,4 +1,4 @@
-﻿// Русский（ru-RU）的对照表，由 L10n.Get 查（外壳经 CoreL10n，即 UI.T）。
+// Русский（ru-RU）的对照表，由 L10n.Get 查（外壳经 CoreL10n，即 UI.T）。
 //
 // ⚠️ <b>这个文件是生成出来的</b>，别手改。
 //
@@ -50,7 +50,7 @@ namespace WinsockPacketEditor
             d["WSASendTo"] = "WSASendTo";
             d["WSARecvFrom"] = "WSARecvFrom";
             d["SureToDelete"] = "Удалить данные?";
-            d["ExcelFile"] = "Файл Excel";
+            d["CsvFile"] = "файл CSV";
             d["Exporting"] = "Экспорт…";
             d["IPAddress"] = "IP-адрес";
             d["PacketHead"] = "Начала пакета";
@@ -67,15 +67,16 @@ namespace WinsockPacketEditor
             d["BetaVersion"] = "Это бета-версия";
             d["BetaVersionContent"] = "\r\nВ бета-версии могут оставаться неизвестные ошибки — используйте с осторожностью.\r\nЕсли нужна стабильная версия, скачайте последний выпуск с официального сайта.";
             d["GotIt"] = "Понятно";
-            d["ExportToExcel.Success"] = "Экспорт в Excel выполнен";
-            d["ExportToExcel.Error"] = "Ошибка экспорта в Excel";
+            d["ExportToCsv.Success"] = "Экспорт в CSV выполнен";
+            d["ExportToCsv.Error"] = "Ошибка экспорта в CSV";
+            d["ExportToCsv.Empty"] = "Нет данных для экспорта";
             d["CheckSystemLog"] = "Проверьте системный журнал";
-            d["ExcelColumn.Log"] = "Время\\tМодуль\\tСодержание\\t";
-            d["ExcelColumn.FilterLog"] = "Время\\tФильтр\\tДействие\\tСовпадение\\tТип\\tДлина\\t";
-            d["ExcelColumn.ProxyLog"] = "Время\\tУчётная запись\\tIP-адрес\\tСодержание\\t";
-            d["ExcelColumn.Proxy"] = "Время\\tТип\\tСокет\\tКлиент\\tСервер\\tДлина\\tДанные\\t";
-            d["ExcelColumn.Packet"] = "Время\\tТип\\tСокет\\tОткуда\\tКуда\\tДлина\\tДанные\\t";
-            d["ExcelColumn.BatchAccounts"] = "Логин\\tПароль\\tИстекает\\t";
+            d["CsvColumn.Log"] = "Время,Модуль,Содержание";
+            d["CsvColumn.FilterLog"] = "Время,Фильтр,Действие,Совпадение,Тип,Длина";
+            d["CsvColumn.ProxyLog"] = "Время,Учётная запись,IP-адрес,Содержание";
+            d["CsvColumn.Proxy"] = "Время,Тип,Сокет,Клиент,Сервер,Длина,Данные";
+            d["CsvColumn.Packet"] = "Время,Тип,Сокет,Откуда,Куда,Длина,Данные";
+            d["CsvColumn.BatchAccounts"] = "Логин,Пароль,Истекает";
             d["FilterListFile"] = "Файл списка фильтров";
             d["Password.Incorrect"] = "Неверный пароль";
             d["BatchSuccess"] = "Массовое изменение выполнено";
@@ -124,8 +125,6 @@ namespace WinsockPacketEditor
             d["ExportRobotList.Error"] = "Ошибка экспорта списка роботов";
             d["DeleteAccounts"] = "Удалить учётных записей: {0}?";
             d["InstallCertificate.Success"] = "Сертификат WPE64 установлен";
-            d["UninstallDriver"] = "Удалить драйвер";
-            d["UninstallDriver.Alert"] = "Удаление драйвера немедленно перезагрузит компьютер.\r\nНе удаляйте без необходимости!";
             d["CerFile"] = "Файл CER";
             d["CrtFile"] = "Файл CRT";
             d["PemFile"] = "Файл PEM";
@@ -290,7 +289,7 @@ namespace WinsockPacketEditor
             d["FilterEditForm.AppointLength.Error"] = "Неверная длина";
             d["FilterEditForm.Change.Error"] = "Ошибка настройки подмены";
             d["SendList.SystemSocket.Blocked"] = "В отправке «{0}» включено «Использовать системный сокет», но системный сокет не задан — сначала щёлкните пакет в списке правой кнопкой и выберите «Задать системный сокет».";
-            d["SendExecute.Socket.Missing"] = "В отправке «{0}» есть пакеты без сокета (HTTP / HTTPS / WebSocket отправляются по номеру сессии, их сокет всегда 0) — такие пакеты отправить нельзя. Включите «Использовать системный сокет» и сначала задайте его через контекстное меню списка пакетов.";
+            d["SendExecute.Socket.Missing"] = "В списке отправки «{0}» есть пакеты без сокета (номер сокета 0) — их нельзя отправить: включите «Использовать системный сокет» или задайте его через контекстное меню списка.";
             d["SendList.LoopCount.Fixed"] = "Число повторов отправки «{0}» некорректно ({1}); принято за 1.";
             d["SendEditForm.SendName.Empty"] = "Имя отправки пусто";
             d["RobotEditForm.SendList.Error"] = "Ошибка в списке отправок";
@@ -340,19 +339,6 @@ namespace WinsockPacketEditor
             d["RobotEditForm.INST.MoveTo"] = "Переместить в ( {0} )";
             d["RobotEditForm.INST.MoveBy"] = "Сместить на ( {0} )";
             d["RobotEditForm.RName.Empty"] = "Имя робота пусто";
-            d["ProcessSetting.Save.Success"] = "Настройки процессов сохранены";
-            d["ProcessSetting.LoadDriver.Error"] = "Не удалось загрузить драйвер — проверьте, запущено ли приложение от администратора";
-            d["ProcessSetting.NeedHttpProxy"] = "Трафик процессов идёт через HTTP-прокси. Сначала включите HTTP-прокси в настройках прокси";
-            d["ProcessSetting.Port.Invalid"] = "В списке портов есть нераспознанные записи: {0} (числа 1–65535 через запятую)";
-            d["ProcessSetting.Port.Empty"] = "Включено «Только порты», но ни один порт не указан";
-            d["ProcessSetting.IP.Empty"] = "Адрес принудительного прокси пуст";
-            d["ProcessSetting.IP.Error"] = "Неверный адрес принудительного прокси (нужен IPv4-адрес или домен)";
-            d["ProcessSetting.Port.Error"] = "Порт принудительного прокси должен быть в диапазоне 1–65535";
-            d["ProcessSetting.Auth.Empty"] = "Включено «Требуется авторизация», но имя пользователя или пароль пусты";
-            d["ProcessSetting.Port.Loop"] = "Порт принудительного прокси не может совпадать с портом самого HTTP-прокси {0}: трафик зациклится в SunnyNet";
-            d["ProcessSetting.Socks5.Off"] = "Локальный SOCKS5-прокси выключен, принимать перенаправленный трафик некому";
-            d["ProcessSetting.Auth.Required"] = "Локальный SOCKS5-прокси требует авторизацию: включите «Требуется авторизация» и укажите учётную запись прокси, иначе перехваченные процессы потеряют связь";
-            d["ProcessSetting.Detect.Before"] = "Сервер принудительного прокси недоступен, ничего не сохранено: {0}";
             d["WPCConfig.ServerList"] = "Список серверов";
             d["WPCConfig.NoticeList"] = "Список объявлений";
             d["WPCConfig.RuleList"] = "Список правил";

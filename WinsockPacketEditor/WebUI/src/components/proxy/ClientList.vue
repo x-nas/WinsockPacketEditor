@@ -28,7 +28,7 @@ import { useList } from '../../stores/lists'
 import { pushToast } from '../../stores/toast'
 import ContextMenu from '../ContextMenu.vue'
 import { ICON, type MenuItem } from '../menu'
-import { ipKey, timeKey, useSort } from '../../useSort'
+import { useSort } from '../../useSort'
 import { useScrollGutter } from '../../useScrollGutter'
 
 const rows = useList<AuthRow>(FeedList.Auth)
@@ -40,19 +40,17 @@ const cbodyEl = ref<HTMLElement | null>(null)
 const cgutter = useScrollGutter(cbodyEl)
 
 /*
-  表头排序。WinForms 那张表的八列里有六列带 SortMode，这里照着给同样六列
-  （所属地与国旗那一列那边也不排，它是按 IP 查出来的附属信息）。
+  表头排序。可排五列：用户名 / 链接数 / 设备数 / 流量统计 / 在线时长。
+  认证时间与 IP 不排（2026-09-23 用户要求去掉）；所属地也不排（按 IP 查出来的附属信息）。
 
-  <b>IP 不能按字符串排</b>：10.10.10.9 会跑到 10.10.10.10 后面，用 ipKey 转成数字。
-  在线分钟是前端按认证时间现算的（onlineOf），排序直接排认证时间，等价且不必等那 20 秒的 tick。
+  在线时长是前端按认证时间现算的分钟数（onlineMinutes），排序直接按它排。
 */
 const sort = useSort<AuthRow>(rows, {
-  time: (r) => timeKey(r.AuthTime),
   user: (r) => r.UserName || '',
-  ip: (r) => ipKey(r.AuthIP),
   links: (r) => r.LinksNumber,
   devices: (r) => r.DevicesNumber,
   traffic: (r) => r.TrafficStatistics,
+  online: (r) => onlineMinutes(r),
 })
 
 /** 表格显示的是排过的那一份；选中态按 AuthIP 认，与顺序无关。 */
@@ -326,11 +324,11 @@ watch(rows, () => {
       没有标题条：页名与在线数侧栏那一项已经在显示，
       「右键可加入名单」也不值得占一整行 —— 表格直接顶到上边。
     -->
-    <!-- 带 .so 的这几格可点排序；所属地与在线分钟不排（一个是附属信息、一个跟着认证时间走）-->
+    <!-- 带 .so 的这几格可点排序；认证时间 / IP / 所属地不排（前两个用户要求去掉、所属地是附属信息）-->
     <div ref="headEl" class="head" :style="{ paddingRight: (14 + gutter) + 'px', gridTemplateColumns: gridCols }">
-      <span class="so" :class="{ on: sort.active('time') }" @click="sort.toggle('time')">{{ t('cli.authTime') }}<i class="ar">{{ sort.mark('time') }}</i></span>
+      <span>{{ t('cli.authTime') }}</span>
       <span class="so" :class="{ on: sort.active('user') }" @click="sort.toggle('user')">{{ t('col.user') }}<i class="ar">{{ sort.mark('user') }}</i></span>
-      <span class="so" :class="{ on: sort.active('ip') }" @click="sort.toggle('ip')">{{ t('cli.ip') }}<i class="ar">{{ sort.mark('ip') }}</i></span>
+      <span>{{ t('cli.ip') }}</span>
       <span class="rz">
         {{ t('col.clientLoc') }}
         <i class="grip" :title="t('col.resizeHint')"
@@ -340,7 +338,7 @@ watch(rows, () => {
       <span class="so" :class="{ on: sort.active('links') }" @click="sort.toggle('links')">{{ t('cli.links') }}<i class="ar">{{ sort.mark('links') }}</i></span>
       <span class="so" :class="{ on: sort.active('devices') }" @click="sort.toggle('devices')">{{ t('cli.devices') }}<i class="ar">{{ sort.mark('devices') }}</i></span>
       <span class="so" :class="{ on: sort.active('traffic') }" @click="sort.toggle('traffic')">{{ t('cli.traffic') }}<i class="ar">{{ sort.mark('traffic') }}</i></span>
-      <span>{{ t('cli.online') }}</span>
+      <span class="so" :class="{ on: sort.active('online') }" @click="sort.toggle('online')">{{ t('cli.online') }}<i class="ar">{{ sort.mark('online') }}</i></span>
       <span>{{ t('cli.device') }}</span>
     </div>
 

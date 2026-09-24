@@ -1,4 +1,4 @@
-﻿// 한국어（ko-KR）的对照表，由 L10n.Get 查（外壳经 CoreL10n，即 UI.T）。
+// 한국어（ko-KR）的对照表，由 L10n.Get 查（外壳经 CoreL10n，即 UI.T）。
 //
 // ⚠️ <b>这个文件是生成出来的</b>，别手改。
 //
@@ -50,7 +50,7 @@ namespace WinsockPacketEditor
             d["WSASendTo"] = "WSASendTo";
             d["WSARecvFrom"] = "WSARecvFrom";
             d["SureToDelete"] = "데이터를 삭제하시겠습니까?";
-            d["ExcelFile"] = "Excel 파일";
+            d["CsvFile"] = "CSV 파일";
             d["Exporting"] = "내보내는 중…";
             d["IPAddress"] = "IP 주소";
             d["PacketHead"] = "패킷 머리";
@@ -67,15 +67,16 @@ namespace WinsockPacketEditor
             d["BetaVersion"] = "베타 버전입니다";
             d["BetaVersionContent"] = "\r\n베타 버전에는 알려지지 않은 문제가 남아 있을 수 있으니 주의해서 사용하세요.\r\n정식 버전이 필요하면 공식 사이트에서 최신 버전을 내려받으세요.";
             d["GotIt"] = "확인했습니다";
-            d["ExportToExcel.Success"] = "Excel 로 내보내기에 성공했습니다";
-            d["ExportToExcel.Error"] = "Excel 로 내보내지 못했습니다";
+            d["ExportToCsv.Success"] = "CSV 로 내보내기에 성공했습니다";
+            d["ExportToCsv.Error"] = "CSV 로 내보내지 못했습니다";
+            d["ExportToCsv.Empty"] = "내보낼 데이터가 없습니다";
             d["CheckSystemLog"] = "시스템 로그를 확인하세요";
-            d["ExcelColumn.Log"] = "시각\\t모듈\\t내용\\t";
-            d["ExcelColumn.FilterLog"] = "시각\\t필터 이름\\t동작\\t일치\\t종류\\t길이\\t";
-            d["ExcelColumn.ProxyLog"] = "시각\\t계정\\tIP 주소\\t내용\\t";
-            d["ExcelColumn.Proxy"] = "시각\\t종류\\t소켓\\t클라이언트\\t서버\\t길이\\t데이터\\t";
-            d["ExcelColumn.Packet"] = "시각\\t종류\\t소켓\\t보낸 곳\\t받는 곳\\t길이\\t데이터\\t";
-            d["ExcelColumn.BatchAccounts"] = "사용자 이름\\t비밀번호\\t만료 시각\\t";
+            d["CsvColumn.Log"] = "시각,모듈,내용";
+            d["CsvColumn.FilterLog"] = "시각,필터 이름,동작,일치,종류,길이";
+            d["CsvColumn.ProxyLog"] = "시각,계정,IP 주소,내용";
+            d["CsvColumn.Proxy"] = "시각,종류,소켓,클라이언트,서버,길이,데이터";
+            d["CsvColumn.Packet"] = "시각,종류,소켓,보낸 곳,받는 곳,길이,데이터";
+            d["CsvColumn.BatchAccounts"] = "사용자 이름,비밀번호,만료 시각";
             d["FilterListFile"] = "필터 목록 파일";
             d["Password.Incorrect"] = "비밀번호가 틀립니다";
             d["BatchSuccess"] = "일괄 조정을 마쳤습니다";
@@ -124,8 +125,6 @@ namespace WinsockPacketEditor
             d["ExportRobotList.Error"] = "로봇 목록을 내보내지 못했습니다";
             d["DeleteAccounts"] = "계정 {0} 개를 삭제하시겠습니까?";
             d["InstallCertificate.Success"] = "WPE64 인증서를 설치했습니다";
-            d["UninstallDriver"] = "드라이버 제거";
-            d["UninstallDriver.Alert"] = "드라이버를 제거하면 컴퓨터가 즉시 다시 시작됩니다.\r\n꼭 필요한 경우가 아니면 제거하지 마세요!";
             d["CerFile"] = "CER 파일";
             d["CrtFile"] = "CRT 파일";
             d["PemFile"] = "PEM 파일";
@@ -290,7 +289,7 @@ namespace WinsockPacketEditor
             d["FilterEditForm.AppointLength.Error"] = "길이 지정이 올바르지 않습니다";
             d["FilterEditForm.Change.Error"] = "패킷 교체 설정이 올바르지 않습니다";
             d["SendList.SystemSocket.Blocked"] = "전송 「{0}」에 「시스템 소켓 사용」이 켜져 있지만 시스템 소켓이 설정되지 않았습니다 — 패킷 목록에서 마우스 오른쪽 버튼으로 「시스템 소켓 설정」을 먼저 하세요.";
-            d["SendExecute.Socket.Missing"] = "전송 「{0}」에 소켓이 없는 패킷이 있습니다(HTTP / HTTPS / WebSocket 은 세션 번호로 보내므로 소켓이 항상 0) —— 이 패킷들은 보낼 수 없습니다. 「시스템 소켓 사용」을 켜고 패킷 목록에서 먼저 설정하세요.";
+            d["SendExecute.Socket.Missing"] = "보내기 목록 「{0}」에 소켓이 없는 패킷이 있습니다(소켓 번호 0) — 보낼 수 없습니다. 「시스템 소켓 사용」을 켜거나 목록에서 마우스 오른쪽 클릭으로 설정하세요.";
             d["SendList.LoopCount.Fixed"] = "전송 「{0}」의 반복 횟수가 올바르지 않습니다({1}). 1 회로 처리했습니다.";
             d["SendEditForm.SendName.Empty"] = "전송 이름이 비어 있습니다";
             d["RobotEditForm.SendList.Error"] = "전송 목록 지정이 올바르지 않습니다";
@@ -340,19 +339,6 @@ namespace WinsockPacketEditor
             d["RobotEditForm.INST.MoveTo"] = "좌표로 이동 ( {0} )";
             d["RobotEditForm.INST.MoveBy"] = "상대 이동 ( {0} )";
             d["RobotEditForm.RName.Empty"] = "로봇 이름이 비어 있습니다";
-            d["ProcessSetting.Save.Success"] = "프로세스 설정을 저장했습니다";
-            d["ProcessSetting.LoadDriver.Error"] = "드라이버를 로드하지 못했습니다. 관리자 권한으로 실행 중인지 확인하세요";
-            d["ProcessSetting.NeedHttpProxy"] = "프로세스 데이터는 HTTP 프록시를 거칩니다. 먼저 프록시 설정에서 HTTP 프록시를 켜세요";
-            d["ProcessSetting.Port.Invalid"] = "포트 지정에 인식할 수 없는 내용이 있습니다: {0} (1~65535 숫자를 쉼표로 구분)";
-            d["ProcessSetting.Port.Empty"] = "「포트 지정」을 켰지만 포트가 없습니다";
-            d["ProcessSetting.IP.Empty"] = "강제 프록시 주소가 비어 있습니다";
-            d["ProcessSetting.IP.Error"] = "강제 프록시 주소가 잘못되었습니다 (IPv4 주소 또는 도메인)";
-            d["ProcessSetting.Port.Error"] = "강제 프록시 포트는 1~65535 사이여야 합니다";
-            d["ProcessSetting.Auth.Empty"] = "「인증 필요」를 켰지만 계정이나 비밀번호가 비어 있습니다";
-            d["ProcessSetting.Port.Loop"] = "강제 프록시 포트로 HTTP 프록시 자신의 포트 {0}은(는) 쓸 수 없습니다: 트래픽이 SunnyNet 자신으로 되돌아와 루프가 됩니다";
-            d["ProcessSetting.Socks5.Off"] = "로컬 SOCKS5 프록시가 꺼져 있어 전달해도 받을 곳이 없습니다";
-            d["ProcessSetting.Auth.Required"] = "로컬 SOCKS5 프록시가 인증을 요구합니다. 「인증 필요」를 켜고 프록시 계정을 입력하세요. 그렇지 않으면 가로챈 프로세스가 바로 끊깁니다";
-            d["ProcessSetting.Detect.Before"] = "강제 프록시 서버에 연결할 수 없어 저장하지 않았습니다: {0}";
             d["WPCConfig.ServerList"] = "서버 목록";
             d["WPCConfig.NoticeList"] = "공지 목록";
             d["WPCConfig.RuleList"] = "규칙 목록";

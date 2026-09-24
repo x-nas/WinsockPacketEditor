@@ -1146,13 +1146,19 @@ body.col-resizing * {
 .so.on { color: var(--cyan); }
 
 /*
-  箭头用 em 定宽占位：不占位的话，点一下表头这一格会变宽，
-  整行列宽是 grid 定死的，于是标题会左右跳一下。
+  箭头恒占 1em 宽（↕ / ↑ / ↓ 三种状态宽度一致），排到 / 取消排序时标题不会左右跳。
+  平时是暗色的 ↕ 提示「可排序」，与文字区分开；排到这一列时经下面 .so.on .ar 亮成青色。
 */
 .so .ar {
   display: inline-block;
   width: 1em;
   margin-left: 2px;
+  /*
+    负右外边距把箭头的占位宽度抵消成 0：text-align:center 就只按文字本身居中，
+    箭头仍紧跟文字右边渲染（不会被挤到最右），文字也不会因箭头占位而偏左。
+  */
+  margin-right: calc(-1em - 2px);
+  color: var(--muted);
   /*
     ⚠️ 箭头字形<b>不走 --mono / --share</b>（2026-09-15 用户报「排序箭头变形了」）：
     Share Tech Mono 没有 ↑↓，而内嵌的 WPE Sarasa 的 unicode-range 含 U+2190–21FF，
@@ -1164,6 +1170,9 @@ body.col-resizing * {
   font-style: normal;
   letter-spacing: 0;
 }
+
+/* 排到这一列的箭头跟着点亮 —— 写在 .so .ar 之后（同特异度后写的赢），否则会被上面的 color: var(--muted) 盖掉 */
+.so.on .ar { color: inherit; }
 
 .list-page .row {
   height: 34px;   /* 必须与各屏的 ROW_H 常量一致，对不上滚动位置会线性漂移 */
@@ -1298,7 +1307,16 @@ body.col-resizing * {
   行高参差不齐。乘数由 App.vue 按语言给（方块字 1，拉丁 / 西里尔 1.3），
   这样八个弹窗各自的比例还在，只是整体宽一档 —— 比逐个去改那八个数可靠。
 */
-.setf .row { display: grid; grid-template-columns: calc(var(--setf-k, 112px) * var(--setf-kx, 1)) 1fr; align-items: center; gap: 12px; padding: 5px 20px; min-height: 32px; }
+/*
+  ⚠️ 末尾的 height / border-bottom 是<b>压掉 .list-page .row 的泄漏</b>，别删。
+
+  设置弹窗的根元素同时带 `setf` 与 `list-page`（借 `.list-page .head` 给弹窗里那张小表用），
+  于是表单行也被按「虚拟滚动表格的行」渲染：定高 34px + 一条下边框。
+  单行时行高刚好也是 34，看不出来；中文一行的标签换成英语 / 俄语 / 越南语就折成两行，
+  行高不跟着涨 —— 内容直接溢出、压住下面那句说明（2026-09-23 用户报「其他语言排版错乱」）。
+  `.list-page .row` 在 1177 行、这里在 1310 行，同特异度下后写的赢。
+*/
+.setf .row { display: grid; grid-template-columns: calc(var(--setf-k, 112px) * var(--setf-kx, 1)) 1fr; align-items: center; gap: 12px; padding: 5px 20px; min-height: 32px; height: auto; border-bottom: 0; }
 .setf .row > .k { font-size: var(--fs-body); color: var(--muted); }
 .setf .row > .v { display: flex; align-items: center; gap: 10px; min-width: 0; flex-wrap: wrap; }
 .setf .row.off > .k, .setf .row.off > .v { opacity: .45; }
@@ -1771,6 +1789,12 @@ body.col-resizing * {
   line-height: 1.5;
   /* 长句要能折行；换行符照原样显示（有几条文案是分行写的） */
   white-space: pre-wrap;
+  /*
+    ⚠️ <b>没有空格的长串也要能在框内断开</b>（进程路径就是典型：C:\...\game.exe 里一个空格都没有）。
+    pre-wrap 只在空白处折行，这种长串本来会整条冲出 340px 的框、跑到页面外面
+    （进程列表悬停提示撞到的就是这条，2026-09-23）。
+  */
+  overflow-wrap: anywhere;
   pointer-events: none;
 }
 

@@ -1137,8 +1137,8 @@ namespace WPEHybrid
                     外壳没了而驱动还把它们的连接转到一个已经不存在的端口上，表现是「关掉 WPE 之后目标进程断网」。
                     驱动本身不卸（卸载会重启电脑）。UDP 那头的 SOCKS5 关联一并收掉。
                 */
-                Operate.ProxyConfig.Proxy.ReleaseDriverProcesses();
-                Operate.ProxyConfig.Proxy.CloseAllUDPProxy();
+                //内置 mihomo 内核必须停：不停会留下 TUN 路由，退出后整机断网
+                MihomoKernel.Stop();
 
                 //远程管理与启动时的 StartRemoteMGT 成对（在 EnsureProxyConfigLoaded 里）
                 Operate.SystemConfig.StopRemoteMGT(true);
@@ -2077,8 +2077,6 @@ namespace WPEHybrid
                     maxConnectionDefault = Operate.ProxyConfig.Proxy.DefaultMaxConnectionNumber,
                     connBufferKB = Operate.ProxyConfig.Proxy.ProxyReceiveBufferBytes / 1024,
                     memoryGB = Math.Round(Kernel32.TotalPhysicalMemory() / 1073741824.0, 1),
-                    enableHttp = ProxyCfg.Enable_HTTP,
-                    httpPort = (int)ProxyCfg.HTTP_Port,
                     enableSystemProxy = ProxyCfg.Enable_SystemProxy,
                     //服务在跑时改端口没有意义，界面据此禁用相关输入
                     running = ProxyCfg.IsRunning,
@@ -2097,9 +2095,7 @@ namespace WPEHybrid
             this.bridge.Register("saveProxySetting", args =>
             {
                 bool enableSocks5 = args["enableSocks5"] != null && (bool)args["enableSocks5"];
-                bool enableHttp = args["enableHttp"] != null && (bool)args["enableHttp"];
                 int socks5Port = args["socks5Port"] == null ? 1080 : (int)args["socks5Port"];
-                int httpPort = args["httpPort"] == null ? 1081 : (int)args["httpPort"];
 
                 bool proxyIpAuto = args["proxyIpAuto"] != null && (bool)args["proxyIpAuto"];
                 string proxyIp = args["proxyIp"] == null ? string.Empty : ((string)args["proxyIp"]).Trim();
@@ -2109,7 +2105,7 @@ namespace WPEHybrid
 
                 try
                 {
-                    string error = ProxyCfg.SaveProxySettings(proxyIpAuto, proxyIp, enableSocks5, socks5Port, enableAuth, onlyWpc, maxConnection, enableHttp, httpPort);
+                    string error = ProxyCfg.SaveProxySettings(proxyIpAuto, proxyIp, enableSocks5, socks5Port, enableAuth, onlyWpc, maxConnection);
                     if (!string.IsNullOrEmpty(error)) return new { ok = false, error = error };
 
                     UI.Toast(UiIcon.Success, UI.T("ProxySettingsForm.Success", "代理设置保存成功"));
@@ -4080,9 +4076,23 @@ namespace WPEHybrid
 
             #region//设置页 II：进程 / 映射 / 外部代理 / 快捷键 / 备份 / 远程管理
 
-            //── 进程设置 ──
+            //── mihomo 模式设置 ──
+            this.bridge.Register("getMihomoSetting", args => Operate.ProxyConfig.Proxy.GetMihomoSetting());
 
-            this.bridge.Register("getProcessSetting", args => Operate.ProxyConfig.Proxy.GetProcessSetting());
+            this.bridge.Register("saveMihomoSetting", async args =>
+            {
+                bool enable = args["enable"] != null && (bool)args["enable"];
+                string tunStack = args["tunStack"] == null ? null : (string)args["tunStack"];
+                string dnsMode = args["dnsMode"] == null ? null : (string)args["dnsMode"];
+
+                //进程名单是界面上的草稿，点保存时整份送来（勾选过程不落库、不改内存）
+                var arr = args["processNames"] as Newtonsoft.Json.Linq.JArray;
+                var names = new List<string>();
+                if (arr != null) { foreach (var x in arr) { string n = (string)x; if (!string.IsNullOrEmpty(n)) { names.Add(n); } } }
+
+                string error = await Operate.ProxyConfig.Proxy.SaveMihomoSetting(enable, tunStack, dnsMode, names.ToArray());
+                return new { error = error ?? string.Empty };
+            });
 
             //进程枚举要几百毫秒，别卡 UI 线程
             this.bridge.Register("getProcessRows", async args => new { rows = await Task.Run(() => Operate.ProxyConfig.Proxy.GetProcessRows()) });
@@ -4134,42 +4144,7 @@ namespace WPEHybrid
                 return new { icons = icons };
             });
 
-            this.bridge.Register("addSelectProcessName", args => new
-            {
-                ok = Operate.ProxyConfig.Proxy.AddSelectProcessName_ByPid(args["pid"] == null ? 0 : (int)args["pid"]),
-            });
-
-            this.bridge.Register("removeSelectProcessName", args => new
-            {
-                ok = Operate.ProxyConfig.Proxy.RemoveSelectProcessName(args["name"] == null ? string.Empty : (string)args["name"]),
-            });
-
-            this.bridge.Register("uninstallDriver", async args => new { ok = await Operate.ProxyConfig.Proxy.UninstallDriver_Dialog() });
-
-            //保存是异步的：先真连一次转代理服务器，装驱动那一段走 UI.Busy 在后台跑（首次装驱动要几秒）
-            this.bridge.Register("saveProcessSetting", async args =>
-            {
-                var pids = new List<int>();
-                var arr = args["pids"] as Newtonsoft.Json.Linq.JArray;
-                if (arr != null) { foreach (var x in arr) { pids.Add((int)x); } }
-
-                return new
-                {
-                    error = await Operate.ProxyConfig.Proxy.SaveProcessSetting(
-                        args["driverType"] == null ? 1 : (int)args["driverType"],
-                        args["mustTcp"] != null && (bool)args["mustTcp"],
-                        args["ip"] == null ? null : (string)args["ip"],
-                        args["port"] == null ? 1080 : (int)args["port"],
-                        args["appointPort"] != null && (bool)args["appointPort"],
-                        args["appointPortContent"] == null ? null : (string)args["appointPortContent"],
-                        args["auth"] != null && (bool)args["auth"],
-                        args["userName"] == null ? null : (string)args["userName"],
-                        args["passWord"] == null ? null : (string)args["passWord"],
-                        pids),
-                };
-            });
-
-            //进程设置与外部代理的「检测代理」共用
+            //外部代理的「检测代理」
             this.bridge.Register("testSocksProxy", async args => new
             {
                 error = await Operate.ProxyConfig.Proxy.TestSocksProxy(
@@ -4392,6 +4367,11 @@ namespace WPEHybrid
                 text = Operate.ProxyConfig.List.GetProxyHex_ByIds(ReadLongIds(args)),
             });
 
+            this.bridge.Register("copyProxyHexMerged", args => new
+            {
+                text = Operate.ProxyConfig.List.GetProxyHexMerged_ByIds(ReadLongIds(args)),
+            });
+
             this.bridge.Register("addProxyToSend", args => new
             {
                 count = Operate.ProxyConfig.List.AddToSend_ByProxyIds(
@@ -4417,10 +4397,10 @@ namespace WPEHybrid
             });
 
             //ids 为空就是导整张表 —— SaveProxyList_Dialog 本来就这么写的
-            this.bridge.Register("exportProxyExcel", async args =>
+            this.bridge.Register("exportProxyCsv", async args =>
             {
-                await Operate.ProxyConfig.List.ExportProxyExcel_ByIds(ReadLongIds(args));
-                return new { ok = true };
+                string path = await Operate.ProxyConfig.List.ExportProxyCsv_ByIds(ReadLongIds(args));
+                return new { ok = path != null, path = path ?? string.Empty };
             });
 
             /*
@@ -4432,6 +4412,11 @@ namespace WPEHybrid
             this.bridge.Register("copyPacketHex", args => new
             {
                 text = Operate.PacketConfig.List.GetPacketHex_ByIds(ReadLongIds(args)),
+            });
+
+            this.bridge.Register("copyPacketHexMerged", args => new
+            {
+                text = Operate.PacketConfig.List.GetPacketHexMerged_ByIds(ReadLongIds(args)),
             });
 
             this.bridge.Register("addPacketToSend", args => new
@@ -4478,11 +4463,11 @@ namespace WPEHybrid
                 return new { ok = true };
             });
 
-            //ids 为空就是导整张表 —— SavePacketListToExcel 本来就这么写的
-            this.bridge.Register("exportPacketExcel", async args =>
+            //ids 为空就是导整张表 —— SavePacketList_Dialog 本来就这么写的
+            this.bridge.Register("exportPacketCsv", async args =>
             {
-                await Operate.PacketConfig.List.ExportPacketExcel_ByIds(ReadLongIds(args));
-                return new { ok = true };
+                string path = await Operate.PacketConfig.List.ExportPacketCsv_ByIds(ReadLongIds(args));
+                return new { ok = path != null, path = path ?? string.Empty };
             });
 
             #endregion
@@ -5190,6 +5175,9 @@ namespace WPEHybrid
                     socks5Port = Operate.ProxyConfig.Proxy.SOCKS5_Port,
                     socks5Addr = socks5Addr,
                     httpAddr = httpAddr,
+                    //内置 mihomo 内核状态（2026-09-23）：RunBar 的 TUN 灯读这两个
+                    tunReady = MihomoKernel.IsReady,
+                    kernelRunning = MihomoKernel.IsRunning,
                     /*
                         IP 归属地库的版本与条目数，由 Operate 暴露成 string / int ——
                         外壳因此不用引用 QQWry 程序集（直接读 ipSearch.Version 会 CS0012）。
@@ -6224,8 +6212,8 @@ namespace WPEHybrid
                 if (values != null) foreach (var value in values) { var id = (long?)value; if (!id.HasValue || id.Value < 1) throw new InvalidOperationException("Every packetId must be positive."); ids.Add(id.Value); }
                 string path;
                 var fileName = (string)args["fileName"];
-                if (list == "proxy") path = await Operate.ProxyConfig.List.ExportProxyExcel_ByIds(ids, fileName);
-                else if (list == "packet") path = await Operate.PacketConfig.List.ExportPacketExcel_ByIds(ids, fileName);
+                if (list == "proxy") path = await Operate.ProxyConfig.List.ExportProxyCsv_ByIds(ids, fileName);
+                else if (list == "packet") path = await Operate.PacketConfig.List.ExportPacketCsv_ByIds(ids, fileName);
                 else throw new InvalidOperationException("list must be proxy or packet.");
                 return new Newtonsoft.Json.Linq.JObject { ["list"] = list, ["requested"] = ids.Count, ["saved"] = !string.IsNullOrEmpty(path), ["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path };
             }
@@ -6262,8 +6250,8 @@ namespace WPEHybrid
                     var ids = new List<long>(); var values = args["capturePacketIds"] as Newtonsoft.Json.Linq.JArray;
                     if (values != null) foreach (var value in values) { var id = (long?)value; if (!id.HasValue || id.Value < 1) throw new InvalidOperationException("Every capturePacketId must be positive."); ids.Add(id.Value); }
                     string path;
-                    if (list == "proxy") path = await Operate.ProxyConfig.List.ExportProxyExcel_ByIds(ids, fileName);
-                    else if (list == "packet") path = await Operate.PacketConfig.List.ExportPacketExcel_ByIds(ids, fileName);
+                    if (list == "proxy") path = await Operate.ProxyConfig.List.ExportProxyCsv_ByIds(ids, fileName);
+                    else if (list == "packet") path = await Operate.PacketConfig.List.ExportPacketCsv_ByIds(ids, fileName);
                     else throw new InvalidOperationException("captureList must be proxy or packet.");
                     result["list"] = list; result["requested"] = ids.Count; result["saved"] = !string.IsNullOrEmpty(path); result["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path;
                     return result;
@@ -6466,23 +6454,6 @@ namespace WPEHybrid
                 if (action == "inject.startHook") await Task.Run(() => { link.PushHookFlags(); link.PushFilters(); link.PushRuntime(); link.StartHook(); });
                 else await Task.Run(() => link.StopHook());
                 return Newtonsoft.Json.Linq.JObject.FromObject(InjectStatus());
-            }
-            if (action == "driver.uninstall")
-            {
-                var ok = await Operate.ProxyConfig.Proxy.UninstallDriver_Dialog();
-                return new Newtonsoft.Json.Linq.JObject { ["uninstalled"] = ok, ["changed"] = ok };
-            }
-            if (action == "processProxy.save")
-            {
-                var pids = new List<int>(); var values = args["pids"] as Newtonsoft.Json.Linq.JArray;
-                if (values != null) foreach (var value in values) { var pid = (int?)value; if (!pid.HasValue || pid.Value <= 0) throw new InvalidOperationException("Every pid must be positive."); pids.Add(pid.Value); }
-                var error = await Operate.ProxyConfig.Proxy.SaveProcessSetting(
-                    (int?)args["driverType"] ?? 1, (bool?)args["mustTcp"] ?? false,
-                    (string)args["ip"], (int?)args["port"] ?? 1080,
-                    (bool?)args["appointPort"] ?? false, (string)args["appointPortContent"],
-                    (bool?)args["auth"] ?? false, (string)args["userName"], (string)args["passWord"], pids);
-                if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
-                return new Newtonsoft.Json.Linq.JObject { ["changed"] = true, ["processCount"] = pids.Count };
             }
             if (action == "packetEdit.sendStart")
             {

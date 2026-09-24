@@ -1,4 +1,4 @@
-﻿// Tiếng Việt（vi-VN）的对照表，由 L10n.Get 查（外壳经 CoreL10n，即 UI.T）。
+// Tiếng Việt（vi-VN）的对照表，由 L10n.Get 查（外壳经 CoreL10n，即 UI.T）。
 //
 // ⚠️ <b>这个文件是生成出来的</b>，别手改。
 //
@@ -50,7 +50,7 @@ namespace WinsockPacketEditor
             d["WSASendTo"] = "WSASendTo";
             d["WSARecvFrom"] = "WSARecvFrom";
             d["SureToDelete"] = "Bạn có chắc muốn xóa dữ liệu?";
-            d["ExcelFile"] = "Tệp Excel";
+            d["CsvFile"] = "Tệp CSV";
             d["Exporting"] = "Đang xuất…";
             d["IPAddress"] = "Địa chỉ IP";
             d["PacketHead"] = "Đầu gói tin";
@@ -67,15 +67,16 @@ namespace WinsockPacketEditor
             d["BetaVersion"] = "Đây là bản beta";
             d["BetaVersionContent"] = "\r\nBản beta có thể còn lỗi chưa biết, hãy dùng thận trọng.\r\nNếu cần bản chính thức, hãy tải phiên bản mới nhất từ trang chính thức.";
             d["GotIt"] = "Đã hiểu";
-            d["ExportToExcel.Success"] = "Xuất ra Excel thành công";
-            d["ExportToExcel.Error"] = "Xuất ra Excel thất bại";
+            d["ExportToCsv.Success"] = "Xuất ra CSV thành công";
+            d["ExportToCsv.Error"] = "Xuất ra CSV thất bại";
+            d["ExportToCsv.Empty"] = "Không có dữ liệu để xuất";
             d["CheckSystemLog"] = "Hãy xem nhật ký hệ thống";
-            d["ExcelColumn.Log"] = "Thời gian\\tMô-đun\\tNội dung\\t";
-            d["ExcelColumn.FilterLog"] = "Thời gian\\tBộ lọc\\tHành động\\tKhớp\\tLoại\\tĐộ dài\\t";
-            d["ExcelColumn.ProxyLog"] = "Thời gian\\tTài khoản\\tĐịa chỉ IP\\tNội dung\\t";
-            d["ExcelColumn.Proxy"] = "Thời gian\\tLoại\\tSocket\\tClient\\tServer\\tĐộ dài\\tDữ liệu\\t";
-            d["ExcelColumn.Packet"] = "Thời gian\\tLoại\\tSocket\\tTừ\\tĐến\\tĐộ dài\\tDữ liệu\\t";
-            d["ExcelColumn.BatchAccounts"] = "Tên đăng nhập\\tMật khẩu\\tHết hạn\\t";
+            d["CsvColumn.Log"] = "Thời gian,Mô-đun,Nội dung";
+            d["CsvColumn.FilterLog"] = "Thời gian,Bộ lọc,Hành động,Khớp,Loại,Độ dài";
+            d["CsvColumn.ProxyLog"] = "Thời gian,Tài khoản,Địa chỉ IP,Nội dung";
+            d["CsvColumn.Proxy"] = "Thời gian,Loại,Socket,Client,Server,Độ dài,Dữ liệu";
+            d["CsvColumn.Packet"] = "Thời gian,Loại,Socket,Từ,Đến,Độ dài,Dữ liệu";
+            d["CsvColumn.BatchAccounts"] = "Tên đăng nhập,Mật khẩu,Hết hạn";
             d["FilterListFile"] = "Tệp danh sách bộ lọc";
             d["Password.Incorrect"] = "Sai mật khẩu";
             d["BatchSuccess"] = "Điều chỉnh hàng loạt thành công";
@@ -124,8 +125,6 @@ namespace WinsockPacketEditor
             d["ExportRobotList.Error"] = "Xuất danh sách robot thất bại";
             d["DeleteAccounts"] = "Xóa {0} tài khoản?";
             d["InstallCertificate.Success"] = "Cài chứng chỉ WPE64 thành công";
-            d["UninstallDriver"] = "Gỡ driver";
-            d["UninstallDriver.Alert"] = "Gỡ driver sẽ khởi động lại máy tính ngay lập tức.\r\nĐừng gỡ nếu không thật sự cần!";
             d["CerFile"] = "Tệp CER";
             d["CrtFile"] = "Tệp CRT";
             d["PemFile"] = "Tệp PEM";
@@ -290,7 +289,7 @@ namespace WinsockPacketEditor
             d["FilterEditForm.AppointLength.Error"] = "Độ dài chỉ định không hợp lệ";
             d["FilterEditForm.Change.Error"] = "Cài đặt đổi gói không hợp lệ";
             d["SendList.SystemSocket.Blocked"] = "Mục gửi “{0}” đã bật “Dùng socket hệ thống” nhưng socket hệ thống chưa được đặt — hãy chuột phải một gói tin trong danh sách và chọn “Đặt socket hệ thống” trước.";
-            d["SendExecute.Socket.Missing"] = "Mục gửi “{0}” có gói tin không có socket (HTTP / HTTPS / WebSocket gửi theo số phiên nên socket luôn là 0) — những gói này không gửi được. Hãy bật “Dùng socket hệ thống” và đặt nó trước từ menu chuột phải của danh sách gói tin.";
+            d["SendExecute.Socket.Missing"] = "Danh sách gửi “{0}” có gói không có socket (số socket là 0) — không gửi được: hãy bật “Dùng socket hệ thống” hoặc đặt nó từ menu chuột phải của danh sách.";
             d["SendList.LoopCount.Fixed"] = "Số vòng lặp của mục gửi “{0}” không hợp lệ ({1}); coi như 1.";
             d["SendEditForm.SendName.Empty"] = "Chưa nhập tên mục gửi";
             d["RobotEditForm.SendList.Error"] = "Danh sách gửi không hợp lệ";
@@ -340,19 +339,6 @@ namespace WinsockPacketEditor
             d["RobotEditForm.INST.MoveTo"] = "Tới tọa độ ( {0} )";
             d["RobotEditForm.INST.MoveBy"] = "Dịch tương đối ( {0} )";
             d["RobotEditForm.RName.Empty"] = "Chưa nhập tên robot";
-            d["ProcessSetting.Save.Success"] = "Đã lưu cài đặt tiến trình";
-            d["ProcessSetting.LoadDriver.Error"] = "Không nạp được driver, hãy kiểm tra xem có đang chạy với quyền quản trị không";
-            d["ProcessSetting.NeedHttpProxy"] = "Dữ liệu của tiến trình đi qua proxy HTTP. Hãy bật proxy HTTP trong Thiết lập proxy trước";
-            d["ProcessSetting.Port.Invalid"] = "Danh sách cổng có nội dung không nhận ra: {0} (số 1–65535, cách nhau bằng dấu phẩy)";
-            d["ProcessSetting.Port.Empty"] = "Đã bật «Chỉ định cổng» nhưng chưa nhập cổng nào";
-            d["ProcessSetting.IP.Empty"] = "Địa chỉ proxy bắt buộc đang trống";
-            d["ProcessSetting.IP.Error"] = "Địa chỉ proxy bắt buộc không hợp lệ (cần địa chỉ IPv4 hoặc tên miền)";
-            d["ProcessSetting.Port.Error"] = "Cổng proxy bắt buộc phải nằm trong khoảng 1–65535";
-            d["ProcessSetting.Auth.Empty"] = "Đã bật «Cần xác thực» nhưng tài khoản hoặc mật khẩu đang trống";
-            d["ProcessSetting.Port.Loop"] = "Cổng proxy bắt buộc không được trùng cổng {0} của chính proxy HTTP: lưu lượng sẽ vòng lại SunnyNet";
-            d["ProcessSetting.Socks5.Off"] = "Proxy SOCKS5 cục bộ đang tắt, không có gì nhận lưu lượng được chuyển tới";
-            d["ProcessSetting.Auth.Required"] = "Proxy SOCKS5 cục bộ yêu cầu xác thực: hãy bật «Cần xác thực» và điền một tài khoản proxy, nếu không các tiến trình bị chặn sẽ mất kết nối";
-            d["ProcessSetting.Detect.Before"] = "Không kết nối được máy chủ proxy bắt buộc, chưa lưu: {0}";
             d["WPCConfig.ServerList"] = "Danh sách máy chủ";
             d["WPCConfig.NoticeList"] = "Danh sách thông báo";
             d["WPCConfig.RuleList"] = "Danh sách quy tắc";

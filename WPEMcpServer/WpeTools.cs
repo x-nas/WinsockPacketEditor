@@ -63,14 +63,10 @@ internal static class WpeTools
     public static Task<string> AccountDelete(WpeGatewayClient gateway, string id, string idempotencyKey, CancellationToken cancellationToken = default) => gateway.InvokeAsync("accounts.delete", new AccountDeleteInput(id, idempotencyKey), cancellationToken);
     [McpServerTool(Name = "wpe_proxy_auth_set_enabled"), Description("Request a reversible proxy authentication setting change. WPE validates Only-WPC compatibility and persists the setting after local confirmation.")]
     public static Task<string> ProxyAuthSetEnabled(WpeGatewayClient gateway, bool enabled, string idempotencyKey, CancellationToken cancellationToken = default) => gateway.InvokeAsync("proxy.auth.setEnabled", new ProxyAuthSetEnabledInput(enabled, idempotencyKey), cancellationToken);
-    [McpServerTool(Name = "wpe_proxy_http_set_enabled"), Description("Request a reversible HTTP proxy enable/disable change. WPE validates port compatibility and persists the setting after local confirmation.")]
-    public static Task<string> ProxyHttpSetEnabled(WpeGatewayClient gateway, bool enabled, string idempotencyKey, CancellationToken cancellationToken = default) => gateway.InvokeAsync("proxy.http.setEnabled", new ProxyHttpSetEnabledInput(enabled, idempotencyKey), cancellationToken);
     [McpServerTool(Name = "wpe_proxy_max_connections_set"), Description("Request a reversible proxy maximum-connection limit change. WPE validates the current machine cap and persists the setting after local confirmation.")]
     public static Task<string> ProxyMaxConnectionsSet(WpeGatewayClient gateway, int maxConnection, string idempotencyKey, CancellationToken cancellationToken = default) => gateway.InvokeAsync("proxy.maxConnections.set", new ProxyMaxConnectionsSetInput(maxConnection, idempotencyKey), cancellationToken);
     [McpServerTool(Name = "wpe_proxy_socks5_port_set"), Description("Request a reversible SOCKS5 listening-port change. WPE validates range and HTTP-port conflicts, then persists after local confirmation.")]
     public static Task<string> ProxySocks5PortSet(WpeGatewayClient gateway, int port, string idempotencyKey, CancellationToken cancellationToken = default) => gateway.InvokeAsync("proxy.socks5Port.set", new ProxySocks5PortSetInput(port, idempotencyKey), cancellationToken);
-    [McpServerTool(Name = "wpe_proxy_http_port_set"), Description("Request a reversible HTTP listening-port change. WPE validates that HTTP is enabled, checks range and SOCKS5 conflicts, then persists after local confirmation.")]
-    public static Task<string> ProxyHttpPortSet(WpeGatewayClient gateway, int port, string idempotencyKey, CancellationToken cancellationToken = default) => gateway.InvokeAsync("proxy.httpPort.set", new ProxyHttpPortSetInput(port, idempotencyKey), cancellationToken);
     [McpServerTool(Name = "wpe_firewall_set_enabled"), Description("Request a reversible firewall enable/disable change. WPE applies and persists it only after local confirmation.")]
     public static Task<string> FirewallSetEnabled(WpeGatewayClient gateway, bool enabled, string idempotencyKey, CancellationToken cancellationToken = default) => gateway.InvokeAsync("firewall.setEnabled", new FirewallSetEnabledInput(enabled, idempotencyKey), cancellationToken);
     [McpServerTool(Name = "wpe_proxy_only_wpc_set_enabled"), Description("Request a reversible Only-WPC proxy setting change. WPE requires authentication when enabling and persists after local confirmation.")]
@@ -292,10 +288,8 @@ public sealed record AccountUpdateInput(string Id, bool Enabled, bool LimitLinks
 public sealed record AccountDeleteInput(string Id, string IdempotencyKey);
 public sealed record AccountLoginsListInput(string Id, int? Limit = null, string? Cursor = null);
 public sealed record ProxyAuthSetEnabledInput(bool Enabled, string IdempotencyKey);
-public sealed record ProxyHttpSetEnabledInput(bool Enabled, string IdempotencyKey);
 public sealed record ProxyMaxConnectionsSetInput(int MaxConnection, string IdempotencyKey);
 public sealed record ProxySocks5PortSetInput(int Port, string IdempotencyKey);
-public sealed record ProxyHttpPortSetInput(int Port, string IdempotencyKey);
 public sealed record FirewallSetEnabledInput(bool Enabled, string IdempotencyKey);
 public sealed record ProxyOnlyWpcSetEnabledInput(bool Enabled, string IdempotencyKey);
 public sealed record ProxyBindIpSetInput(bool Auto, string Ip, string IdempotencyKey);

@@ -157,8 +157,7 @@ function proxyColumns() {
   /*
     类型不给固定色 —— 它按「请求 / 响应」分色，见 cellClass。
 
-    宽度比注入模式那份多 16px：代理模式会出现 WebSocket 请求 / 响应
-    （SunnyNet 的 WebSocket 中间人那条路），是全部类型名里最长的一个，96 装不下。
+    宽度按最长的类型名（「WebSocket 响应」这类）留的余量，改类型名时跟着量一次。
   */
   { key: 'Type', title: t('col.type'), w: 112, align: 'center', halign: 'center' },
   { key: 'DomainType', title: t('col.proto'), w: 82, align: 'center', halign: 'center', cls: 'c-meta' },

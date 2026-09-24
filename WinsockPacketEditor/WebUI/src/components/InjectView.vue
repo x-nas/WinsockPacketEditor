@@ -202,7 +202,7 @@ async function chooseFile(): Promise<void> {
 /*
   照「进程设置」那一屏的做法：进程表回来之后按<b>去重路径一次批量取</b>，按路径记忆化。
   ⚠️ 别在 render 里逐个发桥调用 —— 二百多个进程就是二百多次往返加二百多次整表重渲染
-  （那正是 ProcessSetting 当初改掉的写法）。iconOf 只是一次查表，没有副作用。
+  （那正是 MihomoSetting 当初改掉的写法）。iconOf 只是一次查表，没有副作用。
 */
 const icons = ref<Record<string, string>>({})
 
