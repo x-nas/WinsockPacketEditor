@@ -24,10 +24,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WinsockPacketEditor\WinsockPacketEditor.csproj" />
+    <ProjectReference Include="..\..\WinsockPacketEditor\WinsockPacketEditor.csproj" />
     <!-- 注入要用 WPEHook.dll：ShellLink 按「主程序所在目录 + WPE64_DLL」找它，
          不引这一条的话跑测的输出目录里没有这个文件，注入直接失败 -->
-    <ProjectReference Include="..\WPEHook\WPEHook.csproj" />
+    <ProjectReference Include="..\..\WPEHook\WPEHook.csproj" />
     <!-- 32 位靶子：验证矩阵要求每一项在两种位数上各跑一遍。
          ReferenceOutputAssembly=false —— 只要它<b>编出来并落到同一个目录</b>，
          不能真的引用它（那是个 x86 的 exe，引进来位数就冲突了）。 -->
