@@ -396,6 +396,17 @@ async function save(): Promise<void> {
 /* 断环说明钉在 01 卡最下部 */
 .ps .cols .loop { margin-top: auto; padding-top: 6px; padding-bottom: 2px; }
 
+/*
+  用户（2026-09-24）：02 卡里「搜索框 + 进程表」上下不要留空 ——
+  ① 抬头与表之间：.grp 的 margin-bottom(4px) 与 .tbl 的 margin-top(6px) 一起归零；
+  ② 表与卡底之间：去掉本卡（:last-child = 02 卡）的 padding-bottom(8px)，01 卡不受影响。
+  表本来就通栏（左右无边框 / 无外边距），上下贴齐后读成卡里的一整条带；
+  表的上下边框也去掉，避免与抬头的下边框、卡自己的下边框叠成双线。
+*/
+.ps .cols > .sec:last-child { padding-bottom: 0; }
+.ps .cols > .sec:last-child > .grp { margin-bottom: 0; }
+.ps .cols > .sec > .tbl { margin-top: 0; border-top: 0; border-bottom: 0; }
+
 /* 内核状态小标（跟在启用开关后面，不做成单独区域） */
 .tag {
   font-family: var(--share);
