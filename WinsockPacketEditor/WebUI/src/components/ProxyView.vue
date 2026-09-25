@@ -20,7 +20,6 @@ import SendList from './proxy/SendList.vue'
 import WareHouseList from './proxy/WareHouseList.vue'
 import RobotList from './proxy/RobotList.vue'
 import TextCompare from './proxy/TextCompare.vue'
-import XorCalc from './proxy/XorCalc.vue'
 import Transcode from './proxy/Transcode.vue'
 import ExtractData from './proxy/ExtractData.vue'
 import StatData from './proxy/StatData.vue'
@@ -107,7 +106,6 @@ onBeforeUnmount(() => detach?.())
 
     <!-- 四个工具页：状态都在 stores/tools 里，v-if 销毁再挂回来内容还在 -->
     <TextCompare v-if="page === 'diff'" />
-    <XorCalc v-if="page === 'xor'" />
     <Transcode v-if="page === 'transcode'" />
     <ExtractData v-if="page === 'extract'" />
 

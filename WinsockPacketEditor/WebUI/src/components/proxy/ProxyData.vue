@@ -19,8 +19,8 @@ import { attachPacketFeed, onProxyTrimmed, resetStat, rows } from '../../stores/
 import { useList } from '../../stores/lists'
 import { pushToast } from '../../stores/toast'
 import { useRowPick } from '../../usePick'
-import { gotoPage, listSetting, proxyRunning } from '../../stores/runtime'
-import { textA, textB } from '../../stores/tools'
+import { gotoPage, kernelRunning, listSetting, proxyRunning, tunReady } from '../../stores/runtime'
+import { textA, textB, trInput, trMode } from '../../stores/tools'
 import PacketList from '../PacketList.vue'
 import ContextMenu from '../ContextMenu.vue'
 import { ICON, type MenuItem } from '../menu'
@@ -152,7 +152,9 @@ onMounted(async () => {
     try {
       const s = await call<Stats>('getStats')
       stats.value = s
-      proxyRunning.value = !!(s as any).proxyRunning
+      proxyRunning.value = s.proxyRunning
+      tunReady.value = s.tunReady
+      kernelRunning.value = s.kernelRunning
     } catch {
       /* 窗口关闭中，忽略 */
     }
@@ -441,6 +443,7 @@ const menuItems = computed<MenuItem[]>(() => {
     //与 WinForms 一样一条一行（十六进制），写进文本对比页那两个框；带条数
     { id: 'toTextA', label: t('pm.toTextA') + tag, icon: ICON.text },
     { id: 'toTextB', label: t('pm.toTextB') + tag, icon: ICON.text },
+    { id: 'decode', label: t('tr.encode') + ' / ' + t('tr.decode') + tag, icon: ICON.hex },
     { divider: true },
     toSend,
     /*
@@ -542,6 +545,15 @@ async function onMenuPick(id: string): Promise<void> {
         else textB.value = r.text
         pushToast('success', t(id === 'toTextA' ? 'pm.toTextAOk' : 'pm.toTextBOk'))
         gotoPage.value = 'diff'
+        return
+      }
+
+      case 'decode': {
+        const r = await call<{ text: string }>('copyProxyHexMerged', { ids })
+        if (!r?.text) { pushToast('error', t('pm.copyFail')); return }
+        trInput.value = r.text
+        trMode.value = 'dec'
+        gotoPage.value = 'transcode'
         return
       }
 

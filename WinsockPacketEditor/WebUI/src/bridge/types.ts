@@ -173,6 +173,9 @@ export interface Stats {
   queue: number
   list: number
   total: number
+  proxyRunning: boolean
+  tunReady: boolean
+  kernelRunning: boolean
   autoClear: boolean
   autoClearValue: number
 }

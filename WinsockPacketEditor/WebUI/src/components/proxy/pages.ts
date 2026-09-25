@@ -8,7 +8,7 @@ import type { Key } from '../../i18n'
 export type PageKey =
   | 'data' | 'client' | 'account'
   | 'filter' | 'send' | 'robot' | 'warehouse'
-  | 'stat' | 'diff' | 'xor' | 'transcode' | 'extract'
+  | 'stat' | 'diff' | 'transcode' | 'extract'
   | 'wpc' | 'log'
   // 注入模式的主屏（PacketInfo）。代理模式没有这一页，见文件末尾的 INJECT_GROUPS
   | 'packet'
@@ -50,7 +50,6 @@ export const GROUPS: PageGroup[] = [
     items: [
       { key: 'stat', label: 'proxy.nav.stat', icon: '<path d="M4 20V10M10 20V4M16 20v-8M22 20v-5"/>' },
       { key: 'diff', label: 'proxy.nav.diff', icon: '<rect x="3" y="4" width="7" height="16"/><rect x="14" y="4" width="7" height="16"/>' },
-      { key: 'xor', label: 'proxy.nav.xor', icon: '<circle cx="12" cy="12" r="8"/><path d="M8 8l8 8M16 8l-8 8"/>' },
       { key: 'transcode', label: 'proxy.nav.transcode', icon: '<path d="M9 6L3 12l6 6M15 6l6 6-6 6"/>' },
       { key: 'extract', label: 'proxy.nav.extract', icon: '<path d="M12 3v12M8 11l4 4 4-4M4 19h16"/>' },
     ],
@@ -94,7 +93,7 @@ export const INJECT_GROUPS: PageGroup[] = [
     ],
   },
   { cap: 'Rules', items: [P('filter'), P('send'), P('robot'), P('warehouse')] },
-  { cap: 'Tools', items: [P('stat'), P('diff'), P('xor'), P('transcode'), P('extract')] },
+  { cap: 'Tools', items: [P('stat'), P('diff'), P('transcode'), P('extract')] },
   { cap: 'System', items: [P('log')] },
 ]
 

@@ -17,7 +17,7 @@ import { gotoPage, listSetting } from '../../stores/runtime'
 import { useList } from '../../stores/lists'
 import { useRowPick } from '../../usePick'
 import { pushToast } from '../../stores/toast'
-import { textA, textB } from '../../stores/tools'
+import { textA, textB, trInput, trMode } from '../../stores/tools'
 import { status } from '../../stores/inject'
 import { t } from '../../i18n'
 import PacketList from '../PacketList.vue'
@@ -502,6 +502,7 @@ const menuItems = computed<MenuItem[]>(() => {
     { divider: true },
     { id: 'toTextA', label: t('pm.toTextA') + tag, icon: ICON.text },
     { id: 'toTextB', label: t('pm.toTextB') + tag, icon: ICON.text },
+    { id: 'decode', label: t('tr.encode') + ' / ' + t('tr.decode') + tag, icon: ICON.hex },
     { divider: true },
     toSend,
     //添加到滤镜只用第一条（与 WinForms 一致），所以<b>不带条数</b>
@@ -595,6 +596,15 @@ async function onMenuPick(id: string): Promise<void> {
         else textB.value = r.text
         pushToast('success', t(id === 'toTextA' ? 'pm.toTextAOk' : 'pm.toTextBOk'))
         gotoPage.value = 'diff'
+        return
+      }
+
+      case 'decode': {
+        const r = await call<{ text: string }>('copyPacketHexMerged', { ids })
+        if (!r?.text) { pushToast('error', t('pm.copyFail')); return }
+        trInput.value = r.text
+        trMode.value = 'dec'
+        gotoPage.value = 'transcode'
         return
       }
 

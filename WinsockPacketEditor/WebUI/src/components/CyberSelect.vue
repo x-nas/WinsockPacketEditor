@@ -31,7 +31,7 @@ const scroll = ref<HTMLElement | null>(null)
 const open = ref(false)
 /** 键盘高亮的那一项 */
 const hi = ref(-1)
-const pos = ref({ x: 0, y: 0, w: 0 })
+const pos = ref({ x: 0, y: 0, w: 0, maxH: 0 })
 
 const current = computed(() => props.options.find((o) => o.value === props.modelValue) ?? null)
 
@@ -74,10 +74,14 @@ function place(): void {
   const t = trig.value, el = list.value
   if (!t || !el) return
   const r = t.getBoundingClientRect()
-  const h = el.offsetHeight
   const below = window.innerHeight - r.bottom - 8
-  const up = h > below && r.top - 8 > below
-  pos.value = { x: r.left, y: up ? r.top - h - 2 : r.bottom + 2, w: r.width }
+  const above = r.top - 8
+  //列表不再硬截 240px：能完整展示时就完整展示；只有贴近视口边缘时才限制滚动高度。
+  const natural = (scroll.value?.scrollHeight ?? el.offsetHeight) + 2
+  const up = natural > below && above > below
+  const available = Math.max(80, Math.floor(up ? above : below - 2))
+  const height = Math.min(natural, available)
+  pos.value = { x: r.left, y: up ? r.top - height - 2 : r.bottom + 2, w: r.width, maxH: available }
 }
 
 function onDocDown(e: MouseEvent): void {
@@ -181,7 +185,7 @@ onBeforeUnmount(close)
 
     <Teleport to="body">
       <!-- 外层不滚（角标挂它上面），里面一层才滚：绝对定位到盒子外的角标会被算进可滚动溢出，凭空多出一条滚动条 -->
-      <div v-if="open" ref="list" class="cs-list" :style="{ left: pos.x + 'px', top: pos.y + 'px', width: pos.w + 'px' }">
+      <div v-if="open" ref="list" class="cs-list" :style="{ left: pos.x + 'px', top: pos.y + 'px', width: pos.w + 'px', '--cs-max-height': pos.maxH + 'px' }">
         <span class="mk tl" /><span class="mk br" />
         <div ref="scroll" class="cs-scroll" role="listbox">
         <button
@@ -245,7 +249,7 @@ onBeforeUnmount(close)
   box-shadow: 0 10px 30px rgb(var(--shadow-rgb) / 55%);
 }
 
-.cs-scroll { max-height: 240px; overflow-y: auto; padding: 4px 0; }
+.cs-scroll { max-height: var(--cs-max-height, 240px); overflow-y: auto; padding: 4px 0; }
 
 .cs-list .mk { position: absolute; width: 7px; height: 7px; border: 1px solid var(--cyan); pointer-events: none; }
 .cs-list .mk.tl { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }

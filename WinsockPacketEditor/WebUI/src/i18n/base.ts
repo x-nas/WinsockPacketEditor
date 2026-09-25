@@ -100,7 +100,6 @@ export const DICT = {
   'proxy.nav.warehouse': { zh: '仓库列表', en: 'WareHouse List' },
   'proxy.nav.stat': { zh: '统计数据', en: 'Statistics' },
   'proxy.nav.diff': { zh: '文本对比', en: 'Text Comparison' },
-  'proxy.nav.xor': { zh: '异或计算', en: 'XOR Calculator' },
   'proxy.nav.transcode': { zh: '编码转换', en: 'Transcoding' },
   'proxy.nav.extract': { zh: '数据提取', en: 'Data Extraction' },
   'proxy.nav.wpc': { zh: 'WPC 配置', en: 'WPC Config' },
@@ -1464,7 +1463,7 @@ export const DICT = {
   'as.limitOn': { zh: '超过上限丢弃最旧的', en: 'Drop the oldest when full' },
   'as.limitHint': { zh: '1 ~ 1000000。每个仓库最多留这么多条，满了丢最旧的；所有入库路径都受它管', en: '1–1000000. Per warehouse; when full the oldest rows are dropped. Applies to every path that adds packets' },
 
-  'list.paused': { zh: '已暂停跟随 · 点此回到底部', en: 'Auto-scroll paused · click to jump to the end' },
+  'list.paused': { zh: '下面还有内容 · 点此回到底部', en: 'More below · click to jump to the end' },
 
   // ── 代理模式：十六进制面板 ──────────────────────────
   'hex.title': { zh: '十六进制', en: 'Hex' },

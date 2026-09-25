@@ -39,7 +39,6 @@ import RobotList from './proxy/RobotList.vue'
 import WareHouseList from './proxy/WareHouseList.vue'
 import StatData from './proxy/StatData.vue'
 import TextCompare from './proxy/TextCompare.vue'
-import XorCalc from './proxy/XorCalc.vue'
 import Transcode from './proxy/Transcode.vue'
 import ExtractData from './proxy/ExtractData.vue'
 import SystemLog from './proxy/SystemLog.vue'
@@ -801,7 +800,6 @@ async function clearList(): Promise<void> {
       <WareHouseList v-if="page === 'warehouse'" />
       <StatData v-if="page === 'stat'" mode="inject" />
       <TextCompare v-if="page === 'diff'" />
-      <XorCalc v-if="page === 'xor'" />
       <Transcode v-if="page === 'transcode'" />
       <ExtractData v-if="page === 'extract'" />
     </div>

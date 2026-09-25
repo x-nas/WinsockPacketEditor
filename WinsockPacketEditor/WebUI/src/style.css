@@ -532,6 +532,16 @@ body.col-resizing * {
   gap: 7px;
   flex: none;
   min-width: 0;
+  /*
+    读数窗统一高度，不随内部字号走。
+
+    窗高由内容撑（padding 3 + 行高 1 + 边框），而值那一格的字号并不都一样：
+    SOCKS5 地址是 --fs-body（12.5），TUN 的「已启用」是 --fs-label（10.5）。
+    不定高的话 TUN 那格会矮 2.3px，两块并排看着就是一高一低。
+    21px = SOCKS5 那格的自然高度（20.8，见下），取整到像素；用 min-height 而不是
+    height，是为了别的语言换行 / 缩放放大字号时仍然撑得开、不被裁。
+  */
+  min-height: 21px;
   padding: 3px 9px;
   border: 1px solid rgb(var(--border-rgb) / 70%);
   background: rgb(var(--inset-rgb) / 30%);
@@ -563,6 +573,18 @@ body.col-resizing * {
   letter-spacing: .02em;
   color: var(--cyan);
   white-space: nowrap;
+}
+
+/*
+  TUN 的读数（「已启用 / 未启用」）比 SOCKS5 那格地址小 2px（--fs-body 12.5 → --fs-label 10.5）。
+
+  地址是一串要逐字读的 IP:Port，保持 --fs-body；TUN 只是两三个字的状态词，
+  和左边的 TUN 标签（.pk 也是 10.5px）一样属于「说明」而不是「读数」，
+  缩到与标签同号既压得住、又不会被误读成一串数值。
+*/
+.modebar .pv.tun {
+  font-size: var(--fs-label);
+  padding-top: 0;    /* 与 .pk 同号同补偿：10.5px 下 1.3px 偏低，去掉后 −0.14 */
 }
 
 /* 值后面跟一小段附注（#pid · x64 / 40 条）—— 次要，不抢主值的青 */

@@ -540,14 +540,14 @@ defineExpose({ cur, nib, col, insertMode, hasSel, selCount, per, selectAll, sele
             <span class="off">{{ offset(r * per) }}</span>
             <span class="hexs" data-col="hex">
               <span v-for="i in rowIdx(r)" :key="i" class="b" :data-i="i"
-                    :class="{ d: differs(i), sel: inSel(i), cur: !readonly && i === cur && col === 'hex', hi: !readonly && i === cur && nib === 1 }">{{ hex2(local[i]) }} </span>
-              <span v-if="!readonly && r === rows - 1" class="b end" :data-i="len" :class="{ cur: cur === len && col === 'hex' }">   </span>
+                    :class="{ d: differs(i), sel: inSel(i), cur: !readonly && i === cur, hi: !readonly && i === cur && col === 'hex' && nib === 1 }">{{ hex2(local[i]) }} </span>
+              <span v-if="!readonly && r === rows - 1" class="b end" :data-i="len" :class="{ cur: cur === len }">   </span>
               <span v-if="r === rows - 1" class="pad">{{ tailPad() }}</span>
             </span>
             <span class="ascs" data-col="asc">
               <span v-for="i in rowIdx(r)" :key="i" class="c" :data-i="i"
-                    :class="{ d: differs(i), sel: inSel(i), cur: !readonly && i === cur && col === 'asc' }">{{ asc(local[i]) }}</span>
-              <span v-if="!readonly && r === rows - 1" class="c end" :data-i="len" :class="{ cur: cur === len && col === 'asc' }"> </span>
+                    :class="{ d: differs(i), sel: inSel(i), cur: !readonly && i === cur }">{{ asc(local[i]) }}</span>
+              <span v-if="!readonly && r === rows - 1" class="c end" :data-i="len" :class="{ cur: cur === len }"> </span>
             </span>
           </div>
         </div>

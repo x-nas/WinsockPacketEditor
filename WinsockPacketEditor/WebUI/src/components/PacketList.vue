@@ -15,7 +15,7 @@
   行高写死 ROW_H，不做动态测量。数据行都是单行不换行的等宽文本，本来就等高；
   动态测高要引入 ResizeObserver + 位置累加表，为一个不存在的问题付代价。
 */
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { flagSrc } from '../flags'
 import { listSetting } from '../stores/runtime'
 import { t, type Key } from '../i18n'
@@ -347,6 +347,16 @@ const viewW = ref(1200)
 const following = ref(true)
 
 /*
+  视口当前是否贴着底部 —— <b>只用来决定右下角「回到最新」按钮是否显示</b>。
+
+  ⚠️ 为什么不直接复用 following：following 是「要不要在新数据到达时自动贴底」的开关状态，
+  关掉「自动滚动」后它恒为 false。而按钮表达的是「下面还有内容，点一下跳到底」。
+  两者在自动滚动关闭时正好相反 —— 用户点完按钮已经到底了，following 却仍是 false，
+  于是按钮一直挂着不消失（用户报的正是这个）。所以：<b>按钮看位置，跟随看开关</b>。
+*/
+const atBottom = ref(true)
+
+/*
   外部的「自动滚动」开关。
 
   关掉时立刻停住；重新打开时贴回底部 —— 否则用户勾上之后要等下一批数据到才生效，
@@ -354,8 +364,20 @@ const following = ref(true)
   那是「临时脱离」，不该反过来把外面的开关也关掉。
 */
 watch(() => props.follow, (on) => {
-  following.value = on
-  if (on) scrollToBottom()
+  if (!on) {
+    following.value = false
+    // 关掉自动滚动不等于「已经离开底部」：按钮显隐仍按当前位置算
+    refreshAtBottom()
+    return
+  }
+
+  // 开关切换与虚拟列表重绘可能发生在同一轮更新；等 DOM 稳定后强制恢复一次跟随。
+  following.value = true
+  void nextTick(() => {
+    requestAnimationFrame(() => {
+      if (props.follow) scrollToBottom(true)
+    })
+  })
 })
 
 const total = computed(() => rows.value.length)
@@ -374,17 +396,70 @@ function onScroll(): void {
   if (!el) return
 
   scrollTop.value = el.scrollTop
+  // 按钮显隐只认位置，与自动滚动开关、与是不是用户操作都无关
+  refreshAtBottom()
 
-  // 距底 2 行以内算「在底部」，给一点余量，否则滚动条像素误差会让跟随反复开关
-  following.value = el.scrollHeight - el.scrollTop - el.clientHeight < ROW_H * 2
+  if (!props.follow) {
+    following.value = false
+    return
+  }
+
+  /*
+    新行渲染、程序 scrollToBottom 与浏览器自身的滚动位置校正也可能触发 scroll。
+    它们绝不能被误认为“用户离开底部”，否则高频入队时只跟随几行就停住。
+    只有滚轮、触摸或按住滚动条拖动时，才更新用户的临时暂停状态；判定严格到 1px。
+  */
+  if (!userScrollPending && !pointerScrolling) return
+  following.value = atBottom.value
 }
 
-function scrollToBottom(): void {
+const BOTTOM_EPSILON = 1
+let userScrollPending = false
+let pointerScrolling = false
+let userScrollRaf = 0
+
+/** 读一次实际滚动位置，更新「视口是否贴底」。程序滚动与用户滚动共用同一把尺。 */
+function refreshAtBottom(): void {
+  const el = scroller.value
+  if (!el) return
+  atBottom.value = el.scrollHeight - el.scrollTop - el.clientHeight <= BOTTOM_EPSILON
+}
+
+function syncFollowFromViewport(): void {
+  const el = scroller.value
+  if (!el) return
+  scrollTop.value = el.scrollTop
+  refreshAtBottom()
+  following.value = props.follow && atBottom.value
+}
+
+/*
+  抵达边界时滚轮不会再触发 scroll：不能只靠 onScroll 更新“已在底部”。
+  用户输入后下一帧统一读取浏览器最终的 scrollTop，既覆盖普通滚动，也覆盖到顶/到底的边界滚动。
+*/
+function scheduleUserFollowSync(): void {
+  userScrollPending = true
+  if (userScrollRaf) return
+  userScrollRaf = requestAnimationFrame(() => {
+    userScrollRaf = 0
+    userScrollPending = false
+    if (props.follow) syncFollowFromViewport()
+  })
+}
+
+function markWheelScroll(): void { scheduleUserFollowSync() }
+function beginPointerScroll(): void { pointerScrolling = true; scheduleUserFollowSync() }
+function endPointerScroll(): void { pointerScrolling = false; scheduleUserFollowSync() }
+
+function scrollToBottom(forceFollow = false): void {
   const el = scroller.value
   if (!el) return
   el.scrollTop = el.scrollHeight
   scrollTop.value = el.scrollTop
-  following.value = true
+  // 程序已经贴底：按钮必须马上收起（自动滚动关闭时也不会再挂着）
+  atBottom.value = true
+  // 手动点“回到最新”只跳一次；只有外部开关恢复时才强制重新进入跟随状态。
+  following.value = forceFollow || props.follow
 }
 
 /*
@@ -403,6 +478,7 @@ function scrollToIndex(i: number): void {
   following.value = false
   el.scrollTop = Math.max(0, i * ROW_H - el.clientHeight / 2 + ROW_H / 2)
   scrollTop.value = el.scrollTop
+  refreshAtBottom()
 }
 
 // 数据变了：跟随时贴到底；被整表清空时回到顶部。
@@ -413,13 +489,18 @@ watch(total, () => {
     const el = scroller.value
     if (el) el.scrollTop = 0
     scrollTop.value = 0
-    following.value = true
+    following.value = props.follow
+    // 空表既在顶也在底，按钮不该挂在一个没有内容的列表上
+    atBottom.value = true
     return
   }
 
-  if (following.value) {
+  if (props.follow && following.value) {
     // 等 DOM 把新的 spacer 高度算出来再贴底
-    requestAnimationFrame(scrollToBottom)
+    requestAnimationFrame(() => {
+      // rAF 之前用户可能刚关闭开关，不能让一帧遗留任务把列表再次拉到底部。
+      if (props.follow && following.value) scrollToBottom()
+    })
   }
 })
 
@@ -438,6 +519,11 @@ function syncViewport(): void {
   viewH.value = el.clientHeight
   viewW.value = el.clientWidth
   scrollTop.value = el.scrollTop
+  /*
+    容器尺寸变化（窗口缩放、切库）会改变「相对底部」的判定，必须重算。
+    放在程序滚动之前：先拿到真实位置，按钮显隐才不会滞后。
+  */
+  refreshAtBottom()
 }
 
 function refreshVisibleViewport(): void {
@@ -469,6 +555,8 @@ onMounted(() => {
 onBeforeUnmount(() => {
   if (layoutRaf) cancelAnimationFrame(layoutRaf)
   layoutRaf = 0
+  if (userScrollRaf) cancelAnimationFrame(userScrollRaf)
+  userScrollRaf = 0
   ro?.disconnect()
   ro = null
 })
@@ -519,7 +607,17 @@ defineExpose({ scrollToBottom, scrollToIndex })
 
 <template>
   <div class="pl">
-    <div ref="scroller" class="pl-scroll" @scroll.passive="onScroll">
+    <div
+      ref="scroller"
+      class="pl-scroll"
+      @scroll.passive="onScroll"
+      @wheel.passive="markWheelScroll"
+      @touchstart.passive="markWheelScroll"
+      @touchmove.passive="markWheelScroll"
+      @pointerdown="beginPointerScroll"
+      @pointerup="endPointerScroll"
+      @pointercancel="endPointerScroll"
+    >
       <!-- 表头与行同在一个滚动容器里：sticky 只锁纵向，横向自然跟着一起滚，列不会错位 -->
       <div class="pl-head" :style="{ width: totalWidth + 'px' }">
         <div
@@ -594,13 +692,17 @@ defineExpose({ scrollToBottom, scrollToIndex })
       圆形悬浮按钮，只有一个向下箭头 —— 与聊天窗口「回到最新」是同一个约定，
       不用文字也认得。原来那句「已暂停跟随 · 点此回到底部」搬进 title，
       鼠标停一下仍然能看到解释，读屏则走 aria-label。
+
+      ⚠️ 显隐判据是 <b>atBottom（视口是否贴着底部）</b>，不是 following。
+      following 是「要不要自动贴底」的开关状态，关掉「自动滚动」后恒为 false；
+      用它当判据会导致点完按钮已到底、按钮却永不消失（用户报过的 bug）。
     -->
     <button
-      v-if="!following"
+      v-if="!atBottom"
       class="pl-paused"
       :title="t('list.paused')"
       :aria-label="t('list.paused')"
-      @click="scrollToBottom"
+      @click="() => scrollToBottom()"
     >
       <svg class="ico" viewBox="0 0 24 24"><path d="M12 5v13M6 12l6 6 6-6" /></svg>
     </button>
