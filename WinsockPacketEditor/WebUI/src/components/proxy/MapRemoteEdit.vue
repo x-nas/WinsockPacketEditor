@@ -2,7 +2,8 @@
 /*
   远程映射的一条 —— 对应 WinForms 的 Controls/MapRemoteEdit。请求地址 → 映射地址。
 
-  ⚠️ <b>两端都固定 http，没有协议下拉。</b>映射只在 SOCKS5 那条路上生效
+  映射只在 SOCKS5 的明文 HTTP 路径上生效。两端显示协议下拉，是为了与本地映射保持
+  一致的编辑体验；首期只有 HTTP 选项，不能制造不生效的 HTTPS 重定向规则。
   （HandleHttpConnect / ForwardData 的 DomainType.HTTP 分支），四个查询调用点
   一律传 MapProtocol.Http；ProtocolTypeTo 在任何数据路径上都<b>没有被读过</b> ——
   ConnectToTarget 开的是明文 TCP，ModifyRequestHostAndPath 拼的也是明文 HTTP 请求。
@@ -14,6 +15,7 @@ import { computed, ref, watch } from 'vue'
 import { call } from '../../bridge'
 import type { MapRemoteRow } from '../../bridge/types'
 import { t } from '../../i18n'
+import CyberSelect from '../CyberSelect.vue'
 import SettingsModal from './SettingsModal.vue'
 
 const props = defineProps<{ target: MapRemoteRow | null | 'add' }>()
@@ -21,7 +23,8 @@ const emit = defineEmits<{ (e: 'close'): void }>()
 
 const busy = ref(false)
 const error = ref('')
-const f = ref({ hostFrom: '', portFrom: 80, pathFrom: '', hostTo: '', portTo: 80, pathTo: '' })
+const HTTP_ONLY = [{ value: 0, label: 'http://' }]
+const f = ref({ protocolFrom: 0, hostFrom: '', portFrom: 80, pathFrom: '', protocolTo: 0, hostTo: '', portTo: 80, pathTo: '' })
 
 const isAdd = computed(() => props.target === 'add')
 const title = computed(() => t('map.remote') + ' · ' + t(isAdd.value ? 'fw.add' : 'fw.edit'))
@@ -29,9 +32,9 @@ const title = computed(() => t('map.remote') + ' · ' + t(isAdd.value ? 'fw.add'
 watch(() => props.target, (v) => {
   if (!v) return
   error.value = ''
-  if (v === 'add') { f.value = { hostFrom: '', portFrom: 80, pathFrom: '', hostTo: '', portTo: 80, pathTo: '' }; return }
-  // ProtocolTo 不进表单：它不是用户能选的东西了，保存时一律写 http（见文件头）
-  f.value = { hostFrom: v.HostFrom, portFrom: v.PortFrom, pathFrom: v.PathFrom, hostTo: v.HostTo, portTo: v.PortTo, pathTo: v.PathTo }
+  if (v === 'add') { f.value = { protocolFrom: 0, hostFrom: '', portFrom: 80, pathFrom: '', protocolTo: 0, hostTo: '', portTo: 80, pathTo: '' }; return }
+  // 老库可能遗留 HTTPS 值；远程映射并不支持它，编辑后统一归正为 HTTP。
+  f.value = { protocolFrom: 0, hostFrom: v.HostFrom, portFrom: v.PortFrom, pathFrom: v.PathFrom, protocolTo: 0, hostTo: v.HostTo, portTo: v.PortTo, pathTo: v.PathTo }
 })
 
 async function save(): Promise<void> {
@@ -40,13 +43,13 @@ async function save(): Promise<void> {
   try {
     const r = await call<{ error: string }>('saveMapRemote', {
       id: isAdd.value ? '' : (props.target as MapRemoteRow).Id,
-      protocolFrom: 0,
+      protocolFrom: f.value.protocolFrom,
       hostFrom: f.value.hostFrom,
       portFrom: Math.trunc(f.value.portFrom || 0),
       pathFrom: f.value.pathFrom,
       //两端都是 http。老库里可能存着 ProtocolTo=1（外壳早先能选 https），
       //改一次就归正，不做迁移 —— 那个值本来也没人读
-      protocolTo: 0,
+      protocolTo: f.value.protocolTo,
       hostTo: f.value.hostTo,
       portTo: Math.trunc(f.value.portTo || 0),
       pathTo: f.value.pathTo,
@@ -70,7 +73,7 @@ async function save(): Promise<void> {
       <div class="row">
         <div class="k">{{ t('map.host') }}</div>
         <div class="v">
-          <span class="proto">http://</span>
+          <CyberSelect v-model="f.protocolFrom" class="proto" :options="HTTP_ONLY" />
           <input v-model="f.hostFrom" class="inp" spellcheck="false" placeholder="www.example.com">
           <span class="colon">:</span>
           <input v-model.number="f.portFrom" class="inp num" type="number" min="1" max="65535">
@@ -85,7 +88,7 @@ async function save(): Promise<void> {
       <div class="row">
         <div class="k">{{ t('map.host') }}</div>
         <div class="v">
-          <span class="proto">http://</span>
+          <CyberSelect v-model="f.protocolTo" class="proto" :options="HTTP_ONLY" />
           <input v-model="f.hostTo" class="inp" spellcheck="false" placeholder="127.0.0.1">
           <span class="colon">:</span>
           <input v-model.number="f.portTo" class="inp num" type="number" min="1" max="65535">
@@ -101,5 +104,6 @@ async function save(): Promise<void> {
 </template>
 
 <style scoped>
-.proto, .colon { color: var(--dim); font-family: var(--mono); font-size: var(--fs-body); }
+.proto { width: 88px; }
+.colon { color: var(--dim); font-family: var(--mono); font-size: var(--fs-body); }
 </style>

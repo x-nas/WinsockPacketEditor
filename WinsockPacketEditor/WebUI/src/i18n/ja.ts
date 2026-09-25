@@ -1161,4 +1161,5 @@ export const ja: Record<Key, string> = {
   'mh.manual': "プロセス名を手動指定",
   'mh.manualPh': "複数のプロセス名は ; で区切ります（例: game.exe;launcher.exe）",
   'mh.manualHint': "プロセス一覧を取得できない場合は、ここにプロセス名を直接入力できます。入力した名前はチェックした一覧と統合され、mihomo の PROCESS-NAME ルールとして生成されます。設定と一緒に保存されます。",
+  'cert.title': 'HTTPS マッピング証明書', 'cert.root': 'ルート証明書', 'cert.trusted': '現在のユーザーで信頼済み', 'cert.untrusted': '現在のユーザーでは未信頼', 'cert.createHint': '未作成です。HTTPS ローカルマッピングを有効にしてから、このルート証明書を作成して信頼してください。', 'cert.create': 'ルート証明書を作成', 'cert.trust': '信頼', 'cert.untrust': '信頼を解除', 'cert.delete': '材料を削除', 'cert.format': 'エクスポート形式', 'cert.export': '証明書をエクスポート', 'cert.exported': 'エクスポート済み：{0}', 'cert.error': 'HTTPS マッピング証明書の操作に失敗しました', 'cert.result': 'エクスポート結果', 'cert.hint': 'ルート証明書は現在のユーザー証明書ストアだけで信頼されます。秘密鍵材料はサーバー レベルの Windows DPAPI で保護され、バックアップやエクスポートには含まれません。材料を削除しない限り、このサーバーは同じルート証明書を使用します。', 'cert.formatCer': '.cer（一般）', 'cert.formatCrt': '.crt', 'cert.formatDer': '.der', 'cert.formatPem': '.pem', 'cert.formatAndroid': 'Android .0',
 }

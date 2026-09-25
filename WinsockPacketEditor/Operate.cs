@@ -7418,6 +7418,12 @@ namespace WinsockPacketEditor
                                 break;
 
                             case Operate.ProxyConfig.Proxy.DomainType.HTTPS:
+                                psSession.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(targetAddress, targetPort);
+                                if (Operate.ProxyConfig.Mapping.HasEnabledHttpsLocalHost(targetAddress, targetPort)
+                                    && psSession.StartHttpsMitm(targetAddress, targetIP, targetPort)) { break; }
+                                await psSession.ConnectToTarget(targetIP, targetPort);
+                                break;
+
                             case Operate.ProxyConfig.Proxy.DomainType.Socket:
                                 psSession.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(targetAddress, targetPort);
                                 await psSession.ConnectToTarget(targetIP, targetPort);
@@ -14913,6 +14919,23 @@ namespace WinsockPacketEditor
                     }
 
                     return null;
+                }
+
+                /// <summary>HTTPS 没有独立总开关；有已启用的主机/端口规则才尝试 TLS 终止，路径仍在解密后按原有映射语义判定。</summary>
+                public static bool HasEnabledHttpsLocalHost(string host, int port)
+                {
+                    try
+                    {
+                        return lstMapLocal.Any(rule => rule.IsEnable
+                            && rule.ProtocolType == ProxyConfig.Proxy.MapProtocol.Https
+                            && string.Equals(rule.Host, host, StringComparison.OrdinalIgnoreCase)
+                            && rule.Port == port);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(HasEnabledHttpsLocalHost), ex);
+                        return false;
+                    }
                 }
 
                 #endregion

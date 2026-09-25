@@ -1159,4 +1159,5 @@ export const ko: Record<Key, string> = {
   'mh.manual': "프로세스 이름 직접 지정",
   'mh.manualPh': "여러 프로세스 이름은 ; 로 구분합니다(예: game.exe;launcher.exe)",
   'mh.manualHint': "프로세스 목록을 가져올 수 없을 때 여기에 프로세스 이름을 직접 입력할 수 있습니다. 입력한 이름은 선택한 목록과 합쳐져 mihomo PROCESS-NAME 규칙으로 생성되며 설정과 함께 저장됩니다.",
+  'cert.title': 'HTTPS 매핑 인증서', 'cert.root': '루트 인증서', 'cert.trusted': '현재 사용자에게 신뢰됨', 'cert.untrusted': '현재 사용자에게 신뢰되지 않음', 'cert.createHint': '아직 만들지 않았습니다. HTTPS 로컬 매핑을 활성화한 뒤 이 루트 인증서를 만들고 신뢰하세요.', 'cert.create': '루트 인증서 만들기', 'cert.trust': '신뢰', 'cert.untrust': '신뢰 해제', 'cert.delete': '자료 삭제', 'cert.format': '내보내기 형식', 'cert.export': '인증서 내보내기', 'cert.exported': '내보냄: {0}', 'cert.error': 'HTTPS 매핑 인증서 작업에 실패했습니다', 'cert.result': '내보내기 결과', 'cert.hint': '루트 인증서는 현재 사용자 인증서 저장소에서만 신뢰됩니다. 개인 키 자료는 서버 수준 Windows DPAPI로 보호되며 백업이나 내보내기에 포함되지 않습니다. 자료를 삭제하지 않는 한 이 서버는 같은 루트 인증서를 사용합니다.', 'cert.formatCer': '.cer(일반)', 'cert.formatCrt': '.crt', 'cert.formatDer': '.der', 'cert.formatPem': '.pem', 'cert.formatAndroid': 'Android .0',
 }

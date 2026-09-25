@@ -48,6 +48,7 @@ namespace WinsockPacketEditor
         */
         internal HttpSniffer HttpReqSniffer;
         internal HttpSniffer HttpRespSniffer;
+        internal HttpsMitmSession HttpsMitm;
 
         /// <summary>取（或建）本会话某个方向的 HTTP 嗅探器；非 HTTP 会话返回 null。</summary>
         internal HttpSniffer Sniffer(bool request)
@@ -266,6 +267,7 @@ namespace WinsockPacketEditor
         {
             //命令那一步失败（连不上目标）时会话已经在关了，后面排着的数据帧直接丢
             if (this.ProxyStep != Operate.ProxyConfig.Proxy.ProxyStep.ForwardData || !this.Connected) { return; }
+            if (this.HttpsMitm != null) { this.HttpsMitm.Feed(body); return; }
             Operate.ProxyConfig.Proxy.ProcessForwardData(this, body, ref this.ForwardBuffer);
         }
 
@@ -313,7 +315,18 @@ namespace WinsockPacketEditor
                 this.Close(CloseReason.SocketError);
                 Operate.DoLog(nameof(ConnectToTarget), ex);
             }
-        }        
+        }
+
+        public bool StartHttpsMitm(string host, string ip, int port)
+        {
+            var status = new HttpsMitmCertificateManager().GetStatus();
+            if (!status.Exists || !status.Trusted) return false;
+            HttpsMitm = new HttpsMitmSession(this, host, ip, port);
+            Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Success);
+            ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.ForwardData;
+            HttpsMitm.Start();
+            return true;
+        }
 
         #endregion
 
@@ -637,6 +650,7 @@ namespace WinsockPacketEditor
 
         protected override void OnSessionClosed(CloseReason reason)
         {
+            if (HttpsMitm != null) { HttpsMitm.Complete(); HttpsMitm = null; }
             // HTTP 嗅探尚未组成完整消息的末段也要入列表；必须在目标套接字关闭前取句柄。
             Operate.FilterConfig.Filter.Flush_SOCKS_HTTP(this);
 

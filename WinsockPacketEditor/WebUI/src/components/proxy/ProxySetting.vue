@@ -43,9 +43,30 @@ interface Setting {
   running: boolean
 }
 
+interface HttpsCertificateStatus {
+  Exists: boolean
+  Trusted: boolean
+  Subject: string
+  Thumbprint: string
+  Error: string
+}
+
 const s = ref<Setting | null>(null)
+const httpsCert = ref<HttpsCertificateStatus | null>(null)
+const certificateNote = ref('')
+const certificateExportFormat = ref('cer')
+const certificateExportFormats = computed(() => [
+  { value: 'cer', label: t('cert.formatCer') }, { value: 'crt', label: t('cert.formatCrt') },
+  { value: 'der', label: t('cert.formatDer') }, { value: 'pem', label: t('cert.formatPem') },
+  { value: 'android', label: t('cert.formatAndroid') },
+])
 const busy = ref(false)
 const error = ref('')
+
+async function loadHttpsCertificate(): Promise<void> {
+  try { httpsCert.value = await call<HttpsCertificateStatus>('getHttpsMappingCertificate') }
+  catch (e) { console.error('[https-cert] 读取证书状态失败', e) }
+}
 
 /*
   最大连接数不是随手填的数字：服务启动时按「连接数 × 每连接缓冲」一次性预留内存。
@@ -68,6 +89,7 @@ watch(() => props.open, async (on) => {
   error.value = ''
   try {
     s.value = await call<Setting>('getProxySetting')
+    await loadHttpsCertificate()
   } catch (e) {
     console.error('[set] 读取代理设置失败', e)
   }
@@ -124,6 +146,23 @@ async function toggleSystemProxy(): Promise<void> {
     s.value.enableSystemProxy = !!r?.enabled
   } catch (e) {
     console.error('[set] 切换系统代理失败', e)
+  }
+}
+
+async function certificateAction(action: 'create' | 'trust' | 'untrust' | 'export' | 'delete'): Promise<void> {
+  const methods = {
+    create: 'createHttpsMappingCertificate', trust: 'trustHttpsMappingCertificate', untrust: 'untrustHttpsMappingCertificate',
+    export: 'exportHttpsMappingCertificate', delete: 'deleteHttpsMappingCertificate',
+  }
+  try {
+    certificateNote.value = ''
+    const r = await call<any>(methods[action], action === 'export' ? { format: certificateExportFormat.value } : {})
+    if (!r?.ok && !r?.cancelled) error.value = r?.error || t('cert.error')
+    else if (action === 'export' && r?.path) certificateNote.value = t('cert.exported').replace('{0}', r.path)
+    await loadHttpsCertificate()
+  } catch (e) {
+    console.error('[https-cert] 证书操作失败', e)
+    error.value = String(e)
   }
 }
 
@@ -232,6 +271,36 @@ async function toggleSystemProxy(): Promise<void> {
       </div>
 
       </section>
+
+      <!-- HTTPS 映射根证书。是否尝试 MITM 由已启用的 HTTPS 本地映射规则决定，不设独立开关。 -->
+      <section class="sec https-cert">
+      <div class="grp">{{ t('cert.title') }}</div>
+      <div class="row">
+        <div class="k">{{ t('cert.root') }}</div>
+        <div class="v cert-actions">
+          <template v-if="httpsCert?.Exists">
+            <span class="tip" :class="{ warn: !httpsCert.Trusted }">{{ httpsCert.Trusted ? t('cert.trusted') : t('cert.untrusted') }}</span>
+            <button v-if="!httpsCert.Trusted" class="sbtn primary" @click="certificateAction('trust')">{{ t('cert.trust') }}</button>
+            <button v-else class="sbtn" @click="certificateAction('untrust')">{{ t('cert.untrust') }}</button>
+            <button class="sbtn danger" @click="certificateAction('delete')">{{ t('cert.delete') }}</button>
+          </template>
+          <template v-else>
+            <span class="tip warn">{{ t('cert.createHint') }}</span>
+            <button class="sbtn primary" @click="certificateAction('create')">{{ t('cert.create') }}</button>
+          </template>
+        </div>
+      </div>
+      <div v-if="httpsCert?.Exists" class="row">
+        <div class="k">{{ t('cert.format') }}</div>
+        <div class="v cert-actions">
+          <CyberSelect v-model="certificateExportFormat" class="cert-format" :options="certificateExportFormats" />
+          <button class="sbtn" @click="certificateAction('export')">{{ t('cert.export') }}</button>
+        </div>
+      </div>
+      <div v-if="httpsCert?.Error" class="row"><div class="k">状态</div><div class="v"><span class="tip warn">{{ httpsCert.Error }}</span></div></div>
+      <div v-if="certificateNote" class="row"><div class="k">{{ t('cert.result') }}</div><div class="v"><span class="tip">{{ certificateNote }}</span></div></div>
+      <p class="hint">{{ t('cert.hint') }}</p>
+      </section>
     </template>
 
     <div v-else class="loading">{{ t('hex.loading') }}</div>
@@ -264,6 +333,9 @@ async function toggleSystemProxy(): Promise<void> {
   line-height: 1.5;
 }
 .tip.warn { color: var(--amber); }
+
+/* 与其它设置下拉共用 CyberSelect，仅限定证书格式这列的可读宽度。 */
+.cert-format { width: 150px; }
 
 /* 下拉是自绘的 CyberSelect，这里只给宽度 */
 .sel { min-width: 190px; }

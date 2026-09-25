@@ -2,12 +2,14 @@
 /*
   本地映射的一条 —— 对应 WinForms 的 Controls/MapLocalEdit。
   远端地址（协议 / 主机 / 端口 / 路径）→ 本地文件。本地文件走 C# 的原生文件框（浏览器拿不到完整路径），也能直接填。
-  协议只有 http（那边的下拉两项都落到 Http），这里就不画下拉了。
+  协议可选 HTTP / HTTPS。HTTPS 规则由代理模式的 MITM 会话使用；没有已启用的 HTTPS
+  本地映射时不会尝试解密 TLS。
 */
 import { computed, ref, watch } from 'vue'
 import { call } from '../../bridge'
 import type { MapLocalRow } from '../../bridge/types'
 import { t } from '../../i18n'
+import CyberSelect from '../CyberSelect.vue'
 import SettingsModal from './SettingsModal.vue'
 
 const props = defineProps<{ target: MapLocalRow | null | 'add' }>()
@@ -15,7 +17,8 @@ const emit = defineEmits<{ (e: 'close'): void }>()
 
 const busy = ref(false)
 const error = ref('')
-const f = ref({ host: '', port: 80, remotePath: '', localPath: '' })
+const PROTOCOLS = [{ value: 0, label: 'http://' }, { value: 1, label: 'https://' }]
+const f = ref({ protocol: 0, host: '', port: 80, remotePath: '', localPath: '' })
 
 const isAdd = computed(() => props.target === 'add')
 const title = computed(() => t('map.local') + ' · ' + t(isAdd.value ? 'fw.add' : 'fw.edit'))
@@ -23,9 +26,16 @@ const title = computed(() => t('map.local') + ' · ' + t(isAdd.value ? 'fw.add' 
 watch(() => props.target, (v) => {
   if (!v) return
   error.value = ''
-  if (v === 'add') { f.value = { host: '', port: 80, remotePath: '', localPath: '' }; return }
-  f.value = { host: v.Host, port: v.Port, remotePath: v.RemotePath, localPath: v.LocalPath }
+  if (v === 'add') { f.value = { protocol: 0, host: '', port: 80, remotePath: '', localPath: '' }; return }
+  f.value = { protocol: v.Protocol === 1 ? 1 : 0, host: v.Host, port: v.Port, remotePath: v.RemotePath, localPath: v.LocalPath }
 })
+
+function changeProtocol(protocol: number): void {
+  const old = f.value.protocol
+  const oldDefault = old === 1 ? 443 : 80
+  f.value.protocol = protocol === 1 ? 1 : 0
+  if (f.value.port === oldDefault) f.value.port = f.value.protocol === 1 ? 443 : 80
+}
 
 async function pick(): Promise<void> {
   try {
@@ -42,7 +52,7 @@ async function save(): Promise<void> {
   try {
     const r = await call<{ error: string }>('saveMapLocal', {
       id: isAdd.value ? '' : (props.target as MapLocalRow).Id,
-      protocol: 0,
+      protocol: f.value.protocol,
       host: f.value.host,
       port: Math.trunc(f.value.port || 0),
       remotePath: f.value.remotePath,
@@ -67,7 +77,7 @@ async function save(): Promise<void> {
       <div class="row">
         <div class="k">{{ t('map.host') }}</div>
         <div class="v">
-          <span class="proto">http://</span>
+          <CyberSelect class="proto" :model-value="f.protocol" :options="PROTOCOLS" @update:model-value="changeProtocol(Number($event))" />
           <input v-model="f.host" class="inp" spellcheck="false" placeholder="www.example.com">
           <span class="colon">:</span>
           <input v-model.number="f.port" class="inp num" type="number" min="1" max="65535">
@@ -91,5 +101,6 @@ async function save(): Promise<void> {
 </template>
 
 <style scoped>
-.proto, .colon { color: var(--dim); font-family: var(--mono); font-size: var(--fs-body); }
+.proto { width: 88px; }
+.colon { color: var(--dim); font-family: var(--mono); font-size: var(--fs-body); }
 </style>

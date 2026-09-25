@@ -1152,4 +1152,5 @@ export const tw: Record<Key, string> = {
   'mh.manual': "手動指定處理程序",
   'mh.manualPh': "多個處理程序名稱用 ; 分隔，例如：game.exe;launcher.exe",
   'mh.manualHint': "當處理程序清單列舉不出來時，可以在這裡直接填處理程序名稱。這些名稱會與勾選的清單合併，一起產生 mihomo 的 PROCESS-NAME 規則；清單隨設定儲存。",
+  'cert.title': 'HTTPS 映射憑證', 'cert.root': '根憑證', 'cert.trusted': '目前使用者已信任', 'cert.untrusted': '目前使用者尚未信任', 'cert.createHint': '尚未建立。新增並啟用 HTTPS 本機映射後，請建立並信任此根憑證。', 'cert.create': '建立根憑證', 'cert.trust': '信任', 'cert.untrust': '取消信任', 'cert.delete': '刪除材料', 'cert.format': '匯出格式', 'cert.export': '匯出憑證', 'cert.exported': '已匯出：{0}', 'cert.error': 'HTTPS 映射憑證操作失敗', 'cert.result': '匯出結果', 'cert.hint': '根憑證僅信任到「目前使用者」憑證庫；私鑰材料由伺服器層級 Windows DPAPI 保護，不會包含在備份或匯出中。除非手動刪除材料，否則此伺服器會持續使用同一根憑證。', 'cert.formatCer': '.cer（通用）', 'cert.formatCrt': '.crt', 'cert.formatDer': '.der', 'cert.formatPem': '.pem', 'cert.formatAndroid': 'Android .0',
 }

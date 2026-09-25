@@ -34,6 +34,17 @@ Add-Type -AssemblyName System.IO.Compression.FileSystem
 
 function Step([string]$text) { Write-Host ''; Write-Host "== $text" -ForegroundColor Cyan }
 
+# 不依赖 Get-FileHash：某些由 cmd 启动的旧 PowerShell 环境不能解析该 cmdlet。
+# 用 BCL 保持 Windows PowerShell 5.1 与 PowerShell 7 的一致性。
+function Get-Sha256([string]$path) {
+    $stream = [IO.File]::OpenRead($path)
+    try {
+        $sha = [Security.Cryptography.SHA256]::Create()
+        try { return ([BitConverter]::ToString($sha.ComputeHash($stream))).Replace('-', '').ToLowerInvariant() }
+        finally { $sha.Dispose() }
+    } finally { $stream.Dispose() }
+}
+
 function Find-MSBuild {
     $vswhere = Join-Path ([Environment]::GetFolderPath('ProgramFilesX86')) 'Microsoft Visual Studio\Installer\vswhere.exe'
     if (-not (Test-Path $vswhere)) { throw "找不到 vswhere：$vswhere" }
@@ -115,7 +126,7 @@ try {
     } finally { $zip.Dispose() }
 } finally { $fs.Dispose() }
 
-$Hash = (Get-FileHash -LiteralPath $ZipPath -Algorithm SHA256).Hash.ToLowerInvariant()
+$Hash = Get-Sha256 $ZipPath
 $zipLen = (Get-Item -LiteralPath $ZipPath).Length
 
 $info = @(
@@ -153,7 +164,7 @@ $OutExe = Join-Path $DistDir "$OutBaseName $VersionPrefix$short.exe"
 Copy-Item -LiteralPath $built -Destination $OutExe -Force
 
 $outLen = (Get-Item -LiteralPath $OutExe).Length
-$outHash = (Get-FileHash -LiteralPath $OutExe -Algorithm SHA256).Hash.ToLowerInvariant()
+$outHash = Get-Sha256 $OutExe
 [IO.File]::WriteAllText("$OutExe.sha256.txt", "$outHash  $OutBaseName $VersionPrefix$short.exe`r`n", (New-Object Text.UTF8Encoding($false)))
 
 Write-Host ("{0}  ({1:N2} MB)" -f $OutExe, ($outLen / 1MB)) -ForegroundColor Green

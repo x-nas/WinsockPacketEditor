@@ -38,9 +38,9 @@ watch(() => props.open, async (on) => {
 }, { immediate: true })
 
 
-// 协议一律是 http —— 运行期只有 DomainType.HTTP 那一支会查映射，见 MapRemoteEdit.vue 的文件头
-function urlOf(host: string, port: number, path: string): string {
-  return 'http://' + host + ':' + port + (path || '')
+function scheme(protocol: number): string { return protocol === 1 ? 'https' : 'http' }
+function urlOf(protocol: number, host: string, port: number, path: string): string {
+  return scheme(protocol) + '://' + host + ':' + port + (path || '')
 }
 
 /*
@@ -52,8 +52,8 @@ function urlOf(host: string, port: number, path: string): string {
   拆开之后主机不参与收缩、路径从<b>头</b>那边省略（见样式里的 direction: rtl），
   于是长地址显示成 `http://cdn.example.com:80` + `…/v1/config.json`，两头都在。
 */
-function hostOf(host: string, port: number): string {
-  return 'http://' + host + ':' + port
+function hostOf(protocol: number, host: string, port: number): string {
+  return scheme(protocol) + '://' + host + ':' + port
 }
 
 function pathOf(path: string): string {
@@ -130,7 +130,7 @@ async function save(): Promise<void> {
         ⚠️ 这句要放在最上面。它是「用这个面板之前就该知道」的前提，
         原先摆在底部，要滚过两张表才看得见 —— 而那两张表是会长的，行一多更看不到。
       -->
-      <p class="hint warn top">{{ t('map.httpOnly') }}</p>
+      <p class="hint warn top">HTTP 映射直接转发；HTTPS 本地映射需要已信任 WPE 证书，且仅支持本地响应。</p>
 
       <!-- 本地映射 -->
       <section class="sec">
@@ -162,7 +162,7 @@ async function save(): Promise<void> {
           <div v-for="r in locals" v-else :key="r.Id" class="tr hl" :class="{ off: !r.IsEnable }"
                @contextmenu.prevent="openMenu($event, false, r.Id)" @dblclick="!($event.target as HTMLElement).closest('button') && (localEdit = r)">
             <span class="ck"><button class="chk" :class="{ on: r.IsEnable }" @click.stop="toggle(false, r.Id, !r.IsEnable)"><i /></button></span>
-            <span class="url" :title="urlOf(r.Host, r.Port, r.RemotePath)"><bdi class="uh">{{ hostOf(r.Host, r.Port) }}</bdi><bdi class="up"><span dir="ltr">{{ pathOf(r.RemotePath) }}</span></bdi></span>
+            <span class="url" :title="urlOf(r.Protocol, r.Host, r.Port, r.RemotePath)"><bdi class="uh">{{ hostOf(r.Protocol, r.Host, r.Port) }}</bdi><bdi class="up"><span dir="ltr">{{ pathOf(r.RemotePath) }}</span></bdi></span>
             <span class="file" :title="r.LocalPath">{{ r.LocalPath }}</span>
             <span class="ops">
               <button class="op" :title="t('acct.op.edit')" @click.stop="localEdit = r"><svg class="ico" viewBox="0 0 24 24"><path d="M4 20h4L20 8l-4-4L4 16z" /></svg></button>
@@ -203,8 +203,8 @@ async function save(): Promise<void> {
           <div v-for="r in remotes" v-else :key="r.Id" class="tr hr" :class="{ off: !r.IsEnable }"
                @contextmenu.prevent="openMenu($event, true, r.Id)" @dblclick="!($event.target as HTMLElement).closest('button') && (remoteEdit = r)">
             <span class="ck"><button class="chk" :class="{ on: r.IsEnable }" @click.stop="toggle(true, r.Id, !r.IsEnable)"><i /></button></span>
-            <span class="url" :title="urlOf(r.HostFrom, r.PortFrom, r.PathFrom)"><bdi class="uh">{{ hostOf(r.HostFrom, r.PortFrom) }}</bdi><bdi class="up"><span dir="ltr">{{ pathOf(r.PathFrom) }}</span></bdi></span>
-            <span class="url to" :title="urlOf(r.HostTo, r.PortTo, r.PathTo)"><bdi class="uh">{{ hostOf(r.HostTo, r.PortTo) }}</bdi><bdi class="up"><span dir="ltr">{{ pathOf(r.PathTo) }}</span></bdi></span>
+            <span class="url" :title="urlOf(r.ProtocolFrom, r.HostFrom, r.PortFrom, r.PathFrom)"><bdi class="uh">{{ hostOf(r.ProtocolFrom, r.HostFrom, r.PortFrom) }}</bdi><bdi class="up"><span dir="ltr">{{ pathOf(r.PathFrom) }}</span></bdi></span>
+            <span class="url to" :title="urlOf(r.ProtocolTo, r.HostTo, r.PortTo, r.PathTo)"><bdi class="uh">{{ hostOf(r.ProtocolTo, r.HostTo, r.PortTo) }}</bdi><bdi class="up"><span dir="ltr">{{ pathOf(r.PathTo) }}</span></bdi></span>
             <span class="ops">
               <button class="op" :title="t('acct.op.edit')" @click.stop="remoteEdit = r"><svg class="ico" viewBox="0 0 24 24"><path d="M4 20h4L20 8l-4-4L4 16z" /></svg></button>
               <button class="op del" :title="t('acct.op.del')" @click.stop="action(true, r.Id, ListAction.Delete)"><svg class="ico" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg></button>

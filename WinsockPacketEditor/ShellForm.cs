@@ -2174,6 +2174,51 @@ namespace WPEHybrid
                 return new { ok = true };
             });
 
+            // HTTPS 本地映射的独立根证书：与旧 HTTP 代理导出的静态证书完全分开。
+            this.bridge.Register("getHttpsMappingCertificate", args => new HttpsMitmCertificateManager().GetStatus());
+
+            this.bridge.Register("createHttpsMappingCertificate", args =>
+            {
+                try { return new { ok = true, status = new HttpsMitmCertificateManager().Create() }; }
+                catch (Exception ex) { Operate.DoLog("createHttpsMappingCertificate", ex); return new { ok = false, error = ex.Message }; }
+            });
+
+            this.bridge.Register("trustHttpsMappingCertificate", async args =>
+            {
+                if (!await UI.Confirm("HTTPS 映射证书", "将 WPE x64 的 HTTPS 映射根证书安装到“当前用户”的受信任根证书库。只有安装后，客户端才会信任 HTTPS 本地映射。是否继续？")) { return new { ok = false, cancelled = true }; }
+                try { new HttpsMitmCertificateManager().Trust(); return new { ok = true }; }
+                catch (Exception ex) { Operate.DoLog("trustHttpsMappingCertificate", ex); return new { ok = false, error = ex.Message }; }
+            });
+
+            this.bridge.Register("untrustHttpsMappingCertificate", async args =>
+            {
+                if (!await UI.Confirm("HTTPS 映射证书", "将从“当前用户”的受信任根证书库取消信任 WPE x64 HTTPS 映射根证书。不会删除本地私钥材料。是否继续？")) { return new { ok = false, cancelled = true }; }
+                try { new HttpsMitmCertificateManager().Untrust(); return new { ok = true }; }
+                catch (Exception ex) { Operate.DoLog("untrustHttpsMappingCertificate", ex); return new { ok = false, error = ex.Message }; }
+            });
+
+            this.bridge.Register("exportHttpsMappingCertificate", async args =>
+            {
+                string format = args?["format"]?.ToString()?.ToLowerInvariant() ?? "cer";
+                var certificate = new HttpsMitmCertificateManager();
+                string path = await UI.PickSave(new FilePick
+                {
+                    Title = "导出 HTTPS 映射根证书（只含公钥）",
+                    Filter = "证书文件（*.*）|*.*",
+                    FileName = certificate.GetExportFileName(format)
+                });
+                if (string.IsNullOrEmpty(path)) { return new { ok = false, cancelled = true }; }
+                try { return new { ok = true, path = certificate.ExportCertificate(path, format) }; }
+                catch (Exception ex) { Operate.DoLog("exportHttpsMappingCertificate", ex); return new { ok = false, error = ex.Message }; }
+            });
+
+            this.bridge.Register("deleteHttpsMappingCertificate", async args =>
+            {
+                if (!await UI.Confirm("HTTPS 映射证书", "删除 HTTPS 映射根证书私钥材料。已建立的 HTTPS 映射在重启后将不能使用；请先取消信任。是否继续？")) { return new { ok = false, cancelled = true }; }
+                try { new HttpsMitmCertificateManager().DeleteMaterial(); return new { ok = true }; }
+                catch (Exception ex) { Operate.DoLog("deleteHttpsMappingCertificate", ex); return new { ok = false, error = ex.Message }; }
+            });
+
             #endregion
 
 
