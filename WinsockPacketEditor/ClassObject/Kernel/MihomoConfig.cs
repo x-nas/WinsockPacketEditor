@@ -90,7 +90,9 @@ namespace WinsockPacketEditor
                 {
                     if (string.IsNullOrWhiteSpace(raw)) { continue; }
                     string name = raw.Trim();
-                    if (name.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) == false) { name += ".exe"; }
+                    //可执行映像可以是 .dat 等非 .exe 扩展名；仅无扩展名的手动输入才补 .exe。
+                    //这里也做同一层规范化，避免调用方绕过 UI 时把 _Client_.dat 写成不存在的 _Client_.dat.exe。
+                    if (string.IsNullOrEmpty(Path.GetExtension(name))) { name += ".exe"; }
 
                     // mihomo 一条规则写错整份配置加载失败：名字里带逗号 / 空格的一律跳过
                     if (name.IndexOf(',') >= 0 || name.IndexOf(' ') >= 0 || name.IndexOf('\t') >= 0)

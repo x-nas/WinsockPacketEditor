@@ -2753,6 +2753,35 @@ namespace WinsockPacketEditor
                 return rows.ToArray();
             }
 
+            /// <summary>编码转换工具页的单项模式：只计算用户选中的一种编码，避免大输入时生成整组结果。</summary>
+            public static string TranscodeOne(string text, bool decode, string format)
+            {
+                try
+                {
+                    string s = text ?? string.Empty;
+                    string f = (format ?? "utf8").ToLowerInvariant();
+                    if (!decode) { s = s.Trim(); }
+                    if (f == "base64") { return decode ? Base64_Decoding(s) : Base64_Encoding(s); }
+
+                    PacketConfig.Packet.EncodingFormat ef;
+                    switch (f)
+                    {
+                        case "default": ef = PacketConfig.Packet.EncodingFormat.Default; break;
+                        case "gbk": ef = PacketConfig.Packet.EncodingFormat.GBK; break;
+                        case "utf7": ef = PacketConfig.Packet.EncodingFormat.UTF7; break;
+                        case "utf8": ef = PacketConfig.Packet.EncodingFormat.UTF8; break;
+                        case "utf16be": ef = PacketConfig.Packet.EncodingFormat.UTF16; break;
+                        case "utf32": ef = PacketConfig.Packet.EncodingFormat.UTF32; break;
+                        case "utf16le": ef = PacketConfig.Packet.EncodingFormat.Unicode; break;
+                        default: return string.Empty;
+                    }
+                    return decode
+                        ? BytesToString(ef, StringToBytes(PacketConfig.Packet.EncodingFormat.Hex, s))
+                        : BytesToString(PacketConfig.Packet.EncodingFormat.Hex, StringToBytes(ef, s));
+                }
+                catch (Exception ex) { Operate.DoLog(nameof(TranscodeOne), ex); return string.Empty; }
+            }
+
             /// <summary>数据提取的三种类型，序号与 WinForms 那个下拉一致。</summary>
             public const int ExtractCharles = 0;   //Charles XML 会话（.chlsx）→ 十六进制数据
             public const int ExtractFilt = 1;      //旧版 FILT 过滤器（.filt）→ WPE64 滤镜列表（.fp）
@@ -5455,11 +5484,14 @@ namespace WinsockPacketEditor
                         if (string.IsNullOrEmpty(processName)) { continue; }
 
                         /*
-                            主模块名先用「进程名 + .exe」兜底（那仍然是一条合法的 PROCESS-NAME 规则），
-                            取到映像路径后再由 FillProcessPaths 覆盖成真实文件名。进程名带空格的是
+                            主模块名先用「无扩展名才补 .exe」兜底（那仍然是一条合法的 PROCESS-NAME 规则），
+                            取到映像路径后再由 FillProcessPaths 覆盖成真实文件名。不能把 _Client_.dat
+                            这类合法的可执行映像误写成 _Client_.dat.exe。进程名带空格的是
                             Idle / Memory Compression 这类伪进程，保留空串让前端跳过。
                         */
-                        string ModuleName = processName.IndexOf(' ') < 0 ? processName + ".exe" : string.Empty;
+                        string ModuleName = processName.IndexOf(' ') < 0
+                            ? (string.IsNullOrEmpty(Path.GetExtension(processName)) ? processName + ".exe" : processName)
+                            : string.Empty;
 
                         piReturn.Add(new ProcessInfo(null, processName, processId, ModuleName, string.Empty));
                     }
@@ -5828,7 +5860,7 @@ namespace WinsockPacketEditor
                 private static readonly char[] ManualNameSeparators = { ';', '；', ',', '，', '\r', '\n', '\t' };
 
                 /// <summary>
-                /// 手动进程名 → 规范化列表：分隔符认 ; ； , ， 换行与制表符；补 .exe；不分大小写去重；
+                /// 手动进程名 → 规范化列表：分隔符认 ; ； , ， 换行与制表符；无扩展名才补 .exe；不分大小写去重；
                 /// 自身进程不收。名字里带空格的收进 Invalid（mihomo 那条规则写错会让整份配置加载失败）。
                 /// </summary>
                 public static List<string> ParseManualProcessNames(string Text, out List<string> Invalid)
@@ -5851,7 +5883,9 @@ namespace WinsockPacketEditor
                             continue;
                         }
 
-                        if (name.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) == false) { name += ".exe"; }
+                        //可执行映像不一定以 .exe 结尾（如 _Client_.dat）；已有扩展名必须原样保留，
+                        //否则 PROCESS-NAME 会生成不存在的 "_Client_.dat.exe"，永远匹配不到进程。
+                        if (string.IsNullOrEmpty(Path.GetExtension(name))) { name += ".exe"; }
                         if (IsSelfProcess(0, name)) { continue; }
 
                         if (seen.Add(name)) { list.Add(name); }
@@ -7619,12 +7653,24 @@ namespace WinsockPacketEditor
 
                                     if (Operate.ProxyConfig.Mapping.Enable_MapLocal || Operate.ProxyConfig.Mapping.Enable_MapRemote)
                                     {
-                                        string request = Encoding.ASCII.GetString(bData);
+                                        byte[] mappingData = Operate.ProxyConfig.Proxy.CombineData(psSession.HttpMappingBuffer, bData, 0, bData.Length);
+                                        int headerLength = FindHttpHeaderEnd(mappingData);
+                                        if (headerLength < 0 && mappingData.Length <= 64 * 1024 && IsPossiblyHttpRequest(mappingData))
+                                        {
+                                            // 映射必须在发往目标前决定；等待被 TCP 拆开的完整请求头。
+                                            psSession.HttpMappingBuffer = mappingData;
+                                            return;
+                                        }
+                                        psSession.HttpMappingBuffer = Array.Empty<byte>();
+                                        bData = mappingData;
+                                        string request = Encoding.ASCII.GetString(bData, 0, headerLength > 0 ? headerLength : bData.Length);
 
-                                        if (request.StartsWith("GET") || request.StartsWith("POST") || request.StartsWith("HEAD") || request.StartsWith("PUT"))
+                                        if (headerLength >= 0 && (request.StartsWith("GET") || request.StartsWith("POST") || request.StartsWith("HEAD") || request.StartsWith("PUT")
+                                            || request.StartsWith("DELETE") || request.StartsWith("OPTIONS") || request.StartsWith("PATCH") || request.StartsWith("TRACE")))
                                         {
                                             var headers = Operate.ProxyConfig.Proxy.ParseHttpHeaders(request);
-                                            if (headers.TryGetValue("Host", out string hostHeader))
+                                            if (headers.TryGetValue("Host", out string hostHeader)
+                                                && TryParseHttpHost(hostHeader, psSession.ServerPort, out string host, out int port))
                                             {
                                                 string requestPath = request.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1];
                                                 string cleanPath = requestPath.Split('?')[0];
@@ -7635,8 +7681,8 @@ namespace WinsockPacketEditor
                                                 {
                                                     var localRule = Operate.ProxyConfig.Mapping.GetMapLocal(
                                                         Operate.ProxyConfig.Proxy.MapProtocol.Http,
-                                                        hostHeader.Split(':')[0],
-                                                        80,
+                                                        host,
+                                                        port,
                                                         cleanPath);
 
                                                     if (localRule != null)
@@ -7681,8 +7727,8 @@ namespace WinsockPacketEditor
 
                                                 if (Operate.ProxyConfig.Mapping.Enable_MapRemote)
                                                 {
-                                                    string TargetIP = hostHeader.Split(':')[0];
-                                                    int TargetPort = 80;
+                                                    string TargetIP = host;
+                                                    int TargetPort = port;
 
                                                     var remoteRule = Operate.ProxyConfig.Mapping.GetMapRemote(
                                                         Operate.ProxyConfig.Proxy.MapProtocol.Http,
@@ -7704,6 +7750,8 @@ namespace WinsockPacketEditor
 
                                                         if (modifiedRequestBytes != null)
                                                         {
+                                                            // 只重写头部；请求体可能是二进制，不能经 ASCII 字符串往返。
+                                                            modifiedRequestBytes = Operate.ProxyConfig.Proxy.CombineData(modifiedRequestBytes, bData, headerLength, bData.Length - headerLength);
                                                             psSession.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(remoteRule.HostTo, remoteRule.PortTo);
                                                             psSession.TargetSocket.Send(modifiedRequestBytes);
                                                             Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Req, modifiedRequestBytes, true);
@@ -8462,6 +8510,69 @@ namespace WinsockPacketEditor
                     }
 
                     return headers;
+                }
+
+                private static int FindHttpHeaderEnd(byte[] data)
+                {
+                    if (data == null) { return -1; }
+                    for (int i = 0; i + 3 < data.Length; i++)
+                    {
+                        if (data[i] == 13 && data[i + 1] == 10 && data[i + 2] == 13 && data[i + 3] == 10) { return i + 4; }
+                    }
+                    return -1;
+                }
+
+                private static bool IsPossiblyHttpRequest(byte[] data)
+                {
+                    if (data == null || data.Length == 0) { return false; }
+                    string[] methods = { "GET ", "POST ", "HEAD ", "PUT ", "DELETE ", "OPTIONS ", "PATCH ", "TRACE ", "CONNECT " };
+                    foreach (string method in methods)
+                    {
+                        int count = Math.Min(data.Length, method.Length);
+                        bool matched = true;
+                        for (int i = 0; i < count; i++)
+                        {
+                            if (data[i] != (byte)method[i]) { matched = false; break; }
+                        }
+                        if (matched) { return true; }
+                    }
+                    return false;
+                }
+
+                /// <summary>解析 Host（含 IPv6 字面量）及其可选端口；缺省端口保留 SOCKS CONNECT 的目标端口。</summary>
+                private static bool TryParseHttpHost(string hostHeader, int defaultPort, out string host, out int port)
+                {
+                    host = string.Empty;
+                    port = defaultPort > 0 ? defaultPort : 80;
+                    if (string.IsNullOrWhiteSpace(hostHeader)) { return false; }
+                    string value = hostHeader.Trim();
+                    if (value.StartsWith("[", StringComparison.Ordinal))
+                    {
+                        int end = value.IndexOf(']');
+                        if (end <= 1) { return false; }
+                        host = value.Substring(1, end - 1);
+                        if (end + 1 < value.Length && value[end + 1] == ':')
+                        {
+                            int parsed;
+                            if (!int.TryParse(value.Substring(end + 2), out parsed) || parsed < 1 || parsed > 65535) { return false; }
+                            port = parsed;
+                        }
+                        return true;
+                    }
+
+                    int lastColon = value.LastIndexOf(':');
+                    if (lastColon > 0 && value.IndexOf(':') == lastColon)
+                    {
+                        int parsed;
+                        if (int.TryParse(value.Substring(lastColon + 1), out parsed) && parsed >= 1 && parsed <= 65535)
+                        {
+                            host = value.Substring(0, lastColon);
+                            port = parsed;
+                            return host.Length > 0;
+                        }
+                    }
+                    host = value;
+                    return host.Length > 0;
                 }
 
                 #endregion                
@@ -20141,43 +20252,13 @@ namespace WinsockPacketEditor
                             }
                         }
 
-                        /*
-                            HTTP 会话：把字节流拼成完整的请求 / 响应，按 HTTP_Req / HTTP_Resp 入列表，
-                            替代逐段 TCP 条目（只影响展示 —— 线上仍是上面逐段过滤后的字节）。
-                            非 HTTP 会话 Sniffer 返回 null，走原来的 TCP 条目。
-                        */
+                        // HTTP 嗅探只影响展示。确认协议前不入列表，避免同一批数据同时出现 TCP 与 HTTP 两条记录。
                         HttpSniffer sniffer = psSession.Sniffer(ptType == Operate.PacketConfig.Packet.PacketType.TCP_Req);
                         if (sniffer != null)
                         {
-                            List<byte[]> msgs = sniffer.Feed(bRawBuffer);
-
-                            if (sniffer.IsHttp)
-                            {
-                                Operate.PacketConfig.Packet.PacketType httpType =
-                                    ptType == Operate.PacketConfig.Packet.PacketType.TCP_Req
-                                        ? Operate.PacketConfig.Packet.PacketType.HTTP_Req
-                                        : Operate.PacketConfig.Packet.PacketType.HTTP_Resp;
-
-                                foreach (byte[] msg in msgs)
-                                {
-                                    _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
-                                        DateTime.Now,
-                                        Operate.FilterConfig.Filter.FilterAction.None,
-                                        msg.Length,
-                                        SocketID,
-                                        0,
-                                        httpType,
-                                        $"{psSession.ClientIP}:{psSession.ClientPort}",
-                                        $"{psSession.ServerIP}:{psSession.ServerPort}",
-                                        psSession.ServerAddress,
-                                        psSession.DomainType,
-                                        msg,
-                                        msg,
-                                        null);
-                                }
-
-                                return;
-                            }
+                            HttpSniffResult sniffed = sniffer.Feed(bRawBuffer, bEffective, FilterAction);
+                            QueueHttpSniffResult(psSession, SocketID, ptType, sniffed);
+                            return;
                         }
 
                         _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
@@ -20199,6 +20280,58 @@ namespace WinsockPacketEditor
                     {
                         Operate.DoLog(nameof(DoFilter_SOCKS_TCP), ex);
                     }
+                }
+
+                /// <summary>会话关闭时刷出 HTTP 嗅探的残片；未知协议按 TCP、已确认 HTTP 按 HTTP 入列表。</summary>
+                public static void Flush_SOCKS_HTTP(ProxySession psSession)
+                {
+                    if (psSession == null) { return; }
+                    try
+                    {
+                        FlushHttpSniffer(psSession, psSession.HttpReqSniffer, Operate.PacketConfig.Packet.PacketType.TCP_Req, psSession.TargetSocket);
+                        FlushHttpSniffer(psSession, psSession.HttpRespSniffer, Operate.PacketConfig.Packet.PacketType.TCP_Resp, psSession.SocketSession?.Client);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(Flush_SOCKS_HTTP), ex);
+                    }
+                }
+
+                private static void FlushHttpSniffer(ProxySession psSession, HttpSniffer sniffer, Operate.PacketConfig.Packet.PacketType tcpType, Socket socket)
+                {
+                    if (sniffer == null) { return; }
+                    int socketId = 0;
+                    try { if (socket != null) { socketId = socket.Handle.ToInt32(); } } catch { }
+                    QueueHttpSniffResult(psSession, socketId, tcpType, sniffer.Flush());
+                }
+
+                private static void QueueHttpSniffResult(ProxySession psSession, int socketId, Operate.PacketConfig.Packet.PacketType tcpType, HttpSniffResult result)
+                {
+                    if (result == null) { return; }
+                    Operate.PacketConfig.Packet.PacketType httpType = tcpType == Operate.PacketConfig.Packet.PacketType.TCP_Req
+                        ? Operate.PacketConfig.Packet.PacketType.HTTP_Req
+                        : Operate.PacketConfig.Packet.PacketType.HTTP_Resp;
+                    foreach (HttpSniffEntry entry in result.HttpEntries) { QueueHttpSniffEntry(psSession, socketId, httpType, entry); }
+                    foreach (HttpSniffEntry entry in result.TcpEntries) { QueueHttpSniffEntry(psSession, socketId, tcpType, entry); }
+                }
+
+                private static void QueueHttpSniffEntry(ProxySession psSession, int socketId, Operate.PacketConfig.Packet.PacketType type, HttpSniffEntry entry)
+                {
+                    if (entry == null || entry.Effective == null || entry.Effective.Length == 0) { return; }
+                    _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
+                        DateTime.Now,
+                        entry.Action,
+                        entry.Effective.Length,
+                        socketId,
+                        0,
+                        type,
+                        $"{psSession.ClientIP}:{psSession.ClientPort}",
+                        $"{psSession.ServerIP}:{psSession.ServerPort}",
+                        psSession.ServerAddress,
+                        psSession.DomainType,
+                        entry.Raw,
+                        entry.Effective,
+                        null);
                 }
 
                 public static void DoFilter_SOCKS_UDP(ProxySession psSession, ProxyUDP pu, IPEndPoint epRemote, Span<byte> bData, Operate.PacketConfig.Packet.PacketType ptType)

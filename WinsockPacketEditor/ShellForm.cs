@@ -1388,6 +1388,16 @@ namespace WPEHybrid
                 };
             });
 
+            //协议解码器只由工具页按需调用：不把解码结果推入高频 Feed，也不接触抓包/滤镜热路径。
+            this.bridge.Register("decodeBytes", args =>
+            {
+                string kind = args["kind"] == null ? string.Empty : (string)args["kind"];
+                string key = args["key"] == null ? string.Empty : (string)args["key"];
+                string iv = args["iv"] == null ? string.Empty : (string)args["iv"];
+                byte[] buffer = args["data"] == null ? null : Convert.FromBase64String((string)args["data"]);
+                return ProtocolDecoder.Decode(buffer, kind, key, iv);
+            });
+
             //界面偏好。颜色是用户可配的，UiPrefs 是唯一真源，前端不许写死。
             this.bridge.Register("getPrefs", args =>
             {
@@ -1506,6 +1516,10 @@ namespace WPEHybrid
                 total = Operate.PacketConfig.Packet.TotalPackets,
                 //启停逻辑已搬进 Operate，这里直接问它要状态（原先是反射读 SuperSocket 的 ServerState）
                 proxyRunning = Operate.ProxyConfig.Proxy.IsRunning,
+                //TUN 内核可在「进程设置」保存时单独重启，不能只在应用启动时取一次；
+                //这两个 volatile 状态随 getStats 的 500ms 轮询推给主页状态条。
+                tunReady = MihomoKernel.IsReady,
+                kernelRunning = MihomoKernel.IsRunning,
 
                 /*
                     统计条那 13 项，取值与 WinForms 的「计时器 - 更新代理统计信息」逐条对齐。
@@ -3841,6 +3855,14 @@ namespace WPEHybrid
                 rows = Operate.SystemConfig.Transcode(
                     args["text"] == null ? string.Empty : (string)args["text"],
                     args["decode"] != null && (bool)args["decode"]),
+            });
+
+            this.bridge.Register("transcodeOne", args => new
+            {
+                text = Operate.SystemConfig.TranscodeOne(
+                    args["text"] == null ? string.Empty : (string)args["text"],
+                    args["decode"] != null && (bool)args["decode"],
+                    args["format"] == null ? "utf8" : (string)args["format"]),
             });
 
             //点「选择文件」：C# 弹原生文件框（浏览器拿不到完整路径）

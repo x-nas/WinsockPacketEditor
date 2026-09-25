@@ -177,6 +177,9 @@ namespace WinsockPacketEditor
         /// <summary>转发阶段拆包用的残片（Enable_UnPack 时 ProcessForwardData 往里存半个包）。</summary>
         public byte[] ForwardBuffer = Array.Empty<byte>();
 
+        /// <summary>HTTP 映射等待完整请求头的短暂缓存；仅在启用 HTTP 映射时使用。</summary>
+        public byte[] HttpMappingBuffer = Array.Empty<byte>();
+
         internal void OnFrame(BinaryRequestInfo frame)
         {
             if (frame == null) { return; }
@@ -634,6 +637,9 @@ namespace WinsockPacketEditor
 
         protected override void OnSessionClosed(CloseReason reason)
         {
+            // HTTP 嗅探尚未组成完整消息的末段也要入列表；必须在目标套接字关闭前取句柄。
+            Operate.FilterConfig.Filter.Flush_SOCKS_HTTP(this);
+
             /*
                 释放设备槽：控制连接走注销（令牌作废 + 释放它占的那份），普通 / 令牌数据连接按 DeviceKey 减一份。
                 两条路互斥 —— 控制连接的 DeviceKey 是注册时占的那份，由 Unregister 释放，不能再减一次。
