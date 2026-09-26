@@ -3,7 +3,7 @@
   远程映射的一条 —— 对应 WinForms 的 Controls/MapRemoteEdit。请求地址 → 映射地址。
 
   HTTPS 源地址在 TLS 终止后按首个 HTTP/1.1 请求选路，可转发到 HTTPS 或 HTTP 目标。
-  HTTP 源地址目前仅可转发到 HTTP 目标。
+  HTTP 源地址目前仅可转发到 HTTP 目标；TCP 在 SOCKS CONNECT 时整条连接改道。
 */
 import { computed, ref, watch } from 'vue'
 import { call } from '../../bridge'
@@ -17,11 +17,13 @@ const emit = defineEmits<{ (e: 'close'): void }>()
 
 const busy = ref(false)
 const error = ref('')
-const PROTOCOLS = [{ value: 0, label: 'http://' }, { value: 1, label: 'https://' }]
+const PROTOCOLS = [{ value: 0, label: 'http://' }, { value: 1, label: 'https://' }, { value: 2, label: 'tcp://' }]
+const TCP_PROTOCOL = [{ value: 2, label: 'tcp://' }]
 const f = ref({ protocolFrom: 0, hostFrom: '', portFrom: 80, pathFrom: '', protocolTo: 0, hostTo: '', portTo: 80, pathTo: '' })
 
 const isAdd = computed(() => props.target === 'add')
 const title = computed(() => t('map.remote') + ' · ' + t(isAdd.value ? 'fw.add' : 'fw.edit'))
+const isTcp = computed(() => f.value.protocolFrom === 2)
 
 watch(() => props.target, (v) => {
   if (!v) return
@@ -31,6 +33,14 @@ watch(() => props.target, (v) => {
 })
 
 function changeProtocol(side: 'from' | 'to', protocol: number): void {
+  if (side === 'from' && protocol === 2) {
+    f.value.protocolFrom = 2
+    f.value.protocolTo = 2
+    f.value.pathFrom = ''
+    f.value.pathTo = ''
+    return
+  }
+  if (side === 'to' && isTcp.value) return
   const protocolKey = side === 'from' ? 'protocolFrom' : 'protocolTo'
   const portKey = side === 'from' ? 'portFrom' : 'portTo'
   const old = f.value[protocolKey]
@@ -49,6 +59,7 @@ async function save(): Promise<void> {
       error.value = 'HTTP 源地址暂不支持映射到 HTTPS 目标'
       return
     }
+    if (isTcp.value) { f.value.protocolTo = 2; f.value.pathFrom = ''; f.value.pathTo = '' }
     const r = await call<{ error: string }>('saveMapRemote', {
       id: isAdd.value ? '' : (props.target as MapRemoteRow).Id,
       protocolFrom: f.value.protocolFrom,
@@ -80,12 +91,12 @@ async function save(): Promise<void> {
         <div class="k">{{ t('map.host') }}</div>
         <div class="v">
           <CyberSelect class="proto" :model-value="f.protocolFrom" :options="PROTOCOLS" @update:model-value="changeProtocol('from', Number($event))" />
-          <input v-model="f.hostFrom" class="inp" spellcheck="false" placeholder="www.example.com">
+          <input v-model="f.hostFrom" class="inp" spellcheck="false" :placeholder="isTcp ? '*' : 'www.example.com'">
           <span class="colon">:</span>
           <input v-model.number="f.portFrom" class="inp num" type="number" min="1" max="65535">
         </div>
       </div>
-      <div class="row">
+      <div v-if="!isTcp" class="row">
         <div class="k">{{ t('map.path') }}</div>
         <div class="v"><input v-model="f.pathFrom" class="inp" spellcheck="false" placeholder="/api/"></div>
       </div>
@@ -94,17 +105,17 @@ async function save(): Promise<void> {
       <div class="row">
         <div class="k">{{ t('map.host') }}</div>
         <div class="v">
-          <CyberSelect class="proto" :model-value="f.protocolTo" :options="f.protocolFrom === 0 ? PROTOCOLS.slice(0, 1) : PROTOCOLS" @update:model-value="changeProtocol('to', Number($event))" />
+          <CyberSelect class="proto" :model-value="f.protocolTo" :options="isTcp ? TCP_PROTOCOL : (f.protocolFrom === 0 ? PROTOCOLS.slice(0, 1) : PROTOCOLS.slice(0, 2))" @update:model-value="changeProtocol('to', Number($event))" />
           <input v-model="f.hostTo" class="inp" spellcheck="false" placeholder="127.0.0.1">
           <span class="colon">:</span>
           <input v-model.number="f.portTo" class="inp num" type="number" min="1" max="65535">
         </div>
       </div>
-      <div class="row">
+      <div v-if="!isTcp" class="row">
         <div class="k">{{ t('map.path') }}</div>
         <div class="v"><input v-model="f.pathTo" class="inp" spellcheck="false" placeholder="/api/"></div>
       </div>
-      <p class="hint">{{ t('map.remoteEditHint') }}</p>
+      <p class="hint">{{ isTcp ? 'TCP 映射在建立 SOCKS CONNECT 时改道整条连接；支持 *、前缀* 和 *后缀主机匹配。' : t('map.remoteEditHint') }}</p>
     </div>
   </SettingsModal>
 </template>

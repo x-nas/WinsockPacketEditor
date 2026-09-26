@@ -2,20 +2,6 @@
 
 状态：HTTPS 本地映射与远程映射首期均已完成（2026-09-26）。HTTPS 源地址在 TLS 终止后按首个 HTTP/1.1 请求选路，可映射到 HTTPS 或 HTTP 目标；HTTP 源地址只允许映射到 HTTP 目标，界面与保存校验均禁止 HTTP → HTTPS。
 
-## POC 结论（2026-09-25）
-
-独立的 `tests/HttpsMitmPoc` 已在 Windows 上以 net48 Release 构建并运行通过：
-
-- BCL `CertificateRequest` 创建根 CA，并动态签发带 DNS SAN 的叶证书；
-- `SslStream` 成功承接客户端 TLS，按路径返回本地 HTTP/1.1 响应；
-- 未命中请求经另一个 `SslStream` 建立上游 TLS 后原样转发，测试上游收到原始请求；
-- 没有使用 Titanium.Web.Proxy、BouncyCastle 或 SunnyNet，也没有安装系统根证书。
-
-net48 的 Schannel 不能直接使用 `CertificateRequest` 产生的临时私钥句柄；POC 需把内存 PFX
-以 `UserKeySet` 重载为 Schannel 可用的证书。正式实现的 CA 私钥持久化在服务器级
-`%PROGRAMDATA%\WPE64\https-mitm\`，并由机器 DPAPI 保护。
-POC 只证明 BCL 路线可行，不是生产代理实现。
-
 ## 已完成的前置修复（2026-09-25）
 
 - HTTP 列表嗅探改为先判定、后入队：不再把同一段数据先记成 TCP 再重复记成 HTTP；会话关闭时会刷出未完成残片。
@@ -59,7 +45,7 @@ HTTPS MITM 不能作为独立的前置/后置代理插在 WPE 外面；那会令
 ## 实现边界与依赖
 
 - 不把 Titanium.Web.Proxy 作为完整监听代理接入主链路：它拥有自己的 socket/会话生命周期，独立串联会污染 WPE 的外网 `ClientIP` 语义。
-- 可在前期 POC 评估其兼容 `net48` 的 3.2.0 版本，用于证书/API 研究；不得让它成为主 SOCKS5 监听入口。
+- 不引入 Titanium.Web.Proxy、BouncyCastle 或 SunnyNet；证书与 TLS 仅使用 BCL API，不让第三方代理框架成为主 SOCKS5 监听入口。
 - 正式实现新增 WPE 自己管理的 `HttpsMitmSession`：`SslStream` 负责 TLS，证书组件负责 CA/站点证书，数据面只实现受限的 HTTP/1.1。
 - MITM 会话不进入既有普通 TCP 字节滤镜，避免把 TLS 或解密 HTTP 的语义混淆、重复入列或误改数据。
 
@@ -77,8 +63,7 @@ HTTPS 本地映射复用 `MapLocal`；HTTPS 远程映射复用现有 `MapRemote`
 
 ## 已完成项与验证
 
-1. 独立 net48 POC：动态 CA、TLS 服务端/客户端双握手、HTTP/1.1 透传与本地响应，已通过。
-2. `HttpsMitmCertificateManager`：机器 DPAPI 保护服务器级根 CA 私钥；首版 CurrentUser 材料自动原样迁移；显式创建、信任、取消信任、多格式导出（`.cer/.crt/.der/.pem`、Android `<hash>.0`）和删除材料（删除时同时取消信任）。根证书只显式信任到 CurrentUser 证书库。
-3. `ProxySession` CONNECT 后接入 `HttpsMitmSession`：认证、ClientIP、账号、设备和连接限制仍先由既有 SOCKS5 会话处理；未命中时建立上游 TLS 并双向转发，包括请求头后的正文。
-4. 证书管理位于代理设置，页面文案已经接入六语言 i18n；导出格式在程序内选择，系统对话框只选择保存位置并带入默认文件名。
-5. Vue Release 构建、.NET Release 全解决方案构建，以及 `CheckUiCoupling.ps1` 均已通过。NuGet 漏洞索引因网络不可用产生的 `NU1900` 不影响编译结果。
+1. `HttpsMitmCertificateManager`：机器 DPAPI 保护服务器级根 CA 私钥；首版 CurrentUser 材料自动原样迁移；显式创建、信任、取消信任、多格式导出（`.cer/.crt/.der/.pem`、Android `<hash>.0`）和删除材料（删除时同时取消信任）。根证书只显式信任到 CurrentUser 证书库。
+2. `ProxySession` CONNECT 后接入 `HttpsMitmSession`：认证、ClientIP、账号、设备和连接限制仍先由既有 SOCKS5 会话处理；未命中时建立上游 TLS 并双向转发，包括请求头后的正文。
+3. 证书管理位于代理设置，页面文案已经接入六语言 i18n；导出格式在程序内选择，系统对话框只选择保存位置并带入默认文件名。
+4. Vue Release 构建、.NET Release 全解决方案构建，以及 `CheckUiCoupling.ps1` 均已通过。NuGet 漏洞索引因网络不可用产生的 `NU1900` 不影响编译结果。

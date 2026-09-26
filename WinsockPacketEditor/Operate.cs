@@ -6367,6 +6367,9 @@ namespace WinsockPacketEditor
                 {
                     Http = 0,
                     Https = 1,
+                    // TCP 映射在 SOCKS CONNECT 时改目标，不解析或改写后续字节。
+                    // 独立枚举值避免旧库中的 Https 规则意外变成连接级规则。
+                    Tcp = 2,
                 }
 
                 public enum CommandType : byte
@@ -7406,19 +7409,35 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
+                        MapRemote tcpRule = null;
+                        if (Operate.ProxyConfig.Mapping.Enable_MapRemote)
+                        {
+                            tcpRule = Operate.ProxyConfig.Mapping.GetMapRemoteConnection(targetAddress, targetPort, targetIP);
+                        }
+
                         switch (psSession.DomainType)
                         {
                             case Operate.ProxyConfig.Proxy.DomainType.External:
                                 psSession.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(Operate.ProxyConfig.Proxy.ExternalProxy_IP, Operate.ProxyConfig.Proxy.ExternalProxy_Port);
-                                await psSession.ConnectToEXTProxyServer(bData);
+                                if (tcpRule != null) { Operate.ProxyConfig.Mapping.LogTcpMapRemoteMatch(psSession, tcpRule, targetAddress, targetPort); }
+                                await psSession.ConnectToEXTProxyServer(bData, tcpRule);
                                 break;
 
                             case Operate.ProxyConfig.Proxy.DomainType.HTTP:
+                                // HTTP 的请求级映射需要等待完整首个请求头；先保存 TCP 规则，只有
+                                // 没有命中 HTTP 规则时才作为回退使用，保持现有路径优先级。
+                                psSession.TcpMapRule = tcpRule;
                                 await Operate.ProxyConfig.Proxy.HandleHttpConnect(psSession, targetIP, targetPort, targetAddress);
                                 break;
 
                             case Operate.ProxyConfig.Proxy.DomainType.HTTPS:
                                 psSession.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(targetAddress, targetPort);
+                                if (tcpRule != null)
+                                {
+                                    Operate.ProxyConfig.Mapping.LogTcpMapRemoteMatch(psSession, tcpRule, targetAddress, targetPort);
+                                    await psSession.ConnectToTarget(tcpRule.HostTo, tcpRule.PortTo);
+                                    break;
+                                }
                                 if (Operate.ProxyConfig.Mapping.HasEnabledHttpsMappingHost(targetAddress, targetPort)
                                     && psSession.StartHttpsMitm(targetAddress, targetIP, targetPort)) { break; }
                                 await psSession.ConnectToTarget(targetIP, targetPort);
@@ -7426,7 +7445,12 @@ namespace WinsockPacketEditor
 
                             case Operate.ProxyConfig.Proxy.DomainType.Socket:
                                 psSession.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(targetAddress, targetPort);
-                                await psSession.ConnectToTarget(targetIP, targetPort);
+                                if (tcpRule != null)
+                                {
+                                    Operate.ProxyConfig.Mapping.LogTcpMapRemoteMatch(psSession, tcpRule, targetAddress, targetPort);
+                                    await psSession.ConnectToTarget(tcpRule.HostTo, tcpRule.PortTo);
+                                }
+                                else { await psSession.ConnectToTarget(targetIP, targetPort); }
                                 break;
                         }
 
@@ -7759,7 +7783,13 @@ namespace WinsockPacketEditor
                                     break;
                             }
 
-                            if (!ConnectHttpMappingTarget(psSession, psSession.ServerIP, psSession.ServerPort)) { return; }
+                            MapRemote tcpRule = psSession.TcpMapRule;
+                            if (tcpRule != null)
+                            {
+                                Operate.ProxyConfig.Mapping.LogTcpMapRemoteMatch(psSession, tcpRule, psSession.ServerIP, psSession.ServerPort);
+                                if (!ConnectHttpMappingTarget(psSession, tcpRule.HostTo, tcpRule.PortTo)) { return; }
+                            }
+                            else if (!ConnectHttpMappingTarget(psSession, psSession.ServerIP, psSession.ServerPort)) { return; }
 
                             if (Operate.ProxyConfig.Proxy.HookTCP_Req)
                             {
@@ -8754,6 +8784,45 @@ namespace WinsockPacketEditor
                 }
 
                 #endregion
+
+                /// <summary>为外部 SOCKS5 代理重新组装 CONNECT，域名交给上游解析。</summary>
+                public static byte[] BuildSocks5ConnectRequest(string host, int port)
+                {
+                    try
+                    {
+                        host = (host ?? string.Empty).Trim();
+                        if (host.Length == 0 || port < 1 || port > 65535) { return null; }
+
+                        using (MemoryStream stream = new MemoryStream())
+                        {
+                            stream.WriteByte(0x05);
+                            stream.WriteByte(0x01);
+                            stream.WriteByte(0x00);
+                            if (IPAddress.TryParse(host, out IPAddress address))
+                            {
+                                byte[] bytes = address.GetAddressBytes();
+                                stream.WriteByte((byte)(address.AddressFamily == AddressFamily.InterNetwork ? 0x01 : 0x04));
+                                stream.Write(bytes, 0, bytes.Length);
+                            }
+                            else
+                            {
+                                byte[] bytes = Encoding.UTF8.GetBytes(host);
+                                if (bytes.Length > 255) { return null; }
+                                stream.WriteByte(0x03);
+                                stream.WriteByte((byte)bytes.Length);
+                                stream.Write(bytes, 0, bytes.Length);
+                            }
+                            stream.WriteByte((byte)(port >> 8));
+                            stream.WriteByte((byte)port);
+                            return stream.ToArray();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(BuildSocks5ConnectRequest), ex);
+                        return null;
+                    }
+                }
 
                 #region//解析代理服务器的响应
 
@@ -14975,6 +15044,57 @@ namespace WinsockPacketEditor
 
                 #endregion
 
+                #region//查找 TCP 连接级远程映射
+
+                /// <summary>
+                /// TCP 映射只在 SOCKS CONNECT 建连时按主机/IP 和端口匹配；不进入 HTTP 的路径映射。
+                /// 规则主机支持精确值、*、前缀* 和 *后缀；域名和已解析 IP 都会尝试匹配。
+                /// </summary>
+                public static MapRemote GetMapRemoteConnection(string host, int port, string ip)
+                {
+                    try
+                    {
+                        if (port < 1 || port > 65535) { return null; }
+                        return lstMapRemote.FirstOrDefault(rule => rule.IsEnable
+                            && rule.ProtocolTypeFrom == ProxyConfig.Proxy.MapProtocol.Tcp
+                            && rule.PortFrom == port
+                            && (MapHostPatternMatch(rule.HostFrom, host) || MapHostPatternMatch(rule.HostFrom, ip)));
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetMapRemoteConnection), ex);
+                        return null;
+                    }
+                }
+
+                private static bool MapHostPatternMatch(string pattern, string host)
+                {
+                    pattern = (pattern ?? string.Empty).Trim();
+                    host = (host ?? string.Empty).Trim();
+                    if (pattern.Length == 0 || pattern == "*") { return true; }
+                    if (host.Length == 0) { return false; }
+                    if (pattern.StartsWith("*", StringComparison.Ordinal))
+                    {
+                        return host.EndsWith(pattern.Substring(1), StringComparison.OrdinalIgnoreCase);
+                    }
+                    if (pattern.EndsWith("*", StringComparison.Ordinal))
+                    {
+                        return host.StartsWith(pattern.Substring(0, pattern.Length - 1), StringComparison.OrdinalIgnoreCase);
+                    }
+                    return string.Equals(pattern, host, StringComparison.OrdinalIgnoreCase);
+                }
+
+                /// <summary>只记录端点，不记录业务数据，且按现有系统日志节流策略输出。</summary>
+                public static void LogTcpMapRemoteMatch(ProxySession session, MapRemote rule, string host, int port)
+                {
+                    if (session == null || rule == null) { return; }
+                    Operate.SystemConfig.LogThrottled("Map.Tcp", string.Format(
+                        "TCP 连接级映射：{0}:{1} → {2}:{3}（规则 {4}:{5}）",
+                        host, port, rule.HostTo, rule.PortTo, rule.HostFrom, rule.PortFrom));
+                }
+
+                #endregion
+
                 #region//本地映射的列表操作
 
                 public static async Task UpdateMapLocal_ByListAction(SystemConfig.ListAction listAction, MapLocal pml)
@@ -15195,10 +15315,26 @@ namespace WinsockPacketEditor
                         PathTo = (PathTo ?? string.Empty).Trim();
 
                         if (string.IsNullOrEmpty(HostFrom) || string.IsNullOrEmpty(HostTo)) { return UI.T("MapRemoteForm.Empty", "映射数据为空"); }
+                        if (PortFrom < 1 || PortFrom > 65535 || PortTo < 1 || PortTo > 65535) { return "端口必须在 1 到 65535 之间"; }
 
                         if (ProtocolOf(ProtocolFrom) == ProxyConfig.Proxy.MapProtocol.Http && ProtocolOf(ProtocolTo) == ProxyConfig.Proxy.MapProtocol.Https)
                         {
                             return UI.T("MapRemoteForm.HttpToHttpsUnsupported", "HTTP 源地址暂不支持映射到 HTTPS 目标");
+                        }
+
+                        if (ProtocolOf(ProtocolFrom) != ProxyConfig.Proxy.MapProtocol.Tcp && ProtocolOf(ProtocolTo) == ProxyConfig.Proxy.MapProtocol.Tcp)
+                        {
+                            return "HTTP/HTTPS 源地址暂不支持映射到 TCP 目标";
+                        }
+
+                        if (ProtocolOf(ProtocolFrom) == ProxyConfig.Proxy.MapProtocol.Tcp)
+                        {
+                            if (ProtocolOf(ProtocolTo) != ProxyConfig.Proxy.MapProtocol.Tcp)
+                            {
+                                return "TCP 源地址只能映射到 TCP 目标";
+                            }
+                            PathFrom = string.Empty;
+                            PathTo = string.Empty;
                         }
 
                         if (string.IsNullOrEmpty(Id))

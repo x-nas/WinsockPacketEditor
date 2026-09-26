@@ -43,6 +43,10 @@ namespace WinsockPacketEditor
         public Operate.ProxyConfig.Proxy.AddressType AddressType;
         public Operate.ProxyConfig.Proxy.DomainType DomainType;
 
+        // HTTP 端口需等首个完整请求头才能决定请求级映射；此处暂存 TCP 规则，
+        // 仅在没有命中 HTTP 规则时将整条连接改道。
+        internal MapRemote TcpMapRule;
+
         /*
             HTTP 结构化嗅探（2026-09-23）：只在 DomainType == HTTP（端口 80/8080）的会话上启用，按方向各一个。
             拼出来的完整请求/响应按 HTTP_Req / HTTP_Resp 入列表，替代逐段 TCP 条目（只影响展示，不改线上字节）。
@@ -349,7 +353,7 @@ namespace WinsockPacketEditor
 
         #region//连接外部代理服务器（异步）
 
-        public async Task ConnectToEXTProxyServer(byte[] bData)
+        public async Task ConnectToEXTProxyServer(byte[] bData, MapRemote tcpMapRule = null)
         {
             try
             {
@@ -364,6 +368,13 @@ namespace WinsockPacketEditor
                 }
                 this.EnsureTargetSocket(family);
 
+                byte[] command = bData;
+                if (tcpMapRule != null)
+                {
+                    byte[] mappedCommand = Operate.ProxyConfig.Proxy.BuildSocks5ConnectRequest(tcpMapRule.HostTo, tcpMapRule.PortTo);
+                    if (mappedCommand != null) { command = mappedCommand; }
+                }
+
                 var Establish = await Operate.ProxyConfig.Proxy.EstablishSocksProxyServer(
                     this.TargetSocket,
                     Operate.ProxyConfig.Proxy.Enable_ExternalProxy_Auth,
@@ -371,7 +382,7 @@ namespace WinsockPacketEditor
                     Operate.ProxyConfig.Proxy.ExternalProxy_Port,
                     Operate.ProxyConfig.Proxy.ExternalProxy_UserName,
                     Operate.ProxyConfig.Proxy.ExternalProxy_PassWord,
-                    bData);
+                    command);
 
                 if (!Establish.Success || Establish.Response[1] != 0x00)
                 {
