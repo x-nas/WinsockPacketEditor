@@ -1,6 +1,6 @@
 # HTTPS 映射改造方案与当前实现
 
-状态：首期实现已完成（2026-09-25）。HTTPS 本地映射复用既有规则与编辑器：本地映射可选 HTTP / HTTPS；远程映射保留协议下拉框，但当前只提供 HTTP。
+状态：HTTPS 本地映射与远程映射首期均已完成（2026-09-26）。HTTPS 源地址在 TLS 终止后按首个 HTTP/1.1 请求选路，可映射到 HTTPS 或 HTTP 目标；HTTP 源地址只允许映射到 HTTP 目标，界面与保存校验均禁止 HTTP → HTTPS。
 
 ## POC 结论（2026-09-25）
 
@@ -21,7 +21,8 @@ POC 只证明 BCL 路线可行，不是生产代理实现。
 - HTTP 列表嗅探改为先判定、后入队：不再把同一段数据先记成 TCP 再重复记成 HTTP；会话关闭时会刷出未完成残片。
 - 嗅探缓存对所有路径（包括 `Content-Length`）执行 4 MB 上限，超限退回 TCP 展示，不影响转发。
 - HTTP 条目现在保留过滤前与实际过滤后的字节及动作，展示不再假定它永远是未修改数据。
-- HTTP 映射会等待完整请求头，支持 PATCH / DELETE / OPTIONS / TRACE，并正确解析 `Host` 的 IPv6 字面量和端口；映射改写只重写头部，二进制正文原样保留。
+- HTTP 映射会等待完整请求头，支持 PATCH / DELETE / OPTIONS / TRACE，并正确解析 `Host` 的 IPv6 字面量和端口；映射改写只重写头部，二进制正文原样保留。HTTP 映射启用时 SOCKS CONNECT 先回应成功、等首个请求按真实路径选定本地/远程规则后才连接最终目标，避免同一来源主机下不同路径规则预连到第一条目标。
+- HTTP 本地文件响应按 64 KB 分块发送，带正确 MIME、`Content-Length` 和 `Connection: close`，随后关闭会话；目标 Socket 发送均循环至完整写入，不能忽略 `Socket.Send` 的部分完成。
 
 这些修复是 TLS 解密接入的基础。
 
@@ -64,7 +65,7 @@ HTTPS MITM 不能作为独立的前置/后置代理插在 WPE 外面；那会令
 
 ## 配置、证书与规则
 
-HTTPS 直接复用 `MapLocal` 的持久化模型、数据库、备份 XML、导入/导出和编辑器；不增加独立总开关。只要存在启用的 HTTPS 主机/端口规则，就在该 CONNECT 会话上启用 MITM；没有规则即不启用。远程映射明确保持 HTTP-only。
+HTTPS 本地映射复用 `MapLocal`；HTTPS 远程映射复用现有 `MapRemote` 的持久化模型、数据库、备份 XML、导入/导出和编辑器，不增加独立总开关。只要存在启用的 HTTPS 源主机/端口规则，就在该 CONNECT 会话上启用 MITM；解密首个 HTTP/1.1 请求后先匹配本地规则，再匹配远程规则。远程 HTTPS 目标以 `HostTo` 作 SNI 和证书验证名，远程 HTTP 目标使用明文 TCP。受限会话每次只完成一组请求/响应并在两端声明 `Connection: close`；响应可由 `Content-Length` 或上游关闭连接定界。HTTP 来源暂不建立 TLS 上游，因而保存时禁止选择 HTTPS 目标。
 
 根证书为每台服务器首次生成后持续复用，仅在用户明确确认后安装到“当前用户”受信任根证书库。私钥以机器 DPAPI 放 `%PROGRAMDATA%\WPE64\https-mitm\`，不随安装包、备份或日志分发；提供导出公钥、取消信任和删除本地材料的独立操作。导出支持 `.cer` / `.crt` / `.der`、PEM（`.pem`），以及 Android 系统 CA 目录所需的 PEM `<subject_hash_old>.0`；后者自动按 Android 规则命名。绝不静默写入“本地计算机”根证书库。删除材料等同于主动轮换根证书，之后客户端必须重新安装新根证书。
 

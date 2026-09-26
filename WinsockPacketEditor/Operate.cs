@@ -7419,7 +7419,7 @@ namespace WinsockPacketEditor
 
                             case Operate.ProxyConfig.Proxy.DomainType.HTTPS:
                                 psSession.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(targetAddress, targetPort);
-                                if (Operate.ProxyConfig.Mapping.HasEnabledHttpsLocalHost(targetAddress, targetPort)
+                                if (Operate.ProxyConfig.Mapping.HasEnabledHttpsMappingHost(targetAddress, targetPort)
                                     && psSession.StartHttpsMitm(targetAddress, targetIP, targetPort)) { break; }
                                 await psSession.ConnectToTarget(targetIP, targetPort);
                                 break;
@@ -7454,50 +7454,13 @@ namespace WinsockPacketEditor
 
                         if (Operate.ProxyConfig.Mapping.Enable_MapLocal || Operate.ProxyConfig.Mapping.Enable_MapRemote)
                         {
-                            // 本地代理映射
-                            if (Operate.ProxyConfig.Mapping.Enable_MapLocal)
-                            {
-                                var localRule = Operate.ProxyConfig.Mapping.GetMapLocal(
-                                    Operate.ProxyConfig.Proxy.MapProtocol.Http,
-                                    targetAddress,
-                                    targetPort,
-                                    string.Empty);
-
-                                if (localRule != null)
-                                {
-                                    psSession.ServerIP = targetAddress;
-                                    psSession.ServerPort = targetPort;
-
-                                    bool fileExists = await Task.Run(() => File.Exists(localRule.LocalPath));
-                                    if (fileExists)
-                                    {
-                                        Operate.ProxyConfig.Proxy.SendCommandResponse(psSession, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Success);
-                                        psSession.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.ForwardData;
-                                        return;
-                                    }
-                                    else
-                                    {
-                                        Operate.ProxyConfig.Proxy.SendCommandResponse(psSession, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
-                                        return;
-                                    }
-                                }
-                            }
-
-                            // 远程代理映射
-                            if (Operate.ProxyConfig.Mapping.Enable_MapRemote)
-                            {
-                                var remoteRule = Operate.ProxyConfig.Mapping.GetMapRemote(
-                                    Operate.ProxyConfig.Proxy.MapProtocol.Http,
-                                    targetAddress,
-                                    targetPort,
-                                    string.Empty);
-
-                                if (remoteRule != null)
-                                {
-                                    await psSession.ConnectToTarget(remoteRule.HostTo, remoteRule.PortTo);
-                                    return;
-                                }
-                            }
+                            // 路径要等首个 HTTP 请求头到达才能确定。此前在这里以空路径取第一条远程规则，
+                            // 同一主机不同路径的规则会先连错目标，之后即使选中了正确规则也无法换连接。
+                            psSession.ServerIP = targetIP;
+                            psSession.ServerPort = targetPort;
+                            Operate.ProxyConfig.Proxy.SendCommandResponse(psSession, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Success);
+                            psSession.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.ForwardData;
+                            return;
                         }
 
                         await psSession.ConnectToTarget(targetIP, targetPort);
@@ -7506,6 +7469,45 @@ namespace WinsockPacketEditor
                     {
                         Operate.DoLog(nameof(HandleHttpConnect), ex);
                     }                    
+                }
+
+                /// <summary>HTTP 映射已在 SOCKS CONNECT 阶段回应成功；首个请求判定目标后再连，不能再发送一次 SOCKS 应答。</summary>
+                private static bool ConnectHttpMappingTarget(ProxySession psSession, string targetIP, int targetPort)
+                {
+                    if (psSession.TargetSocket != null && psSession.TargetSocket.Connected) { return true; }
+                    psSession.ConnectToTarget(targetIP, targetPort, false).GetAwaiter().GetResult();
+                    return psSession.TargetSocket != null && psSession.TargetSocket.Connected;
+                }
+
+                private static void SendHttpMapLocalFile(ProxySession psSession, string localPath)
+                {
+                    if (!File.Exists(localPath))
+                    {
+                        byte[] notFound = Operate.ProxyConfig.Proxy.Get404Response();
+                        psSession.SendToClient(notFound, 0, notFound.Length);
+                        Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Resp, notFound, false);
+                        psSession.Close(SuperSocket.SocketBase.CloseReason.ServerClosing);
+                        return;
+                    }
+
+                    var file = new FileInfo(localPath);
+                    string contentType = Operate.ProxyConfig.Proxy.GetContentType(Path.GetExtension(localPath));
+                    byte[] header = Encoding.UTF8.GetBytes("HTTP/1.1 200 OK\r\nContent-Type: " + contentType + "\r\nContent-Length: " + file.Length + "\r\nConnection: close\r\n\r\n");
+                    psSession.SendToClient(header, 0, header.Length);
+                    Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Resp, header, false);
+
+                    byte[] buffer = new byte[64 * 1024];
+                    using (var input = new FileStream(localPath, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    {
+                        int read;
+                        while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                        {
+                            byte[] chunk = read == buffer.Length ? (byte[])buffer.Clone() : buffer.Take(read).ToArray();
+                            psSession.SendToClient(chunk, 0, chunk.Length);
+                            Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Resp, chunk, false);
+                        }
+                    }
+                    psSession.Close(SuperSocket.SocketBase.CloseReason.ServerClosing);
                 }
 
                 public static void HandleUnsupportedCommand(ProxySession psSession)
@@ -7693,37 +7695,11 @@ namespace WinsockPacketEditor
 
                                                     if (localRule != null)
                                                     {
+                                                        Operate.ProxyConfig.Mapping.LogMapLocalMatch(psSession, localRule, host, port, cleanPath);
                                                         Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Req, bData, false);
 
-                                                        if (File.Exists(localRule.LocalPath))
-                                                        {
-                                                            byte[] fileBytes = File.ReadAllBytes(localRule.LocalPath);
-                                                            string contentType = Operate.ProxyConfig.Proxy.GetContentType(Path.GetExtension(localRule.LocalPath));
-
-                                                            string response =
-                                                                $"HTTP/1.1 200 OK\r\n" +
-                                                                $"Content-Type: {contentType}\r\n" +
-                                                                $"Content-Length: {fileBytes.Length}\r\n" +
-                                                                "Connection: close\r\n\r\n";
-
-                                                            byte[] headerBytes = Encoding.UTF8.GetBytes(response);
-
-                                                            psSession.SendToClient(headerBytes, 0, headerBytes.Length);
-                                                            Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Resp, headerBytes, false);
-
-                                                            psSession.SendToClient(fileBytes, 0, fileBytes.Length);
-                                                            Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Resp, fileBytes, false);
-
-                                                            return;
-                                                        }
-                                                        else
-                                                        {
-                                                            byte[] b404 = Operate.ProxyConfig.Proxy.Get404Response();
-                                                            psSession.SendToClient(b404, 0, b404.Length);
-                                                            Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Resp, b404, false);
-
-                                                            return;
-                                                        }
+                                                        SendHttpMapLocalFile(psSession, localRule.LocalPath);
+                                                        return;
                                                     }
                                                 }
 
@@ -7744,6 +7720,7 @@ namespace WinsockPacketEditor
 
                                                     if (remoteRule != null)
                                                     {
+                                                        Operate.ProxyConfig.Mapping.LogMapRemoteMatch(psSession, remoteRule, TargetIP, TargetPort, cleanPath);
                                                         psSession.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(TargetIP, TargetPort);
                                                         Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Req, bData, true);
 
@@ -7759,7 +7736,8 @@ namespace WinsockPacketEditor
                                                             // 只重写头部；请求体可能是二进制，不能经 ASCII 字符串往返。
                                                             modifiedRequestBytes = Operate.ProxyConfig.Proxy.CombineData(modifiedRequestBytes, bData, headerLength, bData.Length - headerLength);
                                                             psSession.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(remoteRule.HostTo, remoteRule.PortTo);
-                                                            psSession.TargetSocket.Send(modifiedRequestBytes);
+                                                            if (!ConnectHttpMappingTarget(psSession, remoteRule.HostTo, remoteRule.PortTo)) { return; }
+                                                            psSession.SendToTarget(modifiedRequestBytes);
                                                             Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Req, modifiedRequestBytes, true);
                                                         }
 
@@ -7781,6 +7759,8 @@ namespace WinsockPacketEditor
                                     break;
                             }
 
+                            if (!ConnectHttpMappingTarget(psSession, psSession.ServerIP, psSession.ServerPort)) { return; }
+
                             if (Operate.ProxyConfig.Proxy.HookTCP_Req)
                             {
                                 Operate.FilterConfig.Filter.DoFilter_SOCKS_TCP(psSession, bData, Operate.PacketConfig.Packet.PacketType.TCP_Req);
@@ -7788,7 +7768,7 @@ namespace WinsockPacketEditor
                             }
                             else
                             {
-                                psSession.TargetSocket.Send(bData);
+                                psSession.SendToTarget(bData);
                             }                            
                         }
                     }
@@ -14553,7 +14533,8 @@ namespace WinsockPacketEditor
                     Dictionary<string, string> headers,
                     string newHost, 
                     int newPort, 
-                    string newPath)
+                    string newPath,
+                    ProxyConfig.Proxy.MapProtocol targetProtocol = ProxyConfig.Proxy.MapProtocol.Http)
                 {
                     try
                     {
@@ -14611,8 +14592,9 @@ namespace WinsockPacketEditor
                             }
                             else if (line.StartsWith("Host:", StringComparison.OrdinalIgnoreCase))
                             {
-                                string portPart = newPort == 80 ? "" : $":{newPort}";
-                                sb.AppendLine($"Host: {newHost}{portPart}");
+                                string portPart = newPort == (targetProtocol == ProxyConfig.Proxy.MapProtocol.Https ? 443 : 80) ? "" : $":{newPort}";
+                                string hostForHeader = newHost.IndexOf(':') >= 0 && !newHost.StartsWith("[") ? "[" + newHost + "]" : newHost;
+                                sb.AppendLine($"Host: {hostForHeader}{portPart}");
                                 hostHeaderFound = true;
                             }
                             else
@@ -14623,8 +14605,9 @@ namespace WinsockPacketEditor
 
                         if (!hostHeaderFound)
                         {
-                            string portPart = newPort == 80 ? "" : $":{newPort}";
-                            string hostLine = $"Host: {newHost}{portPart}";
+                            string portPart = newPort == (targetProtocol == ProxyConfig.Proxy.MapProtocol.Https ? 443 : 80) ? "" : $":{newPort}";
+                            string hostForHeader = newHost.IndexOf(':') >= 0 && !newHost.StartsWith("[") ? "[" + newHost + "]" : newHost;
+                            string hostLine = $"Host: {hostForHeader}{portPart}";
 
                             string requestStr = sb.ToString();
                             int insertIndex = requestStr.IndexOf("\r\n", StringComparison.Ordinal);
@@ -14651,6 +14634,20 @@ namespace WinsockPacketEditor
                 #endregion
 
                 #region//缓存映射数据
+
+                /// <summary>仅记规则和端点，不记录 URL、请求头或正文，避免系统日志泄露业务数据。</summary>
+                public static void LogMapLocalMatch(ProxySession session, MapLocal rule, string host, int port, string path)
+                {
+                    if (session == null || rule == null) { return; }
+                    Operate.DoLog(nameof(LogMapLocalMatch), "已匹配本地映射规则：" + session.ClientIP + " → " + host + ":" + port);
+                }
+
+                /// <summary>仅记规则和端点，不记录 URL、请求头或正文，避免系统日志泄露业务数据。</summary>
+                public static void LogMapRemoteMatch(ProxySession session, MapRemote rule, string host, int port, string path)
+                {
+                    if (session == null || rule == null) { return; }
+                    Operate.DoLog(nameof(LogMapRemoteMatch), "已匹配远程映射规则：" + session.ClientIP + " → " + host + ":" + port + " → " + rule.HostTo + ":" + rule.PortTo);
+                }
 
                 public static void MappingData_ToQueue(ProxySession psSession, Operate.PacketConfig.Packet.PacketType ptType, byte[] bData, bool MapRemote)
                 {
@@ -14938,6 +14935,19 @@ namespace WinsockPacketEditor
                     }
                 }
 
+                /// <summary>CONNECT 后的 TLS 终止预判：路径要解密后才能比较，故这里只按 HTTPS 源主机和端口筛选。</summary>
+                public static bool HasEnabledHttpsMappingHost(string host, int port)
+                {
+                    try
+                    {
+                        return (Enable_MapLocal && HasEnabledHttpsLocalHost(host, port)) || (Enable_MapRemote && lstMapRemote.Any(rule => rule.IsEnable
+                            && rule.ProtocolTypeFrom == ProxyConfig.Proxy.MapProtocol.Https
+                            && string.Equals(rule.HostFrom, host, StringComparison.OrdinalIgnoreCase)
+                            && rule.PortFrom == port));
+                    }
+                    catch (Exception ex) { Operate.DoLog(nameof(HasEnabledHttpsMappingHost), ex); return false; }
+                }
+
                 #endregion
 
                 #region//查找远程代理映射
@@ -15185,6 +15195,11 @@ namespace WinsockPacketEditor
                         PathTo = (PathTo ?? string.Empty).Trim();
 
                         if (string.IsNullOrEmpty(HostFrom) || string.IsNullOrEmpty(HostTo)) { return UI.T("MapRemoteForm.Empty", "映射数据为空"); }
+
+                        if (ProtocolOf(ProtocolFrom) == ProxyConfig.Proxy.MapProtocol.Http && ProtocolOf(ProtocolTo) == ProxyConfig.Proxy.MapProtocol.Https)
+                        {
+                            return UI.T("MapRemoteForm.HttpToHttpsUnsupported", "HTTP 源地址暂不支持映射到 HTTPS 目标");
+                        }
 
                         if (string.IsNullOrEmpty(Id))
                         {
@@ -20266,7 +20281,7 @@ namespace WinsockPacketEditor
                             switch (ptType)
                             {
                                 case Operate.PacketConfig.Packet.PacketType.TCP_Req:
-                                    psSession.TargetSocket.Send(bEffective);
+                                    psSession.SendToTarget(bEffective);
                                     break;
 
                                 case Operate.PacketConfig.Packet.PacketType.TCP_Resp:

@@ -101,6 +101,7 @@ async function save(): Promise<void> {
 </template>
 
 <style scoped>
-.proto { width: 88px; }
+/* 协议文字决定宽度，HTTPS 不会被截成 “http:…”。 */
+.proto { width: max-content; min-width: 104px; }
 .colon { color: var(--dim); font-family: var(--mono); font-size: var(--fs-body); }
 </style>

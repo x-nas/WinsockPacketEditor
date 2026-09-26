@@ -3,6 +3,7 @@ using SuperSocket.SocketBase.Protocol;
 using System;
 using System.Buffers;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
@@ -158,6 +159,22 @@ namespace WinsockPacketEditor
             }
         }
 
+        /// <summary>目标侧 Socket.Send 允许部分完成；TCP 请求必须循环写完，不能静默截断。</summary>
+        public void SendToTarget(byte[] data)
+        {
+            if (data == null || data.Length == 0) { return; }
+            Socket target = this.TargetSocket;
+            if (target == null || !target.Connected) { throw new SocketException((int)SocketError.NotConnected); }
+
+            int offset = 0;
+            while (offset < data.Length)
+            {
+                int sent = target.Send(data, offset, data.Length - offset, SocketFlags.None);
+                if (sent <= 0) { throw new IOException("目标服务器连接已关闭"); }
+                offset += sent;
+            }
+        }
+
         #endregion
 
         #region//帧队列：过滤器切出来的帧按顺序处理
@@ -275,7 +292,7 @@ namespace WinsockPacketEditor
 
         #region//连接远程服务器（异步）
 
-        public async Task ConnectToTarget(string TargetIP, int TargetPort)
+        public async Task ConnectToTarget(string TargetIP, int TargetPort, bool sendCommandResponse = true)
         {
             try
             {
@@ -291,7 +308,7 @@ namespace WinsockPacketEditor
                 Socket targetSocket = this.TargetSocket;
                 if (targetSocket == null)
                 {
-                    Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
+                    if (sendCommandResponse) { Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable); }
                     this.Close(CloseReason.SocketError);
                     return;
                 }
@@ -301,7 +318,7 @@ namespace WinsockPacketEditor
                 this.ServerIP = TargetIP;
                 this.ServerPort = TargetPort;
 
-                Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Success);
+                if (sendCommandResponse) { Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Success); }
                 this.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.ForwardData;
                 this.StartReceivingFromTarget();
             }
@@ -311,7 +328,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
+                if (sendCommandResponse) { Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable); }
                 this.Close(CloseReason.SocketError);
                 Operate.DoLog(nameof(ConnectToTarget), ex);
             }
