@@ -55,6 +55,12 @@ HTTPS 本地映射复用 `MapLocal`；HTTPS 远程映射复用现有 `MapRemote`
 
 根证书为每台服务器首次生成后持续复用，仅在用户明确确认后安装到“当前用户”受信任根证书库。私钥以机器 DPAPI 放 `%PROGRAMDATA%\WPE64\https-mitm\`，不随安装包、备份或日志分发；提供导出公钥、取消信任和删除本地材料的独立操作。导出支持 `.cer` / `.crt` / `.der`、PEM（`.pem`），以及 Android 系统 CA 目录所需的 PEM `<subject_hash_old>.0`；后者自动按 Android 规则命名。绝不静默写入“本地计算机”根证书库。删除材料等同于主动轮换根证书，之后客户端必须重新安装新根证书。
 
+### 证书链兼容性实测（2026-09-27）
+
+通过 SOCKS5 CONNECT 后直接发送 TLS ClientHello、解析服务端未加密 Certificate 握手消息，确认当前 .NET Framework `SslStream` / Schannel 实现只下发动态叶证书（`CN=目标域名`、`Issuer=CN=WPE64`）。即使将 WPE 根 CA 的仅公钥副本加入 `CurrentUser\CA`，Schannel 仍不会把这张自签名根附带到服务端握手；该尝试已撤销，产品不写入该额外证书库。
+
+同一探针观察到 Charles 5.2.1 会下发“目标叶证书 + 自签名 Charles Proxy CA”两张证书。这不是当前 WPE `SslStream` API 可显式控制的行为；要复刻它需要引入独立 TLS 实现和额外加密依赖，当前不纳入 WPE。客户端应安装并信任 WPE 导出的根证书；某些旧 Android 浏览器即使未显式安装证书仍可能显示页面，属于客户端特有的兼容行为，不能作为功能承诺。严格校验证书链的浏览器拒绝未受信任 WPE 根证书是预期安全行为。
+
 ## 状态机与回退
 
 - 启用 HTTPS 映射前先检查证书可用性；失败则配置不生效。
