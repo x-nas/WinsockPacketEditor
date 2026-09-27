@@ -13,7 +13,7 @@
 */
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { call } from '../../bridge'
-import { FeedList, type PacketListRow, type Prefs, type ProxyRow, type SendRow, type Stats, type WareHouseRow } from '../../bridge/types'
+import { FeedList, type CodecResult, type PacketListRow, type Prefs, type ProxyRow, type SendRow, type Stats, type WareHouseRow } from '../../bridge/types'
 import { t } from '../../i18n'
 import { attachPacketFeed, onProxyTrimmed, resetStat, rows } from '../../stores/packets'
 import { useList } from '../../stores/lists'
@@ -25,6 +25,11 @@ import PacketList from '../PacketList.vue'
 import ContextMenu from '../ContextMenu.vue'
 import { ICON, type MenuItem } from '../menu'
 import HexPanel from '../HexPanel.vue'
+import DecodeResult from '../decoder/DecodeResult.vue'
+import SmartResult from '../decoder/SmartResult.vue'
+import BatchResult from '../decoder/BatchResult.vue'
+import { decoderMenuItem, smartDecodeMenuItem, batchDecodeMenuItem, ensureDecoders, type DecodePayload, type SmartPayload, type BatchPayload } from '../decoder/actions'
+import { decRows } from '../../stores/decoder'
 import PacketEdit from './PacketEdit.vue'
 import PacketModification from './PacketModification.vue'
 import RunBar from './RunBar.vue'
@@ -127,6 +132,7 @@ let statsTimer = 0
 
 onMounted(async () => {
   detach = attachPacketFeed()
+  void ensureDecoders()
 
   try {
     prefs.value = await call<Prefs>('getPrefs')
@@ -397,7 +403,88 @@ const modifyId = ref<number | null>(null)
 
 //右键只开菜单、不动选中集（与账号 / 滤镜两屏同一条口径）
 function onMenu(ev: MouseEvent, _r: PacketListRow): void {
+  void ensureDecoders()
   menuAt.value = { x: ev.clientX, y: ev.clientY }
+}
+
+/** 解码结果弹窗的目标；null = 关着 */
+const decodeResult = ref<DecodePayload | null>(null)
+/** 智能解码结果 */
+const smartPayload = ref<SmartPayload | null>(null)
+/** 批量解码结果 */
+const batchPayload = ref<BatchPayload | null>(null)
+
+function hexToBytes(hex: string): Uint8Array {
+  const s = hex.replace(/[\s-]/g, '')
+  const out = new Uint8Array(s.length / 2)
+  for (let i = 0; i < out.length; i++) out[i] = parseInt(s.slice(i * 2, i * 2 + 2), 16)
+  return out
+}
+function bytesToHex(a: Uint8Array): string {
+  return Array.from(a, (b) => b.toString(16).padStart(2, '0').toUpperCase()).join(' ')
+}
+function bytesToB64(a: Uint8Array): string {
+  let s = ''
+  for (let i = 0; i < a.length; i++) s += String.fromCharCode(a[i])
+  return btoa(s)
+}
+function b64ToBytes(b64: string): Uint8Array {
+  const bin = atob(b64)
+  const out = new Uint8Array(bin.length)
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i)
+  return out
+}
+
+/** 按选中的解码器解码当前选中的封包，结果进 DecodeResult。 */
+async function decodePacket(decoderId: string, ids: number[]): Promise<void> {
+  try {
+    const hex = await call<{ text: string }>('copyProxyHexMerged', { ids })
+    if (!hex?.text) { pushToast('error', t('pm.copyFail')); return }
+
+    const data = bytesToB64(hexToBytes(hex.text))
+    const packetType = rows.value.find((r) => r.Id === ids[0])?.Type
+    const res = await call<CodecResult>('decodeWith', { data, id: decoderId, packetType })
+    const d = decRows.value.find((x) => x.Id === decoderId)
+
+    decodeResult.value = {
+      decoderId,
+      decoderName: d?.Name ?? '',
+      text: res?.Text ?? '',
+      hex: res?.OutputBase64 ? bytesToHex(b64ToBytes(res.OutputBase64)) : '',
+      bufferB64: res?.OutputBase64 ?? '',
+      error: res?.Ok ? '' : (res?.Error ?? t('tr.errDecode')),
+      list: 'proxy',
+      id: ids[0],
+    }
+  } catch (e) {
+    console.error('[dec] 解码失败', e)
+    pushToast('error', String(e))
+  }
+}
+
+/** 智能解码第一条选中的封包。 */
+async function runSmartDecode(id: number): Promise<void> {
+  try {
+    const hex = await call<{ text: string }>('copyProxyHex', { ids: [id] })
+    if (!hex?.text) { pushToast('error', t('pm.copyFail')); return }
+    const packetType = rows.value.find((r) => r.Id === id)?.Type
+    const r = await call<{ hits: SmartPayload['hits'] }>('smartDecode', { data: bytesToB64(hexToBytes(hex.text)), packetType })
+    smartPayload.value = { hits: r?.hits ?? [] }
+  } catch (e) {
+    console.error('[dec] 智能解码失败', e)
+    pushToast('error', String(e))
+  }
+}
+
+/** 批量解码选中的封包。 */
+async function runBatchDecode(decoderId: string, ids: number[]): Promise<void> {
+  try {
+    const r = await call<BatchPayload>('batchDecode', { list: 'proxy', id: decoderId, ids })
+    batchPayload.value = { decoder: r?.decoder ?? '', rows: r?.rows ?? [] }
+  } catch (e) {
+    console.error('[dec] 批量解码失败', e)
+    pushToast('error', String(e))
+  }
 }
 
 const sends = useList<SendRow>(FeedList.Send)
@@ -444,6 +531,9 @@ const menuItems = computed<MenuItem[]>(() => {
     { id: 'toTextA', label: t('pm.toTextA') + tag, icon: ICON.text },
     { id: 'toTextB', label: t('pm.toTextB') + tag, icon: ICON.text },
     { id: 'decode', label: t('tr.encode') + ' / ' + t('tr.decode') + tag, icon: ICON.hex },
+    decoderMenuItem(t('proxy.nav.decoder')),
+    smartDecodeMenuItem(t('dec.smart')),
+    batchDecodeMenuItem(t('dec.batch')),
     { divider: true },
     toSend,
     /*
@@ -489,6 +579,22 @@ async function onMenuPick(id: string): Promise<void> {
       console.error('[pm] 添加失败', e)
     }
 
+    return
+  }
+
+  if (id.startsWith('dec:')) {
+    if (!ids.length) { needPickToast(); return }
+    await decodePacket(id.slice(4), ids)
+    return
+  }
+  if (id === 'smartDecode') {
+    if (!ids.length) { needPickToast(); return }
+    await runSmartDecode(ids[0])
+    return
+  }
+  if (id.startsWith('batch:')) {
+    if (!ids.length) { needPickToast(); return }
+    await runBatchDecode(id.slice(6), ids)
     return
   }
 
@@ -553,7 +659,7 @@ async function onMenuPick(id: string): Promise<void> {
         if (!r?.text) { pushToast('error', t('pm.copyFail')); return }
         trInput.value = r.text
         trMode.value = 'dec'
-        gotoPage.value = 'transcode'
+        gotoPage.value = 'decoder'
         return
       }
 
@@ -889,6 +995,9 @@ const cells = computed(() => {
       <!-- 封包编辑：保存后 C# 按行 UI.Feed.Update 推回来，这里不用做别的 -->
       <PacketEdit :target="editTarget" @close="editTarget = null" />
       <PacketModification :id="modifyId" @close="modifyId = null" />
+      <DecodeResult :payload="decodeResult" @close="decodeResult = null" />
+      <SmartResult :payload="smartPayload" @close="smartPayload = null" />
+      <BatchResult :payload="batchPayload" @close="batchPayload = null" />
 
     </div>
 

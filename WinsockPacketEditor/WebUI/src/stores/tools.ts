@@ -10,8 +10,6 @@ import { ref } from 'vue'
 /** 高亮叠层的一段：[start, end) 的字符区间 + 样式类（del / ins / rx / dup） */
 export interface Mark { start: number; end: number; cls: string }
 
-export interface TranscodeRow { Key: string; Value: string }
-
 /** C# SystemConfig.DuplicateInfo 的原样 JSON */
 export interface DupRow {
   Sequence: string
@@ -46,9 +44,8 @@ export const tcRegex = ref('')
 */
 export const tcMinBytes = ref(4)
 
-/* ── 编码转换 ── */
+/* ── 编码转换（快速编解码页签 / 解码器测试台共用输入）── */
 export const trInput = ref('')
-export const trRows = ref<TranscodeRow[]>([])
 
 /** 编码还是解码。⚠️ 没有「空」这一档了 —— 现在是实时跑的，进页面就有结果。 */
 export const trMode = ref<'enc' | 'dec'>('enc')

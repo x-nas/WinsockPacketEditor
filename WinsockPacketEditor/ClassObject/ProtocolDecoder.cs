@@ -28,8 +28,8 @@ namespace WinsockPacketEditor
         {
             try
             {
-                if (input == null) { return Fail("封包不存在或已被清理"); }
-                if (input.Length > MaxInputBytes) { return Fail("封包超过 4 MB，未执行解码"); }
+                if (input == null) { return Fail(UI.T("Proto.NoPacket", "封包不存在或已被清理")); }
+                if (input.Length > MaxInputBytes) { return Fail(UI.T("Proto.TooLarge", "封包超过 4 MB，未执行解码")); }
 
                 byte[] output;
                 switch ((kind ?? string.Empty).ToLowerInvariant())
@@ -42,23 +42,49 @@ namespace WinsockPacketEditor
                         return Success(output, SafeText(output), "bytes");
 
                     case "xor":
-                        output = Xor(input, ParseHex(keyHex, "XOR 密钥"));
+                        output = Xor(input, ParseHex(keyHex, UI.T("Proto.XorKeyName", "XOR 密钥")));
                         return Success(output, SafeText(output), "bytes");
 
                     case "aes-cbc":
-                        output = AesCbcDecrypt(input, ParseHex(keyHex, "AES 密钥"), ParseHex(ivHex, "AES IV"));
+                        output = AesCbcDecrypt(input, ParseHex(keyHex, UI.T("Proto.AesKeyName", "AES 密钥")), ParseHex(ivHex, UI.T("Proto.AesIvName", "AES IV")));
                         return Success(output, SafeText(output), "bytes");
 
                     case "protobuf":
                         return Success(input, ProtobufGuess(input), "protobuf");
 
                     default:
-                        return Fail("不支持的解码器");
+                        return Fail(UI.T("Proto.Unsupported", "不支持的解码器"));
                 }
             }
             catch (FormatException ex) { return Fail(ex.Message); }
-            catch (CryptographicException ex) { return Fail("AES 解密失败：" + ex.Message); }
-            catch (Exception ex) { return Fail("解码失败：" + ex.Message); }
+            catch (CryptographicException ex) { return Fail(string.Format(UI.T("Proto.AesFail", "AES 解密失败：{0}"), ex.Message)); }
+            catch (Exception ex) { return Fail(string.Format(UI.T("Proto.DecodeFail", "解码失败：{0}"), ex.Message)); }
+        }
+
+        /// <summary>快速工作台的反向操作：把左侧明文编码成右侧字节。</summary>
+        internal static Result Encode(byte[] input, string kind, string keyHex, string ivHex)
+        {
+            try
+            {
+                if (input == null) { return Fail(UI.T("Proto.NoPacket", "封包不存在或已被清理")); }
+                if (input.Length > MaxInputBytes) { return Fail(UI.T("Proto.TooLarge", "封包超过 4 MB，未执行编码")); }
+
+                byte[] output;
+                switch ((kind ?? string.Empty).ToLowerInvariant())
+                {
+                    case "xor":
+                        output = Xor(input, ParseHex(keyHex, UI.T("Proto.XorKeyName", "XOR 密钥")));
+                        return Success(output, BitConverter.ToString(output).Replace("-", " "), "bytes");
+                    case "aes-cbc":
+                        output = AesCbcEncrypt(input, ParseHex(keyHex, UI.T("Proto.AesKeyName", "AES 密钥")), ParseHex(ivHex, UI.T("Proto.AesIvName", "AES IV")));
+                        return Success(output, BitConverter.ToString(output).Replace("-", " "), "bytes");
+                    default:
+                        return Fail(UI.T("Proto.Unsupported", "不支持的编码器"));
+                }
+            }
+            catch (FormatException ex) { return Fail(ex.Message); }
+            catch (CryptographicException ex) { return Fail(string.Format(UI.T("Proto.AesFail", "AES 编码失败：{0}"), ex.Message)); }
+            catch (Exception ex) { return Fail(string.Format(UI.T("Proto.DecodeFail", "编码失败：{0}"), ex.Message)); }
         }
 
         private static Result Success(byte[] output, string text, string format)
@@ -70,7 +96,7 @@ namespace WinsockPacketEditor
 
         private static byte[] Xor(byte[] input, byte[] key)
         {
-            if (key.Length == 0) { throw new FormatException("XOR 密钥不能为空"); }
+            if (key.Length == 0) { throw new FormatException(UI.T("Proto.XorEmpty", "XOR 密钥不能为空")); }
             byte[] output = new byte[input.Length];
             for (int i = 0; i < input.Length; i++) { output[i] = (byte)(input[i] ^ key[i % key.Length]); }
             return output;
@@ -78,8 +104,8 @@ namespace WinsockPacketEditor
 
         private static byte[] AesCbcDecrypt(byte[] input, byte[] key, byte[] iv)
         {
-            if (key.Length != 16 && key.Length != 24 && key.Length != 32) { throw new FormatException("AES 密钥必须是 16、24 或 32 字节"); }
-            if (iv.Length != 16) { throw new FormatException("AES IV 必须是 16 字节"); }
+            if (key.Length != 16 && key.Length != 24 && key.Length != 32) { throw new FormatException(UI.T("Proto.AesKeyLen", "AES 密钥必须是 16、24 或 32 字节")); }
+            if (iv.Length != 16) { throw new FormatException(UI.T("Proto.AesIvLen", "AES IV 必须是 16 字节")); }
             using (Aes aes = Aes.Create())
             {
                 aes.Mode = CipherMode.CBC;
@@ -90,17 +116,31 @@ namespace WinsockPacketEditor
             }
         }
 
+        private static byte[] AesCbcEncrypt(byte[] input, byte[] key, byte[] iv)
+        {
+            if (key.Length != 16 && key.Length != 24 && key.Length != 32) { throw new FormatException(UI.T("Proto.AesKeyLen", "AES 密钥必须是 16、24 或 32 字节")); }
+            if (iv.Length != 16) { throw new FormatException(UI.T("Proto.AesIvLen", "AES IV 必须是 16 字节")); }
+            using (Aes aes = Aes.Create())
+            {
+                aes.Mode = CipherMode.CBC;
+                aes.Padding = PaddingMode.PKCS7;
+                aes.Key = key;
+                aes.IV = iv;
+                using (ICryptoTransform encryptor = aes.CreateEncryptor()) { return encryptor.TransformFinalBlock(input, 0, input.Length); }
+            }
+        }
+
         private static byte[] ParseHex(string value, string name)
         {
             string s = (value ?? string.Empty).Replace(" ", string.Empty).Replace("-", string.Empty);
-            if (s.Length == 0 || (s.Length & 1) != 0) { throw new FormatException(name + "必须是偶数位十六进制"); }
+            if (s.Length == 0 || (s.Length & 1) != 0) { throw new FormatException(string.Format(UI.T("Proto.HexEven", "{0}必须是偶数位十六进制"), name)); }
             byte[] result = new byte[s.Length / 2];
             for (int i = 0; i < result.Length; i++)
             {
                 byte b;
                 if (!byte.TryParse(s.Substring(i * 2, 2), NumberStyles.AllowHexSpecifier, CultureInfo.InvariantCulture, out b))
                 {
-                    throw new FormatException(name + "不是有效十六进制");
+                    throw new FormatException(string.Format(UI.T("Proto.HexBad", "{0}不是有效十六进制"), name));
                 }
                 result[i] = b;
             }
@@ -113,7 +153,8 @@ namespace WinsockPacketEditor
             return text.Replace("\0", "·");
         }
 
-        private static string ProtobufGuess(byte[] input)
+        // 仅供 CodecEngine 复用（解码器体系与快速页共用同一份 Protobuf 推测）。
+        internal static string ProtobufGuess(byte[] input)
         {
             var sb = new StringBuilder();
             int fields = 0;
@@ -123,14 +164,14 @@ namespace WinsockPacketEditor
 
         private static void ParseMessage(byte[] bytes, int start, int end, int depth, StringBuilder sb, ref int fields)
         {
-            if (depth >= MaxProtoDepth) { sb.AppendLine("… 最大嵌套深度"); return; }
+            if (depth >= MaxProtoDepth) { sb.AppendLine(UI.T("Proto.MaxDepth", "… 最大嵌套深度")); return; }
             int pos = start;
             while (pos < end && fields++ < MaxProtoFields)
             {
                 ulong tag = ReadVarint(bytes, ref pos, end);
                 int field = (int)(tag >> 3);
                 int wire = (int)(tag & 7);
-                if (field <= 0 || wire == 3 || wire == 4 || wire > 5) { throw new FormatException("不是有效的 Protobuf wire format"); }
+                if (field <= 0 || wire == 3 || wire == 4 || wire > 5) { throw new FormatException(UI.T("Proto.BadWire", "不是有效的 Protobuf wire format")); }
                 sb.Append(' ', depth * 2).Append(field).Append(" [").Append(wire).Append("]: ");
                 switch (wire)
                 {
@@ -145,7 +186,7 @@ namespace WinsockPacketEditor
                     case 5: Require(pos, 4, end); sb.AppendLine("fixed32 0x" + BitConverter.ToString(bytes, pos, 4).Replace("-", "")); pos += 4; break;
                 }
             }
-            if (fields >= MaxProtoFields) { sb.AppendLine("… 字段数达到上限"); }
+            if (fields >= MaxProtoFields) { sb.AppendLine(UI.T("Proto.MaxFields", "… 字段数达到上限")); }
         }
 
         private static void AppendLengthDelimited(byte[] bytes, int pos, int len, int depth, StringBuilder sb, ref int fields)
@@ -170,17 +211,17 @@ namespace WinsockPacketEditor
             ulong value = 0;
             for (int shift = 0; shift < 64; shift += 7)
             {
-                if (pos >= end) { throw new FormatException("Protobuf varint 被截断"); }
+                if (pos >= end) { throw new FormatException(UI.T("Proto.VarintTrunc", "Protobuf varint 被截断")); }
                 byte b = bytes[pos++];
                 value |= (ulong)(b & 0x7F) << shift;
                 if ((b & 0x80) == 0) { return value; }
             }
-            throw new FormatException("Protobuf varint 过长");
+            throw new FormatException(UI.T("Proto.VarintLong", "Protobuf varint 过长"));
         }
 
         private static void Require(int pos, int length, int end)
         {
-            if (length < 0 || pos > end - length) { throw new FormatException("Protobuf 字段被截断"); }
+            if (length < 0 || pos > end - length) { throw new FormatException(UI.T("Proto.FieldTrunc", "Protobuf 字段被截断")); }
         }
     }
 }

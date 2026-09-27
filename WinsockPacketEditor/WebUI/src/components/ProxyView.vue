@@ -20,7 +20,7 @@ import SendList from './proxy/SendList.vue'
 import WareHouseList from './proxy/WareHouseList.vue'
 import RobotList from './proxy/RobotList.vue'
 import TextCompare from './proxy/TextCompare.vue'
-import Transcode from './proxy/Transcode.vue'
+import Decoder from './decoder/Decoder.vue'
 import ExtractData from './proxy/ExtractData.vue'
 import StatData from './proxy/StatData.vue'
 import WpcConfig from './proxy/WpcConfig.vue'
@@ -106,7 +106,7 @@ onBeforeUnmount(() => detach?.())
 
     <!-- 四个工具页：状态都在 stores/tools 里，v-if 销毁再挂回来内容还在 -->
     <TextCompare v-if="page === 'diff'" />
-    <Transcode v-if="page === 'transcode'" />
+    <Decoder v-if="page === 'decoder'" />
     <ExtractData v-if="page === 'extract'" />
 
     <!-- 统计数据（页面开着时每秒刷）与 WPC 配置（两份列表都在推送流里） -->

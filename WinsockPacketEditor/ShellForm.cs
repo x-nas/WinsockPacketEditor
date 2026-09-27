@@ -1398,6 +1398,17 @@ namespace WPEHybrid
                 return ProtocolDecoder.Decode(buffer, kind, key, iv);
             });
 
+            //快速编解码工作台的「编码：左→右」。协议类算法不能再借用 transcodeOne，
+            //因为它只处理字符集；明文统一以 UTF-8 字节交给 ProtocolDecoder。
+            this.bridge.Register("encodeBytes", args =>
+            {
+                string kind = args["kind"] == null ? string.Empty : (string)args["kind"];
+                string key = args["key"] == null ? string.Empty : (string)args["key"];
+                string iv = args["iv"] == null ? string.Empty : (string)args["iv"];
+                string text = args["text"] == null ? string.Empty : (string)args["text"];
+                return ProtocolDecoder.Encode(System.Text.Encoding.UTF8.GetBytes(text), kind, key, iv);
+            });
+
             //界面偏好。颜色是用户可配的，UiPrefs 是唯一真源，前端不许写死。
             this.bridge.Register("getPrefs", args =>
             {
@@ -3910,6 +3921,161 @@ namespace WPEHybrid
                     args["format"] == null ? "utf8" : (string)args["format"]),
             });
 
+            #region//解码器（跨模式共用）
+
+            /*
+                解码器：列表 / 增删改 / 启停 / 测试台 / 按 Id 解码。
+
+                算法与帧解析都在 Operate 侧（CodecEngine / FrameExtractor），这里只转发 + 校验；
+                测试台用的是【未保存】的配置（编辑弹窗里改到一半也要能试）。
+                data 一律是 base64，与 decodeBytes 同一口径。
+            */
+            this.bridge.Register("getDecoders", args => new
+            {
+                rows = Operate.DecoderConfig.GetRows(),
+            });
+
+            this.bridge.Register("addDecoder", args => new
+            {
+                id = Operate.DecoderConfig.AddDecoder_New_ById(),
+            });
+
+            this.bridge.Register("saveDecoder", args =>
+            {
+                DecoderRow row = null;
+
+                try
+                {
+                    if (args["decoder"] != null) { row = args["decoder"].ToObject<DecoderRow>(); }
+                }
+                catch (Exception ex) { Operate.DoLog("saveDecoder", ex); }
+
+                DecoderInfo di = Operate.DecoderConfig.FromRow(row);
+                string error;
+                bool ok = Operate.DecoderConfig.SaveDecoder(di, out error);
+
+                return new { ok = ok, error = error, id = di.GUID.ToString().ToUpper() };
+            });
+
+            this.bridge.Register("deleteDecoders", args =>
+            {
+                List<Guid> ids = new List<Guid>();
+
+                try
+                {
+                    List<string> raw = args["ids"] == null ? null : args["ids"].ToObject<List<string>>();
+                    if (raw != null)
+                    {
+                        foreach (string s in raw) { Guid g; if (Guid.TryParse(s, out g)) { ids.Add(g); } }
+                    }
+                }
+                catch (Exception ex) { Operate.DoLog("deleteDecoders", ex); }
+
+                int n = Operate.DecoderConfig.DeleteDecoder_ByIds(ids);
+                Operate.DecoderConfig.SaveDecoderList_ToDB();
+                return new { ok = true, count = n };
+            });
+
+            this.bridge.Register("setDecoderEnable", args => new
+            {
+                ok = Operate.DecoderConfig.SetDecoderEnable_ById(
+                    args["id"] == null ? null : (string)args["id"],
+                    args["enable"] != null && (bool)args["enable"]),
+            });
+
+            this.bridge.Register("testDecoder", args =>
+            {
+                DecoderRow row = null;
+
+                try
+                {
+                    if (args["decoder"] != null) { row = args["decoder"].ToObject<DecoderRow>(); }
+                }
+                catch (Exception ex) { Operate.DoLog("testDecoder", ex); }
+
+                DecoderInfo di = Operate.DecoderConfig.FromRow(row);
+
+                byte[] buffer = null;
+                try { buffer = args["data"] == null ? null : Convert.FromBase64String((string)args["data"]); }
+                catch (Exception ex) { Operate.DoLog("testDecoder.data", ex); }
+
+                bool encode = args["encode"] != null && (bool)args["encode"];
+                bool applyFrame = args["applyFrame"] == null || (bool)args["applyFrame"];
+
+                return CodecEngine.Process(buffer, di, encode, applyFrame);
+            });
+
+            //按已保存的解码器解码（列表 / 详情右键用）。
+            this.bridge.Register("decodeWith", args =>
+            {
+                string id = args["id"] == null ? string.Empty : (string)args["id"];
+                Guid g;
+                DecoderInfo di = Guid.TryParse(id, out g) ? Operate.DecoderConfig.GetDecoder_ById(g) : null;
+
+                if (di == null) { return new CodecResult { Ok = false, Error = UI.T("Dec.ErrNoDecoder", "解码器不存在") }; }
+
+                byte[] buffer = null;
+                try { buffer = args["data"] == null ? null : Convert.FromBase64String((string)args["data"]); }
+                catch (Exception ex) { Operate.DoLog("decodeWith.data", ex); }
+
+                bool applyFrame = args["applyFrame"] == null || (bool)args["applyFrame"];
+                Operate.PacketConfig.Packet.PacketType packetType;
+                if (TryReadDecoderPacketType(args, out packetType))
+                {
+                    //范围只在来自列表 / 详情的真实封包上校验；工具页测试没有封包上下文。
+                    return CodecEngine.Run(buffer, di, packetType, applyFrame);
+                }
+                return CodecEngine.Process(buffer, di, false, applyFrame);
+            });
+
+            //智能解码：遍历启用的解码器，挑出能解出可读明文的（偏移未写死的会试 0~4）。
+            this.bridge.Register("smartDecode", args =>
+            {
+                byte[] buffer = null;
+                try { buffer = args["data"] == null ? null : Convert.FromBase64String((string)args["data"]); }
+                catch (Exception ex) { Operate.DoLog("smartDecode.data", ex); }
+
+                Operate.PacketConfig.Packet.PacketType packetType;
+                return new
+                {
+                    hits = TryReadDecoderPacketType(args, out packetType)
+                        ? CodecEngine.SmartDecode(buffer, Operate.DecoderConfig.List.lstDecoderInfo, packetType)
+                        : CodecEngine.SmartDecode(buffer, Operate.DecoderConfig.List.lstDecoderInfo)
+                };
+            });
+
+            //批量解码：对选中的封包逐条按同一个解码器解码（list = proxy / packet）。
+            this.bridge.Register("batchDecode", args =>
+            {
+                string listName = args["list"] == null ? "proxy" : (string)args["list"];
+                string id = args["id"] == null ? string.Empty : (string)args["id"];
+                Guid g;
+                DecoderInfo di = Guid.TryParse(id, out g) ? Operate.DecoderConfig.GetDecoder_ById(g) : null;
+                List<long> ids = ReadLongIds(args);
+                List<object> rows = new List<object>();
+
+                if (di == null) { return new { decoder = string.Empty, rows = rows }; }
+
+                if (listName == "packet")
+                {
+                    foreach (PacketInfo pi in Operate.PacketConfig.List.PickPackets(ids))
+                    {
+                        rows.Add(DecoderResultRow(pi.Id, pi.PacketBuffer, di, pi.PacketType));
+                    }
+                }
+                else
+                {
+                    foreach (ProxyInfo pi in Operate.ProxyConfig.List.PickProxies(ids))
+                    {
+                        rows.Add(DecoderResultRow(pi.Id, pi.PacketBuffer, di, pi.PacketType));
+                    }
+                }
+
+                return new { decoder = di.Name, rows = rows };
+            });
+
+            #endregion
+
             //点「选择文件」：C# 弹原生文件框（浏览器拿不到完整路径）
             this.bridge.Register("extractPick", async args =>
                 await Operate.SystemConfig.ExtractData_Pick_Dialog(args["kind"] == null ? 0 : (int)args["kind"]));
@@ -6243,7 +6409,7 @@ namespace WPEHybrid
                 var all = (bool?)parts["all"] ?? false;
                 Func<string, bool> on = key => all || (bool?)parts[key] == true;
                 var fileName = ((string)args["fileName"] ?? (string)parts["name"] ?? Operate.SystemConfig.AssemblyVersion).Trim();
-                var path = await Operate.SystemConfig.ExportSystemBackUp_Dialog(fileName, new Operate.SystemConfig.BackupParts { SystemConfig = on("systemConfig"), ProxySet = on("proxySet"), ProxyAccount = on("proxyAccount"), WhiteList = on("whiteList"), BlackList = on("blackList"), ProxyMapping = on("proxyMapping"), InjectSet = on("injectSet"), FilterList = on("filterList"), SendList = on("sendList"), RobotList = on("robotList"), WareHouse = on("wareHouse"), AutoStores = on("autoStores"), WpcServer = on("wpcServer"), WpcNotice = on("wpcNotice") });
+                var path = await Operate.SystemConfig.ExportSystemBackUp_Dialog(fileName, new Operate.SystemConfig.BackupParts { SystemConfig = on("systemConfig"), ProxySet = on("proxySet"), ProxyAccount = on("proxyAccount"), WhiteList = on("whiteList"), BlackList = on("blackList"), ProxyMapping = on("proxyMapping"), InjectSet = on("injectSet"), FilterList = on("filterList"), SendList = on("sendList"), RobotList = on("robotList"), WareHouse = on("wareHouse"), AutoStores = on("autoStores"), WpcServer = on("wpcServer"), WpcNotice = on("wpcNotice"), DecoderList = on("decoderList") });
                 return new Newtonsoft.Json.Linq.JObject { ["saved"] = !string.IsNullOrEmpty(path), ["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path };
             }
             if (action == "backup.import")
@@ -6309,7 +6475,7 @@ namespace WPEHybrid
                     if (parts == null) throw new InvalidOperationException("backupParts is required when kind is backup.");
                     var all = (bool?)parts["all"] ?? false;
                     Func<string, bool> on = key => all || (bool?)parts[key] == true;
-                    var path = await Operate.SystemConfig.ExportSystemBackUp_Dialog(string.IsNullOrEmpty(fileName) ? ((string)parts["name"] ?? Operate.SystemConfig.AssemblyVersion) : fileName, new Operate.SystemConfig.BackupParts { SystemConfig = on("systemConfig"), ProxySet = on("proxySet"), ProxyAccount = on("proxyAccount"), WhiteList = on("whiteList"), BlackList = on("blackList"), ProxyMapping = on("proxyMapping"), InjectSet = on("injectSet"), FilterList = on("filterList"), SendList = on("sendList"), RobotList = on("robotList"), WareHouse = on("wareHouse"), AutoStores = on("autoStores"), WpcServer = on("wpcServer"), WpcNotice = on("wpcNotice") });
+                    var path = await Operate.SystemConfig.ExportSystemBackUp_Dialog(string.IsNullOrEmpty(fileName) ? ((string)parts["name"] ?? Operate.SystemConfig.AssemblyVersion) : fileName, new Operate.SystemConfig.BackupParts { SystemConfig = on("systemConfig"), ProxySet = on("proxySet"), ProxyAccount = on("proxyAccount"), WhiteList = on("whiteList"), BlackList = on("blackList"), ProxyMapping = on("proxyMapping"), InjectSet = on("injectSet"), FilterList = on("filterList"), SendList = on("sendList"), RobotList = on("robotList"), WareHouse = on("wareHouse"), AutoStores = on("autoStores"), WpcServer = on("wpcServer"), WpcNotice = on("wpcNotice"), DecoderList = on("decoderList") });
                     result["saved"] = !string.IsNullOrEmpty(path);
                     result["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path;
                     return result;
@@ -6806,6 +6972,38 @@ namespace WPEHybrid
         }
 
         #endregion
+
+        /// <summary>批量解码的一行：一条封包按同一个解码器解出来的结果。</summary>
+        /// <summary>读取前端随真实封包带回的 PacketType；缺失表示工具页的无上下文测试。</summary>
+        private static bool TryReadDecoderPacketType(Newtonsoft.Json.Linq.JObject args, out Operate.PacketConfig.Packet.PacketType packetType)
+        {
+            packetType = default(Operate.PacketConfig.Packet.PacketType);
+            if (args == null || args["packetType"] == null) { return false; }
+
+            int value;
+            if (!int.TryParse(args["packetType"].ToString(), out value)
+                || !Enum.IsDefined(typeof(Operate.PacketConfig.Packet.PacketType), value))
+            {
+                return false;
+            }
+
+            packetType = (Operate.PacketConfig.Packet.PacketType)value;
+            return true;
+        }
+
+        private object DecoderResultRow(long id, byte[] buffer, DecoderInfo di,
+            Operate.PacketConfig.Packet.PacketType packetType)
+        {
+            CodecResult r = CodecEngine.Run(buffer, di, packetType);
+
+            string hex = string.Empty;
+            if (r.Ok && !string.IsNullOrEmpty(r.OutputBase64))
+            {
+                hex = CodecEngine.BytesToHex(Convert.FromBase64String(r.OutputBase64));
+            }
+
+            return new { Id = id, Ok = r.Ok, Text = r.Text, Hex = hex, Error = r.Error };
+        }
 
         private void EnsureProxyConfigLoaded()
         {

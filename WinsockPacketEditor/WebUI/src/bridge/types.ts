@@ -342,3 +342,43 @@ export interface ServerRow {
 export interface NoticeRow {
   Id: string; Type: number; Title: string; Content: string; More: string; Time: string
 }
+
+/**
+ * 解码器。跨注入 / 代理两种模式共用（与滤镜 / 发送 / 机器人同一层级）。
+ * 字段名与 C# DecoderRow 逐字一致；枚举一律按 int 传。
+ */
+export interface DecoderRow {
+  Id: string
+  IsEnable: boolean
+  Name: string
+  Description: string
+  Kind: number
+  Charset: number
+  KeyFormat: number
+  Key: string
+  IvFormat: number
+  Iv: string
+  CipherMode: number
+  Padding: number
+  BlockSize: number
+  LengthBytes: number
+  BigEndian: boolean
+  LengthIncludesSelf: boolean
+  HasFixedHeader: boolean
+  FixedHeader: string
+  LengthIncludesFixedHeader: boolean
+  DataOffset: number
+  ProtocolType: number
+  Direction: number
+  ParamsJson: string
+}
+
+/** 解码 / 编码结果。字段与 C# CodecResult 一致。 */
+export interface CodecResult {
+  Ok?: boolean
+  Error?: string
+  Text?: string
+  OutputBase64?: string
+  Format?: string
+}
+

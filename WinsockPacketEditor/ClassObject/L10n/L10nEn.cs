@@ -234,6 +234,10 @@ namespace WinsockPacketEditor
             d["MapSettingsForm.Success"] = "Map settings successfully";
             d["MapLocalForm.Empty"] = "Map Local Empty";
             d["MapRemoteForm.Empty"] = "Map Remote Empty";
+            d["MapRemoteForm.PortRange"] = "Ports must be between 1 and 65535";
+            d["MapRemoteForm.HttpToHttpsUnsupported"] = "An HTTP source address cannot be mapped to an HTTPS target";
+            d["MapRemoteForm.HttpToTcpUnsupported"] = "An HTTP/HTTPS source address cannot be mapped to a TCP target";
+            d["MapRemoteForm.TcpTargetRequired"] = "A TCP source address can only be mapped to a TCP target";
             d["EXTProxySettingsForm.ProxyIP.Empty"] = "EXTProxy address Empty";
             d["EXTProxySettingsForm.ProxyIP.Error"] = "EXTProxy address Error";
             d["EXTProxySettingsForm.SpecifyPort.Empty"] = "Specify Port Empty";
@@ -343,6 +347,26 @@ namespace WinsockPacketEditor
             d["WPCConfig.NoticeList"] = "Notice List";
             d["WPCConfig.RuleList"] = "Rule List";
             d["WPCConfig.RuleList.Error"] = "Save Rule Error";
+            d["Proto.NoPacket"] = "The packet does not exist or has been cleared";
+            d["Proto.TooLarge"] = "Packet exceeds 4 MB; decoding was skipped";
+            d["Proto.XorKeyName"] = "XOR key";
+            d["Proto.AesKeyName"] = "AES key";
+            d["Proto.AesIvName"] = "AES IV";
+            d["Proto.Unsupported"] = "Unsupported decoder";
+            d["Proto.AesFail"] = "AES decryption failed: {0}";
+            d["Proto.CipherFail"] = "Encryption/decryption failed: {0}";
+            d["Proto.DecodeFail"] = "Decoding failed: {0}";
+            d["Proto.XorEmpty"] = "XOR key cannot be empty";
+            d["Proto.AesKeyLen"] = "AES key must be 16, 24 or 32 bytes";
+            d["Proto.AesIvLen"] = "AES IV must be 16 bytes";
+            d["Proto.HexEven"] = "{0} must be an even number of hex digits";
+            d["Proto.HexBad"] = "{0} is not valid hex";
+            d["Proto.MaxDepth"] = "… maximum nesting depth";
+            d["Proto.BadWire"] = "Not a valid Protobuf wire format";
+            d["Proto.MaxFields"] = "… field limit reached";
+            d["Proto.VarintTrunc"] = "Protobuf varint is truncated";
+            d["Proto.VarintLong"] = "Protobuf varint is too long";
+            d["Proto.FieldTrunc"] = "Protobuf field is truncated";
             return d;
         }
     }

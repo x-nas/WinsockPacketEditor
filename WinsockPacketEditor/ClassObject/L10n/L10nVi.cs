@@ -234,6 +234,10 @@ namespace WinsockPacketEditor
             d["MapSettingsForm.Success"] = "Đã lưu cài đặt ánh xạ";
             d["MapLocalForm.Empty"] = "Ánh xạ cục bộ đang trống";
             d["MapRemoteForm.Empty"] = "Ánh xạ từ xa đang trống";
+            d["MapRemoteForm.PortRange"] = "Cổng phải nằm trong khoảng từ 1 đến 65535";
+            d["MapRemoteForm.HttpToHttpsUnsupported"] = "Không thể ánh xạ địa chỉ nguồn HTTP tới đích HTTPS";
+            d["MapRemoteForm.HttpToTcpUnsupported"] = "Không thể ánh xạ địa chỉ nguồn HTTP/HTTPS tới đích TCP";
+            d["MapRemoteForm.TcpTargetRequired"] = "Địa chỉ nguồn TCP chỉ có thể ánh xạ tới đích TCP";
             d["EXTProxySettingsForm.ProxyIP.Empty"] = "Chưa nhập địa chỉ proxy ngoài";
             d["EXTProxySettingsForm.ProxyIP.Error"] = "Địa chỉ proxy ngoài không hợp lệ";
             d["EXTProxySettingsForm.SpecifyPort.Empty"] = "Chưa nhập cổng chỉ định";
@@ -343,6 +347,26 @@ namespace WinsockPacketEditor
             d["WPCConfig.NoticeList"] = "Danh sách thông báo";
             d["WPCConfig.RuleList"] = "Danh sách quy tắc";
             d["WPCConfig.RuleList.Error"] = "Lưu quy tắc thất bại";
+            d["Proto.NoPacket"] = "Gói tin không tồn tại hoặc đã bị xóa";
+            d["Proto.TooLarge"] = "Gói tin vượt quá 4 MB, không thực hiện giải mã";
+            d["Proto.XorKeyName"] = "Khóa XOR";
+            d["Proto.AesKeyName"] = "Khóa AES";
+            d["Proto.AesIvName"] = "AES IV";
+            d["Proto.Unsupported"] = "Bộ giải mã không được hỗ trợ";
+            d["Proto.AesFail"] = "Giải mã AES thất bại: {0}";
+            d["Proto.CipherFail"] = "Mã hóa/giải mã thất bại: {0}";
+            d["Proto.DecodeFail"] = "Giải mã thất bại: {0}";
+            d["Proto.XorEmpty"] = "Khóa XOR không được để trống";
+            d["Proto.AesKeyLen"] = "Khóa AES phải là 16, 24 hoặc 32 byte";
+            d["Proto.AesIvLen"] = "AES IV phải là 16 byte";
+            d["Proto.HexEven"] = "{0} phải có số chữ số hex chẵn";
+            d["Proto.HexBad"] = "{0} không phải hex hợp lệ";
+            d["Proto.MaxDepth"] = "… độ sâu lồng nhau tối đa";
+            d["Proto.BadWire"] = "Không phải định dạng wire của Protobuf hợp lệ";
+            d["Proto.MaxFields"] = "… đã đạt giới hạn số trường";
+            d["Proto.VarintTrunc"] = "Protobuf varint bị cắt ngắn";
+            d["Proto.VarintLong"] = "Protobuf varint quá dài";
+            d["Proto.FieldTrunc"] = "Trường Protobuf bị cắt ngắn";
             return d;
         }
     }

@@ -4618,6 +4618,7 @@ namespace WinsockPacketEditor
                     WPCConfig.ServerList.SaveServerList_ToDB();
                     WPCConfig.NoticeList.SaveNoticeList_ToDB();
                     WareHouseConfig.List.SaveWareHouseList_ToDB();
+                    DecoderConfig.SaveDecoderList_ToDB();
                 }
                 catch (Exception ex)
                 {
@@ -4639,6 +4640,7 @@ namespace WinsockPacketEditor
                     WPCConfig.ServerList.LoadServerList_FromDB();
                     WPCConfig.NoticeList.LoadNoticeList_FromDB();
                     WareHouseConfig.List.LoadWareHouseList_FromDB();
+                    DecoderConfig.LoadDecoderList_FromDB();
 
                     string DBFilePath = string.Format("{0}\\{1}", DataBase.dbPath, DataBase.dbName);
                     Operate.DoLog(nameof(LoadSystemList_FromDB), UI.T("StartForm.Database.Loaded", "已加载数据库 : ") + DBFilePath);
@@ -4680,6 +4682,7 @@ namespace WinsockPacketEditor
                 public bool AutoStores { get; set; }
                 public bool WpcServer { get; set; }
                 public bool WpcNotice { get; set; }
+                public bool DecoderList { get; set; }
 
                 /// <summary>一个都没勾。导出前拦一下，别产出一个只有根节点的空备份。</summary>
                 public bool IsEmpty
@@ -4688,7 +4691,7 @@ namespace WinsockPacketEditor
                     {
                         return !SystemConfig && !ProxySet && !ProxyAccount && !WhiteList && !BlackList
                             && !ProxyMapping && !InjectSet && !FilterList && !SendList && !RobotList
-                            && !WareHouse && !AutoStores && !WpcServer && !WpcNotice;
+                            && !WareHouse && !AutoStores && !WpcServer && !WpcNotice && !DecoderList;
                     }
                 }
             }
@@ -4926,6 +4929,12 @@ namespace WinsockPacketEditor
                     if (Parts.AutoStores && WareHouseConfig.List.lstAutoStoresInfo.Count > 0)
                     {
                         add("AutoStores", WareHouseConfig.List.GetAutoStores_XML(WareHouseConfig.List.lstAutoStoresInfo));
+                    }
+
+                    //解码器（跨模式共用）
+                    if (Parts.DecoderList && DecoderConfig.List.lstDecoderInfo.Count > 0)
+                    {
+                        add("Decoders", DecoderConfig.GetDecoderList_XML());
                     }
 
                     /*
@@ -5393,6 +5402,23 @@ namespace WinsockPacketEditor
                 catch (Exception ex)
                 {
                     Operate.DoLog("Import AutoStores", ex);
+                }
+
+                #endregion
+
+                #region//解码器
+
+                try
+                {
+                    XElement xeDecoders = xdoc.Root.Element("Decoders");
+                    if (xeDecoders != null)
+                    {
+                        DecoderConfig.LoadDecoderList_XML(xeDecoders);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog("Import Decoders", ex);
                 }
 
                 #endregion
@@ -15315,7 +15341,7 @@ namespace WinsockPacketEditor
                         PathTo = (PathTo ?? string.Empty).Trim();
 
                         if (string.IsNullOrEmpty(HostFrom) || string.IsNullOrEmpty(HostTo)) { return UI.T("MapRemoteForm.Empty", "映射数据为空"); }
-                        if (PortFrom < 1 || PortFrom > 65535 || PortTo < 1 || PortTo > 65535) { return "端口必须在 1 到 65535 之间"; }
+                        if (PortFrom < 1 || PortFrom > 65535 || PortTo < 1 || PortTo > 65535) { return UI.T("MapRemoteForm.PortRange", "端口必须在 1 到 65535 之间"); }
 
                         if (ProtocolOf(ProtocolFrom) == ProxyConfig.Proxy.MapProtocol.Http && ProtocolOf(ProtocolTo) == ProxyConfig.Proxy.MapProtocol.Https)
                         {
@@ -15324,14 +15350,14 @@ namespace WinsockPacketEditor
 
                         if (ProtocolOf(ProtocolFrom) != ProxyConfig.Proxy.MapProtocol.Tcp && ProtocolOf(ProtocolTo) == ProxyConfig.Proxy.MapProtocol.Tcp)
                         {
-                            return "HTTP/HTTPS 源地址暂不支持映射到 TCP 目标";
+                            return UI.T("MapRemoteForm.HttpToTcpUnsupported", "HTTP/HTTPS 源地址暂不支持映射到 TCP 目标");
                         }
 
                         if (ProtocolOf(ProtocolFrom) == ProxyConfig.Proxy.MapProtocol.Tcp)
                         {
                             if (ProtocolOf(ProtocolTo) != ProxyConfig.Proxy.MapProtocol.Tcp)
                             {
-                                return "TCP 源地址只能映射到 TCP 目标";
+                                return UI.T("MapRemoteForm.TcpTargetRequired", "TCP 源地址只能映射到 TCP 目标");
                             }
                             PathFrom = string.Empty;
                             PathTo = string.Empty;
@@ -18681,6 +18707,444 @@ namespace WinsockPacketEditor
             }
 
             #endregion
+        }
+
+        #endregion
+
+        #region//解码器配置（注入 / 代理两模式共用）
+
+        /// <summary>
+        /// 解码器子系统。与 FilterConfig / SendConfig / RobotConfig 同级、同样两模式共用。
+        ///
+        /// 它只做「保存 / 读取 / 增删 / 校验 / 备份」，算法在 CodecEngine、帧解析在 FrameExtractor，
+        /// 桥在 ShellForm。列表规模小，不走 Feed 推送（IUiFeed 那 20 份是契约，能不动就不动），
+        /// 前端用桥的请求 / 应答取。
+        /// </summary>
+        public static class DecoderConfig
+        {
+            public static class List
+            {
+                public static BindingList<DecoderInfo> lstDecoderInfo = new BindingList<DecoderInfo>();
+            }
+
+            public static string KindLabel(DecoderKind kind)
+            {
+                switch (kind)
+                {
+                    case DecoderKind.Aes: return UI.T("Dec.Kind.Aes", "AES");
+                    case DecoderKind.Des: return UI.T("Dec.Kind.Des", "DES");
+                    case DecoderKind.Protobuf: return UI.T("Dec.Kind.Protobuf", "Protobuf");
+                    case DecoderKind.MessagePack: return UI.T("Dec.Kind.MessagePack", "MessagePack");
+                    case DecoderKind.Rc4: return UI.T("Dec.Kind.Rc4", "RC4");
+                    case DecoderKind.Xxtea: return UI.T("Dec.Kind.Xxtea", "XXTEA");
+                    case DecoderKind.Amf: return UI.T("Dec.Kind.Amf", "AMF");
+                    case DecoderKind.Bson: return UI.T("Dec.Kind.Bson", "BSON");
+                    case DecoderKind.FlatBuffers: return UI.T("Dec.Kind.FlatBuffers", "FlatBuffers");
+                    case DecoderKind.TextCharset: return UI.T("Dec.Kind.Text", "文本编码");
+                    default: return UI.T("Dec.Kind.Xor", "XOR");
+                }
+            }
+
+            public static void AddDecoder_New()
+            {
+                try
+                {
+                    DecoderInfo di = new DecoderInfo();
+                    di.GUID = Guid.NewGuid();
+                    di.Name = DecoderInfo.DefaultName(KindLabel(di.Kind), List.lstDecoderInfo.Count + 1);
+                    List.lstDecoderInfo.Add(di);
+                }
+                catch (Exception ex) { Operate.DoLog(nameof(AddDecoder_New), ex); }
+            }
+
+            public static void AddDecoder(DecoderInfo di)
+            {
+                if (di != null) { List.lstDecoderInfo.Add(di); }
+            }
+
+            /// <summary>新增一条默认解码器并落库，返回它的 GUID 串（前端拿它打开编辑弹窗）。</summary>
+            public static string AddDecoder_New_ById()
+            {
+                DecoderInfo di = new DecoderInfo();
+                di.GUID = Guid.NewGuid();
+                di.Name = DecoderInfo.DefaultName(KindLabel(di.Kind), List.lstDecoderInfo.Count + 1);
+                List.lstDecoderInfo.Add(di);
+                SaveDecoderList_ToDB();
+                return di.GUID.ToString().ToUpper();
+            }
+
+            public static bool SetDecoderEnable_ById(string id, bool enable)
+            {
+                Guid g;
+                if (!Guid.TryParse(id, out g)) { return false; }
+
+                DecoderInfo di = GetDecoder_ById(g);
+                if (di == null) { return false; }
+
+                di.IsEnable = enable;
+                SaveDecoderList_ToDB();
+                return true;
+            }
+
+            /// <summary>校验 + 新增/覆盖 + 落库。error 非空表示没存。</summary>
+            public static bool SaveDecoder(DecoderInfo di, out string error)
+            {
+                if (!Normalize(di, out error)) { return false; }
+
+                DecoderInfo existing = GetDecoder_ById(di.GUID);
+
+                if (existing == null)
+                {
+                    List.lstDecoderInfo.Add(di);
+                }
+                else
+                {
+                    int idx = List.lstDecoderInfo.IndexOf(existing);
+                    if (idx >= 0) { List.lstDecoderInfo[idx] = di; }
+                }
+
+                SaveDecoderList_ToDB();
+                return true;
+            }
+
+            public static List<DecoderRow> GetRows()
+            {
+                List<DecoderRow> rows = new List<DecoderRow>();
+                foreach (DecoderInfo d in List.lstDecoderInfo) { rows.Add(ToRow(d)); }
+                return rows;
+            }
+
+            public static DecoderRow ToRow(DecoderInfo d)
+            {
+                DecoderRow r = new DecoderRow();
+                r.Id = d.GUID.ToString().ToUpper();
+                r.IsEnable = d.IsEnable;
+                r.Name = d.Name;
+                r.Description = d.Description;
+                r.Kind = (int)d.Kind;
+                r.Charset = (int)d.Charset;
+                r.KeyFormat = (int)d.KeyFormat;
+                r.Key = d.Key;
+                r.IvFormat = (int)d.IvFormat;
+                r.Iv = d.Iv;
+                r.CipherMode = (int)d.CipherMode;
+                r.Padding = (int)d.Padding;
+                r.BlockSize = d.BlockSize;
+                r.LengthBytes = d.LengthBytes;
+                r.BigEndian = d.BigEndian;
+                r.LengthIncludesSelf = d.LengthIncludesSelf;
+                r.HasFixedHeader = d.HasFixedHeader;
+                r.FixedHeader = d.FixedHeader;
+                r.LengthIncludesFixedHeader = d.LengthIncludesFixedHeader;
+                r.DataOffset = d.DataOffset;
+                r.ProtocolType = (int)d.ProtocolType;
+                r.Direction = (int)d.Direction;
+                r.ParamsJson = d.ParamsJson;
+                return r;
+            }
+
+            public static DecoderInfo FromRow(DecoderRow r)
+            {
+                DecoderInfo d = new DecoderInfo();
+                if (r == null) { return d; }
+
+                Guid g;
+                if (!string.IsNullOrEmpty(r.Id) && Guid.TryParse(r.Id, out g)) { d.GUID = g; }
+                else { d.GUID = Guid.NewGuid(); }
+
+                d.IsEnable = r.IsEnable;
+                d.Name = r.Name;
+                d.Description = r.Description;
+                d.Kind = (DecoderKind)r.Kind;
+                d.Charset = (DecoderCharset)r.Charset;
+                d.KeyFormat = (DecoderKeyFormat)r.KeyFormat;
+                d.Key = r.Key;
+                d.IvFormat = (DecoderKeyFormat)r.IvFormat;
+                d.Iv = r.Iv;
+                d.CipherMode = (DecoderCipherMode)r.CipherMode;
+                d.Padding = (DecoderPadding)r.Padding;
+                d.BlockSize = r.BlockSize;
+                d.LengthBytes = r.LengthBytes;
+                d.BigEndian = r.BigEndian;
+                d.LengthIncludesSelf = r.LengthIncludesSelf;
+                d.HasFixedHeader = r.HasFixedHeader;
+                d.FixedHeader = r.FixedHeader;
+                d.LengthIncludesFixedHeader = r.LengthIncludesFixedHeader;
+                d.DataOffset = r.DataOffset;
+                d.ProtocolType = (DecoderProtocol)r.ProtocolType;
+                d.Direction = (DecoderDirection)r.Direction;
+                d.ParamsJson = r.ParamsJson;
+                return d;
+            }
+
+            public static DecoderInfo GetDecoder_ById(Guid id)
+            {
+                foreach (DecoderInfo di in List.lstDecoderInfo) { if (di.GUID == id) { return di; } }
+                return null;
+            }
+
+            public static int DeleteDecoder_ByIds(IList<Guid> ids)
+            {
+                int nReturn = 0;
+
+                try
+                {
+                    if (ids == null) { return 0; }
+                    for (int i = List.lstDecoderInfo.Count - 1; i >= 0; i--)
+                    {
+                        if (ids.Contains(List.lstDecoderInfo[i].GUID))
+                        {
+                            List.lstDecoderInfo.RemoveAt(i);
+                            nReturn++;
+                        }
+                    }
+                }
+                catch (Exception ex) { Operate.DoLog(nameof(DeleteDecoder_ByIds), ex); }
+
+                return nReturn;
+            }
+
+            /// <summary>
+            /// 业务校验。控件属性不是约束 —— 下限 / 必填都落在这里。
+            /// 保存前必须调一次，智能解码 / 批量解码也用同一份判据筛掉配错的解码器。
+            /// </summary>
+            public static bool Normalize(DecoderInfo di, out string error)
+            {
+                error = null;
+
+                if (di == null) { error = UI.T("Dec.ErrNoDecoder", "解码器不存在"); return false; }
+                if (string.IsNullOrWhiteSpace(di.Name)) { error = UI.T("Dec.ErrName", "名称不能为空"); return false; }
+                if (di.DataOffset < 0) { error = UI.T("Dec.ErrOffset", "解码起始偏移不能为负"); return false; }
+
+                if (di.LengthBytes != 0 && di.LengthBytes != 1 && di.LengthBytes != 2 && di.LengthBytes != 4)
+                {
+                    error = UI.T("Dec.FrameLenBytes", "包长字段只能占 1 / 2 / 4 字节");
+                    return false;
+                }
+
+                if (di.CipherMode == DecoderCipherMode.CTS)
+                {
+                    error = UI.T("Dec.CtsUnsupported", "CTS 模式当前不受支持；请改用 CBC、ECB、CFB 或 OFB");
+                    return false;
+                }
+
+                //块大小由 AES（128 位）/ DES（64 位）算法固定；历史列只为读取旧数据库保留，
+                //不能让一个不会参与运算的值伪装成可配置项。
+                di.BlockSize = 0;
+
+                if (di.HasFixedHeader && FrameExtractor.ParseHex(di.FixedHeader).Length == 0)
+                {
+                    error = UI.T("Dec.FrameHeaderEmpty", "启用了固定头部但没有填写头部字节");
+                    return false;
+                }
+
+                try
+                {
+                    if (di.Kind == DecoderKind.Xor || di.Kind == DecoderKind.Rc4 || di.Kind == DecoderKind.Xxtea)
+                    {
+                        CodecEngine.ParseKey(di.Key, di.KeyFormat, true);
+                        if (di.Kind == DecoderKind.Xxtea && CodecEngine.ParseKey(di.Key, di.KeyFormat, true).Length != 16)
+                        {
+                            error = UI.T("Dec.XxteaKey", "XXTEA 密钥必须是 16 字节");
+                            return false;
+                        }
+                    }
+                    else if (di.Kind == DecoderKind.Aes || di.Kind == DecoderKind.Des)
+                    {
+                        CodecEngine.ParseKey(di.Key, di.KeyFormat, true);
+                        CodecEngine.ParseKey(di.Iv, di.IvFormat, false);
+                    }
+                }
+                catch (FormatException ex) { error = ex.Message; return false; }
+
+                if (string.IsNullOrEmpty(di.ParamsJson)) { di.ParamsJson = string.Empty; }
+
+                return true;
+            }
+
+            public static void SaveDecoderList_ToDB()
+            {
+                DataBase.SaveTable_Decoder(List.lstDecoderInfo);
+            }
+
+            public static void LoadDecoderList_FromDB()
+            {
+                try
+                {
+                    List.lstDecoderInfo.Clear();
+                    DataTable dt = DataBase.SelectTable_Decoder();
+
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        DecoderInfo di = new DecoderInfo();
+                        di.GUID = Guid.Parse(Convert.ToString(row["GUID"]));
+                        di.IsEnable = Convert.ToBoolean(row["IsEnable"]);
+                        di.Name = Convert.ToString(row["Name"]);
+                        di.Description = Convert.ToString(row["Description"]);
+                        di.Kind = (DecoderKind)Convert.ToInt32(row["Kind"]);
+                        di.Charset = (DecoderCharset)Convert.ToInt32(row["Charset"]);
+                        di.KeyFormat = (DecoderKeyFormat)Convert.ToInt32(row["KeyFormat"]);
+                        di.Key = Convert.ToString(row["Key"]);
+                        di.IvFormat = (DecoderKeyFormat)Convert.ToInt32(row["IvFormat"]);
+                        di.Iv = Convert.ToString(row["Iv"]);
+                        di.CipherMode = (DecoderCipherMode)Convert.ToInt32(row["CipherMode"]);
+                        di.Padding = (DecoderPadding)Convert.ToInt32(row["Padding"]);
+                        di.BlockSize = Convert.ToInt32(row["BlockSize"]);
+                        di.LengthBytes = Convert.ToInt32(row["LengthBytes"]);
+                        di.BigEndian = Convert.ToBoolean(row["BigEndian"]);
+                        di.LengthIncludesSelf = Convert.ToBoolean(row["LengthIncludesSelf"]);
+                        di.HasFixedHeader = Convert.ToBoolean(row["HasFixedHeader"]);
+                        di.FixedHeader = Convert.ToString(row["FixedHeader"]);
+                        di.LengthIncludesFixedHeader = Convert.ToBoolean(row["LengthIncludesFixedHeader"]);
+                        di.DataOffset = Convert.ToInt32(row["DataOffset"]);
+                        di.ProtocolType = (DecoderProtocol)Convert.ToInt32(row["ProtocolType"]);
+                        di.Direction = (DecoderDirection)Convert.ToInt32(row["Direction"]);
+                        di.ParamsJson = Convert.ToString(row["ParamsJson"]);
+
+                        List.lstDecoderInfo.Add(di);
+                    }
+
+                    InstallBuiltinPresets();
+                }
+                catch (Exception ex) { Operate.DoLog(nameof(LoadDecoderList_FromDB), ex); }
+            }
+
+            /// <summary>装入截图对应的十个可编辑预置；不覆盖同名的用户配置。</summary>
+            private static void InstallBuiltinPresets()
+            {
+                bool added = false;
+                Action<DecoderKind, string, string, string, int> add = (kind, name, key, iv, offset) =>
+                {
+                    foreach (DecoderInfo old in List.lstDecoderInfo)
+                    {
+                        if (old != null && string.Equals(old.Name, name, StringComparison.OrdinalIgnoreCase)) { return; }
+                    }
+                    DecoderInfo d = new DecoderInfo();
+                    d.GUID = Guid.NewGuid(); d.IsEnable = true; d.Kind = kind; d.Name = name;
+                    d.Description = "通用解码器 - " + name;
+                    d.KeyFormat = DecoderKeyFormat.Hex; d.Key = key; d.IvFormat = DecoderKeyFormat.Hex; d.Iv = iv;
+                    d.CipherMode = DecoderCipherMode.CBC; d.Padding = DecoderPadding.PKCS7; d.DataOffset = offset;
+                    d.ProtocolType = DecoderProtocol.Any; d.Direction = DecoderDirection.Any;
+                    List.lstDecoderInfo.Add(d);
+                    added = true;
+                };
+
+                add(DecoderKind.Aes, "AES", "6165736B657931323334353637383930", "00000000000000000000000000000000", 0);
+                add(DecoderKind.Amf, "AMF0 / AMF3", "", "", 0);
+                add(DecoderKind.Bson, "BSON", "", "", 0);
+                add(DecoderKind.Des, "DES", "6465736B65793132", "0000000000000000", 0);
+                add(DecoderKind.FlatBuffers, "FlatBuffers", "", "", 0);
+                add(DecoderKind.MessagePack, "MessagePack", "", "", 0);
+                add(DecoderKind.Protobuf, "Protobuf", "", "", 16);
+                add(DecoderKind.Rc4, "RC4", "0102030405060708", "", 0);
+                add(DecoderKind.Xor, "XOR", "64", "", 0);
+                add(DecoderKind.Xxtea, "XXTEA", "000102030405060708090A0B0C0D0E0F", "", 0);
+                if (added) { SaveDecoderList_ToDB(); }
+            }
+
+            public static XElement GetDecoderList_XML()
+            {
+                try
+                {
+                    XElement xeRoot = new XElement("Decoders");
+
+                    foreach (DecoderInfo di in List.lstDecoderInfo)
+                    {
+                        xeRoot.Add(new XElement("Decoder",
+                            new XElement("ID", di.GUID.ToString().ToUpper()),
+                            new XElement("IsEnable", di.IsEnable.ToString()),
+                            new XElement("Name", di.Name),
+                            new XElement("Description", di.Description),
+                            new XElement("Kind", (int)di.Kind),
+                            new XElement("Charset", (int)di.Charset),
+                            new XElement("KeyFormat", (int)di.KeyFormat),
+                            new XElement("Key", di.Key),
+                            new XElement("IvFormat", (int)di.IvFormat),
+                            new XElement("Iv", di.Iv),
+                            new XElement("CipherMode", (int)di.CipherMode),
+                            new XElement("Padding", (int)di.Padding),
+                            new XElement("BlockSize", di.BlockSize),
+                            new XElement("LengthBytes", di.LengthBytes),
+                            new XElement("BigEndian", di.BigEndian.ToString()),
+                            new XElement("LengthIncludesSelf", di.LengthIncludesSelf.ToString()),
+                            new XElement("HasFixedHeader", di.HasFixedHeader.ToString()),
+                            new XElement("FixedHeader", di.FixedHeader),
+                            new XElement("LengthIncludesFixedHeader", di.LengthIncludesFixedHeader.ToString()),
+                            new XElement("DataOffset", di.DataOffset),
+                            new XElement("ProtocolType", (int)di.ProtocolType),
+                            new XElement("Direction", (int)di.Direction),
+                            new XElement("ParamsJson", di.ParamsJson)
+                            ));
+                    }
+
+                    return xeRoot;
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(GetDecoderList_XML), ex);
+                    return null;
+                }
+            }
+
+            /// <summary>从备份的 &lt;Decoders&gt; 节恢复。节存在就先清空再装（与其它列表同一口径）。</summary>
+            public static void LoadDecoderList_XML(XElement xeRoot)
+            {
+                try
+                {
+                    if (xeRoot == null) { return; }
+
+                    List.lstDecoderInfo.Clear();
+
+                    foreach (XElement xe in xeRoot.Elements("Decoder"))
+                    {
+                        DecoderInfo di = new DecoderInfo();
+                        di.GUID = Guid.Parse(GetXmlString(xe, "ID", Guid.NewGuid().ToString()));
+                        di.IsEnable = GetXmlBool(xe, "IsEnable", true);
+                        di.Name = GetXmlString(xe, "Name", string.Empty);
+                        di.Description = GetXmlString(xe, "Description", string.Empty);
+                        di.Kind = (DecoderKind)GetXmlInt(xe, "Kind", 1);
+                        di.Charset = (DecoderCharset)GetXmlInt(xe, "Charset", 3);
+                        di.KeyFormat = (DecoderKeyFormat)GetXmlInt(xe, "KeyFormat", 0);
+                        di.Key = GetXmlString(xe, "Key", string.Empty);
+                        di.IvFormat = (DecoderKeyFormat)GetXmlInt(xe, "IvFormat", 0);
+                        di.Iv = GetXmlString(xe, "Iv", string.Empty);
+                        di.CipherMode = (DecoderCipherMode)GetXmlInt(xe, "CipherMode", 0);
+                        di.Padding = (DecoderPadding)GetXmlInt(xe, "Padding", 1);
+                        di.BlockSize = GetXmlInt(xe, "BlockSize", 0);
+                        di.LengthBytes = GetXmlInt(xe, "LengthBytes", 0);
+                        di.BigEndian = GetXmlBool(xe, "BigEndian", false);
+                        di.LengthIncludesSelf = GetXmlBool(xe, "LengthIncludesSelf", false);
+                        di.HasFixedHeader = GetXmlBool(xe, "HasFixedHeader", false);
+                        di.FixedHeader = GetXmlString(xe, "FixedHeader", string.Empty);
+                        di.LengthIncludesFixedHeader = GetXmlBool(xe, "LengthIncludesFixedHeader", false);
+                        di.DataOffset = GetXmlInt(xe, "DataOffset", 0);
+                        di.ProtocolType = (DecoderProtocol)GetXmlInt(xe, "ProtocolType", 0);
+                        di.Direction = (DecoderDirection)GetXmlInt(xe, "Direction", 0);
+                        di.ParamsJson = GetXmlString(xe, "ParamsJson", string.Empty);
+
+                        List.lstDecoderInfo.Add(di);
+                    }
+                }
+                catch (Exception ex) { Operate.DoLog(nameof(LoadDecoderList_XML), ex); }
+            }
+
+            private static string GetXmlString(XElement xe, string name, string fallback)
+            {
+                XElement e = xe.Element(name);
+                return e == null ? fallback : e.Value;
+            }
+
+            private static int GetXmlInt(XElement xe, string name, int fallback)
+            {
+                int v;
+                return int.TryParse(GetXmlString(xe, name, string.Empty), out v) ? v : fallback;
+            }
+
+            private static bool GetXmlBool(XElement xe, string name, bool fallback)
+            {
+                bool v;
+                return bool.TryParse(GetXmlString(xe, name, string.Empty), out v) ? v : fallback;
+            }
         }
 
         #endregion
@@ -31308,6 +31772,7 @@ namespace WinsockPacketEditor
                     DataBase.CreateTable_BlackList();
                     DataBase.CreateTable_ServerInfo();
                     DataBase.CreateTable_NoticeInfo();
+                    DataBase.CreateTable_Decoder();
                 }
                 catch (Exception ex)
                 {
@@ -31477,6 +31942,48 @@ namespace WinsockPacketEditor
                 {
                     //补不上就记一条，别把启动整个拦下来 —— 缺列的后果由读取那边的兜底兜住
                     Operate.DoLog(nameof(EnsureColumn), ex);
+                }
+            }
+
+            /// <summary>
+            /// 老库删列。SQLite 的 DROP COLUMN 从 3.35 起才有、且不支持 IF EXISTS，
+            /// 所以先用 PRAGMA table_info 查一遍（与 EnsureColumn 同一种写法）。幂等。
+            /// <b>以后废弃一张表的某列，都在对应的 CreateTable_* 末尾补一句这个。</b>
+            /// </summary>
+            private static void DropColumnIfExists(SqliteConnection Conn, string Table, string Column)
+            {
+                try
+                {
+                    bool exists = false;
+
+                    using (SqliteCommand cmd = new SqliteCommand("PRAGMA table_info(" + Table + ");", Conn))
+                    using (SqliteDataReader r = cmd.ExecuteReader())
+                    {
+                        while (r.Read())
+                        {
+                            if (string.Equals(Convert.ToString(r["name"]), Column, StringComparison.OrdinalIgnoreCase))
+                            {
+                                exists = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!exists) { return; }
+
+                    string sql = "ALTER TABLE " + Table + " DROP COLUMN " + Column + ";";
+
+                    using (SqliteCommand cmd = new SqliteCommand(sql, Conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    Operate.DoLog(nameof(DropColumnIfExists), "已为老库删列：" + Table + "." + Column);
+                }
+                catch (Exception ex)
+                {
+                    //删不掉就记一条，别把启动整个拦下来 —— 残留列无害（读写都不再提它）
+                    Operate.DoLog(nameof(DropColumnIfExists), ex);
                 }
             }
 
@@ -32243,6 +32750,64 @@ namespace WinsockPacketEditor
 
             #region//滤镜列表
 
+            /// <summary>
+            /// 解码器表。<b>跨模式共用</b>（注入 / 代理两模式同一份），所以命名不带 Proxy 前缀，
+            /// 与 Filter / Send / Robot 一个层级，列名也照它们（GUID 主键 + IsEnable + Name）。
+            /// </summary>
+            public static bool CreateTable_Decoder()
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
+                    {
+                        string sql = "CREATE TABLE IF NOT EXISTS Decoder (";
+                        sql += "GUID TEXT NOT NULL PRIMARY KEY,";
+                        sql += "IsEnable BOOLEAN DEFAULT 1,";
+                        sql += "Name TEXT NOT NULL,";
+                        sql += "Description TEXT,";
+                        sql += "Kind INTEGER NOT NULL DEFAULT 1,";
+                        sql += "Charset INTEGER NOT NULL DEFAULT 3,";
+                        sql += "KeyFormat INTEGER NOT NULL DEFAULT 0,";
+                        sql += "Key TEXT,";
+                        sql += "IvFormat INTEGER NOT NULL DEFAULT 0,";
+                        sql += "Iv TEXT,";
+                        sql += "CipherMode INTEGER NOT NULL DEFAULT 0,";
+                        sql += "Padding INTEGER NOT NULL DEFAULT 1,";
+                        sql += "BlockSize INTEGER NOT NULL DEFAULT 0,";
+                        sql += "LengthBytes INTEGER NOT NULL DEFAULT 0,";
+                        sql += "BigEndian BOOLEAN DEFAULT 0,";
+                        sql += "LengthIncludesSelf BOOLEAN DEFAULT 0,";
+                        sql += "HasFixedHeader BOOLEAN DEFAULT 0,";
+                        sql += "FixedHeader TEXT,";
+                        sql += "LengthIncludesFixedHeader BOOLEAN DEFAULT 0,";
+                        sql += "DataOffset INTEGER NOT NULL DEFAULT 0,";
+                        sql += "ProtocolType INTEGER NOT NULL DEFAULT 0,";
+                        sql += "Direction INTEGER NOT NULL DEFAULT 0,";
+                        sql += "ParamsJson TEXT";
+                        sql += ");";
+
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // 「作者」列已废弃：新库不再建它，老库在这里删掉（幂等，删不掉也不算失败）。
+                        DropColumnIfExists(conn, "Decoder", "Author");
+                    }
+
+                    bReturn = true;
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(CreateTable_Decoder), ex);
+                }
+
+                return bReturn;
+            }
+
             private static bool CreateTable_Filter()
             {
                 bool bReturn = false;
@@ -32504,6 +33069,142 @@ namespace WinsockPacketEditor
                 catch (Exception ex)
                 {
                     Operate.DoLog(nameof(SaveTable_Filter), ex);
+                    return 0;
+                }
+
+                return iReturn;
+            }
+
+            #endregion
+
+            #region//解码器（跨模式共用）
+
+            public static DataTable SelectTable_Decoder()
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
+                    {
+                        string sql = "SELECT * FROM Decoder;";
+
+                        using (SqliteDataAdapter adapter = new SqliteDataAdapter(sql, conn))
+                        {
+                            adapter.Fill(dtReturn);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(SelectTable_Decoder), ex);
+                }
+
+                return dtReturn;
+            }
+
+            /// <summary>插一条解码器。Conn / Tx 传进来就复用（整表保存时装进一个事务）。</summary>
+            public static void InsertTable_Decoder(DecoderInfo di)
+            {
+                InsertTable_Decoder(di, null, null);
+            }
+
+            public static void InsertTable_Decoder(DecoderInfo di, SqliteConnection Conn, SqliteTransaction Tx)
+            {
+                SqliteConnection conn = Conn;
+                bool own = conn == null;
+
+                try
+                {
+                    if (di == null) { return; }
+                    if (own) { conn = new SqliteConnection(conStr); }
+
+                    string sql = "INSERT INTO Decoder (";
+                    sql += "GUID,IsEnable,Name,Description,Kind,Charset,KeyFormat,Key,IvFormat,Iv,";
+                    sql += "CipherMode,Padding,BlockSize,LengthBytes,BigEndian,LengthIncludesSelf,";
+                    sql += "HasFixedHeader,FixedHeader,LengthIncludesFixedHeader,DataOffset,ProtocolType,Direction,ParamsJson";
+                    sql += ") VALUES (";
+                    sql += "@GUID,@IsEnable,@Name,@Description,@Kind,@Charset,@KeyFormat,@Key,@IvFormat,@Iv,";
+                    sql += "@CipherMode,@Padding,@BlockSize,@LengthBytes,@BigEndian,@LengthIncludesSelf,";
+                    sql += "@HasFixedHeader,@FixedHeader,@LengthIncludesFixedHeader,@DataOffset,@ProtocolType,@Direction,@ParamsJson";
+                    sql += ");";
+
+                    using (SqliteCommand cmd = new SqliteCommand(sql, conn))
+                    {
+                        if (Tx != null) { cmd.Transaction = Tx; }
+
+                        AddParam(cmd, "@GUID", di.GUID.ToString().ToUpper());
+                        AddParam(cmd, "@IsEnable", di.IsEnable);
+                        AddParam(cmd, "@Name", di.Name);
+                        AddParam(cmd, "@Description", di.Description);
+                        AddParam(cmd, "@Kind", (int)di.Kind);
+                        AddParam(cmd, "@Charset", (int)di.Charset);
+                        AddParam(cmd, "@KeyFormat", (int)di.KeyFormat);
+                        AddParam(cmd, "@Key", di.Key);
+                        AddParam(cmd, "@IvFormat", (int)di.IvFormat);
+                        AddParam(cmd, "@Iv", di.Iv);
+                        AddParam(cmd, "@CipherMode", (int)di.CipherMode);
+                        AddParam(cmd, "@Padding", (int)di.Padding);
+                        AddParam(cmd, "@BlockSize", di.BlockSize);
+                        AddParam(cmd, "@LengthBytes", di.LengthBytes);
+                        AddParam(cmd, "@BigEndian", di.BigEndian);
+                        AddParam(cmd, "@LengthIncludesSelf", di.LengthIncludesSelf);
+                        AddParam(cmd, "@HasFixedHeader", di.HasFixedHeader);
+                        AddParam(cmd, "@FixedHeader", di.FixedHeader);
+                        AddParam(cmd, "@LengthIncludesFixedHeader", di.LengthIncludesFixedHeader);
+                        AddParam(cmd, "@DataOffset", di.DataOffset);
+                        AddParam(cmd, "@ProtocolType", (int)di.ProtocolType);
+                        AddParam(cmd, "@Direction", (int)di.Direction);
+                        AddParam(cmd, "@ParamsJson", di.ParamsJson);
+
+                        if (own) { conn.Open(); }
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(InsertTable_Decoder), ex);
+                }
+                finally
+                {
+                    if (own && conn != null) { conn.Dispose(); }
+                }
+            }
+
+            /// <summary>整表保存解码器：删空 + 全部插入，装在同一个事务里。返回写进去的条数。</summary>
+            public static int SaveTable_Decoder(IList<DecoderInfo> list)
+            {
+                int iReturn = 0;
+
+                try
+                {
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
+                    {
+                        conn.Open();
+
+                        using (SqliteTransaction tx = conn.BeginTransaction())
+                        {
+                            using (SqliteCommand del = new SqliteCommand("DELETE FROM Decoder;", conn, tx))
+                            {
+                                del.ExecuteNonQuery();
+                            }
+
+                            if (list != null)
+                            {
+                                foreach (DecoderInfo di in list)
+                                {
+                                    InsertTable_Decoder(di, conn, tx);
+                                    iReturn++;
+                                }
+                            }
+
+                            tx.Commit();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(SaveTable_Decoder), ex);
                     return 0;
                 }
 

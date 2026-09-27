@@ -56,7 +56,7 @@ async function save(): Promise<void> {
   error.value = ''
   try {
     if (f.value.protocolFrom === 0 && f.value.protocolTo === 1) {
-      error.value = 'HTTP 源地址暂不支持映射到 HTTPS 目标'
+      error.value = t('map.httpToHttpsUnsupported')
       return
     }
     if (isTcp.value) { f.value.protocolTo = 2; f.value.pathFrom = ''; f.value.pathTo = '' }
@@ -115,7 +115,7 @@ async function save(): Promise<void> {
         <div class="k">{{ t('map.path') }}</div>
         <div class="v"><input v-model="f.pathTo" class="inp" spellcheck="false" placeholder="/api/"></div>
       </div>
-      <p class="hint">{{ isTcp ? 'TCP 映射在建立 SOCKS CONNECT 时改道整条连接；支持 *、前缀* 和 *后缀主机匹配。' : t('map.remoteEditHint') }}</p>
+      <p class="hint">{{ isTcp ? t('map.tcpEditHint') : t('map.remoteEditHint') }}</p>
     </div>
   </SettingsModal>
 </template>

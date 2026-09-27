@@ -130,7 +130,7 @@ async function save(): Promise<void> {
         ⚠️ 这句要放在最上面。它是「用这个面板之前就该知道」的前提，
         原先摆在底部，要滚过两张表才看得见 —— 而那两张表是会长的，行一多更看不到。
       -->
-      <p class="hint warn top">HTTP 映射直接转发；HTTPS 本地映射需要已信任 WPE 证书，且仅支持本地响应。TCP 映射会在建连时改道整条连接。</p>
+      <p class="hint warn top">{{ t('map.capabilityHint') }}</p>
 
       <!-- 本地映射 -->
       <section class="sec">

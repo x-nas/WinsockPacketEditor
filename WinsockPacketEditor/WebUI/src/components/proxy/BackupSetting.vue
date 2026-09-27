@@ -26,6 +26,7 @@ const f = ref({
   systemConfig: true, proxySet: true, proxyAccount: true, whiteList: true, blackList: true, proxyMapping: true,
   injectSet: true,
   filterList: true, sendList: true, robotList: true, autoStores: true,
+  decoderList: true,
   wareHouse: false,
   wpcServer: true, wpcNotice: true,
 })
@@ -38,7 +39,7 @@ const GROUPS = [
     但把这句写进标签会在俄语下把格子撑破 —— 实测「Хранилище (с пакетами…」被截掉了尾巴。
     标签只留名字，说明交给提示（自绘的那套，见 tooltip.ts）。
   */
-  { key: 'bk.grp.lists', items: [['filterList', 'bk.filterList'], ['sendList', 'bk.sendList'], ['robotList', 'bk.robotList'], ['autoStores', 'bk.autoStores'], ['wareHouse', 'bk.wareHouse', 'bk.wareHouseHint']] },
+  { key: 'bk.grp.lists', items: [['filterList', 'bk.filterList'], ['sendList', 'bk.sendList'], ['robotList', 'bk.robotList'], ['autoStores', 'bk.autoStores'], ['decoderList', 'proxy.nav.decoder'], ['wareHouse', 'bk.wareHouse', 'bk.wareHouseHint']] },
   { key: 'bk.grp.wpc', items: [['wpcServer', 'bk.wpcServer'], ['wpcNotice', 'bk.wpcNotice']] },
 ] as const
 

@@ -240,6 +240,10 @@ namespace WinsockPacketEditor
             d["MapSettingsForm.Success"] = "對映設定儲存成功";
             d["MapLocalForm.Empty"] = "對映資料為空";
             d["MapRemoteForm.Empty"] = "對映資料為空";
+            d["MapRemoteForm.PortRange"] = "連接埠必須介於 1 到 65535 之間";
+            d["MapRemoteForm.HttpToHttpsUnsupported"] = "HTTP 來源地址暫不支援對映至 HTTPS 目標";
+            d["MapRemoteForm.HttpToTcpUnsupported"] = "HTTP/HTTPS 來源地址暫不支援對映至 TCP 目標";
+            d["MapRemoteForm.TcpTargetRequired"] = "TCP 來源地址只能對映至 TCP 目標";
             d["EXTProxySettingsForm.ProxyIP.Empty"] = "外部代理地址為空";
             d["EXTProxySettingsForm.ProxyIP.Error"] = "外部代理地址錯誤";
             d["EXTProxySettingsForm.SpecifyPort.Empty"] = "指定埠為空";
@@ -350,6 +354,26 @@ namespace WinsockPacketEditor
             d["WPCConfig.RuleList"] = "規則列表";
             d["WPCConfig.RuleList.Error"] = "規則型別或動作不正確";
 
+            d["Proto.NoPacket"] = "封包不存在或已被清理";
+            d["Proto.TooLarge"] = "封包超過 4 MB，未執行解碼";
+            d["Proto.XorKeyName"] = "XOR 密鑰";
+            d["Proto.AesKeyName"] = "AES 密鑰";
+            d["Proto.AesIvName"] = "AES IV";
+            d["Proto.Unsupported"] = "不支援的解碼器";
+            d["Proto.AesFail"] = "AES 解密失敗：{0}";
+            d["Proto.CipherFail"] = "加解密失敗：{0}";
+            d["Proto.DecodeFail"] = "解碼失敗：{0}";
+            d["Proto.XorEmpty"] = "XOR 密鑰不能為空";
+            d["Proto.AesKeyLen"] = "AES 密鑰必須是 16、24 或 32 位元組";
+            d["Proto.AesIvLen"] = "AES IV 必須是 16 位元組";
+            d["Proto.HexEven"] = "{0}必須是偶數位十六進位制";
+            d["Proto.HexBad"] = "{0}不是有效十六進位制";
+            d["Proto.MaxDepth"] = "… 最大嵌套深度";
+            d["Proto.BadWire"] = "不是有效的 Protobuf wire format";
+            d["Proto.MaxFields"] = "… 欄位數達到上限";
+            d["Proto.VarintTrunc"] = "Protobuf varint 被截斷";
+            d["Proto.VarintLong"] = "Protobuf varint 過長";
+            d["Proto.FieldTrunc"] = "Protobuf 欄位被截斷";
             return d;
         }
     }

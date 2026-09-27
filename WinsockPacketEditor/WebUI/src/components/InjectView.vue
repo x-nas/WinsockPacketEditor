@@ -39,7 +39,7 @@ import RobotList from './proxy/RobotList.vue'
 import WareHouseList from './proxy/WareHouseList.vue'
 import StatData from './proxy/StatData.vue'
 import TextCompare from './proxy/TextCompare.vue'
-import Transcode from './proxy/Transcode.vue'
+import Decoder from './decoder/Decoder.vue'
 import ExtractData from './proxy/ExtractData.vue'
 import SystemLog from './proxy/SystemLog.vue'
 //7 个设置弹窗：代理那 12 项的真子集
@@ -800,7 +800,7 @@ async function clearList(): Promise<void> {
       <WareHouseList v-if="page === 'warehouse'" />
       <StatData v-if="page === 'stat'" mode="inject" />
       <TextCompare v-if="page === 'diff'" />
-      <Transcode v-if="page === 'transcode'" />
+      <Decoder v-if="page === 'decoder'" />
       <ExtractData v-if="page === 'extract'" />
     </div>
 
