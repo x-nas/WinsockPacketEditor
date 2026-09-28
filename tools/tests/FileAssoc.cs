@@ -100,7 +100,7 @@ static class T
             Func<FileAssociation.FileType, string> name = ft => "WPE x64 " + ft.Ext.ToUpperInvariant();
             object r1 = Invoke("Apply", classes, ownerOf, staged, name);
             List<string> claimed = Field<List<string>>(r1, "Claimed"), foreign = Field<List<string>>(r1, "Foreign");
-            Check("④ 空闲的 11 种都认领、.rp / .sc 两种有主的跳过", Field<bool>(r1, "Changed") && claimed.Count == 11
+            Check("④ 空闲的 12 种都认领、.rp / .sc 两种有主的跳过", Field<bool>(r1, "Changed") && claimed.Count == 12
                 && foreign.OrderBy(x => x).SequenceEqual(new[] { ".rp", ".sc" }), "认领 " + claimed.Count + " · 跳过 " + string.Join(" ", foreign));
 
             bool allOk = FileAssociation.Types.Where(ft => claimed.Contains(ft.Ext)).All(ft =>
@@ -114,7 +114,7 @@ static class T
 
             //⑧ 再跑一遍：什么都不改
             object r2 = Invoke("Apply", classes, ownerOf, staged, name);
-            Check("⑧ 第二次注册：值都没变 → Changed = false", !Field<bool>(r2, "Changed") && Field<List<string>>(r2, "Claimed").Count == 11);
+            Check("⑧ 第二次注册：值都没变 → Changed = false", !Field<bool>(r2, "Changed") && Field<List<string>>(r2, "Claimed").Count == 12);
 
             //⑨ 换语言：类型名跟着变
             object r3 = Invoke("Apply", classes, ownerOf, staged, (Func<FileAssociation.FileType, string>)(ft => "WPE x64 " + ft.Ext));
@@ -125,7 +125,7 @@ static class T
             int n = (int)Invoke("Remove", classes, fileExts);
             bool gone = FileAssociation.Types.All(ft => !Exists(classes, ft.ProgId));
             bool extsGone = FileAssociation.Types.Where(ft => ft.Ext != ".rp" && ft.Ext != ".pml" && ft.Ext != ".sc").All(ft => !Exists(classes, ft.Ext));
-            Check("⑩ 清除：11 种全清、ProgID 一个不剩、空了的后缀键连键删掉", n == 11 && gone && extsGone, "清掉 " + n + " 种");
+            Check("⑩ 清除：12 种全清、ProgID 一个不剩、空了的后缀键连键删掉", n == 12 && gone && extsGone, "清掉 " + n + " 种");
             Check("⑪ 清除不碰别人的：.rp 仍归 Axure；.pml 去掉默认值、过滤器子键保留",
                 Def(classes, ".rp") == "Axure.rp" && Exists(classes, ".pml") && string.IsNullOrEmpty(Def(classes, ".pml")) && Def(classes, ".pml\\PersistentHandler") != null);
             string[] ow;

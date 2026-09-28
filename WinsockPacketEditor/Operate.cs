@@ -44,7 +44,7 @@ namespace WinsockPacketEditor
                 ⚠️ 它也进了库文件名（DataBase.dbName ＝ AssemblyVersion + ".db"）：
                 2.1.9 正式版是「2.1.9.db」，测过的「2.1.9 Beta.db」不会被读到 —— 要带过去用备份导出 / 导入。
             */
-            public static bool IsBeta = true;
+            public static bool IsBeta = false;
             /// <summary>MCP 操作需要 WPE 本机确认；默认 false。</summary>
             public static bool McpRequiresConfirmation = false;
             public static bool McpEnabled = true;
@@ -1756,42 +1756,42 @@ namespace WinsockPacketEditor
                             case Operate.PacketConfig.Packet.EncodingFormat.Short:
                                 if (buffer.Length >= 2)
                                 {
-                                    sReturn = BitConverter.ToInt16(buffer.ToArray(), 0).ToString();
+                                    sReturn = MemoryMarshal.Read<short>(buffer).ToString();
                                 }
                                 break;
 
                             case Operate.PacketConfig.Packet.EncodingFormat.UShort:
                                 if (buffer.Length >= 2)
                                 {
-                                    sReturn = BitConverter.ToUInt16(buffer.ToArray(), 0).ToString();
+                                    sReturn = MemoryMarshal.Read<ushort>(buffer).ToString();
                                 }
                                 break;
 
                             case Operate.PacketConfig.Packet.EncodingFormat.Int32:
                                 if (buffer.Length >= 4)
                                 {
-                                    sReturn = BitConverter.ToInt32(buffer.ToArray(), 0).ToString();
+                                    sReturn = MemoryMarshal.Read<int>(buffer).ToString();
                                 }
                                 break;
 
                             case Operate.PacketConfig.Packet.EncodingFormat.UInt32:
                                 if (buffer.Length >= 4)
                                 {
-                                    sReturn = BitConverter.ToUInt32(buffer.ToArray(), 0).ToString();
+                                    sReturn = MemoryMarshal.Read<uint>(buffer).ToString();
                                 }
                                 break;
 
                             case Operate.PacketConfig.Packet.EncodingFormat.Int64:
                                 if (buffer.Length >= 8)
                                 {
-                                    sReturn = BitConverter.ToInt64(buffer.ToArray(), 0).ToString();
+                                    sReturn = MemoryMarshal.Read<long>(buffer).ToString();
                                 }
                                 break;
 
                             case Operate.PacketConfig.Packet.EncodingFormat.UInt64:
                                 if (buffer.Length >= 8)
                                 {
-                                    sReturn = BitConverter.ToUInt64(buffer.ToArray(), 0).ToString();
+                                    sReturn = MemoryMarshal.Read<ulong>(buffer).ToString();
                                 }
                                 break;
 
@@ -2751,6 +2751,35 @@ namespace WinsockPacketEditor
                 }
 
                 return rows.ToArray();
+            }
+
+            /// <summary>编码转换工具页的单项模式：只计算用户选中的一种编码，避免大输入时生成整组结果。</summary>
+            public static string TranscodeOne(string text, bool decode, string format)
+            {
+                try
+                {
+                    string s = text ?? string.Empty;
+                    string f = (format ?? "utf8").ToLowerInvariant();
+                    if (!decode) { s = s.Trim(); }
+                    if (f == "base64") { return decode ? Base64_Decoding(s) : Base64_Encoding(s); }
+
+                    PacketConfig.Packet.EncodingFormat ef;
+                    switch (f)
+                    {
+                        case "default": ef = PacketConfig.Packet.EncodingFormat.Default; break;
+                        case "gbk": ef = PacketConfig.Packet.EncodingFormat.GBK; break;
+                        case "utf7": ef = PacketConfig.Packet.EncodingFormat.UTF7; break;
+                        case "utf8": ef = PacketConfig.Packet.EncodingFormat.UTF8; break;
+                        case "utf16be": ef = PacketConfig.Packet.EncodingFormat.UTF16; break;
+                        case "utf32": ef = PacketConfig.Packet.EncodingFormat.UTF32; break;
+                        case "utf16le": ef = PacketConfig.Packet.EncodingFormat.Unicode; break;
+                        default: return string.Empty;
+                    }
+                    return decode
+                        ? BytesToString(ef, StringToBytes(PacketConfig.Packet.EncodingFormat.Hex, s))
+                        : BytesToString(PacketConfig.Packet.EncodingFormat.Hex, StringToBytes(ef, s));
+                }
+                catch (Exception ex) { Operate.DoLog(nameof(TranscodeOne), ex); return string.Empty; }
             }
 
             /// <summary>数据提取的三种类型，序号与 WinForms 那个下拉一致。</summary>
@@ -4589,6 +4618,7 @@ namespace WinsockPacketEditor
                     WPCConfig.ServerList.SaveServerList_ToDB();
                     WPCConfig.NoticeList.SaveNoticeList_ToDB();
                     WareHouseConfig.List.SaveWareHouseList_ToDB();
+                    DecoderConfig.SaveDecoderList_ToDB();
                 }
                 catch (Exception ex)
                 {
@@ -4610,6 +4640,7 @@ namespace WinsockPacketEditor
                     WPCConfig.ServerList.LoadServerList_FromDB();
                     WPCConfig.NoticeList.LoadNoticeList_FromDB();
                     WareHouseConfig.List.LoadWareHouseList_FromDB();
+                    DecoderConfig.LoadDecoderList_FromDB();
 
                     string DBFilePath = string.Format("{0}\\{1}", DataBase.dbPath, DataBase.dbName);
                     Operate.DoLog(nameof(LoadSystemList_FromDB), UI.T("StartForm.Database.Loaded", "已加载数据库 : ") + DBFilePath);
@@ -4651,6 +4682,7 @@ namespace WinsockPacketEditor
                 public bool AutoStores { get; set; }
                 public bool WpcServer { get; set; }
                 public bool WpcNotice { get; set; }
+                public bool DecoderList { get; set; }
 
                 /// <summary>一个都没勾。导出前拦一下，别产出一个只有根节点的空备份。</summary>
                 public bool IsEmpty
@@ -4659,7 +4691,7 @@ namespace WinsockPacketEditor
                     {
                         return !SystemConfig && !ProxySet && !ProxyAccount && !WhiteList && !BlackList
                             && !ProxyMapping && !InjectSet && !FilterList && !SendList && !RobotList
-                            && !WareHouse && !AutoStores && !WpcServer && !WpcNotice;
+                            && !WareHouse && !AutoStores && !WpcServer && !WpcNotice && !DecoderList;
                     }
                 }
             }
@@ -4897,6 +4929,12 @@ namespace WinsockPacketEditor
                     if (Parts.AutoStores && WareHouseConfig.List.lstAutoStoresInfo.Count > 0)
                     {
                         add("AutoStores", WareHouseConfig.List.GetAutoStores_XML(WareHouseConfig.List.lstAutoStoresInfo));
+                    }
+
+                    //解码器（跨模式共用）
+                    if (Parts.DecoderList && DecoderConfig.List.lstDecoderInfo.Count > 0)
+                    {
+                        add("Decoders", DecoderConfig.GetDecoderList_XML());
                     }
 
                     /*
@@ -5368,6 +5406,23 @@ namespace WinsockPacketEditor
 
                 #endregion
 
+                #region//解码器
+
+                try
+                {
+                    XElement xeDecoders = xdoc.Root.Element("Decoders");
+                    if (xeDecoders != null)
+                    {
+                        DecoderConfig.LoadDecoderList_XML(xeDecoders);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog("Import Decoders", ex);
+                }
+
+                #endregion
+
                 #region//WPC 节点
 
                 try
@@ -5455,11 +5510,14 @@ namespace WinsockPacketEditor
                         if (string.IsNullOrEmpty(processName)) { continue; }
 
                         /*
-                            主模块名先用「进程名 + .exe」兜底（那仍然是一条合法的 PROCESS-NAME 规则），
-                            取到映像路径后再由 FillProcessPaths 覆盖成真实文件名。进程名带空格的是
+                            主模块名先用「无扩展名才补 .exe」兜底（那仍然是一条合法的 PROCESS-NAME 规则），
+                            取到映像路径后再由 FillProcessPaths 覆盖成真实文件名。不能把 _Client_.dat
+                            这类合法的可执行映像误写成 _Client_.dat.exe。进程名带空格的是
                             Idle / Memory Compression 这类伪进程，保留空串让前端跳过。
                         */
-                        string ModuleName = processName.IndexOf(' ') < 0 ? processName + ".exe" : string.Empty;
+                        string ModuleName = processName.IndexOf(' ') < 0
+                            ? (string.IsNullOrEmpty(Path.GetExtension(processName)) ? processName + ".exe" : processName)
+                            : string.Empty;
 
                         piReturn.Add(new ProcessInfo(null, processName, processId, ModuleName, string.Empty));
                     }
@@ -5828,7 +5886,7 @@ namespace WinsockPacketEditor
                 private static readonly char[] ManualNameSeparators = { ';', '；', ',', '，', '\r', '\n', '\t' };
 
                 /// <summary>
-                /// 手动进程名 → 规范化列表：分隔符认 ; ； , ， 换行与制表符；补 .exe；不分大小写去重；
+                /// 手动进程名 → 规范化列表：分隔符认 ; ； , ， 换行与制表符；无扩展名才补 .exe；不分大小写去重；
                 /// 自身进程不收。名字里带空格的收进 Invalid（mihomo 那条规则写错会让整份配置加载失败）。
                 /// </summary>
                 public static List<string> ParseManualProcessNames(string Text, out List<string> Invalid)
@@ -5851,7 +5909,9 @@ namespace WinsockPacketEditor
                             continue;
                         }
 
-                        if (name.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) == false) { name += ".exe"; }
+                        //可执行映像不一定以 .exe 结尾（如 _Client_.dat）；已有扩展名必须原样保留，
+                        //否则 PROCESS-NAME 会生成不存在的 "_Client_.dat.exe"，永远匹配不到进程。
+                        if (string.IsNullOrEmpty(Path.GetExtension(name))) { name += ".exe"; }
                         if (IsSelfProcess(0, name)) { continue; }
 
                         if (seen.Add(name)) { list.Add(name); }
@@ -6333,6 +6393,9 @@ namespace WinsockPacketEditor
                 {
                     Http = 0,
                     Https = 1,
+                    // TCP 映射在 SOCKS CONNECT 时改目标，不解析或改写后续字节。
+                    // 独立枚举值避免旧库中的 Https 规则意外变成连接级规则。
+                    Tcp = 2,
                 }
 
                 public enum CommandType : byte
@@ -7372,21 +7435,48 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
+                        MapRemote tcpRule = null;
+                        if (Operate.ProxyConfig.Mapping.Enable_MapRemote)
+                        {
+                            tcpRule = Operate.ProxyConfig.Mapping.GetMapRemoteConnection(targetAddress, targetPort, targetIP);
+                        }
+
                         switch (psSession.DomainType)
                         {
                             case Operate.ProxyConfig.Proxy.DomainType.External:
                                 psSession.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(Operate.ProxyConfig.Proxy.ExternalProxy_IP, Operate.ProxyConfig.Proxy.ExternalProxy_Port);
-                                await psSession.ConnectToEXTProxyServer(bData);
+                                if (tcpRule != null) { Operate.ProxyConfig.Mapping.LogTcpMapRemoteMatch(psSession, tcpRule, targetAddress, targetPort); }
+                                await psSession.ConnectToEXTProxyServer(bData, tcpRule);
                                 break;
 
                             case Operate.ProxyConfig.Proxy.DomainType.HTTP:
+                                // HTTP 的请求级映射需要等待完整首个请求头；先保存 TCP 规则，只有
+                                // 没有命中 HTTP 规则时才作为回退使用，保持现有路径优先级。
+                                psSession.TcpMapRule = tcpRule;
                                 await Operate.ProxyConfig.Proxy.HandleHttpConnect(psSession, targetIP, targetPort, targetAddress);
                                 break;
 
                             case Operate.ProxyConfig.Proxy.DomainType.HTTPS:
+                                psSession.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(targetAddress, targetPort);
+                                if (tcpRule != null)
+                                {
+                                    Operate.ProxyConfig.Mapping.LogTcpMapRemoteMatch(psSession, tcpRule, targetAddress, targetPort);
+                                    await psSession.ConnectToTarget(tcpRule.HostTo, tcpRule.PortTo);
+                                    break;
+                                }
+                                if (Operate.ProxyConfig.Mapping.HasEnabledHttpsMappingHost(targetAddress, targetPort)
+                                    && psSession.StartHttpsMitm(targetAddress, targetIP, targetPort)) { break; }
+                                await psSession.ConnectToTarget(targetIP, targetPort);
+                                break;
+
                             case Operate.ProxyConfig.Proxy.DomainType.Socket:
                                 psSession.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(targetAddress, targetPort);
-                                await psSession.ConnectToTarget(targetIP, targetPort);
+                                if (tcpRule != null)
+                                {
+                                    Operate.ProxyConfig.Mapping.LogTcpMapRemoteMatch(psSession, tcpRule, targetAddress, targetPort);
+                                    await psSession.ConnectToTarget(tcpRule.HostTo, tcpRule.PortTo);
+                                }
+                                else { await psSession.ConnectToTarget(targetIP, targetPort); }
                                 break;
                         }
 
@@ -7414,50 +7504,13 @@ namespace WinsockPacketEditor
 
                         if (Operate.ProxyConfig.Mapping.Enable_MapLocal || Operate.ProxyConfig.Mapping.Enable_MapRemote)
                         {
-                            // 本地代理映射
-                            if (Operate.ProxyConfig.Mapping.Enable_MapLocal)
-                            {
-                                var localRule = Operate.ProxyConfig.Mapping.GetMapLocal(
-                                    Operate.ProxyConfig.Proxy.MapProtocol.Http,
-                                    targetAddress,
-                                    targetPort,
-                                    string.Empty);
-
-                                if (localRule != null)
-                                {
-                                    psSession.ServerIP = targetAddress;
-                                    psSession.ServerPort = targetPort;
-
-                                    bool fileExists = await Task.Run(() => File.Exists(localRule.LocalPath));
-                                    if (fileExists)
-                                    {
-                                        Operate.ProxyConfig.Proxy.SendCommandResponse(psSession, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Success);
-                                        psSession.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.ForwardData;
-                                        return;
-                                    }
-                                    else
-                                    {
-                                        Operate.ProxyConfig.Proxy.SendCommandResponse(psSession, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
-                                        return;
-                                    }
-                                }
-                            }
-
-                            // 远程代理映射
-                            if (Operate.ProxyConfig.Mapping.Enable_MapRemote)
-                            {
-                                var remoteRule = Operate.ProxyConfig.Mapping.GetMapRemote(
-                                    Operate.ProxyConfig.Proxy.MapProtocol.Http,
-                                    targetAddress,
-                                    targetPort,
-                                    string.Empty);
-
-                                if (remoteRule != null)
-                                {
-                                    await psSession.ConnectToTarget(remoteRule.HostTo, remoteRule.PortTo);
-                                    return;
-                                }
-                            }
+                            // 路径要等首个 HTTP 请求头到达才能确定。此前在这里以空路径取第一条远程规则，
+                            // 同一主机不同路径的规则会先连错目标，之后即使选中了正确规则也无法换连接。
+                            psSession.ServerIP = targetIP;
+                            psSession.ServerPort = targetPort;
+                            Operate.ProxyConfig.Proxy.SendCommandResponse(psSession, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Success);
+                            psSession.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.ForwardData;
+                            return;
                         }
 
                         await psSession.ConnectToTarget(targetIP, targetPort);
@@ -7466,6 +7519,45 @@ namespace WinsockPacketEditor
                     {
                         Operate.DoLog(nameof(HandleHttpConnect), ex);
                     }                    
+                }
+
+                /// <summary>HTTP 映射已在 SOCKS CONNECT 阶段回应成功；首个请求判定目标后再连，不能再发送一次 SOCKS 应答。</summary>
+                private static bool ConnectHttpMappingTarget(ProxySession psSession, string targetIP, int targetPort)
+                {
+                    if (psSession.TargetSocket != null && psSession.TargetSocket.Connected) { return true; }
+                    psSession.ConnectToTarget(targetIP, targetPort, false).GetAwaiter().GetResult();
+                    return psSession.TargetSocket != null && psSession.TargetSocket.Connected;
+                }
+
+                private static void SendHttpMapLocalFile(ProxySession psSession, string localPath)
+                {
+                    if (!File.Exists(localPath))
+                    {
+                        byte[] notFound = Operate.ProxyConfig.Proxy.Get404Response();
+                        psSession.SendToClient(notFound, 0, notFound.Length);
+                        Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Resp, notFound, false);
+                        psSession.Close(SuperSocket.SocketBase.CloseReason.ServerClosing);
+                        return;
+                    }
+
+                    var file = new FileInfo(localPath);
+                    string contentType = Operate.ProxyConfig.Proxy.GetContentType(Path.GetExtension(localPath));
+                    byte[] header = Encoding.UTF8.GetBytes("HTTP/1.1 200 OK\r\nContent-Type: " + contentType + "\r\nContent-Length: " + file.Length + "\r\nConnection: close\r\n\r\n");
+                    psSession.SendToClient(header, 0, header.Length);
+                    Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Resp, header, false);
+
+                    byte[] buffer = new byte[64 * 1024];
+                    using (var input = new FileStream(localPath, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    {
+                        int read;
+                        while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                        {
+                            byte[] chunk = read == buffer.Length ? (byte[])buffer.Clone() : buffer.Take(read).ToArray();
+                            psSession.SendToClient(chunk, 0, chunk.Length);
+                            Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Resp, chunk, false);
+                        }
+                    }
+                    psSession.Close(SuperSocket.SocketBase.CloseReason.ServerClosing);
                 }
 
                 public static void HandleUnsupportedCommand(ProxySession psSession)
@@ -7619,12 +7711,24 @@ namespace WinsockPacketEditor
 
                                     if (Operate.ProxyConfig.Mapping.Enable_MapLocal || Operate.ProxyConfig.Mapping.Enable_MapRemote)
                                     {
-                                        string request = Encoding.ASCII.GetString(bData);
+                                        byte[] mappingData = Operate.ProxyConfig.Proxy.CombineData(psSession.HttpMappingBuffer, bData, 0, bData.Length);
+                                        int headerLength = FindHttpHeaderEnd(mappingData);
+                                        if (headerLength < 0 && mappingData.Length <= 64 * 1024 && IsPossiblyHttpRequest(mappingData))
+                                        {
+                                            // 映射必须在发往目标前决定；等待被 TCP 拆开的完整请求头。
+                                            psSession.HttpMappingBuffer = mappingData;
+                                            return;
+                                        }
+                                        psSession.HttpMappingBuffer = Array.Empty<byte>();
+                                        bData = mappingData;
+                                        string request = Encoding.ASCII.GetString(bData, 0, headerLength > 0 ? headerLength : bData.Length);
 
-                                        if (request.StartsWith("GET") || request.StartsWith("POST") || request.StartsWith("HEAD") || request.StartsWith("PUT"))
+                                        if (headerLength >= 0 && (request.StartsWith("GET") || request.StartsWith("POST") || request.StartsWith("HEAD") || request.StartsWith("PUT")
+                                            || request.StartsWith("DELETE") || request.StartsWith("OPTIONS") || request.StartsWith("PATCH") || request.StartsWith("TRACE")))
                                         {
                                             var headers = Operate.ProxyConfig.Proxy.ParseHttpHeaders(request);
-                                            if (headers.TryGetValue("Host", out string hostHeader))
+                                            if (headers.TryGetValue("Host", out string hostHeader)
+                                                && TryParseHttpHost(hostHeader, psSession.ServerPort, out string host, out int port))
                                             {
                                                 string requestPath = request.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1];
                                                 string cleanPath = requestPath.Split('?')[0];
@@ -7635,43 +7739,17 @@ namespace WinsockPacketEditor
                                                 {
                                                     var localRule = Operate.ProxyConfig.Mapping.GetMapLocal(
                                                         Operate.ProxyConfig.Proxy.MapProtocol.Http,
-                                                        hostHeader.Split(':')[0],
-                                                        80,
+                                                        host,
+                                                        port,
                                                         cleanPath);
 
                                                     if (localRule != null)
                                                     {
+                                                        Operate.ProxyConfig.Mapping.LogMapLocalMatch(psSession, localRule, host, port, cleanPath);
                                                         Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Req, bData, false);
 
-                                                        if (File.Exists(localRule.LocalPath))
-                                                        {
-                                                            byte[] fileBytes = File.ReadAllBytes(localRule.LocalPath);
-                                                            string contentType = Operate.ProxyConfig.Proxy.GetContentType(Path.GetExtension(localRule.LocalPath));
-
-                                                            string response =
-                                                                $"HTTP/1.1 200 OK\r\n" +
-                                                                $"Content-Type: {contentType}\r\n" +
-                                                                $"Content-Length: {fileBytes.Length}\r\n" +
-                                                                "Connection: close\r\n\r\n";
-
-                                                            byte[] headerBytes = Encoding.UTF8.GetBytes(response);
-
-                                                            psSession.SendToClient(headerBytes, 0, headerBytes.Length);
-                                                            Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Resp, headerBytes, false);
-
-                                                            psSession.SendToClient(fileBytes, 0, fileBytes.Length);
-                                                            Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Resp, fileBytes, false);
-
-                                                            return;
-                                                        }
-                                                        else
-                                                        {
-                                                            byte[] b404 = Operate.ProxyConfig.Proxy.Get404Response();
-                                                            psSession.SendToClient(b404, 0, b404.Length);
-                                                            Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Resp, b404, false);
-
-                                                            return;
-                                                        }
+                                                        SendHttpMapLocalFile(psSession, localRule.LocalPath);
+                                                        return;
                                                     }
                                                 }
 
@@ -7681,8 +7759,8 @@ namespace WinsockPacketEditor
 
                                                 if (Operate.ProxyConfig.Mapping.Enable_MapRemote)
                                                 {
-                                                    string TargetIP = hostHeader.Split(':')[0];
-                                                    int TargetPort = 80;
+                                                    string TargetIP = host;
+                                                    int TargetPort = port;
 
                                                     var remoteRule = Operate.ProxyConfig.Mapping.GetMapRemote(
                                                         Operate.ProxyConfig.Proxy.MapProtocol.Http,
@@ -7692,6 +7770,7 @@ namespace WinsockPacketEditor
 
                                                     if (remoteRule != null)
                                                     {
+                                                        Operate.ProxyConfig.Mapping.LogMapRemoteMatch(psSession, remoteRule, TargetIP, TargetPort, cleanPath);
                                                         psSession.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(TargetIP, TargetPort);
                                                         Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Req, bData, true);
 
@@ -7704,8 +7783,11 @@ namespace WinsockPacketEditor
 
                                                         if (modifiedRequestBytes != null)
                                                         {
+                                                            // 只重写头部；请求体可能是二进制，不能经 ASCII 字符串往返。
+                                                            modifiedRequestBytes = Operate.ProxyConfig.Proxy.CombineData(modifiedRequestBytes, bData, headerLength, bData.Length - headerLength);
                                                             psSession.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(remoteRule.HostTo, remoteRule.PortTo);
-                                                            psSession.TargetSocket.Send(modifiedRequestBytes);
+                                                            if (!ConnectHttpMappingTarget(psSession, remoteRule.HostTo, remoteRule.PortTo)) { return; }
+                                                            psSession.SendToTarget(modifiedRequestBytes);
                                                             Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Req, modifiedRequestBytes, true);
                                                         }
 
@@ -7727,6 +7809,14 @@ namespace WinsockPacketEditor
                                     break;
                             }
 
+                            MapRemote tcpRule = psSession.TcpMapRule;
+                            if (tcpRule != null)
+                            {
+                                Operate.ProxyConfig.Mapping.LogTcpMapRemoteMatch(psSession, tcpRule, psSession.ServerIP, psSession.ServerPort);
+                                if (!ConnectHttpMappingTarget(psSession, tcpRule.HostTo, tcpRule.PortTo)) { return; }
+                            }
+                            else if (!ConnectHttpMappingTarget(psSession, psSession.ServerIP, psSession.ServerPort)) { return; }
+
                             if (Operate.ProxyConfig.Proxy.HookTCP_Req)
                             {
                                 Operate.FilterConfig.Filter.DoFilter_SOCKS_TCP(psSession, bData, Operate.PacketConfig.Packet.PacketType.TCP_Req);
@@ -7734,7 +7824,7 @@ namespace WinsockPacketEditor
                             }
                             else
                             {
-                                psSession.TargetSocket.Send(bData);
+                                psSession.SendToTarget(bData);
                             }                            
                         }
                     }
@@ -8464,6 +8554,69 @@ namespace WinsockPacketEditor
                     return headers;
                 }
 
+                private static int FindHttpHeaderEnd(byte[] data)
+                {
+                    if (data == null) { return -1; }
+                    for (int i = 0; i + 3 < data.Length; i++)
+                    {
+                        if (data[i] == 13 && data[i + 1] == 10 && data[i + 2] == 13 && data[i + 3] == 10) { return i + 4; }
+                    }
+                    return -1;
+                }
+
+                private static bool IsPossiblyHttpRequest(byte[] data)
+                {
+                    if (data == null || data.Length == 0) { return false; }
+                    string[] methods = { "GET ", "POST ", "HEAD ", "PUT ", "DELETE ", "OPTIONS ", "PATCH ", "TRACE ", "CONNECT " };
+                    foreach (string method in methods)
+                    {
+                        int count = Math.Min(data.Length, method.Length);
+                        bool matched = true;
+                        for (int i = 0; i < count; i++)
+                        {
+                            if (data[i] != (byte)method[i]) { matched = false; break; }
+                        }
+                        if (matched) { return true; }
+                    }
+                    return false;
+                }
+
+                /// <summary>解析 Host（含 IPv6 字面量）及其可选端口；缺省端口保留 SOCKS CONNECT 的目标端口。</summary>
+                private static bool TryParseHttpHost(string hostHeader, int defaultPort, out string host, out int port)
+                {
+                    host = string.Empty;
+                    port = defaultPort > 0 ? defaultPort : 80;
+                    if (string.IsNullOrWhiteSpace(hostHeader)) { return false; }
+                    string value = hostHeader.Trim();
+                    if (value.StartsWith("[", StringComparison.Ordinal))
+                    {
+                        int end = value.IndexOf(']');
+                        if (end <= 1) { return false; }
+                        host = value.Substring(1, end - 1);
+                        if (end + 1 < value.Length && value[end + 1] == ':')
+                        {
+                            int parsed;
+                            if (!int.TryParse(value.Substring(end + 2), out parsed) || parsed < 1 || parsed > 65535) { return false; }
+                            port = parsed;
+                        }
+                        return true;
+                    }
+
+                    int lastColon = value.LastIndexOf(':');
+                    if (lastColon > 0 && value.IndexOf(':') == lastColon)
+                    {
+                        int parsed;
+                        if (int.TryParse(value.Substring(lastColon + 1), out parsed) && parsed >= 1 && parsed <= 65535)
+                        {
+                            host = value.Substring(0, lastColon);
+                            port = parsed;
+                            return host.Length > 0;
+                        }
+                    }
+                    host = value;
+                    return host.Length > 0;
+                }
+
                 #endregion                
 
                 #region//发送404响应
@@ -8657,6 +8810,45 @@ namespace WinsockPacketEditor
                 }
 
                 #endregion
+
+                /// <summary>为外部 SOCKS5 代理重新组装 CONNECT，域名交给上游解析。</summary>
+                public static byte[] BuildSocks5ConnectRequest(string host, int port)
+                {
+                    try
+                    {
+                        host = (host ?? string.Empty).Trim();
+                        if (host.Length == 0 || port < 1 || port > 65535) { return null; }
+
+                        using (MemoryStream stream = new MemoryStream())
+                        {
+                            stream.WriteByte(0x05);
+                            stream.WriteByte(0x01);
+                            stream.WriteByte(0x00);
+                            if (IPAddress.TryParse(host, out IPAddress address))
+                            {
+                                byte[] bytes = address.GetAddressBytes();
+                                stream.WriteByte((byte)(address.AddressFamily == AddressFamily.InterNetwork ? 0x01 : 0x04));
+                                stream.Write(bytes, 0, bytes.Length);
+                            }
+                            else
+                            {
+                                byte[] bytes = Encoding.UTF8.GetBytes(host);
+                                if (bytes.Length > 255) { return null; }
+                                stream.WriteByte(0x03);
+                                stream.WriteByte((byte)bytes.Length);
+                                stream.Write(bytes, 0, bytes.Length);
+                            }
+                            stream.WriteByte((byte)(port >> 8));
+                            stream.WriteByte((byte)port);
+                            return stream.ToArray();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(BuildSocks5ConnectRequest), ex);
+                        return null;
+                    }
+                }
 
                 #region//解析代理服务器的响应
 
@@ -14436,7 +14628,8 @@ namespace WinsockPacketEditor
                     Dictionary<string, string> headers,
                     string newHost, 
                     int newPort, 
-                    string newPath)
+                    string newPath,
+                    ProxyConfig.Proxy.MapProtocol targetProtocol = ProxyConfig.Proxy.MapProtocol.Http)
                 {
                     try
                     {
@@ -14494,8 +14687,9 @@ namespace WinsockPacketEditor
                             }
                             else if (line.StartsWith("Host:", StringComparison.OrdinalIgnoreCase))
                             {
-                                string portPart = newPort == 80 ? "" : $":{newPort}";
-                                sb.AppendLine($"Host: {newHost}{portPart}");
+                                string portPart = newPort == (targetProtocol == ProxyConfig.Proxy.MapProtocol.Https ? 443 : 80) ? "" : $":{newPort}";
+                                string hostForHeader = newHost.IndexOf(':') >= 0 && !newHost.StartsWith("[") ? "[" + newHost + "]" : newHost;
+                                sb.AppendLine($"Host: {hostForHeader}{portPart}");
                                 hostHeaderFound = true;
                             }
                             else
@@ -14506,8 +14700,9 @@ namespace WinsockPacketEditor
 
                         if (!hostHeaderFound)
                         {
-                            string portPart = newPort == 80 ? "" : $":{newPort}";
-                            string hostLine = $"Host: {newHost}{portPart}";
+                            string portPart = newPort == (targetProtocol == ProxyConfig.Proxy.MapProtocol.Https ? 443 : 80) ? "" : $":{newPort}";
+                            string hostForHeader = newHost.IndexOf(':') >= 0 && !newHost.StartsWith("[") ? "[" + newHost + "]" : newHost;
+                            string hostLine = $"Host: {hostForHeader}{portPart}";
 
                             string requestStr = sb.ToString();
                             int insertIndex = requestStr.IndexOf("\r\n", StringComparison.Ordinal);
@@ -14534,6 +14729,20 @@ namespace WinsockPacketEditor
                 #endregion
 
                 #region//缓存映射数据
+
+                /// <summary>仅记规则和端点，不记录 URL、请求头或正文，避免系统日志泄露业务数据。</summary>
+                public static void LogMapLocalMatch(ProxySession session, MapLocal rule, string host, int port, string path)
+                {
+                    if (session == null || rule == null) { return; }
+                    Operate.DoLog(nameof(LogMapLocalMatch), "已匹配本地映射规则：" + session.ClientIP + " → " + host + ":" + port);
+                }
+
+                /// <summary>仅记规则和端点，不记录 URL、请求头或正文，避免系统日志泄露业务数据。</summary>
+                public static void LogMapRemoteMatch(ProxySession session, MapRemote rule, string host, int port, string path)
+                {
+                    if (session == null || rule == null) { return; }
+                    Operate.DoLog(nameof(LogMapRemoteMatch), "已匹配远程映射规则：" + session.ClientIP + " → " + host + ":" + port + " → " + rule.HostTo + ":" + rule.PortTo);
+                }
 
                 public static void MappingData_ToQueue(ProxySession psSession, Operate.PacketConfig.Packet.PacketType ptType, byte[] bData, bool MapRemote)
                 {
@@ -14804,6 +15013,36 @@ namespace WinsockPacketEditor
                     return null;
                 }
 
+                /// <summary>HTTPS 没有独立总开关；有已启用的主机/端口规则才尝试 TLS 终止，路径仍在解密后按原有映射语义判定。</summary>
+                public static bool HasEnabledHttpsLocalHost(string host, int port)
+                {
+                    try
+                    {
+                        return lstMapLocal.Any(rule => rule.IsEnable
+                            && rule.ProtocolType == ProxyConfig.Proxy.MapProtocol.Https
+                            && string.Equals(rule.Host, host, StringComparison.OrdinalIgnoreCase)
+                            && rule.Port == port);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(HasEnabledHttpsLocalHost), ex);
+                        return false;
+                    }
+                }
+
+                /// <summary>CONNECT 后的 TLS 终止预判：路径要解密后才能比较，故这里只按 HTTPS 源主机和端口筛选。</summary>
+                public static bool HasEnabledHttpsMappingHost(string host, int port)
+                {
+                    try
+                    {
+                        return (Enable_MapLocal && HasEnabledHttpsLocalHost(host, port)) || (Enable_MapRemote && lstMapRemote.Any(rule => rule.IsEnable
+                            && rule.ProtocolTypeFrom == ProxyConfig.Proxy.MapProtocol.Https
+                            && string.Equals(rule.HostFrom, host, StringComparison.OrdinalIgnoreCase)
+                            && rule.PortFrom == port));
+                    }
+                    catch (Exception ex) { Operate.DoLog(nameof(HasEnabledHttpsMappingHost), ex); return false; }
+                }
+
                 #endregion
 
                 #region//查找远程代理映射
@@ -14827,6 +15066,57 @@ namespace WinsockPacketEditor
                         rule.PortFrom == Port_From &&
                         Path_From.StartsWith(rule.PathFrom, StringComparison.OrdinalIgnoreCase));
                     }
+                }
+
+                #endregion
+
+                #region//查找 TCP 连接级远程映射
+
+                /// <summary>
+                /// TCP 映射只在 SOCKS CONNECT 建连时按主机/IP 和端口匹配；不进入 HTTP 的路径映射。
+                /// 规则主机支持精确值、*、前缀* 和 *后缀；域名和已解析 IP 都会尝试匹配。
+                /// </summary>
+                public static MapRemote GetMapRemoteConnection(string host, int port, string ip)
+                {
+                    try
+                    {
+                        if (port < 1 || port > 65535) { return null; }
+                        return lstMapRemote.FirstOrDefault(rule => rule.IsEnable
+                            && rule.ProtocolTypeFrom == ProxyConfig.Proxy.MapProtocol.Tcp
+                            && rule.PortFrom == port
+                            && (MapHostPatternMatch(rule.HostFrom, host) || MapHostPatternMatch(rule.HostFrom, ip)));
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetMapRemoteConnection), ex);
+                        return null;
+                    }
+                }
+
+                private static bool MapHostPatternMatch(string pattern, string host)
+                {
+                    pattern = (pattern ?? string.Empty).Trim();
+                    host = (host ?? string.Empty).Trim();
+                    if (pattern.Length == 0 || pattern == "*") { return true; }
+                    if (host.Length == 0) { return false; }
+                    if (pattern.StartsWith("*", StringComparison.Ordinal))
+                    {
+                        return host.EndsWith(pattern.Substring(1), StringComparison.OrdinalIgnoreCase);
+                    }
+                    if (pattern.EndsWith("*", StringComparison.Ordinal))
+                    {
+                        return host.StartsWith(pattern.Substring(0, pattern.Length - 1), StringComparison.OrdinalIgnoreCase);
+                    }
+                    return string.Equals(pattern, host, StringComparison.OrdinalIgnoreCase);
+                }
+
+                /// <summary>只记录端点，不记录业务数据，且按现有系统日志节流策略输出。</summary>
+                public static void LogTcpMapRemoteMatch(ProxySession session, MapRemote rule, string host, int port)
+                {
+                    if (session == null || rule == null) { return; }
+                    Operate.SystemConfig.LogThrottled("Map.Tcp", string.Format(
+                        "TCP 连接级映射：{0}:{1} → {2}:{3}（规则 {4}:{5}）",
+                        host, port, rule.HostTo, rule.PortTo, rule.HostFrom, rule.PortFrom));
                 }
 
                 #endregion
@@ -15051,6 +15341,27 @@ namespace WinsockPacketEditor
                         PathTo = (PathTo ?? string.Empty).Trim();
 
                         if (string.IsNullOrEmpty(HostFrom) || string.IsNullOrEmpty(HostTo)) { return UI.T("MapRemoteForm.Empty", "映射数据为空"); }
+                        if (PortFrom < 1 || PortFrom > 65535 || PortTo < 1 || PortTo > 65535) { return UI.T("MapRemoteForm.PortRange", "端口必须在 1 到 65535 之间"); }
+
+                        if (ProtocolOf(ProtocolFrom) == ProxyConfig.Proxy.MapProtocol.Http && ProtocolOf(ProtocolTo) == ProxyConfig.Proxy.MapProtocol.Https)
+                        {
+                            return UI.T("MapRemoteForm.HttpToHttpsUnsupported", "HTTP 源地址暂不支持映射到 HTTPS 目标");
+                        }
+
+                        if (ProtocolOf(ProtocolFrom) != ProxyConfig.Proxy.MapProtocol.Tcp && ProtocolOf(ProtocolTo) == ProxyConfig.Proxy.MapProtocol.Tcp)
+                        {
+                            return UI.T("MapRemoteForm.HttpToTcpUnsupported", "HTTP/HTTPS 源地址暂不支持映射到 TCP 目标");
+                        }
+
+                        if (ProtocolOf(ProtocolFrom) == ProxyConfig.Proxy.MapProtocol.Tcp)
+                        {
+                            if (ProtocolOf(ProtocolTo) != ProxyConfig.Proxy.MapProtocol.Tcp)
+                            {
+                                return UI.T("MapRemoteForm.TcpTargetRequired", "TCP 源地址只能映射到 TCP 目标");
+                            }
+                            PathFrom = string.Empty;
+                            PathTo = string.Empty;
+                        }
 
                         if (string.IsNullOrEmpty(Id))
                         {
@@ -18400,6 +18711,791 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//解码器配置（注入 / 代理两模式共用）
+
+        /// <summary>
+        /// 解码器子系统。与 FilterConfig / SendConfig / RobotConfig 同级、同样两模式共用。
+        ///
+        /// 它只做「保存 / 读取 / 增删 / 校验 / 备份」，算法在 CodecEngine、帧解析在 FrameExtractor，
+        /// 桥在 ShellForm。列表规模小，不走 Feed 推送（IUiFeed 那 20 份是契约，能不动就不动），
+        /// 前端用桥的请求 / 应答取。
+        /// </summary>
+        public static class DecoderConfig
+        {
+            public static class List
+            {
+                public static BindingList<DecoderInfo> lstDecoderInfo = new BindingList<DecoderInfo>();
+            }
+
+            public static string KindLabel(DecoderKind kind)
+            {
+                switch (kind)
+                {
+                    case DecoderKind.Aes: return UI.T("Dec.Kind.Aes", "AES");
+                    case DecoderKind.Des: return UI.T("Dec.Kind.Des", "DES");
+                    case DecoderKind.Protobuf: return UI.T("Dec.Kind.Protobuf", "Protobuf");
+                    case DecoderKind.MessagePack: return UI.T("Dec.Kind.MessagePack", "MessagePack");
+                    case DecoderKind.Rc4: return UI.T("Dec.Kind.Rc4", "RC4");
+                    case DecoderKind.Xxtea: return UI.T("Dec.Kind.Xxtea", "XXTEA");
+                    case DecoderKind.Amf: return UI.T("Dec.Kind.Amf", "AMF");
+                    case DecoderKind.Bson: return UI.T("Dec.Kind.Bson", "BSON");
+                    case DecoderKind.FlatBuffers: return UI.T("Dec.Kind.FlatBuffers", "FlatBuffers");
+                    case DecoderKind.TextCharset: return UI.T("Dec.Kind.Text", "文本编码");
+                    default: return UI.T("Dec.Kind.Xor", "XOR");
+                }
+            }
+
+            public static void AddDecoder_New()
+            {
+                try
+                {
+                    DecoderInfo di = new DecoderInfo();
+                    di.GUID = Guid.NewGuid();
+                    di.Name = DefaultName(List.lstDecoderInfo.Count + 1);
+                    List.lstDecoderInfo.Add(di);
+                }
+                catch (Exception ex) { Operate.DoLog(nameof(AddDecoder_New), ex); }
+            }
+
+            public static void AddDecoder(DecoderInfo di)
+            {
+                if (di != null) { List.lstDecoderInfo.Add(di); }
+            }
+
+            /// <summary>新增一条默认解码器并落库，返回它的 GUID 串（前端选中该条目）。</summary>
+            public static string AddDecoder_New_ById()
+            {
+                DecoderInfo di = new DecoderInfo();
+                di.GUID = Guid.NewGuid();
+                di.Name = DefaultName(List.lstDecoderInfo.Count + 1);
+                List.lstDecoderInfo.Add(di);
+                SaveDecoderList_ToDB();
+                return di.GUID.ToString().ToUpper();
+            }
+
+            private static string DefaultName(int sequence)
+            {
+                return UI.T("Dec.DefaultName", "解码器") + " " + sequence;
+            }
+
+            public static bool SetDecoderEnable_ById(string id, bool enable)
+            {
+                Guid g;
+                if (!Guid.TryParse(id, out g)) { return false; }
+
+                DecoderInfo di = GetDecoder_ById(g);
+                if (di == null) { return false; }
+
+                di.IsEnable = enable;
+                SaveDecoderList_ToDB();
+                return true;
+            }
+
+            /// <summary>校验 + 新增/覆盖 + 落库。error 非空表示没存。</summary>
+            public static bool SaveDecoder(DecoderInfo di, out string error)
+            {
+                if (!Normalize(di, out error)) { return false; }
+
+                DecoderInfo existing = GetDecoder_ById(di.GUID);
+
+                if (existing == null)
+                {
+                    List.lstDecoderInfo.Add(di);
+                }
+                else
+                {
+                    int idx = List.lstDecoderInfo.IndexOf(existing);
+                    if (idx >= 0) { List.lstDecoderInfo[idx] = di; }
+                }
+
+                SaveDecoderList_ToDB();
+                return true;
+            }
+
+            public static List<DecoderRow> GetRows()
+            {
+                List<DecoderRow> rows = new List<DecoderRow>();
+                foreach (DecoderInfo d in List.lstDecoderInfo) { rows.Add(ToRow(d)); }
+                return rows;
+            }
+
+            public static DecoderRow ToRow(DecoderInfo d)
+            {
+                DecoderRow r = new DecoderRow();
+                r.Id = d.GUID.ToString().ToUpper();
+                r.IsEnable = d.IsEnable;
+                r.Name = d.Name;
+                r.Description = d.Description;
+                r.Kind = (int)d.Kind;
+                r.Charset = (int)d.Charset;
+                r.KeyFormat = (int)d.KeyFormat;
+                r.Key = d.Key;
+                r.IvFormat = (int)d.IvFormat;
+                r.Iv = d.Iv;
+                r.CipherMode = (int)d.CipherMode;
+                r.Padding = (int)d.Padding;
+                r.BlockSize = d.BlockSize;
+                r.LengthBytes = d.LengthBytes;
+                r.BigEndian = d.BigEndian;
+                r.LengthIncludesSelf = d.LengthIncludesSelf;
+                r.HasFixedHeader = d.HasFixedHeader;
+                r.FixedHeader = d.FixedHeader;
+                r.LengthIncludesFixedHeader = d.LengthIncludesFixedHeader;
+                r.DataOffset = d.DataOffset;
+                r.ProtocolType = (int)d.ProtocolType;
+                r.Direction = (int)d.Direction;
+                r.ParamsJson = d.ParamsJson;
+                return r;
+            }
+
+            public static DecoderInfo FromRow(DecoderRow r)
+            {
+                DecoderInfo d = new DecoderInfo();
+                if (r == null) { return d; }
+
+                Guid g;
+                if (!string.IsNullOrEmpty(r.Id) && Guid.TryParse(r.Id, out g)) { d.GUID = g; }
+                else { d.GUID = Guid.NewGuid(); }
+
+                d.IsEnable = r.IsEnable;
+                d.Name = r.Name;
+                d.Description = r.Description;
+                d.Kind = (DecoderKind)r.Kind;
+                d.Charset = (DecoderCharset)r.Charset;
+                d.KeyFormat = (DecoderKeyFormat)r.KeyFormat;
+                d.Key = r.Key;
+                d.IvFormat = (DecoderKeyFormat)r.IvFormat;
+                d.Iv = r.Iv;
+                d.CipherMode = (DecoderCipherMode)r.CipherMode;
+                d.Padding = (DecoderPadding)r.Padding;
+                d.BlockSize = r.BlockSize;
+                d.LengthBytes = r.LengthBytes;
+                d.BigEndian = r.BigEndian;
+                d.LengthIncludesSelf = r.LengthIncludesSelf;
+                d.HasFixedHeader = r.HasFixedHeader;
+                d.FixedHeader = r.FixedHeader;
+                d.LengthIncludesFixedHeader = r.LengthIncludesFixedHeader;
+                d.DataOffset = r.DataOffset;
+                d.ProtocolType = (DecoderProtocol)r.ProtocolType;
+                d.Direction = (DecoderDirection)r.Direction;
+                d.ParamsJson = r.ParamsJson;
+                return d;
+            }
+
+            public static DecoderInfo GetDecoder_ById(Guid id)
+            {
+                foreach (DecoderInfo di in List.lstDecoderInfo) { if (di.GUID == id) { return di; } }
+                return null;
+            }
+
+            public static int DeleteDecoder_ByIds(IList<Guid> ids)
+            {
+                int nReturn = 0;
+
+                try
+                {
+                    if (ids == null) { return 0; }
+                    for (int i = List.lstDecoderInfo.Count - 1; i >= 0; i--)
+                    {
+                        if (ids.Contains(List.lstDecoderInfo[i].GUID))
+                        {
+                            List.lstDecoderInfo.RemoveAt(i);
+                            nReturn++;
+                        }
+                    }
+                }
+                catch (Exception ex) { Operate.DoLog(nameof(DeleteDecoder_ByIds), ex); }
+
+                return nReturn;
+            }
+
+            /// <summary>
+            /// 业务校验。控件属性不是约束 —— 下限 / 必填都落在这里。
+            /// 保存前必须调一次，智能解码 / 批量解码也用同一份判据筛掉配错的解码器。
+            /// </summary>
+            public static bool Normalize(DecoderInfo di, out string error)
+            {
+                error = null;
+
+                if (di == null) { error = UI.T("Dec.ErrNoDecoder", "解码器不存在"); return false; }
+                if (string.IsNullOrWhiteSpace(di.Name)) { error = UI.T("Dec.ErrName", "名称不能为空"); return false; }
+                if (di.DataOffset < 0) { error = UI.T("Dec.ErrOffset", "解码起始偏移不能为负"); return false; }
+
+                if (di.LengthBytes != 0 && di.LengthBytes != 1 && di.LengthBytes != 2 && di.LengthBytes != 4)
+                {
+                    error = UI.T("Dec.FrameLenBytes", "包长字段只能占 1 / 2 / 4 字节");
+                    return false;
+                }
+
+                if (di.CipherMode == DecoderCipherMode.CTS)
+                {
+                    error = UI.T("Dec.CtsUnsupported", "CTS 模式当前不受支持；请改用 CBC、ECB、CFB 或 OFB");
+                    return false;
+                }
+
+                //块大小由 AES（128 位）/ DES（64 位）算法固定；历史列只为读取旧数据库保留，
+                //不能让一个不会参与运算的值伪装成可配置项。
+                di.BlockSize = 0;
+
+                if (di.HasFixedHeader && FrameExtractor.ParseHex(di.FixedHeader).Length == 0)
+                {
+                    error = UI.T("Dec.FrameHeaderEmpty", "启用了固定头部但没有填写头部字节");
+                    return false;
+                }
+
+                try
+                {
+                    if (di.Kind == DecoderKind.Xor || di.Kind == DecoderKind.Rc4 || di.Kind == DecoderKind.Xxtea)
+                    {
+                        CodecEngine.ParseKey(di.Key, di.KeyFormat, true);
+                        if (di.Kind == DecoderKind.Xxtea && CodecEngine.ParseKey(di.Key, di.KeyFormat, true).Length != 16)
+                        {
+                            error = UI.T("Dec.XxteaKey", "XXTEA 密钥必须是 16 字节");
+                            return false;
+                        }
+                    }
+                    else if (di.Kind == DecoderKind.Aes || di.Kind == DecoderKind.Des)
+                    {
+                        CodecEngine.ParseKey(di.Key, di.KeyFormat, true);
+                        CodecEngine.ParseKey(di.Iv, di.IvFormat, false);
+                    }
+                }
+                catch (FormatException ex) { error = ex.Message; return false; }
+
+                if (string.IsNullOrEmpty(di.ParamsJson)) { di.ParamsJson = string.Empty; }
+
+                return true;
+            }
+
+            public static void SaveDecoderList_ToDB()
+            {
+                DataBase.SaveTable_Decoder(List.lstDecoderInfo);
+            }
+
+            public static void LoadDecoderList_FromDB()
+            {
+                try
+                {
+                    List.lstDecoderInfo.Clear();
+                    DataTable dt = DataBase.SelectTable_Decoder();
+
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        DecoderInfo di = new DecoderInfo();
+                        di.GUID = Guid.Parse(Convert.ToString(row["GUID"]));
+                        di.IsEnable = Convert.ToBoolean(row["IsEnable"]);
+                        di.Name = Convert.ToString(row["Name"]);
+                        di.Description = Convert.ToString(row["Description"]);
+                        di.Kind = (DecoderKind)Convert.ToInt32(row["Kind"]);
+                        di.Charset = (DecoderCharset)Convert.ToInt32(row["Charset"]);
+                        di.KeyFormat = (DecoderKeyFormat)Convert.ToInt32(row["KeyFormat"]);
+                        di.Key = Convert.ToString(row["Key"]);
+                        di.IvFormat = (DecoderKeyFormat)Convert.ToInt32(row["IvFormat"]);
+                        di.Iv = Convert.ToString(row["Iv"]);
+                        di.CipherMode = (DecoderCipherMode)Convert.ToInt32(row["CipherMode"]);
+                        di.Padding = (DecoderPadding)Convert.ToInt32(row["Padding"]);
+                        di.BlockSize = Convert.ToInt32(row["BlockSize"]);
+                        di.LengthBytes = Convert.ToInt32(row["LengthBytes"]);
+                        di.BigEndian = Convert.ToBoolean(row["BigEndian"]);
+                        di.LengthIncludesSelf = Convert.ToBoolean(row["LengthIncludesSelf"]);
+                        di.HasFixedHeader = Convert.ToBoolean(row["HasFixedHeader"]);
+                        di.FixedHeader = Convert.ToString(row["FixedHeader"]);
+                        di.LengthIncludesFixedHeader = Convert.ToBoolean(row["LengthIncludesFixedHeader"]);
+                        di.DataOffset = Convert.ToInt32(row["DataOffset"]);
+                        di.ProtocolType = (DecoderProtocol)Convert.ToInt32(row["ProtocolType"]);
+                        di.Direction = (DecoderDirection)Convert.ToInt32(row["Direction"]);
+                        di.ParamsJson = Convert.ToString(row["ParamsJson"]);
+
+                        List.lstDecoderInfo.Add(di);
+                    }
+                }
+                catch (Exception ex) { Operate.DoLog(nameof(LoadDecoderList_FromDB), ex); }
+            }
+
+            /// <summary>整份解码器列表 → &lt;Decoders&gt; 节（备份 / 导出共用）。</summary>
+            public static XElement GetDecoderList_XML()
+            {
+                return GetDecoderList_XML(null);
+            }
+
+            /// <summary>
+            /// 指定解码器 → &lt;Decoders&gt; 节。传 null 表示整份列表。
+            /// 导出选中条目时只写这几条，格式与备份恢复同一个根。
+            /// </summary>
+            public static XElement GetDecoderList_XML(List<DecoderInfo> diList)
+            {
+                try
+                {
+                    XElement xeRoot = new XElement("Decoders");
+
+                    if (diList == null) { diList = List.lstDecoderInfo.ToList(); }
+
+                    foreach (DecoderInfo di in diList) { xeRoot.Add(DecoderToXml(di)); }
+
+                    return xeRoot;
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(GetDecoderList_XML), ex);
+                    return null;
+                }
+            }
+
+            private static XElement DecoderToXml(DecoderInfo di)
+            {
+                return new XElement("Decoder",
+                    new XElement("ID", di.GUID.ToString().ToUpper()),
+                    new XElement("IsEnable", di.IsEnable.ToString()),
+                    new XElement("Name", di.Name),
+                    new XElement("Description", di.Description),
+                    new XElement("Kind", (int)di.Kind),
+                    new XElement("Charset", (int)di.Charset),
+                    new XElement("KeyFormat", (int)di.KeyFormat),
+                    new XElement("Key", di.Key),
+                    new XElement("IvFormat", (int)di.IvFormat),
+                    new XElement("Iv", di.Iv),
+                    new XElement("CipherMode", (int)di.CipherMode),
+                    new XElement("Padding", (int)di.Padding),
+                    new XElement("BlockSize", di.BlockSize),
+                    new XElement("LengthBytes", di.LengthBytes),
+                    new XElement("BigEndian", di.BigEndian.ToString()),
+                    new XElement("LengthIncludesSelf", di.LengthIncludesSelf.ToString()),
+                    new XElement("HasFixedHeader", di.HasFixedHeader.ToString()),
+                    new XElement("FixedHeader", di.FixedHeader),
+                    new XElement("LengthIncludesFixedHeader", di.LengthIncludesFixedHeader.ToString()),
+                    new XElement("DataOffset", di.DataOffset),
+                    new XElement("ProtocolType", (int)di.ProtocolType),
+                    new XElement("Direction", (int)di.Direction),
+                    new XElement("ParamsJson", di.ParamsJson)
+                    );
+            }
+
+            /// <summary>
+            /// &lt;Decoder&gt; 节 → 模型。<paramref name="uniqueGuid"/> 为真且 GUID 已存在时换一个新的
+            /// （导入用；备份恢复同一份库内不会有冲突，传 false 保持原 GUID）。
+            /// </summary>
+            private static DecoderInfo DecoderFromXml(XElement xe, bool uniqueGuid)
+            {
+                DecoderInfo di = new DecoderInfo();
+
+                Guid g;
+                if (!Guid.TryParse(GetXmlString(xe, "ID", string.Empty), out g) || g == Guid.Empty)
+                {
+                    g = Guid.NewGuid();
+                }
+                else if (uniqueGuid && GetDecoder_ById(g) != null)
+                {
+                    g = Guid.NewGuid();
+                }
+
+                di.GUID = g;
+                di.IsEnable = GetXmlBool(xe, "IsEnable", true);
+                di.Name = GetXmlString(xe, "Name", string.Empty);
+                di.Description = GetXmlString(xe, "Description", string.Empty);
+                di.Kind = (DecoderKind)GetXmlInt(xe, "Kind", 1);
+                di.Charset = (DecoderCharset)GetXmlInt(xe, "Charset", 3);
+                di.KeyFormat = (DecoderKeyFormat)GetXmlInt(xe, "KeyFormat", 0);
+                di.Key = GetXmlString(xe, "Key", string.Empty);
+                di.IvFormat = (DecoderKeyFormat)GetXmlInt(xe, "IvFormat", 0);
+                di.Iv = GetXmlString(xe, "Iv", string.Empty);
+                di.CipherMode = (DecoderCipherMode)GetXmlInt(xe, "CipherMode", 0);
+                di.Padding = (DecoderPadding)GetXmlInt(xe, "Padding", 1);
+                di.BlockSize = GetXmlInt(xe, "BlockSize", 0);
+                di.LengthBytes = GetXmlInt(xe, "LengthBytes", 0);
+                di.BigEndian = GetXmlBool(xe, "BigEndian", false);
+                di.LengthIncludesSelf = GetXmlBool(xe, "LengthIncludesSelf", false);
+                di.HasFixedHeader = GetXmlBool(xe, "HasFixedHeader", false);
+                di.FixedHeader = GetXmlString(xe, "FixedHeader", string.Empty);
+                di.LengthIncludesFixedHeader = GetXmlBool(xe, "LengthIncludesFixedHeader", false);
+                di.DataOffset = GetXmlInt(xe, "DataOffset", 0);
+                di.ProtocolType = (DecoderProtocol)GetXmlInt(xe, "ProtocolType", 0);
+                di.Direction = (DecoderDirection)GetXmlInt(xe, "Direction", 0);
+                di.ParamsJson = GetXmlString(xe, "ParamsJson", string.Empty);
+
+                return di;
+            }
+
+            /// <summary>从备份的 &lt;Decoders&gt; 节恢复。节存在就先清空再装（与其它列表同一口径）。</summary>
+            public static void LoadDecoderList_XML(XElement xeRoot)
+            {
+                try
+                {
+                    if (xeRoot == null) { return; }
+
+                    List.lstDecoderInfo.Clear();
+
+                    foreach (XElement xe in xeRoot.Elements("Decoder"))
+                    {
+                        List.lstDecoderInfo.Add(DecoderFromXml(xe, false));
+                    }
+                }
+                catch (Exception ex) { Operate.DoLog(nameof(LoadDecoderList_XML), ex); }
+            }
+
+            #region//解码器列表（列表操作 / 文件导入导出）
+
+            /// <summary>按 GUID 串找一个解码器（不区分大小写）。</summary>
+            public static DecoderInfo GetDecoder_ByIdString(string id)
+            {
+                Guid g;
+                return Guid.TryParse(id, out g) ? GetDecoder_ById(g) : null;
+            }
+
+            /// <summary>Id 数组 → 模型列表，按列表里的先后顺序返回（与 PickFilters / PickSends 同一口径）。</summary>
+            public static List<DecoderInfo> PickDecoders(IList<string> Ids)
+            {
+                var picked = new List<DecoderInfo>();
+
+                if (Ids == null || Ids.Count == 0) { return picked; }
+
+                var want = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                foreach (string id in Ids) { if (!string.IsNullOrEmpty(id)) { want.Add(id); } }
+
+                foreach (DecoderInfo di in List.lstDecoderInfo)
+                {
+                    if (want.Contains(di.GUID.ToString())) { picked.Add(di); }
+                }
+
+                return picked;
+            }
+
+            /// <summary>全部启用 / 全部禁用（对应工具条上那两个按钮）。返回改了几条。</summary>
+            public static int SetAllDecoderEnable(bool IsEnable)
+            {
+                int n = 0;
+
+                foreach (DecoderInfo di in List.lstDecoderInfo)
+                {
+                    if (di.IsEnable != IsEnable) { di.IsEnable = IsEnable; n++; }
+                }
+
+                if (n > 0) { SaveDecoderList_ToDB(); }
+                return n;
+            }
+
+            /// <summary>复制一条解码器（新 GUID + 名称加副本后缀），追加到表尾。</summary>
+            public static DecoderInfo CopyDecoder(DecoderInfo src)
+            {
+                if (src == null) { return null; }
+
+                DecoderInfo di = FromRow(ToRow(src));
+                di.GUID = Guid.NewGuid();
+                di.Name = string.Format(UI.T("CopyName", "{0} - 副本"), src.Name);
+                List.lstDecoderInfo.Add(di);
+                return di;
+            }
+
+            /// <summary>
+            /// 列表动作，编号照搬 <see cref="SystemConfig.ListAction"/>（与滤镜 / 发送 / 机器人 / 仓库同一套语义）。
+            ///
+            /// 【顺序为什么有意义】智能解码按列表顺序逐条尝试，命中结果也按这个顺序排；
+            /// 右键「解码 ▸ 解码器」的子菜单同样按列表顺序列出来。所以置顶 / 上移 / 下移 / 置底
+            /// 是给「常用解码器排在前面」用的，移动逻辑与滤镜那份逐字一致。
+            /// </summary>
+            public static async Task UpdateDecoderList_ByListAction(SystemConfig.ListAction listAction, List<DecoderInfo> diList)
+            {
+                try
+                {
+                    switch (listAction)
+                    {
+                        case SystemConfig.ListAction.Top:
+
+                            foreach (DecoderInfo di in diList)
+                            {
+                                List.lstDecoderInfo.Remove(di);
+                                List.lstDecoderInfo.Insert(0, di);
+                            }
+
+                            break;
+
+                        case SystemConfig.ListAction.Up:
+
+                            foreach (DecoderInfo di in diList)
+                            {
+                                int iIndex = List.lstDecoderInfo.IndexOf(di);
+
+                                if (iIndex > 0)
+                                {
+                                    List.lstDecoderInfo.Remove(di);
+                                    List.lstDecoderInfo.Insert(iIndex - 1, di);
+                                }
+                            }
+
+                            break;
+
+                        case SystemConfig.ListAction.Down:
+
+                            foreach (DecoderInfo di in diList)
+                            {
+                                int iIndex = List.lstDecoderInfo.IndexOf(di);
+
+                                if (iIndex > -1 && iIndex < List.lstDecoderInfo.Count - 1)
+                                {
+                                    List.lstDecoderInfo.Remove(di);
+                                    List.lstDecoderInfo.Insert(iIndex + 1, di);
+                                }
+                            }
+
+                            break;
+
+                        case SystemConfig.ListAction.Bottom:
+
+                            foreach (DecoderInfo di in diList)
+                            {
+                                List.lstDecoderInfo.Remove(di);
+                                List.lstDecoderInfo.Add(di);
+                            }
+
+                            break;
+
+                        case SystemConfig.ListAction.Copy:
+                            foreach (DecoderInfo di in diList) { CopyDecoder(di); }
+                            break;
+
+                        case SystemConfig.ListAction.Export:
+                            await SaveDecoderList_Dialog(diList.Count > 0 ? diList[0].Name : null, diList);
+                            break;
+
+                        case SystemConfig.ListAction.Delete:
+                            await DeleteDecoder_Dialog(diList);
+                            break;
+                    }
+                }
+                catch (Exception ex) { Operate.DoLog(nameof(UpdateDecoderList_ByListAction), ex); }
+            }
+
+            /// <summary>按 Id 数组收列表动作，动作编号照搬 <see cref="SystemConfig.ListAction"/>。</summary>
+            public static async Task<int> DecoderListAction_ByIds(int Action, IList<string> Ids)
+            {
+                List<DecoderInfo> picked = PickDecoders(Ids);
+
+                if (picked.Count == 0) { return 0; }
+
+                int before = List.lstDecoderInfo.Count;
+
+                await UpdateDecoderList_ByListAction((SystemConfig.ListAction)Action, picked);
+
+                //导出只写文件、不动列表；其余动作都改了内容
+                if ((SystemConfig.ListAction)Action != SystemConfig.ListAction.Export)
+                {
+                    SaveDecoderList_ToDB();
+                }
+
+                return List.lstDecoderInfo.Count - before;
+            }
+
+            /// <summary>删除（带确认框）。</summary>
+            public static async Task DeleteDecoder_Dialog(List<DecoderInfo> diList)
+            {
+                if (diList == null || diList.Count == 0) { return; }
+
+                if (await UI.Confirm(UI.T("Dec.TabDecoders", "解码器"), UI.T("Dec.DelConfirm", "确定删除选中的解码器吗？")))
+                {
+                    foreach (DecoderInfo di in diList) { List.lstDecoderInfo.Remove(di); }
+                }
+            }
+
+            /// <summary>清空全部（带确认框）。</summary>
+            public static async Task CleanUpDecoderList_Dialog()
+            {
+                if (await UI.Confirm(UI.T("Dec.TabDecoders", "解码器"), UI.T("SureToDelete", "确定删除数据吗?")))
+                {
+                    List.lstDecoderInfo.Clear();
+                }
+            }
+
+            public static async Task CleanUpDecoderList_Dialog_Shell()
+            {
+                int before = List.lstDecoderInfo.Count;
+
+                await CleanUpDecoderList_Dialog();
+
+                if (List.lstDecoderInfo.Count != before) { SaveDecoderList_ToDB(); }
+            }
+
+            /// <summary>导出解码器到文件（带文件框）。diList 为 null 表示全部。</summary>
+            public static async Task<string> SaveDecoderList_Dialog(string FileName, List<DecoderInfo> diList)
+            {
+                try
+                {
+                    if (List.lstDecoderInfo.Count > 0)
+                    {
+                        FilePick sfdSaveFile = new FilePick();
+                        sfdSaveFile.Filter = UI.T("DecoderListFile", "解码器列表文件") + "（*.dec）|*.dec";
+
+                        if (!string.IsNullOrEmpty(FileName)) { sfdSaveFile.FileName = FileName; }
+
+                        string sPickedPath = await UI.PickSave(sfdSaveFile);
+                        if (!string.IsNullOrEmpty(sPickedPath))
+                        {
+                            var EncryptPassword = await SystemConfig.GetEncryptExportAsync(UI.T("ExportDecoderList", "导出解码器列表"));
+
+                            if (SaveDecoderList(sPickedPath, diList, EncryptPassword.DoEncrypt, EncryptPassword.Password))
+                            {
+                                string Title = UI.T("ExportDecoderList.Success", "导出解码器列表成功");
+                                UI.Notify(UiIcon.Success, Title, sPickedPath);
+                                Operate.DoLog(nameof(SaveDecoderList_Dialog), Title + ": " + sPickedPath);
+                                return sPickedPath;
+                            }
+                            else
+                            {
+                                UI.Notify(UiIcon.Error, UI.T("ExportDecoderList.Error", "导出解码器列表失败"), UI.T("CheckSystemLog", "请检查系统日志"));
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex) { Operate.DoLog(nameof(SaveDecoderList_Dialog), ex); }
+                return null;
+            }
+
+            private static bool SaveDecoderList(string FilePath, List<DecoderInfo> diList, bool DoEncrypt, string Password)
+            {
+                try
+                {
+                    XDocument xdoc = new XDocument
+                    {
+                        Declaration = new XDeclaration("1.0", "utf-8", "yes")
+                    };
+
+                    XElement xeRoot = GetDecoderList_XML(diList);
+                    if (xeRoot == null) { return false; }
+
+                    xdoc.Add(xeRoot);
+                    xdoc.Save(FilePath);
+
+                    if (DoEncrypt)
+                    {
+                        if (!string.IsNullOrEmpty(Password)) { SystemConfig.EncryptXMLFile(FilePath, Password); }
+                    }
+
+                    return true;
+                }
+                catch (Exception ex) { Operate.DoLog(nameof(SaveDecoderList), ex); }
+
+                return false;
+            }
+
+            /// <summary>导出全部（工具条按钮）。</summary>
+            public static async Task<string> SaveAllDecoders_Dialog(string FileName = null)
+            {
+                return await SaveDecoderList_Dialog(FileName, null);
+            }
+
+            /// <summary>从文件导入解码器（带文件框）。</summary>
+            public static async Task<string> LoadDecoderList_Dialog(string FileName = null)
+            {
+                try
+                {
+                    FilePick ofdLoadFile = new FilePick();
+                    ofdLoadFile.Filter = UI.T("DecoderListFile", "解码器列表文件") + "（*.dec）|*.dec";
+                    if (!string.IsNullOrWhiteSpace(FileName)) { ofdLoadFile.FileName = FileName; }
+
+                    string sPickedPath = await UI.PickOpen(ofdLoadFile);
+                    if (!string.IsNullOrEmpty(sPickedPath))
+                    {
+                        if (await LoadDecoderList(sPickedPath, true))
+                        {
+                            string Title = UI.T("ImportDecoderList.Success", "导入解码器列表成功");
+                            UI.Notify(UiIcon.Success, Title, sPickedPath);
+                            Operate.DoLog(nameof(LoadDecoderList_Dialog), Title + ": " + sPickedPath);
+                            return sPickedPath;
+                        }
+                    }
+                }
+                catch (Exception ex) { Operate.DoLog(nameof(LoadDecoderList_Dialog), ex); }
+                return null;
+            }
+
+            private static async Task<bool> LoadDecoderList(string FilePath, bool LoadFromUser)
+            {
+                try
+                {
+                    if (File.Exists(FilePath))
+                    {
+                        XDocument xdoc = null;
+
+                        if (SystemConfig.IsEncryptXMLFile(FilePath))
+                        {
+                            if (LoadFromUser)
+                            {
+                                xdoc = await SystemConfig.GetEncryptImportAsync(UI.T("ImportDecoderList", "导入解码器列表"), FilePath);
+                            }
+                        }
+                        else
+                        {
+                            xdoc = XDocument.Load(FilePath);
+                        }
+
+                        if (xdoc == null)
+                        {
+                            string sError = UI.T("Password.Incorrect", "导入失败: 密码错误");
+
+                            if (LoadFromUser) { UI.Toast(UiIcon.Error, sError); }
+                            else { Operate.DoLog(nameof(LoadDecoderList), sError); }
+
+                            return false;
+                        }
+
+                        LoadDecoderList_FromXDocument(xdoc);
+                        return true;
+                    }
+                }
+                catch (Exception ex) { Operate.DoLog(nameof(LoadDecoderList), ex); }
+
+                return false;
+            }
+
+            /// <summary>
+            /// 导入（追加）：与备份恢复不同，<b>不清空</b>现有解码器；GUID 已存在就换一个新的。
+            /// </summary>
+            public static void LoadDecoderList_FromXDocument(XDocument xdoc)
+            {
+                try
+                {
+                    if (xdoc == null || xdoc.Root == null) { return; }
+
+                    foreach (XElement xe in xdoc.Root.Elements("Decoder"))
+                    {
+                        List.lstDecoderInfo.Add(DecoderFromXml(xe, true));
+                    }
+                }
+                catch (Exception ex) { Operate.DoLog(nameof(LoadDecoderList_FromXDocument), ex); }
+            }
+
+            /// <summary>导入解码器列表（带文件框）。导进来之后要落库。</summary>
+            public static async Task<string> LoadDecoderList_Dialog_Shell(string FileName = null)
+            {
+                int before = List.lstDecoderInfo.Count;
+
+                var path = await LoadDecoderList_Dialog(FileName);
+
+                if (List.lstDecoderInfo.Count != before) { SaveDecoderList_ToDB(); }
+                return path;
+            }
+
+            #endregion
+
+            private static string GetXmlString(XElement xe, string name, string fallback)
+            {
+                XElement e = xe.Element(name);
+                return e == null ? fallback : e.Value;
+            }
+
+            private static int GetXmlInt(XElement xe, string name, int fallback)
+            {
+                int v;
+                return int.TryParse(GetXmlString(xe, name, string.Empty), out v) ? v : fallback;
+            }
+
+            private static bool GetXmlBool(XElement xe, string name, bool fallback)
+            {
+                bool v;
+                return bool.TryParse(GetXmlString(xe, name, string.Empty), out v) ? v : fallback;
+            }
+        }
+
+        #endregion
+
         #region//滤镜配置
 
         public static class FilterConfig
@@ -20132,7 +21228,7 @@ namespace WinsockPacketEditor
                             switch (ptType)
                             {
                                 case Operate.PacketConfig.Packet.PacketType.TCP_Req:
-                                    psSession.TargetSocket.Send(bEffective);
+                                    psSession.SendToTarget(bEffective);
                                     break;
 
                                 case Operate.PacketConfig.Packet.PacketType.TCP_Resp:
@@ -20141,43 +21237,13 @@ namespace WinsockPacketEditor
                             }
                         }
 
-                        /*
-                            HTTP 会话：把字节流拼成完整的请求 / 响应，按 HTTP_Req / HTTP_Resp 入列表，
-                            替代逐段 TCP 条目（只影响展示 —— 线上仍是上面逐段过滤后的字节）。
-                            非 HTTP 会话 Sniffer 返回 null，走原来的 TCP 条目。
-                        */
+                        // HTTP 嗅探只影响展示。确认协议前不入列表，避免同一批数据同时出现 TCP 与 HTTP 两条记录。
                         HttpSniffer sniffer = psSession.Sniffer(ptType == Operate.PacketConfig.Packet.PacketType.TCP_Req);
                         if (sniffer != null)
                         {
-                            List<byte[]> msgs = sniffer.Feed(bRawBuffer);
-
-                            if (sniffer.IsHttp)
-                            {
-                                Operate.PacketConfig.Packet.PacketType httpType =
-                                    ptType == Operate.PacketConfig.Packet.PacketType.TCP_Req
-                                        ? Operate.PacketConfig.Packet.PacketType.HTTP_Req
-                                        : Operate.PacketConfig.Packet.PacketType.HTTP_Resp;
-
-                                foreach (byte[] msg in msgs)
-                                {
-                                    _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
-                                        DateTime.Now,
-                                        Operate.FilterConfig.Filter.FilterAction.None,
-                                        msg.Length,
-                                        SocketID,
-                                        0,
-                                        httpType,
-                                        $"{psSession.ClientIP}:{psSession.ClientPort}",
-                                        $"{psSession.ServerIP}:{psSession.ServerPort}",
-                                        psSession.ServerAddress,
-                                        psSession.DomainType,
-                                        msg,
-                                        msg,
-                                        null);
-                                }
-
-                                return;
-                            }
+                            HttpSniffResult sniffed = sniffer.Feed(bRawBuffer, bEffective, FilterAction);
+                            QueueHttpSniffResult(psSession, SocketID, ptType, sniffed);
+                            return;
                         }
 
                         _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
@@ -20199,6 +21265,58 @@ namespace WinsockPacketEditor
                     {
                         Operate.DoLog(nameof(DoFilter_SOCKS_TCP), ex);
                     }
+                }
+
+                /// <summary>会话关闭时刷出 HTTP 嗅探的残片；未知协议按 TCP、已确认 HTTP 按 HTTP 入列表。</summary>
+                public static void Flush_SOCKS_HTTP(ProxySession psSession)
+                {
+                    if (psSession == null) { return; }
+                    try
+                    {
+                        FlushHttpSniffer(psSession, psSession.HttpReqSniffer, Operate.PacketConfig.Packet.PacketType.TCP_Req, psSession.TargetSocket);
+                        FlushHttpSniffer(psSession, psSession.HttpRespSniffer, Operate.PacketConfig.Packet.PacketType.TCP_Resp, psSession.SocketSession?.Client);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(Flush_SOCKS_HTTP), ex);
+                    }
+                }
+
+                private static void FlushHttpSniffer(ProxySession psSession, HttpSniffer sniffer, Operate.PacketConfig.Packet.PacketType tcpType, Socket socket)
+                {
+                    if (sniffer == null) { return; }
+                    int socketId = 0;
+                    try { if (socket != null) { socketId = socket.Handle.ToInt32(); } } catch { }
+                    QueueHttpSniffResult(psSession, socketId, tcpType, sniffer.Flush());
+                }
+
+                private static void QueueHttpSniffResult(ProxySession psSession, int socketId, Operate.PacketConfig.Packet.PacketType tcpType, HttpSniffResult result)
+                {
+                    if (result == null) { return; }
+                    Operate.PacketConfig.Packet.PacketType httpType = tcpType == Operate.PacketConfig.Packet.PacketType.TCP_Req
+                        ? Operate.PacketConfig.Packet.PacketType.HTTP_Req
+                        : Operate.PacketConfig.Packet.PacketType.HTTP_Resp;
+                    foreach (HttpSniffEntry entry in result.HttpEntries) { QueueHttpSniffEntry(psSession, socketId, httpType, entry); }
+                    foreach (HttpSniffEntry entry in result.TcpEntries) { QueueHttpSniffEntry(psSession, socketId, tcpType, entry); }
+                }
+
+                private static void QueueHttpSniffEntry(ProxySession psSession, int socketId, Operate.PacketConfig.Packet.PacketType type, HttpSniffEntry entry)
+                {
+                    if (entry == null || entry.Effective == null || entry.Effective.Length == 0) { return; }
+                    _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
+                        DateTime.Now,
+                        entry.Action,
+                        entry.Effective.Length,
+                        socketId,
+                        0,
+                        type,
+                        $"{psSession.ClientIP}:{psSession.ClientPort}",
+                        $"{psSession.ServerIP}:{psSession.ServerPort}",
+                        psSession.ServerAddress,
+                        psSession.DomainType,
+                        entry.Raw,
+                        entry.Effective,
+                        null);
                 }
 
                 public static void DoFilter_SOCKS_UDP(ProxySession psSession, ProxyUDP pu, IPEndPoint epRemote, Span<byte> bData, Operate.PacketConfig.Packet.PacketType ptType)
@@ -31001,6 +32119,7 @@ namespace WinsockPacketEditor
                     DataBase.CreateTable_BlackList();
                     DataBase.CreateTable_ServerInfo();
                     DataBase.CreateTable_NoticeInfo();
+                    DataBase.CreateTable_Decoder();
                 }
                 catch (Exception ex)
                 {
@@ -31170,6 +32289,48 @@ namespace WinsockPacketEditor
                 {
                     //补不上就记一条，别把启动整个拦下来 —— 缺列的后果由读取那边的兜底兜住
                     Operate.DoLog(nameof(EnsureColumn), ex);
+                }
+            }
+
+            /// <summary>
+            /// 老库删列。SQLite 的 DROP COLUMN 从 3.35 起才有、且不支持 IF EXISTS，
+            /// 所以先用 PRAGMA table_info 查一遍（与 EnsureColumn 同一种写法）。幂等。
+            /// <b>以后废弃一张表的某列，都在对应的 CreateTable_* 末尾补一句这个。</b>
+            /// </summary>
+            private static void DropColumnIfExists(SqliteConnection Conn, string Table, string Column)
+            {
+                try
+                {
+                    bool exists = false;
+
+                    using (SqliteCommand cmd = new SqliteCommand("PRAGMA table_info(" + Table + ");", Conn))
+                    using (SqliteDataReader r = cmd.ExecuteReader())
+                    {
+                        while (r.Read())
+                        {
+                            if (string.Equals(Convert.ToString(r["name"]), Column, StringComparison.OrdinalIgnoreCase))
+                            {
+                                exists = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!exists) { return; }
+
+                    string sql = "ALTER TABLE " + Table + " DROP COLUMN " + Column + ";";
+
+                    using (SqliteCommand cmd = new SqliteCommand(sql, Conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    Operate.DoLog(nameof(DropColumnIfExists), "已为老库删列：" + Table + "." + Column);
+                }
+                catch (Exception ex)
+                {
+                    //删不掉就记一条，别把启动整个拦下来 —— 残留列无害（读写都不再提它）
+                    Operate.DoLog(nameof(DropColumnIfExists), ex);
                 }
             }
 
@@ -31936,6 +33097,64 @@ namespace WinsockPacketEditor
 
             #region//滤镜列表
 
+            /// <summary>
+            /// 解码器表。<b>跨模式共用</b>（注入 / 代理两模式同一份），所以命名不带 Proxy 前缀，
+            /// 与 Filter / Send / Robot 一个层级，列名也照它们（GUID 主键 + IsEnable + Name）。
+            /// </summary>
+            public static bool CreateTable_Decoder()
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
+                    {
+                        string sql = "CREATE TABLE IF NOT EXISTS Decoder (";
+                        sql += "GUID TEXT NOT NULL PRIMARY KEY,";
+                        sql += "IsEnable BOOLEAN DEFAULT 1,";
+                        sql += "Name TEXT NOT NULL,";
+                        sql += "Description TEXT,";
+                        sql += "Kind INTEGER NOT NULL DEFAULT 1,";
+                        sql += "Charset INTEGER NOT NULL DEFAULT 3,";
+                        sql += "KeyFormat INTEGER NOT NULL DEFAULT 0,";
+                        sql += "Key TEXT,";
+                        sql += "IvFormat INTEGER NOT NULL DEFAULT 0,";
+                        sql += "Iv TEXT,";
+                        sql += "CipherMode INTEGER NOT NULL DEFAULT 0,";
+                        sql += "Padding INTEGER NOT NULL DEFAULT 1,";
+                        sql += "BlockSize INTEGER NOT NULL DEFAULT 0,";
+                        sql += "LengthBytes INTEGER NOT NULL DEFAULT 0,";
+                        sql += "BigEndian BOOLEAN DEFAULT 0,";
+                        sql += "LengthIncludesSelf BOOLEAN DEFAULT 0,";
+                        sql += "HasFixedHeader BOOLEAN DEFAULT 0,";
+                        sql += "FixedHeader TEXT,";
+                        sql += "LengthIncludesFixedHeader BOOLEAN DEFAULT 0,";
+                        sql += "DataOffset INTEGER NOT NULL DEFAULT 0,";
+                        sql += "ProtocolType INTEGER NOT NULL DEFAULT 0,";
+                        sql += "Direction INTEGER NOT NULL DEFAULT 0,";
+                        sql += "ParamsJson TEXT";
+                        sql += ");";
+
+                        using (SqliteCommand cmd = new SqliteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // 「作者」列已废弃：新库不再建它，老库在这里删掉（幂等，删不掉也不算失败）。
+                        DropColumnIfExists(conn, "Decoder", "Author");
+                    }
+
+                    bReturn = true;
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(CreateTable_Decoder), ex);
+                }
+
+                return bReturn;
+            }
+
             private static bool CreateTable_Filter()
             {
                 bool bReturn = false;
@@ -32197,6 +33416,142 @@ namespace WinsockPacketEditor
                 catch (Exception ex)
                 {
                     Operate.DoLog(nameof(SaveTable_Filter), ex);
+                    return 0;
+                }
+
+                return iReturn;
+            }
+
+            #endregion
+
+            #region//解码器（跨模式共用）
+
+            public static DataTable SelectTable_Decoder()
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
+                    {
+                        string sql = "SELECT * FROM Decoder;";
+
+                        using (SqliteDataAdapter adapter = new SqliteDataAdapter(sql, conn))
+                        {
+                            adapter.Fill(dtReturn);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(SelectTable_Decoder), ex);
+                }
+
+                return dtReturn;
+            }
+
+            /// <summary>插一条解码器。Conn / Tx 传进来就复用（整表保存时装进一个事务）。</summary>
+            public static void InsertTable_Decoder(DecoderInfo di)
+            {
+                InsertTable_Decoder(di, null, null);
+            }
+
+            public static void InsertTable_Decoder(DecoderInfo di, SqliteConnection Conn, SqliteTransaction Tx)
+            {
+                SqliteConnection conn = Conn;
+                bool own = conn == null;
+
+                try
+                {
+                    if (di == null) { return; }
+                    if (own) { conn = new SqliteConnection(conStr); }
+
+                    string sql = "INSERT INTO Decoder (";
+                    sql += "GUID,IsEnable,Name,Description,Kind,Charset,KeyFormat,Key,IvFormat,Iv,";
+                    sql += "CipherMode,Padding,BlockSize,LengthBytes,BigEndian,LengthIncludesSelf,";
+                    sql += "HasFixedHeader,FixedHeader,LengthIncludesFixedHeader,DataOffset,ProtocolType,Direction,ParamsJson";
+                    sql += ") VALUES (";
+                    sql += "@GUID,@IsEnable,@Name,@Description,@Kind,@Charset,@KeyFormat,@Key,@IvFormat,@Iv,";
+                    sql += "@CipherMode,@Padding,@BlockSize,@LengthBytes,@BigEndian,@LengthIncludesSelf,";
+                    sql += "@HasFixedHeader,@FixedHeader,@LengthIncludesFixedHeader,@DataOffset,@ProtocolType,@Direction,@ParamsJson";
+                    sql += ");";
+
+                    using (SqliteCommand cmd = new SqliteCommand(sql, conn))
+                    {
+                        if (Tx != null) { cmd.Transaction = Tx; }
+
+                        AddParam(cmd, "@GUID", di.GUID.ToString().ToUpper());
+                        AddParam(cmd, "@IsEnable", di.IsEnable);
+                        AddParam(cmd, "@Name", di.Name);
+                        AddParam(cmd, "@Description", di.Description);
+                        AddParam(cmd, "@Kind", (int)di.Kind);
+                        AddParam(cmd, "@Charset", (int)di.Charset);
+                        AddParam(cmd, "@KeyFormat", (int)di.KeyFormat);
+                        AddParam(cmd, "@Key", di.Key);
+                        AddParam(cmd, "@IvFormat", (int)di.IvFormat);
+                        AddParam(cmd, "@Iv", di.Iv);
+                        AddParam(cmd, "@CipherMode", (int)di.CipherMode);
+                        AddParam(cmd, "@Padding", (int)di.Padding);
+                        AddParam(cmd, "@BlockSize", di.BlockSize);
+                        AddParam(cmd, "@LengthBytes", di.LengthBytes);
+                        AddParam(cmd, "@BigEndian", di.BigEndian);
+                        AddParam(cmd, "@LengthIncludesSelf", di.LengthIncludesSelf);
+                        AddParam(cmd, "@HasFixedHeader", di.HasFixedHeader);
+                        AddParam(cmd, "@FixedHeader", di.FixedHeader);
+                        AddParam(cmd, "@LengthIncludesFixedHeader", di.LengthIncludesFixedHeader);
+                        AddParam(cmd, "@DataOffset", di.DataOffset);
+                        AddParam(cmd, "@ProtocolType", (int)di.ProtocolType);
+                        AddParam(cmd, "@Direction", (int)di.Direction);
+                        AddParam(cmd, "@ParamsJson", di.ParamsJson);
+
+                        if (own) { conn.Open(); }
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(InsertTable_Decoder), ex);
+                }
+                finally
+                {
+                    if (own && conn != null) { conn.Dispose(); }
+                }
+            }
+
+            /// <summary>整表保存解码器：删空 + 全部插入，装在同一个事务里。返回写进去的条数。</summary>
+            public static int SaveTable_Decoder(IList<DecoderInfo> list)
+            {
+                int iReturn = 0;
+
+                try
+                {
+                    using (SqliteConnection conn = new SqliteConnection(conStr))
+                    {
+                        conn.Open();
+
+                        using (SqliteTransaction tx = conn.BeginTransaction())
+                        {
+                            using (SqliteCommand del = new SqliteCommand("DELETE FROM Decoder;", conn, tx))
+                            {
+                                del.ExecuteNonQuery();
+                            }
+
+                            if (list != null)
+                            {
+                                foreach (DecoderInfo di in list)
+                                {
+                                    InsertTable_Decoder(di, conn, tx);
+                                    iReturn++;
+                                }
+                            }
+
+                            tx.Commit();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(SaveTable_Decoder), ex);
                     return 0;
                 }
 

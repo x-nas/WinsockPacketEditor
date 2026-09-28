@@ -1,0 +1,75 @@
+# HTTPS 映射改造方案与当前实现
+
+状态：HTTPS 本地映射与远程映射首期均已完成（2026-09-26）。HTTPS 源地址在 TLS 终止后按首个 HTTP/1.1 请求选路，可映射到 HTTPS 或 HTTP 目标；HTTP 源地址只允许映射到 HTTP 目标，界面与保存校验均禁止 HTTP → HTTPS。
+
+## 已完成的前置修复（2026-09-25）
+
+- HTTP 列表嗅探改为先判定、后入队：不再把同一段数据先记成 TCP 再重复记成 HTTP；会话关闭时会刷出未完成残片。
+- 嗅探缓存对所有路径（包括 `Content-Length`）执行 4 MB 上限，超限退回 TCP 展示，不影响转发。
+- HTTP 条目现在保留过滤前与实际过滤后的字节及动作，展示不再假定它永远是未修改数据。
+- HTTP 映射会等待完整请求头，支持 PATCH / DELETE / OPTIONS / TRACE，并正确解析 `Host` 的 IPv6 字面量和端口；映射改写只重写头部，二进制正文原样保留。HTTP 映射启用时 SOCKS CONNECT 先回应成功、等首个请求按真实路径选定本地/远程规则后才连接最终目标，避免同一来源主机下不同路径规则预连到第一条目标。
+- HTTP 本地文件响应按 64 KB 分块发送，带正确 MIME、`Content-Length` 和 `Connection: close`，随后关闭会话；目标 Socket 发送均循环至完整写入，不能忽略 `Socket.Send` 的部分完成。
+
+这些修复是 TLS 解密接入的基础。
+
+## 目标与首期范围
+
+为代理模式现有 SOCKS5 端口上的 HTTPS（TCP）流量增加可选本地文件映射。规则匹配沿用既有本地映射语义：主机和端口相等、路径以前缀匹配（查询串属于路径的一部分）。
+
+首期仅支持 HTTP/1.1；不支持 HTTP/2、HTTP/3/QUIC、WebSocket、gRPC、转发到另一 HTTPS URL，亦不尝试绕过证书固定或安全软件校验。TLS 握手或上游校验失败时关闭该会话并写系统日志：握手字节已由 `SslStream` 消费，不能安全地把同一连接降级成明文直通。
+
+## 不可破坏的现有语义
+
+- 外网客户端继续连接现有 WPE SOCKS5 端口，不能要求其改用新端口。
+- `ProxySession.ClientIP`、账号认证、设备/连接限制、客户端列表与代理日志必须继续保留 TCP 对端的真实外网地址。
+- WPC 控制通道、普通 TCP/UDP、未命中的 HTTPS 与本机 mihomo 的其它流量必须保持现有纯转发行为。
+- 进程设置模式的 mihomo 当前已将流量转发到 `127.0.0.1`，该路径本来就没有游戏 PID/真实源 IP；不得将其语义误用于外网客户端。
+
+## 目标架构
+
+HTTPS MITM 不能作为独立的前置/后置代理插在 WPE 外面；那会令 WPE 只看见本机中转连接并丢失外网客户端地址。必须在现有 SOCKS5 `ProxySession` 完成认证和 CONNECT 后，按会话条件选择处理路径：
+
+```text
+客户端 → WPE 既有 SOCKS5 端口 → ProxySession（认证/ClientIP/限额）
+                                  ├─ 普通会话：当前 TCP/UDP 直通
+                                  └─ 可映射 HTTPS：HttpsMitmSession
+                                         ├─ 向客户端作 TLS 服务端握手
+                                         ├─ 动态签发目标域名证书
+                                         ├─ 解析 HTTP/1.1
+                                         ├─ 命中：本地文件 / 固定响应
+                                         └─ 未命中：向目标作 TLS 客户端握手并双向转发
+```
+
+只有存在已启用 HTTPS 规则的主机/端口、且根证书已由用户创建并信任时才尝试 MITM。当前按 SOCKS CONNECT 的主机名预判；IP CONNECT 与无规则继续当前直通路径。
+
+## 实现边界与依赖
+
+- 不把 Titanium.Web.Proxy 作为完整监听代理接入主链路：它拥有自己的 socket/会话生命周期，独立串联会污染 WPE 的外网 `ClientIP` 语义。
+- 不引入 Titanium.Web.Proxy、BouncyCastle 或 SunnyNet；证书与 TLS 仅使用 BCL API，不让第三方代理框架成为主 SOCKS5 监听入口。
+- 正式实现新增 WPE 自己管理的 `HttpsMitmSession`：`SslStream` 负责 TLS，证书组件负责 CA/站点证书，数据面只实现受限的 HTTP/1.1。
+- MITM 会话不进入既有普通 TCP 字节滤镜，避免把 TLS 或解密 HTTP 的语义混淆、重复入列或误改数据。
+
+## 配置、证书与规则
+
+HTTPS 本地映射复用 `MapLocal`；HTTPS 远程映射复用现有 `MapRemote` 的持久化模型、数据库、备份 XML、导入/导出和编辑器，不增加独立总开关。只要存在启用的 HTTPS 源主机/端口规则，就在该 CONNECT 会话上启用 MITM；解密首个 HTTP/1.1 请求后先匹配本地规则，再匹配远程规则。远程 HTTPS 目标以 `HostTo` 作 SNI 和证书验证名，远程 HTTP 目标使用明文 TCP。受限会话每次只完成一组请求/响应并在两端声明 `Connection: close`；响应可由 `Content-Length` 或上游关闭连接定界。HTTP 来源暂不建立 TLS 上游，因而保存时禁止选择 HTTPS 目标。
+
+根证书为每台服务器首次生成后持续复用，仅在用户明确确认后安装到“当前用户”受信任根证书库。私钥以机器 DPAPI 放 `%PROGRAMDATA%\WPE64\https-mitm\`，不随安装包、备份或日志分发；提供导出公钥、取消信任和删除本地材料的独立操作。导出支持 `.cer` / `.crt` / `.der`、PEM（`.pem`），以及 Android 系统 CA 目录所需的 PEM `<subject_hash_old>.0`；后者自动按 Android 规则命名。绝不静默写入“本地计算机”根证书库。删除材料等同于主动轮换根证书，之后客户端必须重新安装新根证书。
+
+### 证书链兼容性实测（2026-09-27）
+
+通过 SOCKS5 CONNECT 后直接发送 TLS ClientHello、解析服务端未加密 Certificate 握手消息，确认当前 .NET Framework `SslStream` / Schannel 实现只下发动态叶证书（`CN=目标域名`、`Issuer=CN=WPE64`）。即使将 WPE 根 CA 的仅公钥副本加入 `CurrentUser\CA`，Schannel 仍不会把这张自签名根附带到服务端握手；该尝试已撤销，产品不写入该额外证书库。
+
+同一探针观察到 Charles 5.2.1 会下发“目标叶证书 + 自签名 Charles Proxy CA”两张证书。这不是当前 WPE `SslStream` API 可显式控制的行为；要复刻它需要引入独立 TLS 实现和额外加密依赖，当前不纳入 WPE。客户端应安装并信任 WPE 导出的根证书；某些旧 Android 浏览器即使未显式安装证书仍可能显示页面，属于客户端特有的兼容行为，不能作为功能承诺。严格校验证书链的浏览器拒绝未受信任 WPE 根证书是预期安全行为。
+
+## 状态机与回退
+
+- 启用 HTTPS 映射前先检查证书可用性；失败则配置不生效。
+- TLS 协商、证书校验或 HTTP/1.1 解析失败时关闭该会话；不得影响其它会话。客户端主动拒绝 WPE 证书的 SSPI `0x80090327` 是正常分支，静默处理，不刷系统错误日志。
+- HTTP/2、QUIC 与 UDP 永远不进入 MITM，维持当前路径。
+
+## 已完成项与验证
+
+1. `HttpsMitmCertificateManager`：机器 DPAPI 保护服务器级根 CA 私钥；首版 CurrentUser 材料自动原样迁移；显式创建、信任、取消信任、多格式导出（`.cer/.crt/.der/.pem`、Android `<hash>.0`）和删除材料（删除时同时取消信任）。根证书只显式信任到 CurrentUser 证书库。
+2. `ProxySession` CONNECT 后接入 `HttpsMitmSession`：认证、ClientIP、账号、设备和连接限制仍先由既有 SOCKS5 会话处理；未命中时建立上游 TLS 并双向转发，包括请求头后的正文。
+3. 证书管理位于代理设置，页面文案已经接入六语言 i18n；导出格式在程序内选择，系统对话框只选择保存位置并带入默认文件名。
+4. Vue Release 构建、.NET Release 全解决方案构建，以及 `CheckUiCoupling.ps1` 均已通过。NuGet 漏洞索引因网络不可用产生的 `NU1900` 不影响编译结果。

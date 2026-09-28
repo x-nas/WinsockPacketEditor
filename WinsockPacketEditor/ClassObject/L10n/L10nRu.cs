@@ -111,6 +111,12 @@ namespace WinsockPacketEditor
             d["ExportFilterList"] = "Экспорт списка фильтров";
             d["ExportFilterList.Success"] = "Список фильтров экспортирован";
             d["ExportFilterList.Error"] = "Ошибка экспорта списка фильтров";
+            d["DecoderListFile"] = "Файл списка декодеров";
+            d["ImportDecoderList"] = "Импорт списка декодеров";
+            d["ImportDecoderList.Success"] = "Список декодеров импортирован";
+            d["ExportDecoderList"] = "Экспорт списка декодеров";
+            d["ExportDecoderList.Success"] = "Список декодеров экспортирован";
+            d["ExportDecoderList.Error"] = "Не удалось экспортировать список декодеров";
             d["ImportSendCollection"] = "Импорт набора отправки";
             d["ExportSendCollection"] = "Экспорт набора отправки";
             d["ExportSendCollection.Success"] = "Набор отправки экспортирован";
@@ -234,6 +240,10 @@ namespace WinsockPacketEditor
             d["MapSettingsForm.Success"] = "Настройки подмен сохранены";
             d["MapLocalForm.Empty"] = "Локальная подмена не заполнена";
             d["MapRemoteForm.Empty"] = "Удалённая подмена не заполнена";
+            d["MapRemoteForm.PortRange"] = "Порты должны быть в диапазоне от 1 до 65535";
+            d["MapRemoteForm.HttpToHttpsUnsupported"] = "HTTP-адрес источника нельзя сопоставить с HTTPS-целью";
+            d["MapRemoteForm.HttpToTcpUnsupported"] = "HTTP/HTTPS-адрес источника нельзя сопоставить с TCP-целью";
+            d["MapRemoteForm.TcpTargetRequired"] = "TCP-адрес источника можно сопоставить только с TCP-целью";
             d["EXTProxySettingsForm.ProxyIP.Empty"] = "Адрес внешнего прокси пуст";
             d["EXTProxySettingsForm.ProxyIP.Error"] = "Неверный адрес внешнего прокси";
             d["EXTProxySettingsForm.SpecifyPort.Empty"] = "Список портов пуст";
@@ -343,6 +353,27 @@ namespace WinsockPacketEditor
             d["WPCConfig.NoticeList"] = "Список объявлений";
             d["WPCConfig.RuleList"] = "Список правил";
             d["WPCConfig.RuleList.Error"] = "Не удалось сохранить правило";
+            d["Proto.NoPacket"] = "Пакет не существует или уже удалён";
+            d["Proto.TooLarge"] = "Пакет превышает 4 МБ, декодирование не выполнено";
+            d["Proto.XorKeyName"] = "Ключ XOR";
+            d["Proto.AesKeyName"] = "Ключ AES";
+            d["Proto.AesIvName"] = "AES IV";
+            d["Proto.Unsupported"] = "Неподдерживаемый декодер";
+            d["Proto.AesFail"] = "Ошибка расшифровки AES: {0}";
+            d["Proto.CipherFail"] = "Ошибка шифрования/расшифровки: {0}";
+            d["Proto.DecodeFail"] = "Ошибка декодирования: {0}";
+            d["Proto.XorEmpty"] = "Ключ XOR не может быть пустым";
+            d["Proto.AesKeyLen"] = "Ключ AES должен быть 16, 24 или 32 байта";
+            d["Proto.AesIvLen"] = "AES IV должен быть 16 байт";
+            d["Proto.HexEven"] = "{0} должен содержать чётное число HEX-цифр";
+            d["Proto.HexBad"] = "{0} не является корректным HEX";
+            d["Proto.MaxDepth"] = "… максимальная глубина вложенности";
+            d["Proto.BadWire"] = "Неверный формат wire у Protobuf";
+            d["Proto.MaxFields"] = "… достигнут предел числа полей";
+            d["Proto.VarintTrunc"] = "Protobuf varint обрезан";
+            d["Proto.VarintLong"] = "Protobuf varint слишком длинный";
+            d["Proto.FieldTrunc"] = "Поле Protobuf обрезано";
+            d["Dec.DefaultName"] = "Декодер";
             return d;
         }
     }

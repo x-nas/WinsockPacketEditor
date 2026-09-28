@@ -6,9 +6,9 @@
   只在用户点行时按 Id 回来取一次，见 CLAUDE.md「字节流按需拉取」。
   往返耗时显示在标题栏上 —— 验收线是 <50ms。
 */
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { call } from '../bridge'
-import { FeedList, type PacketDetail, type SendRow } from '../bridge/types'
+import { FeedList, type CodecResult, type PacketDetail, type SendRow } from '../bridge/types'
 import { byteLen } from '../hex'
 import HexView from './HexView.vue'
 import { ICON, type MenuItem } from './menu'
@@ -17,6 +17,10 @@ import { useList } from '../stores/lists'
 import { pushToast } from '../stores/toast'
 import { textA, textB } from '../stores/tools'
 import { gotoPage } from '../stores/runtime'
+import DecodeResult from './decoder/DecodeResult.vue'
+import SmartResult from './decoder/SmartResult.vue'
+import { decoderMenuItem, smartDecodeMenuItem, ensureDecoders, type DecodePayload, type SmartPayload } from './decoder/actions'
+import { decRows } from '../stores/decoder'
 
 const props = withDefaults(defineProps<{
   id: number | null
@@ -173,8 +177,17 @@ const extraItems = computed<MenuItem[]>(() => {
     { divider: true },
     { id: 'toTextA', label: t('pm.toTextA') + tag, icon: ICON.text },
     { id: 'toTextB', label: t('pm.toTextB') + tag, icon: ICON.text },
+    decoderMenuItem(t('proxy.nav.decoder')),
+    smartDecodeMenuItem(t('dec.smart')),
   ]
 })
+
+/** 解码结果弹窗；null = 关着 */
+const decodeResult = ref<DecodePayload | null>(null)
+/** 智能解码结果 */
+const smartPayload = ref<SmartPayload | null>(null)
+
+onMounted(() => { void ensureDecoders() })
 
 /** 选中那段（没选就是整包）。 */
 function pickedBytes(): Uint8Array {
@@ -198,6 +211,29 @@ async function onPick(id: string): Promise<void> {
   if (pid == null) return
 
   try {
+    if (id === 'smartDecode') {
+      const r = await call<{ hits: SmartPayload['hits'] }>('smartDecode', { data: bytesToB64(pickedBytes()), packetType: props.packetType })
+      smartPayload.value = { hits: r?.hits ?? [] }
+      return
+    }
+
+    if (id.startsWith('dec:')) {
+      const gid = id.slice(4)
+      const res = await call<CodecResult>('decodeWith', { data: bytesToB64(pickedBytes()), id: gid, packetType: props.packetType })
+      const d = decRows.value.find((x) => x.Id === gid)
+      decodeResult.value = {
+        decoderId: gid,
+        decoderName: d?.Name ?? '',
+        text: res?.Text ?? '',
+        hex: res?.OutputBase64 ? bytesToHex(toBytes(res.OutputBase64)) : '',
+        bufferB64: res?.OutputBase64 ?? '',
+        error: res?.Ok ? '' : (res?.Error ?? t('tr.errDecode')),
+        list: props.list,
+        id: pid,
+      }
+      return
+    }
+
     if (id.startsWith('send:')) {
       const sid = id.slice(5)
       //list —— C# 侧按这个决定去代理列表、注入模式的封包列表、还是发送编辑的工作副本里找那一条
@@ -324,6 +360,9 @@ watch(() => props.id, () => { asText.value = null })
       @pick="onPick"
     />
     <div v-else class="hx-empty"></div>
+
+    <DecodeResult :payload="decodeResult" @close="decodeResult = null" />
+    <SmartResult :payload="smartPayload" @close="smartPayload = null" />
   </div>
 </template>
 

@@ -111,6 +111,12 @@ namespace WinsockPacketEditor
             d["ExportFilterList"] = "필터 목록 내보내기";
             d["ExportFilterList.Success"] = "필터 목록을 내보냈습니다";
             d["ExportFilterList.Error"] = "필터 목록을 내보내지 못했습니다";
+            d["DecoderListFile"] = "디코더 목록 파일";
+            d["ImportDecoderList"] = "디코더 목록 가져오기";
+            d["ImportDecoderList.Success"] = "디코더 목록을 가져왔습니다";
+            d["ExportDecoderList"] = "디코더 목록 내보내기";
+            d["ExportDecoderList.Success"] = "디코더 목록을 내보냈습니다";
+            d["ExportDecoderList.Error"] = "디코더 목록 내보내기에 실패했습니다";
             d["ImportSendCollection"] = "전송 묶음 가져오기";
             d["ExportSendCollection"] = "전송 묶음 내보내기";
             d["ExportSendCollection.Success"] = "전송 묶음을 내보냈습니다";
@@ -234,6 +240,10 @@ namespace WinsockPacketEditor
             d["MapSettingsForm.Success"] = "매핑 설정을 저장했습니다";
             d["MapLocalForm.Empty"] = "로컬 매핑이 비어 있습니다";
             d["MapRemoteForm.Empty"] = "원격 매핑이 비어 있습니다";
+            d["MapRemoteForm.PortRange"] = "포트는 1에서 65535 사이여야 합니다";
+            d["MapRemoteForm.HttpToHttpsUnsupported"] = "HTTP 원본 주소를 HTTPS 대상으로 매핑할 수 없습니다";
+            d["MapRemoteForm.HttpToTcpUnsupported"] = "HTTP/HTTPS 원본 주소를 TCP 대상으로 매핑할 수 없습니다";
+            d["MapRemoteForm.TcpTargetRequired"] = "TCP 원본 주소는 TCP 대상으로만 매핑할 수 있습니다";
             d["EXTProxySettingsForm.ProxyIP.Empty"] = "외부 프록시 주소가 비어 있습니다";
             d["EXTProxySettingsForm.ProxyIP.Error"] = "외부 프록시 주소가 올바르지 않습니다";
             d["EXTProxySettingsForm.SpecifyPort.Empty"] = "지정 포트가 비어 있습니다";
@@ -343,6 +353,27 @@ namespace WinsockPacketEditor
             d["WPCConfig.NoticeList"] = "공지 목록";
             d["WPCConfig.RuleList"] = "규칙 목록";
             d["WPCConfig.RuleList.Error"] = "규칙을 저장하지 못했습니다";
+            d["Proto.NoPacket"] = "패킷이 없거나 이미 정리되었습니다";
+            d["Proto.TooLarge"] = "패킷이 4 MB를 초과하여 디코딩을 실행하지 않았습니다";
+            d["Proto.XorKeyName"] = "XOR 키";
+            d["Proto.AesKeyName"] = "AES 키";
+            d["Proto.AesIvName"] = "AES IV";
+            d["Proto.Unsupported"] = "지원하지 않는 디코더";
+            d["Proto.AesFail"] = "AES 복호화 실패: {0}";
+            d["Proto.CipherFail"] = "암호화/복호화 실패: {0}";
+            d["Proto.DecodeFail"] = "디코딩 실패: {0}";
+            d["Proto.XorEmpty"] = "XOR 키는 비워 둘 수 없습니다";
+            d["Proto.AesKeyLen"] = "AES 키는 16, 24 또는 32바이트여야 합니다";
+            d["Proto.AesIvLen"] = "AES IV는 16바이트여야 합니다";
+            d["Proto.HexEven"] = "{0}은(는) 짝수 자리 16진수여야 합니다";
+            d["Proto.HexBad"] = "{0}은(는) 유효한 16진수가 아닙니다";
+            d["Proto.MaxDepth"] = "… 최대 중첩 깊이";
+            d["Proto.BadWire"] = "유효한 Protobuf wire format이 아닙니다";
+            d["Proto.MaxFields"] = "… 필드 수 한도 도달";
+            d["Proto.VarintTrunc"] = "Protobuf varint가 잘렸습니다";
+            d["Proto.VarintLong"] = "Protobuf varint가 너무 깁니다";
+            d["Proto.FieldTrunc"] = "Protobuf 필드가 잘렸습니다";
+            d["Dec.DefaultName"] = "디코더";
             return d;
         }
     }

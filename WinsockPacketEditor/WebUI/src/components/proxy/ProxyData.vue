@@ -13,18 +13,24 @@
 */
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { call } from '../../bridge'
-import { FeedList, type PacketListRow, type Prefs, type ProxyRow, type SendRow, type Stats, type WareHouseRow } from '../../bridge/types'
+import { FeedList, type CodecResult, type PacketListRow, type Prefs, type ProxyRow, type SendRow, type Stats, type WareHouseRow } from '../../bridge/types'
 import { t } from '../../i18n'
 import { attachPacketFeed, onProxyTrimmed, resetStat, rows } from '../../stores/packets'
 import { useList } from '../../stores/lists'
 import { pushToast } from '../../stores/toast'
 import { useRowPick } from '../../usePick'
-import { gotoPage, listSetting, proxyRunning } from '../../stores/runtime'
+import { gotoPage, kernelRunning, listSetting, proxyRunning, tunReady } from '../../stores/runtime'
 import { textA, textB } from '../../stores/tools'
+import { beginDecodeJob, endDecodeJob } from '../../stores/decodeJob'
 import PacketList from '../PacketList.vue'
 import ContextMenu from '../ContextMenu.vue'
 import { ICON, type MenuItem } from '../menu'
 import HexPanel from '../HexPanel.vue'
+import DecodeResult from '../decoder/DecodeResult.vue'
+import SmartResult from '../decoder/SmartResult.vue'
+import BatchResult from '../decoder/BatchResult.vue'
+import { decoderMenuItem, smartDecodeMenuItem, ensureDecoders, type DecodePayload, type SmartPayload, type SmartBatchItem, type BatchPayload } from '../decoder/actions'
+import { decRows } from '../../stores/decoder'
 import PacketEdit from './PacketEdit.vue'
 import PacketModification from './PacketModification.vue'
 import RunBar from './RunBar.vue'
@@ -70,6 +76,17 @@ async function reloadPrefs(): Promise<void> {
 }
 
 const autoRoll = ref(true)
+
+async function toggleAutoRoll(): Promise<void> {
+  const next = !autoRoll.value
+  autoRoll.value = next
+  try {
+    const r = await call<{ ok: boolean }>('saveListAutoRoll', { autoRoll: next })
+    if (!r?.ok) autoRoll.value = !next
+  } catch {
+    autoRoll.value = !next
+  }
+}
 
 /*
   自动清理 —— 2026-09-07 从「列表设置」弹窗搬到这条工具条上。
@@ -127,6 +144,7 @@ let statsTimer = 0
 
 onMounted(async () => {
   detach = attachPacketFeed()
+  void ensureDecoders()
 
   try {
     prefs.value = await call<Prefs>('getPrefs')
@@ -139,6 +157,7 @@ onMounted(async () => {
     const s = await call<any>('getListSetting')
     listSetting.value = s
 
+    autoRoll.value = !!s?.autoRoll
     //自动清理的初值搭同一趟车，不另开一条桥
     autoClear.value = !!s?.autoClear
     clearAt.value = Number(s?.autoClearValue) || 5000
@@ -152,7 +171,9 @@ onMounted(async () => {
     try {
       const s = await call<Stats>('getStats')
       stats.value = s
-      proxyRunning.value = !!(s as any).proxyRunning
+      proxyRunning.value = s.proxyRunning
+      tunReady.value = s.tunReady
+      kernelRunning.value = s.kernelRunning
     } catch {
       /* 窗口关闭中，忽略 */
     }
@@ -395,7 +416,112 @@ const modifyId = ref<number | null>(null)
 
 //右键只开菜单、不动选中集（与账号 / 滤镜两屏同一条口径）
 function onMenu(ev: MouseEvent, _r: PacketListRow): void {
+  void ensureDecoders()
   menuAt.value = { x: ev.clientX, y: ev.clientY }
+}
+
+/** 解码结果弹窗的目标；null = 关着 */
+const decodeResult = ref<DecodePayload | null>(null)
+/** 智能解码结果 */
+const smartPayload = ref<SmartPayload | null>(null)
+/** 批量解码结果 */
+const batchPayload = ref<BatchPayload | null>(null)
+
+function hexToBytes(hex: string): Uint8Array {
+  const s = hex.replace(/[\s-]/g, '')
+  const out = new Uint8Array(s.length / 2)
+  for (let i = 0; i < out.length; i++) out[i] = parseInt(s.slice(i * 2, i * 2 + 2), 16)
+  return out
+}
+function bytesToHex(a: Uint8Array): string {
+  return Array.from(a, (b) => b.toString(16).padStart(2, '0').toUpperCase()).join(' ')
+}
+function bytesToB64(a: Uint8Array): string {
+  let s = ''
+  for (let i = 0; i < a.length; i++) s += String.fromCharCode(a[i])
+  return btoa(s)
+}
+function b64ToBytes(b64: string): Uint8Array {
+  const bin = atob(b64)
+  const out = new Uint8Array(bin.length)
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i)
+  return out
+}
+
+/** 按选中的解码器解码当前选中的封包，结果进 DecodeResult。 */
+async function decodePacket(decoderId: string, ids: number[]): Promise<void> {
+  try {
+    const hex = await call<{ text: string }>('copyProxyHexMerged', { ids })
+    if (!hex?.text) { pushToast('error', t('pm.copyFail')); return }
+
+    const data = bytesToB64(hexToBytes(hex.text))
+    const packetType = rows.value.find((r) => r.Id === ids[0])?.Type
+    const res = await call<CodecResult>('decodeWith', { data, id: decoderId, packetType })
+    const d = decRows.value.find((x) => x.Id === decoderId)
+
+    decodeResult.value = {
+      decoderId,
+      decoderName: d?.Name ?? '',
+      text: res?.Text ?? '',
+      hex: res?.OutputBase64 ? bytesToHex(b64ToBytes(res.OutputBase64)) : '',
+      bufferB64: res?.OutputBase64 ?? '',
+      error: res?.Ok ? '' : (res?.Error ?? t('tr.errDecode')),
+      list: 'proxy',
+      id: ids[0],
+    }
+  } catch (e) {
+    console.error('[dec] 解码失败', e)
+    pushToast('error', String(e))
+  }
+}
+
+/** 智能解码第一条选中的封包。 */
+async function runSmartDecode(id: number): Promise<void> {
+  try {
+    const hex = await call<{ text: string }>('copyProxyHex', { ids: [id] })
+    if (!hex?.text) { pushToast('error', t('pm.copyFail')); return }
+    const packetType = rows.value.find((r) => r.Id === id)?.Type
+    const r = await call<{ hits: SmartPayload['hits'] }>('smartDecode', { data: bytesToB64(hexToBytes(hex.text)), packetType })
+    smartPayload.value = { hits: r?.hits ?? [] }
+  } catch (e) {
+    console.error('[dec] 智能解码失败', e)
+    pushToast('error', String(e))
+  }
+}
+
+/** 多选时逐条智能解码（C# 后台并行），结果按封包分组。 */
+async function runSmartDecodeMany(ids: number[]): Promise<void> {
+  const job = beginDecodeJob(ids.length)
+  try {
+    const r = await call<{ items: Array<{ Id: number; hits: SmartPayload['hits'] }>; cancelled?: boolean }>(
+      'smartDecodeBatch', { list: 'proxy', ids, job })
+    if (r?.cancelled) return
+    const items: SmartBatchItem[] = (r?.items ?? []).map((it) => {
+      const row = rows.value.find((x) => x.Id === it.Id)
+      return { Id: it.Id, Time: row?.Time ?? '', Preview: row?.Preview ?? '', hits: it.hits ?? [] }
+    })
+    smartPayload.value = { hits: [], list: 'proxy', items }
+  } catch (e) {
+    console.error('[dec] 智能解码失败', e)
+    pushToast('error', String(e))
+  } finally {
+    endDecodeJob(job)
+  }
+}
+
+/** 批量解码选中的封包（C# 后台并行，带进度与取消）。 */
+async function runBatchDecode(decoderId: string, ids: number[]): Promise<void> {
+  const job = beginDecodeJob(ids.length)
+  try {
+    const r = await call<BatchPayload & { cancelled?: boolean }>('batchDecode', { list: 'proxy', id: decoderId, ids, job })
+    if (r?.cancelled) return
+    batchPayload.value = { decoder: r?.decoder ?? '', decoderId: r?.decoderId ?? decoderId, list: 'proxy', rows: r?.rows ?? [] }
+  } catch (e) {
+    console.error('[dec] 批量解码失败', e)
+    pushToast('error', String(e))
+  } finally {
+    endDecodeJob(job)
+  }
 }
 
 const sends = useList<SendRow>(FeedList.Send)
@@ -441,6 +567,8 @@ const menuItems = computed<MenuItem[]>(() => {
     //与 WinForms 一样一条一行（十六进制），写进文本对比页那两个框；带条数
     { id: 'toTextA', label: t('pm.toTextA') + tag, icon: ICON.text },
     { id: 'toTextB', label: t('pm.toTextB') + tag, icon: ICON.text },
+    decoderMenuItem(t('proxy.nav.decoder'), n),
+    smartDecodeMenuItem(t('dec.smart'), n),
     { divider: true },
     toSend,
     /*
@@ -486,6 +614,22 @@ async function onMenuPick(id: string): Promise<void> {
       console.error('[pm] 添加失败', e)
     }
 
+    return
+  }
+
+  if (id.startsWith('dec:')) {
+    if (!ids.length) { needPickToast(); return }
+    // 选中一条就单条解码，选中多条就批量解码 —— 不再有单独的「批量解码」菜单项
+    const decoderId = id.slice(4)
+    if (ids.length === 1) await decodePacket(decoderId, ids)
+    else await runBatchDecode(decoderId, ids)
+    return
+  }
+  if (id === 'smartDecode') {
+    if (!ids.length) { needPickToast(); return }
+    // 选中一条就解一条；选中多条逐条解，结果按封包分组
+    if (ids.length === 1) await runSmartDecode(ids[0])
+    else await runSmartDecodeMany(ids)
     return
   }
 
@@ -833,7 +977,7 @@ const cells = computed(() => {
           {{ slowSearch ? t('sp.searching') : t('sp.next') }}
         </button>
 
-        <button class="chk" :class="{ on: autoRoll }" @click="autoRoll = !autoRoll"><i />{{ t('proxy.autoRoll') }}</button>
+        <button class="chk" :class="{ on: autoRoll }" @click="toggleAutoRoll"><i />{{ t('proxy.autoRoll') }}</button>
         <!--
           自动清理 —— 就摆在它管的那张表上面（见 script 里的说明）。
           与日志页工具条上那个是<b>两份配置</b>，所以文案也分开：
@@ -877,6 +1021,9 @@ const cells = computed(() => {
       <!-- 封包编辑：保存后 C# 按行 UI.Feed.Update 推回来，这里不用做别的 -->
       <PacketEdit :target="editTarget" @close="editTarget = null" />
       <PacketModification :id="modifyId" @close="modifyId = null" />
+      <DecodeResult :payload="decodeResult" @close="decodeResult = null" />
+      <SmartResult :payload="smartPayload" @close="smartPayload = null" />
+      <BatchResult :payload="batchPayload" @close="batchPayload = null" />
 
     </div>
 

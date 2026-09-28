@@ -98,7 +98,7 @@ async function toggle(): Promise<void> {
       </span>
       <!-- TUN：内置 mihomo 内核是否已接管进程流量（未就绪压暗） -->
       <span class="port" :class="{ off: !tunReady }" :title="t('mh.tunHint')">
-        <b class="pk">TUN</b><span class="pv">{{ tunReady ? t('ps.s4.on') : t('ps.s4.off') }}</span>
+        <b class="pk">TUN</b><span class="pv tun">{{ tunReady ? t('ps.s4.on') : t('ps.s4.off') }}</span>
       </span>
     </span>
 
@@ -141,7 +141,7 @@ async function toggle(): Promise<void> {
   align-items: center;
   gap: 5px;
   font-family: var(--share);
-  font-size: var(--label-size);
+  font-size: var(--fs-small);
   /*
     ⚠️ 这里原来还有一句 padding-top: 3px，2026-09-10 去掉了 —— 那是<b>补第二遍</b>：
     line-height: 1 本身已经把 Share Tech Mono 的字形偏上治好了，再补 3px 反而把它压到
@@ -154,9 +154,14 @@ async function toggle(): Promise<void> {
   color: var(--muted);
 }
 
+/*
+  表盘图标比文字大 1px。
+  它不与文字共线基线，而是靠 .meta 的 align-items: center 居中；
+  放大到 13 与文字（--fs-small 11.5）仍成 1px 的差，视觉上仍是「图标略大于字」。
+*/
 .clk {
-  width: 12px;
-  height: 12px;
+  width: 13px;
+  height: 13px;
   flex: none;
   fill: none;
   stroke: currentColor;

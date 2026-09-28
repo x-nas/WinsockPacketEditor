@@ -3,6 +3,7 @@ using SuperSocket.SocketBase.Protocol;
 using System;
 using System.Buffers;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
@@ -42,12 +43,17 @@ namespace WinsockPacketEditor
         public Operate.ProxyConfig.Proxy.AddressType AddressType;
         public Operate.ProxyConfig.Proxy.DomainType DomainType;
 
+        // HTTP 端口需等首个完整请求头才能决定请求级映射；此处暂存 TCP 规则，
+        // 仅在没有命中 HTTP 规则时将整条连接改道。
+        internal MapRemote TcpMapRule;
+
         /*
             HTTP 结构化嗅探（2026-09-23）：只在 DomainType == HTTP（端口 80/8080）的会话上启用，按方向各一个。
             拼出来的完整请求/响应按 HTTP_Req / HTTP_Resp 入列表，替代逐段 TCP 条目（只影响展示，不改线上字节）。
         */
         internal HttpSniffer HttpReqSniffer;
         internal HttpSniffer HttpRespSniffer;
+        internal HttpsMitmSession HttpsMitm;
 
         /// <summary>取（或建）本会话某个方向的 HTTP 嗅探器；非 HTTP 会话返回 null。</summary>
         internal HttpSniffer Sniffer(bool request)
@@ -157,6 +163,22 @@ namespace WinsockPacketEditor
             }
         }
 
+        /// <summary>目标侧 Socket.Send 允许部分完成；TCP 请求必须循环写完，不能静默截断。</summary>
+        public void SendToTarget(byte[] data)
+        {
+            if (data == null || data.Length == 0) { return; }
+            Socket target = this.TargetSocket;
+            if (target == null || !target.Connected) { throw new SocketException((int)SocketError.NotConnected); }
+
+            int offset = 0;
+            while (offset < data.Length)
+            {
+                int sent = target.Send(data, offset, data.Length - offset, SocketFlags.None);
+                if (sent <= 0) { throw new IOException("目标服务器连接已关闭"); }
+                offset += sent;
+            }
+        }
+
         #endregion
 
         #region//帧队列：过滤器切出来的帧按顺序处理
@@ -176,6 +198,9 @@ namespace WinsockPacketEditor
 
         /// <summary>转发阶段拆包用的残片（Enable_UnPack 时 ProcessForwardData 往里存半个包）。</summary>
         public byte[] ForwardBuffer = Array.Empty<byte>();
+
+        /// <summary>HTTP 映射等待完整请求头的短暂缓存；仅在启用 HTTP 映射时使用。</summary>
+        public byte[] HttpMappingBuffer = Array.Empty<byte>();
 
         internal void OnFrame(BinaryRequestInfo frame)
         {
@@ -263,6 +288,7 @@ namespace WinsockPacketEditor
         {
             //命令那一步失败（连不上目标）时会话已经在关了，后面排着的数据帧直接丢
             if (this.ProxyStep != Operate.ProxyConfig.Proxy.ProxyStep.ForwardData || !this.Connected) { return; }
+            if (this.HttpsMitm != null) { this.HttpsMitm.Feed(body); return; }
             Operate.ProxyConfig.Proxy.ProcessForwardData(this, body, ref this.ForwardBuffer);
         }
 
@@ -270,7 +296,7 @@ namespace WinsockPacketEditor
 
         #region//连接远程服务器（异步）
 
-        public async Task ConnectToTarget(string TargetIP, int TargetPort)
+        public async Task ConnectToTarget(string TargetIP, int TargetPort, bool sendCommandResponse = true)
         {
             try
             {
@@ -286,7 +312,7 @@ namespace WinsockPacketEditor
                 Socket targetSocket = this.TargetSocket;
                 if (targetSocket == null)
                 {
-                    Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
+                    if (sendCommandResponse) { Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable); }
                     this.Close(CloseReason.SocketError);
                     return;
                 }
@@ -296,7 +322,7 @@ namespace WinsockPacketEditor
                 this.ServerIP = TargetIP;
                 this.ServerPort = TargetPort;
 
-                Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Success);
+                if (sendCommandResponse) { Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Success); }
                 this.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.ForwardData;
                 this.StartReceivingFromTarget();
             }
@@ -306,17 +332,28 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
+                if (sendCommandResponse) { Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable); }
                 this.Close(CloseReason.SocketError);
                 Operate.DoLog(nameof(ConnectToTarget), ex);
             }
-        }        
+        }
+
+        public bool StartHttpsMitm(string host, string ip, int port)
+        {
+            var status = new HttpsMitmCertificateManager().GetStatus();
+            if (!status.Exists || !status.Trusted) return false;
+            HttpsMitm = new HttpsMitmSession(this, host, ip, port);
+            Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Success);
+            ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.ForwardData;
+            HttpsMitm.Start();
+            return true;
+        }
 
         #endregion
 
         #region//连接外部代理服务器（异步）
 
-        public async Task ConnectToEXTProxyServer(byte[] bData)
+        public async Task ConnectToEXTProxyServer(byte[] bData, MapRemote tcpMapRule = null)
         {
             try
             {
@@ -331,6 +368,13 @@ namespace WinsockPacketEditor
                 }
                 this.EnsureTargetSocket(family);
 
+                byte[] command = bData;
+                if (tcpMapRule != null)
+                {
+                    byte[] mappedCommand = Operate.ProxyConfig.Proxy.BuildSocks5ConnectRequest(tcpMapRule.HostTo, tcpMapRule.PortTo);
+                    if (mappedCommand != null) { command = mappedCommand; }
+                }
+
                 var Establish = await Operate.ProxyConfig.Proxy.EstablishSocksProxyServer(
                     this.TargetSocket,
                     Operate.ProxyConfig.Proxy.Enable_ExternalProxy_Auth,
@@ -338,7 +382,7 @@ namespace WinsockPacketEditor
                     Operate.ProxyConfig.Proxy.ExternalProxy_Port,
                     Operate.ProxyConfig.Proxy.ExternalProxy_UserName,
                     Operate.ProxyConfig.Proxy.ExternalProxy_PassWord,
-                    bData);
+                    command);
 
                 if (!Establish.Success || Establish.Response[1] != 0x00)
                 {
@@ -634,6 +678,10 @@ namespace WinsockPacketEditor
 
         protected override void OnSessionClosed(CloseReason reason)
         {
+            if (HttpsMitm != null) { HttpsMitm.Complete(); HttpsMitm = null; }
+            // HTTP 嗅探尚未组成完整消息的末段也要入列表；必须在目标套接字关闭前取句柄。
+            Operate.FilterConfig.Filter.Flush_SOCKS_HTTP(this);
+
             /*
                 释放设备槽：控制连接走注销（令牌作废 + 释放它占的那份），普通 / 令牌数据连接按 DeviceKey 减一份。
                 两条路互斥 —— 控制连接的 DeviceKey 是注册时占的那份，由 Unregister 释放，不能再减一次。

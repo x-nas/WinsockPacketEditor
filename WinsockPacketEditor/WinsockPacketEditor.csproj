@@ -69,6 +69,8 @@
     <!-- SDK 的隐式框架引用之外，本工程还用到的这几个 -->
     <Reference Include="System.Management" />
     <Reference Include="System.Net.Http" />
+    <!-- DPAPI（ProtectedData）：HTTPS 映射根 CA 的私钥材料按当前 Windows 用户加密。 -->
+    <Reference Include="System.Security" />
   </ItemGroup>
 
   <!--

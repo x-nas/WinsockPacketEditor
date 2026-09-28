@@ -1,4 +1,4 @@
-// 代理模式的 14 个页面：侧栏与内容区共用这一份定义。
+// 代理模式的 15 个页面：侧栏与内容区共用这一份定义。
 //
 // 顺序与分组照 WinForms 的 ProxyModeForm（那边是平铺 14 项的 Menu + 同步的 Tabs），
 // 分组是这里加的 —— 平铺 14 项扫起来太累，见 ProxySide.vue 的说明。
@@ -7,8 +7,8 @@ import type { Key } from '../../i18n'
 
 export type PageKey =
   | 'data' | 'client' | 'account'
-  | 'filter' | 'send' | 'robot' | 'warehouse'
-  | 'stat' | 'diff' | 'xor' | 'transcode' | 'extract'
+  | 'filter' | 'send' | 'robot' | 'warehouse' | 'decoders'
+  | 'stat' | 'diff' | 'decoder' | 'extract'
   | 'wpc' | 'log'
   // 注入模式的主屏（PacketInfo）。代理模式没有这一页，见文件末尾的 INJECT_GROUPS
   | 'packet'
@@ -43,6 +43,8 @@ export const GROUPS: PageGroup[] = [
       { key: 'robot', label: 'proxy.nav.robot', icon: '<rect x="4" y="8" width="16" height="11" rx="2"/><path d="M12 8V4M8 13h.01M16 13h.01"/>' },
       // 仓库：尖顶 + 两面墙 + 门里叠着的货架。早先是一个六边形箱子，缩到 13px 就成了个圆点
       { key: 'warehouse', label: 'proxy.nav.warehouse', icon: '<path d="M3 20V9l9-5 9 5v11"/><path d="M2 20h20"/><path d="M8 20v-7h8v7"/><path d="M8 16.5h8"/>' },
+      // 解码器列表：一枚钥匙（算法 + 密钥）。与旁边那个「智能解码」的星芒区分开
+      { key: 'decoders', label: 'proxy.nav.decoders', icon: '<circle cx="7.5" cy="15.5" r="3.5"/><path d="M10 13L20 3"/><path d="M16.5 6.5l2 2"/><path d="M14 9l2 2"/>' },
     ],
   },
   {
@@ -50,8 +52,8 @@ export const GROUPS: PageGroup[] = [
     items: [
       { key: 'stat', label: 'proxy.nav.stat', icon: '<path d="M4 20V10M10 20V4M16 20v-8M22 20v-5"/>' },
       { key: 'diff', label: 'proxy.nav.diff', icon: '<rect x="3" y="4" width="7" height="16"/><rect x="14" y="4" width="7" height="16"/>' },
-      { key: 'xor', label: 'proxy.nav.xor', icon: '<circle cx="12" cy="12" r="8"/><path d="M8 8l8 8M16 8l-8 8"/>' },
-      { key: 'transcode', label: 'proxy.nav.transcode', icon: '<path d="M9 6L3 12l6 6M15 6l6 6-6 6"/>' },
+      // 编码解码：两枝相向的箭头（编码 ↔ 解码），与旁边「解码器列表」的钥匙区分开
+      { key: 'decoder', label: 'proxy.nav.codec', icon: '<path d="M4 9h13M14 6l3 3-3 3M20 15H7M10 12l-3 3 3 3"/>' },
       { key: 'extract', label: 'proxy.nav.extract', icon: '<path d="M12 3v12M8 11l4 4 4-4M4 19h16"/>' },
     ],
   },
@@ -69,12 +71,12 @@ export const GROUPS: PageGroup[] = [
 export const PAGES: PageDef[] = GROUPS.flatMap((g) => g.items)
 
 /*
-  ── 注入模式的 11 页 ──────────────────────────────────
+  ── 注入模式的 12 页 ──────────────────────────────────
 
   与 WinForms 的 InjectModeForm.InitControls 逐项对应（那边同样是 Menu + Tabs 两套导航）。
   除了第一页「封包列表」是注入模式独有的（PacketInfo，另一份 Id 序列），
-  <b>其余 10 页与代理模式是同一个组件、同一份 stores/lists 数据源</b> ——
-  滤镜 / 发送 / 机器人 / 仓库四个子系统在 Operate 里本来就是两种模式共用的。
+  <b>其余 11 页与代理模式是同一个组件、同一份 stores/lists 数据源</b> ——
+  滤镜 / 发送 / 机器人 / 仓库 / 解码器五个子系统在 Operate 里本来就是两种模式共用的。
 
   所以这里只是另一份导航定义，不是另一套页面。图标沿用代理那份，
   同一件事在两种模式下长得一样才不会让人以为是两个功能。
@@ -93,8 +95,8 @@ export const INJECT_GROUPS: PageGroup[] = [
       { key: 'packet', label: 'inject.nav.packet', icon: '<path d="M4 6h16M4 12h16M4 18h10"/>' },
     ],
   },
-  { cap: 'Rules', items: [P('filter'), P('send'), P('robot'), P('warehouse')] },
-  { cap: 'Tools', items: [P('stat'), P('diff'), P('xor'), P('transcode'), P('extract')] },
+  { cap: 'Rules', items: [P('filter'), P('send'), P('robot'), P('warehouse'), P('decoders')] },
+  { cap: 'Tools', items: [P('stat'), P('diff'), P('decoder'), P('extract')] },
   { cap: 'System', items: [P('log')] },
 ]
 

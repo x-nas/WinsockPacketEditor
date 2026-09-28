@@ -111,6 +111,12 @@ namespace WinsockPacketEditor
             d["ExportFilterList"] = "フィルター一覧の書き出し";
             d["ExportFilterList.Success"] = "フィルター一覧を書き出しました";
             d["ExportFilterList.Error"] = "フィルター一覧の書き出しに失敗しました";
+            d["DecoderListFile"] = "デコーダー一覧ファイル";
+            d["ImportDecoderList"] = "デコーダー一覧の読み込み";
+            d["ImportDecoderList.Success"] = "デコーダー一覧の読み込みに成功しました";
+            d["ExportDecoderList"] = "デコーダー一覧の書き出し";
+            d["ExportDecoderList.Success"] = "デコーダー一覧の書き出しに成功しました";
+            d["ExportDecoderList.Error"] = "デコーダー一覧の書き出しに失敗しました";
             d["ImportSendCollection"] = "送信セットの読み込み";
             d["ExportSendCollection"] = "送信セットの書き出し";
             d["ExportSendCollection.Success"] = "送信セットを書き出しました";
@@ -234,6 +240,10 @@ namespace WinsockPacketEditor
             d["MapSettingsForm.Success"] = "マッピング設定を保存しました";
             d["MapLocalForm.Empty"] = "ローカルマッピングが空です";
             d["MapRemoteForm.Empty"] = "リモートマッピングが空です";
+            d["MapRemoteForm.PortRange"] = "ポートは 1 から 65535 の範囲で指定してください";
+            d["MapRemoteForm.HttpToHttpsUnsupported"] = "HTTP の送信元アドレスを HTTPS の宛先へマッピングすることはできません";
+            d["MapRemoteForm.HttpToTcpUnsupported"] = "HTTP/HTTPS の送信元アドレスを TCP の宛先へマッピングすることはできません";
+            d["MapRemoteForm.TcpTargetRequired"] = "TCP の送信元アドレスは TCP の宛先にのみマッピングできます";
             d["EXTProxySettingsForm.ProxyIP.Empty"] = "外部プロキシのアドレスが空です";
             d["EXTProxySettingsForm.ProxyIP.Error"] = "外部プロキシのアドレスが不正です";
             d["EXTProxySettingsForm.SpecifyPort.Empty"] = "指定ポートが空です";
@@ -343,6 +353,27 @@ namespace WinsockPacketEditor
             d["WPCConfig.NoticeList"] = "お知らせ一覧";
             d["WPCConfig.RuleList"] = "ルール一覧";
             d["WPCConfig.RuleList.Error"] = "ルールの保存に失敗しました";
+            d["Proto.NoPacket"] = "パケットが存在しないか、既に破棄されています";
+            d["Proto.TooLarge"] = "パケットが 4 MB を超えているため、デコードを実行しません";
+            d["Proto.XorKeyName"] = "XOR キー";
+            d["Proto.AesKeyName"] = "AES キー";
+            d["Proto.AesIvName"] = "AES IV";
+            d["Proto.Unsupported"] = "未対応のデコーダー";
+            d["Proto.AesFail"] = "AES の復号に失敗しました：{0}";
+            d["Proto.CipherFail"] = "暗号処理に失敗しました：{0}";
+            d["Proto.DecodeFail"] = "デコードに失敗しました：{0}";
+            d["Proto.XorEmpty"] = "XOR キーを空にはできません";
+            d["Proto.AesKeyLen"] = "AES キーは 16、24、32 バイトのいずれかでなければなりません";
+            d["Proto.AesIvLen"] = "AES IV は 16 バイトでなければなりません";
+            d["Proto.HexEven"] = "{0}は偶数桁の 16 進数である必要があります";
+            d["Proto.HexBad"] = "{0}は有効な 16 進数ではありません";
+            d["Proto.MaxDepth"] = "… 最大ネスト深度";
+            d["Proto.BadWire"] = "有効な Protobuf wire format ではありません";
+            d["Proto.MaxFields"] = "… フィールド数の上限に達しました";
+            d["Proto.VarintTrunc"] = "Protobuf varint が途中で切れています";
+            d["Proto.VarintLong"] = "Protobuf varint が長すぎます";
+            d["Proto.FieldTrunc"] = "Protobuf フィールドが途中で切れています";
+            d["Dec.DefaultName"] = "デコーダー";
             return d;
         }
     }
