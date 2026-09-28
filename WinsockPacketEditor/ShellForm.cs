@@ -2277,6 +2277,7 @@ namespace WPEHybrid
                 showServerAddr = Operate.PacketConfig.List.IsShow_ServerAddr,
                 showServerLoc = Operate.PacketConfig.List.IsShow_ServerLocation,
                 showLen = Operate.PacketConfig.List.IsShow_PacketLen,
+                autoRoll = Operate.PacketConfig.List.AutoRoll,
                 autoClear = Operate.PacketConfig.List.AutoClear,
                 autoClearValue = (int)Operate.PacketConfig.List.AutoClear_Value,
             } : new
@@ -2288,8 +2289,28 @@ namespace WPEHybrid
                 showServerAddr = Operate.ProxyConfig.List.IsShow_ServerAddr,
                 showServerLoc = Operate.ProxyConfig.List.IsShow_ServerLocation,
                 showLen = Operate.ProxyConfig.List.IsShow_PacketLen,
+                autoRoll = Operate.PacketConfig.List.AutoRoll,
                 autoClear = Operate.PacketConfig.List.AutoClear,
                 autoClearValue = (int)Operate.PacketConfig.List.AutoClear_Value,
+            });
+
+            //自动滚动与自动清理一样，都落在 InjectMode 表且供两张封包列表共用。
+            //前端点击立即写回；失败时由调用方恢复本次界面的开关状态。
+            this.bridge.Register("saveListAutoRoll", args =>
+            {
+                try
+                {
+                    if (args["autoRoll"] == null) { return new { ok = false }; }
+
+                    Operate.PacketConfig.List.AutoRoll = (bool)args["autoRoll"];
+                    Operate.SystemConfig.SaveInjectMode_ToDB();
+                    return new { ok = true };
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog("saveListAutoRoll", ex);
+                    return new { ok = false, error = ex.Message };
+                }
             });
 
             /*
@@ -4044,34 +4065,199 @@ namespace WPEHybrid
                 };
             });
 
-            //批量解码：对选中的封包逐条按同一个解码器解码（list = proxy / packet）。
-            this.bridge.Register("batchDecode", args =>
+            // 批量窗口只带受限预览；用户点开某项时才重新取这一条的完整结果。
+            this.bridge.Register("getBatchDecodeDetail", args =>
+            {
+                string listName = args["list"] == null ? "proxy" : (string)args["list"];
+                string decoderId = args["decoderId"] == null ? string.Empty : (string)args["decoderId"];
+                long packetId = args["packetId"] == null ? 0L : (long)args["packetId"];
+                Guid guid;
+                DecoderInfo decoder = Guid.TryParse(decoderId, out guid) ? Operate.DecoderConfig.GetDecoder_ById(guid) : null;
+                if (decoder == null) { return (object)new { Id = packetId, Ok = false, Text = string.Empty, Hex = string.Empty, Error = UI.T("Dec.ErrNoDecoder", "解码器不存在"), Truncated = false }; }
+                List<DecodeItem> one = this.SnapshotDecodeItems(listName, new List<long> { packetId });
+                if (one.Count == 0) { return (object)new { Id = packetId, Ok = false, Text = string.Empty, Hex = string.Empty, Error = UI.T("Dec.ErrNoPacket", "封包不存在"), Truncated = false }; }
+                return this.DecoderResultRow(one[0].Id, one[0].Buffer, decoder, one[0].Type, false);
+            });
+
+            this.bridge.Register("getSmartDecodeDetail", args =>
+            {
+                string listName = args["list"] == null ? "proxy" : (string)args["list"];
+                long packetId = args["packetId"] == null ? 0L : (long)args["packetId"];
+                List<DecodeItem> one = this.SnapshotDecodeItems(listName, new List<long> { packetId });
+                if (one.Count == 0) { return new { Id = packetId, hits = new object[0] }; }
+                List<CodecEngine.CodecHit> hits = CodecEngine.SmartDecode(one[0].Buffer,
+                    Operate.DecoderConfig.List.lstDecoderInfo, one[0].Type);
+                return new { Id = one[0].Id, hits = this.SmartHitRows(hits, false) };
+            });
+
+            /*
+                批量解码：对选中的封包逐条按同一个解码器解码（list = proxy / packet）。
+
+                【为什么是后台线程 + 并行】CodecEngine 是无共享状态的纯函数（每次解码只用
+                自己的 buffer 与一份配置），并行不会串味、结果与串行逐条完全一致；而在 UI
+                线程上逐条跑完 N 条会把界面卡住（WebBridge.OnWebMessage 在 UI 线程 await）。
+                所以：<b>先在 UI 线程快照、再 Task.Run + Parallel</b>。
+
+                【快照必须在 UI 线程做】PickProxies / PickPackets 枚举的是抓包热路径上还在
+                增删的 BindingList，不能拿到后台线程去遍历。
+
+                【进度 / 取消】进度经 job 号 + decode:progress 事件回给前端；cancelDecodeJob
+                会把当前任务的令牌取消（单例任务，发起新的会先取消旧的）。
+            */
+            this.bridge.Register("batchDecode", async args =>
             {
                 string listName = args["list"] == null ? "proxy" : (string)args["list"];
                 string id = args["id"] == null ? string.Empty : (string)args["id"];
+                long job = args["job"] == null ? 0L : (long)args["job"];
                 Guid g;
                 DecoderInfo di = Guid.TryParse(id, out g) ? Operate.DecoderConfig.GetDecoder_ById(g) : null;
                 List<long> ids = ReadLongIds(args);
                 List<object> rows = new List<object>();
 
-                if (di == null) { return new { decoder = string.Empty, rows = rows }; }
+                if (di == null) { return new { decoder = string.Empty, rows = rows, cancelled = false }; }
 
-                if (listName == "packet")
+                //配置在后台只读，克隆一份，免得解码途中用户在解码器列表里改它
+                DecoderInfo cfg = di.Clone();
+                List<DecodeItem> items = this.SnapshotDecodeItems(listName, ids);
+                if (items.Count == 0) { return new { decoder = di.Name, rows = rows, cancelled = false }; }
+
+                CancellationToken token = this.BeginDecodeJob();
+                object[] result = new object[items.Count];
+                int done = 0;
+
+                this.PushDecodeProgress(job, 0, items.Count);
+
+                try
                 {
-                    foreach (PacketInfo pi in Operate.PacketConfig.List.PickPackets(ids))
+                    await Task.Run(() =>
                     {
-                        rows.Add(DecoderResultRow(pi.Id, pi.PacketBuffer, di, pi.PacketType));
-                    }
+                        Parallel.For(0, items.Count,
+                            new ParallelOptions { CancellationToken = token, MaxDegreeOfParallelism = DecodeParallelism },
+                            i =>
+                            {
+                                DecodeItem it = items[i];
+                                // 批量结果是给 WebView2 的预览，不可把 300 个完整大包一次塞进 IPC。
+                                result[i] = this.DecoderResultRow(it.Id, it.Buffer, cfg, it.Type, true);
+
+                                int d = Interlocked.Increment(ref done);
+                                if (d == items.Count || (d & 7) == 0) { this.PushDecodeProgress(job, d, items.Count); }
+                            });
+                    }, token);
                 }
-                else
+                catch (OperationCanceledException)
                 {
-                    foreach (ProxyInfo pi in Operate.ProxyConfig.List.PickProxies(ids))
-                    {
-                        rows.Add(DecoderResultRow(pi.Id, pi.PacketBuffer, di, pi.PacketType));
-                    }
+                    //取消后不回半截结果：前端拿到 cancelled 就不弹窗
+                    return new { decoder = di.Name, rows = rows, cancelled = true };
                 }
 
-                return new { decoder = di.Name, rows = rows };
+                foreach (object r in result) { if (r != null) { rows.Add(r); } }
+                this.PushDecodeProgress(job, items.Count, items.Count);
+                return new { decoder = di.Name, decoderId = di.GUID.ToString(), list = listName, rows = rows, cancelled = false };
+            });
+
+            /*
+                多选智能解码：对选中的封包逐条跑 SmartDecode（每个启用的解码器），
+                结果按封包分组回给前端。与批量解码同一套后台并行 + 进度 + 取消。
+            */
+            this.bridge.Register("smartDecodeBatch", async args =>
+            {
+                string listName = args["list"] == null ? "proxy" : (string)args["list"];
+                long job = args["job"] == null ? 0L : (long)args["job"];
+                List<long> ids = ReadLongIds(args);
+                List<object> items = new List<object>();
+
+                //解码器配置也在 UI 线程快照（Clone），后台只读
+                List<DecoderInfo> decoders = new List<DecoderInfo>();
+                foreach (DecoderInfo d in Operate.DecoderConfig.List.lstDecoderInfo)
+                {
+                    if (d != null && d.IsEnable) { decoders.Add(d.Clone()); }
+                }
+
+                List<DecodeItem> packets = this.SnapshotDecodeItems(listName, ids);
+                if (packets.Count == 0 || decoders.Count == 0) { return new { items = items, cancelled = false }; }
+
+                CancellationToken token = this.BeginDecodeJob();
+                object[] result = new object[packets.Count];
+                int done = 0;
+
+                this.PushDecodeProgress(job, 0, packets.Count);
+
+                try
+                {
+                    await Task.Run(() =>
+                    {
+                        Parallel.For(0, packets.Count,
+                            new ParallelOptions { CancellationToken = token, MaxDegreeOfParallelism = DecodeParallelism },
+                            i =>
+                            {
+                                DecodeItem it = packets[i];
+                                List<CodecEngine.CodecHit> hits = CodecEngine.SmartDecode(it.Buffer, decoders, it.Type);
+                                result[i] = new { Id = it.Id, hits = this.SmartHitRows(hits, true) };
+
+                                int d = Interlocked.Increment(ref done);
+                                if (d == packets.Count || (d & 7) == 0) { this.PushDecodeProgress(job, d, packets.Count); }
+                            });
+                    }, token);
+                }
+                catch (OperationCanceledException) { return new { items = items, cancelled = true }; }
+
+                foreach (object r in result) { if (r != null) { items.Add(r); } }
+                this.PushDecodeProgress(job, packets.Count, packets.Count);
+                return new { items = items, cancelled = false };
+            });
+
+            //取消正在跑的批量 / 多选智能解码
+            this.bridge.Register("cancelDecodeJob", args =>
+            {
+                lock (this.decodeJobGate) { if (this.decodeJobCts != null) { this.decodeJobCts.Cancel(); } }
+                return new { ok = true };
+            });
+
+            /*
+                解码器列表页（与滤镜 / 发送 / 机器人 / 仓库并列）。
+
+                右键菜单七个动作齐全（含置顶 / 上移 / 下移 / 置底）：
+                智能解码与右键「解码 ▸」的子菜单都按列表顺序走，顺序调整是有意义的。
+                外加全部启用禁用与文件导入导出。
+            */
+            this.bridge.Register("setAllDecoderEnable", args =>
+            {
+                int n = Operate.DecoderConfig.SetAllDecoderEnable(
+                    args["enable"] != null && (bool)args["enable"]);
+
+                return new { ok = true, count = n };
+            });
+
+            this.bridge.Register("decoderListAction", async args =>
+            {
+                int action = args["action"] == null ? -1 : (int)args["action"];
+                var ids = ReadIds(args);
+
+                if (action < 0 || ids.Count == 0)
+                {
+                    return new { ok = false, delta = 0 };
+                }
+
+                int delta = await Operate.DecoderConfig.DecoderListAction_ByIds(action, ids);
+                return new { ok = true, delta = delta };
+            });
+
+            this.bridge.Register("importDecoders", async args =>
+            {
+                await Operate.DecoderConfig.LoadDecoderList_Dialog_Shell();
+                return new { ok = true };
+            });
+
+            this.bridge.Register("exportDecoders", async args =>
+            {
+                await Operate.DecoderConfig.SaveAllDecoders_Dialog();
+                return new { ok = true };
+            });
+
+            this.bridge.Register("clearDecoders", async args =>
+            {
+                await Operate.DecoderConfig.CleanUpDecoderList_Dialog_Shell();
+                return new { ok = true };
             });
 
             #endregion
@@ -4529,6 +4715,7 @@ namespace WPEHybrid
                         RobotList = f("robotList"),
                         WareHouse = f("wareHouse"),
                         AutoStores = f("autoStores"),
+                        DecoderList = f("decoderList"),
                         WpcServer = f("wpcServer"),
                         WpcNotice = f("wpcNotice"),
                     });
@@ -5819,6 +6006,14 @@ namespace WPEHybrid
         /// <summary>代理模式的配置是否已从数据库加载过。</summary>
         private bool proxyLoaded;
 
+        /*
+            解码任务是<b>单例</b>的：同一时刻只允许一个批量 / 多选智能解码在跑。
+            再发起一个会先把上一个取消（不会两个一起抢 CPU）。
+            进度经 decode:progress 事件推给前端；取消走 cancelDecodeJob 桥。
+        */
+        private readonly object decodeJobGate = new object();
+        private CancellationTokenSource decodeJobCts;
+
         /// <summary>
         /// 注入模式的链路（外壳 ↔ 目标进程里的无头核心）。
         /// 没进过注入模式时是 null。
@@ -6991,8 +7186,13 @@ namespace WPEHybrid
             return true;
         }
 
+        private const int DecodePreviewTextLength = 4096;
+        private const int DecodePreviewHexLength = 8192;
+        // 留一个核心给 WebView2/Windows；四路已经足够覆盖常见桌面 CPU，避免批量解码抢光调度时间。
+        private static readonly int DecodeParallelism = Math.Max(1, Math.Min(4, Environment.ProcessorCount - 1));
+
         private object DecoderResultRow(long id, byte[] buffer, DecoderInfo di,
-            Operate.PacketConfig.Packet.PacketType packetType)
+            Operate.PacketConfig.Packet.PacketType packetType, bool preview = false)
         {
             CodecResult r = CodecEngine.Run(buffer, di, packetType);
 
@@ -7002,7 +7202,114 @@ namespace WPEHybrid
                 hex = CodecEngine.BytesToHex(Convert.FromBase64String(r.OutputBase64));
             }
 
-            return new { Id = id, Ok = r.Ok, Text = r.Text, Hex = hex, Error = r.Error };
+            bool truncated = preview && (IsOver(r.Text, DecodePreviewTextLength) || IsOver(hex, DecodePreviewHexLength));
+            return new
+            {
+                Id = id,
+                Ok = r.Ok,
+                Text = preview ? Preview(r.Text, DecodePreviewTextLength) : r.Text,
+                Hex = preview ? Preview(hex, DecodePreviewHexLength) : hex,
+                Error = r.Error,
+                Truncated = truncated
+            };
+        }
+
+        private static bool IsOver(string text, int length) { return !string.IsNullOrEmpty(text) && text.Length > length; }
+
+        private static string Preview(string text, int length)
+        {
+            if (!IsOver(text, length)) { return text; }
+            return text.Substring(0, length) + "\r\n…";
+        }
+
+        private object[] SmartHitRows(List<CodecEngine.CodecHit> hits, bool preview)
+        {
+            if (hits == null) { return new object[0]; }
+            List<object> rows = new List<object>();
+            foreach (CodecEngine.CodecHit hit in hits)
+            {
+                bool truncated = preview && (IsOver(hit.Text, DecodePreviewTextLength) || IsOver(hit.OutputBase64, DecodePreviewHexLength));
+                rows.Add(new
+                {
+                    Id = hit.Id,
+                    Name = hit.Name,
+                    Text = preview ? Preview(hit.Text, DecodePreviewTextLength) : hit.Text,
+                    OutputBase64 = preview ? PreviewBase64(hit.OutputBase64, DecodePreviewHexLength) : hit.OutputBase64,
+                    Error = hit.Error,
+                    Ok = hit.Ok,
+                    Offset = hit.Offset,
+                    Truncated = truncated
+                });
+            }
+            return rows.ToArray();
+        }
+
+        private static string PreviewBase64(string text, int length)
+        {
+            if (!IsOver(text, length)) { return text; }
+            // Base64 必须在四字节边界截断，否则前端的 atob 会报错。
+            int n = length - length % 4;
+            return text.Substring(0, n);
+        }
+
+        /// <summary>批量解码要处理的一条封包：在 UI 线程快照，之后不再碰共享列表。</summary>
+        private sealed class DecodeItem
+        {
+            public long Id;
+            public byte[] Buffer;
+            public Operate.PacketConfig.Packet.PacketType Type;
+        }
+
+        /// <summary>
+        /// 按 Id 从某张列表里取封包，快照成一组不可变项。
+        /// <b>必须在 UI 线程调用</b>：它枚举的是抓包热路径上还在增删的 BindingList。
+        /// </summary>
+        private List<DecodeItem> SnapshotDecodeItems(string listName, List<long> ids)
+        {
+            List<DecodeItem> items = new List<DecodeItem>();
+
+            if (listName == "packet")
+            {
+                foreach (PacketInfo pi in Operate.PacketConfig.List.PickPackets(ids))
+                {
+                    items.Add(new DecodeItem { Id = pi.Id, Buffer = pi.PacketBuffer, Type = pi.PacketType });
+                }
+            }
+            else
+            {
+                foreach (ProxyInfo pi in Operate.ProxyConfig.List.PickProxies(ids))
+                {
+                    items.Add(new DecodeItem { Id = pi.Id, Buffer = pi.PacketBuffer, Type = pi.PacketType });
+                }
+            }
+
+            return items;
+        }
+
+        /// <summary>开一个新解码任务，并取消上一个（任务是单例的）。返回它的取消令牌。</summary>
+        private CancellationToken BeginDecodeJob()
+        {
+            CancellationTokenSource cts = new CancellationTokenSource();
+
+            lock (this.decodeJobGate)
+            {
+                if (this.decodeJobCts != null)
+                {
+                    try { this.decodeJobCts.Cancel(); } catch { }
+                    this.decodeJobCts.Dispose();
+                }
+
+                this.decodeJobCts = cts;
+            }
+
+            return cts.Token;
+        }
+
+        /// <summary>推一条解码进度给前端（job 号由发起方给，可从后台线程调用）。</summary>
+        private void PushDecodeProgress(long job, int done, int total)
+        {
+            try { this.bridge.PushEvent("decode:progress", new { job = job, done = done, total = total }); }
+            catch (Exception ex) { Operate.DoLog(nameof(PushDecodeProgress), ex); }
         }
 
         private void EnsureProxyConfigLoaded()

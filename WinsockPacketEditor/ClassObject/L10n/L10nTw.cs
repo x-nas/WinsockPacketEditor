@@ -117,6 +117,12 @@ namespace WinsockPacketEditor
             d["ExportFilterList"] = "匯出濾鏡列表";
             d["ExportFilterList.Success"] = "匯出濾鏡列表成功";
             d["ExportFilterList.Error"] = "匯出濾鏡列表失敗";
+            d["DecoderListFile"] = "解碼器清單檔案";
+            d["ImportDecoderList"] = "匯入解碼器清單";
+            d["ImportDecoderList.Success"] = "匯入解碼器清單成功";
+            d["ExportDecoderList"] = "匯出解碼器清單";
+            d["ExportDecoderList.Success"] = "匯出解碼器清單成功";
+            d["ExportDecoderList.Error"] = "匯出解碼器清單失敗";
             d["ImportSendCollection"] = "匯入傳送集";
             d["ExportSendCollection"] = "匯出傳送集";
             d["ExportSendCollection.Success"] = "匯出傳送整合功";
@@ -374,6 +380,7 @@ namespace WinsockPacketEditor
             d["Proto.VarintTrunc"] = "Protobuf varint 被截斷";
             d["Proto.VarintLong"] = "Protobuf varint 過長";
             d["Proto.FieldTrunc"] = "Protobuf 欄位被截斷";
+            d["Dec.DefaultName"] = "解碼器";
             return d;
         }
     }

@@ -32,40 +32,35 @@ export async function ensureDecoders(force = false): Promise<DecoderRow[]> {
   return decRows.value
 }
 
-/** 右键菜单里的「解码 ▸ 解码器」一项，sub 是已保存的解码器。 */
-export function decoderMenuItem(label: string): MenuItem {
+/**
+ * 右键菜单里的「解码 ▸ 解码器」一项，sub 是已保存的解码器。
+ *
+ * ⚠️ 单条 / 批量<b>不再分成两个菜单项</b>：选中几条就按几条走 ——
+ * 点选中的解码器时，前端按选中封包数决定走单条解码还是批量解码（见各列表的 onMenuPick）。
+ * label 后面照其它菜单项带上选中的条数。
+ */
+export function decoderMenuItem(label: string, count = 0): MenuItem {
   const enabled = decRows.value.filter((d) => d.IsEnable)
+  const tag = count ? ' (' + count + ')' : ''
   if (!enabled.length) {
-    return { id: 'decodeWith', label, icon: DEC_ICON, disabled: true }
+    return { id: 'decodeWith', label: label + tag, icon: DEC_ICON, disabled: true }
   }
   return {
     id: 'decodeWith',
-    label,
+    label: label + tag,
     icon: DEC_ICON,
     sub: enabled.map((d) => ({ id: 'dec:' + d.Id, label: d.Name })),
   }
 }
 
-/** 智能解码：遍历启用的解码器，挑可读明文。 */
-export function smartDecodeMenuItem(label: string): MenuItem {
-  return { id: 'smartDecode', label, icon: DEC_ICON }
+/** 智能解码：遍历启用的解码器，挑可读明文。label 后面带上选中的条数。 */
+export function smartDecodeMenuItem(label: string, count = 0): MenuItem {
+  const tag = count ? ' (' + count + ')' : ''
+  return { id: 'smartDecode', label: label + tag, icon: DEC_ICON }
 }
 
-/** 批量解码 ▸ 解码器：对选中的封包逐条解码。 */
-export function batchDecodeMenuItem(label: string): MenuItem {
-  const enabled = decRows.value.filter((d) => d.IsEnable)
-  if (!enabled.length) {
-    return { id: 'batchDecode', label, icon: DEC_ICON, disabled: true }
-  }
-  return {
-    id: 'batchDecode',
-    label,
-    icon: DEC_ICON,
-    sub: enabled.map((d) => ({ id: 'batch:' + d.Id, label: d.Name })),
-  }
-}
-
-const DEC_ICON = '<ellipse cx="8" cy="12" rx="3.5" ry="5.5"/><path d="M14 8l6 8M20 8l-6 8"/>'
+// 与侧栏「解码器列表」共用钥匙，避免同一项功能在不同入口看起来像两套图标。
+const DEC_ICON = '<circle cx="7.5" cy="15.5" r="3.5"/><path d="M10 13L20 3"/><path d="M16.5 6.5l2 2"/><path d="M14 9l2 2"/>'
 
 /** 智能解码的一条命中。 */
 export interface SmartHit {
@@ -76,8 +71,25 @@ export interface SmartHit {
   Error: string
   Ok: boolean
   Offset: number
+  Truncated?: boolean
 }
 export interface SmartPayload {
+  hits: SmartHit[]
+  list?: 'proxy' | 'packet'
+  /**
+   * 多选封包智能解码时按封包分组；有它时 `hits` 为空、以它为显示源。
+   * 单选 / 十六进制面板那条路仍用 `hits`。
+   */
+  items?: SmartBatchItem[]
+}
+
+/** 多条封包智能解码里的一条：这条封包自己的命中。 */
+export interface SmartBatchItem {
+  /** 封包 Id（取字节用；也是分组的 key）。 */
+  Id: number
+  /** 封包时间与预览（从行数据带过来，仅在结果里做标题用）。 */
+  Time: string
+  Preview: string
   hits: SmartHit[]
 }
 
@@ -88,9 +100,13 @@ export interface BatchRow {
   Text: string
   Hex: string
   Error: string
+  /** 批量通道只返回预览；完整内容由用户按需加载。 */
+  Truncated?: boolean
 }
 export interface BatchPayload {
   decoder: string
+  decoderId: string
+  list: 'proxy' | 'packet'
   rows: BatchRow[]
 }
 

@@ -72,6 +72,10 @@ const lengthOptions = [
 const showCipher = computed(() => isCipher(f.value.Kind))
 const showKey = computed(() => needsKey(f.value.Kind))
 const showCharset = computed(() => f.value.Kind === DecKind.TextCharset)
+const showRc4State = computed(() => f.value.Kind === DecKind.Rc4)
+const hasLength = computed(() => f.value.LengthBytes > 0)
+const hasFixedHeader = computed(() => f.value.HasFixedHeader)
+const canIncludeHeader = computed(() => hasLength.value && hasFixedHeader.value)
 
 async function save(): Promise<void> {
   busy.value = true
@@ -105,8 +109,9 @@ async function save(): Promise<void> {
         <div class="row"><div class="k">{{ t('dec.kind') }}</div><div class="v"><CyberSelect class="full" v-model="f.Kind" :options="kindOptions" /></div></div>
         <div v-if="showCharset" class="row"><div class="k">{{ t('dec.charset') }}</div><div class="v"><CyberSelect class="full" v-model="f.Charset" :options="charsetOptions" /></div></div>
         <template v-if="showKey">
-          <div class="row"><div class="k">{{ t('dec.key') }}</div><div class="v"><div class="inline"><CyberSelect class="fmt" v-model="f.KeyFormat" :options="keyFormatOptions" /><input class="inp" v-model="f.Key" :placeholder="f.KeyFormat === 0 ? '01 02 A0 FF' : ''" /></div></div></div>
-          <div v-if="showCipher" class="row"><div class="k">{{ t('dec.iv') }}</div><div class="v"><div class="inline"><CyberSelect class="fmt" v-model="f.IvFormat" :options="keyFormatOptions" /><input class="inp" v-model="f.Iv" :placeholder="f.IvFormat === 0 ? '00 11 22 …' : ''" /></div></div></div>
+          <div class="row"><div class="k">{{ t('dec.key') }}</div><div class="v"><div class="inline"><CyberSelect class="fmt" v-model="f.KeyFormat" :options="keyFormatOptions" /><input class="inp" v-model="f.Key" :placeholder="f.KeyFormat === 0 ? '01 02 A0 FF' : ''" /></div><p v-if="f.KeyFormat === 0" class="hint field-hint">{{ t('dec.hexHint') }}</p></div></div>
+          <div v-if="showRc4State" class="row"><div class="k">{{ t('dec.rc4State') }}</div><div class="v"><div class="readonly">{{ t('dec.rc4PerPacket') }}</div><p class="hint field-hint">{{ t('dec.rc4StateHint') }}</p></div></div>
+          <div v-if="showCipher" class="row"><div class="k">{{ t('dec.iv') }}</div><div class="v"><div class="inline"><CyberSelect class="fmt" v-model="f.IvFormat" :options="keyFormatOptions" /><input class="inp" v-model="f.Iv" :placeholder="f.IvFormat === 0 ? '00 11 22 …' : ''" /></div><p v-if="f.IvFormat === 0" class="hint field-hint">{{ t('dec.hexHint') }}</p></div></div>
           <div v-if="showCipher" class="row"><div class="k">{{ t('dec.mode') }}</div><div class="v"><CyberSelect class="full" v-model="f.CipherMode" :options="cipherOptions" /></div></div>
           <div v-if="showCipher" class="row"><div class="k">{{ t('dec.padding') }}</div><div class="v"><CyberSelect class="full" v-model="f.Padding" :options="paddingOptions" /></div></div>
         </template>
@@ -115,12 +120,12 @@ async function save(): Promise<void> {
       <section class="sec">
         <div class="grp">{{ t('dec.grpFrame') }}</div>
         <div class="row"><div class="k">{{ t('dec.lengthBytes') }}</div><div class="v"><CyberSelect class="num" v-model="f.LengthBytes" :options="lengthOptions" /></div></div>
-        <div class="row"><div class="k">{{ t('dec.bigEndian') }}</div><div class="v"><div class="flags"><button class="chk" :class="{ on: f.BigEndian }" @click="f.BigEndian = !f.BigEndian"><i />{{ t('dec.bigEndian') }}</button>
-          <button class="chk" :class="{ on: f.LengthIncludesSelf }" @click="f.LengthIncludesSelf = !f.LengthIncludesSelf"><i />{{ t('dec.lenSelf') }}</button></div></div></div>
+        <div class="row"><div class="k">{{ t('dec.bigEndian') }}</div><div class="v"><div class="flags"><button class="chk" :class="{ on: f.BigEndian }" :disabled="!hasLength" @click="f.BigEndian = !f.BigEndian"><i />{{ t('dec.bigEndian') }}</button>
+          <button class="chk" :class="{ on: f.LengthIncludesSelf }" :disabled="!hasLength" @click="f.LengthIncludesSelf = !f.LengthIncludesSelf"><i />{{ t('dec.lenSelf') }}</button></div></div></div>
         <div class="row"><div class="k">{{ t('dec.hasHeader') }}</div><div class="v"><div class="inline"><button class="chk" :class="{ on: f.HasFixedHeader }" @click="f.HasFixedHeader = !f.HasFixedHeader"><i />{{ t('dec.hasHeader') }}</button>
-          <input class="inp" v-model="f.FixedHeader" :disabled="!f.HasFixedHeader" placeholder="AB CD" /></div></div></div>
-        <div class="row"><div class="k">{{ t('dec.lenHeader') }}</div><div class="v"><button class="chk" :class="{ on: f.LengthIncludesFixedHeader }" @click="f.LengthIncludesFixedHeader = !f.LengthIncludesFixedHeader"><i />{{ t('dec.lenHeader') }}</button></div></div>
-        <div class="row"><div class="k">{{ t('dec.offset') }}</div><div class="v"><input class="inp num" type="number" min="0" v-model.number="f.DataOffset" /></div></div>
+          <input class="inp" v-model="f.FixedHeader" :disabled="!hasFixedHeader" placeholder="AB CD" /></div><p v-if="hasFixedHeader" class="hint field-hint">{{ t('dec.hexHint') }}</p></div></div>
+        <div class="row"><div class="k">{{ t('dec.lenHeader') }}</div><div class="v"><button class="chk" :class="{ on: f.LengthIncludesFixedHeader }" :disabled="!canIncludeHeader" @click="f.LengthIncludesFixedHeader = !f.LengthIncludesFixedHeader"><i />{{ t('dec.lenHeader') }}</button></div></div>
+        <div class="row"><div class="k">{{ t('dec.offset') }}</div><div class="v"><input class="inp num" type="number" min="0" v-model.number="f.DataOffset" /><p class="hint field-hint">{{ t('dec.offsetHint') }}</p></div></div>
       </section>
 
       <section class="sec">
@@ -143,4 +148,7 @@ async function save(): Promise<void> {
 .de .flags { display: flex; flex-wrap: wrap; gap: 8px; }
 .de .chk { white-space: nowrap; }
 .de .hint { margin: 0 0 8px; color: var(--dim2); font-size: var(--fs-small); line-height: 1.5; }
+.de .field-hint { margin: 5px 0 0; }
+.de .chk:disabled { opacity: .45; cursor: default; }
+.de .readonly { width: 100%; box-sizing: border-box; min-height: 36px; padding: 8px 10px; border: 1px solid var(--border); color: var(--dim); background: rgb(var(--inset-rgb) / 30%); }
 </style>

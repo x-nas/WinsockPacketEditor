@@ -20,7 +20,8 @@ import { useList } from '../../stores/lists'
 import { pushToast } from '../../stores/toast'
 import { useRowPick } from '../../usePick'
 import { gotoPage, kernelRunning, listSetting, proxyRunning, tunReady } from '../../stores/runtime'
-import { textA, textB, trInput, trMode } from '../../stores/tools'
+import { textA, textB } from '../../stores/tools'
+import { beginDecodeJob, endDecodeJob } from '../../stores/decodeJob'
 import PacketList from '../PacketList.vue'
 import ContextMenu from '../ContextMenu.vue'
 import { ICON, type MenuItem } from '../menu'
@@ -28,7 +29,7 @@ import HexPanel from '../HexPanel.vue'
 import DecodeResult from '../decoder/DecodeResult.vue'
 import SmartResult from '../decoder/SmartResult.vue'
 import BatchResult from '../decoder/BatchResult.vue'
-import { decoderMenuItem, smartDecodeMenuItem, batchDecodeMenuItem, ensureDecoders, type DecodePayload, type SmartPayload, type BatchPayload } from '../decoder/actions'
+import { decoderMenuItem, smartDecodeMenuItem, ensureDecoders, type DecodePayload, type SmartPayload, type SmartBatchItem, type BatchPayload } from '../decoder/actions'
 import { decRows } from '../../stores/decoder'
 import PacketEdit from './PacketEdit.vue'
 import PacketModification from './PacketModification.vue'
@@ -75,6 +76,17 @@ async function reloadPrefs(): Promise<void> {
 }
 
 const autoRoll = ref(true)
+
+async function toggleAutoRoll(): Promise<void> {
+  const next = !autoRoll.value
+  autoRoll.value = next
+  try {
+    const r = await call<{ ok: boolean }>('saveListAutoRoll', { autoRoll: next })
+    if (!r?.ok) autoRoll.value = !next
+  } catch {
+    autoRoll.value = !next
+  }
+}
 
 /*
   自动清理 —— 2026-09-07 从「列表设置」弹窗搬到这条工具条上。
@@ -145,6 +157,7 @@ onMounted(async () => {
     const s = await call<any>('getListSetting')
     listSetting.value = s
 
+    autoRoll.value = !!s?.autoRoll
     //自动清理的初值搭同一趟车，不另开一条桥
     autoClear.value = !!s?.autoClear
     clearAt.value = Number(s?.autoClearValue) || 5000
@@ -476,14 +489,38 @@ async function runSmartDecode(id: number): Promise<void> {
   }
 }
 
-/** 批量解码选中的封包。 */
-async function runBatchDecode(decoderId: string, ids: number[]): Promise<void> {
+/** 多选时逐条智能解码（C# 后台并行），结果按封包分组。 */
+async function runSmartDecodeMany(ids: number[]): Promise<void> {
+  const job = beginDecodeJob(ids.length)
   try {
-    const r = await call<BatchPayload>('batchDecode', { list: 'proxy', id: decoderId, ids })
-    batchPayload.value = { decoder: r?.decoder ?? '', rows: r?.rows ?? [] }
+    const r = await call<{ items: Array<{ Id: number; hits: SmartPayload['hits'] }>; cancelled?: boolean }>(
+      'smartDecodeBatch', { list: 'proxy', ids, job })
+    if (r?.cancelled) return
+    const items: SmartBatchItem[] = (r?.items ?? []).map((it) => {
+      const row = rows.value.find((x) => x.Id === it.Id)
+      return { Id: it.Id, Time: row?.Time ?? '', Preview: row?.Preview ?? '', hits: it.hits ?? [] }
+    })
+    smartPayload.value = { hits: [], list: 'proxy', items }
+  } catch (e) {
+    console.error('[dec] 智能解码失败', e)
+    pushToast('error', String(e))
+  } finally {
+    endDecodeJob(job)
+  }
+}
+
+/** 批量解码选中的封包（C# 后台并行，带进度与取消）。 */
+async function runBatchDecode(decoderId: string, ids: number[]): Promise<void> {
+  const job = beginDecodeJob(ids.length)
+  try {
+    const r = await call<BatchPayload & { cancelled?: boolean }>('batchDecode', { list: 'proxy', id: decoderId, ids, job })
+    if (r?.cancelled) return
+    batchPayload.value = { decoder: r?.decoder ?? '', decoderId: r?.decoderId ?? decoderId, list: 'proxy', rows: r?.rows ?? [] }
   } catch (e) {
     console.error('[dec] 批量解码失败', e)
     pushToast('error', String(e))
+  } finally {
+    endDecodeJob(job)
   }
 }
 
@@ -530,10 +567,8 @@ const menuItems = computed<MenuItem[]>(() => {
     //与 WinForms 一样一条一行（十六进制），写进文本对比页那两个框；带条数
     { id: 'toTextA', label: t('pm.toTextA') + tag, icon: ICON.text },
     { id: 'toTextB', label: t('pm.toTextB') + tag, icon: ICON.text },
-    { id: 'decode', label: t('tr.encode') + ' / ' + t('tr.decode') + tag, icon: ICON.hex },
-    decoderMenuItem(t('proxy.nav.decoder')),
-    smartDecodeMenuItem(t('dec.smart')),
-    batchDecodeMenuItem(t('dec.batch')),
+    decoderMenuItem(t('proxy.nav.decoder'), n),
+    smartDecodeMenuItem(t('dec.smart'), n),
     { divider: true },
     toSend,
     /*
@@ -584,17 +619,17 @@ async function onMenuPick(id: string): Promise<void> {
 
   if (id.startsWith('dec:')) {
     if (!ids.length) { needPickToast(); return }
-    await decodePacket(id.slice(4), ids)
+    // 选中一条就单条解码，选中多条就批量解码 —— 不再有单独的「批量解码」菜单项
+    const decoderId = id.slice(4)
+    if (ids.length === 1) await decodePacket(decoderId, ids)
+    else await runBatchDecode(decoderId, ids)
     return
   }
   if (id === 'smartDecode') {
     if (!ids.length) { needPickToast(); return }
-    await runSmartDecode(ids[0])
-    return
-  }
-  if (id.startsWith('batch:')) {
-    if (!ids.length) { needPickToast(); return }
-    await runBatchDecode(id.slice(6), ids)
+    // 选中一条就解一条；选中多条逐条解，结果按封包分组
+    if (ids.length === 1) await runSmartDecode(ids[0])
+    else await runSmartDecodeMany(ids)
     return
   }
 
@@ -651,15 +686,6 @@ async function onMenuPick(id: string): Promise<void> {
         else textB.value = r.text
         pushToast('success', t(id === 'toTextA' ? 'pm.toTextAOk' : 'pm.toTextBOk'))
         gotoPage.value = 'diff'
-        return
-      }
-
-      case 'decode': {
-        const r = await call<{ text: string }>('copyProxyHexMerged', { ids })
-        if (!r?.text) { pushToast('error', t('pm.copyFail')); return }
-        trInput.value = r.text
-        trMode.value = 'dec'
-        gotoPage.value = 'decoder'
         return
       }
 
@@ -951,7 +977,7 @@ const cells = computed(() => {
           {{ slowSearch ? t('sp.searching') : t('sp.next') }}
         </button>
 
-        <button class="chk" :class="{ on: autoRoll }" @click="autoRoll = !autoRoll"><i />{{ t('proxy.autoRoll') }}</button>
+        <button class="chk" :class="{ on: autoRoll }" @click="toggleAutoRoll"><i />{{ t('proxy.autoRoll') }}</button>
         <!--
           自动清理 —— 就摆在它管的那张表上面（见 script 里的说明）。
           与日志页工具条上那个是<b>两份配置</b>，所以文案也分开：

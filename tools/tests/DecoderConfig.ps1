@@ -128,6 +128,71 @@ Check 'GetRows count' ($rows.Count -eq 1) ("count=" + $rows.Count)
 $label = $config.GetMethod('KindLabel').Invoke($null, @([enum]::Parse($kindType, 'Aes')))
 Check 'KindLabel non-empty' (-not [string]::IsNullOrEmpty([string]$label)) ''
 
+# ── 复制 / 按 Id 选取 / XML 导入导出（列表页的列表动作底座）──
+$copy = $config.GetMethod('CopyDecoder').Invoke($null, @($d2))
+Check 'copy new guid' (([Guid]$copy.GUID) -ne ([Guid]$d2.GUID)) ''
+Check 'copy keeps kind' (([Convert]::ToInt32($copy.Kind)) -eq ([Convert]::ToInt32($d2.Kind))) ''
+Check 'copy name prefixed' (([string]$copy.Name).StartsWith('b')) ("name=" + $copy.Name)
+Check 'copy appended' ($lst.Count -eq 2) ("count=" + $lst.Count)
+
+$strListType = [type]('System.Collections.Generic.List``1[System.String]')
+$ids = [Activator]::CreateInstance($strListType)
+$ids.Add([string]$copy.GUID)
+$ids.Add([string]$d2.GUID)
+$idsArg = New-Object object[] 1; $idsArg[0] = $ids
+$picked = $config.GetMethod('PickDecoders').Invoke($null, $idsArg)
+Check 'PickDecoders count' ($picked.Count -eq 2) ("count=" + $picked.Count)
+Check 'PickDecoders list order' (([Guid]$picked[0].GUID) -eq ([Guid]$d2.GUID)) ''
+
+$diListType = [type]('System.Collections.Generic.List``1[WinsockPacketEditor.DecoderInfo]')
+$all = [Activator]::CreateInstance($diListType)
+$all.Add($d2)
+$xmlM = $config.GetMethods() | Where-Object { $_.Name -eq 'GetDecoderList_XML' -and $_.GetParameters().Count -eq 1 }
+$allArg = New-Object object[] 1; $allArg[0] = $all
+$xe = $xmlM.Invoke($null, $allArg)
+Check 'XML export root' (([string]$xe.Name) -eq 'Decoders') ("root=" + $xe.Name)
+Check 'XML export one node' ($xe.Elements('Decoder').Count -eq 1) ''
+
+$lst.Clear()
+$xd = [System.Xml.Linq.XDocument]::new($xe)
+$xdArg = New-Object object[] 1; $xdArg[0] = $xd
+$config.GetMethod('LoadDecoderList_FromXDocument').Invoke($null, $xdArg) | Out-Null
+Check 'XML import appends' ($lst.Count -eq 1) ("count=" + $lst.Count)
+Check 'XML import name' (([string]$lst[0].Name) -eq 'b') ("name=" + $lst[0].Name)
+
+# ── 顺序动作（置顶 / 上移 / 下移 / 置底；与滤镜 / 发送 / 机器人 / 仓库同一套语义）──
+$actType = $asm.GetType('WinsockPacketEditor.Operate+SystemConfig+ListAction')
+
+function Invoke-Move([string]$action, $list) {
+    $a = New-Object object[] 2
+    $a[0] = [enum]::Parse($actType, $action)
+    $a[1] = $list
+    $t = $config.GetMethod('UpdateDecoderList_ByListAction').Invoke($null, $a)
+    $t.Wait()
+}
+
+$lst.Clear()
+$m1 = [Activator]::CreateInstance($diType); $m1.GUID = [Guid]::NewGuid(); $m1.Name = 'a'
+$m2 = [Activator]::CreateInstance($diType); $m2.GUID = [Guid]::NewGuid(); $m2.Name = 'b'
+$m3 = [Activator]::CreateInstance($diType); $m3.GUID = [Guid]::NewGuid(); $m3.Name = 'c'
+$config.GetMethod('AddDecoder').Invoke($null, @($m1)) | Out-Null
+$config.GetMethod('AddDecoder').Invoke($null, @($m2)) | Out-Null
+$config.GetMethod('AddDecoder').Invoke($null, @($m3)) | Out-Null
+
+$pick2 = [Activator]::CreateInstance($diListType); $pick2.Add($m2)
+Invoke-Move 'Up' $pick2
+Check 'move up reorders' (([string]$lst[0].Name) -eq 'b' -and ([string]$lst[1].Name) -eq 'a') ("order=" + (($lst | ForEach-Object { $_.Name }) -join ''))
+
+Invoke-Move 'Down' $pick2
+Check 'move down restores' (([string]$lst[0].Name) -eq 'a' -and ([string]$lst[1].Name) -eq 'b') ("order=" + (($lst | ForEach-Object { $_.Name }) -join ''))
+
+$pick3 = [Activator]::CreateInstance($diListType); $pick3.Add($m3)
+Invoke-Move 'Top' $pick3
+Check 'move top' (([string]$lst[0].Name) -eq 'c') ("order=" + (($lst | ForEach-Object { $_.Name }) -join ''))
+
+Invoke-Move 'Bottom' $pick3
+Check 'move bottom' (([string]$lst[2].Name) -eq 'c') ("order=" + (($lst | ForEach-Object { $_.Name }) -join ''))
+
 $lst.Clear()
 
 Write-Host ""

@@ -11,6 +11,7 @@ import { call } from '../bridge'
 import { loadCountryTable } from '../flags'
 import { attachListFeed } from '../stores/lists'
 import { gotoPage } from '../stores/runtime'
+import { ensureDecoders } from './decoder/actions'
 import ProxySide from './proxy/ProxySide.vue'
 import ProxyData from './proxy/ProxyData.vue'
 import AccountList from './proxy/AccountList.vue'
@@ -20,6 +21,7 @@ import SendList from './proxy/SendList.vue'
 import WareHouseList from './proxy/WareHouseList.vue'
 import RobotList from './proxy/RobotList.vue'
 import TextCompare from './proxy/TextCompare.vue'
+import DecoderList from './decoder/DecoderList.vue'
 import Decoder from './decoder/Decoder.vue'
 import ExtractData from './proxy/ExtractData.vue'
 import StatData from './proxy/StatData.vue'
@@ -53,8 +55,14 @@ onMounted(() => {
   /*
     告诉 C# 进代理模式了：它会加载 14 份列表并强制整体推一次。
     WinForms 是进 ProxyModeForm 时做同一件事（那个 Spin 遮罩里那一串）。
+
+    ⚠️ 解码器不在那 14 份推送流里，要等这句加载完（LoadSystemList_FromDB）之后再
+    <b>主动拉一次</b> —— 早于它拉只会拿到空表，侧栏的计数就一直空着，
+    直到用户点进解码器页才补上。
   */
-  call('enterProxyMode').catch((e) => console.error('[proxy] 进入代理模式失败', e))
+  call('enterProxyMode')
+    .then(() => { void ensureDecoders(true) })
+    .catch((e) => console.error('[proxy] 进入代理模式失败', e))
 
   //国旗用的中文国名对照表，整个会话取一次（约 4KB）
   void loadCountryTable()
@@ -103,6 +111,12 @@ onBeforeUnmount(() => detach?.())
 
     <!-- 机器人列表：运行态由 C# 每秒推（robot:running），重新挂载会自己对上 -->
     <RobotList v-if="page === 'robot'" />
+
+    <!--
+      解码器列表：与上面四份并列。解码器不在 FeedList 推送流里，
+      每个改动动作之后由这一屏自己重新拉一次，没有要保住的运行态。
+    -->
+    <DecoderList v-if="page === 'decoders'" />
 
     <!-- 四个工具页：状态都在 stores/tools 里，v-if 销毁再挂回来内容还在 -->
     <TextCompare v-if="page === 'diff'" />

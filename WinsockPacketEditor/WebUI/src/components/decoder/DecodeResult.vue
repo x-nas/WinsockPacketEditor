@@ -15,7 +15,7 @@ import { gotoPage } from '../../stores/runtime'
 import { useList } from '../../stores/lists'
 import SettingsModal from '../proxy/SettingsModal.vue'
 import CyberSelect from '../CyberSelect.vue'
-import { decInput, decMode, decOutput, decSelectedId } from '../../stores/decoder'
+import { decInput, decMode, decOutput, decSelectedId, decTransformDirection } from '../../stores/decoder'
 import type { DecodePayload } from './actions'
 
 const props = defineProps<{ payload: DecodePayload | null }>()
@@ -24,7 +24,7 @@ const emit = defineEmits<{ (e: 'close'): void }>()
 const sends = useList<SendRow>(FeedList.Send)
 const sendSid = ref('')
 const sendOptions = computed(() => [
-  { value: '', label: t('pm.selectAll') },
+  { value: '', label: t('dec.selectSend') },
   ...sends.value.map((s) => ({ value: s.Id, label: s.Name })),
 ])
 
@@ -38,8 +38,11 @@ async function copyOut(): Promise<void> {
 function useAsInput(): void {
   const p = props.payload
   if (!p) return
-  if (p.text) decInput.value = p.text
-  if (p.hex) decOutput.value = p.hex
+  //解码结果带回工作台时，最常见的下一步是修改明文后重新编码。
+  //因此明确落在编码模式，避免“明文却出现在解码的密文输入框”这一反直觉状态。
+  decTransformDirection.value = 'encode'
+  decInput.value = p.text || ''
+  decOutput.value = ''
   decMode.value = 'decoder'
   if (p.decoderId) decSelectedId.value = p.decoderId
   gotoPage.value = 'decoder'

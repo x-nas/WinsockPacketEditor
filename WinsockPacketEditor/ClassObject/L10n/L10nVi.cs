@@ -111,6 +111,12 @@ namespace WinsockPacketEditor
             d["ExportFilterList"] = "Xuất danh sách bộ lọc";
             d["ExportFilterList.Success"] = "Đã xuất danh sách bộ lọc";
             d["ExportFilterList.Error"] = "Xuất danh sách bộ lọc thất bại";
+            d["DecoderListFile"] = "Tệp danh sách bộ giải mã";
+            d["ImportDecoderList"] = "Nhập danh sách bộ giải mã";
+            d["ImportDecoderList.Success"] = "Đã nhập danh sách bộ giải mã";
+            d["ExportDecoderList"] = "Xuất danh sách bộ giải mã";
+            d["ExportDecoderList.Success"] = "Đã xuất danh sách bộ giải mã";
+            d["ExportDecoderList.Error"] = "Xuất danh sách bộ giải mã thất bại";
             d["ImportSendCollection"] = "Nhập bộ gửi";
             d["ExportSendCollection"] = "Xuất bộ gửi";
             d["ExportSendCollection.Success"] = "Đã xuất bộ gửi";
@@ -367,6 +373,7 @@ namespace WinsockPacketEditor
             d["Proto.VarintTrunc"] = "Protobuf varint bị cắt ngắn";
             d["Proto.VarintLong"] = "Protobuf varint quá dài";
             d["Proto.FieldTrunc"] = "Trường Protobuf bị cắt ngắn";
+            d["Dec.DefaultName"] = "Bộ giải mã";
             return d;
         }
     }

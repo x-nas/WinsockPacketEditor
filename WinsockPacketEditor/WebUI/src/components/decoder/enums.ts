@@ -1,5 +1,7 @@
 /* 解码器的枚举值。与 C# 的 DecoderKind / DecoderProtocol / … 一一对应，按 int 过桥。 */
 
+import { t } from '../../i18n'
+
 export const DecKind = { Xor: 1, Aes: 2, Des: 3, Protobuf: 4, MessagePack: 5, Rc4: 6, Xxtea: 7, Amf: 8, TextCharset: 9, Bson: 10, FlatBuffers: 11 } as const
 export const DecProtocol = { Any: 0, Tcp: 1, Udp: 2, Http: 3, WebSocket: 4 } as const
 export const DecDirection = { Any: 0, Request: 1, Response: 2 } as const
@@ -19,6 +21,23 @@ export const CHARSET_LABELS = ['Default', 'GBK', 'UTF-7', 'UTF-8', 'UTF-16 BE', 
 /** 是否对称加密（要用密钥 / IV / 模式 / 填充）。 */
 export function isCipher(kind: number): boolean {
   return kind === DecKind.Aes || kind === DecKind.Des
+}
+
+/** 算法类型的显示名。列表页与编辑弹窗共用，别各写一份。 */
+export function kindLabel(kind: number): string {
+  switch (kind) {
+    case DecKind.Aes: return 'AES'
+    case DecKind.Des: return 'DES'
+    case DecKind.Protobuf: return 'Protobuf'
+    case DecKind.MessagePack: return 'MessagePack'
+    case DecKind.Rc4: return 'RC4'
+    case DecKind.Xxtea: return 'XXTEA'
+    case DecKind.Amf: return 'AMF'
+    case DecKind.Bson: return 'BSON'
+    case DecKind.FlatBuffers: return 'FlatBuffers'
+    case DecKind.TextCharset: return t('dec.kindText')
+    default: return 'XOR'
+  }
 }
 
 /** 是否需要密钥。 */

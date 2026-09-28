@@ -44,7 +44,7 @@ namespace WinsockPacketEditor
                 ⚠️ 它也进了库文件名（DataBase.dbName ＝ AssemblyVersion + ".db"）：
                 2.1.9 正式版是「2.1.9.db」，测过的「2.1.9 Beta.db」不会被读到 —— 要带过去用备份导出 / 导入。
             */
-            public static bool IsBeta = true;
+            public static bool IsBeta = false;
             /// <summary>MCP 操作需要 WPE 本机确认；默认 false。</summary>
             public static bool McpRequiresConfirmation = false;
             public static bool McpEnabled = true;
@@ -18751,7 +18751,7 @@ namespace WinsockPacketEditor
                 {
                     DecoderInfo di = new DecoderInfo();
                     di.GUID = Guid.NewGuid();
-                    di.Name = DecoderInfo.DefaultName(KindLabel(di.Kind), List.lstDecoderInfo.Count + 1);
+                    di.Name = DefaultName(List.lstDecoderInfo.Count + 1);
                     List.lstDecoderInfo.Add(di);
                 }
                 catch (Exception ex) { Operate.DoLog(nameof(AddDecoder_New), ex); }
@@ -18762,15 +18762,20 @@ namespace WinsockPacketEditor
                 if (di != null) { List.lstDecoderInfo.Add(di); }
             }
 
-            /// <summary>新增一条默认解码器并落库，返回它的 GUID 串（前端拿它打开编辑弹窗）。</summary>
+            /// <summary>新增一条默认解码器并落库，返回它的 GUID 串（前端选中该条目）。</summary>
             public static string AddDecoder_New_ById()
             {
                 DecoderInfo di = new DecoderInfo();
                 di.GUID = Guid.NewGuid();
-                di.Name = DecoderInfo.DefaultName(KindLabel(di.Kind), List.lstDecoderInfo.Count + 1);
+                di.Name = DefaultName(List.lstDecoderInfo.Count + 1);
                 List.lstDecoderInfo.Add(di);
                 SaveDecoderList_ToDB();
                 return di.GUID.ToString().ToUpper();
+            }
+
+            private static string DefaultName(int sequence)
+            {
+                return UI.T("Dec.DefaultName", "解码器") + " " + sequence;
             }
 
             public static bool SetDecoderEnable_ById(string id, bool enable)
@@ -19003,79 +19008,29 @@ namespace WinsockPacketEditor
 
                         List.lstDecoderInfo.Add(di);
                     }
-
-                    InstallBuiltinPresets();
                 }
                 catch (Exception ex) { Operate.DoLog(nameof(LoadDecoderList_FromDB), ex); }
             }
 
-            /// <summary>装入截图对应的十个可编辑预置；不覆盖同名的用户配置。</summary>
-            private static void InstallBuiltinPresets()
+            /// <summary>整份解码器列表 → &lt;Decoders&gt; 节（备份 / 导出共用）。</summary>
+            public static XElement GetDecoderList_XML()
             {
-                bool added = false;
-                Action<DecoderKind, string, string, string, int> add = (kind, name, key, iv, offset) =>
-                {
-                    foreach (DecoderInfo old in List.lstDecoderInfo)
-                    {
-                        if (old != null && string.Equals(old.Name, name, StringComparison.OrdinalIgnoreCase)) { return; }
-                    }
-                    DecoderInfo d = new DecoderInfo();
-                    d.GUID = Guid.NewGuid(); d.IsEnable = true; d.Kind = kind; d.Name = name;
-                    d.Description = "通用解码器 - " + name;
-                    d.KeyFormat = DecoderKeyFormat.Hex; d.Key = key; d.IvFormat = DecoderKeyFormat.Hex; d.Iv = iv;
-                    d.CipherMode = DecoderCipherMode.CBC; d.Padding = DecoderPadding.PKCS7; d.DataOffset = offset;
-                    d.ProtocolType = DecoderProtocol.Any; d.Direction = DecoderDirection.Any;
-                    List.lstDecoderInfo.Add(d);
-                    added = true;
-                };
-
-                add(DecoderKind.Aes, "AES", "6165736B657931323334353637383930", "00000000000000000000000000000000", 0);
-                add(DecoderKind.Amf, "AMF0 / AMF3", "", "", 0);
-                add(DecoderKind.Bson, "BSON", "", "", 0);
-                add(DecoderKind.Des, "DES", "6465736B65793132", "0000000000000000", 0);
-                add(DecoderKind.FlatBuffers, "FlatBuffers", "", "", 0);
-                add(DecoderKind.MessagePack, "MessagePack", "", "", 0);
-                add(DecoderKind.Protobuf, "Protobuf", "", "", 16);
-                add(DecoderKind.Rc4, "RC4", "0102030405060708", "", 0);
-                add(DecoderKind.Xor, "XOR", "64", "", 0);
-                add(DecoderKind.Xxtea, "XXTEA", "000102030405060708090A0B0C0D0E0F", "", 0);
-                if (added) { SaveDecoderList_ToDB(); }
+                return GetDecoderList_XML(null);
             }
 
-            public static XElement GetDecoderList_XML()
+            /// <summary>
+            /// 指定解码器 → &lt;Decoders&gt; 节。传 null 表示整份列表。
+            /// 导出选中条目时只写这几条，格式与备份恢复同一个根。
+            /// </summary>
+            public static XElement GetDecoderList_XML(List<DecoderInfo> diList)
             {
                 try
                 {
                     XElement xeRoot = new XElement("Decoders");
 
-                    foreach (DecoderInfo di in List.lstDecoderInfo)
-                    {
-                        xeRoot.Add(new XElement("Decoder",
-                            new XElement("ID", di.GUID.ToString().ToUpper()),
-                            new XElement("IsEnable", di.IsEnable.ToString()),
-                            new XElement("Name", di.Name),
-                            new XElement("Description", di.Description),
-                            new XElement("Kind", (int)di.Kind),
-                            new XElement("Charset", (int)di.Charset),
-                            new XElement("KeyFormat", (int)di.KeyFormat),
-                            new XElement("Key", di.Key),
-                            new XElement("IvFormat", (int)di.IvFormat),
-                            new XElement("Iv", di.Iv),
-                            new XElement("CipherMode", (int)di.CipherMode),
-                            new XElement("Padding", (int)di.Padding),
-                            new XElement("BlockSize", di.BlockSize),
-                            new XElement("LengthBytes", di.LengthBytes),
-                            new XElement("BigEndian", di.BigEndian.ToString()),
-                            new XElement("LengthIncludesSelf", di.LengthIncludesSelf.ToString()),
-                            new XElement("HasFixedHeader", di.HasFixedHeader.ToString()),
-                            new XElement("FixedHeader", di.FixedHeader),
-                            new XElement("LengthIncludesFixedHeader", di.LengthIncludesFixedHeader.ToString()),
-                            new XElement("DataOffset", di.DataOffset),
-                            new XElement("ProtocolType", (int)di.ProtocolType),
-                            new XElement("Direction", (int)di.Direction),
-                            new XElement("ParamsJson", di.ParamsJson)
-                            ));
-                    }
+                    if (diList == null) { diList = List.lstDecoderInfo.ToList(); }
+
+                    foreach (DecoderInfo di in diList) { xeRoot.Add(DecoderToXml(di)); }
 
                     return xeRoot;
                 }
@@ -19084,6 +19039,80 @@ namespace WinsockPacketEditor
                     Operate.DoLog(nameof(GetDecoderList_XML), ex);
                     return null;
                 }
+            }
+
+            private static XElement DecoderToXml(DecoderInfo di)
+            {
+                return new XElement("Decoder",
+                    new XElement("ID", di.GUID.ToString().ToUpper()),
+                    new XElement("IsEnable", di.IsEnable.ToString()),
+                    new XElement("Name", di.Name),
+                    new XElement("Description", di.Description),
+                    new XElement("Kind", (int)di.Kind),
+                    new XElement("Charset", (int)di.Charset),
+                    new XElement("KeyFormat", (int)di.KeyFormat),
+                    new XElement("Key", di.Key),
+                    new XElement("IvFormat", (int)di.IvFormat),
+                    new XElement("Iv", di.Iv),
+                    new XElement("CipherMode", (int)di.CipherMode),
+                    new XElement("Padding", (int)di.Padding),
+                    new XElement("BlockSize", di.BlockSize),
+                    new XElement("LengthBytes", di.LengthBytes),
+                    new XElement("BigEndian", di.BigEndian.ToString()),
+                    new XElement("LengthIncludesSelf", di.LengthIncludesSelf.ToString()),
+                    new XElement("HasFixedHeader", di.HasFixedHeader.ToString()),
+                    new XElement("FixedHeader", di.FixedHeader),
+                    new XElement("LengthIncludesFixedHeader", di.LengthIncludesFixedHeader.ToString()),
+                    new XElement("DataOffset", di.DataOffset),
+                    new XElement("ProtocolType", (int)di.ProtocolType),
+                    new XElement("Direction", (int)di.Direction),
+                    new XElement("ParamsJson", di.ParamsJson)
+                    );
+            }
+
+            /// <summary>
+            /// &lt;Decoder&gt; 节 → 模型。<paramref name="uniqueGuid"/> 为真且 GUID 已存在时换一个新的
+            /// （导入用；备份恢复同一份库内不会有冲突，传 false 保持原 GUID）。
+            /// </summary>
+            private static DecoderInfo DecoderFromXml(XElement xe, bool uniqueGuid)
+            {
+                DecoderInfo di = new DecoderInfo();
+
+                Guid g;
+                if (!Guid.TryParse(GetXmlString(xe, "ID", string.Empty), out g) || g == Guid.Empty)
+                {
+                    g = Guid.NewGuid();
+                }
+                else if (uniqueGuid && GetDecoder_ById(g) != null)
+                {
+                    g = Guid.NewGuid();
+                }
+
+                di.GUID = g;
+                di.IsEnable = GetXmlBool(xe, "IsEnable", true);
+                di.Name = GetXmlString(xe, "Name", string.Empty);
+                di.Description = GetXmlString(xe, "Description", string.Empty);
+                di.Kind = (DecoderKind)GetXmlInt(xe, "Kind", 1);
+                di.Charset = (DecoderCharset)GetXmlInt(xe, "Charset", 3);
+                di.KeyFormat = (DecoderKeyFormat)GetXmlInt(xe, "KeyFormat", 0);
+                di.Key = GetXmlString(xe, "Key", string.Empty);
+                di.IvFormat = (DecoderKeyFormat)GetXmlInt(xe, "IvFormat", 0);
+                di.Iv = GetXmlString(xe, "Iv", string.Empty);
+                di.CipherMode = (DecoderCipherMode)GetXmlInt(xe, "CipherMode", 0);
+                di.Padding = (DecoderPadding)GetXmlInt(xe, "Padding", 1);
+                di.BlockSize = GetXmlInt(xe, "BlockSize", 0);
+                di.LengthBytes = GetXmlInt(xe, "LengthBytes", 0);
+                di.BigEndian = GetXmlBool(xe, "BigEndian", false);
+                di.LengthIncludesSelf = GetXmlBool(xe, "LengthIncludesSelf", false);
+                di.HasFixedHeader = GetXmlBool(xe, "HasFixedHeader", false);
+                di.FixedHeader = GetXmlString(xe, "FixedHeader", string.Empty);
+                di.LengthIncludesFixedHeader = GetXmlBool(xe, "LengthIncludesFixedHeader", false);
+                di.DataOffset = GetXmlInt(xe, "DataOffset", 0);
+                di.ProtocolType = (DecoderProtocol)GetXmlInt(xe, "ProtocolType", 0);
+                di.Direction = (DecoderDirection)GetXmlInt(xe, "Direction", 0);
+                di.ParamsJson = GetXmlString(xe, "ParamsJson", string.Empty);
+
+                return di;
             }
 
             /// <summary>从备份的 &lt;Decoders&gt; 节恢复。节存在就先清空再装（与其它列表同一口径）。</summary>
@@ -19097,36 +19126,354 @@ namespace WinsockPacketEditor
 
                     foreach (XElement xe in xeRoot.Elements("Decoder"))
                     {
-                        DecoderInfo di = new DecoderInfo();
-                        di.GUID = Guid.Parse(GetXmlString(xe, "ID", Guid.NewGuid().ToString()));
-                        di.IsEnable = GetXmlBool(xe, "IsEnable", true);
-                        di.Name = GetXmlString(xe, "Name", string.Empty);
-                        di.Description = GetXmlString(xe, "Description", string.Empty);
-                        di.Kind = (DecoderKind)GetXmlInt(xe, "Kind", 1);
-                        di.Charset = (DecoderCharset)GetXmlInt(xe, "Charset", 3);
-                        di.KeyFormat = (DecoderKeyFormat)GetXmlInt(xe, "KeyFormat", 0);
-                        di.Key = GetXmlString(xe, "Key", string.Empty);
-                        di.IvFormat = (DecoderKeyFormat)GetXmlInt(xe, "IvFormat", 0);
-                        di.Iv = GetXmlString(xe, "Iv", string.Empty);
-                        di.CipherMode = (DecoderCipherMode)GetXmlInt(xe, "CipherMode", 0);
-                        di.Padding = (DecoderPadding)GetXmlInt(xe, "Padding", 1);
-                        di.BlockSize = GetXmlInt(xe, "BlockSize", 0);
-                        di.LengthBytes = GetXmlInt(xe, "LengthBytes", 0);
-                        di.BigEndian = GetXmlBool(xe, "BigEndian", false);
-                        di.LengthIncludesSelf = GetXmlBool(xe, "LengthIncludesSelf", false);
-                        di.HasFixedHeader = GetXmlBool(xe, "HasFixedHeader", false);
-                        di.FixedHeader = GetXmlString(xe, "FixedHeader", string.Empty);
-                        di.LengthIncludesFixedHeader = GetXmlBool(xe, "LengthIncludesFixedHeader", false);
-                        di.DataOffset = GetXmlInt(xe, "DataOffset", 0);
-                        di.ProtocolType = (DecoderProtocol)GetXmlInt(xe, "ProtocolType", 0);
-                        di.Direction = (DecoderDirection)GetXmlInt(xe, "Direction", 0);
-                        di.ParamsJson = GetXmlString(xe, "ParamsJson", string.Empty);
-
-                        List.lstDecoderInfo.Add(di);
+                        List.lstDecoderInfo.Add(DecoderFromXml(xe, false));
                     }
                 }
                 catch (Exception ex) { Operate.DoLog(nameof(LoadDecoderList_XML), ex); }
             }
+
+            #region//解码器列表（列表操作 / 文件导入导出）
+
+            /// <summary>按 GUID 串找一个解码器（不区分大小写）。</summary>
+            public static DecoderInfo GetDecoder_ByIdString(string id)
+            {
+                Guid g;
+                return Guid.TryParse(id, out g) ? GetDecoder_ById(g) : null;
+            }
+
+            /// <summary>Id 数组 → 模型列表，按列表里的先后顺序返回（与 PickFilters / PickSends 同一口径）。</summary>
+            public static List<DecoderInfo> PickDecoders(IList<string> Ids)
+            {
+                var picked = new List<DecoderInfo>();
+
+                if (Ids == null || Ids.Count == 0) { return picked; }
+
+                var want = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                foreach (string id in Ids) { if (!string.IsNullOrEmpty(id)) { want.Add(id); } }
+
+                foreach (DecoderInfo di in List.lstDecoderInfo)
+                {
+                    if (want.Contains(di.GUID.ToString())) { picked.Add(di); }
+                }
+
+                return picked;
+            }
+
+            /// <summary>全部启用 / 全部禁用（对应工具条上那两个按钮）。返回改了几条。</summary>
+            public static int SetAllDecoderEnable(bool IsEnable)
+            {
+                int n = 0;
+
+                foreach (DecoderInfo di in List.lstDecoderInfo)
+                {
+                    if (di.IsEnable != IsEnable) { di.IsEnable = IsEnable; n++; }
+                }
+
+                if (n > 0) { SaveDecoderList_ToDB(); }
+                return n;
+            }
+
+            /// <summary>复制一条解码器（新 GUID + 名称加副本后缀），追加到表尾。</summary>
+            public static DecoderInfo CopyDecoder(DecoderInfo src)
+            {
+                if (src == null) { return null; }
+
+                DecoderInfo di = FromRow(ToRow(src));
+                di.GUID = Guid.NewGuid();
+                di.Name = string.Format(UI.T("CopyName", "{0} - 副本"), src.Name);
+                List.lstDecoderInfo.Add(di);
+                return di;
+            }
+
+            /// <summary>
+            /// 列表动作，编号照搬 <see cref="SystemConfig.ListAction"/>（与滤镜 / 发送 / 机器人 / 仓库同一套语义）。
+            ///
+            /// 【顺序为什么有意义】智能解码按列表顺序逐条尝试，命中结果也按这个顺序排；
+            /// 右键「解码 ▸ 解码器」的子菜单同样按列表顺序列出来。所以置顶 / 上移 / 下移 / 置底
+            /// 是给「常用解码器排在前面」用的，移动逻辑与滤镜那份逐字一致。
+            /// </summary>
+            public static async Task UpdateDecoderList_ByListAction(SystemConfig.ListAction listAction, List<DecoderInfo> diList)
+            {
+                try
+                {
+                    switch (listAction)
+                    {
+                        case SystemConfig.ListAction.Top:
+
+                            foreach (DecoderInfo di in diList)
+                            {
+                                List.lstDecoderInfo.Remove(di);
+                                List.lstDecoderInfo.Insert(0, di);
+                            }
+
+                            break;
+
+                        case SystemConfig.ListAction.Up:
+
+                            foreach (DecoderInfo di in diList)
+                            {
+                                int iIndex = List.lstDecoderInfo.IndexOf(di);
+
+                                if (iIndex > 0)
+                                {
+                                    List.lstDecoderInfo.Remove(di);
+                                    List.lstDecoderInfo.Insert(iIndex - 1, di);
+                                }
+                            }
+
+                            break;
+
+                        case SystemConfig.ListAction.Down:
+
+                            foreach (DecoderInfo di in diList)
+                            {
+                                int iIndex = List.lstDecoderInfo.IndexOf(di);
+
+                                if (iIndex > -1 && iIndex < List.lstDecoderInfo.Count - 1)
+                                {
+                                    List.lstDecoderInfo.Remove(di);
+                                    List.lstDecoderInfo.Insert(iIndex + 1, di);
+                                }
+                            }
+
+                            break;
+
+                        case SystemConfig.ListAction.Bottom:
+
+                            foreach (DecoderInfo di in diList)
+                            {
+                                List.lstDecoderInfo.Remove(di);
+                                List.lstDecoderInfo.Add(di);
+                            }
+
+                            break;
+
+                        case SystemConfig.ListAction.Copy:
+                            foreach (DecoderInfo di in diList) { CopyDecoder(di); }
+                            break;
+
+                        case SystemConfig.ListAction.Export:
+                            await SaveDecoderList_Dialog(diList.Count > 0 ? diList[0].Name : null, diList);
+                            break;
+
+                        case SystemConfig.ListAction.Delete:
+                            await DeleteDecoder_Dialog(diList);
+                            break;
+                    }
+                }
+                catch (Exception ex) { Operate.DoLog(nameof(UpdateDecoderList_ByListAction), ex); }
+            }
+
+            /// <summary>按 Id 数组收列表动作，动作编号照搬 <see cref="SystemConfig.ListAction"/>。</summary>
+            public static async Task<int> DecoderListAction_ByIds(int Action, IList<string> Ids)
+            {
+                List<DecoderInfo> picked = PickDecoders(Ids);
+
+                if (picked.Count == 0) { return 0; }
+
+                int before = List.lstDecoderInfo.Count;
+
+                await UpdateDecoderList_ByListAction((SystemConfig.ListAction)Action, picked);
+
+                //导出只写文件、不动列表；其余动作都改了内容
+                if ((SystemConfig.ListAction)Action != SystemConfig.ListAction.Export)
+                {
+                    SaveDecoderList_ToDB();
+                }
+
+                return List.lstDecoderInfo.Count - before;
+            }
+
+            /// <summary>删除（带确认框）。</summary>
+            public static async Task DeleteDecoder_Dialog(List<DecoderInfo> diList)
+            {
+                if (diList == null || diList.Count == 0) { return; }
+
+                if (await UI.Confirm(UI.T("Dec.TabDecoders", "解码器"), UI.T("Dec.DelConfirm", "确定删除选中的解码器吗？")))
+                {
+                    foreach (DecoderInfo di in diList) { List.lstDecoderInfo.Remove(di); }
+                }
+            }
+
+            /// <summary>清空全部（带确认框）。</summary>
+            public static async Task CleanUpDecoderList_Dialog()
+            {
+                if (await UI.Confirm(UI.T("Dec.TabDecoders", "解码器"), UI.T("SureToDelete", "确定删除数据吗?")))
+                {
+                    List.lstDecoderInfo.Clear();
+                }
+            }
+
+            public static async Task CleanUpDecoderList_Dialog_Shell()
+            {
+                int before = List.lstDecoderInfo.Count;
+
+                await CleanUpDecoderList_Dialog();
+
+                if (List.lstDecoderInfo.Count != before) { SaveDecoderList_ToDB(); }
+            }
+
+            /// <summary>导出解码器到文件（带文件框）。diList 为 null 表示全部。</summary>
+            public static async Task<string> SaveDecoderList_Dialog(string FileName, List<DecoderInfo> diList)
+            {
+                try
+                {
+                    if (List.lstDecoderInfo.Count > 0)
+                    {
+                        FilePick sfdSaveFile = new FilePick();
+                        sfdSaveFile.Filter = UI.T("DecoderListFile", "解码器列表文件") + "（*.dec）|*.dec";
+
+                        if (!string.IsNullOrEmpty(FileName)) { sfdSaveFile.FileName = FileName; }
+
+                        string sPickedPath = await UI.PickSave(sfdSaveFile);
+                        if (!string.IsNullOrEmpty(sPickedPath))
+                        {
+                            var EncryptPassword = await SystemConfig.GetEncryptExportAsync(UI.T("ExportDecoderList", "导出解码器列表"));
+
+                            if (SaveDecoderList(sPickedPath, diList, EncryptPassword.DoEncrypt, EncryptPassword.Password))
+                            {
+                                string Title = UI.T("ExportDecoderList.Success", "导出解码器列表成功");
+                                UI.Notify(UiIcon.Success, Title, sPickedPath);
+                                Operate.DoLog(nameof(SaveDecoderList_Dialog), Title + ": " + sPickedPath);
+                                return sPickedPath;
+                            }
+                            else
+                            {
+                                UI.Notify(UiIcon.Error, UI.T("ExportDecoderList.Error", "导出解码器列表失败"), UI.T("CheckSystemLog", "请检查系统日志"));
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex) { Operate.DoLog(nameof(SaveDecoderList_Dialog), ex); }
+                return null;
+            }
+
+            private static bool SaveDecoderList(string FilePath, List<DecoderInfo> diList, bool DoEncrypt, string Password)
+            {
+                try
+                {
+                    XDocument xdoc = new XDocument
+                    {
+                        Declaration = new XDeclaration("1.0", "utf-8", "yes")
+                    };
+
+                    XElement xeRoot = GetDecoderList_XML(diList);
+                    if (xeRoot == null) { return false; }
+
+                    xdoc.Add(xeRoot);
+                    xdoc.Save(FilePath);
+
+                    if (DoEncrypt)
+                    {
+                        if (!string.IsNullOrEmpty(Password)) { SystemConfig.EncryptXMLFile(FilePath, Password); }
+                    }
+
+                    return true;
+                }
+                catch (Exception ex) { Operate.DoLog(nameof(SaveDecoderList), ex); }
+
+                return false;
+            }
+
+            /// <summary>导出全部（工具条按钮）。</summary>
+            public static async Task<string> SaveAllDecoders_Dialog(string FileName = null)
+            {
+                return await SaveDecoderList_Dialog(FileName, null);
+            }
+
+            /// <summary>从文件导入解码器（带文件框）。</summary>
+            public static async Task<string> LoadDecoderList_Dialog(string FileName = null)
+            {
+                try
+                {
+                    FilePick ofdLoadFile = new FilePick();
+                    ofdLoadFile.Filter = UI.T("DecoderListFile", "解码器列表文件") + "（*.dec）|*.dec";
+                    if (!string.IsNullOrWhiteSpace(FileName)) { ofdLoadFile.FileName = FileName; }
+
+                    string sPickedPath = await UI.PickOpen(ofdLoadFile);
+                    if (!string.IsNullOrEmpty(sPickedPath))
+                    {
+                        if (await LoadDecoderList(sPickedPath, true))
+                        {
+                            string Title = UI.T("ImportDecoderList.Success", "导入解码器列表成功");
+                            UI.Notify(UiIcon.Success, Title, sPickedPath);
+                            Operate.DoLog(nameof(LoadDecoderList_Dialog), Title + ": " + sPickedPath);
+                            return sPickedPath;
+                        }
+                    }
+                }
+                catch (Exception ex) { Operate.DoLog(nameof(LoadDecoderList_Dialog), ex); }
+                return null;
+            }
+
+            private static async Task<bool> LoadDecoderList(string FilePath, bool LoadFromUser)
+            {
+                try
+                {
+                    if (File.Exists(FilePath))
+                    {
+                        XDocument xdoc = null;
+
+                        if (SystemConfig.IsEncryptXMLFile(FilePath))
+                        {
+                            if (LoadFromUser)
+                            {
+                                xdoc = await SystemConfig.GetEncryptImportAsync(UI.T("ImportDecoderList", "导入解码器列表"), FilePath);
+                            }
+                        }
+                        else
+                        {
+                            xdoc = XDocument.Load(FilePath);
+                        }
+
+                        if (xdoc == null)
+                        {
+                            string sError = UI.T("Password.Incorrect", "导入失败: 密码错误");
+
+                            if (LoadFromUser) { UI.Toast(UiIcon.Error, sError); }
+                            else { Operate.DoLog(nameof(LoadDecoderList), sError); }
+
+                            return false;
+                        }
+
+                        LoadDecoderList_FromXDocument(xdoc);
+                        return true;
+                    }
+                }
+                catch (Exception ex) { Operate.DoLog(nameof(LoadDecoderList), ex); }
+
+                return false;
+            }
+
+            /// <summary>
+            /// 导入（追加）：与备份恢复不同，<b>不清空</b>现有解码器；GUID 已存在就换一个新的。
+            /// </summary>
+            public static void LoadDecoderList_FromXDocument(XDocument xdoc)
+            {
+                try
+                {
+                    if (xdoc == null || xdoc.Root == null) { return; }
+
+                    foreach (XElement xe in xdoc.Root.Elements("Decoder"))
+                    {
+                        List.lstDecoderInfo.Add(DecoderFromXml(xe, true));
+                    }
+                }
+                catch (Exception ex) { Operate.DoLog(nameof(LoadDecoderList_FromXDocument), ex); }
+            }
+
+            /// <summary>导入解码器列表（带文件框）。导进来之后要落库。</summary>
+            public static async Task<string> LoadDecoderList_Dialog_Shell(string FileName = null)
+            {
+                int before = List.lstDecoderInfo.Count;
+
+                var path = await LoadDecoderList_Dialog(FileName);
+
+                if (List.lstDecoderInfo.Count != before) { SaveDecoderList_ToDB(); }
+                return path;
+            }
+
+            #endregion
 
             private static string GetXmlString(XElement xe, string name, string fallback)
             {

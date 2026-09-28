@@ -90,7 +90,7 @@ export const DICT = {
   'inst.cancel': { zh: '取消', en: 'Cancel' },
   'inst.hint': { zh: '保存后请回到启动页选择模式', en: 'After saving, pick a mode on the start page' },
 
-  // ── 代理模式：侧栏 14 页 ────────────────────────────
+  // ── 代理模式：侧栏 15 页 ────────────────────────────
   'proxy.nav.data': { zh: '代理数据', en: 'Proxy Data' },
   'proxy.nav.client': { zh: '客户端列表', en: 'Client List' },
   'proxy.nav.account': { zh: '账号列表', en: 'Account List' },
@@ -101,6 +101,8 @@ export const DICT = {
   'proxy.nav.stat': { zh: '统计数据', en: 'Statistics' },
   'proxy.nav.diff': { zh: '文本对比', en: 'Text Comparison' },
   'proxy.nav.decoder': { zh: '解码器', en: 'Decoder' },
+  'proxy.nav.decoders': { zh: '解码器列表', en: 'Decoder List' },
+  'proxy.nav.codec': { zh: "编码解码", en: "Encode / Decode" },
   'proxy.nav.extract': { zh: '数据提取', en: 'Data Extraction' },
   'proxy.nav.wpc': { zh: 'WPC 配置', en: 'WPC Config' },
   'proxy.nav.log': { zh: '系统日志', en: 'System Log' },
@@ -201,7 +203,7 @@ export const DICT = {
   'set.app.assocOff': { zh: '未关联 · 启动时不会再自动关联', en: 'Not associated · will not re-associate at startup' },
   'set.app.assocClear': { zh: '清除文件关联', en: 'Remove association' },
   'set.app.assocRedo': { zh: '重新关联', en: 'Associate again' },
-  'set.app.assocHint': { zh: 'WPE 导出的备份、滤镜、发送、机器人、仓库、账号、名单、映射等 13 种文件，在资源管理器里显示这个图标。只改当前用户的设置，不注册打开方式。按钮立即生效，不用按「保存」。', en: 'The 13 kinds of files WPE exports (backup, filters, send, robot, warehouse, accounts, lists, mappings…) show this icon in File Explorer. Only the current user is affected and no “open with” is registered. The button applies immediately — no need to press Save.' },
+  'set.app.assocHint': { zh: 'WPE 导出的备份、滤镜、发送、机器人、仓库、解码器、账号、名单、映射等 14 种文件，在资源管理器里显示这个图标。只改当前用户的设置，不注册打开方式。按钮立即生效，不用按「保存」。', en: 'The 14 kinds of files WPE exports (backup, filters, send, robot, warehouse, decoders, accounts, lists, mappings…) show this icon in File Explorer. Only the current user is affected and no “open with” is registered. The button applies immediately — no need to press Save.' },
   'set.app.assocForeign': { zh: '{0} 已被其他程序占用，保留原样', en: '{0} already belong to another program and were left alone' },
   'set.app.assocMissing': { zh: '程序目录里缺少 wpe-data.ico，无法关联', en: 'wpe-data.ico is missing from the program folder, so nothing can be associated' },
   'set.app.assocDone': { zh: '已关联文件图标', en: 'File icons associated' },
@@ -769,6 +771,10 @@ export const DICT = {
   // ── 代理模式：数据列表 ──────────────────────────────
   //与 WinForms 的 cID.HeaderText / cPacketSocket.HeaderText 一致
   'col.id': { zh: '序号', en: 'No.' },
+  'col.decoderName': { zh: '解码器名称', en: 'Decoder Name' },
+  'col.decoderKind': { zh: '类型', en: 'Type' },
+  'col.decoderScope': { zh: '适用范围', en: 'Scope' },
+  'col.decoderDesc': { zh: '描述', en: 'Description' },
 
   /* ── 发送列表（对应 Controls/SendList）────────────────────── */
   'snd.add': { zh: '新增发送', en: 'Add Send' },
@@ -848,7 +854,7 @@ export const DICT = {
   //── 注入模式 ─────────────────────────────────────
   'foot.hooking': { zh: '拦截中', en: 'Hooking' },
 
-  //侧栏：注入模式的 11 页。除主屏外的 10 页与代理模式同名，直接复用 proxy.nav.* 那几个键
+  //侧栏：注入模式的 12 页。除主屏外的 11 页与代理模式同名，直接复用 proxy.nav.* 那几个键
   'inject.nav.packet': { zh: '封包列表', en: 'Packet List' },
 
   'inject.pick.title': { zh: '选择注入方式', en: 'Select Method' },
@@ -1134,19 +1140,33 @@ export const DICT = {
   'tr.errDecode': { zh: '解码失败', en: 'Decoding failed' },
 
   // ── 工具页：解码器（跨模式共用；快速编解码页签复用上面的 tr.*）──
-  'dec.tabDecoders': { zh: '解码器', en: 'Decoders' },
   'dec.tabQuick': { zh: '快速编解码', en: 'Quick codec' },
-  'dec.explain': { zh: '解码器跨注入 / 代理两种模式共用：保存算法与帧配置，在列表或详情的右键菜单里按需解码，也可以在这里测试。', en: 'Decoders are shared by both modes: save algorithm and frame settings, decode on demand from the list/detail menu, or test them here.' },
-  'dec.scopeHint': { zh: '适用范围只筛选来自列表/详情的真实封包；工具页测试没有协议上下文，不受此限制。', en: 'Scope filters real packets from the list/detail view. The workbench test has no packet context, so it is not restricted by scope.' },
-  'dec.add': { zh: '添加', en: 'Add' },
+  'dec.selectDecoder': { zh: '解码器', en: 'Decoder' },
+  'dec.enableAll': { zh: '全部启用', en: 'Enable all' },
+  'dec.disableAll': { zh: '全部禁用', en: 'Disable all' },
+  'dec.import': { zh: '导入', en: 'Import' },
+  'dec.export': { zh: '导出', en: 'Export' },
+  'dec.clearAll': { zh: '清空', en: 'Clear all' },
+  'dec.explain': { zh: "自动对当前输入尝试所有已启用的解码器，列出能解出可读明文的结果。", en: "Tries every enabled decoder against the current input and lists the ones that yield readable text." },
+  'dec.scopeHint': { zh: '适用范围只筛选来自列表/详情的真实封包；请求/响应方向适用于已识别的 TCP、UDP、HTTP 和 WebSocket 流量。工具页测试没有协议上下文，不受此限制。', en: 'Scope filters real packets from the list/detail view. Request/response direction applies to identified TCP, UDP, HTTP, and WebSocket traffic. The workbench test has no packet context, so it is not restricted by scope.' },
+  'dec.add': { zh: '新增解码器', en: 'Add Decoder' },
   'dec.edit': { zh: '修改', en: 'Edit' },
   'dec.del': { zh: '删除', en: 'Delete' },
   'dec.enable': { zh: '启用', en: 'Enabled' },
   'dec.empty': { zh: '还没有解码器，点「添加」新建一个。', en: 'No decoders yet. Click Add to create one.' },
-  'dec.pickFirst': { zh: '先在左侧选中一个解码器。', en: 'Select a decoder on the left first.' },
+  'dec.pickFirst': { zh: '先选择一个解码器。', en: 'Select a decoder first.' },
   'dec.fmtHex': { zh: '十六进制', en: 'Hex' },
   'dec.fmtText': { zh: '纯文本', en: 'Text' },
   'dec.direction': { zh: '方向', en: 'Direction' },
+  'dec.sourceFormat': { zh: '输入格式', en: 'Input format' },
+  'dec.cipherHex': { zh: '密文', en: 'Ciphertext' },
+  'dec.plainText': { zh: '明文', en: 'Plaintext' },
+  'dec.decodedResult': { zh: '解码结果', en: 'Decoded result' },
+  'dec.encodedResult': { zh: '编码结果（HEX）', en: 'Encoded result (HEX)' },
+  'dec.cipherHint': { zh: '粘贴十六进制密文，例如 01 02 A0 FF', en: 'Paste hexadecimal ciphertext, for example 01 02 A0 FF' },
+  'dec.base64Hint': { zh: '粘贴 Base64 数据', en: 'Paste Base64 data' },
+  'dec.decodedHint': { zh: '解码结果会显示在这里', en: 'The decoded result appears here' },
+  'dec.encodedHint': { zh: '编码结果会显示在这里', en: 'The encoded result appears here' },
   'dec.applyFrame': { zh: '按帧配置', en: 'Apply frame' },
   'dec.model': { zh: '解码器模型', en: 'Decoder model' },
   'dec.grpBase': { zh: '基础信息', en: 'Basics' },
@@ -1163,6 +1183,9 @@ export const DICT = {
   'dec.iv': { zh: 'IV', en: 'IV' },
   'dec.mode': { zh: '模式', en: 'Mode' },
   'dec.padding': { zh: '填充', en: 'Padding' },
+  'dec.rc4State': { zh: '状态模型', en: 'State model' },
+  'dec.rc4PerPacket': { zh: '每包独立', en: 'Per packet' },
+  'dec.rc4StateHint': { zh: '每次解码都会从初始密钥状态重新开始；不跨封包延续 RC4 密钥流。', en: 'Each decode restarts from the initial key state; the RC4 keystream is not continued across packets.' },
   'dec.lengthBytes': { zh: '包长字节', en: 'Length bytes' },
   'dec.bigEndian': { zh: '大端字节序', en: 'Big-endian' },
   'dec.lenSelf': { zh: '长度含自身', en: 'Length includes itself' },
@@ -1170,6 +1193,8 @@ export const DICT = {
   'dec.headerHex': { zh: '固定头部（HEX）', en: 'Fixed header (HEX)' },
   'dec.lenHeader': { zh: '长度含固定头', en: 'Length includes header' },
   'dec.offset': { zh: '解码起始偏移', en: 'Start offset' },
+  'dec.offsetHint': { zh: '从固定头部和包长字段剥离后的 payload 起算。', en: 'Counted from the payload after the fixed header and length field are removed.' },
+  'dec.hexHint': { zh: '支持空格或连字符分隔；去除分隔符后必须是偶数位十六进制。', en: 'Spaces and hyphens are allowed; after removing them, hexadecimal digits must be even in number.' },
   'dec.protocol': { zh: '协议', en: 'Protocol' },
   'dec.any': { zh: '全部', en: 'Any' },
   'dec.dirReq': { zh: '请求', en: 'Request' },
@@ -1180,10 +1205,11 @@ export const DICT = {
   'dec.deleted': { zh: '已删除', en: 'Deleted' },
   'dec.resultTitle': { zh: '解码结果', en: 'Decode result' },
   'dec.hexLabel': { zh: 'HEX', en: 'HEX' },
-  'dec.batch': { zh: '批量解码', en: 'Batch decode' },
   'dec.batchTitle': { zh: '批量解码结果', en: 'Batch decode results' },
   'dec.batchNone': { zh: '当前范围没有可解码的封包。', en: 'No decodable packets in the current range.' },
-  'dec.batchPick': { zh: '先选一个解码器再批量解码。', en: 'Pick a decoder before batch decoding.' },
+  'dec.fullResult': { zh: '完整结果', en: 'Full result' },
+  'dec.batchPreview': { zh: '批量结果仅显示预览', en: 'Batch results show a preview only' },
+  'dec.selectSend': { zh: '请选择发送', en: 'Select a send' },
   'dec.smart': { zh: '智能解码', en: 'Smart decode' },
   'dec.smartNone': { zh: '智能解码未找到可用解码器。', en: 'Smart decode found no usable decoder.' },
   'dec.smartTitle': { zh: '智能解码结果', en: 'Smart decode results' },

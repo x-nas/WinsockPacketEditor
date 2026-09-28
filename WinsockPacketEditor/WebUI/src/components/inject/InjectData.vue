@@ -17,7 +17,8 @@ import { gotoPage, listSetting } from '../../stores/runtime'
 import { useList } from '../../stores/lists'
 import { useRowPick } from '../../usePick'
 import { pushToast } from '../../stores/toast'
-import { textA, textB, trInput, trMode } from '../../stores/tools'
+import { textA, textB } from '../../stores/tools'
+import { beginDecodeJob, endDecodeJob } from '../../stores/decodeJob'
 import { status } from '../../stores/inject'
 import { t } from '../../i18n'
 import PacketList from '../PacketList.vue'
@@ -25,7 +26,7 @@ import HexPanel from '../HexPanel.vue'
 import DecodeResult from '../decoder/DecodeResult.vue'
 import SmartResult from '../decoder/SmartResult.vue'
 import BatchResult from '../decoder/BatchResult.vue'
-import { decoderMenuItem, smartDecodeMenuItem, batchDecodeMenuItem, ensureDecoders, type DecodePayload, type SmartPayload, type BatchPayload } from '../decoder/actions'
+import { decoderMenuItem, smartDecodeMenuItem, ensureDecoders, type DecodePayload, type SmartPayload, type SmartBatchItem, type BatchPayload } from '../decoder/actions'
 import { decRows } from '../../stores/decoder'
 import ContextMenu from '../ContextMenu.vue'
 import { ICON, type MenuItem } from '../menu'
@@ -91,6 +92,17 @@ const selectedId = ref<number | null>(null)
 
 const listRef = ref<InstanceType<typeof PacketList> | null>(null)
 const follow = ref(true)
+
+async function toggleAutoRoll(): Promise<void> {
+  const next = !follow.value
+  follow.value = next
+  try {
+    const r = await call<{ ok: boolean }>('saveListAutoRoll', { autoRoll: next })
+    if (!r?.ok) follow.value = !next
+  } catch {
+    follow.value = !next
+  }
+}
 
 /*
   ── 统计条 ────────────────────────────────────────────
@@ -291,6 +303,7 @@ onMounted(async () => {
     const s = await call<any>('getListSetting', { mode: 'inject' })
     if (!listSetting.value) listSetting.value = s
 
+    follow.value = !!s?.autoRoll
     //自动清理的初值搭同一趟车。它<b>不分模式</b>，两种模式是同一份配置
     autoClear.value = !!s?.autoClear
     clearAt.value = Number(s?.autoClearValue) || 5000
@@ -541,14 +554,38 @@ async function runSmartDecode(id: number): Promise<void> {
   }
 }
 
-/** 批量解码选中的封包。 */
-async function runBatchDecode(decoderId: string, ids: number[]): Promise<void> {
+/** 多选时逐条智能解码（C# 后台并行），结果按封包分组。 */
+async function runSmartDecodeMany(ids: number[]): Promise<void> {
+  const job = beginDecodeJob(ids.length)
   try {
-    const r = await call<BatchPayload>('batchDecode', { list: 'packet', id: decoderId, ids })
-    batchPayload.value = { decoder: r?.decoder ?? '', rows: r?.rows ?? [] }
+    const r = await call<{ items: Array<{ Id: number; hits: SmartPayload['hits'] }>; cancelled?: boolean }>(
+      'smartDecodeBatch', { list: 'packet', ids, job })
+    if (r?.cancelled) return
+    const items: SmartBatchItem[] = (r?.items ?? []).map((it) => {
+      const row = rows.value.find((x) => x.Id === it.Id)
+      return { Id: it.Id, Time: row?.Time ?? '', Preview: row?.Preview ?? '', hits: it.hits ?? [] }
+    })
+    smartPayload.value = { hits: [], list: 'packet', items }
+  } catch (e) {
+    console.error('[dec] 智能解码失败', e)
+    pushToast('error', String(e))
+  } finally {
+    endDecodeJob(job)
+  }
+}
+
+/** 批量解码选中的封包（C# 后台并行，带进度与取消）。 */
+async function runBatchDecode(decoderId: string, ids: number[]): Promise<void> {
+  const job = beginDecodeJob(ids.length)
+  try {
+    const r = await call<BatchPayload & { cancelled?: boolean }>('batchDecode', { list: 'packet', id: decoderId, ids, job })
+    if (r?.cancelled) return
+    batchPayload.value = { decoder: r?.decoder ?? '', decoderId: r?.decoderId ?? decoderId, list: 'packet', rows: r?.rows ?? [] }
   } catch (e) {
     console.error('[dec] 批量解码失败', e)
     pushToast('error', String(e))
+  } finally {
+    endDecodeJob(job)
   }
 }
 
@@ -588,10 +625,8 @@ const menuItems = computed<MenuItem[]>(() => {
     { divider: true },
     { id: 'toTextA', label: t('pm.toTextA') + tag, icon: ICON.text },
     { id: 'toTextB', label: t('pm.toTextB') + tag, icon: ICON.text },
-    { id: 'decode', label: t('tr.encode') + ' / ' + t('tr.decode') + tag, icon: ICON.hex },
-    decoderMenuItem(t('proxy.nav.decoder')),
-    smartDecodeMenuItem(t('dec.smart')),
-    batchDecodeMenuItem(t('dec.batch')),
+    decoderMenuItem(t('proxy.nav.decoder'), n),
+    smartDecodeMenuItem(t('dec.smart'), n),
     { divider: true },
     toSend,
     //添加到滤镜只用第一条（与 WinForms 一致），所以<b>不带条数</b>
@@ -632,19 +667,19 @@ async function onMenuPick(id: string): Promise<void> {
     return
   }
 
-  if (id.startsWith('dec:')) {
-    if (!ids.length) { needPickToast(); return }
-    await decodePacket(id.slice(4), ids)
-    return
-  }
   if (id === 'smartDecode') {
     if (!ids.length) { needPickToast(); return }
-    await runSmartDecode(ids[0])
+    // 选中一条就解一条；选中多条逐条解，结果按封包分组
+    if (ids.length === 1) await runSmartDecode(ids[0])
+    else await runSmartDecodeMany(ids)
     return
   }
-  if (id.startsWith('batch:')) {
+  if (id.startsWith('dec:')) {
     if (!ids.length) { needPickToast(); return }
-    await runBatchDecode(id.slice(6), ids)
+    // 选中一条就单条解码，选中多条就批量解码 —— 不再有单独的「批量解码」菜单项
+    const decoderId = id.slice(4)
+    if (ids.length === 1) await decodePacket(decoderId, ids)
+    else await runBatchDecode(decoderId, ids)
     return
   }
 
@@ -701,15 +736,6 @@ async function onMenuPick(id: string): Promise<void> {
         else textB.value = r.text
         pushToast('success', t(id === 'toTextA' ? 'pm.toTextAOk' : 'pm.toTextBOk'))
         gotoPage.value = 'diff'
-        return
-      }
-
-      case 'decode': {
-        const r = await call<{ text: string }>('copyPacketHexMerged', { ids })
-        if (!r?.text) { pushToast('error', t('pm.copyFail')); return }
-        trInput.value = r.text
-        trMode.value = 'dec'
-        gotoPage.value = 'decoder'
         return
       }
 
@@ -848,7 +874,7 @@ defineExpose({ onCleared })
           {{ slowSearch ? t('sp.searching') : t('sp.next') }}
         </button>
 
-        <button class="chk" :class="{ on: follow }" @click="follow = !follow"><i />{{ t('proxy.autoRoll') }}</button>
+        <button class="chk" :class="{ on: follow }" @click="toggleAutoRoll"><i />{{ t('proxy.autoRoll') }}</button>
         <!--
           自动清理 —— 就摆在它管的那张表上面（见 script 里的说明）。
           与日志页工具条上那个是<b>两份配置</b>，所以文案也分开：

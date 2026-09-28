@@ -44,11 +44,8 @@ export const tcRegex = ref('')
 */
 export const tcMinBytes = ref(4)
 
-/* ── 编码转换（快速编解码页签 / 解码器测试台共用输入）── */
+/* ── 编码转换（快速编解码 / 编码解码工作台共用输入）── */
 export const trInput = ref('')
-
-/** 编码还是解码。⚠️ 没有「空」这一档了 —— 现在是实时跑的，进页面就有结果。 */
-export const trMode = ref<'enc' | 'dec'>('enc')
 
 /* ── 数据提取 ── */
 export const exKind = ref(0)

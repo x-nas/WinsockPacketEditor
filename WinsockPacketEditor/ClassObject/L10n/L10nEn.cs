@@ -111,6 +111,12 @@ namespace WinsockPacketEditor
             d["ExportFilterList"] = "Export Filter List";
             d["ExportFilterList.Success"] = "Successfully Exported Filter List";
             d["ExportFilterList.Error"] = "Export Filter List Failed";
+            d["DecoderListFile"] = "Decoder List File";
+            d["ImportDecoderList"] = "Import Decoder List";
+            d["ImportDecoderList.Success"] = "Successfully Imported Decoder List";
+            d["ExportDecoderList"] = "Export Decoder List";
+            d["ExportDecoderList.Success"] = "Successfully Exported Decoder List";
+            d["ExportDecoderList.Error"] = "Export Decoder List Failed";
             d["ImportSendCollection"] = "Import Send Collection";
             d["ExportSendCollection"] = "Export Send Collection";
             d["ExportSendCollection.Success"] = "Successfully Exported Send Collection";
@@ -367,6 +373,7 @@ namespace WinsockPacketEditor
             d["Proto.VarintTrunc"] = "Protobuf varint is truncated";
             d["Proto.VarintLong"] = "Protobuf varint is too long";
             d["Proto.FieldTrunc"] = "Protobuf field is truncated";
+            d["Dec.DefaultName"] = "Decoder";
             return d;
         }
     }

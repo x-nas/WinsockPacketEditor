@@ -16,6 +16,7 @@
 import { onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import { call, inHost, on } from './bridge'
 import { attachUiHost, busy, modalOpen } from './bridge/host'
+import { attachDecodeJob } from './stores/decodeJob'
 import { anyModalOpen } from './useModal'
 import { defOf, initLang, isEn, lang, t } from './i18n'
 import { injectHooked, injectTarget, kernelRunning, proxyRunning, socks5Addr, tunReady } from './stores/runtime'
@@ -27,6 +28,7 @@ import BetaNotice from './components/BetaNotice.vue'
 import EncryptPassword from './components/EncryptPassword.vue'
 import ToastStack from './components/ToastStack.vue'
 import BusyMask from './components/BusyMask.vue'
+import DecodeProgress from './components/DecodeProgress.vue'
 import ConfirmDialog from './components/ConfirmDialog.vue'
 import AppSetting from './components/AppSetting.vue'
 
@@ -53,6 +55,7 @@ onMounted(async () => {
   if (!inHost) return
 
   attachUiHost()
+  attachDecodeJob()
 
   // 最大化状态由 C# 推 —— 用户也可能通过双击拖动区、贴边吸附改变它
   on('window:state', (d: { maximized: boolean }) => { maximized.value = d.maximized })
@@ -417,6 +420,7 @@ watchEffect(() => {
     <ToastStack />
 
     <BusyMask v-if="busy.on" :text="busy.text" />
+    <DecodeProgress />
 
     <!-- 四角标记压在最上层（含弹窗之上，见 style.css 的 --z-ambience） -->
     <span class="cn tl" /><span class="cn tr" /><span class="cn bl" /><span class="cn br" />

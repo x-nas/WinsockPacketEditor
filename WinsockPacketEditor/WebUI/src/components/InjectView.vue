@@ -10,11 +10,11 @@
 
   所以这一屏有两个状态：
     ① 还没附加 —— 选目标（进程列表 / 启动并注入）
-    ② 已附加   —— 侧栏 11 页（对应 InjectModeForm 那 11 个页签）+ 7 个设置弹窗
+    ② 已附加   —— 侧栏 12 页（对应 InjectModeForm 那 11 个页签 + 解码器列表）+ 7 个设置弹窗
 
-  ⚠️ 那 11 页里只有第一页「封包列表」是注入模式独有的，其余 10 页与代理模式
-  <b>是同一个组件、同一份 stores/lists 数据源</b> —— 滤镜 / 发送 / 机器人 / 仓库
-  四个子系统在 Operate 里本来就是两种模式共用的（WinForms 那边也是同一个 UserControl）。
+  ⚠️ 那 12 页里只有第一页「封包列表」是注入模式独有的，其余 11 页与代理模式
+  <b>是同一个组件、同一份 stores/lists 数据源</b> —— 滤镜 / 发送 / 机器人 / 仓库 / 解码器
+  五个子系统在 Operate 里本来就是两种模式共用的（WinForms 那边也是同一个 UserControl）。
 */
 import { computed, nextTick, onMounted, onBeforeUnmount, ref, watch } from 'vue'
 import { call, on } from '../bridge'
@@ -32,14 +32,16 @@ import SettingsModal from './proxy/SettingsModal.vue'
 import { INJECT_GROUPS, INJECT_PAGES, type PageKey } from './proxy/pages'
 import type { SettingKey } from './proxy/settings'
 import InjectData from './inject/InjectData.vue'
-//注入模式的另外 10 页：与代理模式同一个组件，只是从这边的侧栏进来
+//注入模式的另外 11 页：与代理模式同一个组件，只是从这边的侧栏进来
 import FilterList from './proxy/FilterList.vue'
 import SendList from './proxy/SendList.vue'
 import RobotList from './proxy/RobotList.vue'
 import WareHouseList from './proxy/WareHouseList.vue'
 import StatData from './proxy/StatData.vue'
 import TextCompare from './proxy/TextCompare.vue'
+import DecoderList from './decoder/DecoderList.vue'
 import Decoder from './decoder/Decoder.vue'
+import { ensureDecoders } from './decoder/actions'
 import ExtractData from './proxy/ExtractData.vue'
 import SystemLog from './proxy/SystemLog.vue'
 //7 个设置弹窗：代理那 12 项的真子集
@@ -342,6 +344,13 @@ onMounted(async () => {
     /* 桥没接上（浏览器里跑探针页），下面的按钮点了会各自报错 */
   }
 
+  /*
+    ⚠️ 注入模式加载配置是在 injectAttach 成功那一刻（enterInjectMode 刻意不加载）。
+    前端重挂时若目标还在，C# 那边已经加载过了 —— 这里补拉一次解码器，
+    侧栏的计数才不用等用户点进解码器页。解码器不在那 14 份推送流里，没人会替它推。
+  */
+  if (status.value.state !== 'idle') { void ensureDecoders(true) }
+
   void typeSubtitle()
 
   //国旗用的中文国名对照表，整个会话取一次（约 4KB）
@@ -434,6 +443,7 @@ async function quickInject(): Promise<void> {
     if (!r?.ok) { pushToast('error', r?.error || t('inject.failed')); return }
 
     setStatus(r)
+    void ensureDecoders(true)
     page.value = 'packet'
     pushToast('success', t('inject.attached'))
   } catch (e: any) {
@@ -457,6 +467,7 @@ async function attachTo(pid: number, method = 0): Promise<void> {
     const r = await call<any>('injectAttach', { pid, method })
     if (!r?.ok) { pushToast('error', r?.error || t('inject.failed')); return }
     setStatus(r)
+    void ensureDecoders(true)
     procOpen.value = false
     page.value = 'packet'
     pushToast('success', t('inject.attached'))
@@ -481,6 +492,7 @@ async function launchAndAttach(): Promise<void> {
     const r = await call<any>('injectAttach', { pid: -1, path: filePath.value, args: args || null, method: 2 })
     if (!r?.ok) { pushToast('error', r?.error || t('inject.failed')); return }
     setStatus(r)
+    void ensureDecoders(true)
     fileOpen.value = false
     page.value = 'packet'
     pushToast('success', t('inject.launched'))
@@ -773,7 +785,7 @@ async function clearList(): Promise<void> {
       </div>
     </div>
 
-    <!-- ══════════ ② 已附加：侧栏 + 11 页 ══════════ -->
+    <!-- ══════════ ② 已附加：侧栏 + 12 页 ══════════ -->
     <div v-else class="workscr" :class="{ collapsed: sideCollapsed }">
       <ProxySide :current="page" :groups="INJECT_GROUPS" mode="inject" :collapsed="sideCollapsed" @go="page = $event" @toggle="sideCollapsed = !sideCollapsed" />
 
@@ -798,6 +810,7 @@ async function clearList(): Promise<void> {
       <SendList v-if="page === 'send'" />
       <RobotList v-if="page === 'robot'" />
       <WareHouseList v-if="page === 'warehouse'" />
+      <DecoderList v-if="page === 'decoders'" />
       <StatData v-if="page === 'stat'" mode="inject" />
       <TextCompare v-if="page === 'diff'" />
       <Decoder v-if="page === 'decoder'" />

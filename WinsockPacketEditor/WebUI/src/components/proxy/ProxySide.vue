@@ -16,6 +16,7 @@ import { FeedList } from '../../bridge/types'
 import { useList } from '../../stores/lists'
 import { injectFeed, rows } from '../../stores/packets'
 import { filterLogs, proxyLogs, sysLogs } from '../../stores/logs'
+import { decRows } from '../../stores/decoder'
 import { t } from '../../i18n'
 import type { PageGroup, PageKey } from './pages'
 import { GROUPS } from './pages'
@@ -23,7 +24,7 @@ import { GROUPS } from './pages'
 /*
   两种模式共用这一份侧栏。
 
-  注入模式的 11 页里有 10 页与代理模式是同一个组件、同一份数据源，
+  注入模式的 12 页里有 11 页与代理模式是同一个组件、同一份数据源，
   只有主屏那一页不同（PacketInfo 与 ProxyInfo 各有一套 Id 序列），
   所以差别只在<b>传进来的 groups</b> 与「主屏计数取哪一路推送」。
   抄一份 InjectSide 出来，下场是两边慢慢走样 —— 见 CLAUDE.md 的 .list-page。
@@ -78,6 +79,7 @@ const counts = computed<Partial<Record<PageKey, number>>>(() => ({
   send: useList(FeedList.Send).value.length,
   robot: useList(FeedList.Robot).value.length,
   warehouse: useList(FeedList.WareHouse).value.length,
+  decoders: decRows.value.length,
   wpc: useList(FeedList.Server).value.length,
   log: logCount.value,
 }))
