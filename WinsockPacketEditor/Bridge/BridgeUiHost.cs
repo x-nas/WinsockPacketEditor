@@ -1,4 +1,6 @@
 using System;
+using System.Globalization;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WinsockPacketEditor;
@@ -104,6 +106,9 @@ namespace WPEHybrid
                 using (SaveFileDialog sfd = new SaveFileDialog())
                 {
                     ApplyPick(sfd, Pick);
+                    //所有导出共用这一处。用户仍可在保存框里改名；这里只统一初始建议名。
+                    //Windows 文件名不能有冒号，故“2026-9-29 16:01”采用等价的 2026-9-29 16-01。
+                    sfd.FileName = ExportDefaultName(Pick);
                     return sfd.ShowDialog(this.owner) == DialogResult.OK ? sfd.FileName : null;
                 }
             }));
@@ -122,6 +127,24 @@ namespace WPEHybrid
             if (!string.IsNullOrEmpty(Pick.Filter)) { Dialog.Filter = Pick.Filter; }
             if (!string.IsNullOrEmpty(Pick.FileName)) { Dialog.FileName = Pick.FileName; }
             if (!string.IsNullOrEmpty(Pick.InitialDir)) { Dialog.InitialDirectory = Pick.InitialDir; }
+        }
+
+        /// <summary>所有导出的统一默认文件名；尽量从调用方名字或筛选器保留原有扩展名。</summary>
+        private static string ExportDefaultName(FilePick Pick)
+        {
+            string ext = Path.GetExtension(Pick == null ? string.Empty : Pick.FileName ?? string.Empty);
+            if (string.IsNullOrEmpty(ext) && Pick != null)
+            {
+                string filter = Pick.Filter ?? string.Empty;
+                int start = filter.IndexOf("*.", StringComparison.Ordinal);
+                if (start >= 0)
+                {
+                    int end = start + 2;
+                    while (end < filter.Length && char.IsLetterOrDigit(filter[end])) { end++; }
+                    if (end > start + 2) { ext = filter.Substring(start + 1, end - start - 1); }
+                }
+            }
+            return DateTime.Now.ToString("yyyy-M-d HH-mm", CultureInfo.InvariantCulture) + ext;
         }
 
         /// <summary>切回外壳的 UI 线程执行；出错返回 null。</summary>

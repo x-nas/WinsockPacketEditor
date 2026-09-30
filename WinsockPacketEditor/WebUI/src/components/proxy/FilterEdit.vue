@@ -30,6 +30,8 @@ import { t, type Key } from '../../i18n'
 import { pushToast } from '../../stores/toast'
 import ContextMenu from '../ContextMenu.vue'
 import CyberSelect from '../CyberSelect.vue'
+import SettingsModal from './SettingsModal.vue'
+import { formatOptions } from '../extractor/formats'
 import { ICON, type MenuItem } from '../menu'
 import { useModal } from '../../useModal'
 
@@ -54,6 +56,12 @@ const emit = defineEmits<{ (e: 'close'): void }>()
 interface SearchCell { v: string; exclude: boolean }
 interface ModifyCell { v: string; progression: boolean; random: boolean }
 
+/**
+ * 修改行上的一个取值器替换格：从这一列开始写入指定变量渲染出的字节。
+ * 与固定值 / 递进 / 随机互斥（设了替换格就清掉那三样）。
+ */
+interface ReplaceBinding { ExtractorId: string; VariableId: string; Format: string }
+
 interface EditRow {
   Id: string
   Name: string
@@ -68,8 +76,11 @@ interface EditRow {
   IsExecute: boolean; ExecuteType: number; ExecuteId: string
   IsProgressionContinuous: boolean; ProgressionStep: number
   IsProgressionCarry: boolean; ProgressionCarryNumber: number
+  IsVariableAction: boolean; CaptureVariable: boolean
+  VariableExtractorId: string; VariableId: string
   Search: Array<{ Index: number; Value: string; Exclude: boolean }>
   Modify: Array<{ Index: number; Value: string; Progression: boolean; Random: boolean }>
+  ModifyReplacements: Array<{ Index: number; ExtractorId: string; VariableId: string; Format: string }>
 }
 
 const busy = ref(false)
@@ -113,8 +124,17 @@ const M0: ModifyCell = { v: '', progression: false, random: false }
 /** 当前该用哪一份修改位。 */
 const mCells = computed(() => (isOffset.value ? mPos : mHead))
 
+/*
+  取值器替换格<b>也按模式分两份</b>，与 mHead / mPos 同一个道理：
+  「指定位置」下的索引是相对匹配点的偏移，和绝对位置不是一回事。
+*/
+const rHead = ref<Record<number, ReplaceBinding>>({})
+const rPos = ref<Record<number, ReplaceBinding>>({})
+const rCells = computed(() => (isOffset.value ? rPos : rHead))
+
 const searchAt = (i: number): SearchCell => sCells.value[i] || S0
 const modifyAt = (i: number): ModifyCell => mCells.value.value[i] || M0
+const replaceAt = (i: number): ReplaceBinding | undefined => rCells.value.value[i]
 
 /** 写之前才建对象 —— 保持稀疏。 */
 function editSearch(i: number, patch: Partial<SearchCell>): void {
@@ -124,6 +144,20 @@ function editSearch(i: number, patch: Partial<SearchCell>): void {
 function editModify(i: number, patch: Partial<ModifyCell>): void {
   const m = mCells.value
   m.value[i] = { ...(m.value[i] || M0), ...patch }
+}
+
+/** 设为取值器替换格：与固定值 / 递进 / 随机互斥，设了就把那一格清空。 */
+function setReplace(i: number, b: ReplaceBinding): void {
+  //整份替换引用，确保虚拟格的颜色和 title 都在同一拍重新计算。
+  rCells.value.value = { ...rCells.value.value, [i]: b }
+  delete mCells.value.value[i]
+}
+
+function clearReplace(i: number): void {
+  //不要只 delete 深层属性：横向虚拟表复用 DOM 节点时，显式换引用才能可靠撤掉旧 title。
+  const next = { ...rCells.value.value }
+  delete next[i]
+  rCells.value.value = next
 }
 
 /* ── 载入 ──────────────────────────────────────────────────── */
@@ -136,6 +170,8 @@ watch(() => props.id, async (id) => {
   sCells.value = {}
   mHead.value = {}
   mPos.value = {}
+  rHead.value = {}
+  rPos.value = {}
   sel.value = null
 
   try {
@@ -147,6 +183,9 @@ watch(() => props.id, async (id) => {
     }
 
     f.value = r.row
+    //命中后执行里的取值器只剩「取值器赋值」；类型选到取值器就预置好。
+    if (f.value.ExecuteType === 5) f.value.CaptureVariable = true
+    void loadExtractors()
 
     const sm: Record<number, SearchCell> = {}
     for (const c of r.row.Search || []) sm[c.Index] = { v: c.Value || '', exclude: !!c.Exclude }
@@ -162,6 +201,13 @@ watch(() => props.id, async (id) => {
       mm[c.Index] = { v: c.Value || '', progression: !!c.Progression, random: !!c.Random }
     }
     mCells.value.value = mm
+
+    //取值器替换格与修改位同一套索引，落到同一份。
+    const rb: Record<number, ReplaceBinding> = {}
+    for (const c of r.row.ModifyReplacements || []) {
+      rb[c.Index] = { ExtractorId: guidKey(c.ExtractorId), VariableId: guidKey(c.VariableId), Format: c.Format || '' }
+    }
+    rCells.value.value = rb
 
     await nextTick()
     resetGrids()
@@ -315,7 +361,11 @@ function onCellInput(i: number, row: 'search' | 'modify', e: Event): void {
     既然「空值不能排除」，那让标记跟着值走才是完整的规则。
   */
   if (row === 'search') editSearch(i, v ? { v } : { v, exclude: false })
-  else editModify(i, { v })
+  else {
+    //替换格与固定值互斥：往替换格键入字节，就等于把它改回普通修改位
+    if (v && replaceAt(i)) clearReplace(i)
+    editModify(i, { v })
+  }
 }
 
 /**
@@ -361,7 +411,8 @@ function openMenu(row: 'search' | 'modify', i: number, e: MouseEvent): void {
  * 按选中的是查找位还是修改位给不同的项 —— 排除只属于查找位，递进 / 随机只属于修改位。
  */
 const menuItems = computed<MenuItem[]>(() => {
-  const row = sel.value ? sel.value.split(':')[0] : ''
+  const parts = sel.value ? sel.value.split(':') : []
+  const row = parts[0] || ''
   const out: MenuItem[] = []
 
   if (row === 'search') {
@@ -370,8 +421,13 @@ const menuItems = computed<MenuItem[]>(() => {
   }
 
   if (row === 'modify') {
+    /*
+      取值器替换格：右键修改行的某一格，设为「从这一格起写入某个取值器变量」。
+      与递进 / 随机 / 固定值互斥 —— 替换格本身就是这一格的写值方式。
+    */
     out.push({ id: 'progression-on', label: t('flt.e.progressionOn'), icon: ICON.step })
     out.push({ id: 'random-on', label: t('flt.e.randomOn'), icon: ICON.dice })
+    out.push({ id: 'replace-on', label: t('flt.e.replaceOn'), icon: ICON.link })
     out.push({ id: 'mark-off', label: t('flt.e.markOff'), icon: ICON.minus })
   }
 
@@ -439,7 +495,11 @@ async function pasteAt(row: 'search' | 'modify', i: number, text?: string): Prom
     if (at < lo || at >= hi) break   //写到表尾就停，与 WinForms 一致
 
     if (row === 'search') editSearch(at, { v: bytes[k] })
-    else editModify(at, { v: bytes[k] })
+    else {
+      //与键盘键入同一条规矩：往替换格写固定字节就等于改回普通修改位
+      if (replaceAt(at)) clearReplace(at)
+      editModify(at, { v: bytes[k] })
+    }
 
     n++
   }
@@ -511,15 +571,18 @@ function onMenuPick(id: string): void {
 
     editSearch(i, { exclude: true })
   } else if (id === 'exclude-off') editSearch(i, { exclude: false })
+  //替换格始终从同一个菜单入口打开；重新选择即覆盖当前绑定。
+  else if (id === 'replace-on') openBind(i)
   //递进与随机互斥：源模型里也是 else-if，一位不可能既递进又随机
-  else if (id === 'progression-on') editModify(i, { progression: true, random: false })
+  else if (id === 'progression-on') { clearReplace(i); editModify(i, { progression: true, random: false }) }
   //随机<b>连值一起清掉</b>（ctSelect.Text = string.Empty）—— 随机位不需要预设值，
   //留着一个再也用不上的值只会让人以为它还起作用
-  else if (id === 'random-on') editModify(i, { v: '', random: true, progression: false })
-  else if (id === 'mark-off') editModify(i, { progression: false, random: false })
+  else if (id === 'random-on') { clearReplace(i); editModify(i, { v: '', random: true, progression: false }) }
+  //取消标记也负责取消变量值：三种修改方式在同一格上互斥。
+  else if (id === 'mark-off') { clearReplace(i); editModify(i, { progression: false, random: false }) }
   else if (id === 'clear') {
     if (row === 'search') editSearch(i, { v: '', exclude: false })
-    else editModify(i, { v: '', progression: false, random: false })
+    else { clearReplace(i); editModify(i, { v: '', progression: false, random: false }) }
   }
 }
 
@@ -532,6 +595,143 @@ const ACTIONS: Array<{ v: number; label: Key }> = [
   { v: FilterAction.NoModify_Display, label: 'proxy.act.display' },
   { v: FilterAction.NoModify_NoDisplay, label: 'proxy.act.hide' },
 ]
+
+interface ExtractorChoice {
+  Id: string; Name: string; IsEnable: boolean
+  Variables: Array<{ Id: string; Name: string; Kind: number; DataType: number; Value: string; CurrentValue?: string }>
+}
+const extractorChoices = ref<ExtractorChoice[]>([])
+/** C# 读取已保存绑定时会输出大写 GUID；统一列表的 GUID，避免同一引用因大小写不同显示为「?」。 */
+function guidKey(id: string): string { return String(id || '').toUpperCase() }
+async function loadExtractors(): Promise<void> {
+  const rows = (await call<{ rows: ExtractorChoice[] }>('getPacketExtractors')).rows || []
+  extractorChoices.value = rows.map(extractor => ({
+    ...extractor,
+    Id: guidKey(extractor.Id),
+    Variables: (extractor.Variables || []).map(variable => ({ ...variable, Id: guidKey(variable.Id) })),
+  }))
+}
+const captureVariables = computed(() => f.value ? (extractorChoices.value.find(x => x.Id === f.value!.VariableExtractorId)?.Variables || []).filter(x => x.Kind === 1) : [])
+//取值器动作的两个选择框也走全局统一的 CyberSelect；原生 select 的展开菜单由系统绘制，
+//会脱离当前暗色主题。切换取值器时必须清空变量，避免把旧取值器的变量 Id 留到保存。
+const extractorOptions = computed(() => extractorChoices.value.map((x) => ({ value: x.Id, label: x.Name })))
+const captureVariableOptions = computed(() => captureVariables.value.map((x) => ({ value: x.Id, label: x.Name })))
+function selectCaptureExtractor(id: string | number): void {
+  if (!f.value) return
+  f.value.VariableExtractorId = String(id)
+  f.value.VariableId = ''
+}
+
+/* ── 取值器替换格：绑定编辑弹窗 ─────────────────────────────── */
+
+/*
+  右键修改行的某一格 → 选取值器 + 变量 + 写入格式。
+  GUID 定位，改名字不会失效（旧的模板按名称引用，改名就静默坏掉）。
+
+  变量可以是任意一种（简单值 / 从封包取值 / 表达式）：表达式会经引擎算好，
+  从封包取值则依赖此前某条滤镜的「取值器赋值」抓进来的值。
+*/
+const bindAt = ref<number | null>(null)
+const bindDraft = ref<{ ExtractorId: string; VariableId: string; Format: string } | null>(null)
+const bindKeyword = ref('')
+
+const bindVariables = computed(() => {
+  if (!bindDraft.value) return []
+  return extractorChoices.value.find(x => x.Id === bindDraft.value!.ExtractorId)?.Variables || []
+})
+const bindVariable = computed(() => bindVariables.value.find(x => x.Id === bindDraft.value?.VariableId) || null)
+const bindFormatOptions = computed(() => (bindVariable.value ? formatOptions(bindVariable.value.DataType) : []))
+const bindCandidates = computed(() => extractorChoices.value
+  .flatMap(extractor => extractor.Variables.map(variable => ({ extractor, variable })))
+  .filter(x => !bindKeyword.value.trim() || (x.extractor.Name + ' ' + x.variable.Name).toLowerCase().includes(bindKeyword.value.trim().toLowerCase())))
+
+function bindTypeName(type: number): string { return ['整数', '浮点数', '字节数组', '字符串'][type] || '未知类型' }
+function bindKindName(kind: number): string { return ['简单值', '从封包取值', '表达式'][kind] || '未知类型' }
+function bindCurrentValue(variable: ExtractorChoice['Variables'][number]): string {
+  if (variable.CurrentValue !== undefined && variable.CurrentValue !== '') return variable.CurrentValue
+  return variable.Kind === 0 ? (variable.Value || '—') : '—'
+}
+
+/** 取该变量类型的默认格式（选项里的第一项）。 */
+function defaultFormat(dataType: number): string {
+  return formatOptions(dataType)[0]?.value ?? ''
+}
+
+function openBind(i: number): void {
+  const existing = replaceAt(i)
+
+  //一个取值器都没有时给一句提示，不要点了什么都没发生
+  if (!existing && extractorChoices.value.length === 0) { pushToast('warning', t('flt.e.replaceNoExtractor')); return }
+
+  const extractorId = existing?.ExtractorId || extractorChoices.value[0]?.Id || ''
+  const vars = extractorChoices.value.find(x => x.Id === extractorId)?.Variables || []
+  const variableId = existing?.VariableId && vars.some(x => x.Id === existing.VariableId) ? existing.VariableId : (vars[0]?.Id || '')
+  const variable = vars.find(x => x.Id === variableId)
+
+  //格式要么沿用旧的，要么按当前变量类型取回默认值（换过变量类型时旧格式就失效了）
+  let format = existing?.Format ?? ''
+  if (!variable || !formatOptions(variable.DataType).some(o => o.value === format)) format = variable ? defaultFormat(variable.DataType) : ''
+
+  bindAt.value = i
+  bindDraft.value = { ExtractorId: extractorId, VariableId: variableId, Format: format }
+  bindKeyword.value = ''
+}
+
+/** 从完整变量表选择一项；同一入口统一重置成该类型的合法默认格式。 */
+function selectBindVariable(extractorId: string, variableId: string): void {
+  if (!bindDraft.value) return
+  const variable = extractorChoices.value.find(x => x.Id === extractorId)?.Variables.find(x => x.Id === variableId)
+  if (!variable) return
+  bindDraft.value.ExtractorId = extractorId
+  bindDraft.value.VariableId = variableId
+  bindDraft.value.Format = defaultFormat(variable.DataType)
+}
+
+function closeBind(): void {
+  bindAt.value = null
+  bindDraft.value = null
+}
+
+function saveBind(): void {
+  if (bindAt.value === null || !bindDraft.value) return
+
+  const d = bindDraft.value
+
+  if (!d.ExtractorId || !d.VariableId) { pushToast('warning', t('flt.e.replaceNoVariable')); return }
+
+  //数值/浮点必须有一个明确的写入格式，空格式会退化成 8 字节
+  const v = bindVariable.value
+  if (v && (v.DataType === 0 || v.DataType === 1) && !d.Format) { pushToast('warning', t('flt.e.replaceNeedFormat')); return }
+
+  setReplace(bindAt.value, { ExtractorId: d.ExtractorId, VariableId: d.VariableId, Format: d.Format })
+  closeBind()
+}
+
+/** 格子悬停提示：这条替换格写的是哪个取值器的哪个变量、什么格式。 */
+function replaceTitle(i: number): string {
+  const b = replaceAt(i)
+  if (!b) return ''
+  const ex = extractorChoices.value.find(x => x.Id === b.ExtractorId)
+  const v = ex?.Variables.find(x => x.Id === b.VariableId)
+  return !ex || !v ? '' : ex.Name + '.' + v.Name + (b.Format ? ' · ' + b.Format : '')
+}
+
+/** 引用被删除时不再拿 ? 占位，沿用单元格原生悬停提示样式。 */
+function replaceMissing(i: number): boolean {
+  const b = replaceAt(i)
+  if (!b) return false
+  const ex = extractorChoices.value.find(x => x.Id === b.ExtractorId)
+  return !ex || !ex.Variables.some(x => x.Id === b.VariableId)
+}
+
+/**
+ * 横向虚拟表默认按列号复用格子 DOM。把绑定状态编进 key，取消变量值时就会重建该格，
+ * 连同浏览器可能缓存的原生 title 提示一起丢掉。
+ */
+function replaceDomKey(prefix: string, i: number): string {
+  const b = replaceAt(i)
+  return prefix + i + ':' + (b ? b.ExtractorId + ':' + b.VariableId + ':' + b.Format : 'none')
+}
 
 /*
   作用域<b>随 mode 变</b>——与 LeachSetting 的类别开关同一条口径。
@@ -586,6 +786,7 @@ const EXEC_TYPES: Array<{ v: number; label: Key }> = [
   { v: 1, label: 'proxy.nav.robot' },
   { v: 3, label: 'proxy.nav.filter' },
   { v: 4, label: 'proxy.nav.warehouse' },
+  { v: 5, label: 'proxy.nav.extractors' },
 ]
 
 const execTargets = ref<Array<{ Id: string; Name: string }>>([])
@@ -669,8 +870,20 @@ async function save(): Promise<void> {
       }
     }
 
+    //取值器替换格：当前模式那一份，与修改位共用同一套索引。
+    const R = []
+    const rr = rCells.value.value
+
+    for (const k of Object.keys(rr)) {
+      const b = rr[Number(k)]
+
+      if (b && b.ExtractorId && b.VariableId) {
+        R.push({ Index: Number(k), ExtractorId: b.ExtractorId, VariableId: b.VariableId, Format: b.Format || '' })
+      }
+    }
+
     const r = await call<{ ok: boolean; error: string }>('saveFilterEdit', {
-      row: { ...f.value, Search: S, Modify: M },
+      row: { ...f.value, Search: S, Modify: M, ModifyReplacements: R },
     })
 
     if (!r?.ok) {
@@ -745,6 +958,20 @@ const { covered } = useModal(() => props.id !== null)
           </div>
         </div>
 
+        <!-- 普通模式下仍保留但置灰，让高级模式的修改基准紧跟模式本身。 -->
+        <div class="row" :class="{ off: f.Mode !== 1 }">
+          <div class="k">{{ t('flt.e.startFrom') }}</div>
+          <div class="v">
+            <button class="rd" :class="{ on: f.StartFrom === 0 }" :disabled="f.Mode !== 1"
+                    @click="f.StartFrom = 0"><i />{{ t('flt.e.fromHead') }}</button>
+            <button class="rd" :class="{ on: f.StartFrom === 1 }" :disabled="f.Mode !== 1"
+                    @click="f.StartFrom = 1"><i />{{ t('flt.e.fromPos') }}</button>
+            <span v-if="f.Mode === 1" class="tip">
+              {{ f.StartFrom === 1 ? t('flt.e.fromPosTip') : t('flt.e.fromHeadTip') }}
+            </span>
+          </div>
+        </div>
+
         <!--
           执行：命中之后再跑另一张表里的一项。
           两个下拉在没勾选时压暗禁用，与 WinForms 的 FilterAction_ExecuteChange 一致。
@@ -759,29 +986,12 @@ const { covered } = useModal(() => props.id !== null)
             <CyberSelect v-model="f.ExecuteType" class="dd" :options="execTypeOptions" :disabled="!f.IsExecute" />
 
             <CyberSelect v-model="f.ExecuteId" class="dd grow" :options="execTargetOptions"
-                         :disabled="!f.IsExecute || execTargets.length === 0" />
+                         v-if="f.ExecuteType !== 5" :disabled="!f.IsExecute || execTargets.length === 0" />
+            <template v-if="f.ExecuteType === 5">
+              <CyberSelect class="dd capture" :model-value="f.VariableExtractorId" :options="extractorOptions" placeholder="选择取值器" :disabled="!f.IsExecute" @update:model-value="selectCaptureExtractor" />
+              <CyberSelect v-model="f.VariableId" class="dd capture capture-variable" :options="captureVariableOptions" :placeholder="captureVariableOptions.length ? '选择从封包取值变量' : '—'" :disabled="!f.IsExecute || !f.VariableExtractorId" />
+            </template>
 
-            <span v-if="f.IsExecute && execTargets.length === 0" class="tip">
-              {{ t('flt.e.executeEmpty') }}
-            </span>
-          </div>
-        </div>
-
-        <!--
-          修改起始于。普通模式下<b>压暗但仍显示</b>，不是隐藏 ——
-          WinForms 里是 pFilterModifyFrom.Enabled = false，让人看得见这个选项存在、
-          只是当前模式用不上；藏起来会让人以为高级模式凭空多出个东西。
-        -->
-        <div class="row" :class="{ off: f.Mode !== 1 }">
-          <div class="k">{{ t('flt.e.startFrom') }}</div>
-          <div class="v">
-            <button class="rd" :class="{ on: f.StartFrom === 0 }" :disabled="f.Mode !== 1"
-                    @click="f.StartFrom = 0"><i />{{ t('flt.e.fromHead') }}</button>
-            <button class="rd" :class="{ on: f.StartFrom === 1 }" :disabled="f.Mode !== 1"
-                    @click="f.StartFrom = 1"><i />{{ t('flt.e.fromPos') }}</button>
-            <span v-if="f.Mode === 1" class="tip">
-              {{ f.StartFrom === 1 ? t('flt.e.fromPosTip') : t('flt.e.fromHeadTip') }}
-            </span>
           </div>
         </div>
 
@@ -819,9 +1029,10 @@ const { covered } = useModal(() => props.id !== null)
               <div v-if="isNormal" class="grow2 r-modify">
                 <div
                   v-for="i in sg.cols"
-                  :key="'m' + i"
+                  :key="replaceDomKey('m', i)"
                   class="cell"
-                  :class="{ 'm-pg': modifyAt(i).progression, 'm-rd': modifyAt(i).random, sel: sel === 'modify:' + i }"
+                  :class="{ 'm-pg': modifyAt(i).progression, 'm-rd': modifyAt(i).random, 'm-vr': !!replaceAt(i), sel: sel === 'modify:' + i }"
+                  :title="replaceMissing(i) ? '变量不存在' : (replaceTitle(i) || '')"
                   @mousedown="pick('modify', i)"
                   @contextmenu.prevent="openMenu('modify', i, $event)"
                 >
@@ -853,9 +1064,10 @@ const { covered } = useModal(() => props.id !== null)
                 <div class="grow2 r-modify">
                   <div
                     v-for="i in mg.cols"
-                    :key="'mm' + i"
+                    :key="replaceDomKey('mm', i)"
                     class="cell"
-                    :class="{ 'm-pg': modifyAt(i).progression, 'm-rd': modifyAt(i).random, sel: sel === 'modify:' + i }"
+                    :class="{ 'm-pg': modifyAt(i).progression, 'm-rd': modifyAt(i).random, 'm-vr': !!replaceAt(i), sel: sel === 'modify:' + i }"
+                    :title="replaceMissing(i) ? '变量不存在' : (replaceTitle(i) || '')"
                     @mousedown="pick('modify', i)"
                     @contextmenu.prevent="openMenu('modify', i, $event)"
                   >
@@ -878,6 +1090,7 @@ const { covered } = useModal(() => props.id !== null)
           <span class="lg m-ex">{{ t('flt.e.excludeOn') }}</span>
           <span class="lg m-pg">{{ t('flt.e.progressionOn') }}</span>
           <span class="lg m-rd">{{ t('flt.e.randomOn') }}</span>
+          <span class="lg m-vr">{{ t('flt.e.replaceOn') }}</span>
 
           <span class="jump">
             {{ t('flt.e.jump') }}
@@ -956,7 +1169,31 @@ const { covered } = useModal(() => props.id !== null)
     </div>
 
     <ContextMenu :at="menuAt" :items="menuItems" @pick="onMenuPick" @close="menuAt = null" />
-  </div></Teleport>
+  </div>
+
+  <!--
+    取值器替换格的绑定编辑：选取值器 → 选变量 → 选写入格式。
+    用统一的设置弹窗外壳（Teleport 到 body，自带模态栈登记），
+    打开时本编辑器会被置为 inert。
+  -->
+  <SettingsModal :open="bindAt !== null" :title="t('flt.e.replaceTitle')" subtitle="VARIABLE REPLACE CELL"
+                 :width="820" :hint="t('flt.e.bindHint')" :save-text="t('dlg.ok')"
+                 @update:open="!$event && closeBind()" @save="saveBind">
+    <div v-if="bindDraft" class="vr-picker">
+      <input v-model="bindKeyword" class="inp vr-search" placeholder="搜索取值器或变量名称" autofocus />
+      <div class="vr-table">
+        <div class="vr-head"><span>取值器</span><span>变量名称</span><span>变量类型</span><span>数据类型</span><span>当前值</span><span>写入格式</span></div>
+        <div v-if="!bindCandidates.length" class="vr-empty">没有匹配的取值器变量。</div>
+        <div v-for="item in bindCandidates" :key="item.extractor.Id + item.variable.Id" class="vr-row"
+                :class="{ selected: bindDraft.ExtractorId === item.extractor.Id && bindDraft.VariableId === item.variable.Id, off: !item.extractor.IsEnable }"
+                :aria-disabled="!item.extractor.IsEnable" @click="item.extractor.IsEnable && selectBindVariable(item.extractor.Id, item.variable.Id)">
+          <span :title="item.extractor.Name">{{ item.extractor.Name }}</span><span class="vr-var" :title="item.variable.Name">{{ item.variable.Name }}</span><span class="vr-kind">{{ bindKindName(item.variable.Kind) }}</span>
+          <span class="vr-type">{{ bindTypeName(item.variable.DataType) }}</span><span class="vr-value" :title="bindCurrentValue(item.variable)">{{ bindCurrentValue(item.variable) }}</span>
+          <span class="vr-format" @click.stop><CyberSelect v-if="bindDraft.ExtractorId === item.extractor.Id && bindDraft.VariableId === item.variable.Id" class="full" v-model="bindDraft.Format" :options="bindFormatOptions" :disabled="bindFormatOptions.length <= 1" /></span>
+        </div>
+      </div>
+    </div>
+  </SettingsModal></Teleport>
 </template>
 
 <style scoped>
@@ -1035,6 +1272,7 @@ const { covered } = useModal(() => props.id !== null)
 /* 下拉宽度类叫 .dd 不叫 .sel —— 字节格的选中态也是 .sel，裸 .sel 会把选中的格子一起改宽 */
 .dd { width: 150px; max-width: 260px; }
 .dd.grow { flex: 1; min-width: 0; max-width: none; }
+.dd.capture-variable { flex: 1 1 240px; min-width: 220px; max-width: 420px; }
 
 /*
   作用域只剩四项，一行放得下。
@@ -1233,11 +1471,15 @@ const { covered } = useModal(() => props.id !== null)
 .cell.m-ex { background: #ee82ee; }
 .cell.m-pg { background: #8b0000; }
 .cell.m-rd { background: #1e90ff; }
+/* 取值器替换格：用青绿，避开 WinForms 传下来的紫 / 暗红 / 蓝三种标记色 */
+.cell.m-vr { background: #0f766e; }
 
 /* 文字色跟着底色走，理由见上面那段 */
 .cell.m-ex .hex,
 .cell.m-rd .hex { color: #0a0a0f; }
 .cell.m-pg .hex { color: #fff; }
+.cell.m-vr .hex { color: #fff; }
+
 
 /* 选中框用绿色：三种标记底色里没有绿，压在哪一种上都分得出来 */
 .cell.sel { outline: 2px solid var(--green); outline-offset: -2px; }
@@ -1266,6 +1508,22 @@ const { covered } = useModal(() => props.id !== null)
 .legend .lg.m-ex::before { background: #ee82ee; border-color: #ee82ee; }
 .legend .lg.m-pg::before { background: #8b0000; border-color: #8b0000; }
 .legend .lg.m-rd::before { background: #1e90ff; border-color: #1e90ff; }
+.legend .lg.m-vr::before { background: #0f766e; border-color: #0f766e; }
+
+/* 取值器替换格：复用「插入变量」的完整信息表，而非只显示两个名字的下拉框。 */
+.vr-picker { padding: 2px 2px 0; }
+.vr-search { box-sizing: border-box; width: 100%; margin-bottom: 10px; }
+.vr-table { max-height: 380px; overflow: auto; border: 1px solid var(--border); }
+.vr-head, .vr-row { display: grid; grid-template-columns: minmax(76px, .55fr) minmax(94px, .75fr) 82px 68px minmax(98px, .85fr) minmax(112px, .8fr); align-items: center; gap: 10px; padding: 0 12px; }
+.vr-head { height: 35px; background: var(--bar); color: var(--dim); font: var(--fs-small) var(--mono); }
+.vr-row { box-sizing: border-box; width: 100%; min-height: 42px; border: 0; border-top: 1px solid var(--border); background: transparent; color: var(--gray); text-align: left; font: inherit; cursor: pointer; }
+.vr-row:hover:not(.off) { background: rgb(var(--cyan-rgb) / 7%); }
+.vr-row.selected { background: rgb(var(--cyan-rgb) / 12%); box-shadow: inset 2px 0 var(--cyan); }
+.vr-row.off { opacity: .42; cursor: not-allowed; }
+.vr-row > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vr-var { color: var(--cyan); }.vr-kind, .vr-type { color: var(--dim); font-size: var(--fs-small); }.vr-value { color: var(--text); font: var(--fs-small) var(--mono); }
+.vr-format { overflow: visible !important; }.vr-format .full { display: flex; width: 100%; }
+.vr-empty { padding: 18px 12px; color: var(--dim); font-size: var(--fs-small); }
 
 .ft {
   flex: none;

@@ -7,7 +7,7 @@ import type { Key } from '../../i18n'
 
 export type PageKey =
   | 'data' | 'client' | 'account'
-  | 'filter' | 'send' | 'robot' | 'warehouse' | 'decoders'
+  | 'filter' | 'send' | 'robot' | 'warehouse' | 'decoders' | 'extractors'
   | 'stat' | 'diff' | 'decoder' | 'extract'
   | 'wpc' | 'log'
   // 注入模式的主屏（PacketInfo）。代理模式没有这一页，见文件末尾的 INJECT_GROUPS
@@ -45,6 +45,7 @@ export const GROUPS: PageGroup[] = [
       { key: 'warehouse', label: 'proxy.nav.warehouse', icon: '<path d="M3 20V9l9-5 9 5v11"/><path d="M2 20h20"/><path d="M8 20v-7h8v7"/><path d="M8 16.5h8"/>' },
       // 解码器列表：一枚钥匙（算法 + 密钥）。与旁边那个「智能解码」的星芒区分开
       { key: 'decoders', label: 'proxy.nav.decoders', icon: '<circle cx="7.5" cy="15.5" r="3.5"/><path d="M10 13L20 3"/><path d="M16.5 6.5l2 2"/><path d="M14 9l2 2"/>' },
+      { key: 'extractors', label: 'proxy.nav.extractors', icon: '<path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/>' },
     ],
   },
   {
@@ -95,7 +96,7 @@ export const INJECT_GROUPS: PageGroup[] = [
       { key: 'packet', label: 'inject.nav.packet', icon: '<path d="M4 6h16M4 12h16M4 18h10"/>' },
     ],
   },
-  { cap: 'Rules', items: [P('filter'), P('send'), P('robot'), P('warehouse'), P('decoders')] },
+  { cap: 'Rules', items: [P('filter'), P('send'), P('robot'), P('warehouse'), P('decoders'), P('extractors')] },
   { cap: 'Tools', items: [P('stat'), P('diff'), P('decoder'), P('extract')] },
   { cap: 'System', items: [P('log')] },
 ]

@@ -41,7 +41,9 @@ import StatData from './proxy/StatData.vue'
 import TextCompare from './proxy/TextCompare.vue'
 import DecoderList from './decoder/DecoderList.vue'
 import Decoder from './decoder/Decoder.vue'
+import PacketExtractorList from './extractor/PacketExtractorList.vue'
 import { ensureDecoders } from './decoder/actions'
+import { ensurePacketExtractors } from '../stores/extractor'
 import ExtractData from './proxy/ExtractData.vue'
 import SystemLog from './proxy/SystemLog.vue'
 //7 个设置弹窗：代理那 12 项的真子集
@@ -349,7 +351,7 @@ onMounted(async () => {
     前端重挂时若目标还在，C# 那边已经加载过了 —— 这里补拉一次解码器，
     侧栏的计数才不用等用户点进解码器页。解码器不在那 14 份推送流里，没人会替它推。
   */
-  if (status.value.state !== 'idle') { void ensureDecoders(true) }
+  if (status.value.state !== 'idle') { void ensureDecoders(true); void ensurePacketExtractors() }
 
   void typeSubtitle()
 
@@ -444,6 +446,7 @@ async function quickInject(): Promise<void> {
 
     setStatus(r)
     void ensureDecoders(true)
+    void ensurePacketExtractors()
     page.value = 'packet'
     pushToast('success', t('inject.attached'))
   } catch (e: any) {
@@ -468,6 +471,7 @@ async function attachTo(pid: number, method = 0): Promise<void> {
     if (!r?.ok) { pushToast('error', r?.error || t('inject.failed')); return }
     setStatus(r)
     void ensureDecoders(true)
+    void ensurePacketExtractors()
     procOpen.value = false
     page.value = 'packet'
     pushToast('success', t('inject.attached'))
@@ -493,6 +497,7 @@ async function launchAndAttach(): Promise<void> {
     if (!r?.ok) { pushToast('error', r?.error || t('inject.failed')); return }
     setStatus(r)
     void ensureDecoders(true)
+    void ensurePacketExtractors()
     fileOpen.value = false
     page.value = 'packet'
     pushToast('success', t('inject.launched'))
@@ -811,6 +816,7 @@ async function clearList(): Promise<void> {
       <RobotList v-if="page === 'robot'" />
       <WareHouseList v-if="page === 'warehouse'" />
       <DecoderList v-if="page === 'decoders'" />
+      <PacketExtractorList v-if="page === 'extractors'" />
       <StatData v-if="page === 'stat'" mode="inject" />
       <TextCompare v-if="page === 'diff'" />
       <Decoder v-if="page === 'decoder'" />

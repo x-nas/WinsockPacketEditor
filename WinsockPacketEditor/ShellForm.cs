@@ -3944,6 +3944,73 @@ namespace WPEHybrid
 
             #region//解码器（跨模式共用）
 
+            // 取值器与滤镜同属两模式共用的规则。列表规模小，按请求拉取，运行值不落库。
+            this.bridge.Register("getPacketExtractors", args => new { rows = PacketExtractorConfig.GetRows() });
+            this.bridge.Register("addPacketExtractor", args => new { id = PacketExtractorConfig.Add() });
+            this.bridge.Register("savePacketExtractor", args =>
+            {
+                PacketExtractorInfo item = null;
+                try
+                {
+                    var source = args["extractor"] as Newtonsoft.Json.Linq.JObject;
+                    if (source != null)
+                    {
+                        // 兼容早期前端已打开的编辑窗：新变量曾以空字符串表示未分配的 Guid，
+                        // Newtonsoft 无法将其反序列化为 Guid。归一成 Empty 后由配置层生成正式 ID。
+                        foreach (Newtonsoft.Json.Linq.JToken token in source.DescendantsAndSelf())
+                        {
+                            var obj = token as Newtonsoft.Json.Linq.JObject;
+                            var id = obj == null ? null : obj["Id"];
+                            if (id != null && id.Type == Newtonsoft.Json.Linq.JTokenType.String && string.IsNullOrWhiteSpace((string)id)) obj["Id"] = Guid.Empty.ToString("D");
+                        }
+                        item = source.ToObject<PacketExtractorInfo>();
+                    }
+                }
+                catch (Exception ex) { Operate.DoLog("savePacketExtractor", ex); }
+                string error; bool ok = PacketExtractorConfig.SaveOne(item, out error);
+                var attached = AttachedLink();
+                if (ok && attached != null) { attached.TryPush(attached.PushPacketExtractors); attached.TryPush(attached.PushFilters); }
+                return new { ok = ok, error = error };
+            });
+            this.bridge.Register("deletePacketExtractors", args =>
+            {
+                var ids = new List<Guid>();
+                try { foreach (string id in args["ids"].ToObject<List<string>>()) { Guid g; if (Guid.TryParse(id, out g)) ids.Add(g); } }
+                catch (Exception ex) { Operate.DoLog("deletePacketExtractors", ex); }
+                int count = PacketExtractorConfig.Delete(ids); var attached = AttachedLink(); if (attached != null) attached.TryPush(attached.PushPacketExtractors);
+                return new { ok = true, count = count };
+            });
+            this.bridge.Register("setAllPacketExtractorEnable", args =>
+            {
+                bool enable = args["enable"] != null && (bool)args["enable"];
+                PacketExtractorConfig.SetAllEnable(enable); var attached = AttachedLink(); if (attached != null) attached.TryPush(attached.PushPacketExtractors);
+                return new { ok = true };
+            });
+            this.bridge.Register("packetExtractorListAction", async args =>
+            {
+                int action = args["action"] == null ? -1 : (int)args["action"];
+                var ids = new List<Guid>();
+                try { foreach (string id in args["ids"].ToObject<List<string>>()) { Guid g; if (Guid.TryParse(id, out g)) ids.Add(g); } }
+                catch (Exception ex) { Operate.DoLog("packetExtractorListAction", ex); }
+                int changed = await PacketExtractorConfig.ApplyListAction((Operate.SystemConfig.ListAction)action, ids);
+                var attached = AttachedLink(); if (attached != null) attached.TryPush(attached.PushPacketExtractors);
+                return new { ok = true, changed = changed };
+            });
+            this.bridge.Register("importPacketExtractors", async args =>
+            {
+                await PacketExtractorConfig.ImportDialog(); var attached = AttachedLink(); if (attached != null) attached.TryPush(attached.PushPacketExtractors);
+                return new { ok = true };
+            });
+            this.bridge.Register("exportPacketExtractors", async args =>
+            {
+                await PacketExtractorConfig.ExportDialog(); return new { ok = true };
+            });
+            this.bridge.Register("clearPacketExtractors", async args =>
+            {
+                await PacketExtractorConfig.ClearDialog(); var attached = AttachedLink(); if (attached != null) attached.TryPush(attached.PushPacketExtractors);
+                return new { ok = true };
+            });
+
             /*
                 解码器：列表 / 增删改 / 启停 / 测试台 / 按 Id 解码。
 
@@ -4716,6 +4783,7 @@ namespace WPEHybrid
                         WareHouse = f("wareHouse"),
                         AutoStores = f("autoStores"),
                         DecoderList = f("decoderList"),
+                        PacketExtractorList = f("packetExtractorList"),
                         WpcServer = f("wpcServer"),
                         WpcNotice = f("wpcNotice"),
                     });
@@ -6604,7 +6672,7 @@ namespace WPEHybrid
                 var all = (bool?)parts["all"] ?? false;
                 Func<string, bool> on = key => all || (bool?)parts[key] == true;
                 var fileName = ((string)args["fileName"] ?? (string)parts["name"] ?? Operate.SystemConfig.AssemblyVersion).Trim();
-                var path = await Operate.SystemConfig.ExportSystemBackUp_Dialog(fileName, new Operate.SystemConfig.BackupParts { SystemConfig = on("systemConfig"), ProxySet = on("proxySet"), ProxyAccount = on("proxyAccount"), WhiteList = on("whiteList"), BlackList = on("blackList"), ProxyMapping = on("proxyMapping"), InjectSet = on("injectSet"), FilterList = on("filterList"), SendList = on("sendList"), RobotList = on("robotList"), WareHouse = on("wareHouse"), AutoStores = on("autoStores"), WpcServer = on("wpcServer"), WpcNotice = on("wpcNotice"), DecoderList = on("decoderList") });
+                var path = await Operate.SystemConfig.ExportSystemBackUp_Dialog(fileName, new Operate.SystemConfig.BackupParts { SystemConfig = on("systemConfig"), ProxySet = on("proxySet"), ProxyAccount = on("proxyAccount"), WhiteList = on("whiteList"), BlackList = on("blackList"), ProxyMapping = on("proxyMapping"), InjectSet = on("injectSet"), FilterList = on("filterList"), SendList = on("sendList"), RobotList = on("robotList"), WareHouse = on("wareHouse"), AutoStores = on("autoStores"), WpcServer = on("wpcServer"), WpcNotice = on("wpcNotice"), DecoderList = on("decoderList"), PacketExtractorList = on("packetExtractorList") });
                 return new Newtonsoft.Json.Linq.JObject { ["saved"] = !string.IsNullOrEmpty(path), ["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path };
             }
             if (action == "backup.import")
@@ -6670,7 +6738,7 @@ namespace WPEHybrid
                     if (parts == null) throw new InvalidOperationException("backupParts is required when kind is backup.");
                     var all = (bool?)parts["all"] ?? false;
                     Func<string, bool> on = key => all || (bool?)parts[key] == true;
-                    var path = await Operate.SystemConfig.ExportSystemBackUp_Dialog(string.IsNullOrEmpty(fileName) ? ((string)parts["name"] ?? Operate.SystemConfig.AssemblyVersion) : fileName, new Operate.SystemConfig.BackupParts { SystemConfig = on("systemConfig"), ProxySet = on("proxySet"), ProxyAccount = on("proxyAccount"), WhiteList = on("whiteList"), BlackList = on("blackList"), ProxyMapping = on("proxyMapping"), InjectSet = on("injectSet"), FilterList = on("filterList"), SendList = on("sendList"), RobotList = on("robotList"), WareHouse = on("wareHouse"), AutoStores = on("autoStores"), WpcServer = on("wpcServer"), WpcNotice = on("wpcNotice"), DecoderList = on("decoderList") });
+                    var path = await Operate.SystemConfig.ExportSystemBackUp_Dialog(string.IsNullOrEmpty(fileName) ? ((string)parts["name"] ?? Operate.SystemConfig.AssemblyVersion) : fileName, new Operate.SystemConfig.BackupParts { SystemConfig = on("systemConfig"), ProxySet = on("proxySet"), ProxyAccount = on("proxyAccount"), WhiteList = on("whiteList"), BlackList = on("blackList"), ProxyMapping = on("proxyMapping"), InjectSet = on("injectSet"), FilterList = on("filterList"), SendList = on("sendList"), RobotList = on("robotList"), WareHouse = on("wareHouse"), AutoStores = on("autoStores"), WpcServer = on("wpcServer"), WpcNotice = on("wpcNotice"), DecoderList = on("decoderList"), PacketExtractorList = on("packetExtractorList") });
                     result["saved"] = !string.IsNullOrEmpty(path);
                     result["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path;
                     return result;

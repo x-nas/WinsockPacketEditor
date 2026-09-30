@@ -112,6 +112,7 @@ namespace WinsockPacketEditor
             d["ExportFilterList.Success"] = "Список фильтров экспортирован";
             d["ExportFilterList.Error"] = "Ошибка экспорта списка фильтров";
             d["DecoderListFile"] = "Файл списка декодеров";
+            d["PacketExtractorListFile"] = "Файл списка извлекателей пакетов";
             d["ImportDecoderList"] = "Импорт списка декодеров";
             d["ImportDecoderList.Success"] = "Список декодеров импортирован";
             d["ExportDecoderList"] = "Экспорт списка декодеров";

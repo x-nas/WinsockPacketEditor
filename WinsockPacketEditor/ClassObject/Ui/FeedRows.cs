@@ -291,6 +291,25 @@ namespace WinsockPacketEditor
     }
 
     /// <summary>
+    /// 修改行上的一个「取值器替换格」。
+    ///
+    /// 命中后把该格的取值器变量渲染成字节，从这一格开始写入（可以跨若干列）。
+    /// 与框里的固定值/递进/随机互斥：界面上设了替换格就清掉那三样。
+    ///
+    /// 用 GUID 而不是名称定位（旧模板是 <c>${名称.变量}</c>），改名不会失效。
+    /// <b>不进 FilterModifyCell</b>：MCP 的 rule.save 会整段替换 Modify，
+    /// 拆成独立的数组才能保证 MCP 不改动时替换格不被连带清掉。
+    /// </summary>
+    public sealed class FilterReplaceCell
+    {
+        public int Index;
+        public string ExtractorId;
+        public string VariableId;
+        /// <summary>写入字节格式（u8/u16le/.../utf8...）；字节数组变量为空。</summary>
+        public string Format;
+    }
+
+    /// <summary>
     /// 滤镜编辑弹窗要的全部数据（对应 Controls/FilterEdit）。
     ///
     /// 比列表用的 <see cref="FilterRow"/> 多出格子内容与递进参数 ——
@@ -347,6 +366,12 @@ namespace WinsockPacketEditor
         public bool IsProgressionCarry;
         public int ProgressionCarryNumber;
 
+        //取值器命中后操作：因动态替换已改成修改行上的替换格，这里只剩「取值器赋值」。
+        public bool IsVariableAction;
+        public bool CaptureVariable;
+        public string VariableExtractorId;
+        public string VariableId;
+
         /*
             查找与修改是<b>两套独立的索引</b>（源模型里就是 FSearch / FModify 两个串）。
             普通模式下两者恰好对齐同一列，看不出区别；
@@ -357,6 +382,9 @@ namespace WinsockPacketEditor
         */
         public FilterSearchCell[] Search;
         public FilterModifyCell[] Modify;
+
+        /// <summary>修改行上的取值器替换格；与 Modify <b>分开</b>下发，MCP 整段替换 Modify 时不受影响。</summary>
+        public FilterReplaceCell[] ModifyReplacements;
     }
 
     /// <summary>客户端认证记录的一行。</summary>

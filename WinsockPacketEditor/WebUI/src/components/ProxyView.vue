@@ -11,6 +11,7 @@ import { call } from '../bridge'
 import { loadCountryTable } from '../flags'
 import { attachListFeed } from '../stores/lists'
 import { gotoPage } from '../stores/runtime'
+import { ensurePacketExtractors } from '../stores/extractor'
 import { ensureDecoders } from './decoder/actions'
 import ProxySide from './proxy/ProxySide.vue'
 import ProxyData from './proxy/ProxyData.vue'
@@ -23,6 +24,7 @@ import RobotList from './proxy/RobotList.vue'
 import TextCompare from './proxy/TextCompare.vue'
 import DecoderList from './decoder/DecoderList.vue'
 import Decoder from './decoder/Decoder.vue'
+import PacketExtractorList from './extractor/PacketExtractorList.vue'
 import ExtractData from './proxy/ExtractData.vue'
 import StatData from './proxy/StatData.vue'
 import WpcConfig from './proxy/WpcConfig.vue'
@@ -61,7 +63,7 @@ onMounted(() => {
     直到用户点进解码器页才补上。
   */
   call('enterProxyMode')
-    .then(() => { void ensureDecoders(true) })
+    .then(() => { void ensureDecoders(true); void ensurePacketExtractors() })
     .catch((e) => console.error('[proxy] 进入代理模式失败', e))
 
   //国旗用的中文国名对照表，整个会话取一次（约 4KB）
@@ -117,6 +119,7 @@ onBeforeUnmount(() => detach?.())
       每个改动动作之后由这一屏自己重新拉一次，没有要保住的运行态。
     -->
     <DecoderList v-if="page === 'decoders'" />
+    <PacketExtractorList v-if="page === 'extractors'" />
 
     <!-- 四个工具页：状态都在 stores/tools 里，v-if 销毁再挂回来内容还在 -->
     <TextCompare v-if="page === 'diff'" />

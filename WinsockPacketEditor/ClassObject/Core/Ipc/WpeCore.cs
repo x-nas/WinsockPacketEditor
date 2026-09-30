@@ -691,6 +691,17 @@ namespace WinsockPacketEditor.Ipc
             w.I64(Operate.PacketConfig.Packet.Total_SendBytes);
             w.I64(Operate.PacketConfig.Packet.Total_RecvBytes);
 
+            //变量运行值的真源同样在目标进程。每秒回传一次显示快照；单项最多 4096 字符，
+            //200 个变量也远低于 1 MB 控制帧上限，且不在钩子线程上做 IPC。
+            var variables = PacketVariableEngine.GetCurrentDisplays(4096);
+            w.I32(variables.Count);
+            foreach (PacketVariableEngine.PacketVariableDisplay variable in variables)
+            {
+                w.Guid_(variable.ExtractorId);
+                w.Guid_(variable.VariableId);
+                w.Str(variable.Display);
+            }
+
             SendEvent(w);
         }
 
@@ -839,6 +850,7 @@ namespace WinsockPacketEditor.Ipc
                             case ConfigKind.Runtime: ConfigSnapshot.ApplyRuntime(payload); break;
                             case ConfigKind.Sends: ConfigSnapshot.ApplySends(payload); break;
                             case ConfigKind.Robots: ConfigSnapshot.ApplyRobots(payload); break;
+                            case ConfigKind.PacketExtractors: ConfigSnapshot.ApplyPacketExtractors(payload); break;
                             default: return Fail("不认识的快照类别: " + kind);
                         }
 

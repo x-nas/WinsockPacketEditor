@@ -69,7 +69,7 @@ namespace WinsockPacketEditor.Ipc
         #region//Filters：滤镜列表整表
 
         /*
-            FilterInfo 是<b>纯标量</b>的（27 个字段，没有嵌套列表），
+            FilterInfo 是<b>纯标量</b>的（都是标量字段，没有嵌套列表），
             所以逐字段收发就够了，不需要任何序列化框架。
 
             ⚠️ 加字段要改<b>两处</b>（Encode 与 Apply），删字段只改一处。
@@ -125,6 +125,11 @@ namespace WinsockPacketEditor.Ipc
                 w.Str(fi.RandomPosition);
                 w.Str(fi.FSearch);
                 w.Str(fi.FModify);
+                w.Bool(fi.IsVariableAction);
+                w.Bool(fi.CaptureVariable);
+                w.Guid_(fi.VariableExtractorId);
+                w.Guid_(fi.VariableId);
+                w.Str(fi.VariableReplacePosition);
             }
 
             return w.ToArray();
@@ -195,6 +200,11 @@ namespace WinsockPacketEditor.Ipc
                 string randomPosition = r.Str();
                 string fsearch = r.Str();
                 string fmodify = r.Str();
+                bool isVariableAction = r.Bool();
+                bool captureVariable = r.Bool();
+                Guid variableExtractorId = r.Guid_();
+                Guid variableId = r.Guid_();
+                string variableReplacePosition = r.Str();
 
                 var fi = new FilterInfo(
                     isEnable, fid, fname,
@@ -208,6 +218,11 @@ namespace WinsockPacketEditor.Ipc
                     progPosition, progCount,
                     excludePosition, randomPosition,
                     fsearch, fmodify);
+                fi.VariableExtractorId = variableExtractorId;
+                fi.VariableId = variableId;
+                fi.IsVariableAction = isVariableAction;
+                fi.CaptureVariable = captureVariable;
+                fi.VariableReplacePosition = variableReplacePosition;
 
                 FilterInfo keep;
                 if (oldCounts.TryGetValue(fid, out keep))
@@ -505,6 +520,47 @@ namespace WinsockPacketEditor.Ipc
                 PacketBuffer = r.Bytes(),
             };
         }
+
+        #region//PacketExtractors
+
+        public static byte[] EncodePacketExtractors()
+        {
+            var w = new IpcWriter();
+            var list = PacketExtractorConfig.Items;
+            w.I32(list.Count);
+            foreach (PacketExtractorInfo e in list)
+            {
+                w.Guid_(e.Id); w.Str(e.Name); w.Bool(e.IsEnable); w.I32((int)e.Scope); w.Str(e.Description);
+                w.I32(e.Variables.Count);
+                foreach (PacketVariableInfo v in e.Variables)
+                {
+                    var x = v.Extraction ?? new PacketExtractionSpec();
+                    w.Guid_(v.Id); w.Str(v.Name); w.I32((int)v.Kind); w.I32((int)v.DataType); w.Str(v.Value);
+                    w.I32(x.Offset); w.I32(x.Length); w.Bool(x.RelativeToMatch); w.Bool(x.BigEndian); w.Bool(x.Signed); w.I32((int)x.Encoding); w.I32(v.TtlSeconds);
+                }
+            }
+            return w.ToArray();
+        }
+
+        public static void ApplyPacketExtractors(byte[] payload)
+        {
+            var r = new IpcReader(payload); int count = r.I32(); var list = new List<PacketExtractorInfo>(count);
+            for (int i = 0; i < count; i++)
+            {
+                var e = new PacketExtractorInfo { Id = r.Guid_(), Name = r.Str(), IsEnable = r.Bool(), Scope = (PacketExtractorScope)r.I32(), Description = r.Str() };
+                int n = r.I32();
+                for (int j = 0; j < n; j++)
+                {
+                    Guid id = r.Guid_(); string name = r.Str(); var kind = (PacketVariableKind)r.I32(); var dataType = (PacketVariableDataType)r.I32(); string value = r.Str();
+                    var x = new PacketExtractionSpec { Offset = r.I32(), Length = r.I32(), RelativeToMatch = r.Bool(), BigEndian = r.Bool(), Signed = r.Bool(), Encoding = (PacketVariableEncoding)r.I32() };
+                    e.Variables.Add(new PacketVariableInfo { Id = id, Name = name, Kind = kind, DataType = dataType, Value = value, Extraction = x, TtlSeconds = r.I32() });
+                }
+                list.Add(e);
+            }
+            PacketVariableEngine.Publish(list);
+        }
+
+        #endregion
 
         #endregion
     }

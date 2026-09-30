@@ -2,7 +2,7 @@
 /*
   备份设置 —— 对应 WinForms 的 Controls/BackUpSetting。
 
-  导出：勾选要带的十五样东西，C# 弹保存框（可加密）。导入：C# 弹打开框，整份配置与各份列表换掉，
+  导出：勾选要带的十六样东西，C# 弹保存框（可加密）。导入：C# 弹打开框，整份配置与各份列表换掉，
   外壳那边随即应用偏好、整表重推、落库（见 ShellForm 的 importBackup）；备份里可能带着语言，页面字典要跟着切。
   这个弹窗没有「保存」——两个动作各自就是终点。
 */
@@ -12,6 +12,7 @@ import { lang, normalize, t } from '../../i18n'
 import { kernelRunning, refreshHotkey, socks5Addr, tunReady } from '../../stores/runtime'
 import { initTheme } from '../../stores/theme'
 import { ensureDecoders } from '../decoder/actions'
+import { ensurePacketExtractors } from '../../stores/extractor'
 import SettingsModal from './SettingsModal.vue'
 
 const props = defineProps<{ open: boolean }>()
@@ -21,13 +22,13 @@ const busy = ref(false)
 /*
   ⚠️ <b>仓库默认不勾。</b>仓储封包是原始字节，自动入库开着抓一阵就是几万条 ——
   实测 50000 条 × 512 字节已经是十几 MB 的 XML，真实封包 4KB 时还要再乘几倍。
-  其余十四项都是「配置与规则」量级，默认勾上无妨。
+  其余十五项都是「配置与规则」量级，默认勾上无妨。
 */
 const f = ref({
   systemConfig: true, proxySet: true, proxyAccount: true, whiteList: true, blackList: true, proxyMapping: true,
   injectSet: true,
   filterList: true, sendList: true, robotList: true, autoStores: true,
-  decoderList: true,
+  decoderList: true, packetExtractorList: true,
   wareHouse: false,
   wpcServer: true, wpcNotice: true,
 })
@@ -40,7 +41,7 @@ const GROUPS = [
     但把这句写进标签会在俄语下把格子撑破 —— 实测「Хранилище (с пакетами…」被截掉了尾巴。
     标签只留名字，说明交给提示（自绘的那套，见 tooltip.ts）。
   */
-  { key: 'bk.grp.lists', items: [['filterList', 'bk.filterList'], ['sendList', 'bk.sendList'], ['robotList', 'bk.robotList'], ['autoStores', 'bk.autoStores'], ['decoderList', 'proxy.nav.decoders'], ['wareHouse', 'bk.wareHouse', 'bk.wareHouseHint']] },
+  { key: 'bk.grp.lists', items: [['filterList', 'bk.filterList'], ['sendList', 'bk.sendList'], ['robotList', 'bk.robotList'], ['autoStores', 'bk.autoStores'], ['decoderList', 'proxy.nav.decoders'], ['packetExtractorList', 'proxy.nav.extractors'], ['wareHouse', 'bk.wareHouse', 'bk.wareHouseHint']] },
   { key: 'bk.grp.wpc', items: [['wpcServer', 'bk.wpcServer'], ['wpcNotice', 'bk.wpcNotice']] },
 ] as const
 
@@ -91,6 +92,7 @@ async function importBackup(): Promise<void> {
     void refreshHotkey()
     //解码器不在推送流里，备份导入后要自己重拉一次（列表页与工作台读同一份 decRows）
     void ensureDecoders(true)
+    void ensurePacketExtractors()
     //监听地址可能跟着代理配置一起换了
     try {
       const s = await call<{ socks5Addr?: string; tunReady?: boolean; kernelRunning?: boolean }>('getSystemCheck')

@@ -460,6 +460,7 @@ namespace WinsockPacketEditor.Ipc
         public void PushRuntime() { PushConfig(ConfigKind.Runtime, ConfigSnapshot.EncodeRuntime()); }
         public void PushSends() { PushConfig(ConfigKind.Sends, ConfigSnapshot.EncodeSends()); }
         public void PushRobots() { PushConfig(ConfigKind.Robots, ConfigSnapshot.EncodeRobots()); }
+        public void PushPacketExtractors() { PushConfig(ConfigKind.PacketExtractors, ConfigSnapshot.EncodePacketExtractors()); }
 
         /// <summary>把五类快照全部推一遍（连上时、以及重新附加之后）。</summary>
         public void PushAll()
@@ -468,6 +469,7 @@ namespace WinsockPacketEditor.Ipc
             PushFilters();
             PushSends();
             PushRobots();
+            PushPacketExtractors();
             PushRuntime();
         }
 
@@ -581,9 +583,9 @@ namespace WinsockPacketEditor.Ipc
             switch (kind)
             {
                 case IpcEvent.Log:
-                    //目标侧的日志进外壳的系统日志，与本地日志混在一起 ——
-                    //加个前缀好认出来是从目标里来的
-                    Operate.DoLog("[目标] " + r.Str(), r.Str());
+                    //目标侧的日志进外壳的系统日志，与本地日志混在一起；
+                    //模块列只显示模块名，不再加「[目标]」前缀。
+                    Operate.DoLog(r.Str(), r.Str());
                     break;
 
                 case IpcEvent.FilterLog:
@@ -622,7 +624,7 @@ namespace WinsockPacketEditor.Ipc
                     break;
 
                 case IpcEvent.Fatal:
-                    Operate.DoLog("[目标] Fatal", r.Str());
+                    Operate.DoLog("Fatal", r.Str());
                     break;
 
                 default:
@@ -726,6 +728,14 @@ namespace WinsockPacketEditor.Ipc
             Operate.PacketConfig.Packet.WSARecvFrom_CNT = (int)r.I64();
             Operate.PacketConfig.Packet.Total_SendBytes = r.I64();
             Operate.PacketConfig.Packet.Total_RecvBytes = r.I64();
+
+            //注入目标的取值器变量运行值只留在目标内存；这里存进外壳的显示镜像，
+            //供 getPacketExtractors / 编辑取值器的「当前值」列读取，不参与任何变量计算。
+            int vn = r.I32();
+            for (int i = 0; i < vn; i++)
+            {
+                PacketVariableEngine.SetMirroredDisplay(r.Guid_(), r.Guid_(), r.Str());
+            }
 
             /*
                 ⚠️ 计数是<b>就地改属性</b>，不动列表结构 —— BindingList.ListChanged 不会触发，

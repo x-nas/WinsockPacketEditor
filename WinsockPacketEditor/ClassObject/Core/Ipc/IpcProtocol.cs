@@ -28,11 +28,10 @@ namespace WinsockPacketEditor.Ipc
         /// 协议版本。两端 Hello 时对不上就直接拒绝，<b>不猜、不兼容</b>。
         /// 改了任何一个帧的字段就要 +1。
         ///
-        /// 4（2026-09-10）：Stats 事件末尾加了<b>封包计数那 11 个 long</b>（计数搬回目标，
-        ///                  见 <c>WpeCore.OnPacket</c> 那段说明）；ResetStats 命令加了一个
-        ///                  <c>u8 掩码</c>（要清哪几组计数）。
+        /// 9（2026-09-30）：Stats 事件末尾追加取值器变量的显示快照；注入目标的运行值
+        ///                  回传外壳，只供编辑器的「当前值」列显示。
         /// </summary>
-        public const int Version = 4;
+        public const int Version = 9;
 
         /// <summary>控制通道单帧上限（1 MB）。快照最大的是滤镜表，几十条 × 几百字节，余量足够。</summary>
         public const int MaxControlFrame = 1024 * 1024;
@@ -203,6 +202,7 @@ namespace WinsockPacketEditor.Ipc
         //—— 阶段 2 ——
         Sends = 4,
         Robots = 5,
+        PacketExtractors = 6,
     }
 
     /// <summary>应答的结果码。</summary>

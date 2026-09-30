@@ -44,7 +44,7 @@ namespace WinsockPacketEditor
                 ⚠️ 它也进了库文件名（DataBase.dbName ＝ AssemblyVersion + ".db"）：
                 2.1.9 正式版是「2.1.9.db」，测过的「2.1.9 Beta.db」不会被读到 —— 要带过去用备份导出 / 导入。
             */
-            public static bool IsBeta = false;
+            public static bool IsBeta = true;
             /// <summary>MCP 操作需要 WPE 本机确认；默认 false。</summary>
             public static bool McpRequiresConfirmation = false;
             public static bool McpEnabled = true;
@@ -4039,6 +4039,13 @@ namespace WinsockPacketEditor
                         new XElement("HookWSA_SendTo", PacketConfig.Packet.HookWSA_SendTo),
                         new XElement("HookWSA_Recv", PacketConfig.Packet.HookWSA_Recv),
                         new XElement("HookWSA_RecvFrom", PacketConfig.Packet.HookWSA_RecvFrom),                        
+                        new XElement("PacketList_ShowSocket", PacketConfig.List.IsShow_PacketSocket),
+                        new XElement("PacketList_ShowType", PacketConfig.List.IsShow_PacketType),
+                        new XElement("PacketList_ShowClientAddr", PacketConfig.List.IsShow_ClientAddr),
+                        new XElement("PacketList_ShowClientLocation", PacketConfig.List.IsShow_ClientLocation),
+                        new XElement("PacketList_ShowServerAddr", PacketConfig.List.IsShow_ServerAddr),
+                        new XElement("PacketList_ShowServerLocation", PacketConfig.List.IsShow_ServerLocation),
+                        new XElement("PacketList_ShowLength", PacketConfig.List.IsShow_PacketLen),
                         new XElement("PacketList_AutoRoll", PacketConfig.List.AutoRoll),
                         new XElement("PacketList_AutoClear", PacketConfig.List.AutoClear),
                         new XElement("PacketList_AutoClear_Value", PacketConfig.List.AutoClear_Value)
@@ -4078,6 +4085,14 @@ namespace WinsockPacketEditor
                         PacketConfig.Packet.HookWSA_SendTo = Convert.ToBoolean(InjectMode.Rows[0]["HookWSA_SendTo"]);
                         PacketConfig.Packet.HookWSA_Recv = Convert.ToBoolean(InjectMode.Rows[0]["HookWSA_Recv"]);
                         PacketConfig.Packet.HookWSA_RecvFrom = Convert.ToBoolean(InjectMode.Rows[0]["HookWSA_RecvFrom"]);
+
+                        PacketConfig.List.IsShow_PacketSocket = Convert.ToBoolean(InjectMode.Rows[0]["PacketList_ShowSocket"]);
+                        PacketConfig.List.IsShow_PacketType = Convert.ToBoolean(InjectMode.Rows[0]["PacketList_ShowType"]);
+                        PacketConfig.List.IsShow_ClientAddr = Convert.ToBoolean(InjectMode.Rows[0]["PacketList_ShowClientAddr"]);
+                        PacketConfig.List.IsShow_ClientLocation = Convert.ToBoolean(InjectMode.Rows[0]["PacketList_ShowClientLocation"]);
+                        PacketConfig.List.IsShow_ServerAddr = Convert.ToBoolean(InjectMode.Rows[0]["PacketList_ShowServerAddr"]);
+                        PacketConfig.List.IsShow_ServerLocation = Convert.ToBoolean(InjectMode.Rows[0]["PacketList_ShowServerLocation"]);
+                        PacketConfig.List.IsShow_PacketLen = Convert.ToBoolean(InjectMode.Rows[0]["PacketList_ShowLength"]);
                         
                         PacketConfig.List.AutoRoll = Convert.ToBoolean(InjectMode.Rows[0]["PacketList_AutoRoll"]);
                         PacketConfig.List.AutoClear = Convert.ToBoolean(InjectMode.Rows[0]["PacketList_AutoClear"]);
@@ -4166,6 +4181,21 @@ namespace WinsockPacketEditor
                         PacketConfig.Packet.HookWSA_RecvFrom = Convert.ToBoolean(HookWSA_RecvFrom.Value);
                     }                    
 
+                    XElement PacketList_ShowSocket = xeInjectMode.Element("PacketList_ShowSocket");
+                    if (PacketList_ShowSocket != null) { PacketConfig.List.IsShow_PacketSocket = Convert.ToBoolean(PacketList_ShowSocket.Value); }
+                    XElement PacketList_ShowType = xeInjectMode.Element("PacketList_ShowType");
+                    if (PacketList_ShowType != null) { PacketConfig.List.IsShow_PacketType = Convert.ToBoolean(PacketList_ShowType.Value); }
+                    XElement PacketList_ShowClientAddr = xeInjectMode.Element("PacketList_ShowClientAddr");
+                    if (PacketList_ShowClientAddr != null) { PacketConfig.List.IsShow_ClientAddr = Convert.ToBoolean(PacketList_ShowClientAddr.Value); }
+                    XElement PacketList_ShowClientLocation = xeInjectMode.Element("PacketList_ShowClientLocation");
+                    if (PacketList_ShowClientLocation != null) { PacketConfig.List.IsShow_ClientLocation = Convert.ToBoolean(PacketList_ShowClientLocation.Value); }
+                    XElement PacketList_ShowServerAddr = xeInjectMode.Element("PacketList_ShowServerAddr");
+                    if (PacketList_ShowServerAddr != null) { PacketConfig.List.IsShow_ServerAddr = Convert.ToBoolean(PacketList_ShowServerAddr.Value); }
+                    XElement PacketList_ShowServerLocation = xeInjectMode.Element("PacketList_ShowServerLocation");
+                    if (PacketList_ShowServerLocation != null) { PacketConfig.List.IsShow_ServerLocation = Convert.ToBoolean(PacketList_ShowServerLocation.Value); }
+                    XElement PacketList_ShowLength = xeInjectMode.Element("PacketList_ShowLength");
+                    if (PacketList_ShowLength != null) { PacketConfig.List.IsShow_PacketLen = Convert.ToBoolean(PacketList_ShowLength.Value); }
+
                     XElement xePacketList_AutoRoll = xeInjectMode.Element("PacketList_AutoRoll");
                     if (xePacketList_AutoRoll != null)
                     {
@@ -4247,7 +4277,14 @@ namespace WinsockPacketEditor
                         new XElement("SelectProcessNames", ProxyConfig.Proxy.SerializeSelectProcessNames()),
                         new XElement("TunStack", ProxyConfig.Proxy.TunStack),
                         new XElement("DnsMode", ProxyConfig.Proxy.DnsMode),
-                        new XElement("ManualProcessNames", ProxyConfig.Proxy.ManualProcessNames)
+                        new XElement("ManualProcessNames", ProxyConfig.Proxy.ManualProcessNames),
+                        new XElement("ProxyList_ShowSocket", ProxyConfig.List.IsShow_PacketSocket),
+                        new XElement("ProxyList_ShowType", ProxyConfig.List.IsShow_PacketType),
+                        new XElement("ProxyList_ShowClientAddr", ProxyConfig.List.IsShow_ClientAddr),
+                        new XElement("ProxyList_ShowClientLocation", ProxyConfig.List.IsShow_ClientLocation),
+                        new XElement("ProxyList_ShowServerAddr", ProxyConfig.List.IsShow_ServerAddr),
+                        new XElement("ProxyList_ShowServerLocation", ProxyConfig.List.IsShow_ServerLocation),
+                        new XElement("ProxyList_ShowLength", ProxyConfig.List.IsShow_PacketLen)
                         );
 
                     return xeProxyMode;
@@ -4343,6 +4380,14 @@ namespace WinsockPacketEditor
                         {
                             ProxyConfig.Proxy.ManualProcessNames = ProxyMode.Rows[0]["ManualProcessNames"].ToString();
                         }
+
+                        ProxyConfig.List.IsShow_PacketSocket = Convert.ToBoolean(ProxyMode.Rows[0]["ProxyList_ShowSocket"]);
+                        ProxyConfig.List.IsShow_PacketType = Convert.ToBoolean(ProxyMode.Rows[0]["ProxyList_ShowType"]);
+                        ProxyConfig.List.IsShow_ClientAddr = Convert.ToBoolean(ProxyMode.Rows[0]["ProxyList_ShowClientAddr"]);
+                        ProxyConfig.List.IsShow_ClientLocation = Convert.ToBoolean(ProxyMode.Rows[0]["ProxyList_ShowClientLocation"]);
+                        ProxyConfig.List.IsShow_ServerAddr = Convert.ToBoolean(ProxyMode.Rows[0]["ProxyList_ShowServerAddr"]);
+                        ProxyConfig.List.IsShow_ServerLocation = Convert.ToBoolean(ProxyMode.Rows[0]["ProxyList_ShowServerLocation"]);
+                        ProxyConfig.List.IsShow_PacketLen = Convert.ToBoolean(ProxyMode.Rows[0]["ProxyList_ShowLength"]);
                     }
                 }
                 catch (Exception ex)
@@ -4597,6 +4642,21 @@ namespace WinsockPacketEditor
 
                     XElement ManualProcessNames = xeProxyMode.Element("ManualProcessNames");
                     if (ManualProcessNames != null) { ProxyConfig.Proxy.ManualProcessNames = ManualProcessNames.Value ?? string.Empty; }
+
+                    XElement ProxyList_ShowSocket = xeProxyMode.Element("ProxyList_ShowSocket");
+                    if (ProxyList_ShowSocket != null) { ProxyConfig.List.IsShow_PacketSocket = Convert.ToBoolean(ProxyList_ShowSocket.Value); }
+                    XElement ProxyList_ShowType = xeProxyMode.Element("ProxyList_ShowType");
+                    if (ProxyList_ShowType != null) { ProxyConfig.List.IsShow_PacketType = Convert.ToBoolean(ProxyList_ShowType.Value); }
+                    XElement ProxyList_ShowClientAddr = xeProxyMode.Element("ProxyList_ShowClientAddr");
+                    if (ProxyList_ShowClientAddr != null) { ProxyConfig.List.IsShow_ClientAddr = Convert.ToBoolean(ProxyList_ShowClientAddr.Value); }
+                    XElement ProxyList_ShowClientLocation = xeProxyMode.Element("ProxyList_ShowClientLocation");
+                    if (ProxyList_ShowClientLocation != null) { ProxyConfig.List.IsShow_ClientLocation = Convert.ToBoolean(ProxyList_ShowClientLocation.Value); }
+                    XElement ProxyList_ShowServerAddr = xeProxyMode.Element("ProxyList_ShowServerAddr");
+                    if (ProxyList_ShowServerAddr != null) { ProxyConfig.List.IsShow_ServerAddr = Convert.ToBoolean(ProxyList_ShowServerAddr.Value); }
+                    XElement ProxyList_ShowServerLocation = xeProxyMode.Element("ProxyList_ShowServerLocation");
+                    if (ProxyList_ShowServerLocation != null) { ProxyConfig.List.IsShow_ServerLocation = Convert.ToBoolean(ProxyList_ShowServerLocation.Value); }
+                    XElement ProxyList_ShowLength = xeProxyMode.Element("ProxyList_ShowLength");
+                    if (ProxyList_ShowLength != null) { ProxyConfig.List.IsShow_PacketLen = Convert.ToBoolean(ProxyList_ShowLength.Value); }
                 }
                 catch (Exception ex)
                 {
@@ -4619,6 +4679,7 @@ namespace WinsockPacketEditor
                     WPCConfig.NoticeList.SaveNoticeList_ToDB();
                     WareHouseConfig.List.SaveWareHouseList_ToDB();
                     DecoderConfig.SaveDecoderList_ToDB();
+                    PacketExtractorConfig.Save();
                 }
                 catch (Exception ex)
                 {
@@ -4641,6 +4702,7 @@ namespace WinsockPacketEditor
                     WPCConfig.NoticeList.LoadNoticeList_FromDB();
                     WareHouseConfig.List.LoadWareHouseList_FromDB();
                     DecoderConfig.LoadDecoderList_FromDB();
+                    PacketExtractorConfig.Load();
 
                     string DBFilePath = string.Format("{0}\\{1}", DataBase.dbPath, DataBase.dbName);
                     Operate.DoLog(nameof(LoadSystemList_FromDB), UI.T("StartForm.Database.Loaded", "已加载数据库 : ") + DBFilePath);
@@ -4683,6 +4745,7 @@ namespace WinsockPacketEditor
                 public bool WpcServer { get; set; }
                 public bool WpcNotice { get; set; }
                 public bool DecoderList { get; set; }
+                public bool PacketExtractorList { get; set; }
 
                 /// <summary>一个都没勾。导出前拦一下，别产出一个只有根节点的空备份。</summary>
                 public bool IsEmpty
@@ -4691,7 +4754,7 @@ namespace WinsockPacketEditor
                     {
                         return !SystemConfig && !ProxySet && !ProxyAccount && !WhiteList && !BlackList
                             && !ProxyMapping && !InjectSet && !FilterList && !SendList && !RobotList
-                            && !WareHouse && !AutoStores && !WpcServer && !WpcNotice && !DecoderList;
+                             && !WareHouse && !AutoStores && !WpcServer && !WpcNotice && !DecoderList && !PacketExtractorList;
                     }
                 }
             }
@@ -4814,7 +4877,7 @@ namespace WinsockPacketEditor
                            空列表写个空壳没意义，跳过是对的，也是既定语义：导入端是
                            「节在就先清空再装、节不在就一个字都不动」，所以<b>源端为空不会</b>
                            把目标机上的同名列表清掉（弹窗底下那句提示已按这个口径改过）。
-                        ② <b>`Get*_XML` 返回了 null</b> —— 那十五个方法一律是
+                        ② <b>`Get*_XML` 返回了 null</b> —— 各类导出方法一律是
                            `try { 拼 } catch { 记日志 } return null`，<b>返回 null 只可能是抛异常了</b>。
 
                         原来两种情况共用同一条静默路径（`if (xe != null) { Add }`），于是第 ② 种
@@ -4935,6 +4998,12 @@ namespace WinsockPacketEditor
                     if (Parts.DecoderList && DecoderConfig.List.lstDecoderInfo.Count > 0)
                     {
                         add("Decoders", DecoderConfig.GetDecoderList_XML());
+                    }
+
+                    //取值器与滤镜通过 GUID 关联；整节保留原 GUID，恢复后引用无需重新绑定。
+                    if (Parts.PacketExtractorList && PacketExtractorConfig.Items.Count > 0)
+                    {
+                        add("PacketExtractors", PacketExtractorConfig.GetBackupXml());
                     }
 
                     /*
@@ -5419,6 +5488,24 @@ namespace WinsockPacketEditor
                 catch (Exception ex)
                 {
                     Operate.DoLog("Import Decoders", ex);
+                }
+
+                #endregion
+
+                #region//取值器
+
+                try
+                {
+                    XElement xePacketExtractors = xdoc.Root.Element("PacketExtractors");
+                    if (xePacketExtractors != null)
+                    {
+                        // 保留 GUID，确保同一份备份中的滤镜变量引用恢复后仍然有效。
+                        PacketExtractorConfig.LoadBackupXml(xePacketExtractors);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog("Import PacketExtractors", ex);
                 }
 
                 #endregion
@@ -19544,6 +19631,7 @@ namespace WinsockPacketEditor
                     None,
                     Filter,
                     WareHouse,
+                    PacketExtractor,
                 }
 
                 public enum FilterStartFrom
@@ -19609,6 +19697,20 @@ namespace WinsockPacketEditor
                     public int Index { get; set; }
                     public byte Value { get; set; }
                 }
+
+                /// <summary>
+                /// 一个取值器替换格（修改行上的列）。Index 的含义随 FStartFrom 变，与修改位一致：
+                /// Head 是绝对位置，Position 是相对匹配点的偏移（可为负）。
+                /// </summary>
+                private struct VariableReplacement
+                {
+                    public int Index { get; set; }
+                    public Guid ExtractorId { get; set; }
+                    public Guid VariableId { get; set; }
+                    public string Format { get; set; }
+                }
+
+                private static readonly VariableReplacement[] NoVariableReplacements = new VariableReplacement[0];
 
                 #endregion
 
@@ -20540,6 +20642,7 @@ namespace WinsockPacketEditor
                 private static readonly RuleCache<List<Modification>> modificationRuleCache = new RuleCache<List<Modification>>(ParseModificationsCore);
                 private static readonly RuleCache<NormalSearch> normalRuleCache = new RuleCache<NormalSearch>(CompileNormalSearch);
                 private static readonly RuleCache<int[]> positionRuleCache = new RuleCache<int[]>(CompilePositions);
+                private static readonly RuleCache<VariableReplacement[]> variableReplaceCache = new RuleCache<VariableReplacement[]>(CompileVariableReplacements);
                 private static readonly RuleCache<HashSet<int>> socketRuleCache = new RuleCache<HashSet<int>>(text =>
                     new HashSet<int>(text.Split(';').Select(s => { int n; return int.TryParse(s.Trim(), out n) ? (int?)n : null; })
                         .Where(n => n.HasValue).Select(n => n.Value)));
@@ -20568,6 +20671,40 @@ namespace WinsockPacketEditor
                     foreach (string part in text.Split(','))
                     { int n; if (int.TryParse(part, out n)) { result.Add(n); } }
                     return result.ToArray();
+                }
+
+                /*
+                    取值器替换格的位置串："索引|取值器GUID|变量GUID|格式,索引|..."。
+                    格式可省略（字节数组），GUID 与索引解析失败就跳过这一项 ——
+                    坏一行不该让整条滤镜的替换全部失效。
+                */
+                private static VariableReplacement[] CompileVariableReplacements(string text)
+                {
+                    if (string.IsNullOrEmpty(text)) { return NoVariableReplacements; }
+
+                    var result = new List<VariableReplacement>();
+                    foreach (string part in text.Split(','))
+                    {
+                        if (part.Length == 0) { continue; }
+
+                        string[] bits = part.Split('|');
+                        if (bits.Length < 3) { continue; }
+
+                        int index; Guid extractor, variable;
+                        if (!int.TryParse(bits[0], out index)) { continue; }
+                        if (!Guid.TryParse(bits[1], out extractor) || !Guid.TryParse(bits[2], out variable)) { continue; }
+
+                        result.Add(new VariableReplacement
+                        {
+                            Index = index,
+                            ExtractorId = extractor,
+                            VariableId = variable,
+                            Format = bits.Length >= 4 ? bits[3] : string.Empty,
+                        });
+                    }
+
+                    result.Sort((a, b) => a.Index.CompareTo(b.Index));
+                    return result.Count == 0 ? NoVariableReplacements : result.ToArray();
                 }
 
                 private static int[][] CompileRanges(string text)
@@ -20602,6 +20739,7 @@ namespace WinsockPacketEditor
                     excludeRuleCache.Get(filter.ExcludePosition);
                     positionRuleCache.Get(filter.ProgressionPosition);
                     positionRuleCache.Get(filter.RandomPosition);
+                    variableReplaceCache.Get(filter.VariableReplacePosition);
                     socketRuleCache.Get(filter.SocketContent);
                     rangeRuleCache.Get(filter.LengthContent);
                     rangeRuleCache.Get(filter.PortContent);
@@ -21003,6 +21141,7 @@ namespace WinsockPacketEditor
                         }
 
                         bool bDoFilter = false;
+                        bool variableReplaced = false;
                         bool isMatch = false;
                         List<int> MatchIndex = null;
 
@@ -21022,6 +21161,18 @@ namespace WinsockPacketEditor
                         }
 
                         byte[] tempBuffer = null;
+
+                        //取值器赋值总是读取主动作前的命中包；普通替换或换包不能影响抓取来源。
+                        if (fi.IsExecute && fi.FEType == FilterConfig.Filter.FilterExecuteType.PacketExtractor && fi.CaptureVariable)
+                        {
+                            int captureAt = MatchIndex != null && MatchIndex.Count > 0 ? MatchIndex[0] : 0;
+                            string captureError = null;
+                            if (!PacketVariableEngine.TryCapture(fi.VariableExtractorId, fi.VariableId, iSocket, bufferSpan.ToArray(), captureAt, out captureError)
+                                && !string.IsNullOrEmpty(captureError))
+                            {
+                                Operate.DoLog("PacketVariable", captureError);
+                            }
+                        }
 
                         // Only serialize this filter's byte transformation. Nested actions run
                         // outside this lock, so two filters cannot deadlock each other.
@@ -21084,6 +21235,80 @@ namespace WinsockPacketEditor
                                 break;
                         }
 
+                        /*
+                            取值器替换格：在主动作之后写入，同一字节以替换格的结果为准
+                            （换包时改的是换出的新包）。
+
+                            定位与修改位完全一致：
+                              普通 / 高级·包头   绝对位置，只写一次；
+                              高级·指定位置       相对匹配点，每个命中点各写一次。
+                            每个格只渲染一次；按列升序写，后写覆盖先写；越界的格子只记日志。
+                        */
+                        VariableReplacement[] replacements = string.IsNullOrEmpty(fi.VariableReplacePosition)
+                            ? NoVariableReplacements
+                            : variableReplaceCache.Get(fi.VariableReplacePosition);
+
+                        if (replacements.Length > 0)
+                        {
+                            //表达式统一重算一次，避免每个格各算一遍（旧模板是逐次重算）。
+                            PacketVariableEngine.Prepare(iSocket);
+
+                            bool relative = fi.FMode == FilterConfig.Filter.FilterMode.Advanced
+                                && fi.FStartFrom == FilterConfig.Filter.FilterStartFrom.Position;
+
+                            //锚点：相对位置时逐个命中点，否则只写一次（锚点 0）。
+                            var anchors = relative && MatchIndex != null && MatchIndex.Count > 0 ? MatchIndex : null;
+                            int anchorCount = anchors != null ? anchors.Count : 1;
+
+                            byte[][] rendered = new byte[replacements.Length][];
+
+                            for (int k = 0; k < replacements.Length; k++)
+                            {
+                                string replaceError;
+                                byte[] bytes;
+                                if (PacketVariableEngine.TryRenderVariable(replacements[k].ExtractorId, replacements[k].VariableId,
+                                        replacements[k].Format, iSocket, out bytes, out replaceError))
+                                {
+                                    rendered[k] = bytes;
+                                }
+                                else if (!string.IsNullOrEmpty(replaceError))
+                                {
+                                    Operate.DoLog("PacketVariable", replaceError);
+                                }
+                            }
+
+                            for (int a = 0; a < anchorCount; a++)
+                            {
+                                int anchor = anchors != null ? anchors[a] : 0;
+                                Span<byte> target = tempBuffer != null ? tempBuffer.AsSpan() : bufferSpan;
+                                bool wrote = false;
+
+                                for (int k = 0; k < replacements.Length; k++)
+                                {
+                                    byte[] bytes = rendered[k];
+                                    if (bytes == null || bytes.Length == 0) { continue; }
+
+                                    int start = replacements[k].Index + (relative ? anchor : 0);
+                                    if (start >= 0 && start + bytes.Length <= target.Length)
+                                    {
+                                        bytes.AsSpan().CopyTo(target.Slice(start, bytes.Length));
+                                        wrote = true;
+                                    }
+                                    else
+                                    {
+                                        Operate.DoLog("PacketVariable", "取值器替换格超出封包长度或长度不匹配");
+                                    }
+                                }
+
+                                if (wrote)
+                                {
+                                    tempBuffer = target.ToArray();
+                                    bDoFilter = true;
+                                    variableReplaced = true;
+                                }
+                            }
+                        }
+
                         }
 
                         if (fi.IsExecute && fi.Execute_GUID != null && fi.Execute_GUID != Guid.Empty)
@@ -21105,7 +21330,15 @@ namespace WinsockPacketEditor
                                 case FilterConfig.Filter.FilterExecuteType.Filter:
 
                                     FilterInfo fiExecute = FilterConfig.Filter.GetFilter_ByGuid(fi.Execute_GUID);
-                                    FilterConfig.Filter.DoFilter(fiExecute, iSocket, bufferSpan, out bNewBuffer, ptType, sAddr);
+                                    //取值器动态替换在本条主动作之后完成；后续滤镜必须看到最终字节。
+                                    if (tempBuffer != null)
+                                    {
+                                        FilterConfig.Filter.DoFilter(fiExecute, iSocket, tempBuffer.AsSpan(), out bNewBuffer, ptType, sAddr);
+                                    }
+                                    else
+                                    {
+                                        FilterConfig.Filter.DoFilter(fiExecute, iSocket, bufferSpan, out bNewBuffer, ptType, sAddr);
+                                    }
 
                                     break;
 
@@ -21126,7 +21359,9 @@ namespace WinsockPacketEditor
 
                         if (bDoFilter)
                         {
-                            faReturn = fi.FAction;
+                            //只有替换格、没有主动作时，按 Replace 返回以让调用方采用 bNewBuffer。
+                            faReturn = fi.FAction == FilterConfig.Filter.FilterAction.None && variableReplaced
+                                ? FilterConfig.Filter.FilterAction.Replace : fi.FAction;
                             fi.IncrementExecutionCount();
 
                             switch (fi.FAction)
@@ -22371,6 +22606,30 @@ namespace WinsockPacketEditor
                             });
                         }
 
+                        //取值器替换格：与修改位同一套索引（「指定位置」下可以是负偏移）。
+                        var rCells = new List<FilterReplaceCell>();
+
+                        if (!string.IsNullOrEmpty(fi.VariableReplacePosition))
+                        {
+                            foreach (string part in fi.VariableReplacePosition.Split(','))
+                            {
+                                string[] bits = part.Split('|');
+                                if (bits.Length < 3) { continue; }
+
+                                int index; Guid extractor, variable;
+                                if (!int.TryParse(bits[0], out index)) { continue; }
+                                if (!Guid.TryParse(bits[1], out extractor) || !Guid.TryParse(bits[2], out variable)) { continue; }
+
+                                rCells.Add(new FilterReplaceCell
+                                {
+                                    Index = index,
+                                    ExtractorId = extractor.ToString().ToUpper(),
+                                    VariableId = variable.ToString().ToUpper(),
+                                    Format = bits.Length >= 4 ? bits[3] : string.Empty,
+                                });
+                            }
+                        }
+
                         FilterRow head = FilterRow.From_(fi);
 
                         return new FilterEditRow
@@ -22396,8 +22655,13 @@ namespace WinsockPacketEditor
                             ProgressionStep = fi.ProgressionStep,
                             IsProgressionCarry = fi.IsProgressionCarry,
                             ProgressionCarryNumber = fi.ProgressionCarryNumber,
+                            IsVariableAction = fi.IsVariableAction,
+                            CaptureVariable = fi.CaptureVariable,
+                            VariableExtractorId = fi.VariableExtractorId.ToString().ToUpper(),
+                            VariableId = fi.VariableId.ToString().ToUpper(),
                             Search = sCells.ToArray(),
                             Modify = mCells.ToArray(),
+                            ModifyReplacements = rCells.ToArray(),
                         };
                     }
                     catch (Exception ex)
@@ -22544,6 +22808,61 @@ namespace WinsockPacketEditor
                         fi.ProgressionStep = Row.ProgressionStep < 1 ? 1 : Row.ProgressionStep;
                         fi.IsProgressionCarry = Row.IsProgressionCarry;
                         fi.ProgressionCarryNumber = Row.ProgressionCarryNumber < 1 ? 1 : Row.ProgressionCarryNumber;
+                        Guid variableGuid;
+                        fi.VariableExtractorId = Guid.TryParse(Row.VariableExtractorId, out variableGuid) ? variableGuid : Guid.Empty;
+                        fi.VariableId = Guid.TryParse(Row.VariableId, out variableGuid) ? variableGuid : Guid.Empty;
+                        fi.IsVariableAction = false;
+                        //命中后执行只剩「取值器赋值」：类型选到取值器即启用，不再有子动作二选一。
+                        fi.CaptureVariable = Row.IsExecute && Row.ExecuteType == (int)FilterConfig.Filter.FilterExecuteType.PacketExtractor;
+
+                        if (fi.CaptureVariable && (fi.VariableExtractorId == Guid.Empty || fi.VariableId == Guid.Empty))
+                        {
+                            return "取值器赋值必须选择取值器和变量";
+                        }
+
+                        /*
+                            取值器替换格：与修改位同一套索引范围（「指定位置」下可为负）。
+                            校验引用还在、格式对得上变量的类型 —— 引用被删掉的替换格
+                            在钩子线程上只会静默不写，放在保存时说清楚更好查。
+                        */
+                        var replacePositions = new StringBuilder();
+
+                        if (Row.ModifyReplacements != null)
+                        {
+                            foreach (FilterReplaceCell c in Row.ModifyReplacements)
+                            {
+                                if (c == null || c.Index < lo || c.Index >= max) { continue; }
+
+                                Guid extractorId, variableId;
+
+                                if (!Guid.TryParse(c.ExtractorId, out extractorId) || !Guid.TryParse(c.VariableId, out variableId))
+                                {
+                                    return "取值器替换格必须选择取值器和变量";
+                                }
+
+                                PacketExtractorInfo extractor;
+                                PacketVariableInfo variable;
+
+                                if (!PacketExtractorConfig.TryGetVariable(extractorId, variableId, out extractor, out variable))
+                                {
+                                    return "取值器或变量已不存在";
+                                }
+
+                                string format = (c.Format ?? string.Empty).Trim().ToLowerInvariant();
+
+                                if (!PacketVariableEngine.IsFormatValid(variable.DataType, format))
+                                {
+                                    return "取值器替换格的写入格式无效";
+                                }
+
+                                replacePositions.Append(c.Index).Append("|")
+                                    .Append(extractorId.ToString().ToUpper()).Append("|")
+                                    .Append(variableId.ToString().ToUpper()).Append("|")
+                                    .Append(format).Append(",");
+                            }
+                        }
+
+                        fi.VariableReplacePosition = replacePositions.ToString().TrimEnd(',');
 
                         //TrimEnd(',') 与 WinForms 的 bSave_Click 逐字一致 —— 存进库的串要能对得上
                         fi.FSearch = search.ToString().TrimEnd(',');
@@ -22854,6 +23173,7 @@ namespace WinsockPacketEditor
                     {
                         var filter = filters[i];
                         if (filter.IsEnable && (filter.FAction == Filter.FilterAction.Replace ||
+                            !string.IsNullOrEmpty(filter.VariableReplacePosition) ||
                             (filter.IsExecute && filter.FEType == Filter.FilterExecuteType.Filter)))
                         { writesInput = true; break; }
                     }
@@ -22975,6 +23295,17 @@ namespace WinsockPacketEditor
                                 dataRow["RandomPosition"].ToString(),
                                 dataRow["Search"].ToString(),
                                 dataRow["Modify"].ToString());
+
+                            FilterInfo loaded = FilterConfig.Filter.GetFilter_ByGuid(Guid.Parse(dataRow["GUID"].ToString()));
+                            if (loaded != null)
+                            {
+                                Guid parsed;
+                                if (Guid.TryParse(Convert.ToString(dataRow["VariableExtractorGUID"]), out parsed)) loaded.VariableExtractorId = parsed;
+                                if (Guid.TryParse(Convert.ToString(dataRow["VariableGUID"]), out parsed)) loaded.VariableId = parsed;
+                                loaded.VariableReplacePosition = dataRow["VariableReplacePosition"] == DBNull.Value ? string.Empty : Convert.ToString(dataRow["VariableReplacePosition"]);
+                                loaded.IsVariableAction = dataRow["IsVariableAction"] != DBNull.Value && Convert.ToBoolean(dataRow["IsVariableAction"]);
+                                loaded.CaptureVariable = dataRow["CaptureVariable"] != DBNull.Value && Convert.ToBoolean(dataRow["CaptureVariable"]);
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -23110,7 +23441,11 @@ namespace WinsockPacketEditor
                                 new XElement("ExcludePosition", fi.ExcludePosition),
                                 new XElement("RandomPosition", fi.RandomPosition),
                                 new XElement("Search", fi.FSearch),
-                                new XElement("Modify", fi.FModify)
+                                new XElement("Modify", fi.FModify),
+                                new XElement("VariableExtractorGUID", fi.VariableExtractorId == Guid.Empty ? string.Empty : fi.VariableExtractorId.ToString().ToUpper()),
+                                new XElement("VariableGUID", fi.VariableId == Guid.Empty ? string.Empty : fi.VariableId.ToString().ToUpper()),
+                                new XElement("CaptureVariable", fi.CaptureVariable.ToString()),
+                                new XElement("VariableReplacePosition", fi.VariableReplacePosition ?? string.Empty)
                                 );
 
                             xeRoot.Add(xeFilter);
@@ -23382,6 +23717,30 @@ namespace WinsockPacketEditor
                                 sFModify = xeFilter.Element("Modify").Value;
                             }
 
+                            string sFVariableExtractorGUID = string.Empty;
+                            if (xeFilter.Element("VariableExtractorGUID") != null)
+                            {
+                                sFVariableExtractorGUID = xeFilter.Element("VariableExtractorGUID").Value;
+                            }
+
+                            string sFVariableGUID = string.Empty;
+                            if (xeFilter.Element("VariableGUID") != null)
+                            {
+                                sFVariableGUID = xeFilter.Element("VariableGUID").Value;
+                            }
+
+                            bool bCaptureVariable = false;
+                            if (xeFilter.Element("CaptureVariable") != null)
+                            {
+                                bCaptureVariable = bool.Parse(xeFilter.Element("CaptureVariable").Value);
+                            }
+
+                            string sFVariableReplacePosition = string.Empty;
+                            if (xeFilter.Element("VariableReplacePosition") != null)
+                            {
+                                sFVariableReplacePosition = xeFilter.Element("VariableReplacePosition").Value;
+                            }
+
                             FilterConfig.Filter.AddFilter(
                                 bIsEnable,
                                 FID,
@@ -23412,6 +23771,18 @@ namespace WinsockPacketEditor
                                 RandomPosition,
                                 sFSearch,
                                 sFModify);
+
+                            //取值器那几项不是构造参数，导入后补写上去。
+                            FilterInfo imported = FilterConfig.Filter.GetFilter_ByGuid(FID);
+
+                            if (imported != null)
+                            {
+                                Guid parsedVariableGuid;
+                                if (Guid.TryParse(sFVariableExtractorGUID, out parsedVariableGuid)) imported.VariableExtractorId = parsedVariableGuid;
+                                if (Guid.TryParse(sFVariableGUID, out parsedVariableGuid)) imported.VariableId = parsedVariableGuid;
+                                imported.CaptureVariable = bCaptureVariable;
+                                imported.VariableReplacePosition = sFVariableReplacePosition;
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -32680,6 +33051,13 @@ namespace WinsockPacketEditor
                         sql += "HookWSA_SendTo BOOLEAN DEFAULT 1,";//WSA 发送到
                         sql += "HookWSA_Recv BOOLEAN DEFAULT 1,";//WSA 接收
                         sql += "HookWSA_RecvFrom BOOLEAN DEFAULT 1,";//WSA 接收自                        
+                        sql += "PacketList_ShowSocket BOOLEAN DEFAULT 1,";
+                        sql += "PacketList_ShowType BOOLEAN DEFAULT 1,";
+                        sql += "PacketList_ShowClientAddr BOOLEAN DEFAULT 1,";
+                        sql += "PacketList_ShowClientLocation BOOLEAN DEFAULT 1,";
+                        sql += "PacketList_ShowServerAddr BOOLEAN DEFAULT 1,";
+                        sql += "PacketList_ShowServerLocation BOOLEAN DEFAULT 1,";
+                        sql += "PacketList_ShowLength BOOLEAN DEFAULT 1,";
                         sql += "PacketList_AutoRoll BOOLEAN DEFAULT 0,";//封包列表自动滚动
                         sql += "PacketList_AutoClear BOOLEAN DEFAULT 1,";//封包列表自动清理
                         sql += "PacketList_AutoClear_Value INTEGER DEFAULT 5000";//封包列表自动清理数值
@@ -32689,6 +33067,7 @@ namespace WinsockPacketEditor
                         {
                             conn.Open();
                             cmd.ExecuteNonQuery();
+
                         }
                     }
 
@@ -32766,6 +33145,7 @@ namespace WinsockPacketEditor
                         sql += "HookWSA_SendTo,";
                         sql += "HookWSA_Recv,";
                         sql += "HookWSA_RecvFrom,";                        
+                        sql += "PacketList_ShowSocket,PacketList_ShowType,PacketList_ShowClientAddr,PacketList_ShowClientLocation,PacketList_ShowServerAddr,PacketList_ShowServerLocation,PacketList_ShowLength,";
                         sql += "PacketList_AutoRoll,";
                         sql += "PacketList_AutoClear,";
                         sql += "PacketList_AutoClear_Value";
@@ -32782,6 +33162,7 @@ namespace WinsockPacketEditor
                         sql += "@HookWSA_SendTo,";
                         sql += "@HookWSA_Recv,";
                         sql += "@HookWSA_RecvFrom,";                        
+                        sql += "@PacketList_ShowSocket,@PacketList_ShowType,@PacketList_ShowClientAddr,@PacketList_ShowClientLocation,@PacketList_ShowServerAddr,@PacketList_ShowServerLocation,@PacketList_ShowLength,";
                         sql += "@PacketList_AutoRoll,";
                         sql += "@PacketList_AutoClear,";
                         sql += "@PacketList_AutoClear_Value";
@@ -32801,6 +33182,13 @@ namespace WinsockPacketEditor
                             AddParam(cmd, "@HookWSA_SendTo", PacketConfig.Packet.HookWSA_SendTo);
                             AddParam(cmd, "@HookWSA_Recv", PacketConfig.Packet.HookWSA_Recv);
                             AddParam(cmd, "@HookWSA_RecvFrom", PacketConfig.Packet.HookWSA_RecvFrom);                            
+                            AddParam(cmd, "@PacketList_ShowSocket", PacketConfig.List.IsShow_PacketSocket);
+                            AddParam(cmd, "@PacketList_ShowType", PacketConfig.List.IsShow_PacketType);
+                            AddParam(cmd, "@PacketList_ShowClientAddr", PacketConfig.List.IsShow_ClientAddr);
+                            AddParam(cmd, "@PacketList_ShowClientLocation", PacketConfig.List.IsShow_ClientLocation);
+                            AddParam(cmd, "@PacketList_ShowServerAddr", PacketConfig.List.IsShow_ServerAddr);
+                            AddParam(cmd, "@PacketList_ShowServerLocation", PacketConfig.List.IsShow_ServerLocation);
+                            AddParam(cmd, "@PacketList_ShowLength", PacketConfig.List.IsShow_PacketLen);
                             AddParam(cmd, "@PacketList_AutoRoll", PacketConfig.List.AutoRoll);
                             AddParam(cmd, "@PacketList_AutoClear", PacketConfig.List.AutoClear);
                             AddParam(cmd, "@PacketList_AutoClear_Value", PacketConfig.List.AutoClear_Value);  
@@ -32870,6 +33258,13 @@ namespace WinsockPacketEditor
                         sql += "TunStack TEXT DEFAULT 'system',";//代理模式 - 内置 mihomo 内核的 TUN 栈（2026-09-23）
                         sql += "DnsMode TEXT DEFAULT 'fake-ip',";//代理模式 - 内置 mihomo 内核的 DNS 模式（2026-09-23）
                         sql += "ManualProcessNames TEXT,";//代理模式 - 手动指定的进程名（; 分隔，2026-09-24）
+                        sql += "ProxyList_ShowSocket BOOLEAN DEFAULT 1,";
+                        sql += "ProxyList_ShowType BOOLEAN DEFAULT 1,";
+                        sql += "ProxyList_ShowClientAddr BOOLEAN DEFAULT 1,";
+                        sql += "ProxyList_ShowClientLocation BOOLEAN DEFAULT 1,";
+                        sql += "ProxyList_ShowServerAddr BOOLEAN DEFAULT 1,";
+                        sql += "ProxyList_ShowServerLocation BOOLEAN DEFAULT 1,";
+                        sql += "ProxyList_ShowLength BOOLEAN DEFAULT 1,";
                         sql += "Only_WPC_Client BOOLEAN DEFAULT 0";//代理模式 - 只允许 WPC 客户端连接（2026-09-14）
                         sql += ");";
 
@@ -32991,7 +33386,8 @@ namespace WinsockPacketEditor
                         sql += "SelectProcessNames,";
                         sql += "TunStack,";
                         sql += "DnsMode,";
-                        sql += "ManualProcessNames";
+                        sql += "ManualProcessNames,";
+                        sql += "ProxyList_ShowSocket,ProxyList_ShowType,ProxyList_ShowClientAddr,ProxyList_ShowClientLocation,ProxyList_ShowServerAddr,ProxyList_ShowServerLocation,ProxyList_ShowLength";
                         sql += ") VALUES (";
                         sql += "@ProxyIP_Auto,";
                         sql += "@Enable_SOCKS5,";
@@ -33034,7 +33430,8 @@ namespace WinsockPacketEditor
                         sql += "@SelectProcessNames,";
                         sql += "@TunStack,";
                         sql += "@DnsMode,";
-                        sql += "@ManualProcessNames";
+                        sql += "@ManualProcessNames,";
+                        sql += "@ProxyList_ShowSocket,@ProxyList_ShowType,@ProxyList_ShowClientAddr,@ProxyList_ShowClientLocation,@ProxyList_ShowServerAddr,@ProxyList_ShowServerLocation,@ProxyList_ShowLength";
                         sql += ");";
 
                         using (SqliteCommand cmd = new SqliteCommand(sql, conn))
@@ -33081,6 +33478,13 @@ namespace WinsockPacketEditor
                             AddParam(cmd, "@TunStack", ProxyConfig.Proxy.TunStack ?? "system");
                             AddParam(cmd, "@DnsMode", ProxyConfig.Proxy.DnsMode ?? "fake-ip");
                             AddParam(cmd, "@ManualProcessNames", ProxyConfig.Proxy.ManualProcessNames ?? string.Empty);
+                            AddParam(cmd, "@ProxyList_ShowSocket", ProxyConfig.List.IsShow_PacketSocket);
+                            AddParam(cmd, "@ProxyList_ShowType", ProxyConfig.List.IsShow_PacketType);
+                            AddParam(cmd, "@ProxyList_ShowClientAddr", ProxyConfig.List.IsShow_ClientAddr);
+                            AddParam(cmd, "@ProxyList_ShowClientLocation", ProxyConfig.List.IsShow_ClientLocation);
+                            AddParam(cmd, "@ProxyList_ShowServerAddr", ProxyConfig.List.IsShow_ServerAddr);
+                            AddParam(cmd, "@ProxyList_ShowServerLocation", ProxyConfig.List.IsShow_ServerLocation);
+                            AddParam(cmd, "@ProxyList_ShowLength", ProxyConfig.List.IsShow_PacketLen);
 
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -33190,7 +33594,12 @@ namespace WinsockPacketEditor
                         sql += "ExcludePosition TEXT,";
                         sql += "RandomPosition TEXT,";
                         sql += "Search TEXT,";
-                        sql += "Modify TEXT";
+                        sql += "Modify TEXT,";
+                        sql += "VariableExtractorGUID TEXT,";
+                        sql += "VariableGUID TEXT,";
+                        sql += "IsVariableAction BOOLEAN DEFAULT 0,";
+                        sql += "CaptureVariable BOOLEAN DEFAULT 0,";
+                        sql += "VariableReplacePosition TEXT";
                         sql += ");";
 
                         using (SqliteCommand cmd = new SqliteCommand(sql, conn))
@@ -33198,6 +33607,20 @@ namespace WinsockPacketEditor
                             conn.Open();
                             cmd.ExecuteNonQuery();
                         }
+
+                        /*
+                            老化迁移：替换格所在的新列补上，旧的模板替换三列删掉。
+                            （模板替换已改成修改行上的替换格，见 VariableReplacePosition。）
+                            取值器赋值那几列是本功能引入的，老库一并用 EnsureColumn 补齐。
+                        */
+                        EnsureColumn(conn, "Filter", "VariableExtractorGUID", "TEXT");
+                        EnsureColumn(conn, "Filter", "VariableGUID", "TEXT");
+                        EnsureColumn(conn, "Filter", "IsVariableAction", "BOOLEAN DEFAULT 0");
+                        EnsureColumn(conn, "Filter", "CaptureVariable", "BOOLEAN DEFAULT 0");
+                        EnsureColumn(conn, "Filter", "VariableReplacePosition", "TEXT");
+                        DropColumnIfExists(conn, "Filter", "ReplaceVariable");
+                        DropColumnIfExists(conn, "Filter", "VariableTemplate");
+                        DropColumnIfExists(conn, "Filter", "VariableOffset");
                     }
 
                     bReturn = true;
@@ -33288,6 +33711,7 @@ namespace WinsockPacketEditor
                         sql += "RandomPosition,";
                         sql += "Search,";
                         sql += "Modify";
+                        sql += ",VariableExtractorGUID,VariableGUID,IsVariableAction,CaptureVariable,VariableReplacePosition";
                         sql += ") VALUES (";
                         sql += "@GUID,";
                         sql += "@IsEnable,";
@@ -33316,6 +33740,7 @@ namespace WinsockPacketEditor
                         sql += "@RandomPosition,";
                         sql += "@Search,";
                         sql += "@Modify";
+                        sql += ",@VariableExtractorGUID,@VariableGUID,@IsVariableAction,@CaptureVariable,@VariableReplacePosition";
                         sql += ");";
 
                         using (SqliteCommand cmd = new SqliteCommand(sql, conn))
@@ -33350,6 +33775,11 @@ namespace WinsockPacketEditor
                             AddParam(cmd, "@RandomPosition", fi.RandomPosition);
                             AddParam(cmd, "@Search", fi.FSearch);
                             AddParam(cmd, "@Modify", fi.FModify);
+                            AddParam(cmd, "@VariableExtractorGUID", fi.VariableExtractorId == Guid.Empty ? null : fi.VariableExtractorId.ToString().ToUpper());
+                            AddParam(cmd, "@VariableGUID", fi.VariableId == Guid.Empty ? null : fi.VariableId.ToString().ToUpper());
+                            AddParam(cmd, "@IsVariableAction", fi.IsVariableAction);
+                            AddParam(cmd, "@CaptureVariable", fi.CaptureVariable);
+                            AddParam(cmd, "@VariableReplacePosition", fi.VariableReplacePosition);
 
                             //借来的连接已经是开着的，再 Open 一次会抛
                             if (own) { conn.Open(); }

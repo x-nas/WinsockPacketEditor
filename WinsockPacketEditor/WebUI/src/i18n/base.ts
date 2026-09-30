@@ -102,6 +102,7 @@ export const DICT = {
   'proxy.nav.diff': { zh: '文本对比', en: 'Text Comparison' },
   'proxy.nav.decoder': { zh: '解码器', en: 'Decoder' },
   'proxy.nav.decoders': { zh: '解码器列表', en: 'Decoder List' },
+  'proxy.nav.extractors': { zh: '取值器列表', en: 'Packet Extractors' },
   'proxy.nav.codec': { zh: "编码解码", en: "Encode / Decode" },
   'proxy.nav.extract': { zh: '数据提取', en: 'Data Extraction' },
   'proxy.nav.wpc': { zh: 'WPC 配置', en: 'WPC Config' },
@@ -203,7 +204,7 @@ export const DICT = {
   'set.app.assocOff': { zh: '未关联 · 启动时不会再自动关联', en: 'Not associated · will not re-associate at startup' },
   'set.app.assocClear': { zh: '清除文件关联', en: 'Remove association' },
   'set.app.assocRedo': { zh: '重新关联', en: 'Associate again' },
-  'set.app.assocHint': { zh: 'WPE 导出的备份、滤镜、发送、机器人、仓库、解码器、账号、名单、映射等 14 种文件，在资源管理器里显示这个图标。只改当前用户的设置，不注册打开方式。按钮立即生效，不用按「保存」。', en: 'The 14 kinds of files WPE exports (backup, filters, send, robot, warehouse, decoders, accounts, lists, mappings…) show this icon in File Explorer. Only the current user is affected and no “open with” is registered. The button applies immediately — no need to press Save.' },
+  'set.app.assocHint': { zh: 'WPE 导出的备份、滤镜、发送、机器人、仓库、解码器、取值器、账号、名单、映射等 15 种文件，在资源管理器里显示这个图标。只改当前用户的设置，不注册打开方式。按钮立即生效，不用按「保存」。', en: 'The 15 kinds of files WPE exports (backup, filters, send, robot, warehouse, decoders, extractors, accounts, lists, mappings…) show this icon in File Explorer. Only the current user is affected and no “open with” is registered. The button applies immediately — no need to press Save.' },
   'set.app.assocForeign': { zh: '{0} 已被其他程序占用，保留原样', en: '{0} already belong to another program and were left alone' },
   'set.app.assocMissing': { zh: '程序目录里缺少 wpe-data.ico，无法关联', en: 'wpe-data.ico is missing from the program folder, so nothing can be associated' },
   'set.app.assocDone': { zh: '已关联文件图标', en: 'File icons associated' },
@@ -542,6 +543,19 @@ export const DICT = {
   'flt.e.progressionOn': { zh: '设为递进', en: 'Mark step' },
   'flt.e.randomOn': { zh: '设为随机', en: 'Mark random' },
   'flt.e.markOff': { zh: '取消标记', en: 'Clear mark' },
+  //变量值（取代原来的模板动态替换）：在修改行上右键设置
+  'flt.e.replaceOn': { zh: '设为变量值', en: 'Set variable value' },
+  //保留键以兼容各语言包；右键菜单不再显示这两个旧动作。
+  'flt.e.replaceEdit': { zh: '编辑变量值', en: 'Edit variable value' },
+  'flt.e.replaceOff': { zh: '取消变量值', en: 'Clear variable value' },
+  'flt.e.replaceTitle': { zh: '取值器变量', en: 'Extractor variable' },
+  'flt.e.bindExtractor': { zh: '取值器', en: 'Extractor' },
+  'flt.e.bindVariable': { zh: '变量', en: 'Variable' },
+  'flt.e.bindFormat': { zh: '写入格式', en: 'Byte format' },
+  'flt.e.bindHint': { zh: '从该列起写入变量渲染出的字节；数值 / 浮点变量必须选格式。', en: 'Writes the variable bytes from this column; numeric variables need a byte format.' },
+  'flt.e.replaceNoExtractor': { zh: '还没有取值器，请先到侧栏的「取值器」页添加', en: 'No extractors yet. Add one on the Extractor page first.' },
+  'flt.e.replaceNoVariable': { zh: '请选择取值器和变量', en: 'Select an extractor and a variable' },
+  'flt.e.replaceNeedFormat': { zh: '数值变量必须选择写入格式', en: 'Numeric variables need a byte format' },
   //文案照 Localizer.cs 的 FilterEditForm.Exclude.Error，不另起译法
   'flt.e.excludeEmpty': { zh: '空值无法设置排除', en: 'Cannot set Exclude for Empty' },
   //剪贴板四项：文案与提示语照 Localizer.cs（Copy / Cut / Paste / Delete 及各自的 .Success）
