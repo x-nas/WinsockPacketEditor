@@ -1,30 +1,30 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { call } from '../../bridge'
-import { lang } from '../../i18n'
+import { lang, t, type Key } from '../../i18n'
 import { mcpTools as tools, type McpTool } from '../../mcpTools'
 import SettingsModal from './SettingsModal.vue'
 
 // 清单从 MCP Server 的注册特性生成（见 src/mcpTools.ts，启动页的计数用的是同一份）。
 
-interface ToolGroup { title: string; tools: McpTool[] }
+interface ToolGroup { title: Key; tools: McpTool[] }
 
 // Keep the human-facing list in the same scopes an operator uses in WPE. A
 // cross-scope "add to …" operation belongs to its destination: adding a
 // captured packet to a send task is a Send tool, while adding it to a warehouse
 // is a Warehouse tool. The predicates are otherwise mutually exclusive.
-const toolScopes: Array<{ title: string; matches: (name: string) => boolean }> = [
-  { title: '代理', matches: (name) => /^wpe_(?:proxy_(?:auth|http|max|socks5|bind|external|only|settings|config|runtime|start|stop)|external_proxy|firewall|connections?(?:_|$)|executors_)/.test(name) },
-  { title: '注入', matches: (name) => /^wpe_(?:inject|driver|process_proxy)/.test(name) },
-  { title: '封包', matches: (name) => /^wpe_(?:capture(?!_add_to_(?:send|warehouse)$)|proxy_capture(?!_add_to_(?:send|warehouse)$)|packet(?!_(?:edit_(?:send|add_to_send)$|extractors?(?:_|$)))|bytes|import$|export$)/.test(name) },
-  { title: '代理账号', matches: (name) => /^wpe_accounts?(?:_|$)/.test(name) },
-  { title: '滤镜', matches: (name) => /^wpe_filters?(?:_|$)/.test(name) },
-  { title: '发送', matches: (name) => /^wpe_(?:sends?(?:_|$)|send_collection|packet_edit_(?:send|add_to_send)|(?:capture|proxy_capture)_add_to_send)/.test(name) },
-  { title: '机器人', matches: (name) => /^wpe_robots?(?:_|$)/.test(name) },
-  { title: '仓库', matches: (name) => /^wpe_(?:warehouses?(?:_|$)|auto_stores|(?:capture|proxy_capture)_add_to_warehouse)/.test(name) },
-  { title: '解码器', matches: (name) => /^wpe_decoders?(?:_|$)/.test(name) },
-  { title: '取值器', matches: (name) => /^wpe_packet_extractors?(?:_|$)/.test(name) },
-  { title: '设置', matches: (name) => /^wpe_(?:remote_management|setting|map_local|map_remote|wpc_server|start_mode)/.test(name) },
+const toolScopes: Array<{ title: Key; matches: (name: string) => boolean }> = [
+  { title: 'mcp.scope.proxy', matches: (name) => /^wpe_(?:proxy_(?:auth|http|max|socks5|bind|external|only|settings|config|runtime|start|stop)|external_proxy|firewall|connections?(?:_|$)|executors_)/.test(name) },
+  { title: 'mcp.scope.inject', matches: (name) => /^wpe_(?:inject|driver|process_proxy)/.test(name) },
+  { title: 'mcp.scope.packet', matches: (name) => /^wpe_(?:capture(?!_add_to_(?:send|warehouse)$)|proxy_capture(?!_add_to_(?:send|warehouse)$)|packet(?!_(?:edit_(?:send|add_to_send)$|extractors?(?:_|$)))|bytes|import$|export$)/.test(name) },
+  { title: 'mcp.scope.account', matches: (name) => /^wpe_accounts?(?:_|$)/.test(name) },
+  { title: 'mcp.scope.filter', matches: (name) => /^wpe_filters?(?:_|$)/.test(name) },
+  { title: 'mcp.scope.send', matches: (name) => /^wpe_(?:sends?(?:_|$)|send_collection|packet_edit_(?:send|add_to_send)|(?:capture|proxy_capture)_add_to_send)/.test(name) },
+  { title: 'mcp.scope.robot', matches: (name) => /^wpe_robots?(?:_|$)/.test(name) },
+  { title: 'mcp.scope.warehouse', matches: (name) => /^wpe_(?:warehouses?(?:_|$)|auto_stores|(?:capture|proxy_capture)_add_to_warehouse)/.test(name) },
+  { title: 'mcp.scope.decoder', matches: (name) => /^wpe_decoders?(?:_|$)/.test(name) },
+  { title: 'mcp.scope.extractor', matches: (name) => /^wpe_packet_extractors?(?:_|$)/.test(name) },
+  { title: 'mcp.scope.settings', matches: (name) => /^wpe_(?:remote_management|setting|map_local|map_remote|wpc_server|start_mode)/.test(name) },
 ]
 
 const toolGroups: ToolGroup[] = [
@@ -32,7 +32,7 @@ const toolGroups: ToolGroup[] = [
     title: scope.title,
     tools: tools.filter((tool) => scope.matches(tool.name) && !toolScopes.slice(0, index).some((earlier) => earlier.matches(tool.name))),
   })),
-  { title: '其它', tools: tools.filter((tool) => !toolScopes.some((scope) => scope.matches(tool.name))) },
+  { title: 'mcp.scope.other' as Key, tools: tools.filter((tool) => !toolScopes.some((scope) => scope.matches(tool.name))) },
 ].filter((group) => group.tools.length > 0)
 
 // MCP 工具很多；每次打开设置均从紧凑目录开始，由操作者按需展开。
@@ -129,35 +129,35 @@ async function save(): Promise<void> {
 </script>
 
 <template>
-  <SettingsModal :open="props.open" title="MCP 设置" subtitle="本机 AI 自动化权限" :busy="busy" :error="error" @update:open="emit('update:open', $event)" @save="save">
+  <SettingsModal :open="props.open" :title="t('start.mcp')" :subtitle="t('mcp.modalSubtitle')" :busy="busy" :error="error" @update:open="emit('update:open', $event)" @save="save">
     <div class="setf mcp-set">
     <div class="swb">
       <div class="row">
         <label class="chk" :class="{ on: enabled }">
           <i />
           <input v-model="enabled" type="checkbox" hidden />
-          <span>启用 MCP 服务</span>
+          <span>{{ t('mcp.enabled') }}</span>
         </label>
       </div>
-      <p class="hint">关闭后，本机 AI 无法发现或调用 WPE 的 MCP 服务。</p>
+      <p class="hint">{{ t('mcp.enabledHint') }}</p>
     </div>
     <div class="swb">
       <div class="row">
         <label class="chk" :class="{ on: requiresConfirmation }">
           <i />
           <input v-model="requiresConfirmation" type="checkbox" hidden />
-          <span>MCP 操作需要人工确认</span>
+          <span>{{ t('mcp.confirm') }}</span>
         </label>
       </div>
-      <p class="hint">{{ requiresConfirmation ? '所有风险等级的 MCP 操作都需要 WPE 本地确认。' : '关闭确认后，MCP 操作将直接执行，请确保 AI 客户端和本机环境可信。' }}</p>
+      <p class="hint">{{ requiresConfirmation ? t('mcp.confirmOnHint') : t('mcp.confirmOffHint') }}</p>
     </div>
     <section class="sec tools-sec">
-      <div class="grp"><span>MCP 工具列表</span><b>{{ tools.length }}</b></div>
-      <p class="hint">以下为当前 MCP Server 实际注册的全部工具。{{ requiresConfirmation ? '写入工具会请求 WPE 本地确认。' : '已关闭人工确认，写入工具将自动确认并直接执行。' }}</p>
+      <div class="grp"><span>{{ t('mcp.tools') }}</span><b>{{ tools.length }}</b></div>
+      <p class="hint">{{ requiresConfirmation ? t('mcp.toolsHintOn') : t('mcp.toolsHintOff') }}</p>
       <div class="mcp-tools">
         <section v-for="group in toolGroups" :key="group.title" class="mcp-scope" :class="{ expanded: expandedGroups.has(group.title) }">
           <button class="mcp-scope-head" type="button" :aria-expanded="expandedGroups.has(group.title)" @click="toggleGroup(group.title)">
-            <span class="chev" aria-hidden="true">›</span><span>{{ group.title }}</span><b>{{ group.tools.length }}</b>
+            <span class="chev" aria-hidden="true">›</span><span>{{ t(group.title) }}</span><b>{{ group.tools.length }}</b>
           </button>
           <div v-if="expandedGroups.has(group.title)" class="mcp-scope-body">
             <article v-for="tool in group.tools" :key="tool.name" class="mcp-tool">

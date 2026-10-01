@@ -29,15 +29,7 @@ const mcpOpen = ref(false)
 const instanceOpen = ref(false)
 
 function mcpAvailability(): string {
-  switch (lang.value) {
-    case 'zh': return `${mcpToolCount} 个工具可用`
-    case 'tw': return `${mcpToolCount} 個工具可用`
-    case 'ja': return `${mcpToolCount} 個のツールを利用可能`
-    case 'ko': return `${mcpToolCount}개 도구 사용 가능`
-    case 'vi': return `${mcpToolCount} công cụ khả dụng`
-    case 'ru': return `Доступно инструментов: ${mcpToolCount}`
-    default: return `${mcpToolCount} tools available`
-  }
+  return t('start.mcp.available').replace('{count}', String(mcpToolCount))
 }
 
 interface SystemCheck {
@@ -271,8 +263,8 @@ onMounted(async () => {
           <path d="M12 7v5l3 2" />
           <path d="M16 4h5v5" />
         </svg>
-        <span class="nm">MCP 设置</span>
-        <span class="ds">本机 AI 自动化权限</span>
+        <span class="nm">{{ t('start.mcp') }}</span>
+        <span class="ds">{{ t('start.mcp.desc') }}</span>
         <span class="cur">{{ mcpAvailability() }}</span>
         <span class="ar">→</span>
       </button>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /*
-  软件设置 —— 界面语言 + 深浅色。
+  软件设置 —— 界面语言、外观与显示。
 
   【为什么单独一屏，而不是并进「系统设置」】那 12 个设置弹窗管的都是<b>抓包行为</b>
   （端口 / 拦截 / 过滤 / 防火墙…），只在进了模式之后才有意义，而且各自只属于一种模式。
@@ -17,7 +17,7 @@
   早先是点一下立刻生效并落库（与「系统代理」那个滑动开关同一条口径），
   <b>2026-09-07 按要求改成了保存制</b>，与其余 12 个设置弹窗一致。
 
-  所以下面两个 draft* 是<b>草稿</b>，不是真值：点卡片 / 选下拉只改草稿，
+  所以下面各个 draft* 是<b>草稿</b>，不是真值：点卡片 / 选下拉只改草稿，
   onSave 才把改动推给 setLang / setTheme（它们自己会落库并同步到 C#）。
   取消、按 Esc、点遮罩关掉 —— 都不应用，草稿在下次打开时按当前真值重置。
 
@@ -286,19 +286,12 @@ async function onSave(): Promise<void> {
           <code>{{ draftMainTextColor.toUpperCase() }}</code>
           <button class="mini" type="button" @click="resetDisplayDraft">{{ t('set.app.displayReset') }}</button>
         </div>
-      </div>
-      <p class="tip">{{ t('set.app.displayHint') }}</p>
-
-      <div class="grp">{{ t('set.app.ambience') }}</div>
-
-      <!--
-        游走亮带的开关。放在主题下面单成一组 —— 它不是「深还是浅」的一部分，
-        是「这套皮肤的动效要不要」，与主题正交（浅色下同样有这条带子）。
-      -->
-      <div class="one">
-        <button class="chk" :class="{ on: draftScan }" @click="draftScan = !draftScan">
-          <i />{{ t('set.app.scan') }}
-        </button>
+        <span class="display-label">{{ t('set.app.scan') }}</span>
+        <div class="display-ctl">
+          <button class="chk" :class="{ on: draftScan }" @click="draftScan = !draftScan">
+            <i />{{ t('set.app.scan') }}
+          </button>
+        </div>
       </div>
       <p class="tip">{{ t('set.app.scanHint') }}</p>
 

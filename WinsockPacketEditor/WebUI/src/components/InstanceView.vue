@@ -14,7 +14,7 @@
 */
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { call } from '../bridge'
-import { lang, normalize } from '../i18n'
+import { lang, normalize, t } from '../i18n'
 import { kernelRunning, socks5Addr, tunReady } from '../stores/runtime'
 import SettingsModal from './proxy/SettingsModal.vue'
 
@@ -134,31 +134,31 @@ function sizeText(n: number): string {
 </script>
 
 <template>
-  <SettingsModal :open="props.open" title="多开设置" subtitle="本次运行使用独立数据库" :busy="saving" @update:open="emit('update:open', $event)" @save="save">
+  <SettingsModal :open="props.open" :title="t('start.inst.zh')" :subtitle="t('inst.modalSubtitle')" :busy="saving" @update:open="emit('update:open', $event)" @save="save">
     <div class="instance-set">
-      <p class="instance-lead">本次运行有效：数据库目录不会永久保存，重启后仍使用默认目录。</p>
+      <p class="instance-lead">{{ t('inst.lead') }}</p>
       <section class="instance-sec">
-        <div class="instance-sec-title"><b>01</b><strong>数据库目录</strong><span>选择本次运行使用的数据库目录</span></div>
+        <div class="instance-sec-title"><b>01</b><strong>{{ t('inst.sectionPath') }}</strong><span>{{ t('inst.sectionPathDesc') }}</span></div>
         <div class="instance-row">
-          <label>目录路径</label>
+          <label>{{ t('inst.pathLabel') }}</label>
           <div class="path-line">
-            <input v-model="path" class="inp" spellcheck="false" :class="{ bad: probe && !probe.valid }" placeholder="例如 D:\\WPE64DB\\instance-02">
-            <button class="path-btn" :disabled="picking" @click="pick">浏览</button>
-            <button class="path-btn reset" :disabled="picking" @click="useDefault">默认目录</button>
+            <input v-model="path" class="inp" spellcheck="false" :class="{ bad: probe && !probe.valid }" :placeholder="t('inst.pathPlaceholder')">
+            <button class="path-btn" :disabled="picking" @click="pick">{{ t('inst.browse') }}</button>
+            <button class="path-btn reset" :disabled="picking" @click="useDefault">{{ t('inst.defaultPath') }}</button>
           </div>
         </div>
-        <p v-if="probe && !probe.valid" class="error-text">目录路径无效，请选择一个有效的本地目录。</p>
-        <p v-else class="instance-hint">目录不存在时会自动创建；选择已有目录会沿用其中的数据库文件。</p>
+        <p v-if="probe && !probe.valid" class="error-text">{{ t('inst.badPath') }}</p>
+        <p v-else class="instance-hint">{{ t('inst.pathHint') }}</p>
       </section>
       <section class="instance-sec">
-        <div class="instance-sec-title"><b>02</b><strong>数据库状态</strong><span>当前路径和数据库文件信息</span></div>
+        <div class="instance-sec-title"><b>02</b><strong>{{ t('inst.sectionStatus') }}</strong><span>{{ t('inst.sectionStatusDesc') }}</span></div>
         <div class="instance-info">
-          <div><span>数据库文件</span><b>{{ dbName || '—' }}</b></div>
-          <div><span>目录状态</span><b :class="probe?.dirExists ? 'good' : 'warn'">{{ probe ? (probe.dirExists ? '已存在' : '将自动创建') : '检查中…' }}</b></div>
-          <div><span>数据库状态</span><b :class="probe?.fileExists ? 'good' : 'warn'">{{ probe ? (probe.fileExists ? '沿用已有数据库' : '将新建数据库') : '检查中…' }}</b></div>
-          <div><span>当前数据库</span><b>{{ probe?.current || '—' }}</b></div>
+          <div><span>{{ t('inst.dbFile') }}</span><b>{{ dbName || '—' }}</b></div>
+          <div><span>{{ t('inst.dirStatus') }}</span><b :class="probe?.dirExists ? 'good' : 'warn'">{{ probe ? (probe.dirExists ? t('inst.dirOk') : t('inst.dirNew')) : t('inst.checking') }}</b></div>
+          <div><span>{{ t('inst.dbStatus') }}</span><b :class="probe?.fileExists ? 'good' : 'warn'">{{ probe ? (probe.fileExists ? t('inst.dbExisting') : t('inst.dbCreating')) : t('inst.checking') }}</b></div>
+          <div><span>{{ t('inst.current') }}</span><b>{{ probe?.current || '—' }}</b></div>
         </div>
-        <p v-if="probe" class="instance-hint">目标大小：{{ sizeText(probe.size) }}<span v-if="probe.modified">　最后修改：{{ probe.modified }}</span></p>
+        <p v-if="probe" class="instance-hint">{{ t('inst.targetSize').replace('{size}', sizeText(probe.size)) }}<span v-if="probe.modified">　{{ t('inst.lastModified').replace('{time}', probe.modified) }}</span></p>
       </section>
     </div>
   </SettingsModal>

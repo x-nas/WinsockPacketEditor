@@ -67,7 +67,7 @@
 </td>
 <td width="50%" valign="top">
 <img src="docs/screenshots/wpe-appset.png" alt="软件设置"><br>
-<sub><b>七种语言 + 深 / 浅主题 + 显示偏好</b>：可随时切换或跟随系统；全局字号与灰阶文字颜色可调整、恢复默认，并随设置备份保存。</sub>
+<sub><b>七种语言 + 深 / 浅主题 + 显示偏好</b>：可随时切换或跟随系统；全局字号、主文字颜色和扫描线可调整，扫描线的说明集中在「显示」分组。</sub>
 </td>
 </tr>
 </table>
@@ -148,7 +148,7 @@ A **network packet capture-and-edit tool** for Windows. It lists every packet a 
 </td>
 <td width="50%" valign="top">
 <img src="docs/screenshots/wpe-appset-en.png" alt="Preferences"><br>
-<sub><b>Seven languages + dark / light themes + display preferences</b> — switch any time or follow the system; adjust global text size and gray-tone text color, restore the defaults, and include them in settings backups.</sub>
+<sub><b>Seven languages + dark / light themes + display preferences</b> — switch any time or follow the system; adjust global text size, main text color, and scan line, with the scan-line description grouped under Display.</sub>
 </td>
 </tr>
 </table>
