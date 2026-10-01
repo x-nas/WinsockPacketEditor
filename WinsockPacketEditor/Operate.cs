@@ -11274,23 +11274,21 @@ namespace WinsockPacketEditor
                                     break;
 
                                 /*
-                                    ⚠️ <b>WebSocket 并进 HTTP 这两支</b>（2026-09-07）。
+                                    HTTP 这两支现在只有<b>明文 HTTP</b>会走到 —— 目标端口 80 / 8080
+                                    且 HttpSniffer 成功组出完整报文的那些条目。
 
-                                    在此之前这个 switch 只有 TCP / UDP / HTTP / HTTPS 六个 case、
-                                    <b>也没有 default</b>，于是 WebSocket 请求 / 响应（类型 21 / 22，
-                                    WebSocket 请求 / 响应（类型 21 / 22）—— SunnyNet 的中间人移除后已无产出者，保留这两支只为统计口径完整）：
-                                      · 拿得到 ProxyInfo.Id（那是构造函数里发的），也进得了列表；
-                                      · 但<b>六个计数器一个都不进</b> —— 界面上「代理总数」是那六个相加，
-                                        于是最大序号会一直跑在总数前面（实测抓 28,979 个包时差 97 个）；
-                                      · <b>连 Total_Request / Total_Response 与实时速率也漏掉了</b>，
-                                        所以 BYTES 与 SPEED 同样少算 WebSocket 的流量。
+                                    ⚠️ <b>HTTPS_Req / HTTPS_Resp（19 / 20）当前没有任何产出者。</b>
+                                    别想着「判到 443 就 +1」：TLS 是密文，拿不到请求行、也拿不到报文边界，
+                                    按 CONNECT +1 数出来的是<b>连接数</b>而不是请求 / 响应条数 ——
+                                    两种量纲混进同一组计数，界面上的「代理总数」（六格相加）就没有意义了。
+                                    要真按请求 / 响应计，只能走 HTTPS 映射那套 MITM 解密。
 
-                                    并进 HTTP 而不是另开一对计数器，是<b>按要求</b>选的：
-                                    总数立刻对得上，代价是这两格的含义变宽 ——
-                                    界面上的文案已经跟着改成「HTTP / WS 请求·响应」。
+                                    ⚠️ <b>WebSocket_Req / WebSocket_Resp（21 / 22）同样已无产出者</b>：
+                                    SunnyNet 的中间人随 2.4 移除（2026-09-07 把它们并进这两支，
+                                    是为了让「代理总数」对得上；现在只剩口径完整的意义）。
 
-                                    ⚠️ <b>WinForms 那半边的标签还写着「HTTP」</b>（两条线并行，
-                                    Forms/ 下的东西这一轮不动），数字会跟着变、字没跟着变。
+                                    两条都保留 case，是为了升级前存档里的旧条目还能计入统计。
+                                    界面文案是「HTTP 请求 / 响应」—— 别再写成「HTTP / WS」或「HTTP(S)」。
                                 */
                                 case PacketConfig.Packet.PacketType.HTTP_Req:
                                 case PacketConfig.Packet.PacketType.HTTPS_Req:
