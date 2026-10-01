@@ -83,11 +83,11 @@ async function exportBackup(): Promise<void> {
 async function importBackup(): Promise<void> {
   busy.value = true
   try {
-    const r = await call<{ language: string; isDark: boolean; themeMode: string; scanLine: boolean }>('importBackup')
+    const r = await call<{ language: string; isDark: boolean; themeMode: string; scanLine: boolean; fontScale?: number; mainTextColor?: string | null }>('importBackup')
     //直接写 lang，不走 setLang —— 后者会反过来再写一次 C#（多开设置那一屏同一个理由）
     if (r?.language) lang.value = normalize(r.language)
     //主题同理：用 initTheme（只应用、不回写），备份里带的那份已经在 C# 侧落库了
-    if (r?.themeMode) initTheme(r.themeMode, r.isDark, r.scanLine)
+    if (r?.themeMode) initTheme(r.themeMode, r.isDark, r.scanLine, r.fontScale, r.mainTextColor)
     //备份里带着快捷键与它作用的列表，快捷面板底部那一条要跟上
     void refreshHotkey()
     //解码器不在推送流里，备份导入后要自己重拉一次（列表页与工作台读同一份 decRows）

@@ -28,7 +28,7 @@
 import { computed, ref, watch } from 'vue'
 import { call } from '../bridge'
 import { LANGS, defOf, lang, setLang, t, type Lang } from '../i18n'
-import { scanLine, setScan, setTheme, systemIsDark, theme, type Theme } from '../stores/theme'
+import { defaultMainTextColor, fontScale, mainTextColor, scanLine, setDisplayPreferences, setScan, setTheme, systemIsDark, theme, type Theme } from '../stores/theme'
 import { pushToast } from '../stores/toast'
 import CyberSelect from './CyberSelect.vue'
 import SettingsModal from './proxy/SettingsModal.vue'
@@ -66,12 +66,18 @@ const THEMES: ThemeCard[] = [
 const draftLang = ref<Lang>(lang.value)
 const draftTheme = ref<Theme>(theme.value)
 const draftScan = ref(scanLine.value)
+const draftFontScale = ref(fontScale.value)
+const draftMainTextColor = ref(defaultMainTextColor())
+const draftCustomTextColor = ref(mainTextColor.value !== null)
 
 watch(() => props.open, (on) => {
   if (!on) return
   draftLang.value = lang.value
   draftTheme.value = theme.value
   draftScan.value = scanLine.value
+  draftFontScale.value = fontScale.value
+  draftMainTextColor.value = mainTextColor.value || defaultMainTextColor()
+  draftCustomTextColor.value = mainTextColor.value !== null
   void loadAssoc()
 })
 
@@ -167,6 +173,12 @@ function pickTheme(k: Theme): void {
   draftTheme.value = k
 }
 
+function resetDisplayDraft(): void {
+  draftFontScale.value = 100
+  draftMainTextColor.value = defaultMainTextColor()
+  draftCustomTextColor.value = false
+}
+
 /**
  * 保存。
  *
@@ -181,6 +193,7 @@ async function onSave(): Promise<void> {
     if (draftLang.value !== lang.value) { await setLang(draftLang.value) }
     if (draftTheme.value !== theme.value) { await setTheme(draftTheme.value) }
     if (draftScan.value !== scanLine.value) { await setScan(draftScan.value) }
+    await setDisplayPreferences(draftFontScale.value, draftCustomTextColor.value ? draftMainTextColor.value : null)
 
     emit('update:open', false)
   } finally {
@@ -254,6 +267,20 @@ async function onSave(): Promise<void> {
           {{ t('set.app.now') }} · {{ t(systemIsDark ? 'set.app.dark' : 'set.app.light') }}
         </b>
       </p>
+
+      <div class="grp">{{ t('set.app.display') }}</div>
+      <div class="display-row">
+        <label class="display-label" for="font-scale">{{ t('set.app.fontScale') }}</label>
+        <input id="font-scale" class="scale" v-model.number="draftFontScale" type="range" min="90" max="150" step="5">
+        <output class="scale-value">{{ draftFontScale }}%</output>
+      </div>
+      <div class="display-row">
+        <label class="display-label" for="main-text-color">{{ t('set.app.textColor') }}</label>
+        <input id="main-text-color" class="color" v-model="draftMainTextColor" type="color" @input="draftCustomTextColor = true">
+        <code>{{ draftMainTextColor.toUpperCase() }}</code>
+        <button class="mini" type="button" @click="resetDisplayDraft">{{ t('set.app.displayReset') }}</button>
+      </div>
+      <p class="tip">{{ t('set.app.displayHint') }}</p>
 
       <div class="grp">{{ t('set.app.ambience') }}</div>
 
@@ -372,4 +399,11 @@ async function onSave(): Promise<void> {
 
 /* 说明是整句，截断了就没意义 —— 与列表设置那几处同一条口径 */
 .tip { margin: 0; padding: 0 20px 10px; font-size: var(--fs-small); line-height: 1.6; color: var(--dim2); }
+
+.display-row { display: flex; align-items: center; gap: 10px; min-height: 32px; padding: 2px 20px; }
+.display-label { flex: 0 0 74px; min-width: calc(5em + 12px); color: var(--muted); font-size: var(--fs-body); white-space: nowrap; }
+.scale { width: 180px; accent-color: var(--cyan); }
+.scale-value { width: 42px; color: var(--cyan); font-family: var(--mono); font-size: var(--fs-body); }
+.color { width: 28px; height: 24px; padding: 1px; border: 1px solid var(--border2); background: var(--panel); cursor: pointer; }
+.display-row code { color: var(--soft); font-family: var(--mono); font-size: var(--fs-small); }
 </style>

@@ -38,11 +38,12 @@ import { INJECT_SETTINGS, type SettingKey } from '../proxy/settings'
 import ContextMenu from '../ContextMenu.vue'
 import type { MenuItem } from '../menu'
 
-const props = defineProps<{ busy: boolean }>()
+const props = defineProps<{ busy: boolean; focusList: boolean }>()
 
 const emit = defineEmits<{
   (e: 'toggleHook'): void
   (e: 'clear'): void
+  (e: 'toggleFocusList'): void
   (e: 'openSetting', key: SettingKey): void
 }>()
 
@@ -125,6 +126,12 @@ function openMenu(e: MouseEvent): void {
       <svg v-if="status.hooked" class="ico" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" /></svg>
       <svg v-else class="ico" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z" /></svg>
       {{ status.hooked ? t('inject.stopHook') : t('inject.startHook') }}
+    </button>
+
+    <button class="tb" :class="{ on: props.focusList }" :title="props.focusList ? t('proxy.exitFocusList') : t('proxy.focusList')" @click="emit('toggleFocusList')">
+      <svg v-if="!props.focusList" class="ico" viewBox="0 0 24 24"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" /></svg>
+      <svg v-else class="ico" viewBox="0 0 24 24"><path d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5" /></svg>
+      {{ props.focusList ? t('proxy.exitFocusList') : t('proxy.focusList') }}
     </button>
 
     <button class="tb" @click="emit('clear')">

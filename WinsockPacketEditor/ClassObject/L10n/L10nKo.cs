@@ -299,6 +299,7 @@ namespace WinsockPacketEditor
             d["FilterEditForm.AppointPort.Error"] = "포트 지정이 올바르지 않습니다";
             d["FilterEditForm.AppointLength.Error"] = "길이 지정이 올바르지 않습니다";
             d["FilterEditForm.Change.Error"] = "패킷 교체 설정이 올바르지 않습니다";
+            d["FilterEditForm.Cell.Hex"] = "입력된 각 필터 칸은 두 자리 16진수 바이트여야 합니다";
             d["SendList.SystemSocket.Blocked"] = "전송 「{0}」에 「시스템 소켓 사용」이 켜져 있지만 시스템 소켓이 설정되지 않았습니다 — 패킷 목록에서 마우스 오른쪽 버튼으로 「시스템 소켓 설정」을 먼저 하세요.";
             d["SendExecute.Socket.Missing"] = "보내기 목록 「{0}」에 소켓이 없는 패킷이 있습니다(소켓 번호 0) — 보낼 수 없습니다. 「시스템 소켓 사용」을 켜거나 목록에서 마우스 오른쪽 클릭으로 설정하세요.";
             d["SendList.LoopCount.Fixed"] = "전송 「{0}」의 반복 횟수가 올바르지 않습니다({1}). 1 회로 처리했습니다.";

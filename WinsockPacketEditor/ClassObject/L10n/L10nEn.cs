@@ -299,6 +299,7 @@ namespace WinsockPacketEditor
             d["FilterEditForm.AppointPort.Error"] = "Appoint Port Error";
             d["FilterEditForm.AppointLength.Error"] = "Appoint Length Error";
             d["FilterEditForm.Change.Error"] = "Change Error";
+            d["FilterEditForm.Cell.Hex"] = "Each filled filter cell must contain a two-digit hexadecimal byte";
             d["SendList.SystemSocket.Blocked"] = "Send “{0}” has “Use system socket” checked, but the system socket has not been set — right-click a packet in the packet list and choose “Set system socket” first.";
             d["SendExecute.Socket.Missing"] = "Send list \"{0}\" has packets with no socket (socket 0); they cannot be sent — turn on \"Use system socket\" or set one from the list's right-click menu.";
             d["SendList.LoopCount.Fixed"] = "Loop count of send “{0}” is invalid ({1}); treated as 1.";

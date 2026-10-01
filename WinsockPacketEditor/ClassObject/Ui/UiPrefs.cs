@@ -58,6 +58,12 @@
         /// </summary>
         public bool ScanLine = true;
 
+        /// <summary>WebView2 界面全局字号百分比（90–150，5 为步长）。</summary>
+        public int FontScale = 100;
+
+        /// <summary>用户选择的灰阶文字色；空串表示使用主题原有的多级灰阶。</summary>
+        public string MainTextColor = string.Empty;
+
         public bool IsAnimation;
         public bool IsShadowEnabled;
         public bool IsShowInWindow = true;

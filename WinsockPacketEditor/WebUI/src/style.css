@@ -768,6 +768,17 @@ body.col-resizing * {
 .datapage .list { flex: 1; min-height: 0; border: 0; border-radius: 0; }
 
 /*
+  专注列表：收起统计格和下半部，让工具条与封包表吃掉剩余高度。
+  状态条仍保留，启停、清空、设置和「退出专注列表」始终可用；隐藏只用 display，
+  组件不会卸载，所以已选封包、快速面板页签和十六进制滚动位置都不丢。
+*/
+.datapage.focus-list { overflow: hidden; }
+.datapage.focus-list .stats,
+.datapage.focus-list .lower,
+.datapage.focus-list .lostbar { display: none; }
+.datapage.focus-list .grid { flex: 1 1 0; min-height: 0; }
+
+/*
   行底色图例。工具条上一段，<b>不参与收缩</b>（flex: none）——
   搜索框是 flex: 1，窗口一窄就该由它让位，图例被压扁会让色块变形、字被截断。
 

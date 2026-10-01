@@ -51,6 +51,7 @@ import ActionColor from './ActionColor.vue'
 import type { SettingKey } from './settings'
 
 const props = withDefaults(defineProps<{ visible?: boolean }>(), { visible: true })
+const focusList = ref(false)
 
 const prefs = ref<Prefs | null>(null)
 const stats = ref<Stats | null>(null)
@@ -836,8 +837,8 @@ const cells = computed(() => {
 </script>
 
 <template>
-  <div class="datapage">
-    <RunBar @clear="clearAll" @open-setting="setting = $event" />
+  <div class="datapage" :class="{ 'focus-list': focusList }">
+    <RunBar :focus-list="focusList" @clear="clearAll" @toggle-focus-list="focusList = !focusList" @open-setting="setting = $event" />
 
     <ProxySetting
       :open="setting === 'proxy'"

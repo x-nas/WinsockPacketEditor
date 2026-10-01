@@ -1419,6 +1419,8 @@ namespace WPEHybrid
                     isDark = p.IsDark,
                     themeMode = ThemeMode(),
                     scanLine = p.ScanLine,
+                    fontScale = p.FontScale,
+                    mainTextColor = p.MainTextColor,
                     language = p.Language,
                     systemColor = p.SystemColor.Hex,
                     //滤镜标记色：封包列表按 FilterAction 给行上色，与 WinForms 一致
@@ -1507,9 +1509,26 @@ namespace WPEHybrid
                         UI.Prefs.ScanLine = (bool)args["scan"];
                     }
 
+                    if (args["fontScale"] != null)
+                    {
+                        int scale;
+                        if (int.TryParse(args["fontScale"].ToString(), out scale))
+                        {
+                            UI.Prefs.FontScale = Math.Min(150, Math.Max(90, ((scale + 2) / 5) * 5));
+                        }
+                    }
+
+                    if (args["mainTextColor"] != null)
+                    {
+                        string color = ((string)args["mainTextColor"] ?? string.Empty).Trim();
+                        UI.Prefs.MainTextColor = color.Length == 0 || System.Text.RegularExpressions.Regex.IsMatch(color, "^#[0-9A-Fa-f]{6}$")
+                            ? color
+                            : string.Empty;
+                    }
+
                     Operate.SystemConfig.SaveSystemConfig_ToDB();
 
-                    return new { ok = true, isDark = UI.Prefs.IsDark, mode = ThemeMode(), scan = UI.Prefs.ScanLine };
+                    return new { ok = true, isDark = UI.Prefs.IsDark, mode = ThemeMode(), scan = UI.Prefs.ScanLine, fontScale = UI.Prefs.FontScale, mainTextColor = UI.Prefs.MainTextColor };
                 }
                 catch (Exception ex)
                 {
@@ -4825,6 +4844,8 @@ namespace WPEHybrid
                     isDark = UI.Prefs.IsDark,
                     themeMode = ThemeMode(),
                     scanLine = UI.Prefs.ScanLine,
+                    fontScale = UI.Prefs.FontScale,
+                    mainTextColor = UI.Prefs.MainTextColor,
                 };
             });
 
@@ -5661,6 +5682,8 @@ namespace WPEHybrid
                     themeMode = ThemeMode(),
                     isDark = UI.Prefs.IsDark,
                     scanLine = UI.Prefs.ScanLine,
+                    fontScale = UI.Prefs.FontScale,
+                    mainTextColor = UI.Prefs.MainTextColor,
                     lastInjection = Operate.SystemConfig.LastInjection ?? string.Empty,
                     lastInject = this.LastInjectInfo(),
                     socks5Port = Operate.ProxyConfig.Proxy.SOCKS5_Port,

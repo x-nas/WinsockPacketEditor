@@ -3376,6 +3376,8 @@ namespace WinsockPacketEditor
                         new XElement("LogList_AutoClear", LogConfig.List.AutoClear),
                         new XElement("LogList_AutoClear_Value", LogConfig.List.AutoClear_Value),
                         new XElement("ScanLine", UI.Prefs.ScanLine),
+                        new XElement("FontScale", UI.Prefs.FontScale),
+                        new XElement("MainTextColor", UI.Prefs.MainTextColor ?? string.Empty),
                         new XElement("StoresLimit", WareHouseConfig.WareHouse.StoresLimit),
                         new XElement("StoresLimit_Value", WareHouseConfig.WareHouse.StoresLimit_Value),
                         new XElement("CheckNotShow", SystemConfig.CheckNotShow),
@@ -3500,6 +3502,21 @@ namespace WinsockPacketEditor
                             UI.Prefs.ScanLine = Convert.ToBoolean(dtSystemConfig.Rows[0]["ScanLine"]);
                         }
 
+                        UI.Prefs.FontScale = 100;
+                        UI.Prefs.MainTextColor = string.Empty;
+                        if (dtSystemConfig.Columns.Contains("FontScale"))
+                        {
+                            int scale;
+                            if (int.TryParse(dtSystemConfig.Rows[0]["FontScale"].ToString(), out scale))
+                            {
+                                UI.Prefs.FontScale = Math.Min(150, Math.Max(90, ((scale + 2) / 5) * 5));
+                            }
+                        }
+                        if (dtSystemConfig.Columns.Contains("MainTextColor"))
+                        {
+                            UI.Prefs.MainTextColor = dtSystemConfig.Rows[0]["MainTextColor"].ToString();
+                        }
+
                         //新列：老库经 EnsureColumn 补过，但备份导入那条路可能塞进来一张没有这两列的表
                         if (dtSystemConfig.Columns.Contains("StoresLimit"))
                         {
@@ -3582,6 +3599,8 @@ namespace WinsockPacketEditor
                         SystemConfig.McpRequiresConfirmation = false;
 
                         UI.Prefs.ScanLine = true;
+                        UI.Prefs.FontScale = 100;
+                        UI.Prefs.MainTextColor = string.Empty;
 
                         //仓库上限：与字段初值逐个对上（见 UiPrefs 那条同样的告诫）
                         WareHouseConfig.WareHouse.StoresLimit = true;
@@ -3751,6 +3770,21 @@ namespace WinsockPacketEditor
                     if (ScanLine != null)
                     {
                         UI.Prefs.ScanLine = Convert.ToBoolean(ScanLine.Value);
+                    }
+
+                    XElement FontScale = xeSystemConfig.Element("FontScale");
+                    if (FontScale != null)
+                    {
+                        int scale;
+                        if (int.TryParse(FontScale.Value, out scale))
+                        {
+                            UI.Prefs.FontScale = Math.Min(150, Math.Max(90, ((scale + 2) / 5) * 5));
+                        }
+                    }
+                    XElement MainTextColor = xeSystemConfig.Element("MainTextColor");
+                    if (MainTextColor != null)
+                    {
+                        UI.Prefs.MainTextColor = MainTextColor.Value;
                     }
 
                     XElement StoresLimit = xeSystemConfig.Element("StoresLimit");
@@ -22738,6 +22772,11 @@ namespace WinsockPacketEditor
 
                                 if (s.Length > 0)
                                 {
+                                    if (!IsFilterCellByte(s, Row.Mode == (int)FilterConfig.Filter.FilterMode.Advanced))
+                                    {
+                                        return UI.T("FilterEditForm.Cell.Hex", "查找格必须填写两位十六进制字节");
+                                    }
+
                                     search.Append(c.Index).Append("|").Append(s).Append(",");
 
                                     //排除是查找位的标记，没有查找值就无从排除
@@ -22770,6 +22809,11 @@ namespace WinsockPacketEditor
 
                                 if (m.Length > 0)
                                 {
+                                    if (!IsFilterCellByte(m, false))
+                                    {
+                                        return UI.T("FilterEditForm.Cell.Hex", "修改格必须填写两位十六进制字节");
+                                    }
+
                                     modify.Append(c.Index).Append("|").Append(m).Append(",");
                                 }
 
@@ -22882,6 +22926,20 @@ namespace WinsockPacketEditor
                         Operate.DoLog(nameof(SaveFilterEdit), ex);
                         return ex.Message;
                     }
+                }
+
+                /// <summary>滤镜表每格恰好一个字节；高级查找可用 * 通配半字节。</summary>
+                private static bool IsFilterCellByte(string value, bool allowWildcard)
+                {
+                    if (value == null || value.Length != 2) { return false; }
+
+                    for (int i = 0; i < value.Length; i++)
+                    {
+                        if (allowWildcard && value[i] == '*') { continue; }
+                        if (!Uri.IsHexDigit(value[i])) { return false; }
+                    }
+
+                    return true;
                 }
 
                 /// <summary>勾了「指定」就必须有值。返回 null 表示都合规。</summary>
@@ -32535,6 +32593,8 @@ namespace WinsockPacketEditor
                         sql += "LogList_AutoClear BOOLEAN DEFAULT 1,";//日志列表自动清理
                         sql += "LogList_AutoClear_Value INTEGER DEFAULT 5000,";//日志列表自动清理数值
                         sql += "ScanLine BOOLEAN DEFAULT 1,";//外壳氛围层的游走亮带
+                        sql += "FontScale INTEGER DEFAULT 100,";//WebView2 全局字号百分比
+                        sql += "MainTextColor TEXT,";//WebView2 灰阶文字颜色；空 = 主题默认
                         sql += "StoresLimit BOOLEAN DEFAULT 1,";//仓库上限
                         sql += "StoresLimit_Value INTEGER DEFAULT 5000,";//仓库上限条数
                         sql += "CheckNotShow BOOLEAN DEFAULT 1,";//过滤设置不显示
@@ -32591,6 +32651,8 @@ namespace WinsockPacketEditor
                             */
                             EnsureColumn(conn, "SystemConfig", "ThemeFollowSystem", "BOOLEAN DEFAULT 0");
                             EnsureColumn(conn, "SystemConfig", "ScanLine", "BOOLEAN DEFAULT 1");
+                            EnsureColumn(conn, "SystemConfig", "FontScale", "INTEGER DEFAULT 100");
+                            EnsureColumn(conn, "SystemConfig", "MainTextColor", "TEXT");
                             EnsureColumn(conn, "SystemConfig", "StoresLimit", "BOOLEAN DEFAULT 1");
                             EnsureColumn(conn, "SystemConfig", "StoresLimit_Value", "INTEGER DEFAULT 5000");
                             EnsureColumn(conn, "SystemConfig", "LastInjectMethod", "INTEGER DEFAULT 0");
@@ -32783,6 +32845,8 @@ namespace WinsockPacketEditor
                         sql += "LogList_AutoClear,";
                         sql += "LogList_AutoClear_Value,";
                         sql += "ScanLine,";
+                        sql += "FontScale,";
+                        sql += "MainTextColor,";
                         sql += "StoresLimit,";
                         sql += "StoresLimit_Value,";
                         sql += "CheckNotShow,";
@@ -32851,6 +32915,8 @@ namespace WinsockPacketEditor
                         sql += "@LogList_AutoClear,";
                         sql += "@LogList_AutoClear_Value,";
                         sql += "@ScanLine,";
+                        sql += "@FontScale,";
+                        sql += "@MainTextColor,";
                         sql += "@StoresLimit,";
                         sql += "@StoresLimit_Value,";
                         sql += "@CheckNotShow,";
@@ -32929,6 +32995,8 @@ namespace WinsockPacketEditor
                             AddParam(cmd, "@LogList_AutoClear", LogConfig.List.AutoClear);
                             AddParam(cmd, "@LogList_AutoClear_Value", LogConfig.List.AutoClear_Value);
                             AddParam(cmd, "@ScanLine", UI.Prefs.ScanLine);
+                            AddParam(cmd, "@FontScale", UI.Prefs.FontScale);
+                            AddParam(cmd, "@MainTextColor", UI.Prefs.MainTextColor);
                             AddParam(cmd, "@StoresLimit", WareHouseConfig.WareHouse.StoresLimit);
                             AddParam(cmd, "@StoresLimit_Value", WareHouseConfig.WareHouse.StoresLimit_Value);
                             AddParam(cmd, "@CheckNotShow", SystemConfig.CheckNotShow);

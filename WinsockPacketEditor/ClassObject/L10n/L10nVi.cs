@@ -299,6 +299,7 @@ namespace WinsockPacketEditor
             d["FilterEditForm.AppointPort.Error"] = "Cổng chỉ định không hợp lệ";
             d["FilterEditForm.AppointLength.Error"] = "Độ dài chỉ định không hợp lệ";
             d["FilterEditForm.Change.Error"] = "Cài đặt đổi gói không hợp lệ";
+            d["FilterEditForm.Cell.Hex"] = "Mỗi ô bộ lọc đã điền phải chứa một byte thập lục phân gồm hai chữ số";
             d["SendList.SystemSocket.Blocked"] = "Mục gửi “{0}” đã bật “Dùng socket hệ thống” nhưng socket hệ thống chưa được đặt — hãy chuột phải một gói tin trong danh sách và chọn “Đặt socket hệ thống” trước.";
             d["SendExecute.Socket.Missing"] = "Danh sách gửi “{0}” có gói không có socket (số socket là 0) — không gửi được: hãy bật “Dùng socket hệ thống” hoặc đặt nó từ menu chuột phải của danh sách.";
             d["SendList.LoopCount.Fixed"] = "Số vòng lặp của mục gửi “{0}” không hợp lệ ({1}); coi như 1.";

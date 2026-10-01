@@ -136,6 +136,24 @@ const searchAt = (i: number): SearchCell => sCells.value[i] || S0
 const modifyAt = (i: number): ModifyCell => mCells.value.value[i] || M0
 const replaceAt = (i: number): ReplaceBinding | undefined => rCells.value.value[i]
 
+/** 每格代表一个字节：必须完整填写两位；高级查找保留既有的半字节通配符。 */
+function isCompleteCellValue(value: string, row: 'search' | 'modify'): boolean {
+  const allowed = row === 'search' && f.value?.Mode === 1 ? '[0-9A-F*]' : '[0-9A-F]'
+  return new RegExp(`^${allowed}{2}$`).test(value)
+}
+
+/** 表很宽，横向滚动后仍能一眼确认哪些格已经填过。 */
+const searchFilledCount = computed(() => Object.values(sCells.value).filter(c => isCompleteCellValue(c.v, 'search')).length)
+const modifyFilledCount = computed(() => {
+  //变量值也是实际写入数据；空的递进 / 随机标记则不算「已填写」。
+  const values = Object.values(mCells.value.value).filter(c => isCompleteCellValue(c.v, 'modify')).length
+  return values + Object.keys(rCells.value.value).length
+})
+
+function filledText(n: number): string {
+  return t('flt.e.filledCount').replace('{n}', String(n))
+}
+
 /** 写之前才建对象 —— 保持稀疏。 */
 function editSearch(i: number, patch: Partial<SearchCell>): void {
   sCells.value[i] = { ...(sCells.value[i] || S0), ...patch }
@@ -343,9 +361,8 @@ function clean(v: string, wildcard: boolean): string {
 }
 
 function allowWildcard(row: 'search' | 'modify'): boolean {
-  if (row === 'modify') return true
-  //查找位：普通模式不给通配符，高级模式给
-  return f.value?.Mode === 1
+  //通配符只属于高级查找；修改行最终会按字节解析，不能接受 *。
+  return row === 'search' && f.value?.Mode === 1
 }
 
 function onCellInput(i: number, row: 'search' | 'modify', e: Event): void {
@@ -366,6 +383,20 @@ function onCellInput(i: number, row: 'search' | 'modify', e: Event): void {
     if (v && replaceAt(i)) clearReplace(i)
     editModify(i, { v })
   }
+}
+
+/**
+ * 先允许用户键入第一个半字节，离开格子才判定「填写完成」。
+ * 不完整值不能留在表里误导计数或在稍后保存时才暴露。
+ */
+function onCellBlur(i: number, row: 'search' | 'modify'): void {
+  const value = valueAt(row, i)
+  if (!value || isCompleteCellValue(value, row)) return
+
+  if (row === 'search') editSearch(i, { v: '', exclude: false })
+  else editModify(i, { v: '' })
+
+  pushToast('error', t('flt.e.byteRequired'))
 }
 
 /**
@@ -835,6 +866,14 @@ const APPOINTS: Array<{ on: keyof EditRow; val: keyof EditRow; label: Key; ph: K
 async function save(): Promise<void> {
   if (!f.value) return
 
+  //输入时允许先键入第一个半字节；保存时必须补齐，不能把 "A" 当作 0A 悄悄写入。
+  const badSearch = Object.values(sCells.value).some(c => c.v && !isCompleteCellValue(c.v, 'search'))
+  const badModify = Object.values(mCells.value.value).some(c => c.v && !isCompleteCellValue(c.v, 'modify'))
+  if (badSearch || badModify) {
+    error.value = t('flt.e.byteRequired')
+    return
+  }
+
   busy.value = true
   error.value = ''
 
@@ -1001,7 +1040,10 @@ const { covered } = useModal(() => props.id !== null)
           普通模式下这张表<b>还带着修改行</b>（两行必须按列对齐，所以同一个滚动条）；
           高级模式下它只有查找一行，修改是下面另一张独立的表。
         -->
-        <div class="gtitle">{{ isNormal ? t('flt.e.gridNormal') : t('flt.e.gridSearch') }}</div>
+        <div class="gtitle">
+          <span>{{ t('flt.e.gridSearch') }}</span><span class="gcount">{{ filledText(searchFilledCount) }}</span>
+          <template v-if="isNormal"><span class="gsep">/</span><span>{{ t('flt.e.gridModify') }}</span><span class="gcount">{{ filledText(modifyFilledCount) }}</span></template>
+        </div>
 
         <div :ref="(e) => (sg.el = e as HTMLElement)" class="grid" @scroll.passive="sg.onScroll">
           <div class="gspace" :style="{ width: MAX * COL_W + 'px', height: (isNormal ? 96 : 64) + 'px' }">
@@ -1021,7 +1063,7 @@ const { covered } = useModal(() => props.id !== null)
                 >
                   <input class="hex" :value="searchAt(i).v" maxlength="2"
                          spellcheck="false" @input="onCellInput(i, 'search', $event)"
-                         @paste.prevent="onCellPaste('search', i, $event)">
+                         @paste.prevent="onCellPaste('search', i, $event)" @blur="onCellBlur(i, 'search')">
                 </div>
               </div>
 
@@ -1038,7 +1080,7 @@ const { covered } = useModal(() => props.id !== null)
                 >
                   <input class="hex" :value="modifyAt(i).v" maxlength="2"
                          spellcheck="false" @input="onCellInput(i, 'modify', $event)"
-                         @paste.prevent="onCellPaste('modify', i, $event)">
+                         @paste.prevent="onCellPaste('modify', i, $event)" @blur="onCellBlur(i, 'modify')">
                 </div>
               </div>
             </div>
@@ -1051,7 +1093,7 @@ const { covered } = useModal(() => props.id !== null)
           「指定位置」时列范围变成 -1000…999，列头带符号，0 就是匹配点本身。
         -->
         <template v-if="!isNormal">
-          <div class="gtitle">{{ t('flt.e.gridModify') }}</div>
+          <div class="gtitle"><span>{{ t('flt.e.gridModify') }}</span><span class="gcount">{{ filledText(modifyFilledCount) }}</span></div>
 
           <div :ref="(e) => (mg.el = e as HTMLElement)" class="grid" @scroll.passive="mg.onScroll">
             <div class="gspace" :style="{ width: (MAX - mLo) * COL_W + 'px', height: '64px' }">
@@ -1073,7 +1115,7 @@ const { covered } = useModal(() => props.id !== null)
                   >
                     <input class="hex" :value="modifyAt(i).v" maxlength="2"
                            spellcheck="false" @input="onCellInput(i, 'modify', $event)"
-                           @paste.prevent="onCellPaste('modify', i, $event)">
+                           @paste.prevent="onCellPaste('modify', i, $event)" @blur="onCellBlur(i, 'modify')">
                   </div>
                 </div>
               </div>
@@ -1388,6 +1430,8 @@ const { covered } = useModal(() => props.id !== null)
 }
 
 .gtitle + .grid { margin-bottom: 6px; }
+.gsep { color: var(--muted); }
+.gcount { color: var(--cyan); }
 
 /* 偏移表的匹配点：这一列就是「命中的那一位」，标出来才找得回原点 */
 .cell.head.zero { color: var(--cyan); background: rgb(var(--cyan-rgb) / 12%); }

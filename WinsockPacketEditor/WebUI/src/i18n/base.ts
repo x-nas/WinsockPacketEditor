@@ -132,6 +132,8 @@ export const DICT = {
   'proxy.start': { zh: '开始代理', en: 'Start' },
   'proxy.stop': { zh: '停止代理', en: 'Stop' },
   'proxy.clear': { zh: '清空', en: 'Clear' },
+  'proxy.focusList': { zh: '专注列表', en: 'Focus list' },
+  'proxy.exitFocusList': { zh: '退出专注', en: 'Exit focus' },
   'proxy.settings': { zh: '设置', en: 'Settings' },
 
   // ── 代理模式：统计 ──────────────────────────────────
@@ -199,6 +201,11 @@ export const DICT = {
   'set.app.scanHint': { zh: '整块屏幕上缓慢游走的一条亮带，10 秒一趟。关掉之后其余氛围（网格底纹、四角标记）不受影响', en: 'A faint band that drifts across the whole window every 10 seconds. Turning it off leaves the rest of the ambience (grid, corner marks) untouched' },
   'set.app.themeHint': { zh: '同一套版式换一组配色，与主程序共用这个设置。跟随系统时随操作系统的深浅设置一起变。', en: 'Same layout, different palette. Shared with the main program. “Follow system” tracks the OS light/dark setting.' },
   'set.app.now': { zh: '当前', en: 'Current' },
+  'set.app.display': { zh: '显示', en: 'Display' },
+  'set.app.fontScale': { zh: '全局字号', en: 'Font size' },
+  'set.app.textColor': { zh: '主文字颜色', en: 'Main text color' },
+  'set.app.displayReset': { zh: '恢复默认', en: 'Restore defaults' },
+  'set.app.displayHint': { zh: '按「保存」后立即生效，并会随设置和备份一起保存。', en: 'Applies as soon as you press Save, and is stored with preferences and backups.' },
   'set.app.assoc': { zh: '文件图标', en: 'File icons' },
   'set.app.assocOn': { zh: '已关联 {0} / {1} 种', en: '{0} of {1} associated' },
   'set.app.assocOff': { zh: '未关联 · 启动时不会再自动关联', en: 'Not associated · will not re-associate at startup' },
@@ -535,6 +542,7 @@ export const DICT = {
   'flt.e.gridNormal': { zh: '查找 / 修改', en: 'SEARCH / MODIFY' },
   'flt.e.gridSearch': { zh: '查找', en: 'SEARCH' },
   'flt.e.gridModify': { zh: '修改', en: 'MODIFY' },
+  'flt.e.filledCount': { zh: '已填写 {n} 格', en: '{n} filled cells' },
   'flt.e.jump': { zh: '跳到第', en: 'Go to' },
   'flt.e.go': { zh: '跳转', en: 'Go' },
 
@@ -571,6 +579,7 @@ export const DICT = {
   'flt.e.pasteOk': { zh: '数据已粘贴', en: 'Pasting Completed' },
   'flt.e.delOk': { zh: '数据已删除', en: 'Delete Completed' },
   'flt.e.invalidHex': { zh: '请输入有效的十六进制数值', en: 'Please enter a valid HEX or (*)' },
+  'flt.e.byteRequired': { zh: '每个已填写格必须是两位十六进制字节', en: 'Each filled cell must contain a two-digit hexadecimal byte' },
   'flt.e.emptyCell': { zh: '这个格子是空的', en: 'This cell is empty' },
   'flt.e.clearCells': { zh: '清空内容', en: 'Clear cells' },
 

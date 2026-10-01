@@ -20,7 +20,7 @@
 
 ## 🟢 中文
 
-一款 Windows 上的**网络封包拦截与编辑工具**。它能把某个程序收发的每一条网络封包实时列出来，让你**看清里面的内容、改写它、再发一遍**——协议调试、接口审计、协议学习、模拟器与手游分析都用得上。界面是深色赛博风格，支持**七种语言**与**深 / 浅主题**。
+一款 Windows 上的**网络封包拦截与编辑工具**。它能把某个程序收发的每一条网络封包实时列出来，让你**看清里面的内容、改写它、再发一遍**——协议调试、接口审计、协议学习、模拟器与手游分析都用得上。界面是深色赛博风格，支持**七种语言**、**深 / 浅主题**，以及可保存的全局字号与灰阶文字颜色偏好。
 
 <div align="center">
 <img src="docs/screenshots/wpe-proxy-data.png" width="860" alt="实时抓包主界面"><br>
@@ -67,7 +67,7 @@
 </td>
 <td width="50%" valign="top">
 <img src="docs/screenshots/wpe-appset.png" alt="软件设置"><br>
-<sub><b>七种语言 + 深 / 浅主题</b>：随时切换，可跟随系统。</sub>
+<sub><b>七种语言 + 深 / 浅主题 + 显示偏好</b>：可随时切换或跟随系统；全局字号与灰阶文字颜色可调整、恢复默认，并随设置备份保存。</sub>
 </td>
 </tr>
 </table>
@@ -101,7 +101,7 @@
 
 ## 🟢 English
 
-A **network packet capture-and-edit tool** for Windows. It lists every packet a program sends and receives in real time, so you can **see what's inside, change it, and send it again** — handy for protocol debugging, interface auditing, learning an undocumented protocol, and analyzing emulators and mobile games. The interface is a dark, cyber-styled UI available in **seven languages** with **dark / light themes**.
+A **network packet capture-and-edit tool** for Windows. It lists every packet a program sends and receives in real time, so you can **see what's inside, change it, and send it again** — handy for protocol debugging, interface auditing, learning an undocumented protocol, and analyzing emulators and mobile games. The interface is a dark, cyber-styled UI available in **seven languages**, with **dark / light themes** and saved preferences for global text size and gray-tone text color.
 
 <div align="center">
 <img src="docs/screenshots/wpe-proxy-data-en.png" width="860" alt="Live capture"><br>
@@ -148,7 +148,7 @@ A **network packet capture-and-edit tool** for Windows. It lists every packet a 
 </td>
 <td width="50%" valign="top">
 <img src="docs/screenshots/wpe-appset-en.png" alt="Preferences"><br>
-<sub><b>Seven languages + dark / light themes</b> — switch any time, or follow the system.</sub>
+<sub><b>Seven languages + dark / light themes + display preferences</b> — switch any time or follow the system; adjust global text size and gray-tone text color, restore the defaults, and include them in settings backups.</sub>
 </td>
 </tr>
 </table>

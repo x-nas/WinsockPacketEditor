@@ -305,6 +305,7 @@ namespace WinsockPacketEditor
             d["FilterEditForm.AppointPort.Error"] = "指定埠錯誤";
             d["FilterEditForm.AppointLength.Error"] = "指定長度錯誤";
             d["FilterEditForm.Change.Error"] = "換包資料錯誤";
+            d["FilterEditForm.Cell.Hex"] = "每個已填寫的濾鏡格必須是兩位十六進位位元組";
             d["SendList.SystemSocket.Blocked"] = "傳送「{0}」勾了「使用系統通訊端」，但系統通訊端還沒設定 —— 請先在封包列表裡按右鍵「設定系統通訊端」。";
             d["SendExecute.Socket.Missing"] = "傳送清單「{0}」裡有封包沒有套接字（套接字號為 0）—— 這些封包送不出去，請勾選「使用系統套接字」，或在傳送清單上按右鍵設定它。";
             d["SendList.LoopCount.Fixed"] = "傳送「{0}」的迴圈次數不正確（{1}），已按 1 次處理。";

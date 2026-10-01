@@ -17,21 +17,23 @@
 */
 
 :root {
+  /* 显示偏好只改这个倍率；默认 1，未设置时与原字号逐像素一致。 */
+  --ui-font-scale: 1;
   /* ── 字号规范（2026-09-11 定九层，见 CLAUDE.md「字号规范」）──
      ⚠️ 2026-09-13 按要求把最小一档 --fs-caption 从 9.5 提到 10.5（与 WPE Proxy Cap 一致）：
      这一档的中文走系统回退字体，9.5px 下笔画发虚。现在它与 --fs-label 同为 10.5px，实际只剩八档；
      两个令牌名仍分开留着（用途不同），以后要再拉开只改这一行。
      这一档上所有量出来的居中补偿都按 10.5px 重量过。
      唯一的半像素间隔是 Consolas 12 对 JetBrains Mono 12.5 —— 跨字体，前者 x 高小，读起来一样大。 */
-  --fs-caption: 10.5px;  /* 微标   Share Tech Mono 大写：分组小标 / 统计格标题 / 计数徽标 / eyebrow / 弹窗副标题 */
-  --fs-label: 10.5px;    /* 标签   Share Tech Mono 大写：按钮 / 表头 / 页签 / 胶囊 / 状态栏 */
-  --fs-small: 11.5px;    /* 辅助   JetBrains Mono：提示 / 警告 / 错误 / 附注 / 计数 / 右键菜单 */
-  --fs-dense: 12px;      /* 密集数据 只给 Consolas：封包表 / 十六进制 / 对比视图 */
-  --fs-body: 12.5px;     /* 正文   JetBrains Mono：表格行 / 表单 / 输入框 / 空态 / body 基准 */
-  --fs-lead: 13.5px;     /* 导语   确认框正文 / 模式卡中文名与说明 / 整屏副标题 / 状态字 */
-  --fs-title: 15px;      /* 标题   Orbitron 700：所有弹窗与编辑器的标题 */
-  --fs-num: 17px;        /* 数字   Orbitron：统计格读数 / 步骤号 */
-  --fs-num-lg: 22px;     /* 大数字 Orbitron：统计页漏斗数字 / 测试版提示的大标题 */
+  --fs-caption: calc(10.5px * var(--ui-font-scale));  /* 微标   Share Tech Mono 大写：分组小标 / 统计格标题 / 计数徽标 / eyebrow / 弹窗副标题 */
+  --fs-label: calc(10.5px * var(--ui-font-scale));    /* 标签   Share Tech Mono 大写：按钮 / 表头 / 页签 / 胶囊 / 状态栏 */
+  --fs-small: calc(11.5px * var(--ui-font-scale));    /* 辅助   JetBrains Mono：提示 / 警告 / 错误 / 附注 / 计数 / 右键菜单 */
+  --fs-dense: calc(12px * var(--ui-font-scale));      /* 密集数据 只给 Consolas：封包表 / 十六进制 / 对比视图 */
+  --fs-body: calc(12.5px * var(--ui-font-scale));     /* 正文   JetBrains Mono：表格行 / 表单 / 输入框 / 空态 / body 基准 */
+  --fs-lead: calc(13.5px * var(--ui-font-scale));     /* 导语   确认框正文 / 模式卡中文名与说明 / 整屏副标题 / 状态字 */
+  --fs-title: calc(15px * var(--ui-font-scale));      /* 标题   Orbitron 700：所有弹窗与编辑器的标题 */
+  --fs-num: calc(17px * var(--ui-font-scale));        /* 数字   Orbitron：统计格读数 / 步骤号 */
+  --fs-num-lg: calc(22px * var(--ui-font-scale));     /* 大数字 Orbitron：统计页漏斗数字 / 测试版提示的大标题 */
 
   /* 下面四个是语义别名，保留是因为全项目有六十多处在用；值一律跟着上面走 */
   /* 全项目表头的字号（15 张表共用；各 .vue 里的表头规则都引用它）*/

@@ -40,6 +40,55 @@ export const theme = ref<Theme>('dark')
 */
 export const scanLine = ref(true)
 
+/*
+  显示偏好与主题同样落在 UiPrefs。
+  用根 CSS 变量才能覆盖 Teleport 到 body 的弹窗、菜单和提示层。
+*/
+export const fontScale = ref(100)
+export const mainTextColor = ref<string | null>(null)
+
+/* 只改原本的灰阶文字；偏白的标题、按钮与强调正文保持设计原色。 */
+const textColorTokens = [
+  '--th-fg', '--muted', '--dim2', '--dim3', '--dim4', '--dim',
+]
+
+export function defaultMainTextColor(): string {
+  //取现有灰阶正文的代表色（--dim3），不是偏白的 --gray。
+  return effective.value === 'light' ? '#4d5b70' : '#94a3b8'
+}
+
+function applyDisplay(): void {
+  try {
+    const root = document.documentElement
+    root.style.setProperty('--ui-font-scale', String(fontScale.value / 100))
+    if (mainTextColor.value) {
+      const color = mainTextColor.value
+      //用户挑的就是目标文字色，不能再混入背景把纯白压成灰。
+      for (const token of textColorTokens) root.style.setProperty(token, color)
+    } else {
+      for (const token of textColorTokens) root.style.removeProperty(token)
+    }
+  } catch {
+    /* 非浏览器环境，忽略 */
+  }
+}
+
+function normalizeFontScale(next: number): number {
+  return Math.min(150, Math.max(90, Math.round(next / 5) * 5))
+}
+
+export async function setDisplayPreferences(nextScale: number, nextColor: string | null): Promise<void> {
+  fontScale.value = normalizeFontScale(nextScale)
+  mainTextColor.value = nextColor
+  applyDisplay()
+
+  try {
+    await call('setAppearance', { fontScale: fontScale.value, mainTextColor: nextColor || '' })
+  } catch (e) {
+    console.error('[theme] 显示偏好未能写回 C#，本次切换不会被记住', e)
+  }
+}
+
 /**
  * 系统此刻是不是深色。
  *
@@ -188,10 +237,15 @@ export function initTheme(
   mode: string | undefined | null,
   isDark?: boolean | null,
   scan?: boolean | null,
+  savedFontScale?: number | null,
+  savedMainTextColor?: string | null,
 ): void {
   //认不出来就当开着 —— 它是这套皮肤的一部分，默认状态是开
   scanLine.value = scan !== false
   applyScan()
+  fontScale.value = normalizeFontScale(Number(savedFontScale) || 100)
+  mainTextColor.value = savedMainTextColor || null
+  applyDisplay()
 
   theme.value = mode === 'light' || mode === 'system' || mode === 'dark' ? mode : 'dark'
 
