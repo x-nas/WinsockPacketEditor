@@ -4,6 +4,8 @@
   滤镜的取值器替换格与变量引用插入器用的是同一份口径 ——
   两处各写一份，迟早出现「插入器给的格式在替换格里被判非法」。
 */
+import { t } from '../../i18n'
+
 export interface FormatOption { label: string; value: string }
 
 /** 按变量数据类型给出可选的写入格式；第一项是默认值。 */
@@ -25,5 +27,5 @@ export function formatOptions(dataType: number): FormatOption[] {
   if (dataType === 3) {
     return [{ label: 'UTF-8', value: 'utf8' }, { label: 'GB18030', value: 'gb18030' }, { label: 'Big5', value: 'big5' }]
   }
-  return [{ label: '原始字节', value: '' }]
+  return [{ label: t('pex.fmtRaw'), value: '' }]
 }

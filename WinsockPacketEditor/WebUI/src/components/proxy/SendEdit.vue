@@ -512,8 +512,8 @@ const { covered } = useModal(() => props.id !== null)
 }
 
 .tt { flex: 1; min-width: 0; display: flex; align-items: baseline; gap: 12px; }
-.tt .zh { font-family: var(--orbit); font-weight: 700; font-size: var(--fs-title); color: var(--gray); letter-spacing: .04em; }
-.tt .sub { font-family: var(--share); font-size: var(--fs-caption); letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
+.tt .zh { font-family: var(--orbit); font-weight: 700; font-size: var(--fs-title); color: var(--cyan); letter-spacing: .04em; }
+.tt .sub { font-family: var(--share); font-size: var(--fs-caption); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
 
 .x {
   display: inline-flex;

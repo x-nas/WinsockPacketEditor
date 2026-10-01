@@ -101,6 +101,12 @@
     "wpe_warehouse_list": { "input": { "$ref": "#/definitions/page" }, "output": { "type": "object" } },
     "wpe_warehouse_get": { "input": { "allOf": [{ "$ref": "#/definitions/pageFields" }, { "type": "object", "required": ["id"], "properties": { "id": { "type": "string", "description": "Required warehouse GUID: first call wpe_warehouse_list, then pass the returned row.Id. Display names are not accepted." } } }], "unevaluatedProperties": false }, "output": { "type": "object" } },
     "wpe_auto_stores_list": { "input": { "type": "object", "additionalProperties": false }, "output": { "type": "object" } },
-    "wpe_packet_edit_get": { "input": { "type": "object", "required": ["list", "id"], "properties": { "list": { "type": "string", "enum": ["proxy", "packet"] }, "id": { "type": "integer", "minimum": 1 } }, "additionalProperties": false }, "output": { "type": "object" } }
+    "wpe_packet_edit_get": { "input": { "type": "object", "required": ["list", "id"], "properties": { "list": { "type": "string", "enum": ["proxy", "packet"] }, "id": { "type": "integer", "minimum": 1 } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_decoders_list": { "input": { "$ref": "#/definitions/page" }, "output": { "type": "object" } },
+    "wpe_decoder_get": { "input": { "type": "object", "required": ["id"], "properties": { "id": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_decoder_test": { "input": { "type": "object", "required": ["config", "contentBase64"], "properties": { "config": { "type": "object" }, "contentBase64": { "type": "string" }, "encode": { "type": "boolean" }, "applyFrame": { "type": "boolean" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_decoder_decode_capture": { "input": { "type": "object", "required": ["decoderId", "packetId"], "properties": { "decoderId": { "type": "string", "format": "uuid" }, "packetId": { "type": "integer", "minimum": 1 }, "mode": { "$ref": "#/definitions/packetMode" }, "applyFrame": { "type": "boolean" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_packet_extractors_list": { "input": { "allOf": [{ "$ref": "#/definitions/pageFields" }, { "type": "object", "properties": { "includeCurrentValues": { "type": "boolean" } } }], "unevaluatedProperties": false }, "output": { "type": "object" } },
+    "wpe_packet_extractor_get": { "input": { "type": "object", "required": ["id"], "properties": { "id": { "type": "string", "format": "uuid" }, "includeCurrentValues": { "type": "boolean" } }, "additionalProperties": false }, "output": { "type": "object" } }
   }
 }

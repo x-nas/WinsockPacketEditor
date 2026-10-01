@@ -5,6 +5,7 @@
   在动态替换中漏掉数值字节格式。template 模式下数值变量必须先选一个明确的编码格式。
 */
 import { computed, ref } from 'vue'
+import { t } from '../../i18n'
 import { ensurePacketExtractors, extractorRows, type Variable } from '../../stores/extractor'
 import { formatOptions } from './formats'
 import SettingsModal from '../proxy/SettingsModal.vue'
@@ -34,21 +35,21 @@ const variables = computed(() => sources.value
   .filter(x => props.dataType === null || props.dataType === 2 || props.dataType === 3 || (props.dataType === 1 ? x.variable.DataType === 0 || x.variable.DataType === 1 : x.variable.DataType === props.dataType))
   .filter(x => !keyword.value.trim() || (x.extractor.Name + ' ' + x.variable.Name).toLowerCase().includes(keyword.value.trim().toLowerCase())))
 
-function typeName(type: number): string { return ['整数', '浮点数', '字节数组', '字符串'][type] || '未知类型' }
-function kindName(kind: number): string { return ['简单值', '从封包取值', '表达式'][kind] || '未知类型' }
+function typeName(type: number): string { return [t('pex.typeInt'), t('pex.typeFloat'), t('pex.typeBytes'), t('pex.typeText')][type] || t('pex.unknownType') }
+function kindName(kind: number): string { return [t('pex.kindSimple'), t('pex.kindCapture'), t('pex.kindExpression')][kind] || t('pex.unknownType') }
 /** 编辑中的草稿尚未走后端，因此简单值直接使用它的配置值作为当前值。 */
 function currentValue(variable: Variable): string {
   if (variable.CurrentValue !== undefined && variable.CurrentValue !== '') return variable.CurrentValue
   return variable.Kind === 0 ? (variable.Value || '—') : '—'
 }
 const supportHint = computed(() => {
-  if (props.mode === 'template') return '动态替换支持：整数、浮点数、字节数组、字符串；请在右侧选择写入字节的格式。'
+  if (props.mode === 'template') return t('pex.hintTemplate')
   switch (props.dataType) {
-    case 0: return '整数表达式支持插入：整数变量。'
-    case 1: return '浮点表达式支持插入：整数、浮点数变量。'
-    case 2: return '字节数组表达式支持插入：整数、浮点数、字节数组、字符串变量；数值请在右侧选择字节格式。'
-    case 3: return '字符串表达式支持插入：整数、浮点数、字节数组、字符串变量；字节数组会转换为十六进制文本。'
-    default: return '可插入取值器中的变量。'
+    case 0: return t('pex.hintInt')
+    case 1: return t('pex.hintFloat')
+    case 2: return t('pex.hintBytes')
+    case 3: return t('pex.hintText')
+    default: return t('pex.hintDefault')
   }
 })
 function formats(variable: Variable): Array<{ label: string; value: string }> {
@@ -74,18 +75,18 @@ function hasFormatChoice(variable: Variable): boolean { return needsFormat(varia
 
 <template>
   <span class="ref-picker">
-    <button type="button" class="ref-open" title="选择并插入取值器变量" @mousedown.prevent @click="show">插入变量</button>
+    <button type="button" class="ref-open" :title="t('pex.refOpenTitle')" @mousedown.prevent @click="show">{{ t('pex.refOpen') }}</button>
   </span>
-  <SettingsModal :open="open" title="选择取值器变量" subtitle="VARIABLE REFERENCE" :width="820" readonly cancel-text="关闭" :hint="supportHint" @update:open="open = $event">
+  <SettingsModal :open="open" :title="t('pex.refTitle')" subtitle="Controls/PacketVariableReferencePicker" :width="820" readonly :cancel-text="t('dlg.close')" :hint="supportHint" @update:open="open = $event">
     <div class="ref-dialog">
-      <input v-model="keyword" class="inp ref-search" placeholder="搜索取值器或变量名称" autofocus />
+      <input v-model="keyword" class="inp ref-search" :placeholder="t('pex.refSearch')" autofocus />
       <div class="ref-table">
-        <div class="ref-head"><span>取值器</span><span>变量名称</span><span>变量类型</span><span>数据类型</span><span>当前值</span><span /></div>
-        <div v-if="!variables.length" class="ref-empty">当前类型没有可插入的变量。</div>
+        <div class="ref-head"><span>{{ t('pex.refExtractor') }}</span><span>{{ t('pex.colVarName') }}</span><span>{{ t('pex.refKindName') }}</span><span>{{ t('pex.dataType') }}</span><span>{{ t('pex.colCurrent') }}</span><span /></div>
+        <div v-if="!variables.length" class="ref-empty">{{ t('pex.refEmpty') }}</div>
         <div v-for="item in variables" v-else :key="item.extractor.Id + item.variable.Id" class="ref-row" :class="{ off: !item.extractor.IsEnable && item.extractor.Id !== extraExtractor?.Id }">
           <span :title="item.extractor.Name">{{ item.extractor.Name }}</span><span class="ref-var" :title="item.variable.Name">{{ item.variable.Name }}</span><span class="ref-kind">{{ kindName(item.variable.Kind) }}</span>
-          <span class="ref-type">{{ !item.extractor.IsEnable && item.extractor.Id !== extraExtractor?.Id ? '已禁用' : typeName(item.variable.DataType) }}</span><span class="ref-value" :title="currentValue(item.variable)">{{ currentValue(item.variable) }}</span>
-          <span class="ref-actions"><template v-if="hasFormatChoice(item.variable)"><CyberSelect class="ref-format" :model-value="formatValue(item.extractor.Id, item.variable)" :options="formats(item.variable)" :disabled="!item.extractor.IsEnable && item.extractor.Id !== extraExtractor?.Id" @update:model-value="setFormat(item.extractor.Id, item.variable.Id, $event)" /><button type="button" class="ref-add" :disabled="!item.extractor.IsEnable && item.extractor.Id !== extraExtractor?.Id" @click="insert(item.extractor.Name, item.variable, formatValue(item.extractor.Id, item.variable))">插入</button></template><button v-else type="button" class="ref-add" :disabled="!item.extractor.IsEnable && item.extractor.Id !== extraExtractor?.Id" @click="insert(item.extractor.Name, item.variable, needsFormat(item.variable) ? formats(item.variable)[0].value : '')">插入</button></span>
+          <span class="ref-type">{{ !item.extractor.IsEnable && item.extractor.Id !== extraExtractor?.Id ? t('pex.disabled') : typeName(item.variable.DataType) }}</span><span class="ref-value" :title="currentValue(item.variable)">{{ currentValue(item.variable) }}</span>
+          <span class="ref-actions"><template v-if="hasFormatChoice(item.variable)"><CyberSelect class="ref-format" :model-value="formatValue(item.extractor.Id, item.variable)" :options="formats(item.variable)" :disabled="!item.extractor.IsEnable && item.extractor.Id !== extraExtractor?.Id" @update:model-value="setFormat(item.extractor.Id, item.variable.Id, $event)" /><button type="button" class="ref-add" :disabled="!item.extractor.IsEnable && item.extractor.Id !== extraExtractor?.Id" @click="insert(item.extractor.Name, item.variable, formatValue(item.extractor.Id, item.variable))">{{ t('pex.insert') }}</button></template><button v-else type="button" class="ref-add" :disabled="!item.extractor.IsEnable && item.extractor.Id !== extraExtractor?.Id" @click="insert(item.extractor.Name, item.variable, needsFormat(item.variable) ? formats(item.variable)[0].value : '')">{{ t('pex.insert') }}</button></span>
         </div>
       </div>
     </div>

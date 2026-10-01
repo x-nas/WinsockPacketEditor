@@ -1878,7 +1878,8 @@ namespace WPEHybrid
 
             this.bridge.Register("injectStartHook", async args =>
             {
-                var link = this.injectLink;
+                //用 AttachedLink()：链路已断开时回「还没有附加到目标」，而不是让 Write 抛「管道尚未连接」
+                var link = this.AttachedLink();
                 if (link == null) { return new { ok = false, error = UI.T("Inject.NotAttached", "还没有附加到目标") }; }
 
                 try
@@ -1903,7 +1904,8 @@ namespace WPEHybrid
 
             this.bridge.Register("injectStopHook", async args =>
             {
-                var link = this.injectLink;
+                //用 AttachedLink()：链路已断开时回「还没有附加到目标」，而不是让 Write 抛「管道尚未连接」
+                var link = this.AttachedLink();
                 if (link == null) { return new { ok = false, error = UI.T("Inject.NotAttached", "还没有附加到目标") }; }
 
                 try { await System.Threading.Tasks.Task.Run(() => link.StopHook()); }
@@ -1992,15 +1994,13 @@ namespace WPEHybrid
                     UI.T("Loading", "正在加载..."),
                     () => Operate.ProxyConfig.Proxy.StartProxy());
 
-                string socks5Addr, httpAddr;
-                ProxyAddresses(out socks5Addr, out httpAddr);
+                var socks5Addr = ProxyAddress();
 
                 return new
                 {
                     ok = ok,
                     running = Operate.ProxyConfig.Proxy.IsRunning,
                     socks5Addr = socks5Addr,
-                    httpAddr = httpAddr,
                 };
             });
 
@@ -2155,10 +2155,9 @@ namespace WPEHybrid
 
                     UI.Toast(UiIcon.Success, UI.T("ProxySettingsForm.Success", "代理设置保存成功"));
 
-                    string socks5Addr, httpAddr;
-                    ProxyAddresses(out socks5Addr, out httpAddr);
+                    var socks5Addr = ProxyAddress();
 
-                    return new { ok = true, socks5Addr = socks5Addr, httpAddr = httpAddr };
+                    return new { ok = true, socks5Addr = socks5Addr };
                 }
                 catch (Exception ex)
                 {
@@ -5535,8 +5534,7 @@ namespace WPEHybrid
 
                     Operate.DoLog("saveInstance", "已切换数据库 : " + CurrentDbFull());
 
-                    string socks5Addr, httpAddr;
-                    ProxyAddresses(out socks5Addr, out httpAddr);
+                    var socks5Addr = ProxyAddress();
 
                     return new
                     {
@@ -5549,7 +5547,6 @@ namespace WPEHybrid
                         language = UI.Prefs.Language ?? "zh-CN",
                         socks5Port = Operate.ProxyConfig.Proxy.SOCKS5_Port,
                         socks5Addr = socks5Addr,
-                        httpAddr = httpAddr,
                     };
                 }
                 catch (Exception ex)
@@ -5622,8 +5619,7 @@ namespace WPEHybrid
                 string dbDir = Operate.DataBase.dbPath ?? string.Empty;
                 string dbFile = Operate.DataBase.dbName ?? string.Empty;
 
-                string socks5Addr, httpAddr;
-                ProxyAddresses(out socks5Addr, out httpAddr);
+                var socks5Addr = ProxyAddress();
 
                 return new
                 {
@@ -5689,7 +5685,6 @@ namespace WPEHybrid
                     lastInject = this.LastInjectInfo(),
                     socks5Port = Operate.ProxyConfig.Proxy.SOCKS5_Port,
                     socks5Addr = socks5Addr,
-                    httpAddr = httpAddr,
                     //内置 mihomo 内核状态（2026-09-23）：RunBar 的 TUN 灯读这两个
                     tunReady = MihomoKernel.IsReady,
                     kernelRunning = MihomoKernel.IsRunning,
@@ -5904,35 +5899,20 @@ namespace WPEHybrid
         }
 
         /// <summary>
-        /// SOCKS5 与 HTTP 两个监听地址，<b>一次算出来</b>。
-        ///
-        /// ⚠️ 两者共用同一个 <c>GetLocalIPAddress()</c>，而它实测 <b>70ms</b>（枚举网卡）——
-        /// 各写一个方法各算一遍，等于在启动自检那条路上白付两遍。
-        /// 这也是它只能待在一次性路径上的原因，见 CLAUDE.md「拖窗口时每半秒卡一下」。
-        ///
-        /// HTTP 那个在<b>没启用时返回空串</b>，界面据此显示「未启用」而不是一个连不上的地址。
+        /// SOCKS5 监听地址。网卡枚举较慢，只能待在一次性启动/保存路径上。
         /// </summary>
-        private static void ProxyAddresses(out string socks5, out string http)
+        private static string ProxyAddress()
         {
-            socks5 = string.Empty;
-            http = string.Empty;
-
             try
             {
                 var ips = Operate.SystemConfig.GetLocalIPAddress();
                 string ip = ips != null && ips.Length > 0 ? ips[0].ToString() : "0.0.0.0";
-
-                socks5 = ip + ":" + Operate.ProxyConfig.Proxy.SOCKS5_Port;
-
-                //与 InitHttpProxy 那条日志同一个口径（那边打的是 ProxyUDP_IP，起来之后就等于这个 ip）
-                if (Operate.ProxyConfig.Proxy.Enable_HTTP)
-                {
-                    http = ip + ":" + Operate.ProxyConfig.Proxy.HTTP_Port;
-                }
+                return ip + ":" + Operate.ProxyConfig.Proxy.SOCKS5_Port;
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(ProxyAddresses), ex);
+                Operate.DoLog(nameof(ProxyAddress), ex);
+                return string.Empty;
             }
         }
 
@@ -6785,6 +6765,16 @@ namespace WPEHybrid
                     result["count"] = Operate.FilterConfig.List.lstFilterInfo.Count; result["saved"] = !string.IsNullOrEmpty(path); result["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path;
                     return result;
                 }
+                if (kind == "decoders")
+                {
+                    var path = await Operate.DecoderConfig.SaveAllDecoders_Dialog(fileName);
+                    result["count"] = Operate.DecoderConfig.List.lstDecoderInfo.Count; result["saved"] = !string.IsNullOrEmpty(path); result["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path;
+                    return result;
+                }
+                if (kind == "packetextractors")
+                {
+                    await PacketExtractorConfig.ExportDialog(); result["count"] = PacketExtractorConfig.Items.Count; result["dialogCompleted"] = true; return result;
+                }
                 if (kind == "certificate")
                 {
                     var type = (int?)args["certificateType"] ?? 0;
@@ -6864,6 +6854,16 @@ namespace WPEHybrid
                     var path = await Operate.FilterConfig.List.LoadFilterList_Dialog_Shell(fileName);
                     result["count"] = Operate.FilterConfig.List.lstFilterInfo.Count; result["imported"] = !string.IsNullOrEmpty(path); result["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path;
                     return result;
+                }
+                if (kind == "decoders")
+                {
+                    var path = await Operate.DecoderConfig.LoadDecoderList_Dialog_Shell(fileName);
+                    result["count"] = Operate.DecoderConfig.List.lstDecoderInfo.Count; result["imported"] = !string.IsNullOrEmpty(path); result["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path;
+                    return result;
+                }
+                if (kind == "packetextractors")
+                {
+                    await PacketExtractorConfig.ImportDialog(); result["count"] = PacketExtractorConfig.Items.Count; result["dialogCompleted"] = true; return result;
                 }
                 if (kind == "accounts") await Operate.ProxyConfig.Account.LoadAccountList_Dialog(fileName);
                 else if (kind == "firewallwhitelist") await Operate.ProxyConfig.Proxy.LoadWhiteList_Dialog(fileName);

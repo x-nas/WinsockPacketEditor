@@ -178,6 +178,14 @@ namespace WPEHybrid
         /// <summary>
         /// 工作体在 C# 侧的后台线程跑，前端只负责显示/收起遮罩。
         /// Work 不得访问 UI、不得等 UI 线程。
+        ///
+        /// ⚠️ <b>Work 抛出的异常原样抛给调用方</b>（与 <see cref="UI.Busy"/> 未 Attach 时那条
+        /// TaskCompletionSource 分支同一口径）：调用方就是靠它判「这次成没成」。
+        ///
+        /// 以前这里 catch 住、只记一条日志再 <c>return default(T)</c>，于是 ShellForm 的
+        /// <c>AttachTarget</c> 里那个 <c>try/catch</c> 永远进不去 —— 注入失败被当成成功，
+        /// 装了条从头到尾没连上的管道，日志还写「已注入目标」，用户再点一下就撞上
+        /// 「管道尚未连接」。要「失败也要回一个值」的调用方（导出 CSV 那种）自己在 Work 里 catch。
         /// </summary>
         public async Task<T> BusyAsync<T>(string Text, Func<T> Work)
         {
@@ -191,11 +199,6 @@ namespace WPEHybrid
             try
             {
                 return await Task.Run(Work);
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(BusyAsync), ex);
-                return default(T);
             }
             finally
             {

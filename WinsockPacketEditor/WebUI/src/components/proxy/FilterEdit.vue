@@ -1249,15 +1249,15 @@ const { covered } = useModal(() => props.id !== null)
   background: var(--panel);
 }
 
-.hd .tt { flex: 1; display: flex; align-items: baseline; gap: 10px; }
-.hd .zh { font-family: var(--orbit); font-weight: 700; font-size: var(--fs-title); letter-spacing: .04em; color: var(--gray); }
+.hd .tt { flex: 1; display: flex; align-items: baseline; gap: 12px; }
+.hd .zh { font-family: var(--orbit); font-weight: 700; font-size: var(--fs-title); letter-spacing: .04em; color: var(--cyan); }
 
 .hd .sub {
   font-family: var(--share);
   font-size: var(--fs-caption);
-  letter-spacing: .18em;
+  letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--dim);
+  color: var(--muted);
 }
 
 .hd .x { display: inline-flex; padding: 0; background: transparent; border: 0; color: var(--muted); cursor: pointer; }

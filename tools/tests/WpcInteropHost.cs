@@ -80,7 +80,6 @@ static class WpcInteropHost
         {
             int port = FreePort();
 
-            Operate.ProxyConfig.Proxy.Enable_HTTP = false;
             Operate.ProxyConfig.Proxy.Enable_SOCKS5 = true;
             Operate.ProxyConfig.Proxy.Enable_ExternalProxy = false;
             Operate.ProxyConfig.Proxy.ProxyIP_Auto = false;

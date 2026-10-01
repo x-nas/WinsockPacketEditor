@@ -4272,10 +4272,8 @@ namespace WinsockPacketEditor
                         new XElement("ProxyMode",
                         new XElement("ProxyIP_Auto", ProxyConfig.Proxy.ProxyIP_Auto),
                         new XElement("Enable_SOCKS5", ProxyConfig.Proxy.Enable_SOCKS5),
-                        new XElement("Enable_HTTP", ProxyConfig.Proxy.Enable_HTTP),
                         new XElement("ProxyIP", ProxyConfig.Proxy.ProxyIP),
                         new XElement("SOCKS5_Port", ProxyConfig.Proxy.SOCKS5_Port),
-                        new XElement("HTTP_Port", ProxyConfig.Proxy.HTTP_Port),
                         new XElement("Enable_Auth", ProxyConfig.Proxy.Enable_Auth),
                         new XElement("MaxConnectionNumber", ProxyConfig.Proxy.MaxConnectionNumber),
                         new XElement("Enable_UnPack", ProxyConfig.Proxy.Enable_UnPack),
@@ -4345,10 +4343,8 @@ namespace WinsockPacketEditor
                     {
                         ProxyConfig.Proxy.ProxyIP_Auto = Convert.ToBoolean(ProxyMode.Rows[0]["ProxyIP_Auto"]);
                         ProxyConfig.Proxy.Enable_SOCKS5 = Convert.ToBoolean(ProxyMode.Rows[0]["Enable_SOCKS5"]);
-                        ProxyConfig.Proxy.Enable_HTTP = Convert.ToBoolean(ProxyMode.Rows[0]["Enable_HTTP"]);
                         ProxyConfig.Proxy.ProxyIP = ProxyMode.Rows[0]["ProxyIP"].ToString();
                         ProxyConfig.Proxy.SOCKS5_Port = ushort.Parse(ProxyMode.Rows[0]["SOCKS5_Port"].ToString());
-                        ProxyConfig.Proxy.HTTP_Port = ushort.Parse(ProxyMode.Rows[0]["HTTP_Port"].ToString());
                         ProxyConfig.Proxy.Enable_Auth = Convert.ToBoolean(ProxyMode.Rows[0]["EnableAuth"]);
                         ProxyConfig.Proxy.MaxConnectionNumber = Convert.ToInt32(ProxyMode.Rows[0]["MaxConnectionNumber"].ToString());
                         ProxyConfig.Proxy.Enable_UnPack = Convert.ToBoolean(ProxyMode.Rows[0]["Enable_UnPack"]);
@@ -4446,11 +4442,6 @@ namespace WinsockPacketEditor
                         ProxyConfig.Proxy.Enable_SOCKS5 = Convert.ToBoolean(Enable_SOCKS5.Value);
                     }
 
-                    XElement Enable_HTTP = xeProxyMode.Element("Enable_HTTP");
-                    if (Enable_HTTP != null)
-                    {
-                        ProxyConfig.Proxy.Enable_HTTP = Convert.ToBoolean(Enable_HTTP.Value);
-                    }
 
                     XElement ProxyIP = xeProxyMode.Element("ProxyIP");
                     if (ProxyIP != null)
@@ -4464,11 +4455,6 @@ namespace WinsockPacketEditor
                         ProxyConfig.Proxy.SOCKS5_Port = ushort.Parse(SOCKS5_Port.Value);
                     }
 
-                    XElement HTTP_Port = xeProxyMode.Element("HTTP_Port");
-                    if (HTTP_Port != null)
-                    {
-                        ProxyConfig.Proxy.HTTP_Port = ushort.Parse(HTTP_Port.Value);
-                    }
 
                     XElement Enable_Auth = xeProxyMode.Element("Enable_Auth");
                     if (Enable_Auth != null)
@@ -5817,7 +5803,7 @@ namespace WinsockPacketEditor
                 public static bool ProxyIP_Auto = true;
                 public static bool Enable_SystemProxy = false;
                 public static bool Enable_SOCKS5 = true, Enable_Auth = true;
-                public static bool Enable_HTTP = true, MustTCP_AppointPort = false, MustTCP_Auth = false;
+                public static bool MustTCP_AppointPort = false, MustTCP_Auth = false;
                 public static bool MustTCP = true;
 
                 //内置 mihomo 内核（2026-09-23 起取代 SunnyNet 的进程抓取）
@@ -6351,7 +6337,6 @@ namespace WinsockPacketEditor
                 public static int SocketBufferSize = 8192;
                 public static string ProxyIP = string.Empty;
                 public static ushort SOCKS5_Port = 1080;
-                public static ushort HTTP_Port = 1081;
                 public static int MaxConnectionNumber = DefaultMaxConnectionNumber;
                 public static long Total_Request = 0;
                 public static long Total_Response = 0;
@@ -6768,7 +6753,6 @@ namespace WinsockPacketEditor
                     Enable_Auth = enableAuth;
                     Only_WPC_Client = onlyWpc;
                     MaxConnectionNumber = maxConnection;
-                    //Enable_HTTP / HTTP_Port 不再由界面维护：SunnyNet 的 HTTP 代理已随中间件一起移除
                     SystemConfig.SaveProxyMode_ToDB();
                     return string.Empty;
                 }
@@ -6794,7 +6778,6 @@ namespace WinsockPacketEditor
                 {
                     changed = SOCKS5_Port != port;
                     if (port < 1 || port > 65535) return "The SOCKS5 port must be between 1 and 65535.";
-                    if (Enable_HTTP && port == HTTP_Port) return "SOCKS5 and HTTP proxy ports must be different.";
                     if (changed) { SOCKS5_Port = (ushort)port; SystemConfig.SaveProxyMode_ToDB(); }
                     return string.Empty;
                 }
@@ -33285,10 +33268,8 @@ namespace WinsockPacketEditor
                         string sql = "CREATE TABLE IF NOT EXISTS ProxyMode (";
                         sql += "ProxyIP_Auto BOOLEAN DEFAULT 1,";//代理模式 - 自动检测IP                        
                         sql += "Enable_SOCKS5 BOOLEAN DEFAULT 1,";//代理模式 - 启用SOCKS5代理
-                        sql += "Enable_HTTP BOOLEAN DEFAULT 1,";//代理模式 - 启用HTTP代理
                         sql += "ProxyIP TEXT,";//代理模式 - 代理IP
                         sql += "SOCKS5_Port INTEGER DEFAULT 1080,";//代理模式 - SOCKS5代理端口                        
-                        sql += "HTTP_Port INTEGER DEFAULT 1080,";//代理模式 - HTTP代理端口
                         sql += "EnableAuth BOOLEAN DEFAULT 1,";//代理模式 - 启用代理认证
                         sql += "MaxConnectionNumber INTEGER DEFAULT 5000,";//代理模式 - 最大连接数
                         sql += "Enable_UnPack BOOLEAN DEFAULT 0,";//代理模式 - 启用拆包
@@ -33346,6 +33327,9 @@ namespace WinsockPacketEditor
                             EnsureColumn(conn, "ProxyMode", "TunStack", "TEXT DEFAULT 'system'");
                             EnsureColumn(conn, "ProxyMode", "DnsMode", "TEXT DEFAULT 'fake-ip'");
                             EnsureColumn(conn, "ProxyMode", "ManualProcessNames", "TEXT");
+                            // HTTP 代理已随 SunnyNet 移除；旧数据库不再保留这两个无效字段。
+                            DropColumnIfExists(conn, "ProxyMode", "Enable_HTTP");
+                            DropColumnIfExists(conn, "ProxyMode", "HTTP_Port");
                         }
                     }
 
@@ -33413,10 +33397,8 @@ namespace WinsockPacketEditor
                         string sql = "INSERT INTO ProxyMode (";
                         sql += "ProxyIP_Auto,";
                         sql += "Enable_SOCKS5,";
-                        sql += "Enable_HTTP,";
                         sql += "ProxyIP,";
                         sql += "SOCKS5_Port,";
-                        sql += "HTTP_Port,";
                         sql += "EnableAuth,";
                         sql += "MaxConnectionNumber,";
                         sql += "Enable_UnPack,";
@@ -33457,10 +33439,8 @@ namespace WinsockPacketEditor
                         sql += ") VALUES (";
                         sql += "@ProxyIP_Auto,";
                         sql += "@Enable_SOCKS5,";
-                        sql += "@Enable_HTTP,";
                         sql += "@ProxyIP,";
                         sql += "@SOCKS5_Port,";
-                        sql += "@HTTP_Port,";
                         sql += "@EnableAuth,";
                         sql += "@MaxConnectionNumber,";
                         sql += "@Enable_UnPack,";
@@ -33504,10 +33484,8 @@ namespace WinsockPacketEditor
                         {
                             AddParam(cmd, "@ProxyIP_Auto", ProxyConfig.Proxy.ProxyIP_Auto);
                             AddParam(cmd, "@Enable_SOCKS5", ProxyConfig.Proxy.Enable_SOCKS5);
-                            AddParam(cmd, "@Enable_HTTP", ProxyConfig.Proxy.Enable_HTTP);
                             AddParam(cmd, "@ProxyIP", ProxyConfig.Proxy.ProxyIP);
                             AddParam(cmd, "@SOCKS5_Port", ProxyConfig.Proxy.SOCKS5_Port);
-                            AddParam(cmd, "@HTTP_Port", ProxyConfig.Proxy.HTTP_Port);
                             AddParam(cmd, "@EnableAuth", ProxyConfig.Proxy.Enable_Auth);
                             AddParam(cmd, "@MaxConnectionNumber", ProxyConfig.Proxy.MaxConnectionNumber);
                             AddParam(cmd, "@Enable_UnPack", ProxyConfig.Proxy.Enable_UnPack);

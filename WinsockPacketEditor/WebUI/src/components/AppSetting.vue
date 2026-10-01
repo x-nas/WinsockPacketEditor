@@ -269,16 +269,23 @@ async function onSave(): Promise<void> {
       </p>
 
       <div class="grp">{{ t('set.app.display') }}</div>
-      <div class="display-row">
+      <!--
+        两行合成一张 grid：标签列宽取两行里最长的那条（max-content），
+        各语言用自己的宽度，互不压盖，两行的控件列也对齐。
+        以前两行各自 flex + 定宽 74px，英文 “Main text color” 就会溢出压住色块。
+      -->
+      <div class="display-grid">
         <label class="display-label" for="font-scale">{{ t('set.app.fontScale') }}</label>
-        <input id="font-scale" class="scale" v-model.number="draftFontScale" type="range" min="90" max="150" step="5">
-        <output class="scale-value">{{ draftFontScale }}%</output>
-      </div>
-      <div class="display-row">
+        <div class="display-ctl">
+          <input id="font-scale" class="scale" v-model.number="draftFontScale" type="range" min="90" max="150" step="5">
+          <output class="scale-value">{{ draftFontScale }}%</output>
+        </div>
         <label class="display-label" for="main-text-color">{{ t('set.app.textColor') }}</label>
-        <input id="main-text-color" class="color" v-model="draftMainTextColor" type="color" @input="draftCustomTextColor = true">
-        <code>{{ draftMainTextColor.toUpperCase() }}</code>
-        <button class="mini" type="button" @click="resetDisplayDraft">{{ t('set.app.displayReset') }}</button>
+        <div class="display-ctl">
+          <input id="main-text-color" class="color" v-model="draftMainTextColor" type="color" @input="draftCustomTextColor = true">
+          <code>{{ draftMainTextColor.toUpperCase() }}</code>
+          <button class="mini" type="button" @click="resetDisplayDraft">{{ t('set.app.displayReset') }}</button>
+        </div>
       </div>
       <p class="tip">{{ t('set.app.displayHint') }}</p>
 
@@ -400,10 +407,11 @@ async function onSave(): Promise<void> {
 /* 说明是整句，截断了就没意义 —— 与列表设置那几处同一条口径 */
 .tip { margin: 0; padding: 0 20px 10px; font-size: var(--fs-small); line-height: 1.6; color: var(--dim2); }
 
-.display-row { display: flex; align-items: center; gap: 10px; min-height: 32px; padding: 2px 20px; }
-.display-label { flex: 0 0 74px; min-width: calc(5em + 12px); color: var(--muted); font-size: var(--fs-body); white-space: nowrap; }
+.display-grid { display: grid; grid-template-columns: max-content minmax(0, 1fr); align-items: center; gap: 6px 10px; padding: 2px 20px; }
+.display-label { color: var(--muted); font-size: var(--fs-body); white-space: nowrap; }
+.display-ctl { display: flex; align-items: center; gap: 10px; min-height: 32px; min-width: 0; }
 .scale { width: 180px; accent-color: var(--cyan); }
 .scale-value { width: 42px; color: var(--cyan); font-family: var(--mono); font-size: var(--fs-body); }
 .color { width: 28px; height: 24px; padding: 1px; border: 1px solid var(--border2); background: var(--panel); cursor: pointer; }
-.display-row code { color: var(--soft); font-family: var(--mono); font-size: var(--fs-small); }
+.display-ctl code { color: var(--soft); font-family: var(--mono); font-size: var(--fs-small); }
 </style>
