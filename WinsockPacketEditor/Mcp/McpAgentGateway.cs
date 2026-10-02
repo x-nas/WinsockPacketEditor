@@ -192,6 +192,7 @@ namespace WinsockPacketEditor.Mcp
             if (operation == "proxy.runtime.get") return ReadOnUi(GetProxyRuntime);
             if (operation == "remoteManagement.get") return ReadOnUi(GetRemoteManagement);
             if (operation == "settings.get") return ReadOnUi(() => GetSetting(arguments));
+            if (operation == "unpack.rules.get") return ReadOnUi(GetUnpackRules);
             if (operation == "wpc.servers.list") return ReadOnUi(ListWpcServers);
             if (operation == "wpc.server.rules.list") return ReadOnUi(() => ListWpcServerRules(arguments));
             if (operation == "connections.summary.get") return ReadOnUi(GetConnectionsSummary);
@@ -257,6 +258,7 @@ namespace WinsockPacketEditor.Mcp
             if (operation == "settings.save") return SaveSettingAsync(arguments);
             if (operation == "map.local.save") return SaveMapLocalAsync(arguments);
             if (operation == "map.remote.save") return SaveMapRemoteAsync(arguments);
+            if (operation == "unpack.rules.save") return SaveUnpackRulesAsync(arguments);
             if (operation == "backup.export") return ShellActionAsync("backup.export", arguments, "导出选定的 WPE 备份内容；WPE 会显示本地保存对话框。", "backup.export");
             if (operation == "backup.import") return ShellActionAsync("backup.import", arguments, "导入 WPE 备份；WPE 会显示本地选择文件对话框并替换所含配置。", "backup.import");
             if (operation == "wpc.server.save") return SaveWpcServerAsync(arguments);
@@ -1938,6 +1940,58 @@ namespace WinsockPacketEditor.Mcp
                 if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException(error);
                 return new JObject { ["changed"] = true, ["created"] = string.IsNullOrEmpty((string)a?["id"]) };
             })).ConfigureAwait(false);
+        }
+
+        /// <summary>拆包规则是有序整体；不能按单条动作零散修改，否则 MCP 调用间会暴露错误的匹配优先级。</summary>
+        private static JObject GetUnpackRules()
+        {
+            return new JObject
+            {
+                ["enabled"] = Operate.ProxyConfig.Proxy.Enable_UnPack,
+                ["rules"] = JArray.FromObject(Operate.ProxyConfig.Proxy.UnpackRules.Select(r => new
+                {
+                    id = r.Id,
+                    name = r.Name,
+                    enabled = r.IsEnable,
+                    direction = r.Direction,
+                    header = r.Header,
+                    length = r.Length,
+                }))
+            };
+        }
+
+        private static async Task<JToken> SaveUnpackRulesAsync(JObject a)
+        {
+            var enabledToken = a?["enabled"];
+            var rulesToken = a?["rules"] as JArray;
+            if (enabledToken == null || enabledToken.Type != JTokenType.Boolean) throw new InvalidOperationException("enabled must be a boolean.");
+            if (rulesToken == null) throw new InvalidOperationException("rules must be an array.");
+
+            var enabled = enabledToken.Value<bool>();
+            var rules = rulesToken.ToObject<List<Operate.ProxyConfig.Proxy.UnpackRule>>() ?? new List<Operate.ProxyConfig.Proxy.UnpackRule>();
+            if (rules.Count > 64) throw new InvalidOperationException("拆包规则数量不能超过 64 条。");
+            foreach (var rule in rules)
+            {
+                string error = null;
+                if (rule == null || !Operate.ProxyConfig.Proxy.ValidateUnpackSettings(rule.Header, rule.Length, out error)) throw new InvalidOperationException("拆包规则格式无效：" + error);
+                rule.Id = string.IsNullOrWhiteSpace(rule.Id) ? Guid.NewGuid().ToString("N") : rule.Id.Trim();
+                rule.Name = string.IsNullOrWhiteSpace(rule.Name) ? "拆包规则" : rule.Name.Trim();
+                if (rule.Direction < 0 || rule.Direction > 2) rule.Direction = 0;
+            }
+
+            var key = (string)a?["idempotencyKey"];
+            JObject prior;
+            if (McpWriteGuard.TryGetCompleted("unpack.rules.save", key, a, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync(
+                "unpack.rules.save", key, a, "保存 TCP 拆包开关和完整有序规则列表。", () =>
+                {
+                    Operate.ProxyConfig.Proxy.Enable_UnPack = enabled;
+                    Operate.ProxyConfig.Proxy.UnpackRules = rules;
+                    Operate.ProxyConfig.Proxy.UnPack_Head = rules.Count == 0 ? string.Empty : rules[0].Header;
+                    Operate.ProxyConfig.Proxy.UnPack_Length = rules.Count == 0 ? string.Empty : rules[0].Length;
+                    Operate.SystemConfig.SaveProxyMode_ToDB();
+                    return GetUnpackRules();
+                })).ConfigureAwait(false);
         }
 
         private static async Task<JToken> SaveSettingAsync(JObject arguments)

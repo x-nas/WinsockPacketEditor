@@ -16,7 +16,7 @@ interface ToolGroup { title: Key; tools: McpTool[] }
 const toolScopes: Array<{ title: Key; matches: (name: string) => boolean }> = [
   { title: 'mcp.scope.proxy', matches: (name) => /^wpe_(?:proxy_(?:auth|http|max|socks5|bind|external|only|settings|config|runtime|start|stop)|external_proxy|firewall|connections?(?:_|$)|executors_)/.test(name) },
   { title: 'mcp.scope.inject', matches: (name) => /^wpe_(?:inject|driver|process_proxy)/.test(name) },
-  { title: 'mcp.scope.packet', matches: (name) => /^wpe_(?:capture(?!_add_to_(?:send|warehouse)$)|proxy_capture(?!_add_to_(?:send|warehouse)$)|packet(?!_(?:edit_(?:send|add_to_send)$|extractors?(?:_|$)))|bytes|import$|export$)/.test(name) },
+  { title: 'mcp.scope.packet', matches: (name) => /^wpe_(?:capture(?!_add_to_(?:send|warehouse)$)|proxy_capture(?!_add_to_(?:send|warehouse)$)|packet(?!_(?:edit_(?:send|add_to_send)$|extractors?(?:_|$)))|unpack_rules|bytes|import$|export$)/.test(name) },
   { title: 'mcp.scope.account', matches: (name) => /^wpe_accounts?(?:_|$)/.test(name) },
   { title: 'mcp.scope.filter', matches: (name) => /^wpe_filters?(?:_|$)/.test(name) },
   { title: 'mcp.scope.send', matches: (name) => /^wpe_(?:sends?(?:_|$)|send_collection|packet_edit_(?:send|add_to_send)|(?:capture|proxy_capture)_add_to_send)/.test(name) },
@@ -54,6 +54,7 @@ function zhDescription(name: string): string {
     [/^wpe_account/, '代理账号'], [/^wpe_proxy_(auth|http|bind|external|only|max|socks5|runtime|settings|config|start|stop)/, '代理服务设置'],
     [/^wpe_firewall/, '防火墙规则与设置'], [/^wpe_connection/, '当前代理连接'], [/^wpe_executor/, '发送器与机器人执行器'],
     [/^wpe_bytes/, '调用方提供的字节数据'], [/^wpe_send_collection/, '发送任务中的封包集合'], [/^wpe_send/, '发送任务'],
+    [/^wpe_unpack_rules/, 'TCP 拆包规则'],
     [/^wpe_robot_instruction/, '机器人指令'], [/^wpe_robot/, '机器人任务'], [/^wpe_auto_stores/, '自动入库规则'],
     [/^wpe_warehouse_stores/, '仓库中的封包'], [/^wpe_warehouse/, '封包仓库'], [/^wpe_tasks?/, '发送、机器人或仓库任务'],
     [/^wpe_decoders?/, '解码器配置'], [/^wpe_packet_extractors?/, '取值器配置'],

@@ -1247,6 +1247,53 @@
         "type": "object"
       }
     },
+    "wpe_unpack_rules_save": {
+      "input": {
+        "type": "object",
+        "required": [
+          "enabled",
+          "rules",
+          "idempotencyKey"
+        ],
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "rules": {
+            "type": "array",
+            "maxItems": 64,
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "enabled",
+                "direction",
+                "header",
+                "length"
+              ],
+              "properties": {
+                "id": { "type": "string", "maxLength": 64 },
+                "name": { "type": "string", "minLength": 1, "maxLength": 64 },
+                "enabled": { "type": "boolean" },
+                "direction": { "type": "integer", "minimum": 0, "maximum": 2 },
+                "header": { "type": "string", "minLength": 1, "maxLength": 191 },
+                "length": { "type": "string", "minLength": 1, "maxLength": 15 }
+              },
+              "additionalProperties": false
+            }
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object"
+      }
+    },
     "wpe_map_local_save": {
       "input": {
         "type": "object"

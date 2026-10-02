@@ -26,6 +26,7 @@ For filters and WPC servers, reference fields accept an exact visible name or a 
 | `wpe_proxy_runtime_get` | `proxy.runtime.get` | `read.runtime` | Live listener state and bounded counters |
 | `wpe_remote_management_get` | `remoteManagement.get` | `read.runtime` | Remote-management address, administrator credentials, available local addresses and current HTTP-server state |
 | `wpe_setting_get` | `settings.get` | `read.runtime` | Complete snapshot for a named WPE settings page |
+| `wpe_unpack_rules_get` | `unpack.rules.get` | `read.runtime` | TCP unpacking switch and complete ordered rule set |
 | `wpe_wpc_servers_list` | `wpc.servers.list` | `read.runtime` | WPC server configurations including all three client URLs and nested rule counts |
 | `wpe_wpc_server_rules_list` | `wpc.server.rules.list` | `read.runtime` | Rules for one WPC server, including native numeric type/action values |
 | `wpe_connections_summary_get` | `connections.summary.get` | `read.capture` | Complete count fields for the summary's protocol and WPC/ordinary groups |
@@ -89,6 +90,7 @@ For filters and WPC servers, reference fields accept an exact visible name or a 
 | `wpe_remote_management_save` | `remoteManagement.save` | `write.remote-management` | Saves the existing remote-management enabled state, bind address, port and administrator credentials; starts or stops its HTTP server accordingly |
 | `wpe_setting_save` | `settings.save` | `write.settings` | Persists a complete named settings-page configuration through WPE's native business rules |
 | `wpe_map_local_save` / `wpe_map_remote_save` | `map.local.save` / `map.remote.save` | `write.mapping` | Creates or updates the two native HTTP mapping record types |
+| `wpe_unpack_rules_save` | `unpack.rules.save` | `write.proxy` | Atomically validates and replaces the TCP-unpacking switch and ordered rules; rule order is matching priority |
 | `wpe_export` / `wpe_import` | `export.run` / `import.run` | `write.export` / `write.import` | The two unified file-workflow tools cover every native WPE export and import. Use `kind: backup` plus `backupParts.all: true` to export every module. |
 | `wpe_wpc_server_save` | `wpc.server.save` | `write.wpc` | Creates when `id` is omitted; updates accept the exact visible server name or its GUID |
 | `wpe_wpc_server_rule_save` | `wpc.server.rule.save` | `write.wpc` | `serverId` accepts the exact visible server name or GUID; creates rules when `id` is omitted. Global proxy is enabled `type: 15`, empty `argument`, `action: 0` |

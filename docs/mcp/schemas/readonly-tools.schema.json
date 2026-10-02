@@ -48,6 +48,7 @@
     },
     "wpe_remote_management_get": { "input": { "type": "object", "additionalProperties": false }, "output": { "type": "object" } },
     "wpe_setting_get": { "input": { "type": "object", "required": ["page"], "properties": { "page": { "type": "string" }, "mode": { "type": ["string", "null"] } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_unpack_rules_get": { "input": { "type": "object", "additionalProperties": false }, "output": { "type": "object" } },
     "wpe_wpc_servers_list": { "input": { "type": "object", "additionalProperties": false }, "output": { "type": "object" } },
     "wpe_wpc_server_rules_list": { "input": { "type": "object", "required": ["serverId"], "properties": { "serverId": { "type": "string", "description": "Exact visible WPC server name or GUID." } }, "additionalProperties": false }, "output": { "type": "object" } },
     "wpe_connections_summary_get": {

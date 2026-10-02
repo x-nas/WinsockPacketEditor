@@ -119,6 +119,7 @@ namespace WinsockPacketEditor
             d["ExportFilterList.Error"] = "匯出濾鏡列表失敗";
             d["DecoderListFile"] = "解碼器清單檔案";
             d["PacketExtractorListFile"] = "取值器清單檔案";
+            d["UnpackRuleFile"] = "拆包規則檔案";
             d["ImportDecoderList"] = "匯入解碼器清單";
             d["ImportDecoderList.Success"] = "匯入解碼器清單成功";
             d["ExportDecoderList"] = "匯出解碼器清單";

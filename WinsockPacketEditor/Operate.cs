@@ -4279,6 +4279,7 @@ namespace WinsockPacketEditor
                         new XElement("Enable_UnPack", ProxyConfig.Proxy.Enable_UnPack),
                         new XElement("UnPack_Head", ProxyConfig.Proxy.UnPack_Head),
                         new XElement("UnPack_Length", ProxyConfig.Proxy.UnPack_Length),
+                        new XElement("UnpackRules", ProxyConfig.Proxy.SerializeUnpackRules()),
                         new XElement("Enable_MapLocal", ProxyConfig.Mapping.Enable_MapLocal),
                         new XElement("Enable_MapRemote", ProxyConfig.Mapping.Enable_MapRemote),
                         new XElement("Enable_ExternalProxy", ProxyConfig.Proxy.Enable_ExternalProxy),
@@ -4350,6 +4351,7 @@ namespace WinsockPacketEditor
                         ProxyConfig.Proxy.Enable_UnPack = Convert.ToBoolean(ProxyMode.Rows[0]["Enable_UnPack"]);
                         ProxyConfig.Proxy.UnPack_Head = ProxyMode.Rows[0]["UnPack_Head"].ToString();
                         ProxyConfig.Proxy.UnPack_Length = ProxyMode.Rows[0]["UnPack_Length"].ToString();
+                        ProxyConfig.Proxy.LoadUnpackRules(ProxyMode.Columns.Contains("UnpackRules") ? ProxyMode.Rows[0]["UnpackRules"].ToString() : null);
                         ProxyConfig.Mapping.Enable_MapLocal = Convert.ToBoolean(ProxyMode.Rows[0]["Enable_MapLocal"]);
                         ProxyConfig.Mapping.Enable_MapRemote = Convert.ToBoolean(ProxyMode.Rows[0]["Enable_MapRemote"]);
                         ProxyConfig.Proxy.Enable_ExternalProxy = Convert.ToBoolean(ProxyMode.Rows[0]["Enable_ExternalProxy"]);
@@ -4485,6 +4487,9 @@ namespace WinsockPacketEditor
                     {
                         ProxyConfig.Proxy.UnPack_Length = UnPack_Length.Value;
                     }
+
+                    XElement UnpackRules = xeProxyMode.Element("UnpackRules");
+                    ProxyConfig.Proxy.LoadUnpackRules(UnpackRules == null ? null : UnpackRules.Value);
 
                     XElement Enable_MapLocal = xeProxyMode.Element("Enable_MapLocal");
                     if (Enable_MapLocal != null)
@@ -6372,6 +6377,14 @@ namespace WinsockPacketEditor
                 public static bool FireWall_AutoClear_Expiry = false;
                 public static bool Enable_UnPack = false;
                 public static string UnPack_Head = "01 00 00", UnPack_Length = "4-5";
+                /// <summary>拆包规则按列表顺序优先；旧单规则首次加载时自动迁入第一条。</summary>
+                private static List<UnpackRule> unpackRules = new List<UnpackRule> { new UnpackRule { Name = "默认规则", Header = "01 00 00", Length = "4-5" } };
+                /// <summary>当前规则的只读快照。更新必须整表替换，以便一次性重建热路径索引。</summary>
+                public static List<UnpackRule> UnpackRules
+                {
+                    get { return unpackRules; }
+                    set { ReplaceUnpackRules(value); }
+                }
                 private static ArrayPool<byte> ProxyBufferPool = ArrayPool<byte>.Shared;
                 /*
                     每条 TCP 连接的接收缓冲。<b>两头共用同一个值</b>：
@@ -8203,13 +8216,29 @@ namespace WinsockPacketEditor
                 private const int MaxUnpackPacketBytes = 4 * 1024 * 1024;
                 private const int MaxUnpackHeaderBytes = 64;
                 private static readonly object UnpackConfigGate = new object();
-                private static volatile UnpackConfig CachedUnpackConfig;
-                //无效的导入/旧库设置也要记住；否则每一个 TCP 回调都会重新解析并刷一条错误日志。
-                private static string CachedUnpackHead;
-                private static string CachedUnpackLength;
+                private static volatile UnpackSnapshot CachedUnpackSnapshot;
 
-                private sealed class UnpackConfig
+                public sealed class UnpackRule
                 {
+                    public string Id { get; set; } = Guid.NewGuid().ToString("N");
+                    public string Name { get; set; } = "拆包规则";
+                    public bool IsEnable { get; set; } = true;
+                    /// <summary>0 双向、1 请求、2 响应。</summary>
+                    public int Direction { get; set; }
+                    public string Header { get; set; }
+                    public string Length { get; set; }
+                }
+
+                public sealed class UnpackStreamState
+                {
+                    internal byte[] Pending = Array.Empty<byte>();
+                    internal UnpackConfig Selected;
+                    internal void Reset() { Pending = Array.Empty<byte>(); Selected = null; }
+                }
+
+                internal sealed class UnpackConfig
+                {
+                    public readonly UnpackRule Rule;
                     public readonly string HeadText;
                     public readonly string LengthText;
                     public readonly byte[] Header;
@@ -8217,8 +8246,9 @@ namespace WinsockPacketEditor
                     public readonly int LengthBytes;
                     public readonly int MinimumPacketBytes;
 
-                    public UnpackConfig(string headText, string lengthText, byte[] header, int lengthStart, int lengthBytes)
+                    public UnpackConfig(UnpackRule rule, string headText, string lengthText, byte[] header, int lengthStart, int lengthBytes)
                     {
+                        Rule = rule;
                         HeadText = headText;
                         LengthText = lengthText;
                         Header = header;
@@ -8228,17 +8258,58 @@ namespace WinsockPacketEditor
                     }
                 }
 
+                private sealed class UnpackSnapshot
+                {
+                    public readonly UnpackConfig[][] ByFirstByte;
+                    public UnpackSnapshot(UnpackConfig[][] byFirstByte) { ByFirstByte = byFirstByte; }
+                }
+
+                /// <summary>
+                /// 设置页保存、配置载入等冷路径用整表替换。这里复制集合并废弃旧快照，
+                /// 因此每个 TCP 接收回调只读取一次不可变索引，不会枚举或拼接规则文本。
+                /// </summary>
+                public static void ReplaceUnpackRules(IEnumerable<UnpackRule> rules)
+                {
+                    lock (UnpackConfigGate)
+                    {
+                        unpackRules = rules == null ? new List<UnpackRule>() : rules.Where(r => r != null).ToList();
+                        CachedUnpackSnapshot = null;
+                    }
+                }
+
                 /// <summary>保存、MCP 和热路径共用的拆包配置校验。长度字段为 1 基、最多四个大端字节，且表示整个包长度。</summary>
                 public static bool ValidateUnpackSettings(string headerText, string lengthText, out string error)
                 {
                     UnpackConfig config;
-                    return TryCreateUnpackConfig(headerText, lengthText, out config, out error);
+                    return TryCreateUnpackConfig(new UnpackRule { Header = headerText, Length = lengthText }, out config, out error);
                 }
 
-                private static bool TryCreateUnpackConfig(string headerText, string lengthText, out UnpackConfig config, out string error)
+                public static string SerializeUnpackRules()
+                {
+                    return Newtonsoft.Json.JsonConvert.SerializeObject(UnpackRules ?? new List<UnpackRule>());
+                }
+
+                public static void LoadUnpackRules(string json)
+                {
+                    try
+                    {
+                        var rules = string.IsNullOrWhiteSpace(json) ? null : Newtonsoft.Json.JsonConvert.DeserializeObject<List<UnpackRule>>(json);
+                        if (rules == null || rules.Count == 0)
+                        {
+                            rules = new List<UnpackRule>();
+                            if (!string.IsNullOrWhiteSpace(UnPack_Head) && !string.IsNullOrWhiteSpace(UnPack_Length)) rules.Add(new UnpackRule { Name = "默认规则", Header = UnPack_Head, Length = UnPack_Length });
+                        }
+                        ReplaceUnpackRules(rules);
+                    }
+                    catch (Exception ex) { Operate.DoLog(nameof(LoadUnpackRules), ex); ReplaceUnpackRules(null); }
+                }
+
+                private static bool TryCreateUnpackConfig(UnpackRule rule, out UnpackConfig config, out string error)
                 {
                     config = null;
                     error = null;
+                    string headerText = rule == null ? null : rule.Header;
+                    string lengthText = rule == null ? null : rule.Length;
                     byte[] header = ParseHeaderBytes(headerText);
                     var positions = ParseLengthPositions(lengthText);
                     if (header == null || header.Length == 0 || header.Length > MaxUnpackHeaderBytes)
@@ -8261,90 +8332,99 @@ namespace WinsockPacketEditor
                         return false;
                     }
 
-                    config = new UnpackConfig((headerText ?? string.Empty).Trim(), (lengthText ?? string.Empty).Trim(), header, start, bytes);
+                    config = new UnpackConfig(rule, (headerText ?? string.Empty).Trim(), (lengthText ?? string.Empty).Trim(), header, start, bytes);
                     return true;
                 }
 
-                private static UnpackConfig GetUnpackConfig()
+                private static UnpackSnapshot GetUnpackSnapshot()
                 {
-                    string head = (Operate.ProxyConfig.Proxy.UnPack_Head ?? string.Empty).Trim();
-                    string length = (Operate.ProxyConfig.Proxy.UnPack_Length ?? string.Empty).Trim();
-                    UnpackConfig cached = CachedUnpackConfig;
-                    if (CachedUnpackHead == head && CachedUnpackLength == length) { return cached; }
+                    UnpackSnapshot cached = CachedUnpackSnapshot;
+                    if (cached != null) { return cached; }
 
                     lock (UnpackConfigGate)
                     {
-                        cached = CachedUnpackConfig;
-                        if (CachedUnpackHead == head && CachedUnpackLength == length) { return cached; }
-                        string error;
-                        if (!TryCreateUnpackConfig(head, length, out cached, out error))
+                        cached = CachedUnpackSnapshot;
+                        if (cached != null) { return cached; }
+                        List<UnpackRule> rules = unpackRules;
+                        var lists = new List<UnpackConfig>[256];
+                        foreach (UnpackRule rule in rules.Where(r => r != null && r.IsEnable))
                         {
-                            Operate.DoLog("UnpackConfig", error);
-                            CachedUnpackConfig = null;
-                            CachedUnpackHead = head;
-                            CachedUnpackLength = length;
-                            return null;
+                            UnpackConfig config; string error;
+                            if (!TryCreateUnpackConfig(rule, out config, out error)) { Operate.DoLog("UnpackConfig", (rule.Name ?? rule.Id) + "：" + error); continue; }
+                            int first = config.Header[0];
+                            if (lists[first] == null) { lists[first] = new List<UnpackConfig>(); }
+                            lists[first].Add(config);
                         }
-                        CachedUnpackConfig = cached;
-                        CachedUnpackHead = head;
-                        CachedUnpackLength = length;
+                        var index = new UnpackConfig[256][];
+                        for (int i = 0; i < index.Length; i++) { if (lists[i] != null) { index[i] = lists[i].ToArray(); } }
+                        cached = new UnpackSnapshot(index);
+                        CachedUnpackSnapshot = cached;
                         return cached;
                     }
                 }
 
-                public static void ProcessForwardData(ProxySession session, byte[] receivedData, ref byte[] forwardBuffer)
+                public static void ProcessForwardData(ProxySession session, byte[] receivedData, UnpackStreamState state)
                 {
                     try
                     {
                         if (!Enable_UnPack)
                         {
-                            forwardBuffer = Array.Empty<byte>();
+                            state.Reset();
                             ForwardData(session, receivedData);
                             return;
                         }
-                        foreach (byte[] packet in ProcessUnpackData(receivedData, ref forwardBuffer)) { ForwardData(session, packet); }
+                        foreach (byte[] packet in ProcessUnpackData(receivedData, state, true)) { ForwardData(session, packet); }
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(ProcessForwardData), ex);
-                        forwardBuffer = Array.Empty<byte>();
+                        state.Reset();
                     }
                 }
 
-                public static byte[][] ProcessResponseData(byte[] receivedData, ref byte[] responseBuffer)
+                public static byte[][] ProcessResponseData(byte[] receivedData, UnpackStreamState state)
                 {
-                    try { return ProcessUnpackData(receivedData, ref responseBuffer); }
+                    try { return ProcessUnpackData(receivedData, state, false); }
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(ProcessResponseData), ex);
-                        responseBuffer = Array.Empty<byte>();
+                        state.Reset();
                         return receivedData == null || receivedData.Length == 0 ? Array.Empty<byte[]>() : new[] { receivedData };
                     }
+                }
+
+                //反射跑测与旧扩展的兼容入口；生产会话使用带规则固定状态的重载。
+                public static byte[][] ProcessResponseData(byte[] receivedData, ref byte[] legacyBuffer)
+                {
+                    var state = new UnpackStreamState { Pending = legacyBuffer ?? Array.Empty<byte>() };
+                    byte[][] result = ProcessResponseData(receivedData, state);
+                    legacyBuffer = state.Pending;
+                    return result;
                 }
 
                 /// <summary>
                 /// 增量大端帧拆分。Need-more 不再和无效数据混在一个 bool 里：未完成的帧永远留在本方向的残片中；
                 /// 非帧前缀则原样交给滤镜/转发，并保留可能跨接收边界的包头后缀。
                 /// </summary>
-                private static byte[][] ProcessUnpackData(byte[] receivedData, ref byte[] pending)
+                private static byte[][] ProcessUnpackData(byte[] receivedData, UnpackStreamState state, bool request)
                 {
                     if (receivedData == null || receivedData.Length == 0) { return Array.Empty<byte[]>(); }
-                    UnpackConfig config = GetUnpackConfig();
-                    if (config == null)
+                    UnpackSnapshot snapshot = GetUnpackSnapshot();
+                    if (snapshot == null)
                     {
-                        byte[] raw = pending == null || pending.Length == 0 ? receivedData : CombineData(pending, receivedData, 0, receivedData.Length);
-                        pending = Array.Empty<byte>();
+                        byte[] raw = state.Pending == null || state.Pending.Length == 0 ? receivedData : CombineData(state.Pending, receivedData, 0, receivedData.Length);
+                        state.Reset();
                         return raw == null || raw.Length == 0 ? Array.Empty<byte[]>() : new[] { raw };
                     }
 
                     byte[] rented = null;
                     ReadOnlySpan<byte> data;
-                    if (pending != null && pending.Length > 0)
+                    if (state.Pending != null && state.Pending.Length > 0)
                     {
-                        rented = ProxyBufferPool.Rent(pending.Length + receivedData.Length);
-                        Buffer.BlockCopy(pending, 0, rented, 0, pending.Length);
-                        Buffer.BlockCopy(receivedData, 0, rented, pending.Length, receivedData.Length);
-                        data = rented.AsSpan(0, pending.Length + receivedData.Length);
+                        rented = ProxyBufferPool.Rent(state.Pending.Length + receivedData.Length);
+                        Buffer.BlockCopy(state.Pending, 0, rented, 0, state.Pending.Length);
+                        Buffer.BlockCopy(receivedData, 0, rented, state.Pending.Length, receivedData.Length);
+                        data = rented.AsSpan(0, state.Pending.Length + receivedData.Length);
                     }
                     else { data = receivedData; }
 
@@ -8354,7 +8434,10 @@ namespace WinsockPacketEditor
                     {
                         while (offset < data.Length)
                         {
-                            int headerAt = FindHeader(data, offset, config.Header);
+                            UnpackConfig config = state.Selected;
+                            int headerAt;
+                            if (config != null) { headerAt = FindHeader(data, offset, config.Header); }
+                            else { config = FindRule(data, offset, snapshot, request, out headerAt); }
                             if (headerAt != offset)
                             {
                                 if (headerAt >= 0)
@@ -8364,7 +8447,7 @@ namespace WinsockPacketEditor
                                     continue;
                                 }
 
-                                int suffix = LongestHeaderPrefixSuffix(data.Slice(offset), config.Header);
+                                int suffix = config == null ? LongestAnyHeaderPrefixSuffix(data.Slice(offset), snapshot, request) : LongestHeaderPrefixSuffix(data.Slice(offset), config.Header);
                                 int rawLength = data.Length - offset - suffix;
                                 if (rawLength > 0) { output.Add(data.Slice(offset, rawLength).ToArray()); }
                                 offset = data.Length - suffix;
@@ -8385,16 +8468,54 @@ namespace WinsockPacketEditor
                             if ((uint)(data.Length - offset) < packetLength) { break; } // NeedMoreData
 
                             output.Add(data.Slice(offset, (int)packetLength).ToArray());
+                            if (state.Selected == null) { state.Selected = config; }
                             offset += (int)packetLength;
                         }
 
-                        pending = offset < data.Length ? data.Slice(offset).ToArray() : Array.Empty<byte>();
+                        state.Pending = offset < data.Length ? data.Slice(offset).ToArray() : Array.Empty<byte>();
                         return output.ToArray();
                     }
                     finally
                     {
                         if (rented != null) { ProxyBufferPool.Return(rented); }
                     }
+                }
+
+                private static UnpackConfig FindRule(ReadOnlySpan<byte> data, int start, UnpackSnapshot snapshot, bool request, out int foundAt)
+                {
+                    for (int offset = start; offset < data.Length; offset++)
+                    {
+                        UnpackConfig[] candidates = snapshot.ByFirstByte[data[offset]];
+                        if (candidates == null) { continue; }
+                        foreach (UnpackConfig candidate in candidates)
+                        {
+                            if (candidate.Rule.Direction != 0 && candidate.Rule.Direction != (request ? 1 : 2)) { continue; }
+                            if (offset + candidate.Header.Length > data.Length) { continue; }
+                            int i = 0; while (i < candidate.Header.Length && data[offset + i] == candidate.Header[i]) { i++; }
+                            if (i == candidate.Header.Length) { foundAt = offset; return candidate; }
+                        }
+                    }
+                    foundAt = -1;
+                    return null;
+                }
+
+                private static int LongestAnyHeaderPrefixSuffix(ReadOnlySpan<byte> data, UnpackSnapshot snapshot, bool request)
+                {
+                    int max = Math.Min(data.Length, MaxUnpackHeaderBytes - 1);
+                    for (int length = max; length > 0; length--)
+                    {
+                        UnpackConfig[] candidates = snapshot.ByFirstByte[data[data.Length - length]];
+                        if (candidates == null) { continue; }
+                        foreach (UnpackConfig candidate in candidates)
+                        {
+                            if ((candidate.Rule.Direction == 0 || candidate.Rule.Direction == (request ? 1 : 2)) && length < candidate.Header.Length)
+                            {
+                                int i = 0; while (i < length && data[data.Length - length + i] == candidate.Header[i]) { i++; }
+                                if (i == length) { return length; }
+                            }
+                        }
+                    }
+                    return 0;
                 }
 
                 private static int FindHeader(ReadOnlySpan<byte> data, int start, byte[] header)
@@ -8461,7 +8582,8 @@ namespace WinsockPacketEditor
                         if (!int.TryParse(parts[0], out int start) || !int.TryParse(parts[1], out int end))
                             return (-1, -1);
 
-                        if (start < 0 || end < start)
+                        //界面位置是从 1 开始的序号；后续会换算为零基数组下标，0 会变成非法的 -1。
+                        if (start < 1 || end < start)
                             return (-1, -1);
 
                         return (start, end);
@@ -33341,6 +33463,7 @@ namespace WinsockPacketEditor
                         sql += "Enable_UnPack BOOLEAN DEFAULT 0,";//代理模式 - 启用拆包
                         sql += "UnPack_Head TEXT,";//代理模式 - 拆包指定包头
                         sql += "UnPack_Length TEXT,";//代理模式 - 拆包长度位置
+                        sql += "UnpackRules TEXT,";//代理模式 - 拆包规则 JSON
                         sql += "Enable_MapLocal BOOLEAN DEFAULT 0,";//代理模式 - 启用本地代理映射
                         sql += "Enable_MapRemote BOOLEAN DEFAULT 0,";//代理模式 - 启用远程代理映射
                         sql += "Enable_ExternalProxy BOOLEAN DEFAULT 0,";//代理模式 - 启用外部代理
@@ -33393,6 +33516,7 @@ namespace WinsockPacketEditor
                             EnsureColumn(conn, "ProxyMode", "TunStack", "TEXT DEFAULT 'system'");
                             EnsureColumn(conn, "ProxyMode", "DnsMode", "TEXT DEFAULT 'fake-ip'");
                             EnsureColumn(conn, "ProxyMode", "ManualProcessNames", "TEXT");
+                            EnsureColumn(conn, "ProxyMode", "UnpackRules", "TEXT");
                             // HTTP 代理已随 SunnyNet 移除；旧数据库不再保留这两个无效字段。
                             DropColumnIfExists(conn, "ProxyMode", "Enable_HTTP");
                             DropColumnIfExists(conn, "ProxyMode", "HTTP_Port");
@@ -33470,6 +33594,7 @@ namespace WinsockPacketEditor
                         sql += "Enable_UnPack,";
                         sql += "UnPack_Head,";
                         sql += "UnPack_Length,";
+                        sql += "UnpackRules,";
                         sql += "Enable_MapLocal,";
                         sql += "Enable_MapRemote,";
                         sql += "Enable_ExternalProxy,";
@@ -33512,6 +33637,7 @@ namespace WinsockPacketEditor
                         sql += "@Enable_UnPack,";
                         sql += "@UnPack_Head,";
                         sql += "@UnPack_Length,";
+                        sql += "@UnpackRules,";
                         sql += "@Enable_MapLocal,";
                         sql += "@Enable_MapRemote,";
                         sql += "@Enable_ExternalProxy,";
@@ -33557,6 +33683,7 @@ namespace WinsockPacketEditor
                             AddParam(cmd, "@Enable_UnPack", ProxyConfig.Proxy.Enable_UnPack);
                             AddParam(cmd, "@UnPack_Head", ProxyConfig.Proxy.UnPack_Head);
                             AddParam(cmd, "@UnPack_Length", ProxyConfig.Proxy.UnPack_Length);
+                            AddParam(cmd, "@UnpackRules", ProxyConfig.Proxy.SerializeUnpackRules());
                             AddParam(cmd, "@Enable_MapLocal", ProxyConfig.Mapping.Enable_MapLocal);
                             AddParam(cmd, "@Enable_MapRemote", ProxyConfig.Mapping.Enable_MapRemote);
                             AddParam(cmd, "@Enable_ExternalProxy", ProxyConfig.Proxy.Enable_ExternalProxy);

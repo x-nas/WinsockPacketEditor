@@ -10,7 +10,7 @@ using System.Security.Cryptography;
 namespace WinsockPacketEditor
 {
     /// <summary>
-    /// 让资源管理器给 WPE 自己导出的 15 种数据文件（.sb / .fp / .sp …）显示 WPE 的数据文件图标。
+    /// 让资源管理器给 WPE 自己导出的 16 种数据文件（.sb / .fp / .sp …）显示 WPE 的数据文件图标。
     ///
     /// 【为什么只能靠注册表】Windows 显示文件图标只看文件关联（后缀 → ProgID → DefaultIcon），
     /// 没注册的后缀一律画成空白文档。这里只注册<b>图标与类型名</b>，<b>不注册打开方式</b> ——
@@ -34,7 +34,7 @@ namespace WinsockPacketEditor
     /// </summary>
     public static class FileAssociation
     {
-        #region//15 种文件
+        #region//16 种文件
 
         public sealed class FileType
         {
@@ -61,6 +61,7 @@ namespace WinsockPacketEditor
             new FileType(".fp",  "WPE64.FilterList",     () => UI.T("FilterListFile", "滤镜列表文件")),
             new FileType(".dec", "WPE64.DecoderList",    () => UI.T("DecoderListFile", "解码器列表文件")),
             new FileType(".pex", "WPE64.PacketExtractorList", () => UI.T("PacketExtractorListFile", "取值器列表文件")),
+            new FileType(".upr", "WPE64.UnpackRuleList", () => UI.T("UnpackRuleFile", "拆包规则文件")),
             new FileType(".sp",  "WPE64.SendList",       () => UI.T("SendListFile", "发送列表文件")),
             new FileType(".sc",  "WPE64.SendCollection", () => UI.T("SendList.SendCollectionFile", "发送集文件")),
             new FileType(".rp",  "WPE64.RobotList",      () => UI.T("RobotListFile", "机器人列表文件")),

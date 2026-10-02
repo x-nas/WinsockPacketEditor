@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -2646,6 +2647,7 @@ namespace WPEHybrid
                 unpack = ProxyCfg.Enable_UnPack,
                 unpackHead = ProxyCfg.UnPack_Head,
                 unpackLength = ProxyCfg.UnPack_Length,
+                unpackRules = ProxyCfg.UnpackRules.Select(r => new { r.Id, r.Name, r.IsEnable, r.Direction, r.Header, r.Length }).ToArray(),
             });
 
             this.bridge.Register("saveHookSetting", args =>
@@ -2711,6 +2713,7 @@ namespace WPEHybrid
                     bool unpack = Flag("unpack");
                     string head = (args["unpackHead"] == null ? string.Empty : (string)args["unpackHead"]).Trim();
                     string len = (args["unpackLength"] == null ? string.Empty : (string)args["unpackLength"]).Trim();
+                    var unpackRules = args["unpackRules"] == null ? new List<ProxyCfg.UnpackRule>() : args["unpackRules"].ToObject<List<ProxyCfg.UnpackRule>>();
 
                     /*
                         勾了拆包就得两个都填对。
@@ -2722,10 +2725,20 @@ namespace WPEHybrid
                     */
                     if (unpack)
                     {
-                        string unpackError;
-                        if (!ProxyCfg.ValidateUnpackSettings(head, len, out unpackError))
+                        if (unpackRules.Count > 64)
                         {
-                            return new { ok = false, error = UI.T("HookSettingsForm.UnPack.Error", "拆包设置不正确") + "：" + unpackError };
+                            return new { ok = false, error = "拆包规则数量不能超过 64 条" };
+                        }
+                        foreach (var rule in unpackRules)
+                        {
+                            string unpackError = string.Empty;
+                            if (rule == null || !ProxyCfg.ValidateUnpackSettings(rule.Header, rule.Length, out unpackError))
+                            {
+                                return new { ok = false, error = UI.T("HookSettingsForm.UnPack.Error", "拆包设置不正确") + "：" + unpackError };
+                            }
+                            rule.Id = string.IsNullOrWhiteSpace(rule.Id) ? Guid.NewGuid().ToString("N") : rule.Id;
+                            rule.Name = string.IsNullOrWhiteSpace(rule.Name) ? "拆包规则" : rule.Name.Trim();
+                            if (rule.Direction < 0 || rule.Direction > 2) { rule.Direction = 0; }
                         }
                     }
 
@@ -2735,8 +2748,9 @@ namespace WPEHybrid
                     ProxyCfg.HookUDP_Resp = Flag("udpResp");
 
                     ProxyCfg.Enable_UnPack = unpack;
-                    ProxyCfg.UnPack_Head = head;
-                    ProxyCfg.UnPack_Length = len;
+                    ProxyCfg.UnpackRules = unpackRules;
+                    ProxyCfg.UnPack_Head = unpackRules.Count > 0 ? unpackRules[0].Header : head;
+                    ProxyCfg.UnPack_Length = unpackRules.Count > 0 ? unpackRules[0].Length : len;
 
                     //这七个字段都在 ProxyMode 表
                     Operate.SystemConfig.SaveProxyMode_ToDB();
@@ -2749,6 +2763,51 @@ namespace WPEHybrid
                     Operate.DoLog("saveHookSetting", ex);
                     return new { ok = false, error = ex.Message };
                 }
+            });
+
+            //拆包规则工具栏：和映射列表一样在当前设置草稿上导入 / 导出 / 清空；真正落库仍由下面的「保存」统一完成。
+            this.bridge.Register("unpackRulesCommand", async args =>
+            {
+                int action = args["action"] == null ? -1 : (int)args["action"];
+                var rules = args["rules"] == null
+                    ? new List<ProxyCfg.UnpackRule>()
+                    : args["rules"].ToObject<List<ProxyCfg.UnpackRule>>() ?? new List<ProxyCfg.UnpackRule>();
+
+                if (action == 5)
+                {
+                    if (rules.Count == 0) { return new { rules = rules.ToArray() }; }
+                    string path = await UI.PickSave(new FilePick { Filter = "拆包规则文件（*.upr）|*.upr", FileName = "拆包规则" });
+                    if (!string.IsNullOrEmpty(path))
+                    {
+                        File.WriteAllText(path, Newtonsoft.Json.JsonConvert.SerializeObject(rules, Newtonsoft.Json.Formatting.Indented));
+                        UI.Notify(UiIcon.Success, "导出拆包规则成功", path);
+                    }
+                }
+                else if (action == 8)
+                {
+                    string path = await UI.PickOpen(new FilePick { Filter = "拆包规则文件（*.upr）|*.upr" });
+                    if (!string.IsNullOrEmpty(path))
+                    {
+                        var loaded = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ProxyCfg.UnpackRule>>(File.ReadAllText(path));
+                        if (loaded == null) { throw new InvalidDataException("拆包规则文件格式无效"); }
+                        foreach (var rule in loaded.Where(x => x != null))
+                        {
+                            string error;
+                            if (!ProxyCfg.ValidateUnpackSettings(rule.Header, rule.Length, out error)) { throw new InvalidDataException("拆包规则格式无效：" + error); }
+                            rule.Id = Guid.NewGuid().ToString("N");
+                            rule.Name = string.IsNullOrWhiteSpace(rule.Name) ? "拆包规则" : rule.Name.Trim();
+                            if (rule.Direction < 0 || rule.Direction > 2) { rule.Direction = 0; }
+                        }
+                        rules.AddRange(loaded.Where(x => x != null));
+                        if (rules.Count > 64) { throw new InvalidDataException("拆包规则数量不能超过 64 条"); }
+                        UI.Notify(UiIcon.Success, "导入拆包规则成功", path);
+                    }
+                }
+                else if (action == 7)
+                {
+                    if (rules.Count > 0 && await UI.Confirm("拆包规则", "确定删除全部拆包规则吗？")) { rules.Clear(); }
+                }
+                return new { rules = rules.ToArray() };
             });
 
             #endregion
@@ -6761,6 +6820,15 @@ namespace WPEHybrid
                 else if (kind == "firewallblacklist") await Operate.ProxyConfig.Proxy.SaveBlackList_Dialog(fileName, Operate.ProxyConfig.Proxy.lstBlackList);
                 else if (kind == "maplocal") await Operate.ProxyConfig.Mapping.SaveMapLocal_Dialog(fileName, Operate.ProxyConfig.Mapping.lstMapLocal);
                 else if (kind == "mapremote") await Operate.ProxyConfig.Mapping.SaveMapRemote_Dialog(fileName, Operate.ProxyConfig.Mapping.lstMapRemote);
+                else if (kind == "unpackrules")
+                {
+                    var path = await UI.PickSave(new FilePick { Filter = "拆包规则文件（*.upr）|*.upr", FileName = string.IsNullOrEmpty(fileName) ? "拆包规则" : fileName });
+                    if (!string.IsNullOrEmpty(path)) File.WriteAllText(path, Newtonsoft.Json.JsonConvert.SerializeObject(Operate.ProxyConfig.Proxy.UnpackRules, Newtonsoft.Json.Formatting.Indented));
+                    result["count"] = Operate.ProxyConfig.Proxy.UnpackRules.Count;
+                    result["saved"] = !string.IsNullOrEmpty(path);
+                    result["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path;
+                    return result;
+                }
                 else if (kind == "sends") await Operate.SendConfig.List.SaveSendList_Dialog(fileName, null);
                 else if (kind == "robots") await Operate.RobotConfig.List.SaveRobotList_Dialog(fileName, null);
                 else if (kind == "sendcollection")
@@ -6844,6 +6912,34 @@ namespace WPEHybrid
                 else if (kind == "firewallblacklist") await Operate.ProxyConfig.Proxy.LoadBlackList_Dialog(fileName);
                 else if (kind == "maplocal") await Operate.ProxyConfig.Mapping.LoadMapLocal_Dialog(fileName);
                 else if (kind == "mapremote") await Operate.ProxyConfig.Mapping.LoadMapRemote_Dialog(fileName);
+                else if (kind == "unpackrules")
+                {
+                    var path = await UI.PickOpen(new FilePick { Filter = "拆包规则文件（*.upr）|*.upr", FileName = fileName });
+                    if (!string.IsNullOrEmpty(path))
+                    {
+                        var loaded = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Operate.ProxyConfig.Proxy.UnpackRule>>(File.ReadAllText(path));
+                        if (loaded == null) throw new InvalidDataException("拆包规则文件格式无效");
+                        var rules = Operate.ProxyConfig.Proxy.UnpackRules.Where(x => x != null).ToList();
+                        foreach (var rule in loaded.Where(x => x != null))
+                        {
+                            string error;
+                            if (!Operate.ProxyConfig.Proxy.ValidateUnpackSettings(rule.Header, rule.Length, out error)) throw new InvalidDataException("拆包规则格式无效：" + error);
+                            rule.Id = Guid.NewGuid().ToString("N");
+                            rule.Name = string.IsNullOrWhiteSpace(rule.Name) ? "拆包规则" : rule.Name.Trim();
+                            if (rule.Direction < 0 || rule.Direction > 2) rule.Direction = 0;
+                            rules.Add(rule);
+                        }
+                        if (rules.Count > 64) throw new InvalidDataException("拆包规则数量不能超过 64 条");
+                        Operate.ProxyConfig.Proxy.UnpackRules = rules;
+                        Operate.ProxyConfig.Proxy.UnPack_Head = rules.Count == 0 ? string.Empty : rules[0].Header;
+                        Operate.ProxyConfig.Proxy.UnPack_Length = rules.Count == 0 ? string.Empty : rules[0].Length;
+                        Operate.SystemConfig.SaveProxyMode_ToDB();
+                    }
+                    result["count"] = Operate.ProxyConfig.Proxy.UnpackRules.Count;
+                    result["imported"] = !string.IsNullOrEmpty(path);
+                    result["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path;
+                    return result;
+                }
                 else if (kind == "sends") await Operate.SendConfig.List.LoadSendList_Dialog_Shell(fileName);
                 else if (kind == "robots") await Operate.RobotConfig.List.LoadRobotList_Dialog_Shell(fileName);
                 else if (kind == "sendcollection")

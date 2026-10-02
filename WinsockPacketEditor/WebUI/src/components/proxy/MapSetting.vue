@@ -145,10 +145,10 @@ async function save(): Promise<void> {
       <div class="tbl" :class="{ dim: !f.enableLocal }">
         <div class="tbar">
           <button class="sbtn primary" @click="localEdit = 'add'">{{ t('fw.add') }}</button>
-          <button class="sbtn" @click="command(false, ListAction.Import)">{{ t('map.import') }}</button>
-          <button class="sbtn" :disabled="!locals.length" @click="command(false, ListAction.Export)">{{ t('map.export') }}</button>
           <span class="grow" />
           <span class="cnt">{{ locals.length }}</span>
+          <button class="sbtn" @click="command(false, ListAction.Import)">{{ t('map.import') }}</button>
+          <button class="sbtn" :disabled="!locals.length" @click="command(false, ListAction.Export)">{{ t('map.export') }}</button>
           <button class="sbtn danger" :disabled="!locals.length" @click="command(false, ListAction.CleanUp)">{{ t('rb.clearAll') }}</button>
         </div>
         <div class="tbody">
@@ -186,10 +186,10 @@ async function save(): Promise<void> {
       <div class="tbl" :class="{ dim: !f.enableRemote }">
         <div class="tbar">
           <button class="sbtn primary" @click="remoteEdit = 'add'">{{ t('fw.add') }}</button>
-          <button class="sbtn" @click="command(true, ListAction.Import)">{{ t('map.import') }}</button>
-          <button class="sbtn" :disabled="!remotes.length" @click="command(true, ListAction.Export)">{{ t('map.export') }}</button>
           <span class="grow" />
           <span class="cnt">{{ remotes.length }}</span>
+          <button class="sbtn" @click="command(true, ListAction.Import)">{{ t('map.import') }}</button>
+          <button class="sbtn" :disabled="!remotes.length" @click="command(true, ListAction.Export)">{{ t('map.export') }}</button>
           <button class="sbtn danger" :disabled="!remotes.length" @click="command(true, ListAction.CleanUp)">{{ t('rb.clearAll') }}</button>
         </div>
         <div class="tbody">
