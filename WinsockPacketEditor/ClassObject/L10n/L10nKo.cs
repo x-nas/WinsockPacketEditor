@@ -113,6 +113,7 @@ namespace WinsockPacketEditor
             d["ExportFilterList.Error"] = "필터 목록을 내보내지 못했습니다";
             d["DecoderListFile"] = "디코더 목록 파일";
             d["PacketExtractorListFile"] = "패킷 추출기 목록 파일";
+            d["PacketExtractor.DefaultName"] = "추출기";
             d["UnpackRuleFile"] = "패킷 분할 규칙 파일";
             d["ImportDecoderList"] = "디코더 목록 가져오기";
             d["ImportDecoderList.Success"] = "디코더 목록을 가져왔습니다";

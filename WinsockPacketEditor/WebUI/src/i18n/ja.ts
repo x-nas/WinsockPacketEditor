@@ -82,6 +82,8 @@ export const ja: Record<Key, string> = {
   'quick.tab.send': '送信',
   'quick.tab.robot': 'ロボット',
   'quick.tab.warehouse': 'ウェアハウス',
+  'quick.tab.decoder': 'デコーダー',
+  'quick.tab.extractor': '抽出器',
   'quick.hkTip': 'ショートカット 1–10 で{0}の 1–10 番目を実行し、「実行」「停止」で{0}全体を開始・停止します。「ショートカット設定」で切り替えます',
   'proxy.running': '実行中',
   'proxy.stopped': '停止中',

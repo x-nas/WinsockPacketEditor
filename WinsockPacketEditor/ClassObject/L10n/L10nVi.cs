@@ -113,6 +113,7 @@ namespace WinsockPacketEditor
             d["ExportFilterList.Error"] = "Xuất danh sách bộ lọc thất bại";
             d["DecoderListFile"] = "Tệp danh sách bộ giải mã";
             d["PacketExtractorListFile"] = "Tệp danh sách bộ trích xuất gói";
+            d["PacketExtractor.DefaultName"] = "Bộ trích xuất";
             d["UnpackRuleFile"] = "Tệp quy tắc tách gói";
             d["ImportDecoderList"] = "Nhập danh sách bộ giải mã";
             d["ImportDecoderList.Success"] = "Đã nhập danh sách bộ giải mã";

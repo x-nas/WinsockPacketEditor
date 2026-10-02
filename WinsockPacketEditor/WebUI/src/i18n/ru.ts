@@ -82,6 +82,8 @@ export const ru: Record<Key, string> = {
   'quick.tab.send': 'Отправка',
   'quick.tab.robot': 'Робот',
   'quick.tab.warehouse': 'Хранилище',
+  'quick.tab.decoder': 'Декодер',
+  'quick.tab.extractor': 'Извлекатель',
   'quick.hkTip': 'Клавиши 1–10 запускают пункты 1–10 из «{0}»; «Выполнить» / «Стоп» запускают и останавливают весь список. Переключается в настройках горячих клавиш',
   'proxy.running': 'Работает',
   'proxy.stopped': 'Остановлено',

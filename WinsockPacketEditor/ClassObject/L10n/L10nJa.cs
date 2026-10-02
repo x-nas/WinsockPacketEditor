@@ -113,6 +113,7 @@ namespace WinsockPacketEditor
             d["ExportFilterList.Error"] = "フィルター一覧の書き出しに失敗しました";
             d["DecoderListFile"] = "デコーダー一覧ファイル";
             d["PacketExtractorListFile"] = "パケット抽出一覧ファイル";
+            d["PacketExtractor.DefaultName"] = "抽出器";
             d["UnpackRuleFile"] = "パケット分割規則ファイル";
             d["ImportDecoderList"] = "デコーダー一覧の読み込み";
             d["ImportDecoderList.Success"] = "デコーダー一覧の読み込みに成功しました";

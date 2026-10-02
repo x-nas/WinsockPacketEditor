@@ -119,7 +119,7 @@ namespace WinsockPacketEditor
             Save();
         }
 
-        public static string Add() { var item = new PacketExtractorInfo { Name = "取值器 " + (Items.Count + 1) }; Items.Add(item); Save(); return item.Id.ToString().ToUpperInvariant(); }
+        public static string Add() { var item = new PacketExtractorInfo { Name = UI.T("PacketExtractor.DefaultName", "取值器") + " " + (Items.Count + 1) }; Items.Add(item); Save(); return item.Id.ToString().ToUpperInvariant(); }
         public static bool SaveOne(PacketExtractorInfo item, out string error) { if (!Normalize(item, out error)) return false; var old = Items.FirstOrDefault(x => x.Id == item.Id); if (old == null) Items.Add(item); else Items[Items.IndexOf(old)] = item; Save(); return true; }
         public static int Delete(IEnumerable<Guid> ids) { var set = new HashSet<Guid>(ids ?? Enumerable.Empty<Guid>()); int count = 0; for (int i = Items.Count - 1; i >= 0; i--) if (set.Contains(Items[i].Id)) { Items.RemoveAt(i); count++; } if (count > 0) Save(); return count; }
 

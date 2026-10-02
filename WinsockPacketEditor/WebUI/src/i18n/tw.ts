@@ -83,6 +83,8 @@ export const tw: Record<Key, string> = {
   'quick.tab.send': '傳送',
   'quick.tab.robot': '機器人',
   'quick.tab.warehouse': '倉庫',
+  'quick.tab.decoder': '解碼器',
+  'quick.tab.extractor': '取值器',
   'quick.hkTip': '快捷鍵 1–10 依序執行{0}的第 1–10 條，「執行」「停止」兩個鍵啟停整份{0}。在「快捷鍵設定」裡切換',
   'proxy.running': '執行中',
   'proxy.stopped': '未啟動',

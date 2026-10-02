@@ -162,6 +162,8 @@ export const DICT = {
   'quick.tab.send': { zh: '发送', en: 'Send' },
   'quick.tab.robot': { zh: '机器人', en: 'Robot' },
   'quick.tab.warehouse': { zh: '仓库', en: 'WareHouse' },
+  'quick.tab.decoder': { zh: '解码器', en: 'Decoder' },
+  'quick.tab.extractor': { zh: '取值器', en: 'Extractor' },
   'quick.hkTip': { zh: '快捷键 1–10 依次执行{0}的第 1–10 条，「执行」「停止」两个键启停整份{0}。在「快捷键设置」里切换', en: 'Hotkeys 1–10 run items 1–10 of the {0}; Execute / Stop start and stop the whole {0}. Switch it in HotKey Settings' },
 
 

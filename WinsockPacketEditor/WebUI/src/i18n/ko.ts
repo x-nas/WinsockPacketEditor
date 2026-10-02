@@ -82,6 +82,8 @@ export const ko: Record<Key, string> = {
   'quick.tab.send': '전송',
   'quick.tab.robot': '로봇',
   'quick.tab.warehouse': '창고',
+  'quick.tab.decoder': '디코더',
+  'quick.tab.extractor': '추출기',
   'quick.hkTip': '단축키 1–10은 {0}의 1–10번째 항목을 실행하고, 「실행」「중지」로 {0} 전체를 시작·중지합니다. 「단축키 설정」에서 전환합니다',
   'proxy.running': '실행 중',
   'proxy.stopped': '중지됨',

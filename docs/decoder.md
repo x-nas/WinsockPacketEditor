@@ -60,6 +60,7 @@
 解码与「智能解码」分成两屏（侧栏 Rules 组的「解码器列表」与 Tools 组的「编码解码」）：
 
 - `components/decoder/DecoderList.vue`：解码器<b>列表页</b>，与滤镜 / 发送 / 机器人 / 仓库并列。表格 + 工具条（添加 / 全部启用 / 全部禁用 / 导入 / 导出 / 清空）+ 右键菜单七个动作（置顶 / 上移 / 下移 / 置底 / 复制 / 导出 / 删除 + 全选 / 取消选择）。解码器不在 FeedList 推送流里，每个改动动作后自己 `ensureDecoders(true)` 重拉。
+- **快捷面板**（数据页下半屏左侧，`components/proxy/QuickPanel.vue`，注入 / 代理共用）：也有一栏「解码器」（与「取值器」并列）。列表走 `getDecoders` 拉取，勾选启停走 `setDecoderEnable`、双击开 `DecoderEdit`、右键走 `decoderListAction`。因为解码器不在 Feed 推送流里，面板里每个改动动作后都要 `ensureDecoders(true)` 重拉 —— 不重拉就会看着像「复制 / 移动没生效」；面板里**不提供导出**（导出在解码器列表页）。
 - `components/decoder/Decoder.vue`：<b>智能解码</b>工作台。选择器（`快速编解码` 或某个已保存解码器）在<b>中间栏顶部</b>，右边是「智能解码 / 清空」。选到快速编解码时整块工作台换成 `Transcode.vue`，选择器经它的 `#extra` 插槽放进它的中间栏（否则选到快速编解码后就切不回来了）；选到解码器时显示测试台。中间栏宽度固定 **250px**（与 `Transcode.vue` 的 `.workbench` 一致），两种来源之间切换时不会一宽一窄。
 - `DecoderEdit.vue`（编辑弹窗，列表页与「保存为解码器」共用）、`SmartResult.vue` / `BatchResult.vue` / `DecodeResult.vue`（结果弹窗）、`actions.ts`（右键菜单项 + DTO）、`enums.ts`（枚举与 `kindLabel`）。
 - 快速编解码复用 `components/proxy/Transcode.vue`（嵌入态），与已保存解码器的测试台同一种「左原文 / 中参数 / 右结果」布局；编码 `原文 → 结果`、解码 `结果 → 原文`（右栏可编辑，解码读右栏、写回左栏并保留右栏）。

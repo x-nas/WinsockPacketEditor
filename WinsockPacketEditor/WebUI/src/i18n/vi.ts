@@ -82,6 +82,8 @@ export const vi: Record<Key, string> = {
   'quick.tab.send': 'Gửi',
   'quick.tab.robot': 'Robot',
   'quick.tab.warehouse': 'Kho',
+  'quick.tab.decoder': 'Bộ giải mã',
+  'quick.tab.extractor': 'Bộ trích xuất',
   'quick.hkTip': 'Phím tắt 1–10 chạy mục 1–10 của {0}; «Thực thi» / «Dừng» bật tắt toàn bộ {0}. Đổi trong Cài đặt phím tắt',
   'proxy.running': 'Đang chạy',
   'proxy.stopped': 'Đã dừng',
