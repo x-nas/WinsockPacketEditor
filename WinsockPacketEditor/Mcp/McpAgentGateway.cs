@@ -1969,13 +1969,13 @@ namespace WinsockPacketEditor.Mcp
 
             var enabled = enabledToken.Value<bool>();
             var rules = rulesToken.ToObject<List<Operate.ProxyConfig.Proxy.UnpackRule>>() ?? new List<Operate.ProxyConfig.Proxy.UnpackRule>();
-            if (rules.Count > 64) throw new InvalidOperationException("拆包规则数量不能超过 64 条。");
+            if (rules.Count > 64) throw new InvalidOperationException("No more than 64 unpacking rules are allowed.");
             foreach (var rule in rules)
             {
                 string error = null;
-                if (rule == null || !Operate.ProxyConfig.Proxy.ValidateUnpackSettings(rule.Header, rule.Length, out error)) throw new InvalidOperationException("拆包规则格式无效：" + error);
+                if (rule == null || !Operate.ProxyConfig.Proxy.ValidateUnpackSettings(rule.Header, rule.Length, out error)) throw new InvalidOperationException("Invalid unpacking rule: " + error);
                 rule.Id = string.IsNullOrWhiteSpace(rule.Id) ? Guid.NewGuid().ToString("N") : rule.Id.Trim();
-                rule.Name = string.IsNullOrWhiteSpace(rule.Name) ? "拆包规则" : rule.Name.Trim();
+                rule.Name = string.IsNullOrWhiteSpace(rule.Name) ? UI.T("HookSettingsForm.UnPack.RuleName", "拆包规则") : rule.Name.Trim();
                 if (rule.Direction < 0 || rule.Direction > 2) rule.Direction = 0;
             }
 

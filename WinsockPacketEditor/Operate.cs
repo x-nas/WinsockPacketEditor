@@ -6378,7 +6378,7 @@ namespace WinsockPacketEditor
                 public static bool Enable_UnPack = false;
                 public static string UnPack_Head = "01 00 00", UnPack_Length = "4-5";
                 /// <summary>拆包规则按列表顺序优先；旧单规则首次加载时自动迁入第一条。</summary>
-                private static List<UnpackRule> unpackRules = new List<UnpackRule> { new UnpackRule { Name = "默认规则", Header = "01 00 00", Length = "4-5" } };
+                private static List<UnpackRule> unpackRules = new List<UnpackRule> { new UnpackRule { Name = UI.T("HookSettingsForm.UnPack.DefaultRuleName", "默认规则"), Header = "01 00 00", Length = "4-5" } };
                 /// <summary>当前规则的只读快照。更新必须整表替换，以便一次性重建热路径索引。</summary>
                 public static List<UnpackRule> UnpackRules
                 {
@@ -8221,7 +8221,7 @@ namespace WinsockPacketEditor
                 public sealed class UnpackRule
                 {
                     public string Id { get; set; } = Guid.NewGuid().ToString("N");
-                    public string Name { get; set; } = "拆包规则";
+                    public string Name { get; set; } = UI.T("HookSettingsForm.UnPack.RuleName", "拆包规则");
                     public bool IsEnable { get; set; } = true;
                     /// <summary>0 双向、1 请求、2 响应。</summary>
                     public int Direction { get; set; }
@@ -8297,7 +8297,7 @@ namespace WinsockPacketEditor
                         if (rules == null || rules.Count == 0)
                         {
                             rules = new List<UnpackRule>();
-                            if (!string.IsNullOrWhiteSpace(UnPack_Head) && !string.IsNullOrWhiteSpace(UnPack_Length)) rules.Add(new UnpackRule { Name = "默认规则", Header = UnPack_Head, Length = UnPack_Length });
+                            if (!string.IsNullOrWhiteSpace(UnPack_Head) && !string.IsNullOrWhiteSpace(UnPack_Length)) rules.Add(new UnpackRule { Name = UI.T("HookSettingsForm.UnPack.DefaultRuleName", "默认规则"), Header = UnPack_Head, Length = UnPack_Length });
                         }
                         ReplaceUnpackRules(rules);
                     }
@@ -8314,12 +8314,12 @@ namespace WinsockPacketEditor
                     var positions = ParseLengthPositions(lengthText);
                     if (header == null || header.Length == 0 || header.Length > MaxUnpackHeaderBytes)
                     {
-                        error = "包头必须是 1 到 " + MaxUnpackHeaderBytes + " 个十六进制字节";
+                        error = UI.T("HookSettingsForm.UnPack.HeaderRange", "包头必须是 1 到 64 个十六进制字节");
                         return false;
                     }
                     if (positions.Start < 1 || positions.End < positions.Start || positions.End - positions.Start + 1 > 4)
                     {
-                        error = "长度位置必须从 1 开始，且长度字段只能是 1 到 4 个字节";
+                        error = UI.T("HookSettingsForm.UnPack.LengthRange", "长度位置必须从 1 开始，且长度字段只能是 1 到 4 个字节");
                         return false;
                     }
 
@@ -8328,7 +8328,7 @@ namespace WinsockPacketEditor
                     int minimum = Math.Max(header.Length, start + bytes);
                     if (minimum > MaxUnpackPacketBytes)
                     {
-                        error = "拆包头部过长";
+                        error = UI.T("HookSettingsForm.UnPack.HeaderTooLong", "拆包头部过长");
                         return false;
                     }
 

@@ -410,6 +410,18 @@ export const DICT = {
   'set.hook.length': { zh: '长度字段位置', en: 'Length field' },
   'set.hook.lengthPh': { zh: '如 4-5', en: 'e.g. 4-5' },
   'set.hook.lengthHint': { zh: '包内第几到第几个字节存长度，从 1 数起', en: 'Byte range holding the length, counting from 1' },
+  'set.hook.unpackRule': { zh: '拆包规则', en: 'Unpack Rule' },
+  'set.hook.defaultRuleName': { zh: '默认规则', en: 'Default rule' },
+  'set.hook.unpackEmpty': { zh: '暂无拆包规则', en: 'No unpacking rules yet' },
+  'set.hook.grpRule': { zh: '规则', en: 'Rule' },
+  'set.hook.grpFrame': { zh: '帧格式', en: 'Frame Format' },
+  'set.hook.ruleNamePh': { zh: '请输入名称', en: 'Enter a name' },
+  'set.hook.ruleRequired': { zh: '请填写名称、包头特征和长度字段位置', en: 'Fill in the name, header bytes and length field' },
+  'set.hook.ruleDirBoth': { zh: '双向', en: 'Both' },
+  'set.hook.ruleHint': {
+    zh: '长度字段位置从 1 开始编号，按大端解释并表示整个包长度；首个有效帧会固定该 TCP 方向所命中的规则。',
+    en: 'The length field is numbered from 1, read as big-endian, and covers the whole packet. The first valid frame pins the rule for that TCP direction.',
+  },
 
   'set.grp.workMode': { zh: '工作模式', en: 'Work Mode' },
   'set.speedMode': { zh: '极速模式', en: 'Speed Mode' },

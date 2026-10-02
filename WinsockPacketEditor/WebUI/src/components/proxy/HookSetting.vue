@@ -71,7 +71,7 @@ const form = ref<Form>({
   unpack: false,
   unpackHead: '01 00 00',
   unpackLength: '4-5',
-  unpackRules: [{ Id: '', Name: '默认规则', IsEnable: true, Direction: 0, Header: '01 00 00', Length: '4-5' }],
+  unpackRules: [{ Id: '', Name: t('set.hook.defaultRuleName'), IsEnable: true, Direction: 0, Header: '01 00 00', Length: '4-5' }],
 })
 
 /** 注入模式那一页的三组，文案沿用封包类型那一族键（与过滤设置的类别同一套口径）。 */
@@ -115,7 +115,7 @@ function saveUnpackRule(rule: UnpackRuleRow): void {
   if (i >= 0) form.value.unpackRules.splice(i, 1, rule)
 }
 function delUnpackRule(i: number): void { form.value.unpackRules.splice(i, 1) }
-function dirText(v: number): string { return v === 1 ? t('pt.req') : (v === 2 ? t('pt.resp') : '双向') }
+function dirText(v: number): string { return v === 1 ? t('pt.req') : (v === 2 ? t('pt.resp') : t('set.hook.ruleDirBoth')) }
 
 /*
   拆包规则仍在当前设置草稿中：右键排序 / 删除先改草稿，按「保存」才一并落库。
@@ -311,7 +311,7 @@ async function save(): Promise<void> {
           <span>{{ t('set.hook.length') }}</span>
           <span class="ops">{{ t('col.ops') }}</span>
         </div>
-        <div v-if="!form.unpackRules.length" class="empty">暂无拆包规则</div>
+        <div v-if="!form.unpackRules.length" class="empty">{{ t('set.hook.unpackEmpty') }}</div>
         <div v-for="(r, i) in form.unpackRules" v-else :key="r.Id || i" class="tr ur" :class="{ off: !r.IsEnable }"
              @contextmenu.prevent="openUnpackMenu($event, i)"
              @dblclick="!($event.target as HTMLElement).closest('button') && (unpackEdit = r)">

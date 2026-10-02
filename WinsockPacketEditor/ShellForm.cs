@@ -2727,7 +2727,7 @@ namespace WPEHybrid
                     {
                         if (unpackRules.Count > 64)
                         {
-                            return new { ok = false, error = "拆包规则数量不能超过 64 条" };
+                            return new { ok = false, error = UI.T("HookSettingsForm.UnPack.Max", "拆包规则数量不能超过 64 条") };
                         }
                         foreach (var rule in unpackRules)
                         {
@@ -2737,7 +2737,7 @@ namespace WPEHybrid
                                 return new { ok = false, error = UI.T("HookSettingsForm.UnPack.Error", "拆包设置不正确") + "：" + unpackError };
                             }
                             rule.Id = string.IsNullOrWhiteSpace(rule.Id) ? Guid.NewGuid().ToString("N") : rule.Id;
-                            rule.Name = string.IsNullOrWhiteSpace(rule.Name) ? "拆包规则" : rule.Name.Trim();
+                            rule.Name = string.IsNullOrWhiteSpace(rule.Name) ? UI.T("HookSettingsForm.UnPack.RuleName", "拆包规则") : rule.Name.Trim();
                             if (rule.Direction < 0 || rule.Direction > 2) { rule.Direction = 0; }
                         }
                     }
@@ -2776,36 +2776,36 @@ namespace WPEHybrid
                 if (action == 5)
                 {
                     if (rules.Count == 0) { return new { rules = rules.ToArray() }; }
-                    string path = await UI.PickSave(new FilePick { Filter = "拆包规则文件（*.upr）|*.upr", FileName = "拆包规则" });
+                    string path = await UI.PickSave(new FilePick { Filter = UI.T("UnpackRuleFile", "拆包规则文件") + "（*.upr）|*.upr", FileName = UI.T("HookSettingsForm.UnPack.FileName", "拆包规则") });
                     if (!string.IsNullOrEmpty(path))
                     {
                         File.WriteAllText(path, Newtonsoft.Json.JsonConvert.SerializeObject(rules, Newtonsoft.Json.Formatting.Indented));
-                        UI.Notify(UiIcon.Success, "导出拆包规则成功", path);
+                        UI.Notify(UiIcon.Success, UI.T("HookSettingsForm.UnPack.ExportOk", "导出拆包规则成功"), path);
                     }
                 }
                 else if (action == 8)
                 {
-                    string path = await UI.PickOpen(new FilePick { Filter = "拆包规则文件（*.upr）|*.upr" });
+                    string path = await UI.PickOpen(new FilePick { Filter = UI.T("UnpackRuleFile", "拆包规则文件") + "（*.upr）|*.upr" });
                     if (!string.IsNullOrEmpty(path))
                     {
                         var loaded = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ProxyCfg.UnpackRule>>(File.ReadAllText(path));
-                        if (loaded == null) { throw new InvalidDataException("拆包规则文件格式无效"); }
+                        if (loaded == null) { throw new InvalidDataException(UI.T("HookSettingsForm.UnPack.BadFile", "拆包规则文件格式无效")); }
                         foreach (var rule in loaded.Where(x => x != null))
                         {
                             string error;
-                            if (!ProxyCfg.ValidateUnpackSettings(rule.Header, rule.Length, out error)) { throw new InvalidDataException("拆包规则格式无效：" + error); }
+                            if (!ProxyCfg.ValidateUnpackSettings(rule.Header, rule.Length, out error)) { throw new InvalidDataException(UI.T("HookSettingsForm.UnPack.BadRule", "拆包规则格式无效") + "：" + error); }
                             rule.Id = Guid.NewGuid().ToString("N");
-                            rule.Name = string.IsNullOrWhiteSpace(rule.Name) ? "拆包规则" : rule.Name.Trim();
+                            rule.Name = string.IsNullOrWhiteSpace(rule.Name) ? UI.T("HookSettingsForm.UnPack.RuleName", "拆包规则") : rule.Name.Trim();
                             if (rule.Direction < 0 || rule.Direction > 2) { rule.Direction = 0; }
                         }
                         rules.AddRange(loaded.Where(x => x != null));
-                        if (rules.Count > 64) { throw new InvalidDataException("拆包规则数量不能超过 64 条"); }
-                        UI.Notify(UiIcon.Success, "导入拆包规则成功", path);
+                        if (rules.Count > 64) { throw new InvalidDataException(UI.T("HookSettingsForm.UnPack.Max", "拆包规则数量不能超过 64 条")); }
+                        UI.Notify(UiIcon.Success, UI.T("HookSettingsForm.UnPack.ImportOk", "导入拆包规则成功"), path);
                     }
                 }
                 else if (action == 7)
                 {
-                    if (rules.Count > 0 && await UI.Confirm("拆包规则", "确定删除全部拆包规则吗？")) { rules.Clear(); }
+                    if (rules.Count > 0 && await UI.Confirm(UI.T("HookSettingsForm.UnPack.ClearTitle", "拆包规则"), UI.T("HookSettingsForm.UnPack.ClearConfirm", "确定删除全部拆包规则吗？"))) { rules.Clear(); }
                 }
                 return new { rules = rules.ToArray() };
             });
@@ -6822,7 +6822,7 @@ namespace WPEHybrid
                 else if (kind == "mapremote") await Operate.ProxyConfig.Mapping.SaveMapRemote_Dialog(fileName, Operate.ProxyConfig.Mapping.lstMapRemote);
                 else if (kind == "unpackrules")
                 {
-                    var path = await UI.PickSave(new FilePick { Filter = "拆包规则文件（*.upr）|*.upr", FileName = string.IsNullOrEmpty(fileName) ? "拆包规则" : fileName });
+                    var path = await UI.PickSave(new FilePick { Filter = UI.T("UnpackRuleFile", "拆包规则文件") + "（*.upr）|*.upr", FileName = string.IsNullOrEmpty(fileName) ? UI.T("HookSettingsForm.UnPack.FileName", "拆包规则") : fileName });
                     if (!string.IsNullOrEmpty(path)) File.WriteAllText(path, Newtonsoft.Json.JsonConvert.SerializeObject(Operate.ProxyConfig.Proxy.UnpackRules, Newtonsoft.Json.Formatting.Indented));
                     result["count"] = Operate.ProxyConfig.Proxy.UnpackRules.Count;
                     result["saved"] = !string.IsNullOrEmpty(path);
@@ -6914,22 +6914,22 @@ namespace WPEHybrid
                 else if (kind == "mapremote") await Operate.ProxyConfig.Mapping.LoadMapRemote_Dialog(fileName);
                 else if (kind == "unpackrules")
                 {
-                    var path = await UI.PickOpen(new FilePick { Filter = "拆包规则文件（*.upr）|*.upr", FileName = fileName });
+                    var path = await UI.PickOpen(new FilePick { Filter = UI.T("UnpackRuleFile", "拆包规则文件") + "（*.upr）|*.upr", FileName = fileName });
                     if (!string.IsNullOrEmpty(path))
                     {
                         var loaded = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Operate.ProxyConfig.Proxy.UnpackRule>>(File.ReadAllText(path));
-                        if (loaded == null) throw new InvalidDataException("拆包规则文件格式无效");
+                        if (loaded == null) throw new InvalidDataException(UI.T("HookSettingsForm.UnPack.BadFile", "拆包规则文件格式无效"));
                         var rules = Operate.ProxyConfig.Proxy.UnpackRules.Where(x => x != null).ToList();
                         foreach (var rule in loaded.Where(x => x != null))
                         {
                             string error;
-                            if (!Operate.ProxyConfig.Proxy.ValidateUnpackSettings(rule.Header, rule.Length, out error)) throw new InvalidDataException("拆包规则格式无效：" + error);
+                            if (!Operate.ProxyConfig.Proxy.ValidateUnpackSettings(rule.Header, rule.Length, out error)) throw new InvalidDataException(UI.T("HookSettingsForm.UnPack.BadRule", "拆包规则格式无效") + "：" + error);
                             rule.Id = Guid.NewGuid().ToString("N");
-                            rule.Name = string.IsNullOrWhiteSpace(rule.Name) ? "拆包规则" : rule.Name.Trim();
+                            rule.Name = string.IsNullOrWhiteSpace(rule.Name) ? UI.T("HookSettingsForm.UnPack.RuleName", "拆包规则") : rule.Name.Trim();
                             if (rule.Direction < 0 || rule.Direction > 2) rule.Direction = 0;
                             rules.Add(rule);
                         }
-                        if (rules.Count > 64) throw new InvalidDataException("拆包规则数量不能超过 64 条");
+                        if (rules.Count > 64) throw new InvalidDataException(UI.T("HookSettingsForm.UnPack.Max", "拆包规则数量不能超过 64 条"));
                         Operate.ProxyConfig.Proxy.UnpackRules = rules;
                         Operate.ProxyConfig.Proxy.UnPack_Head = rules.Count == 0 ? string.Empty : rules[0].Header;
                         Operate.ProxyConfig.Proxy.UnPack_Length = rules.Count == 0 ? string.Empty : rules[0].Length;
