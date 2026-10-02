@@ -349,103 +349,98 @@ async function save(): Promise<void> {
       防火墙这里原来正好相反，属于不一致。
     -->
     <p v-if="!form.enable" class="hint idle">{{ t('fw.listIdle') }}</p>
+    </section>
 
     <!--
-      2026-10-02：两张表从「页签二选一」改成<b>并排两张</b>（用户要求去掉白 / 黑两个切换按钮）。
-      去掉的是「客户端地」与「生效次数」两列（客户端列表与连接明细里看得到），
-      否则半宽的表装不下。两张表各自自适应高度铺满所在卡片，不留空隙。
+      2026-10-02：两张表从「页签二选一」先后改成并排、再改成<b>上下两张各自成区</b>
+      （用户要求：白名单在上为 03 区、黑名单在下为 04 区）。两张表各自排序、各自编辑弹窗；
+      卡片底内边距归零、表底边框让掉 —— 表直接铺满卡片，不留空隙。
     -->
-    <div class="names">
-      <!-- ── 白名单 ─────────────────────────────────────── -->
-      <section class="sec">
-      <div class="grp">{{ t('fw.whiteList') }} <span class="cnt">{{ white.length }}</span></div>
+    <section class="sec">
+    <div class="grp">{{ t('fw.whiteList') }} <span class="cnt">{{ white.length }}</span></div>
 
-      <div class="tbl" :class="{ 'no-data': !white.length }">
-        <div class="tbar">
-          <button class="mini" @click="add(false)">{{ t('fw.add') }}</button>
-          <span class="grow" />
-          <button class="mini" @click="listAction(8, false)">{{ t('flt.import') }}</button>
-          <button class="mini" :disabled="!whiteRows.length" @click="listAction(5, false)">{{ t('lst.export') }}</button>
-          <button class="mini danger" :disabled="!whiteRows.length" @click="listAction(7, false)">{{ t('flt.clearAll') }}</button>
-        </div>
-        <div class="thead" :style="rowStyle">
-          <span class="so" :class="{ on: sortWhite.active('ip') }" @click="sortWhite.toggle('ip')">
-            {{ t('cli.ip') }}<i class="ar">{{ sortWhite.mark('ip') }}</i>
-            <i class="grip" :title="t('col.resizeHint')"
-               @click.stop
-               @mousedown.prevent.stop="startResize($event, 'ip')"
-               @dblclick.prevent.stop="resetWidth('ip')" />
+    <div class="tbl">
+      <div class="tbar">
+        <button class="sbtn primary" @click="add(false)">{{ t('fw.add') }}</button>
+        <span class="grow" />
+        <button class="sbtn" @click="listAction(8, false)">{{ t('flt.import') }}</button>
+        <button class="sbtn" :disabled="!whiteRows.length" @click="listAction(5, false)">{{ t('lst.export') }}</button>
+        <button class="sbtn danger" :disabled="!whiteRows.length" @click="listAction(7, false)">{{ t('flt.clearAll') }}</button>
+      </div>
+      <div class="thead" :style="rowStyle">
+        <span class="so" :class="{ on: sortWhite.active('ip') }" @click="sortWhite.toggle('ip')">
+          {{ t('cli.ip') }}<i class="ar">{{ sortWhite.mark('ip') }}</i>
+          <i class="grip" :title="t('col.resizeHint')"
+             @click.stop
+             @mousedown.prevent.stop="startResize($event, 'ip')"
+             @dblclick.prevent.stop="resetWidth('ip')" />
+        </span>
+        <span class="so" :class="{ on: sortWhite.active('expiry') }" @click="sortWhite.toggle('expiry')">{{ t('fw.expiryTime') }}<i class="ar">{{ sortWhite.mark('expiry') }}</i></span>
+        <span class="th-act">{{ t('col.ops') }}</span>
+      </div>
+      <div class="tbody">
+        <div v-if="!whiteRows.length" class="empty">{{ t('fw.emptyList') }}</div>
+        <div v-for="(r, i) in whiteRows" v-else :key="r.IPAddress + '|' + i" class="trow"
+             :style="rowStyle" @dblclick="edit(r, false)">
+          <span class="ip">{{ r.IPAddress }}</span>
+          <span class="exp" :class="{ never: !r.IsExpiry }">
+            {{ r.IsExpiry ? r.ExpiryTime : t('fw.never') }}
           </span>
-          <span class="so" :class="{ on: sortWhite.active('expiry') }" @click="sortWhite.toggle('expiry')">{{ t('fw.expiryTime') }}<i class="ar">{{ sortWhite.mark('expiry') }}</i></span>
-          <span class="th-act">{{ t('col.ops') }}</span>
-        </div>
-        <div class="tbody">
-          <div v-if="!whiteRows.length" class="empty">{{ t('fw.emptyList') }}</div>
-          <div v-for="(r, i) in whiteRows" v-else :key="r.IPAddress + '|' + i" class="trow"
-               :style="rowStyle" @dblclick="edit(r, false)">
-            <span class="ip">{{ r.IPAddress }}</span>
-            <span class="exp" :class="{ never: !r.IsExpiry }">
-              {{ r.IsExpiry ? r.ExpiryTime : t('fw.never') }}
-            </span>
-            <span class="ops">
-              <button class="op" :title="t('fw.edit')" @click.stop="edit(r, false)">
-                <svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4z" /></svg>
-              </button>
-              <button class="op del" :title="t('lst.delete')" @click.stop="del(r, false)">
-                <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg>
-              </button>
-            </span>
-          </div>
+          <span class="ops">
+            <button class="op" :title="t('fw.edit')" @click.stop="edit(r, false)">
+              <svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4z" /></svg>
+            </button>
+            <button class="op del" :title="t('lst.delete')" @click.stop="del(r, false)">
+              <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg>
+            </button>
+          </span>
         </div>
       </div>
-      </section>
-
-      <!-- ── 黑名单 ─────────────────────────────────────── -->
-      <section class="sec">
-      <div class="grp">{{ t('fw.blackList') }} <span class="cnt">{{ black.length }}</span></div>
-
-      <div class="tbl" :class="{ 'no-data': !black.length }">
-        <div class="tbar">
-          <button class="mini" @click="add(true)">{{ t('fw.add') }}</button>
-          <span class="grow" />
-          <button class="mini" @click="listAction(8, true)">{{ t('flt.import') }}</button>
-          <button class="mini" :disabled="!blackRows.length" @click="listAction(5, true)">{{ t('lst.export') }}</button>
-          <button class="mini danger" :disabled="!blackRows.length" @click="listAction(7, true)">{{ t('flt.clearAll') }}</button>
-        </div>
-        <div class="thead" :style="rowStyle">
-          <span class="so" :class="{ on: sortBlack.active('ip') }" @click="sortBlack.toggle('ip')">
-            {{ t('cli.ip') }}<i class="ar">{{ sortBlack.mark('ip') }}</i>
-            <i class="grip" :title="t('col.resizeHint')"
-               @click.stop
-               @mousedown.prevent.stop="startResize($event, 'ip')"
-               @dblclick.prevent.stop="resetWidth('ip')" />
-          </span>
-          <span class="so" :class="{ on: sortBlack.active('expiry') }" @click="sortBlack.toggle('expiry')">{{ t('fw.expiryTime') }}<i class="ar">{{ sortBlack.mark('expiry') }}</i></span>
-          <span class="th-act">{{ t('col.ops') }}</span>
-        </div>
-        <div class="tbody">
-          <div v-if="!blackRows.length" class="empty">{{ t('fw.emptyList') }}</div>
-          <div v-for="(r, i) in blackRows" v-else :key="r.IPAddress + '|' + i" class="trow"
-               :style="rowStyle" @dblclick="edit(r, true)">
-            <span class="ip">{{ r.IPAddress }}</span>
-            <span class="exp" :class="{ never: !r.IsExpiry }">
-              {{ r.IsExpiry ? r.ExpiryTime : t('fw.never') }}
-            </span>
-            <span class="ops">
-              <button class="op" :title="t('fw.edit')" @click.stop="edit(r, true)">
-                <svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4z" /></svg>
-              </button>
-              <button class="op del" :title="t('lst.delete')" @click.stop="del(r, true)">
-                <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg>
-              </button>
-            </span>
-          </div>
-        </div>
-      </div>
-      </section>
     </div>
     </section>
 
+    <section class="sec">
+    <div class="grp">{{ t('fw.blackList') }} <span class="cnt">{{ black.length }}</span></div>
+
+    <div class="tbl">
+      <div class="tbar">
+        <button class="sbtn primary" @click="add(true)">{{ t('fw.add') }}</button>
+        <span class="grow" />
+        <button class="sbtn" @click="listAction(8, true)">{{ t('flt.import') }}</button>
+        <button class="sbtn" :disabled="!blackRows.length" @click="listAction(5, true)">{{ t('lst.export') }}</button>
+        <button class="sbtn danger" :disabled="!blackRows.length" @click="listAction(7, true)">{{ t('flt.clearAll') }}</button>
+      </div>
+      <div class="thead" :style="rowStyle">
+        <span class="so" :class="{ on: sortBlack.active('ip') }" @click="sortBlack.toggle('ip')">
+          {{ t('cli.ip') }}<i class="ar">{{ sortBlack.mark('ip') }}</i>
+          <i class="grip" :title="t('col.resizeHint')"
+             @click.stop
+             @mousedown.prevent.stop="startResize($event, 'ip')"
+             @dblclick.prevent.stop="resetWidth('ip')" />
+        </span>
+        <span class="so" :class="{ on: sortBlack.active('expiry') }" @click="sortBlack.toggle('expiry')">{{ t('fw.expiryTime') }}<i class="ar">{{ sortBlack.mark('expiry') }}</i></span>
+        <span class="th-act">{{ t('col.ops') }}</span>
+      </div>
+      <div class="tbody">
+        <div v-if="!blackRows.length" class="empty">{{ t('fw.emptyList') }}</div>
+        <div v-for="(r, i) in blackRows" v-else :key="r.IPAddress + '|' + i" class="trow"
+             :style="rowStyle" @dblclick="edit(r, true)">
+          <span class="ip">{{ r.IPAddress }}</span>
+          <span class="exp" :class="{ never: !r.IsExpiry }">
+            {{ r.IsExpiry ? r.ExpiryTime : t('fw.never') }}
+          </span>
+          <span class="ops">
+            <button class="op" :title="t('fw.edit')" @click.stop="edit(r, true)">
+              <svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4z" /></svg>
+            </button>
+            <button class="op del" :title="t('lst.delete')" @click.stop="del(r, true)">
+              <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg>
+            </button>
+          </span>
+        </div>
+      </div>
+    </div>
+    </section>
     <IPRuleEdit
       :target="editingWhite"
       :black="false"
@@ -474,27 +469,11 @@ async function save(): Promise<void> {
 
 /* ── 名单 ── */
 
-/*
-  2026-10-02 起这里是<b>两张并排的表</b>，各自一张卡（.sec）。
-  白 / 黑两个切换按钮去掉之后，两张表的卡片标题直接写着是哪张名单，还带条数。
-*/
-.names { display: flex; align-items: stretch; gap: 10px; padding: 0 14px; }
-/*
-  ⚠️ min-width: 0 是必须的：flex 项默认 min-width: auto，表里定宽列一多就会把卡片
-  顶得比容器还宽（横向溢出到弹窗外）。加了它，容器不够宽时由表内部的横向滚动条接手。
-*/
-.names .sec { flex: 1 1 0; min-width: 0; margin: 0 0 8px; padding-bottom: 0; }
-.names .sec > .grp { margin-bottom: 0; }
 /* 条数跟在名单名后面，用等宽字，与工具条里那个计数同一套 */
 .cnt { margin-left: 6px; font-family: var(--mono); font-size: var(--fs-caption); color: var(--muted); }
 
-/*
-  放开之后必须说一句「现在还不生效」——否则用户认认真真加完一批 IP，
-  而防火墙关着，屏幕上没有任何东西提示他还差最后一步。
-  （「默认不出声的东西要出声」，与统计页那条恒等式校验同一条规矩。）
-*/
+/* 放开之后必须说一句「现在还不生效」——否则用户认真加完一批 IP 而防火墙关着，界面不出声。 */
 .hint.idle { color: var(--amber); }
-.grow { flex: 1; }
 
 /*
   表体：<b>表直接铺满卡片</b> —— 表的左右边框去掉、卡片底内边距归零、
@@ -510,8 +489,8 @@ async function save(): Promise<void> {
   overflow: hidden;
 }
 
-/* 两张表的工具条：新增靠左，导入 / 导出 / 清空靠右 */
-.tbar { display: flex; align-items: center; gap: 6px; padding: 6px 8px; border-bottom: 1px solid var(--border); background: var(--card); }
+/* 两张表的工具条：新增靠左（绿色，同映射设置的主按钮），导入 / 导出 / 清空靠右 */
+.tbar { display: flex; align-items: center; gap: 8px; padding: 6px 14px; border-bottom: 1px solid var(--border); background: var(--card); }
 .tbar .grow { flex: 1; }
 
 .thead,
@@ -522,7 +501,7 @@ async function save(): Promise<void> {
   /* 实际最小宽度由 rowStyle 给，见脚本里那段说明 */
   align-items: center;
   gap: 8px;
-  padding: 0 8px;
+  padding: 0 14px;
   font-size: var(--fs-body);
 }
 

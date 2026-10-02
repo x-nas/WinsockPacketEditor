@@ -159,8 +159,6 @@ export const vi: Record<Key, string> = {
   'set.app.assocOff': 'Chưa liên kết · sẽ không tự liên kết khi khởi động',
   'set.app.assocClear': 'Gỡ liên kết',
   'set.app.assocRedo': 'Liên kết lại',
-  'set.app.assocHint': 'Các loại tệp trong bảng dưới hiện biểu tượng tệp dữ liệu WPE trong File Explorer. Chỉ thay đổi thiết lập của người dùng hiện tại, không đăng ký “mở bằng”. Nút có hiệu lực ngay, không cần bấm Lưu.',
-  'set.app.assocForeign': '{0} đã thuộc chương trình khác nên được giữ nguyên',
   'set.app.assocMissing': 'Thiếu wpe-data.ico trong thư mục chương trình nên không thể liên kết',
   'set.app.assocDone': 'Đã liên kết biểu tượng tệp',
   'set.app.assocCleared': 'Đã gỡ liên kết; sẽ không tự liên kết lại khi khởi động',

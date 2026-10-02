@@ -253,8 +253,6 @@ export const DICT = {
   'set.app.assocOff': { zh: '未关联 · 启动时不会再自动关联', en: 'Not associated · will not re-associate at startup' },
   'set.app.assocClear': { zh: '清除文件关联', en: 'Remove association' },
   'set.app.assocRedo': { zh: '重新关联', en: 'Associate again' },
-  'set.app.assocHint': { zh: '下表的文件类型在资源管理器里显示 WPE 数据文件图标。只改当前用户设置，不注册打开方式；按钮立即生效，不用按「保存」。', en: 'The file types below show the WPE data-file icon in File Explorer. Only the current user is affected and no “open with” is registered. The button applies immediately — no need to press Save.' },
-  'set.app.assocForeign': { zh: '{0} 已被其他程序占用，保留原样', en: '{0} already belong to another program and were left alone' },
   'set.app.assocMissing': { zh: '程序目录里缺少 wpe-data.ico，无法关联', en: 'wpe-data.ico is missing from the program folder, so nothing can be associated' },
   'set.app.assocDone': { zh: '已关联文件图标', en: 'File icons associated' },
   'set.app.assocCleared': { zh: '已清除文件关联，启动时不会再自动关联', en: 'File association removed; it will not be restored at startup' },

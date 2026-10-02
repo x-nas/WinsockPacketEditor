@@ -159,8 +159,6 @@ export const ko: Record<Key, string> = {
   'set.app.assocOff': '연결 안 됨 · 시작할 때 자동으로 연결하지 않음',
   'set.app.assocClear': '연결 해제',
   'set.app.assocRedo': '다시 연결',
-  'set.app.assocHint': '아래 파일 종류가 파일 탐색기에서 WPE 데이터 파일 아이콘으로 표시됩니다. 현재 사용자 설정만 바꾸며 ‘연결 프로그램’은 등록하지 않습니다. 버튼은 바로 적용되며 ‘저장’을 누를 필요가 없습니다.',
-  'set.app.assocForeign': '{0}은(는) 다른 프로그램이 사용 중이라 그대로 두었습니다',
   'set.app.assocMissing': '프로그램 폴더에 wpe-data.ico가 없어 연결할 수 없습니다',
   'set.app.assocDone': '파일 아이콘을 연결했습니다',
   'set.app.assocCleared': '연결을 해제했습니다. 시작할 때 자동으로 연결하지 않습니다',

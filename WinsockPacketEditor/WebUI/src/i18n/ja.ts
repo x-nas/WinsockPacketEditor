@@ -159,8 +159,6 @@ export const ja: Record<Key, string> = {
   'set.app.assocOff': '未関連付け · 起動時に自動で関連付けません',
   'set.app.assocClear': '関連付けを解除',
   'set.app.assocRedo': '再び関連付け',
-  'set.app.assocHint': '下表のファイル種別がエクスプローラーで WPE データファイルのアイコンとして表示されます。現在のユーザーの設定だけを変更し、「プログラムから開く」は登録しません。ボタンはすぐに反映され、「保存」は不要です。',
-  'set.app.assocForeign': '{0} は他のプログラムが使用中のため変更していません',
   'set.app.assocMissing': 'プログラムフォルダーに wpe-data.ico がないため関連付けできません',
   'set.app.assocDone': 'ファイルアイコンを関連付けました',
   'set.app.assocCleared': '関連付けを解除しました。起動時に自動で関連付けません',

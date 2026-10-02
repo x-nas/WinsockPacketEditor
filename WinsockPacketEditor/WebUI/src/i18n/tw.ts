@@ -160,8 +160,6 @@ export const tw: Record<Key, string> = {
   'set.app.assocOff': '未關聯 · 啟動時不會再自動關聯',
   'set.app.assocClear': '清除檔案關聯',
   'set.app.assocRedo': '重新關聯',
-  'set.app.assocHint': '下表的檔案類型在檔案總管裡顯示 WPE 資料檔圖示。只改目前使用者的設定，不註冊開啟方式；按鈕立即生效，不用按「儲存」。',
-  'set.app.assocForeign': '{0} 已被其他程式佔用，保留原樣',
   'set.app.assocMissing': '程式目錄裡缺少 wpe-data.ico，無法關聯',
   'set.app.assocDone': '已關聯檔案圖示',
   'set.app.assocCleared': '已清除檔案關聯，啟動時不會再自動關聯',

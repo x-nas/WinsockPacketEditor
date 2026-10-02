@@ -142,19 +142,6 @@ async function toggleAssoc(): Promise<void> {
   }
 }
 
-//「.sc、.pas 已被其他程序占用」；悬停看是谁占的（ProgID）
-const assocForeignText = computed(() => {
-  const a = assoc.value
-  if (!a || !a.enabled || !a.foreign.length) return ''
-  return t('set.app.assocForeign').replace('{0}', a.foreign.join(' '))
-})
-
-const assocForeignTip = computed(() => {
-  const a = assoc.value
-  if (!a) return ''
-  return a.foreign.map((e, i) => e + ' → ' + (a.owners[i] || '?')).join('\n')
-})
-
 const busy = ref(false)
 
 const cur = computed(() => defOf(draftLang.value))
@@ -331,32 +318,25 @@ async function onSave(): Promise<void> {
       </div>
 
       <!--
-        文件类型 ↔ 后缀名对照表（2026-10-02）：把原来那段一句话的状态说明换成一张表，
-        每行一个后缀：类型名（当前界面语言）、后缀、注册结果灯。
-        <b>绿灯 = 这个后缀现在归 WPE</b>（资源管理器会画 WPE 数据文件图标）；
-        <b>黄灯 = 没注册上</b>（多半是后缀已经属于别的程序，WPE 不会去抢）。
+        文件类型 ↔ 后缀名对照表（2026-10-02）：每行一个后缀：类型名（当前界面语言）、
+        后缀、注册结果灯。绿灯 = 这个后缀现在归 WPE，黄灯 = 没注册上（悬停看占用它的程序）。
+        ⚠️ 表体<b>不自己滚</b>：16 行全摊开，滚的是整个软件设置弹窗 —— 一张小节里的表
+        再套一条内滚动条，两把滚动条会互相打架。
       -->
       <div v-if="assoc && !assoc.iconMissing" class="fa-tbl">
         <div class="fa-head">
           <span>{{ t('set.app.assocColType') }}</span>
           <span>{{ t('set.app.assocColExt') }}</span>
-          <span class="fa-ok">{{ t('set.app.assocColOk') }}</span>
+          <span>{{ t('set.app.assocColOk') }}</span>
         </div>
-        <div class="fa-body">
-          <div v-for="r in assoc.rows" :key="r.ext" class="fa-row" :title="r.owner || ''">
-            <span class="fa-name">{{ r.name }}</span>
-            <span class="fa-ext">{{ r.ext }}</span>
-            <span class="fa-ok">
-              <i class="lamp" :class="{ on: r.ok }" />
-            </span>
-          </div>
+        <div class="fa-row" v-for="r in assoc.rows" :key="r.ext" :title="r.owner || ''">
+          <span class="fa-name">{{ r.name }}</span>
+          <span class="fa-ext">{{ r.ext }}</span>
+          <span class="fa-ok">
+            <i class="lamp" :class="{ on: r.ok }" />
+          </span>
         </div>
       </div>
-
-      <p class="tip">
-        {{ t('set.app.assocHint') }}
-        <b v-if="assocForeignText" class="fa-fx" :title="assocForeignTip">{{ assocForeignText }}</b>
-      </p>
     </div>
   </SettingsModal>
 </template>
@@ -426,16 +406,17 @@ async function onSave(): Promise<void> {
 .fa-st { flex: 1; min-width: 0; font-size: var(--fs-body); color: var(--gray); }
 .fa-st.off { color: var(--dim2); }
 .fa-st.bad { color: var(--danger); }
-/* 被别的程序占用的后缀：接在提示语后面，琥珀色 —— 不是错误，只是没动它们 */
-.fa-fx { display: block; margin-top: 2px; color: var(--amber); font-weight: 400; }
 
 /*
   文件类型 ↔ 后缀名对照表。参考映射设置里那几张 .tbl 的骨架：
-  表头一行 + 可滚动表体，行高 30（与防火墙名单一致）。
+  表头一行 + 16 行数据（行高 30，与防火墙名单一致）。
   只读，所以没有工具条、没有右键，也不跟总开关联动。
+
+  ⚠️ <b>表体不设 max-height / overflow</b>：整张表全摊开，滚动交给弹窗外壳
+  （.bd 那条）—— 小节里再套一条内滚动条会与外层那两条互相打架。
 */
-.fa-tbl { margin: 6px 20px 0; border: 1px solid var(--border); background: rgb(var(--inset-rgb) / 20%); }
-.fa-head, .fa-row { display: grid; grid-template-columns: minmax(0, 1fr) 78px 44px; align-items: center; gap: 8px; padding: 0 10px; }
+.fa-tbl { margin: 6px 20px 12px; border: 1px solid var(--border); background: rgb(var(--inset-rgb) / 20%); }
+.fa-head, .fa-row { display: grid; grid-template-columns: minmax(0, 1fr) 92px 56px; align-items: center; gap: 8px; padding: 0 10px; }
 .fa-head {
   height: var(--th-h);
   background: var(--panel);
@@ -446,13 +427,22 @@ async function onSave(): Promise<void> {
   text-transform: uppercase;
   color: var(--th-fg);
   white-space: nowrap;
+  /*
+    表头与数据格共用同一套「后两列居中」的规则（下面那条按 nth-child 给的），
+    否则「后缀名 / 注册」两列的表头会靠左、数据却居中，看着像没对齐。
+  */
 }
-.fa-body { max-height: 232px; overflow-y: auto; }
 .fa-row { height: 30px; font-size: var(--fs-body); color: var(--soft); }
 .fa-row:hover { background: rgb(var(--tint-rgb) / 4%); }
-.fa-name, .fa-ext { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fa-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fa-ext, .fa-ok { text-align: center; }
 .fa-ext { font-family: var(--mono); color: var(--cyan); }
 .fa-ok { display: flex; align-items: center; justify-content: center; }
+/*
+  ⚠️ .fa-ok 是 flex，text-align 对它无效 —— 表头那一格也是 .fa-ok（下面按位置选中），
+  所以表头与内容的居中由同一条 justify-content 负责，两边必然一致。
+*/
+.fa-head > span:nth-child(2), .fa-head > span:nth-child(3) { text-align: center; }
 
 /*
   指示灯：绿 = 注册成功（这个后缀现在归 WPE），黄 = 没注册上。

@@ -225,9 +225,6 @@ const { covered } = useModal(() => props.open)
 
 .ft .grow { flex: 1; }
 
-/* 页脚插槽里的小按钮（.setf .sbtn 那一族）与 .btn 同排时的基准 */
-.ft :slotted(.sbtn) { flex: none; }
-
 /*
   ⚠️ 错误文字可以很长（比如「远程管理启动失败：… 不是本机的地址（可能换了网络），请重新选择监听地址」），
   它要<b>自己折行</b>，不能去挤右边的按钮 —— 原来按钮没写 flex: none，一句长错误就把「取消 / 保存」

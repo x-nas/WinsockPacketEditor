@@ -149,8 +149,12 @@ async function importBackup(): Promise<void> {
       这一屏是 readonly，页脚只有「关闭」一颗，正好让这两颗有地方站。
     -->
     <template #footer>
-      <button class="sbtn" :disabled="busy || !Object.values(f).some(Boolean)" @click="exportBackup">{{ t('bk.export') }}</button>
-      <button class="sbtn warn" :disabled="busy" @click="importBackup">{{ t('bk.import') }}</button>
+      <!--
+        ⚠️ 这一屏是 .setf 之外的页脚，用的必须是 .btn 那一族（子组件自己的 .sbtn 样式
+        scoped 传不进来），照本屏「关闭」那颗同款，再补上原来的强调色。
+      -->
+      <button class="btn ft-export" :disabled="busy || !Object.values(f).some(Boolean)" @click="exportBackup">{{ t('bk.export') }}</button>
+      <button class="btn ft-import" :disabled="busy" @click="importBackup">{{ t('bk.import') }}</button>
     </template>
   </SettingsModal>
 </template>
@@ -213,6 +217,14 @@ async function importBackup(): Promise<void> {
 */
 .selall { display: flex; align-items: center; padding: 11px 20px 0; }
 
+/*
+  页脚那两颗（导入 / 导出）。用的是 SettingsModal 的 .btn 底色，只加各自的强调色 ——
+  与内容区 .sbtn.primary / .sbtn.warn 同一套配色，但排在一起时读起来是「页脚动作」。
+*/
+:global(.ft .btn.ft-export) { border-color: rgb(var(--green-rgb) / 45%); color: var(--green); }
+:global(.ft .btn.ft-export:hover:not(:disabled)) { background: rgb(var(--green-rgb) / 10%); border-color: var(--green); }
+:global(.ft .btn.ft-import) { border-color: rgb(var(--amber-rgb) / 45%); color: var(--amber); }
+:global(.ft .btn.ft-import:hover:not(:disabled)) { background: rgb(var(--amber-rgb) / 10%); border-color: var(--amber); }
 /*
   矮视口再收一档 —— 与启动页、数据页那两处同一个思路。
 
