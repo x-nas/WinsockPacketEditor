@@ -26,7 +26,13 @@
 
 ## 回归测试
 
-`tests/PacketUnpackTest` 是独立的 net48 控制台程序，已加入 `WinSockPacketEditor.sln`。它覆盖首帧/包头分片、粘包、完整帧加半帧、重同步、零长度、超大长度以及配置边界。
+`tests/PacketUnpackTest` 是独立的 net48 控制台程序，已加入 `WinSockPacketEditor.sln`。它覆盖首帧/包头分片、粘包、完整帧加半帧、重同步、零长度、超大长度、多规则按方向选择、同方向首帧后固定规则、零规则原样直通、规则序列化与恢复等边界。
+
+## 界面与自动化入口
+
+- 界面在「拦截设置 → 拆包设置」：一个总开关 + 有序规则表（新建 / 编辑 / 排序 / 删除 / 导入导出 / 清空，均在当前设置草稿上，点「保存」整体落库）；规则编辑器与表格文案走六语言（`set.hook.unpackRule`、`RuleDirBoth`、`RuleHint` 等）。
+- 规则文件后缀 `.upr`（`FileAssociation` 已登记，导出为 UTF-8 JSON）。
+- MCP：`wpe_unpack_rules_get` / `wpe_unpack_rules_save` 读写整份开关 + 规则列表（顺序即匹配优先级）；MCP 报错固定用英文，规则名兜底走 `UI.T`。
 
 ```powershell
 & 'C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Current\Bin\MSBuild.exe' WinSockPacketEditor.sln -restore -p:Configuration=Release
