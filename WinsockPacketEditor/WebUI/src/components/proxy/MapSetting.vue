@@ -124,19 +124,13 @@ async function save(): Promise<void> {
 
 <template>
   <SettingsModal :open="props.open" :title="t('set.map')" subtitle="Address Mapping" :busy="busy" :error="error" :width="900"
+                 :hint="t('map.capabilityHint')"
                  @update:open="emit('update:open', $event)" @save="save">
     <div class="setf list-page ms">
-      <!--
-        ⚠️ 这句要放在最上面。它是「用这个面板之前就该知道」的前提，
-        原先摆在底部，要滚过两张表才看得见 —— 而那两张表是会长的，行一多更看不到。
-      -->
-      <p class="hint warn top">{{ t('map.capabilityHint') }}</p>
-
       <!-- 本地映射 -->
       <section class="sec">
       <div class="grp">{{ t('map.local') }}</div>
-      <div class="row">
-        <div class="k">{{ t('col.enable') }}</div>
+      <div class="row enable-row">
         <div class="v">
           <button class="chk" :class="{ on: f.enableLocal }" @click="f.enableLocal = !f.enableLocal"><i />{{ t('map.enableLocal') }}</button>
           <span class="lb">{{ t('map.localHint') }}</span>
@@ -176,8 +170,7 @@ async function save(): Promise<void> {
       <!-- 远程映射 -->
       <section class="sec">
       <div class="grp">{{ t('map.remote') }}</div>
-      <div class="row">
-        <div class="k">{{ t('col.enable') }}</div>
+      <div class="row enable-row">
         <div class="v">
           <button class="chk" :class="{ on: f.enableRemote }" @click="f.enableRemote = !f.enableRemote"><i />{{ t('map.enableRemote') }}</button>
           <span class="lb">{{ t('map.remoteHint') }}</span>
@@ -223,13 +216,24 @@ async function save(): Promise<void> {
 </template>
 
 <style scoped>
-/* 顶到面板第一行时，.setf .hint 那点 margin-top 不够，单独给一档 */
-.hint.top { margin: 12px 0 10px; }
+/*
+  用户（2026-10-02）：两张表的下沿与所在卡片的下边框之间留着一小段空隙 ——
+  那是 .setf .sec 的 8px padding-bottom，外加表自己那 1px 下边框。
+  与同日的拦截设置拆包表、取值器变量表同一条口径：卡底内边距归零、
+  表的底边框让掉（否则与卡自己的下边框叠成双线），表高改为跟着行数自适应
+  —— 顶掉 .setf .tbl .tbody 的 260px 上限，行多时整张弹窗长高、由弹窗内容区自己滚。
+*/
+.ms .sec { display: flex; flex-direction: column; min-height: 0; padding-bottom: 0; }
+.ms .sec > .grp { flex: none; }
+.ms .tbl { flex: 1; min-height: 0; display: flex; flex-direction: column; border-bottom: 0; }
+.ms .tbl .tbody { flex: 1; min-height: 0; max-height: none; overflow-y: auto; }
+
+/* 启用开关这一行去掉了「启用」标签列：只留开关与说明，整行左对齐 */
+.ms .enable-row { grid-template-columns: 1fr; }
 
 .lb { font-size: var(--fs-small); color: var(--dim2); }
 .cnt { font-family: var(--mono); font-size: var(--fs-small); color: var(--muted); }
 .tbl.dim .tbody { opacity: .55; }
-.ms .tbody { max-height: 190px; }
 /* ⚠️ 操作列 72 → 96：俄语的「Действия」实测要 92px，72 下会被省略号截掉（七种语言里只有它超） */
 .ms .head.hl, .ms .tr.hl { grid-template-columns: 50px minmax(200px, 1.2fr) minmax(200px, 1fr) 100px; }
 .ms .head.hr, .ms .tr.hr { grid-template-columns: 50px minmax(200px, 1fr) minmax(200px, 1fr) 100px; }
