@@ -243,6 +243,7 @@ async function save(): Promise<void> {
     subtitle="Access Control"
     :busy="busy"
     :error="error"
+    :hint="form.enable ? undefined : t('fw.listIdle')"
     @update:open="emit('update:open', $event)"
     @save="save"
   >    <div class="setf" style="--setf-k: 132px">
@@ -336,25 +337,10 @@ async function save(): Promise<void> {
     </div>
     </section>
 
-    <section class="sec">
-    <div class="grp">{{ t('fw.grp.lists') }}</div>
-
     <!--
-      ⚠️ <b>名单区不跟着总开关禁用</b>（2026-09-09 改）。
-      上面那几行（工作模式、四条自动规则、屏蔽时长）是<b>运行时行为</b>，关掉防火墙它们就没有
-      意义，压暗是对的；而<b>名单是数据</b> —— 先把要放行 / 要拦的 IP 备好、回头再开启，
-      是再正常不过的用法，锁住它只是在为难人。
-
-      这也是项目里既有的口径：自动入库那边就是「总开关关着时规则表只压暗不锁：规则得能先备好」，
-      防火墙这里原来正好相反，属于不一致。
-    -->
-    <p v-if="!form.enable" class="hint idle">{{ t('fw.listIdle') }}</p>
-    </section>
-
-    <!--
-      2026-10-02：两张表从「页签二选一」先后改成并排、再改成<b>上下两张各自成区</b>
-      （用户要求：白名单在上为 03 区、黑名单在下为 04 区）。两张表各自排序、各自编辑弹窗；
-      卡片底内边距归零、表底边框让掉 —— 表直接铺满卡片，不留空隙。
+      2026-10-02：原来「03 名单」那张卡的外壳去掉了 —— 白名单直接是 03 区、黑名单是 04 区，
+      黄字提示（防火墙没启用时的提醒）挪到页脚按钮区左侧。
+      两张表各自排序、各自编辑弹窗；卡片底内边距归零、表底边框让掉 —— 表铺满卡片不留空隙。
     -->
     <section class="sec">
     <div class="grp">{{ t('fw.whiteList') }} <span class="cnt">{{ white.length }}</span></div>
@@ -471,9 +457,6 @@ async function save(): Promise<void> {
 
 /* 条数跟在名单名后面，用等宽字，与工具条里那个计数同一套 */
 .cnt { margin-left: 6px; font-family: var(--mono); font-size: var(--fs-caption); color: var(--muted); }
-
-/* 放开之后必须说一句「现在还不生效」——否则用户认真加完一批 IP 而防火墙关着，界面不出声。 */
-.hint.idle { color: var(--amber); }
 
 /*
   表体：<b>表直接铺满卡片</b> —— 表的左右边框去掉、卡片底内边距归零、
