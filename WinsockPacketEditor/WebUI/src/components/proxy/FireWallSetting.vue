@@ -346,6 +346,14 @@ async function save(): Promise<void> {
     <div class="grp">{{ t('fw.whiteList') }} <span class="cnt">{{ white.length }}</span></div>
 
     <div class="tbl">
+      <!-- 工具条在表格<b>最上面</b>，与全程序其它表一致（映射 / 列表 / 仓库 / 发送…） -->
+      <div class="tbar">
+        <button class="sbtn primary" @click="add(false)">{{ t('fw.add') }}</button>
+        <span class="grow" />
+        <button class="sbtn" @click="listAction(8, false)">{{ t('flt.import') }}</button>
+        <button class="sbtn" :disabled="!whiteRows.length" @click="listAction(5, false)">{{ t('lst.export') }}</button>
+        <button class="sbtn danger" :disabled="!whiteRows.length" @click="listAction(7, false)">{{ t('flt.clearAll') }}</button>
+      </div>
       <div class="thead" :style="rowStyle">
         <span class="so" :class="{ on: sortWhite.active('ip') }" @click="sortWhite.toggle('ip')">
           {{ t('cli.ip') }}<i class="ar">{{ sortWhite.mark('ip') }}</i>
@@ -375,20 +383,21 @@ async function save(): Promise<void> {
           </span>
         </div>
       </div>
-      <div class="tbar">
-        <button class="sbtn primary" @click="add(false)">{{ t('fw.add') }}</button>
-        <span class="grow" />
-        <button class="sbtn" @click="listAction(8, false)">{{ t('flt.import') }}</button>
-        <button class="sbtn" :disabled="!whiteRows.length" @click="listAction(5, false)">{{ t('lst.export') }}</button>
-        <button class="sbtn danger" :disabled="!whiteRows.length" @click="listAction(7, false)">{{ t('flt.clearAll') }}</button>
       </div>
-    </div>
     </section>
 
     <section class="sec">
     <div class="grp">{{ t('fw.blackList') }} <span class="cnt">{{ black.length }}</span></div>
 
     <div class="tbl">
+      <!-- 工具条同样在表格最上面 -->
+      <div class="tbar">
+        <button class="sbtn primary" @click="add(true)">{{ t('fw.add') }}</button>
+        <span class="grow" />
+        <button class="sbtn" @click="listAction(8, true)">{{ t('flt.import') }}</button>
+        <button class="sbtn" :disabled="!blackRows.length" @click="listAction(5, true)">{{ t('lst.export') }}</button>
+        <button class="sbtn danger" :disabled="!blackRows.length" @click="listAction(7, true)">{{ t('flt.clearAll') }}</button>
+      </div>
       <div class="thead" :style="rowStyle">
         <span class="so" :class="{ on: sortBlack.active('ip') }" @click="sortBlack.toggle('ip')">
           {{ t('cli.ip') }}<i class="ar">{{ sortBlack.mark('ip') }}</i>
@@ -417,13 +426,6 @@ async function save(): Promise<void> {
             </button>
           </span>
         </div>
-      </div>
-      <div class="tbar">
-        <button class="sbtn primary" @click="add(true)">{{ t('fw.add') }}</button>
-        <span class="grow" />
-        <button class="sbtn" @click="listAction(8, true)">{{ t('flt.import') }}</button>
-        <button class="sbtn" :disabled="!blackRows.length" @click="listAction(5, true)">{{ t('lst.export') }}</button>
-        <button class="sbtn danger" :disabled="!blackRows.length" @click="listAction(7, true)">{{ t('flt.clearAll') }}</button>
       </div>
     </div>
     </section>
@@ -477,8 +479,8 @@ async function save(): Promise<void> {
 */
 section.sec:has(> .tbl) { padding-bottom: 0; }
 
-/* 工具条此时在表格<b>最下面</b>（表头 → 数据 → 新增 / 导入 / 导出 / 清空） */
-.tbar { display: flex; align-items: center; gap: 8px; padding: 6px 14px; background: var(--card); border-top: 1px solid var(--border); }
+/* 工具条回到表格<b>最上面</b>，与全程序其它表一致（映射 / 列表 / 仓库 / 发送…） */
+.tbar { display: flex; align-items: center; gap: 8px; padding: 6px 14px; border-bottom: 1px solid var(--border); background: var(--card); }
 .tbar .grow { flex: 1; }
 
 .thead,

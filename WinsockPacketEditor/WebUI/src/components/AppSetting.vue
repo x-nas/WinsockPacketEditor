@@ -207,12 +207,18 @@ async function onSave(): Promise<void> {
     @save="onSave"
   >
     <div class="setf">
+      <!--
+        2026-10-02：四类设置各做成一张 <b>.sec 分区卡</b>（01 / 02 / 03 / 04），
+        与其它 11 个设置屏同一套外观：左沿色轨 + 带编号的抬头 + 卡身。
+        卡身里的行走 .setf .row（标签列 + 控件列），说明走 .hint。
+      -->
+      <section class="sec">
       <div class="grp">{{ t('set.app.lang') }}</div>
 
       <!--
-        不套 .setf .row：那是「标签列 + 控件」的两栏格，而组标题已经写着「界面语言」，
-        行标签再写一遍就是重复。这一组只有一个控件，直接与下面「外观」那组同构 ——
-        组标题 → 控件 → 提示，三行到底。
+        不套 .setf .row：那是「标签列 + 控件」的两栏格，而卡抬头已经写着「界面语言」，
+        行标签再写一遍就是重复。这一组只有一个控件，直接与下面几张卡同构 ——
+        抬头 → 控件 → 提示，三行到底。
       -->
       <div class="one">
         <CyberSelect
@@ -224,8 +230,10 @@ async function onSave(): Promise<void> {
         <!-- 文化名：下拉里只有语言的自称，出问题时要看的是它到底切成了哪个 culture -->
         <i class="cult">{{ cur.culture }}</i>
       </div>
-      <p class="tip">{{ t('set.app.langHint') }}</p>
+      <p class="hint">{{ t('set.app.langHint') }}</p>
+      </section>
 
+      <section class="sec">
       <div class="grp">{{ t('set.app.theme') }}</div>
 
       <div class="opts theme">
@@ -252,17 +260,16 @@ async function onSave(): Promise<void> {
         ⚠️ 读的是 systemIsDark 而不是 effective：后者是「现在实际生效的主题」，
         而这里草稿刚选上跟随系统、还没按保存，effective 仍停在旧主题上，
         拿它显示就是错的。这一句说的是系统那边的事，与应用了没有无关。
-
-        原先这句在下面单独一组「当前」里，连同「当前语言」一行；
-        语言换成下拉之后那一行就是重复，整组去掉了。
       -->
-      <p class="tip">
+      <p class="hint">
         {{ t('set.app.themeHint') }}
         <b v-if="draftTheme === 'system'" class="now">
           {{ t('set.app.now') }} · {{ t(systemIsDark ? 'set.app.dark' : 'set.app.light') }}
         </b>
       </p>
+      </section>
 
+      <section class="sec">
       <div class="grp">{{ t('set.app.display') }}</div>
       <!--
         两行合成一张 grid：标签列宽取两行里最长的那条（max-content），
@@ -288,8 +295,10 @@ async function onSave(): Promise<void> {
           </button>
         </div>
       </div>
-      <p class="tip">{{ t('set.app.scanHint') }}</p>
+      <p class="hint">{{ t('set.app.scanHint') }}</p>
+      </section>
 
+      <section class="sec">
       <div class="grp">{{ t('set.app.assoc') }}</div>
 
       <!--
@@ -337,17 +346,21 @@ async function onSave(): Promise<void> {
           </span>
         </div>
       </div>
+      </section>
     </div>
   </SettingsModal>
 </template>
 
 <style scoped>
-/* 主题三张卡排三列 —— 每张要放得下色带预览 */
-.opts { display: grid; gap: 8px; padding: 2px 20px 4px; }
+/*
+  卡身里的各块现在长在 .sec 里，内边距跟着卡内的规矩走（14px，见 style.css 的
+  「卡内：行与说明各收 6px 内边距」那段），不再是外边那圈 20px。
+*/
+.opts { display: grid; gap: 8px; padding: 8px 14px 2px; }
 .opts.theme { grid-template-columns: repeat(3, 1fr); }
 
-/* 单控件那一行：与 .opts 用同一份内边距，控件左沿才和下面的主题卡对齐 */
-.one { display: flex; align-items: center; gap: 10px; padding: 2px 20px 4px; }
+/* 单控件那一行：同样用卡内的 14px，控件左沿才和卡里的其它内容对齐 */
+.one { display: flex; align-items: center; gap: 10px; padding: 8px 14px 2px; }
 
 /*
   语言下拉。定宽 190 —— 最长的是「Tiếng Việt」加两字母前缀，
@@ -414,8 +427,12 @@ async function onSave(): Promise<void> {
 
   ⚠️ <b>表体不设 max-height / overflow</b>：整张表全摊开，滚动交给弹窗外壳
   （.bd 那条）—— 小节里再套一条内滚动条会与外层那两条互相打架。
+
+  表长在 04 卡片里，左右 / 下边框让掉、卡片底内边距归零，表直接铺满卡片
+  （与防火墙名单、映射表同一条口径）。
 */
-.fa-tbl { margin: 6px 20px 12px; border: 1px solid var(--border); background: rgb(var(--inset-rgb) / 20%); }
+.fa-tbl { margin: 8px 0 0; border-left: 0; border-right: 0; border-bottom: 0; background: rgb(var(--inset-rgb) / 20%); }
+section.sec:has(> .fa-tbl) { padding-bottom: 0; }
 .fa-head, .fa-row { display: grid; grid-template-columns: minmax(0, 1fr) 92px 56px; align-items: center; gap: 8px; padding: 0 10px; }
 .fa-head {
   height: var(--th-h);
