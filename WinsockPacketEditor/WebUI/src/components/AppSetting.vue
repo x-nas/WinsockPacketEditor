@@ -432,6 +432,10 @@ async function onSave(): Promise<void> {
   （与防火墙名单、映射表同一条口径）。
 */
 .fa-tbl { margin: 8px 0 0; border-left: 0; border-right: 0; border-bottom: 0; background: rgb(var(--inset-rgb) / 20%); }
+/*
+  ⚠️ scoped 样式里的 :has() 会被 Vue 编译成 `section.sec:has(> .fa-tbl)` 这种带
+  作用域属性的形式，而 .fa-tbl 是本组件的元素、属性对得上，所以这条能生效。
+*/
 section.sec:has(> .fa-tbl) { padding-bottom: 0; }
 .fa-head, .fa-row { display: grid; grid-template-columns: minmax(0, 1fr) 92px 56px; align-items: center; gap: 8px; padding: 0 10px; }
 .fa-head {

@@ -521,8 +521,8 @@ section.sec:has(> .tbl) { padding-bottom: 0; }
 
 .num { color: var(--dim3); text-align: center; font-variant-numeric: tabular-nums; }
 
-/* 操作列的表头：跟着「操作」两个字缩小，别跟着数据格的字号 */
-.th-act { font-size: var(--fs-caption); text-align: right; }
+/* 操作列的表头跟着数据格一起居中（数据格 .ops 是 flex，靠 justify-content 居中） */
+.th-act { font-size: var(--fs-caption); text-align: center; }
 
 /* 手柄要贴在表头格子的右边界上，格子得先能定位 */
 .thead > span { position: relative; }
@@ -551,11 +551,13 @@ section.sec:has(> .tbl) { padding-bottom: 0; }
   background: var(--cyan);
   box-shadow: 0 0 4px var(--cyan);
 }
-.exp { color: var(--muted); font-family: var(--mono); font-size: var(--fs-body); }
+/* 「过期时间」列的表头与内容都居中（用户 2026-10-02 要求） */
+.exp { color: var(--muted); font-family: var(--mono); font-size: var(--fs-body); text-align: center; }
+.thead > span:nth-child(2) { text-align: center; }
 /* 「永久有效」是句话不是时间戳，等宽字体反而别扭 */
 .exp.never { font-family: inherit; font-size: var(--fs-body); color: var(--dim4); }
 
-.ops { display: flex; align-items: center; justify-content: flex-end; gap: 2px; }
+.ops { display: flex; align-items: center; justify-content: center; gap: 2px; }
 
 .op {
   display: inline-flex;
