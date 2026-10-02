@@ -114,6 +114,10 @@ async function importBackup(): Promise<void> {
     <div class="setf bk">
       <p class="hint">{{ t('bk.hint') }}</p>
 
+      <div class="selall">
+        <button class="sbtn" @click="setAll(!allOn())">{{ allOn() ? t('pm.deselect') : t('pm.selectAll') }}</button>
+      </div>
+
       <div class="groups" :class="{ two: twoCol }">
         <!--
           ⚠️ 用<b>共用的 .sec / .grp</b>，不再自己画一套卡片（原来是 .g / .gt）——
@@ -136,14 +140,18 @@ async function importBackup(): Promise<void> {
         </section>
       </div>
 
-      <div class="acts">
-        <button class="sbtn" @click="setAll(!allOn())">{{ allOn() ? t('pm.deselect') : t('pm.selectAll') }}</button>
-        <span class="grow" />
-        <button class="sbtn warn" :disabled="busy" @click="importBackup">{{ t('bk.import') }}</button>
-        <button class="sbtn primary" :disabled="busy || !Object.values(f).some(Boolean)" @click="exportBackup">{{ t('bk.export') }}</button>
-      </div>
       <p class="hint">{{ t('bk.importHint') }}</p>
     </div>
+
+    <!--
+      导入 / 导出<b>挪到页脚</b>，紧挨着「关闭」的左边（2026-10-02 用户要求）。
+      全选 / 全不选留在内容区最上面 —— 它管的是上面那堆勾选框，不属于「动作」。
+      这一屏是 readonly，页脚只有「关闭」一颗，正好让这两颗有地方站。
+    -->
+    <template #footer>
+      <button class="sbtn" :disabled="busy || !Object.values(f).some(Boolean)" @click="exportBackup">{{ t('bk.export') }}</button>
+      <button class="sbtn warn" :disabled="busy" @click="importBackup">{{ t('bk.import') }}</button>
+    </template>
   </SettingsModal>
 </template>
 
@@ -198,8 +206,12 @@ async function importBackup(): Promise<void> {
 .groups.two .gb .chk { align-items: flex-start; white-space: normal; text-align: left; }
 /* 勾选框 12px 高，跟首行文字的中心对齐：12.5px × 1.4 行高 ≈ 17.5，(17.5 − 12) ÷ 2 ≈ 2.75 */
 .groups.two .gb .chk i { margin-top: 2.75px; }
-.acts { display: flex; align-items: center; gap: 8px; padding: 11px 20px 4px; }   /* 上边距是量着定的：日语最长的那几条差 1px 就会出滚动条 */
-.acts .grow { flex: 1; }
+
+/*
+  全选 / 全不选：动作按钮挪去页脚之后，这一屏内容区就剩它一颗。
+  「导入 / 导出」原来也在这里、靠 .grow 把两边撑开，现在改成单独一行。
+*/
+.selall { display: flex; align-items: center; padding: 11px 20px 0; }
 
 /*
   矮视口再收一档 —— 与启动页、数据页那两处同一个思路。
@@ -224,6 +236,6 @@ async function importBackup(): Promise<void> {
   .gb { gap: 5px; padding: 4px 12px 0; }
   .groups.two .gb { gap: 5px 10px; padding: 4px 12px 0; }
   .groups { margin-bottom: -7px; }
-  .acts { padding: 10px 20px 2px; }
+  .selall { padding: 8px 20px 0; }
 }
 </style>

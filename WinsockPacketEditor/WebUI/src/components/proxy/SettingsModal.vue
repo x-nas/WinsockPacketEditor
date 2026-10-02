@@ -115,6 +115,12 @@ const { covered } = useModal(() => props.open)
           {{ props.hint }}
         </span>
         <span class="grow" />
+        <!--
+          页脚插槽：个别屏幕要把自己的动作按钮摆在「取消 / 保存」左边
+          （备份设置的导入 / 导出就是这样）。插槽内容出现在 .grow 之后、
+          取消之前，所以它天然贴着右边那两颗按钮。
+        -->
+        <slot name="footer" />
         <button class="btn" :class="{ primary: props.readonly }" :disabled="props.busy" @click="close">
           {{ props.cancelText || (props.readonly ? t('dlg.close') : t('dlg.cancel')) }}
         </button>
@@ -218,6 +224,9 @@ const { covered } = useModal(() => props.open)
 }
 
 .ft .grow { flex: 1; }
+
+/* 页脚插槽里的小按钮（.setf .sbtn 那一族）与 .btn 同排时的基准 */
+.ft :slotted(.sbtn) { flex: none; }
 
 /*
   ⚠️ 错误文字可以很长（比如「远程管理启动失败：… 不是本机的地址（可能换了网络），请重新选择监听地址」），

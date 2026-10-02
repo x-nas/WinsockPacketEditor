@@ -88,6 +88,13 @@ watch(() => props.open, (on) => {
   「取消」也撤不回来。所以按钮单独走 setFileAssoc，不进 onSave；提示语里写明了这一点。
   清除之后 C# 会记一个标记，启动时不再自动注册，直到这里点「重新关联」。
 */
+interface AssocRow {
+  ext: string
+  name: string
+  ok: boolean
+  owner: string | null
+}
+
 interface AssocStatus {
   ok: boolean
   enabled: boolean
@@ -96,6 +103,7 @@ interface AssocStatus {
   owners: string[]
   iconMissing: boolean
   total: number
+  rows: AssocRow[]
   icon: string | null
   error?: string
 }
@@ -321,6 +329,30 @@ async function onSave(): Promise<void> {
           {{ t(assoc.enabled ? 'set.app.assocClear' : 'set.app.assocRedo') }}
         </button>
       </div>
+
+      <!--
+        文件类型 ↔ 后缀名对照表（2026-10-02）：把原来那段一句话的状态说明换成一张表，
+        每行一个后缀：类型名（当前界面语言）、后缀、注册结果灯。
+        <b>绿灯 = 这个后缀现在归 WPE</b>（资源管理器会画 WPE 数据文件图标）；
+        <b>黄灯 = 没注册上</b>（多半是后缀已经属于别的程序，WPE 不会去抢）。
+      -->
+      <div v-if="assoc && !assoc.iconMissing" class="fa-tbl">
+        <div class="fa-head">
+          <span>{{ t('set.app.assocColType') }}</span>
+          <span>{{ t('set.app.assocColExt') }}</span>
+          <span class="fa-ok">{{ t('set.app.assocColOk') }}</span>
+        </div>
+        <div class="fa-body">
+          <div v-for="r in assoc.rows" :key="r.ext" class="fa-row" :title="r.owner || ''">
+            <span class="fa-name">{{ r.name }}</span>
+            <span class="fa-ext">{{ r.ext }}</span>
+            <span class="fa-ok">
+              <i class="lamp" :class="{ on: r.ok }" />
+            </span>
+          </div>
+        </div>
+      </div>
+
       <p class="tip">
         {{ t('set.app.assocHint') }}
         <b v-if="assocForeignText" class="fa-fx" :title="assocForeignTip">{{ assocForeignText }}</b>
@@ -396,6 +428,38 @@ async function onSave(): Promise<void> {
 .fa-st.bad { color: var(--danger); }
 /* 被别的程序占用的后缀：接在提示语后面，琥珀色 —— 不是错误，只是没动它们 */
 .fa-fx { display: block; margin-top: 2px; color: var(--amber); font-weight: 400; }
+
+/*
+  文件类型 ↔ 后缀名对照表。参考映射设置里那几张 .tbl 的骨架：
+  表头一行 + 可滚动表体，行高 30（与防火墙名单一致）。
+  只读，所以没有工具条、没有右键，也不跟总开关联动。
+*/
+.fa-tbl { margin: 6px 20px 0; border: 1px solid var(--border); background: rgb(var(--inset-rgb) / 20%); }
+.fa-head, .fa-row { display: grid; grid-template-columns: minmax(0, 1fr) 78px 44px; align-items: center; gap: 8px; padding: 0 10px; }
+.fa-head {
+  height: var(--th-h);
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--share);
+  font-size: var(--th-size);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--th-fg);
+  white-space: nowrap;
+}
+.fa-body { max-height: 232px; overflow-y: auto; }
+.fa-row { height: 30px; font-size: var(--fs-body); color: var(--soft); }
+.fa-row:hover { background: rgb(var(--tint-rgb) / 4%); }
+.fa-name, .fa-ext { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fa-ext { font-family: var(--mono); color: var(--cyan); }
+.fa-ok { display: flex; align-items: center; justify-content: center; }
+
+/*
+  指示灯：绿 = 注册成功（这个后缀现在归 WPE），黄 = 没注册上。
+  与其它屏的「绿表示在跑」同一条视觉语言；不发光的那颗压暗成灰边，避免看着像「故障」。
+*/
+.lamp { width: 10px; height: 10px; border-radius: 50%; background: rgb(var(--amber-rgb) / 85%); box-shadow: 0 0 5px rgb(var(--amber-rgb) / 45%); }
+.lamp.on { background: var(--green); box-shadow: 0 0 5px rgb(var(--green-rgb) / 55%); }
 
 /* 说明是整句，截断了就没意义 —— 与列表设置那几处同一条口径 */
 .tip { margin: 0; padding: 0 20px 10px; font-size: var(--fs-small); line-height: 1.6; color: var(--dim2); }

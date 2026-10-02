@@ -6213,6 +6213,13 @@ namespace WPEHybrid
                 owners = s.Owners,
                 iconMissing = s.IconMissing,
                 total = FileAssociation.Types.Length,
+                rows = System.Linq.Enumerable.Select(s.Rows, r => new
+                {
+                    ext = r.Ext,
+                    name = r.Name,
+                    ok = r.Ok,
+                    owner = r.Owner,
+                }).ToArray(),
                 icon = withIcon ? FileAssociation.PreviewPng() : null,
             };
         }
