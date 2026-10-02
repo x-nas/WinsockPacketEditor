@@ -2722,36 +2722,10 @@ namespace WPEHybrid
                     */
                     if (unpack)
                     {
-                        //包头：空格 / 逗号 / 分号分隔，每段恰好两位十六进制（照 ParseHeaderBytes）
-                        string[] parts = head.Split(new[] { ' ', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
-                        bool headOk = parts.Length > 0;
-
-                        foreach (string p in parts)
+                        string unpackError;
+                        if (!ProxyCfg.ValidateUnpackSettings(head, len, out unpackError))
                         {
-                            byte b;
-
-                            if (p.Length != 2 || !byte.TryParse(p, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out b))
-                            {
-                                headOk = false;
-                                break;
-                            }
-                        }
-
-                        if (!headOk)
-                        {
-                            return new { ok = false, error = UI.T("HookSettingsForm.UnPack.Error", "拆包设置不正确") };
-                        }
-
-                        //长度：start-end，两个整数，start >= 0 且 end >= start（照 ParseLengthPositions）
-                        string[] lp = len.Split('-');
-                        int s, e2;
-
-                        if (lp.Length != 2
-                            || !int.TryParse(lp[0], out s)
-                            || !int.TryParse(lp[1], out e2)
-                            || s < 0 || e2 < s)
-                        {
-                            return new { ok = false, error = UI.T("HookSettingsForm.UnPack.Error", "拆包设置不正确") };
+                            return new { ok = false, error = UI.T("HookSettingsForm.UnPack.Error", "拆包设置不正确") + "：" + unpackError };
                         }
                     }
 

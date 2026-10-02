@@ -8200,168 +8200,224 @@ namespace WinsockPacketEditor
 
                 #region//处理拆包
 
-                public static void ProcessForwardData(ProxySession m_Session, byte[] receivedData, ref byte[] m_ForwardBuffer)
+                private const int MaxUnpackPacketBytes = 4 * 1024 * 1024;
+                private const int MaxUnpackHeaderBytes = 64;
+                private static readonly object UnpackConfigGate = new object();
+                private static volatile UnpackConfig CachedUnpackConfig;
+                //无效的导入/旧库设置也要记住；否则每一个 TCP 回调都会重新解析并刷一条错误日志。
+                private static string CachedUnpackHead;
+                private static string CachedUnpackLength;
+
+                private sealed class UnpackConfig
+                {
+                    public readonly string HeadText;
+                    public readonly string LengthText;
+                    public readonly byte[] Header;
+                    public readonly int LengthStart;
+                    public readonly int LengthBytes;
+                    public readonly int MinimumPacketBytes;
+
+                    public UnpackConfig(string headText, string lengthText, byte[] header, int lengthStart, int lengthBytes)
+                    {
+                        HeadText = headText;
+                        LengthText = lengthText;
+                        Header = header;
+                        LengthStart = lengthStart;
+                        LengthBytes = lengthBytes;
+                        MinimumPacketBytes = Math.Max(header.Length, lengthStart + lengthBytes);
+                    }
+                }
+
+                /// <summary>保存、MCP 和热路径共用的拆包配置校验。长度字段为 1 基、最多四个大端字节，且表示整个包长度。</summary>
+                public static bool ValidateUnpackSettings(string headerText, string lengthText, out string error)
+                {
+                    UnpackConfig config;
+                    return TryCreateUnpackConfig(headerText, lengthText, out config, out error);
+                }
+
+                private static bool TryCreateUnpackConfig(string headerText, string lengthText, out UnpackConfig config, out string error)
+                {
+                    config = null;
+                    error = null;
+                    byte[] header = ParseHeaderBytes(headerText);
+                    var positions = ParseLengthPositions(lengthText);
+                    if (header == null || header.Length == 0 || header.Length > MaxUnpackHeaderBytes)
+                    {
+                        error = "包头必须是 1 到 " + MaxUnpackHeaderBytes + " 个十六进制字节";
+                        return false;
+                    }
+                    if (positions.Start < 1 || positions.End < positions.Start || positions.End - positions.Start + 1 > 4)
+                    {
+                        error = "长度位置必须从 1 开始，且长度字段只能是 1 到 4 个字节";
+                        return false;
+                    }
+
+                    int start = positions.Start - 1;
+                    int bytes = positions.End - positions.Start + 1;
+                    int minimum = Math.Max(header.Length, start + bytes);
+                    if (minimum > MaxUnpackPacketBytes)
+                    {
+                        error = "拆包头部过长";
+                        return false;
+                    }
+
+                    config = new UnpackConfig((headerText ?? string.Empty).Trim(), (lengthText ?? string.Empty).Trim(), header, start, bytes);
+                    return true;
+                }
+
+                private static UnpackConfig GetUnpackConfig()
+                {
+                    string head = (Operate.ProxyConfig.Proxy.UnPack_Head ?? string.Empty).Trim();
+                    string length = (Operate.ProxyConfig.Proxy.UnPack_Length ?? string.Empty).Trim();
+                    UnpackConfig cached = CachedUnpackConfig;
+                    if (CachedUnpackHead == head && CachedUnpackLength == length) { return cached; }
+
+                    lock (UnpackConfigGate)
+                    {
+                        cached = CachedUnpackConfig;
+                        if (CachedUnpackHead == head && CachedUnpackLength == length) { return cached; }
+                        string error;
+                        if (!TryCreateUnpackConfig(head, length, out cached, out error))
+                        {
+                            Operate.DoLog("UnpackConfig", error);
+                            CachedUnpackConfig = null;
+                            CachedUnpackHead = head;
+                            CachedUnpackLength = length;
+                            return null;
+                        }
+                        CachedUnpackConfig = cached;
+                        CachedUnpackHead = head;
+                        CachedUnpackLength = length;
+                        return cached;
+                    }
+                }
+
+                public static void ProcessForwardData(ProxySession session, byte[] receivedData, ref byte[] forwardBuffer)
                 {
                     try
                     {
-                        if (!Operate.ProxyConfig.Proxy.Enable_UnPack)
+                        if (!Enable_UnPack)
                         {
-                            Operate.ProxyConfig.Proxy.ForwardData(m_Session, receivedData);
+                            forwardBuffer = Array.Empty<byte>();
+                            ForwardData(session, receivedData);
                             return;
                         }
-
-                        byte[] dataToProcess = Operate.ProxyConfig.Proxy.CombineData(m_ForwardBuffer, receivedData, 0, receivedData.Length);
-                        if (dataToProcess == null || dataToProcess.Length == 0)
-                        {
-                            return;
-                        }
-
-                        if (Operate.ProxyConfig.Proxy.TryUnpackData(dataToProcess, out var packets, out int processedLength))
-                        {
-                            foreach (byte[] packet in packets)
-                            {
-                                Operate.ProxyConfig.Proxy.ForwardData(m_Session, packet);
-                            }
-
-                            if (processedLength < dataToProcess.Length)
-                            {
-                                m_ForwardBuffer = new byte[dataToProcess.Length - processedLength];
-                                Buffer.BlockCopy(dataToProcess, processedLength, m_ForwardBuffer, 0, m_ForwardBuffer.Length);
-                            }
-                            else
-                            {
-                                m_ForwardBuffer = Array.Empty<byte>();
-                            }
-                        }
-                        else
-                        {
-                            Operate.ProxyConfig.Proxy.ForwardData(m_Session, dataToProcess);
-                            m_ForwardBuffer = Array.Empty<byte>();
-                        }
+                        foreach (byte[] packet in ProcessUnpackData(receivedData, ref forwardBuffer)) { ForwardData(session, packet); }
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(ProcessForwardData), ex);
-                        m_ForwardBuffer = Array.Empty<byte>();
+                        forwardBuffer = Array.Empty<byte>();
                     }
                 }
 
-                public static byte[][] ProcessResponseData(byte[] receivedData)
+                public static byte[][] ProcessResponseData(byte[] receivedData, ref byte[] responseBuffer)
                 {
-                    try
-                    {
-                        List<byte[]> resultPackets = new List<byte[]>();
-
-                        if (receivedData == null || receivedData.Length == 0)
-                            return resultPackets.ToArray();
-
-                        if (Operate.ProxyConfig.Proxy.TryUnpackData(receivedData, out var packets, out _))
-                        {
-                            return packets.ToArray();
-                        }
-                        else
-                        {
-                            resultPackets.Add(receivedData);
-                            return resultPackets.ToArray();
-                        }
-                    }
+                    try { return ProcessUnpackData(receivedData, ref responseBuffer); }
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(ProcessResponseData), ex);
-                        return new byte[][] { receivedData };
+                        responseBuffer = Array.Empty<byte>();
+                        return receivedData == null || receivedData.Length == 0 ? Array.Empty<byte[]>() : new[] { receivedData };
                     }
                 }
 
-                private static bool TryUnpackData(ReadOnlySpan<byte> data, out List<byte[]> packets, out int processedLength)
+                /// <summary>
+                /// 增量大端帧拆分。Need-more 不再和无效数据混在一个 bool 里：未完成的帧永远留在本方向的残片中；
+                /// 非帧前缀则原样交给滤镜/转发，并保留可能跨接收边界的包头后缀。
+                /// </summary>
+                private static byte[][] ProcessUnpackData(byte[] receivedData, ref byte[] pending)
                 {
-                    packets = new List<byte[]>();
-                    processedLength = 0;
+                    if (receivedData == null || receivedData.Length == 0) { return Array.Empty<byte[]>(); }
+                    UnpackConfig config = GetUnpackConfig();
+                    if (config == null)
+                    {
+                        byte[] raw = pending == null || pending.Length == 0 ? receivedData : CombineData(pending, receivedData, 0, receivedData.Length);
+                        pending = Array.Empty<byte>();
+                        return raw == null || raw.Length == 0 ? Array.Empty<byte[]>() : new[] { raw };
+                    }
 
+                    byte[] rented = null;
+                    ReadOnlySpan<byte> data;
+                    if (pending != null && pending.Length > 0)
+                    {
+                        rented = ProxyBufferPool.Rent(pending.Length + receivedData.Length);
+                        Buffer.BlockCopy(pending, 0, rented, 0, pending.Length);
+                        Buffer.BlockCopy(receivedData, 0, rented, pending.Length, receivedData.Length);
+                        data = rented.AsSpan(0, pending.Length + receivedData.Length);
+                    }
+                    else { data = receivedData; }
+
+                    var output = new List<byte[]>();
+                    int offset = 0;
                     try
                     {
-                        if (data.IsEmpty)
-                            return false;
-
-                        byte[] headerBytes = Operate.ProxyConfig.Proxy.ParseHeaderBytes(Operate.ProxyConfig.Proxy.UnPack_Head);
-                        if (headerBytes == null || headerBytes.Length == 0)
-                            return false;
-
-                        var lengthPositions = Operate.ProxyConfig.Proxy.ParseLengthPositions(Operate.ProxyConfig.Proxy.UnPack_Length);
-                        if (lengthPositions.Start == -1 || lengthPositions.End == -1)
-                            return false;
-
-                        int headerLength = headerBytes.Length;
-                        int lengthFieldStart = lengthPositions.Start - 1;
-                        int lengthFieldEnd = lengthPositions.End - 1;
-                        int lengthFieldLength = lengthFieldEnd - lengthFieldStart + 1;
-                        int minPacketSize = headerLength + lengthFieldLength;
-                        int currentOffset = 0;
-                        bool foundValidPacket = false;
-
-                        while (currentOffset < data.Length)
+                        while (offset < data.Length)
                         {
-                            var remaining = data.Slice(currentOffset);
-
-                            if (remaining.Length < headerLength)
+                            int headerAt = FindHeader(data, offset, config.Header);
+                            if (headerAt != offset)
                             {
-                                processedLength = currentOffset;
-                                return foundValidPacket;
-                            }
-
-                            bool headerMatch = true;
-                            for (int i = 0; i < headerLength; i++)
-                            {
-                                if (remaining[i] != headerBytes[i])
+                                if (headerAt >= 0)
                                 {
-                                    headerMatch = false;
-                                    break;
+                                    output.Add(data.Slice(offset, headerAt - offset).ToArray());
+                                    offset = headerAt;
+                                    continue;
                                 }
-                            }
 
-                            if (!headerMatch)
-                            {
-                                processedLength = currentOffset;
-                                return foundValidPacket;
-                            }
-
-                            if (remaining.Length < minPacketSize)
-                            {
-                                processedLength = currentOffset;
-                                return foundValidPacket;
-                            }
-
-                            int packetLength = 0;
-                            for (int i = 0; i < lengthFieldLength; i++)
-                            {
-                                packetLength = (packetLength << 8) | remaining[lengthFieldStart + i];
-                            }
-
-                            if (remaining.Length < packetLength)
-                            {
-                                processedLength = currentOffset;
-                                return foundValidPacket;
-                            }
-
-                            byte[] completePacket = remaining.Slice(0, packetLength).ToArray();
-                            packets.Add(completePacket);
-                            foundValidPacket = true;
-
-                            currentOffset += packetLength;
-                            processedLength = currentOffset;
-
-                            if (currentOffset >= data.Length)
-                            {
+                                int suffix = LongestHeaderPrefixSuffix(data.Slice(offset), config.Header);
+                                int rawLength = data.Length - offset - suffix;
+                                if (rawLength > 0) { output.Add(data.Slice(offset, rawLength).ToArray()); }
+                                offset = data.Length - suffix;
                                 break;
                             }
+
+                            if (data.Length - offset < config.MinimumPacketBytes) { break; } // NeedMoreData
+
+                            uint packetLength = 0;
+                            for (int i = 0; i < config.LengthBytes; i++) { packetLength = (packetLength << 8) | data[offset + config.LengthStart + i]; }
+                            if (packetLength < config.MinimumPacketBytes || packetLength > MaxUnpackPacketBytes)
+                            {
+                                // 坏长度不能卡死或无限攒内存；吐出一个字节后重新同步包头。
+                                output.Add(data.Slice(offset, 1).ToArray());
+                                offset++;
+                                continue;
+                            }
+                            if ((uint)(data.Length - offset) < packetLength) { break; } // NeedMoreData
+
+                            output.Add(data.Slice(offset, (int)packetLength).ToArray());
+                            offset += (int)packetLength;
                         }
 
-                        return foundValidPacket;
+                        pending = offset < data.Length ? data.Slice(offset).ToArray() : Array.Empty<byte>();
+                        return output.ToArray();
                     }
-                    catch (Exception ex)
+                    finally
                     {
-                        Operate.DoLog(nameof(TryUnpackData), ex);
-                        return false;
+                        if (rented != null) { ProxyBufferPool.Return(rented); }
                     }
+                }
+
+                private static int FindHeader(ReadOnlySpan<byte> data, int start, byte[] header)
+                {
+                    for (int i = start; i <= data.Length - header.Length; i++)
+                    {
+                        int j = 0;
+                        while (j < header.Length && data[i + j] == header[j]) { j++; }
+                        if (j == header.Length) { return i; }
+                    }
+                    return -1;
+                }
+
+                private static int LongestHeaderPrefixSuffix(ReadOnlySpan<byte> data, byte[] header)
+                {
+                    int max = Math.Min(data.Length, header.Length - 1);
+                    for (int length = max; length > 0; length--)
+                    {
+                        bool same = true;
+                        for (int i = 0; i < length; i++) { if (data[data.Length - length + i] != header[i]) { same = false; break; } }
+                        if (same) { return length; }
+                    }
+                    return 0;
                 }
 
                 private static byte[] ParseHeaderBytes(string headerString)
