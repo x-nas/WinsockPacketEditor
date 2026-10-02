@@ -21492,6 +21492,10 @@ namespace WinsockPacketEditor
 
                 public static void DoFilter_SOCKS_TCP(ProxySession psSession, Span<byte> bData, Operate.PacketConfig.Packet.PacketType ptType)
                 {
+                    // 会话关闭与目标 Socket 的异步回调可能交错。关闭中的会话不再有可转发对象，
+                    // 直接忽略这批迟到数据，不能让抓包/滤镜路径再抛日志。
+                    if (psSession == null) { return; }
+
                     try
                     {
                         Socket TargetSocket = null;
@@ -21503,7 +21507,10 @@ namespace WinsockPacketEditor
                                 break;
 
                             case Operate.PacketConfig.Packet.PacketType.TCP_Resp:
-                                TargetSocket = psSession.SocketSession.Client;
+                                // SocketSession 由 SuperSocket 在关闭期间维护，可能已先于目标侧
+                                // 的 BeginReceive 回调被释放。先取快照并判空，避免关闭竞态的空引用。
+                                var socketSession = psSession.SocketSession;
+                                TargetSocket = socketSession == null ? null : socketSession.Client;
                                 break;
                         }
 
@@ -21512,7 +21519,6 @@ namespace WinsockPacketEditor
                             return;
                         }
 
-                        IPEndPoint epRemote = TargetSocket.RemoteEndPoint as IPEndPoint;
                         int SocketID = TargetSocket.Handle.ToInt32();
 
                         byte[] bRawBuffer = bData.ToArray();
@@ -21566,6 +21572,10 @@ namespace WinsockPacketEditor
                             bRawBuffer,
                             bEffective,
                             null);
+                    }
+                    catch (ObjectDisposedException)
+                    {
+                        // Socket 在 Connected/Handle 检查之后仍可能被另一条关闭路径释放。
                     }
                     catch (Exception ex)
                     {

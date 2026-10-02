@@ -48,6 +48,13 @@ namespace WPELauncher
 
         public static string LaunchFailed { get { return T("启动程序失败：", "Failed to start the program: "); } }
 
+        public static string LauncherErrorTitle
+        {
+            get { return T("启动器遇到问题", "The launcher encountered a problem"); }
+        }
+
+        public static string LauncherErrorLog { get { return T("启动器已停止本次启动", "launcher stopped this run"); } }
+
         public static string RepairLocked
         {
             get { return T("有文件被占用，请先关闭正在运行的程序再试。", "Some files are in use. Close the running program and try again."); }

@@ -16,6 +16,9 @@ namespace WPELauncher
         private static readonly Color Muted = Color.FromArgb(0x6B, 0x72, 0x80);
         private readonly string heading;
         private readonly string content;
+        private readonly string tagText;
+        private readonly string logText;
+        private readonly bool detailed;
         private Rectangle buttonRect;
         private int drawingDpi = 96;
         private readonly Timer beatTimer;
@@ -40,18 +43,21 @@ namespace WPELauncher
         [DllImport("shcore.dll")]
         private static extern int GetDpiForMonitor(IntPtr monitor, int dpiType, out uint dpiX, out uint dpiY);
 
-        private LauncherDialog(string title, string heading, string content)
+        private LauncherDialog(string title, string heading, string content, string tagText, string logText, bool detailed)
         {
             this.heading = heading;
             this.content = content;
+            this.tagText = tagText;
+            this.logText = logText;
+            this.detailed = detailed;
             FormBorderStyle = FormBorderStyle.None;
             StartPosition = FormStartPosition.CenterScreen;
             ShowInTaskbar = true;
             Text = title;
             BackColor = Card;
             DoubleBuffered = true;
-            // 内容只有一行说明，压缩 BetaNotice 的底部留白；仍按当前显示器 DPI 布局。
-            ClientSize = new Size(560, 320);
+            // MCP 提示只有一行说明；启动失败要完整显示系统错误和处理建议。
+            ClientSize = new Size(560, detailed ? 430 : 320);
             KeyPreview = true;
             KeyDown += (s, e) => { if (e.KeyCode == Keys.Escape || e.KeyCode == Keys.Enter) Close(); };
             beatTimer = new Timer { Interval = 550, Enabled = true };
@@ -64,7 +70,18 @@ namespace WPELauncher
 
         public static void ShowMcpServerInUse(string title)
         {
-            using (LauncherDialog dialog = new LauncherDialog(title, Strings.McpServerInUseTitle, Strings.McpServerInUseContent))
+            using (LauncherDialog dialog = new LauncherDialog(title, Strings.McpServerInUseTitle, Strings.McpServerInUseContent,
+                "MCP SERVER", Strings.McpServerInUseLog, false))
+            {
+                dialog.ShowDialog();
+            }
+        }
+
+        /// <summary>启动器自己的失败提示。样式与主程序的 BetaNotice 保持一致，避免被误认成系统错误框。</summary>
+        public static void ShowError(string title, string content)
+        {
+            using (LauncherDialog dialog = new LauncherDialog(title, Strings.LauncherErrorTitle, content,
+                "APPLICATION LAUNCHER", Strings.LauncherErrorLog, true))
             {
                 dialog.ShowDialog();
             }
@@ -86,7 +103,7 @@ namespace WPELauncher
         {
             drawingDpi = dpi > 0 ? dpi : 96;
             float scale = dpi / 96f;
-            ClientSize = new Size((int)Math.Round(560 * scale), (int)Math.Round(320 * scale));
+            ClientSize = new Size((int)Math.Round(560 * scale), (int)Math.Round((detailed ? 430 : 320) * scale));
         }
 
         // 与 WPE 主窗体使用同一条每显示器 DPI 检测路径；DeviceDpi 在这个无边框启动器上可能仍是系统 DPI。
@@ -145,7 +162,6 @@ namespace WPELauncher
                 {
                     g.DrawRectangle(tagBorder, tagRect);
                 }
-                string tagText = "MCP SERVER";
                 Size tagTextSize = TextRenderer.MeasureText(tagText, tag, Size.Empty, TextFormatFlags.NoPadding | TextFormatFlags.SingleLine);
                 int tagMarkSize = P(9, scale);
                 int tagGap = P(12, scale);
@@ -158,9 +174,9 @@ namespace WPELauncher
                 TextRenderer.DrawText(g, tagText, tag, new Rectangle(tagLeft + tagMarkSize + tagGap, tagRect.Top, tagTextSize.Width, tagRect.Height), Amber,
                     TextFormatFlags.NoPadding | TextFormatFlags.SingleLine | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix);
                 g.DrawString(heading, title, text, P(38, scale), P(118, scale));
-                g.DrawString(content, body, muted, new RectangleF(P(38, scale), P(176, scale), Width - P(76, scale), P(48, scale)));
+                g.DrawString(content, body, muted, new RectangleF(P(38, scale), P(176, scale), Width - P(76, scale), detailed ? P(120, scale) : P(48, scale)));
 
-                Rectangle logRect = new Rectangle(P(38, scale), P(239, scale), Width - P(76, scale), P(60, scale));
+                Rectangle logRect = new Rectangle(P(38, scale), detailed ? P(310, scale) : P(239, scale), Width - P(76, scale), P(60, scale));
                 using (SolidBrush logBack = new SolidBrush(Color.FromArgb(87, 0, 0, 0)))
                 using (Pen logBorder = new Pen(Border))
                 {
@@ -170,7 +186,6 @@ namespace WPELauncher
                 TextRenderer.DrawText(g, "warning", warning, new Rectangle(logRect.Left + P(25, scale), logRect.Top, P(80, scale), logRect.Height), Amber,
                     TextFormatFlags.NoPadding | TextFormatFlags.SingleLine | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix);
                 int logTextLeft = logRect.Left + P(120, scale);
-                string logText = Strings.McpServerInUseLog;
                 TextRenderer.DrawText(g, logText, body, new Rectangle(logTextLeft, logRect.Top, logRect.Right - logTextLeft, logRect.Height), Muted,
                     TextFormatFlags.NoPadding | TextFormatFlags.SingleLine | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix);
                 if (cursorOn)
