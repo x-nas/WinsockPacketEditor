@@ -117,22 +117,18 @@ async function importBackup(): Promise<void> {
       <p class="hint">{{ t('bk.importHint') }}</p>
 
       <!--
-        全选 / 全不选：<b>放在四个区域下面、靠左</b>（2026-10-02 用户要求）——
-        它管的是上面那堆勾选框，跟着它们更顺。
-      -->
-      <div class="selall">
-        <button class="sbtn" @click="setAll(!allOn())">{{ allOn() ? t('pm.deselect') : t('pm.selectAll') }}</button>
-      </div>
-
-      <!--
-        导入 / 导出用<b>与本屏勾选框同一族的小按钮</b>（.setf .sbtn，绿 = 导出为主、
+        全选在最左、导入 / 导出在最右，<b>同一行</b>（2026-10-02 用户要求）——
+        全选管的就是上面那堆勾选框，跟它们同一行更顺手。
+        按钮用与本屏勾选框同一族的小按钮（.setf .sbtn，绿 = 导出为主、
         琥珀 = 导入带注意色），和映射 / 防火墙名单那几条工具条一个外观。
         ⚠️ 不要再塞进 SettingsModal 的页脚插槽 —— 页脚在组件模板之外，
         scoped 的 .sbtn 样式传不过去，会掉成浏览器原生按钮（2026-10-02 撞过）。
       -->
       <div class="bk-acts">
-        <button class="sbtn primary" :disabled="busy || !Object.values(f).some(Boolean)" @click="exportBackup">{{ t('bk.export') }}</button>
+        <button class="sbtn" @click="setAll(!allOn())">{{ allOn() ? t('pm.deselect') : t('pm.selectAll') }}</button>
+        <span class="grow" />
         <button class="sbtn warn" :disabled="busy" @click="importBackup">{{ t('bk.import') }}</button>
+        <button class="sbtn primary" :disabled="busy || !Object.values(f).some(Boolean)" @click="exportBackup">{{ t('bk.export') }}</button>
       </div>
     </div>
   </SettingsModal>
@@ -160,15 +156,11 @@ async function importBackup(): Promise<void> {
 .gb { display: flex; flex-direction: column; gap: 8px; padding: 8px 14px 0; }
 
 /*
-  全选 / 全不选：放在四个区域<b>下面、靠左</b>。
+  底部动作行：<b>全选靠左、导入 / 导出靠右</b>，.grow 把两边撑开。
+  与本屏勾选框同一族的小按钮（.setf .sbtn），绿色是主动作（导出）、琥珀留给导入。
 */
-.selall { display: flex; align-items: center; padding: 0 20px 0; }
-
-/*
-  导入 / 导出：与本屏勾选框同一族的小按钮（.setf .sbtn），绿色是主动作（导出）、
-  琥珀留给带注意色的导入，和映射 / 防火墙名单那几条工具条同一套外观。
-*/
-.bk-acts { display: flex; align-items: center; gap: 8px; padding: 10px 20px 4px; }
+.bk-acts { display: flex; align-items: center; gap: 8px; padding: 0 20px 4px; }
+.bk-acts .grow { flex: 1; }
 
 /*
   矮视口再收一档 —— 与启动页、数据页那两处同一个思路。
@@ -188,7 +180,6 @@ async function importBackup(): Promise<void> {
   .groups .sec > .grp { padding: 3px 12px 2px; margin-bottom: 0; }
   .groups .sec > .grp::before { padding: 1px 3px 0; min-width: 19px; }
   .gb { gap: 5px; padding: 4px 12px 0; }
-  .selall { padding: 2px 20px 0; }
   .bk-acts { padding: 6px 20px 2px; }
 }
 </style>

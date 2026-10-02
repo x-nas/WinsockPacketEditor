@@ -346,13 +346,6 @@ async function save(): Promise<void> {
     <div class="grp">{{ t('fw.whiteList') }} <span class="cnt">{{ white.length }}</span></div>
 
     <div class="tbl">
-      <div class="tbar">
-        <button class="sbtn primary" @click="add(false)">{{ t('fw.add') }}</button>
-        <span class="grow" />
-        <button class="sbtn" @click="listAction(8, false)">{{ t('flt.import') }}</button>
-        <button class="sbtn" :disabled="!whiteRows.length" @click="listAction(5, false)">{{ t('lst.export') }}</button>
-        <button class="sbtn danger" :disabled="!whiteRows.length" @click="listAction(7, false)">{{ t('flt.clearAll') }}</button>
-      </div>
       <div class="thead" :style="rowStyle">
         <span class="so" :class="{ on: sortWhite.active('ip') }" @click="sortWhite.toggle('ip')">
           {{ t('cli.ip') }}<i class="ar">{{ sortWhite.mark('ip') }}</i>
@@ -382,6 +375,13 @@ async function save(): Promise<void> {
           </span>
         </div>
       </div>
+      <div class="tbar">
+        <button class="sbtn primary" @click="add(false)">{{ t('fw.add') }}</button>
+        <span class="grow" />
+        <button class="sbtn" @click="listAction(8, false)">{{ t('flt.import') }}</button>
+        <button class="sbtn" :disabled="!whiteRows.length" @click="listAction(5, false)">{{ t('lst.export') }}</button>
+        <button class="sbtn danger" :disabled="!whiteRows.length" @click="listAction(7, false)">{{ t('flt.clearAll') }}</button>
+      </div>
     </div>
     </section>
 
@@ -389,13 +389,6 @@ async function save(): Promise<void> {
     <div class="grp">{{ t('fw.blackList') }} <span class="cnt">{{ black.length }}</span></div>
 
     <div class="tbl">
-      <div class="tbar">
-        <button class="sbtn primary" @click="add(true)">{{ t('fw.add') }}</button>
-        <span class="grow" />
-        <button class="sbtn" @click="listAction(8, true)">{{ t('flt.import') }}</button>
-        <button class="sbtn" :disabled="!blackRows.length" @click="listAction(5, true)">{{ t('lst.export') }}</button>
-        <button class="sbtn danger" :disabled="!blackRows.length" @click="listAction(7, true)">{{ t('flt.clearAll') }}</button>
-      </div>
       <div class="thead" :style="rowStyle">
         <span class="so" :class="{ on: sortBlack.active('ip') }" @click="sortBlack.toggle('ip')">
           {{ t('cli.ip') }}<i class="ar">{{ sortBlack.mark('ip') }}</i>
@@ -424,6 +417,13 @@ async function save(): Promise<void> {
             </button>
           </span>
         </div>
+      </div>
+      <div class="tbar">
+        <button class="sbtn primary" @click="add(true)">{{ t('fw.add') }}</button>
+        <span class="grow" />
+        <button class="sbtn" @click="listAction(8, true)">{{ t('flt.import') }}</button>
+        <button class="sbtn" :disabled="!blackRows.length" @click="listAction(5, true)">{{ t('lst.export') }}</button>
+        <button class="sbtn danger" :disabled="!blackRows.length" @click="listAction(7, true)">{{ t('flt.clearAll') }}</button>
       </div>
     </div>
     </section>
@@ -459,21 +459,26 @@ async function save(): Promise<void> {
 .cnt { margin-left: 6px; font-family: var(--mono); font-size: var(--fs-caption); color: var(--muted); }
 
 /*
-  表体：<b>表直接铺满卡片</b> —— 表的左右边框去掉、卡片底内边距归零、
-  表的底边框让掉（否则与卡片自己的下边框叠成双线），高度随行数自适应，
-  行多时由 tbody 自己滚（max-height 兜底），不留缝隙。
+  表体：<b>表直接铺满卡片</b> —— 去掉通用 `.setf .sec .tbl` 那 6px 的上外边距、
+  表的左右 / 底边框，卡片自己也不留底部内边距。
+  这样表格的第一行紧贴抬头、最后一行 / 工具条紧贴卡片下边框，中间不留缝隙。
 */
 .tbl {
-  margin: 6px 0 0;
+  margin: 0;
   border-left: 0;
   border-right: 0;
   border-bottom: 0;
   background: rgb(var(--inset-rgb) / 20%);
   overflow: hidden;
 }
+/*
+  ⚠️ 卡片底部内边距要归零，否则表格与卡片下边框之间会留出那 8px。
+  本组件里只有这两张表所在的卡片需要这条，用 :has(> .tbl) 精确命中。
+*/
+section.sec:has(> .tbl) { padding-bottom: 0; }
 
-/* 两张表的工具条：新增靠左（绿色，同映射设置的主按钮），导入 / 导出 / 清空靠右 */
-.tbar { display: flex; align-items: center; gap: 8px; padding: 6px 14px; border-bottom: 1px solid var(--border); background: var(--card); }
+/* 工具条此时在表格<b>最下面</b>（表头 → 数据 → 新增 / 导入 / 导出 / 清空） */
+.tbar { display: flex; align-items: center; gap: 8px; padding: 6px 14px; background: var(--card); border-top: 1px solid var(--border); }
 .tbar .grow { flex: 1; }
 
 .thead,
