@@ -101,9 +101,12 @@ export const DOMAIN_TYPE: Record<number, string> = {
   WSARecvEx（11）与 WSARecv（10）指向同一个键 —— C# 侧也是共用一个文案键。
 
   ⚠️ <b>这张表必须覆盖 C# 枚举的每一个取值。</b>漏掉的那个值查出来是 undefined，
-  「类型」列就是<b>一片空白</b>，而且不报任何错。21 / 22（WebSocket 请求 / 响应）
-  ⚠️ 21 / 22（WebSocket 请求 / 响应）<b>现在没有产出者</b>了 —— SunnyNet 的中间人已随 2.4 移除。
-  保留这两个映射与 C# 枚举值，是为了让升级前存档里的那几条还能显示类型名，而不是一片空白。
+  「类型」列就是<b>一片空白</b>，而且不报任何错。
+
+  ⚠️ 19 / 20（HTTPS 请求 / 响应）与 21 / 22（WebSocket 请求 / 响应）<b>现在都没有产出者</b>了：
+  WebSocket 的中间人随 SunnyNet 在 2.4 移除；HTTPS 是密文，不解密就分不出「请求 / 响应」
+  （按 CONNECT 数只能得到连接数，那是另一种量纲）。保留这几个映射与 C# 枚举值，是为了让
+  升级前存档里的那几条还能显示类型名，而不是一片空白。
 */
 export const PACKET_TYPE: Record<number, string> = {
   0: 'pt.ws1Send',

@@ -26,6 +26,7 @@ For filters and WPC servers, reference fields accept an exact visible name or a 
 | `wpe_proxy_runtime_get` | `proxy.runtime.get` | `read.runtime` | Live listener state and bounded counters |
 | `wpe_remote_management_get` | `remoteManagement.get` | `read.runtime` | Remote-management address, administrator credentials, available local addresses and current HTTP-server state |
 | `wpe_setting_get` | `settings.get` | `read.runtime` | Complete snapshot for a named WPE settings page |
+| `wpe_unpack_rules_get` | `unpack.rules.get` | `read.runtime` | TCP unpacking switch and complete ordered rule set |
 | `wpe_wpc_servers_list` | `wpc.servers.list` | `read.runtime` | WPC server configurations including all three client URLs and nested rule counts |
 | `wpe_wpc_server_rules_list` | `wpc.server.rules.list` | `read.runtime` | Rules for one WPC server, including native numeric type/action values |
 | `wpe_connections_summary_get` | `connections.summary.get` | `read.capture` | Complete count fields for the summary's protocol and WPC/ordinary groups |
@@ -39,6 +40,10 @@ For filters and WPC servers, reference fields accept an exact visible name or a 
 | `wpe_warehouse_get` | `warehouses.get` | `read.runtime` | One warehouse's bounded stored-packet records; `id` is required and must be the `Id` GUID returned by `wpe_warehouse_list`, never its display name |
 | `wpe_auto_stores_list` | `autoStores.list` | `read.runtime` | Automatic-storage rules only; no mutation |
 | `wpe_packet_edit_get` | `packet.edit.get` | `read.capture` | Explicit editing snapshot; payload returned as Base64 |
+| `wpe_decoders_list` / `wpe_decoder_get` | `decoders.list` / `decoders.get` | `read.runtime` | Saved decoder rows and complete configurations |
+| `wpe_decoder_test` | `decoders.test` | `read.runtime` | Pure caller-data codec trial; does not save or enforce packet scope |
+| `wpe_decoder_decode_capture` | `decoders.decodeCapture` | `read.capture` | Saved decoder applied to one captured packet with native scope validation |
+| `wpe_packet_extractors_list` / `wpe_packet_extractor_get` | `packetExtractors.list` / `packetExtractors.get` | `read.runtime` | Saved extractor configuration; runtime values require explicit opt-in and may be sensitive |
 | `wpe_proxy_bind_ip_set` | `proxy.bindIp.set` | `write.proxy` | Auto or validated IPv4/IPv6 listening address, persisted after WPE-local confirmation |
 | `wpe_external_proxy_set_enabled` | `proxy.external.setEnabled` | `write.proxy` | Toggles the existing external proxy endpoint only; use proxy settings/config tools to inspect credentials |
 | `wpe_proxy_start` | `proxy.start` | `write.proxy.lifecycle` | Starts configured listeners after confirmation |
@@ -76,7 +81,7 @@ For filters and WPC servers, reference fields accept an exact visible name or a 
 | `wpe_account_delete` | `accounts.delete` | `write.account` | `id` is the GUID returned by `wpe_accounts_list`, never `userName` |
 | `wpe_proxy_auth_set_enabled` | `proxy.auth.setEnabled` | `write.proxy` | Boolean-only setting, rejects incompatible Only-WPC state and persists after WPE-local confirmation |
 | `wpe_proxy_max_connections_set` | `proxy.maxConnections.set` | `write.proxy` | Integer setting validated against the live machine cap; persists after WPE-local confirmation |
-| `wpe_proxy_socks5_port_set` | `proxy.socks5Port.set` | `write.proxy` | Integer port setting, validates range and HTTP conflict, persists after WPE-local confirmation |
+| `wpe_proxy_socks5_port_set` | `proxy.socks5Port.set` | `write.proxy` | Integer port setting, validates the range, persists after WPE-local confirmation |
 | `wpe_firewall_set_enabled` | `firewall.setEnabled` | `write.firewall` | Boolean-only firewall switch, persists after WPE-local confirmation |
 | `wpe_proxy_only_wpc_set_enabled` | `proxy.onlyWpc.setEnabled` | `write.proxy` | Boolean-only setting, requires authentication when enabled, persists after WPE-local confirmation |
 | `wpe_external_proxy_set_enabled` | `proxy.external.setEnabled` | `write.proxy` | Boolean-only external proxy switch; validates configured host/port when enabling |
@@ -85,6 +90,7 @@ For filters and WPC servers, reference fields accept an exact visible name or a 
 | `wpe_remote_management_save` | `remoteManagement.save` | `write.remote-management` | Saves the existing remote-management enabled state, bind address, port and administrator credentials; starts or stops its HTTP server accordingly |
 | `wpe_setting_save` | `settings.save` | `write.settings` | Persists a complete named settings-page configuration through WPE's native business rules |
 | `wpe_map_local_save` / `wpe_map_remote_save` | `map.local.save` / `map.remote.save` | `write.mapping` | Creates or updates the two native HTTP mapping record types |
+| `wpe_unpack_rules_save` | `unpack.rules.save` | `write.proxy` | Atomically validates and replaces the TCP-unpacking switch and ordered rules; rule order is matching priority |
 | `wpe_export` / `wpe_import` | `export.run` / `import.run` | `write.export` / `write.import` | The two unified file-workflow tools cover every native WPE export and import. Use `kind: backup` plus `backupParts.all: true` to export every module. |
 | `wpe_wpc_server_save` | `wpc.server.save` | `write.wpc` | Creates when `id` is omitted; updates accept the exact visible server name or its GUID |
 | `wpe_wpc_server_rule_save` | `wpc.server.rule.save` | `write.wpc` | `serverId` accepts the exact visible server name or GUID; creates rules when `id` is omitted. Global proxy is enabled `type: 15`, empty `argument`, `action: 0` |
@@ -136,5 +142,11 @@ For filters and WPC servers, reference fields accept an exact visible name or a 
 | `wpe_driver_uninstall` | `driver.uninstall` | `write.driver` | Opens WPE's existing driver-uninstall confirmation flow |
 | `wpe_process_proxy_save` | `processProxy.save` | `write.driver` | Saves existing process-proxy settings and performs its native on-demand driver install/configuration |
 | `wpe_packet_edit_send_start` / `wpe_packet_edit_send_stop` | `packetEdit.sendStart` / `packetEdit.sendStop` | `write.capture` | Starts or stops the existing packet-editor send session |
+| `wpe_decoder_create` / `wpe_decoder_update` | `decoders.create` / `decoders.update` | `write.decoder` | Creates or replaces a full decoder configuration after local confirmation |
+| `wpe_decoder_set_enabled` / `wpe_decoders_set_all_enabled` | `decoders.setEnabled` / `decoders.setAllEnabled` | `write.decoder` | Changes only decoder enablement |
+| `wpe_decoders_move` / `wpe_decoders_copy` / `wpe_decoders_delete` / `wpe_decoders_clear_all` | `decoders.action` / `decoders.clearAll` | `write.decoder` | Native ordering, copy and destructive list operations |
+| `wpe_packet_extractor_create` / `wpe_packet_extractor_update` | `packetExtractors.create` / `packetExtractors.update` | `write.packet-extractor` | Creates or replaces complete extractors and variables; never writes runtime values directly |
+| `wpe_packet_extractor_set_enabled` / `wpe_packet_extractors_set_all_enabled` | `packetExtractors.setEnabled` / `packetExtractors.setAllEnabled` | `write.packet-extractor` | Changes only extractor enablement |
+| `wpe_packet_extractors_move` / `wpe_packet_extractors_copy` / `wpe_packet_extractors_delete` / `wpe_packet_extractors_clear_all` | `packetExtractors.action` / `packetExtractors.clearAll` | `write.packet-extractor` | Native ordering, copy and destructive list operations |
 
 `wpe_filter_set_enabled` calls WPE's normal `SetFilterEnable_ById` path, so configuration persistence and UI refresh remain identical to a local change. Firewall add/remove tools call the normal `Operate.ProxyConfig.Proxy` business paths; add waits for IP-location lookup, list insertion and database persistence before returning success, while remove only accepts an exact existing address. Rejected or expired confirmation requests make no change.

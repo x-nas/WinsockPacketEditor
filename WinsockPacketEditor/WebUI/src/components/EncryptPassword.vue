@@ -283,7 +283,7 @@ const { covered } = useModal(() => mode.value !== null)
   stroke-linecap: round;
 }
 
-.hd .tt { font-family: var(--orbit); font-weight: 700; font-size: var(--fs-title); letter-spacing: .04em; color: var(--gray); }
+.hd .tt { font-family: var(--orbit); font-weight: 700; font-size: var(--fs-title); letter-spacing: .04em; color: var(--cyan); }
 
 .bd { padding: 14px 20px 4px; }
 

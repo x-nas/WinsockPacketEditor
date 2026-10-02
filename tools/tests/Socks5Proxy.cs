@@ -221,7 +221,6 @@ static class T
             port = FreePort(IPAddress.Loopback);
 
             var P = typeof(Operate.ProxyConfig.Proxy);   //只是让下面短一点
-            Operate.ProxyConfig.Proxy.Enable_HTTP = false;
             Operate.ProxyConfig.Proxy.Enable_SOCKS5 = true;
             Operate.ProxyConfig.Proxy.Enable_ExternalProxy = false;
             Operate.ProxyConfig.Proxy.ProxyIP_Auto = false;

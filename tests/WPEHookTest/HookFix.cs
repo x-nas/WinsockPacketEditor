@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using Microsoft.Data.Sqlite;
 using WinsockPacketEditor;
 using FA = WinsockPacketEditor.Operate.FilterConfig.Filter.FilterAction;
 using PT = WinsockPacketEditor.Operate.PacketConfig.Packet.PacketType;
@@ -55,9 +56,12 @@ namespace WPEHookTest
                 T("A14", "递进计数与执行次数在并发命中下不丢", CaseProgressionRace),
                 T("A15", "高级滤镜首个条件带通配也能匹配", CaseAdvancedWildcardFirst),
                 T("A18", "高级替换多命中、末次越界：动作不吞成 None", CaseAdvancedMultiMatchLastOutOfRange),
+                T("A19", "取值器替换格：绝对值 / 相对多命中 / 多字节 / 越界", CaseVariableReplacement),
+                T("A20", "取值器替换格与取值器赋值字段落库/读回", CaseVariableReplacePersistence),
                 T("B8", "按套接字过滤时不再每包做系统调用（同结果）", CasePortFilterStillWorks),
                 T("A13", "换滤镜快照不把目标里的连续递进计数清零", CaseSnapshotKeepsProgression),
                 T("Bparse", "预解析保持通配、排除、修改顺序及编辑后失效语义", CaseParsedRules),
+                T("A21", "老库 Filter 表迁移：补替换格列、删模板替换列、保留数据", CaseFilterSchemaMigration),
             };
 
             var hooked = new List<Tuple<string, string, Func<bool>>>
@@ -977,6 +981,218 @@ namespace WPEHookTest
             rep.AppendLine("- 命中 [0,2]、末次改 +1 越界：动作 " + action + "（必须 Replace）、执行次数 " + fi.ExecutionCount + "（必须 1）");
             rep.AppendLine("- 改后字节 " + (nb == null ? "<null>" : BitConverter.ToString(nb)) + "（必须 41-FF-41）");
             return action == FA.Replace && fi.ExecutionCount == 1 && bytesOk;
+        }
+
+        /// <summary>
+        /// 取值器替换格（取代旧的模板动态替换）：
+        /// 按 GUID 渲染变量并从标记列写入；相对位置（高级·指定位置）对每个命中点各写一次；
+        /// 多字节变量跨列写；越界的格子只记日志、不影响动作与其它格。
+        /// </summary>
+        private static bool CaseVariableReplacement()
+        {
+            var extractor = new PacketExtractorInfo
+            {
+                Id = Guid.NewGuid(),
+                Name = "回归取值器",
+                IsEnable = true,
+                Scope = PacketExtractorScope.Global,
+                Variables = new List<PacketVariableInfo>
+                {
+                    new PacketVariableInfo
+                    {
+                        Id = Guid.NewGuid(), Name = "常量字", Kind = PacketVariableKind.Constant,
+                        DataType = PacketVariableDataType.Integer, Value = "4660",   // 0x1234
+                        Extraction = new PacketExtractionSpec(),
+                    },
+                    new PacketVariableInfo
+                    {
+                        Id = Guid.NewGuid(), Name = "文本", Kind = PacketVariableKind.Constant,
+                        DataType = PacketVariableDataType.String, Value = "AB",
+                        Extraction = new PacketExtractionSpec(),
+                    },
+                },
+            };
+
+            PacketVariableEngine.Publish(new[] { extractor });
+            Guid numId = extractor.Variables[0].Id;
+            Guid strId = extractor.Variables[1].Id;
+            string numBind = "|" + extractor.Id.ToString() + "|" + numId.ToString() + "|u16be";
+            string strBind = "|" + extractor.Id.ToString() + "|" + strId.ToString() + "|utf8";
+
+            //① 普通模式绝对值：第 1 列写 u16be = 12 34
+            var fi = AddFilter("替换格绝对值", FA.Replace, "0|41", "", SendFunctions());
+            fi.VariableReplacePosition = "1" + numBind;
+
+            byte[] nb;
+            FA abs = Operate.FilterConfig.List.DoFilterList(0, new byte[] { 0x41, 0xFF, 0xFF, 0x00 }, out nb,
+                PT.WS2_Send, new Operate.PacketConfig.Packet.SockAddr());
+            bool absOk = abs == FA.Replace && nb != null && nb.Length == 4 && nb[1] == 0x12 && nb[2] == 0x34;
+            string hexAbs = Hex(nb);
+
+            //② 多字节字符串：第 1 列写 utf8 "AB" = 41 42
+            Operate.FilterConfig.List.lstFilterInfo.Clear();
+            var fiStr = AddFilter("替换格字符串", FA.Replace, "0|41", "", SendFunctions());
+            fiStr.VariableReplacePosition = "1" + strBind;
+
+            FA strAction = Operate.FilterConfig.List.DoFilterList(0, new byte[] { 0x41, 0x00, 0x00 }, out nb,
+                PT.WS2_Send, new Operate.PacketConfig.Packet.SockAddr());
+            bool strOk = strAction == FA.Replace && nb != null && nb.Length == 3 && nb[1] == 0x41 && nb[2] == 0x42;
+            string hexStr = Hex(nb);
+
+            //③ 高级·指定位置：命中 0 与 3，各在 +1 写 12 34
+            Operate.FilterConfig.List.lstFilterInfo.Clear();
+            var fiRel = AddFilter("替换格相对", FA.Replace, "0|41", "", SendFunctions());
+            fiRel.FMode = Operate.FilterConfig.Filter.FilterMode.Advanced;
+            fiRel.FStartFrom = Operate.FilterConfig.Filter.FilterStartFrom.Position;
+            fiRel.VariableReplacePosition = "1" + numBind;
+
+            FA rel = Operate.FilterConfig.List.DoFilterList(0, new byte[] { 0x41, 0xFF, 0xFF, 0x41, 0xFF, 0xFF }, out nb,
+                PT.WS2_Send, new Operate.PacketConfig.Packet.SockAddr());
+            bool relOk = rel == FA.Replace && nb != null && nb.Length == 6
+                && nb[1] == 0x12 && nb[2] == 0x34 && nb[3] == 0x41 && nb[4] == 0x12 && nb[5] == 0x34;
+            string hexRel = Hex(nb);
+
+            //④ 越界：第 3 列写 2 字节到长度 3 的包 → 不写，动作回 None（没有别的改写）
+            Operate.FilterConfig.List.lstFilterInfo.Clear();
+            var fiBad = AddFilter("替换格越界", FA.Replace, "0|41", "", SendFunctions());
+            fiBad.VariableReplacePosition = "3" + numBind;
+
+            FA bad = Operate.FilterConfig.List.DoFilterList(0, new byte[] { 0x41, 0xFF, 0x00 }, out nb,
+                PT.WS2_Send, new Operate.PacketConfig.Packet.SockAddr());
+            bool badOk = bad == FA.None;
+
+            //⑤ 未启用取值器：不写
+            Operate.FilterConfig.List.lstFilterInfo.Clear();
+            extractor.IsEnable = false;
+            PacketVariableEngine.Publish(new[] { extractor });
+            var fiOff = AddFilter("替换格禁用", FA.Replace, "0|41", "", SendFunctions());
+            fiOff.VariableReplacePosition = "1" + numBind;
+            FA off = Operate.FilterConfig.List.DoFilterList(0, new byte[] { 0x41, 0xFF, 0xFF }, out nb,
+                PT.WS2_Send, new Operate.PacketConfig.Packet.SockAddr());
+            bool offOk = off == FA.None;
+
+            PacketVariableEngine.Publish(new PacketExtractorInfo[0]);
+
+            rep.AppendLine("- ① 绝对值 u16be：" + abs + " 字节 " + hexAbs + "（须 Replace / 41-12-34-00）");
+            rep.AppendLine("- ② 多字节 utf8：字节 " + hexStr + "（须 …41-42）");
+            rep.AppendLine("- ③ 相对多命中：字节 " + hexRel + "（须 41-12-34-41-12-34）");
+            rep.AppendLine("- ④ 越界：" + bad + "（须 None）");
+            rep.AppendLine("- ⑤ 取值器禁用：" + off + "（须 None）");
+            return absOk && strOk && relOk && badOk && offOk;
+        }
+
+        private static string Hex(byte[] bytes)
+        {
+            return bytes == null ? "<null>" : BitConverter.ToString(bytes);
+        }
+
+        /// <summary>
+        /// 取值器替换格与取值器赋值字段的落库 / 读回：
+        /// 走一次整表保存（InsertTable_Filter）再 LoadFilterList_FromDB，
+        /// 验证新列 VariableReplacePosition 与旧的取值器赋值列都对得上，
+        /// 顺带覆盖 CreateTable_Filter 里为老库补列 / 删列的迁移路径。
+        /// </summary>
+        private static bool CaseVariableReplacePersistence()
+        {
+            var extractor = new PacketExtractorInfo
+            {
+                Id = Guid.NewGuid(),
+                Name = "持久化取值器",
+                IsEnable = true,
+                Scope = PacketExtractorScope.Global,
+                Variables = new List<PacketVariableInfo>
+                {
+                    new PacketVariableInfo
+                    {
+                        Id = Guid.NewGuid(), Name = "字", Kind = PacketVariableKind.Constant,
+                        DataType = PacketVariableDataType.Integer, Value = "1",
+                        Extraction = new PacketExtractionSpec(),
+                    },
+                },
+            };
+
+            PacketExtractorConfig.Items.Clear();
+            PacketExtractorConfig.Items.Add(extractor);
+
+            var fi = AddFilter("持久化替换格", FA.Replace, "0|41", "", SendFunctions());
+            string stored = "2|" + extractor.Id + "|" + extractor.Variables[0].Id + "|u16le";
+            fi.VariableReplacePosition = stored;
+            fi.VariableExtractorId = extractor.Id;
+            fi.VariableId = extractor.Variables[0].Id;
+            fi.CaptureVariable = true;
+
+            // 整表落库 → 清空 → 从库读回
+            Operate.FilterConfig.List.SaveFilterList_ToDB();
+            Operate.FilterConfig.List.lstFilterInfo.Clear();
+            Operate.FilterConfig.List.LoadFilterList_FromDB();
+
+            var loaded = Operate.FilterConfig.List.lstFilterInfo.FirstOrDefault(x => x.FName == "持久化替换格");
+
+            bool ok = loaded != null
+                && loaded.VariableReplacePosition == stored
+                && loaded.VariableExtractorId == extractor.Id
+                && loaded.VariableId == extractor.Variables[0].Id
+                && loaded.CaptureVariable;
+
+            PacketExtractorConfig.Items.Clear();
+
+            rep.AppendLine("- 读回 VariableReplacePosition=" + (loaded == null ? "<null>" : loaded.VariableReplacePosition));
+            rep.AppendLine("- 读回取值器赋值=" + (loaded == null ? "<null>" : loaded.CaptureVariable + " / " + loaded.VariableExtractorId));
+            return ok;
+        }
+
+        /// <summary>
+        /// 老库迁移：Filter 表原本是模板替换的三列（ReplaceVariable / VariableTemplate / VariableOffset），
+        /// 没有 VariableReplacePosition。InitDB 的 CreateTable_Filter 末尾要补新列、删旧列、保留数据。
+        /// <b>用独立的临时库跑</b>，跑完把 dbPath 还原 —— 否则会污染主测试库的表结构。
+        /// </summary>
+        private static bool CaseFilterSchemaMigration()
+        {
+            string saved = Operate.DataBase.dbPath;
+            string dir = Path.Combine(Path.GetTempPath(), "WPEHookTest_mig");
+
+            try
+            {
+                Operate.DataBase.dbPath = dir;
+                Operate.DataBase.InitConStr();
+                Directory.CreateDirectory(dir);
+
+                string oldSchema =
+                    "DROP TABLE IF EXISTS Filter;" +
+                    "CREATE TABLE Filter (GUID TEXT NOT NULL PRIMARY KEY, Name TEXT NOT NULL, " +
+                    "ReplaceVariable BOOLEAN DEFAULT 0, VariableTemplate TEXT, VariableOffset INTEGER DEFAULT 0);" +
+                    "INSERT INTO Filter (GUID, Name, ReplaceVariable, VariableTemplate, VariableOffset) VALUES ('"
+                    + Guid.NewGuid() + "', 'legacy', 1, 'AA', 3);";
+
+                using (var conn = new SqliteConnection(Operate.DataBase.conStr))
+                using (var cmd = new SqliteCommand(oldSchema, conn)) { conn.Open(); cmd.ExecuteNonQuery(); }
+
+                // 触发 CreateTable_Filter 末尾的 EnsureColumn / DropColumnIfExists
+                Operate.DataBase.InitDB();
+
+                var cols = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                int kept = 0;
+
+                using (var conn = new SqliteConnection(Operate.DataBase.conStr))
+                {
+                    conn.Open();
+                    using (var cmd = new SqliteCommand("PRAGMA table_info(Filter);", conn))
+                    using (var r = cmd.ExecuteReader()) { while (r.Read()) { cols.Add(Convert.ToString(r["name"])); } }
+                    using (var cmd = new SqliteCommand("SELECT COUNT(*) FROM Filter WHERE Name='legacy';", conn))
+                    { kept = Convert.ToInt32(cmd.ExecuteScalar()); }
+                }
+
+                bool oldGone = !cols.Contains("ReplaceVariable") && !cols.Contains("VariableTemplate") && !cols.Contains("VariableOffset");
+                bool ok = cols.Contains("VariableReplacePosition") && oldGone && kept == 1;
+
+                rep.AppendLine("- 新列补齐=" + cols.Contains("VariableReplacePosition") + "，旧三列已删=" + oldGone + "，老行保留=" + kept);
+                return ok;
+            }
+            finally
+            {
+                Operate.DataBase.dbPath = saved;
+                Operate.DataBase.InitConStr();
+            }
         }
 
         private static bool CasePortFilterStillWorks()

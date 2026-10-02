@@ -16,7 +16,6 @@
 import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
 import { call } from '../../bridge'
 import { FeedList, type IPRuleRow } from '../../bridge/types'
-import { flagSrc } from '../../flags'
 import { t } from '../../i18n'
 import { useList } from '../../stores/lists'
 import { ipKey, timeKey, useSort } from '../../useSort'
@@ -53,41 +52,38 @@ const form = ref<Form>({
   autoClearExpiry: false,
 })
 
-/** 当前看的是哪张表。两张表结构一样，用一个开关切，不并排摆 —— 并排的话每张都只剩一半宽。 */
-const tab = ref<'white' | 'black'>('white')
-const source = computed(() => (tab.value === 'black' ? black.value : white.value))
-const isBlack = computed(() => tab.value === 'black')
-
 /*
-  表头排序。WinForms 那张表只有「IP地址」与「过期时间」两列带 SortMode，这里照着给这两列。
+  两张表各自排序（2026-10-02 改成「白名单 + 黑名单两张表并排」，不再用页签二选一）。
+  排序状态原本只有一份，现在每张表一份 —— 否则点白名单表头会把黑名单也一起排了。
 
-  <b>IP 用 StartIP 排</b>：DTO 里现成的数字（C# 侧解析好的段起点），
-  比在前端拆点四段准 —— 名单里可以写成 IP 段（"10.0.0.1-10.0.0.99"），那种拆不出四段。
-  StartIP 为 0 的（解析失败）退回自己拆一次，至少同类的挨在一起。
-
+  IP 用 StartIP 排：DTO 里现成的数字（C# 侧解析好的段起点），比在前端拆点四段准 ——
+  名单里可以写成 IP 段（"10.0.0.1-10.0.0.99"），那种拆不出四段。StartIP 为 0 的退回自己拆一次。
   「永久有效」的没有到期时间，按最大值排到最后 —— 与账号列表「永不过期」同一个处理。
 */
-const sort = useSort<IPRuleRow>(source, {
+const sortWhite = useSort<IPRuleRow>(white, {
   ip: (r) => (r.StartIP || ipKey(r.IPAddress)),
   expiry: (r) => (r.IsExpiry ? timeKey(r.ExpiryTime) : Number.MAX_SAFE_INTEGER),
 })
 
-const rows = sort.sorted
+const sortBlack = useSort<IPRuleRow>(black, {
+  ip: (r) => (r.StartIP || ipKey(r.IPAddress)),
+  expiry: (r) => (r.IsExpiry ? timeKey(r.ExpiryTime) : Number.MAX_SAFE_INTEGER),
+})
+
+const whiteRows = sortWhite.sorted
+const blackRows = sortBlack.sorted
 
 /*
-  列宽可拖 —— 「客户端地」装的是「中国-上海-上海徐汇区电信」这种长串，
-  固定宽度下只看得到省略号。做法照搬 PacketList：手柄挂在表头右边界、
-  监听挂 window（快拖时鼠标会跑出那条 7px 窄条）、双击恢复默认。
-  <b>不持久化</b>，与封包列表一致 —— 关掉弹窗回默认值。
+  列宽可拖 —— 「IP 地址」装的是 IP 段这种长串，固定宽度下只看得到省略号。
+  做法照搬 PacketList：手柄挂在表头右边界、监听挂 window（快拖时鼠标会跑出那条 7px 窄条）、
+  双击恢复默认。<b>不持久化</b>，与封包列表一致 —— 关掉弹窗回默认值。
 */
-const DEF_W: Record<string, number> = { ip: 150, loc: 160 }
+const DEF_W: Record<string, number> = { ip: 150 }
 const colW = reactive<Record<string, number>>({ ...DEF_W })
 const MIN_COL = 60
 
 //「过期时间」用 1fr 吃掉剩余宽度，所以它和操作列都不给手柄
-const gridCols = computed(
-  //⚠️ 生效那列 64 → 88：越南语的「Số lần khớp」实测要 84px，64 下被省略号截掉
-  () => `${colW.ip}px ${colW.loc}px 88px minmax(110px, 1fr) 56px`)
+const gridCols = computed(() => `${colW.ip}px minmax(96px, 1fr) 52px`)
 
 /*
   表头与每一行共用这一份样式，宽度才必然一致。
@@ -105,7 +101,7 @@ const gridCols = computed(
 const GRID_PAD = 20
 const rowStyle = computed(() => ({
   gridTemplateColumns: gridCols.value,
-  minWidth: `${colW.ip + colW.loc + 88 + 110 + 56 + 40 + GRID_PAD}px`,
+  minWidth: `${colW.ip + 96 + 52 + 20 + GRID_PAD}px`,
 }))
 
 let drag: { key: string; x: number; w: number } | null = null
@@ -151,20 +147,22 @@ watch(() => props.open, async (on) => {
 
 /* ── 名单的增删改 ────────────────────────────────────────── */
 
-const editing = ref<string | null>(null)
-const editRow = ref<IPRuleRow | null>(null)
+const editingWhite = ref<string | null>(null)
+const editingBlack = ref<string | null>(null)
+const editWhiteRow = ref<IPRuleRow | null>(null)
+const editBlackRow = ref<IPRuleRow | null>(null)
 
-function add(): void {
-  editRow.value = null
-  editing.value = 'add'
+function add(black: boolean): void {
+  if (black) { editBlackRow.value = null; editingBlack.value = 'add' }
+  else { editWhiteRow.value = null; editingWhite.value = 'add' }
 }
 
-function edit(r: IPRuleRow): void {
-  editRow.value = r
-  editing.value = r.IPAddress
+function edit(r: IPRuleRow, black: boolean): void {
+  if (black) { editBlackRow.value = r; editingBlack.value = r.IPAddress }
+  else { editWhiteRow.value = r; editingWhite.value = r.IPAddress }
 }
 
-async function del(r: IPRuleRow): Promise<void> {
+async function del(r: IPRuleRow, black: boolean): Promise<void> {
   /*
     确认框在 C# 侧弹（DeleteIPRule_Dialog 里 await UI.Confirm），与账号删除、
     各列表的删除同一条路数 —— 全项目的确认框只有 ConfirmDialog 这一个渲染处。
@@ -174,7 +172,7 @@ async function del(r: IPRuleRow): Promise<void> {
     底层的 DeleteIPRule 仍然不弹框（批量路径要能直接调它），弹框的是新加的那层。
   */
   try {
-    await call('deleteIPRule', { black: isBlack.value, ip: r.IPAddress })
+    await call('deleteIPRule', { black, ip: r.IPAddress })
   } catch (e) {
     console.error('[fw] 删除失败', e)
     pushToast('error', String(e))
@@ -182,9 +180,9 @@ async function del(r: IPRuleRow): Promise<void> {
 }
 
 /** 导入 / 导出 / 清空 —— action 取 SystemConfig.ListAction 的值。 */
-async function listAction(action: number): Promise<void> {
+async function listAction(action: number, black: boolean): Promise<void> {
   try {
-    await call('ipRuleAction', { black: isBlack.value, action })
+    await call('ipRuleAction', { black, action })
   } catch (e) {
     console.error('[fw] 列表操作失败', e)
     pushToast('error', String(e))
@@ -245,6 +243,7 @@ async function save(): Promise<void> {
     subtitle="Access Control"
     :busy="busy"
     :error="error"
+    :hint="form.enable ? undefined : t('fw.listIdle')"
     @update:open="emit('update:open', $event)"
     @save="save"
   >    <div class="setf" style="--setf-k: 132px">
@@ -338,88 +337,91 @@ async function save(): Promise<void> {
     </div>
     </section>
 
+    <!--
+      2026-10-02：原来「03 名单」那张卡的外壳去掉了 —— 白名单直接是 03 区、黑名单是 04 区，
+      黄字提示（防火墙没启用时的提醒）挪到页脚按钮区左侧。
+      两张表各自排序、各自编辑弹窗；卡片底内边距归零、表底边框让掉 —— 表铺满卡片不留空隙。
+    -->
     <section class="sec">
-    <div class="grp">{{ t('fw.grp.lists') }}</div>
-
-    <!--
-      ⚠️ <b>名单区不跟着总开关禁用</b>（2026-09-09 改）。
-      上面那几行（工作模式、四条自动规则、屏蔽时长）是<b>运行时行为</b>，关掉防火墙它们就没有
-      意义，压暗是对的；而<b>名单是数据</b> —— 先把要放行 / 要拦的 IP 备好、回头再开启，
-      是再正常不过的用法，锁住它只是在为难人。
-
-      这也是项目里既有的口径：自动入库那边就是「总开关关着时规则表只压暗不锁：规则得能先备好」，
-      防火墙这里原来正好相反，属于不一致。
-    -->
-    <div class="lbar">
-      <button class="tab" :class="{ on: !isBlack }" @click="tab = 'white'">
-        {{ t('fw.whiteList') }} <span class="n">{{ white.length }}</span>
-      </button>
-      <button class="tab" :class="{ on: isBlack }" @click="tab = 'black'">
-        {{ t('fw.blackList') }} <span class="n">{{ black.length }}</span>
-      </button>
-
-      <span class="grow" />
-
-      <button class="mini" @click="add">{{ t('fw.add') }}</button>
-      <button class="mini" @click="listAction(8)">{{ t('flt.import') }}</button>
-      <button class="mini" :disabled="!rows.length" @click="listAction(5)">{{ t('lst.export') }}</button>
-      <button class="mini danger" :disabled="!rows.length" @click="listAction(7)">{{ t('flt.clearAll') }}</button>
-    </div>
-
-    <!--
-      放开之后必须说一句「现在还不生效」——否则用户认认真真加完一批 IP，
-      而防火墙关着，屏幕上没有任何东西提示他还差最后一步。
-      （「默认不出声的东西要出声」，与统计页那条恒等式校验同一条规矩。）
-    -->
-    <p v-if="!form.enable" class="hint idle">{{ t('fw.listIdle') }}</p>
+    <div class="grp">{{ t('fw.whiteList') }} <span class="cnt">{{ white.length }}</span></div>
 
     <div class="tbl">
+      <!-- 工具条在表格<b>最上面</b>，与全程序其它表一致（映射 / 列表 / 仓库 / 发送…） -->
+      <div class="tbar">
+        <button class="sbtn primary" @click="add(false)">{{ t('fw.add') }}</button>
+        <span class="grow" />
+        <button class="sbtn" @click="listAction(8, false)">{{ t('flt.import') }}</button>
+        <button class="sbtn" :disabled="!whiteRows.length" @click="listAction(5, false)">{{ t('lst.export') }}</button>
+        <button class="sbtn danger" :disabled="!whiteRows.length" @click="listAction(7, false)">{{ t('flt.clearAll') }}</button>
+      </div>
       <div class="thead" :style="rowStyle">
-        <span class="so" :class="{ on: sort.active('ip') }" @click="sort.toggle('ip')">
-          {{ t('cli.ip') }}<i class="ar">{{ sort.mark('ip') }}</i>
-          <!-- @click.stop：拖完列宽松手会补派发一次 click，不拦住就顺带排了一次序 -->
+        <span class="so" :class="{ on: sortWhite.active('ip') }" @click="sortWhite.toggle('ip')">
+          {{ t('cli.ip') }}<i class="ar">{{ sortWhite.mark('ip') }}</i>
           <i class="grip" :title="t('col.resizeHint')"
              @click.stop
              @mousedown.prevent.stop="startResize($event, 'ip')"
              @dblclick.prevent.stop="resetWidth('ip')" />
         </span>
-        <span>
-          {{ t('col.clientLoc') }}
-          <i class="grip" :title="t('col.resizeHint')"
-             @click.stop
-             @mousedown.prevent.stop="startResize($event, 'loc')"
-             @dblclick.prevent.stop="resetWidth('loc')" />
-        </span>
-        <span>{{ t('fw.effect') }}</span>
-        <span class="so" :class="{ on: sort.active('expiry') }" @click="sort.toggle('expiry')">{{ t('fw.expiryTime') }}<i class="ar">{{ sort.mark('expiry') }}</i></span>
-        <span />
+        <span class="so" :class="{ on: sortWhite.active('expiry') }" @click="sortWhite.toggle('expiry')">{{ t('fw.expiryTime') }}<i class="ar">{{ sortWhite.mark('expiry') }}</i></span>
+        <span class="th-act">{{ t('col.ops') }}</span>
       </div>
-
       <div class="tbody">
-        <div v-if="!rows.length" class="empty">{{ t('fw.emptyList') }}</div>
-
-        <div v-for="(r, i) in rows" v-else :key="r.IPAddress + '|' + i" class="trow"
-             :style="rowStyle" @dblclick="edit(r)">
+        <div v-if="!whiteRows.length" class="empty">{{ t('fw.emptyList') }}</div>
+        <div v-for="(r, i) in whiteRows" v-else :key="r.IPAddress + '|' + i" class="trow"
+             :style="rowStyle" @dblclick="edit(r, false)">
           <span class="ip">{{ r.IPAddress }}</span>
-          <!-- 国旗 / 局域网图标跟着所属地走，与客户端列表、封包列表一致 -->
-          <span class="loc">
-            <img class="flag" :src="flagSrc(r.IPLocation)" alt="" width="16" height="16"
-                 loading="eager" decoding="sync">
-            <span class="t" :title="r.IPLocation">{{ r.IPLocation }}</span>
-          </span>
-          <span class="num">{{ r.EffectCount }}</span>
-          <!--
-            不到期的写「永久有效」，而不是 8888/12/31 那个哨兵日期，也不是一条短横 ——
-            短横在别的表里读作「没数据」，这里恰恰是一种明确的状态。
-          -->
           <span class="exp" :class="{ never: !r.IsExpiry }">
             {{ r.IsExpiry ? r.ExpiryTime : t('fw.never') }}
           </span>
           <span class="ops">
-            <button class="op" :title="t('fw.edit')" @click.stop="edit(r)">
+            <button class="op" :title="t('fw.edit')" @click.stop="edit(r, false)">
               <svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4z" /></svg>
             </button>
-            <button class="op del" :title="t('lst.delete')" @click.stop="del(r)">
+            <button class="op del" :title="t('lst.delete')" @click.stop="del(r, false)">
+              <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg>
+            </button>
+          </span>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <section class="sec">
+    <div class="grp">{{ t('fw.blackList') }} <span class="cnt">{{ black.length }}</span></div>
+
+    <div class="tbl">
+      <!-- 工具条同样在表格最上面 -->
+      <div class="tbar">
+        <button class="sbtn primary" @click="add(true)">{{ t('fw.add') }}</button>
+        <span class="grow" />
+        <button class="sbtn" @click="listAction(8, true)">{{ t('flt.import') }}</button>
+        <button class="sbtn" :disabled="!blackRows.length" @click="listAction(5, true)">{{ t('lst.export') }}</button>
+        <button class="sbtn danger" :disabled="!blackRows.length" @click="listAction(7, true)">{{ t('flt.clearAll') }}</button>
+      </div>
+      <div class="thead" :style="rowStyle">
+        <span class="so" :class="{ on: sortBlack.active('ip') }" @click="sortBlack.toggle('ip')">
+          {{ t('cli.ip') }}<i class="ar">{{ sortBlack.mark('ip') }}</i>
+          <i class="grip" :title="t('col.resizeHint')"
+             @click.stop
+             @mousedown.prevent.stop="startResize($event, 'ip')"
+             @dblclick.prevent.stop="resetWidth('ip')" />
+        </span>
+        <span class="so" :class="{ on: sortBlack.active('expiry') }" @click="sortBlack.toggle('expiry')">{{ t('fw.expiryTime') }}<i class="ar">{{ sortBlack.mark('expiry') }}</i></span>
+        <span class="th-act">{{ t('col.ops') }}</span>
+      </div>
+      <div class="tbody">
+        <div v-if="!blackRows.length" class="empty">{{ t('fw.emptyList') }}</div>
+        <div v-for="(r, i) in blackRows" v-else :key="r.IPAddress + '|' + i" class="trow"
+             :style="rowStyle" @dblclick="edit(r, true)">
+          <span class="ip">{{ r.IPAddress }}</span>
+          <span class="exp" :class="{ never: !r.IsExpiry }">
+            {{ r.IsExpiry ? r.ExpiryTime : t('fw.never') }}
+          </span>
+          <span class="ops">
+            <button class="op" :title="t('fw.edit')" @click.stop="edit(r, true)">
+              <svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4z" /></svg>
+            </button>
+            <button class="op del" :title="t('lst.delete')" @click.stop="del(r, true)">
               <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg>
             </button>
           </span>
@@ -427,13 +429,20 @@ async function save(): Promise<void> {
       </div>
     </div>
     </section>
-
     <IPRuleEdit
-      :target="editing"
-      :black="isBlack"
-      :is-expiry="editRow?.IsExpiry ?? false"
-      :expiry="editRow?.ExpiryTime ?? ''"
-      @close="editing = null"
+      :target="editingWhite"
+      :black="false"
+      :is-expiry="editWhiteRow?.IsExpiry ?? false"
+      :expiry="editWhiteRow?.ExpiryTime ?? ''"
+      @close="editingWhite = null"
+      @saved="() => {}"
+    />
+    <IPRuleEdit
+      :target="editingBlack"
+      :black="true"
+      :is-expiry="editBlackRow?.IsExpiry ?? false"
+      :expiry="editBlackRow?.ExpiryTime ?? ''"
+      @close="editingBlack = null"
       @saved="() => {}"
     />
     </div>
@@ -448,73 +457,45 @@ async function save(): Promise<void> {
 
 /* ── 名单 ── */
 
-/*
-  ⚠️ 允许折行。名单区这条工具条有六颗按钮（白名单 / 黑名单 + 新增 / 导入 / 导出 / 清空），
-  俄语实测要 723px —— 不折行就把整个弹窗撑出横向滚动条（改造前就有，卡片化之后更明显）。
-  这与 .gtool / .list-page .bar 是同一条口径：排不下就折行，别把最后一颗切掉半个字。
-  左右内边距跟着卡内的行走 14px（它现在长在 .sec 里）。
-*/
-.lbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; row-gap: 6px; padding: 0 14px 6px; }
+/* 条数跟在名单名后面，用等宽字，与工具条里那个计数同一套 */
+.cnt { margin-left: 6px; font-family: var(--mono); font-size: var(--fs-caption); color: var(--muted); }
 
 /*
-  ⚠️ 这里<b>没有</b> .lbar.off / .tbl.off —— 名单区不跟着总开关禁用，理由见模板里那段。
-  上面那几行仍然用 .row.off（工作模式与自动规则是运行时行为，关掉就该压暗）。
-*/
-/*
-  ⚠️ 用<b>这个组件已有的 .hint</b>（工作模式下面那句用的就是它），只覆盖颜色。
-  别为这一句新造一个类：`.tip` 在 style.css 与本组件里<b>都没有定义</b>，
-  写出来只会得到一行没有字号、没有边距的裸文字。
-  改琥珀是因为它说的是「还差一步」，不是普通说明。
-*/
-.hint.idle { color: var(--amber); }
-.grow { flex: 1; }
-
-/* 白 / 黑名单二选一，不并排 —— 并排每张只剩一半宽，而 IP + 所属地 + 时间本来就不窄 */
-.tab {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 12px;
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--muted);
-  font-size: var(--fs-body);
-  cursor: pointer;
-}
-
-.tab.on { border-color: var(--cyan); color: var(--cyan); background: rgb(var(--cyan-rgb) / 10%); }
-.tab .n { font-family: var(--share); font-size: var(--fs-caption); opacity: .8; }
-
-/* 小按钮的样式在 style.css 的 .mini */
-
-/*
-  表头与数据行同在<b>一个</b>滚动容器里：sticky 只锁纵向，横向自然跟着一起滚。
-  分开滚（表头一个容器、表体另一个）在列被拖宽后必然错位 —— PacketList 也是这么做的。
+  表体：<b>表直接铺满卡片</b> —— 去掉通用 `.setf .sec .tbl` 那 6px 的上外边距、
+  表的左右 / 底边框，卡片自己也不留底部内边距。
+  这样表格的第一行紧贴抬头、最后一行 / 工具条紧贴卡片下边框，中间不留缝隙。
 */
 .tbl {
-  margin: 0 20px 6px;
-  border: 1px solid var(--border);
+  margin: 0;
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
   background: rgb(var(--inset-rgb) / 20%);
-  max-height: 218px;
-  overflow: auto;
+  overflow: hidden;
 }
+/*
+  ⚠️ 卡片底部内边距要归零，否则表格与卡片下边框之间会留出那 8px。
+  本组件里只有这两张表所在的卡片需要这条，用 :has(> .tbl) 精确命中。
+*/
+section.sec:has(> .tbl) { padding-bottom: 0; }
+
+/* 工具条回到表格<b>最上面</b>，与全程序其它表一致（映射 / 列表 / 仓库 / 发送…） */
+.tbar { display: flex; align-items: center; gap: 8px; padding: 6px 14px; border-bottom: 1px solid var(--border); background: var(--card); }
+.tbar .grow { flex: 1; }
 
 .thead,
 .trow {
   display: grid;
   /* 实际模板由 :style 的 gridCols 给，这里只留一份兜底 */
-  grid-template-columns: 150px 160px 64px minmax(110px, 1fr) 56px;
+  grid-template-columns: 150px minmax(96px, 1fr) 52px;
   /* 实际最小宽度由 rowStyle 给，见脚本里那段说明 */
   align-items: center;
-  gap: 10px;
-  padding: 0 10px;
+  gap: 8px;
+  padding: 0 14px;
   font-size: var(--fs-body);
 }
 
 .thead {
-  position: sticky;
-  top: 0;
-  z-index: 2;
   height: var(--th-h);
   background: var(--panel);
   border-bottom: 1px solid var(--border);
@@ -526,8 +507,7 @@ async function save(): Promise<void> {
   white-space: nowrap;
 }
 
-/* 定高 + 滚动：名单可能几百条，不能让它把弹窗撑到屏幕外 */
-.tbody { min-width: 100%; }
+.tbody { max-height: 178px; overflow-y: auto; }
 
 .empty { padding: 26px 0; text-align: center; color: var(--muted); font-size: var(--fs-body); }
 
@@ -538,19 +518,11 @@ async function save(): Promise<void> {
 .thead > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .ip { color: var(--cyan); font-family: var(--mono); }
-.loc { display: flex; align-items: center; gap: 6px; color: var(--dim3); }
 
-/*
-  省略号要挂在<b>内层</b>：.loc 成了 flex 容器之后，text-overflow 对它本身不再起作用，
-  而这一列装的是「中国-上海-上海徐汇区电信」这种长串，截断是必需的。
-*/
-.loc .t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
-
-/* 三种原始尺寸（16×12 国旗 / 20×20 组织旗 / 16×16 局域网），定框 + contain 才不会压扁 */
-.flag { width: 16px; height: 16px; object-fit: contain; flex: none; }
 .num { color: var(--dim3); text-align: center; font-variant-numeric: tabular-nums; }
-/* 表头要跟着数据格一起居中，只居中数据会看着像错位 */
-.thead > span:nth-child(3) { text-align: center; }
+
+/* 操作列的表头跟着数据格一起居中（数据格 .ops 是 flex，靠 justify-content 居中） */
+.th-act { font-size: var(--fs-caption); text-align: center; }
 
 /* 手柄要贴在表头格子的右边界上，格子得先能定位 */
 .thead > span { position: relative; }
@@ -579,11 +551,13 @@ async function save(): Promise<void> {
   background: var(--cyan);
   box-shadow: 0 0 4px var(--cyan);
 }
-.exp { color: var(--muted); font-family: var(--mono); font-size: var(--fs-body); }
+/* 「过期时间」列的表头与内容都居中（用户 2026-10-02 要求） */
+.exp { color: var(--muted); font-family: var(--mono); font-size: var(--fs-body); text-align: center; }
+.thead > span:nth-child(2) { text-align: center; }
 /* 「永久有效」是句话不是时间戳，等宽字体反而别扭 */
 .exp.never { font-family: inherit; font-size: var(--fs-body); color: var(--dim4); }
 
-.ops { display: flex; align-items: center; justify-content: flex-end; gap: 2px; }
+.ops { display: flex; align-items: center; justify-content: center; gap: 2px; }
 
 .op {
   display: inline-flex;

@@ -733,64 +733,6 @@
         ]
       }
     },
-    "wpe_proxy_http_set_enabled": {
-      "input": {
-        "type": "object",
-        "required": [
-          "enabled",
-          "idempotencyKey"
-        ],
-        "properties": {
-          "enabled": {
-            "type": "boolean"
-          },
-          "idempotencyKey": {
-            "type": "string",
-            "format": "uuid"
-          }
-        },
-        "additionalProperties": false
-      },
-      "output": {
-        "oneOf": [
-          {
-            "type": "object",
-            "required": [
-              "changed",
-              "enabled",
-              "port",
-              "outcome",
-              "requestHash"
-            ],
-            "properties": {
-              "changed": {
-                "type": "boolean"
-              },
-              "enabled": {
-                "type": "boolean"
-              },
-              "port": {
-                "type": "integer",
-                "minimum": 1,
-                "maximum": 65535
-              },
-              "outcome": {
-                "type": "string",
-                "const": "approved"
-              },
-              "requestHash": {
-                "type": "string",
-                "pattern": "^[a-f0-9]{64}$"
-              }
-            },
-            "additionalProperties": false
-          },
-          {
-            "$ref": "#/$defs/notApplied"
-          }
-        ]
-      }
-    },
     "wpe_proxy_max_connections_set": {
       "input": {
         "type": "object",
@@ -851,62 +793,6 @@
       }
     },
     "wpe_proxy_socks5_port_set": {
-      "input": {
-        "type": "object",
-        "required": [
-          "port",
-          "idempotencyKey"
-        ],
-        "properties": {
-          "port": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 65535
-          },
-          "idempotencyKey": {
-            "type": "string",
-            "format": "uuid"
-          }
-        },
-        "additionalProperties": false
-      },
-      "output": {
-        "oneOf": [
-          {
-            "type": "object",
-            "required": [
-              "changed",
-              "port",
-              "outcome",
-              "requestHash"
-            ],
-            "properties": {
-              "changed": {
-                "type": "boolean"
-              },
-              "port": {
-                "type": "integer",
-                "minimum": 1,
-                "maximum": 65535
-              },
-              "outcome": {
-                "type": "string",
-                "const": "approved"
-              },
-              "requestHash": {
-                "type": "string",
-                "pattern": "^[a-f0-9]{64}$"
-              }
-            },
-            "additionalProperties": false
-          },
-          {
-            "$ref": "#/$defs/notApplied"
-          }
-        ]
-      }
-    },
-    "wpe_proxy_http_port_set": {
       "input": {
         "type": "object",
         "required": [
@@ -1349,6 +1235,53 @@
           },
           "values": {
             "type": "object"
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object"
+      }
+    },
+    "wpe_unpack_rules_save": {
+      "input": {
+        "type": "object",
+        "required": [
+          "enabled",
+          "rules",
+          "idempotencyKey"
+        ],
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "rules": {
+            "type": "array",
+            "maxItems": 64,
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "enabled",
+                "direction",
+                "header",
+                "length"
+              ],
+              "properties": {
+                "id": { "type": "string", "maxLength": 64 },
+                "name": { "type": "string", "minLength": 1, "maxLength": 64 },
+                "enabled": { "type": "boolean" },
+                "direction": { "type": "integer", "minimum": 0, "maximum": 2 },
+                "header": { "type": "string", "minLength": 1, "maxLength": 191 },
+                "length": { "type": "string", "minLength": 1, "maxLength": 15 }
+              },
+              "additionalProperties": false
+            }
           },
           "idempotencyKey": {
             "type": "string",
@@ -2811,7 +2744,23 @@
       "output": {
         "type": "object"
       }
-    }
+    },
+    "wpe_decoder_create": { "input": { "type": "object", "required": ["config", "idempotencyKey"], "properties": { "config": { "type": "object" }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_decoder_update": { "input": { "type": "object", "required": ["id", "config", "idempotencyKey"], "properties": { "id": { "type": "string", "format": "uuid" }, "config": { "type": "object" }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_decoder_set_enabled": { "input": { "type": "object", "required": ["id", "enabled", "idempotencyKey"], "properties": { "id": { "type": "string", "format": "uuid" }, "enabled": { "type": "boolean" }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_decoders_set_all_enabled": { "input": { "type": "object", "required": ["enabled", "idempotencyKey"], "properties": { "enabled": { "type": "boolean" }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_decoders_move": { "input": { "$ref": "#/$defs/taskMove" }, "output": { "type": "object" } },
+    "wpe_decoders_copy": { "input": { "$ref": "#/$defs/taskIds" }, "output": { "type": "object" } },
+    "wpe_decoders_delete": { "input": { "$ref": "#/$defs/taskIds" }, "output": { "type": "object" } },
+    "wpe_decoders_clear_all": { "input": { "$ref": "#/$defs/idempotentWrite" }, "output": { "type": "object" } },
+    "wpe_packet_extractor_create": { "input": { "type": "object", "required": ["extractor", "idempotencyKey"], "properties": { "extractor": { "type": "object" }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_packet_extractor_update": { "input": { "type": "object", "required": ["id", "extractor", "idempotencyKey"], "properties": { "id": { "type": "string", "format": "uuid" }, "extractor": { "type": "object" }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_packet_extractor_set_enabled": { "input": { "type": "object", "required": ["id", "enabled", "idempotencyKey"], "properties": { "id": { "type": "string", "format": "uuid" }, "enabled": { "type": "boolean" }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_packet_extractors_set_all_enabled": { "input": { "type": "object", "required": ["enabled", "idempotencyKey"], "properties": { "enabled": { "type": "boolean" }, "idempotencyKey": { "type": "string", "format": "uuid" } }, "additionalProperties": false }, "output": { "type": "object" } },
+    "wpe_packet_extractors_move": { "input": { "$ref": "#/$defs/taskMove" }, "output": { "type": "object" } },
+    "wpe_packet_extractors_copy": { "input": { "$ref": "#/$defs/taskIds" }, "output": { "type": "object" } },
+    "wpe_packet_extractors_delete": { "input": { "$ref": "#/$defs/taskIds" }, "output": { "type": "object" } },
+    "wpe_packet_extractors_clear_all": { "input": { "$ref": "#/$defs/idempotentWrite" }, "output": { "type": "object" } }
   },
   "$defs": {
     "idempotentWrite": {

@@ -1,4 +1,6 @@
 using System;
+using System.Globalization;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WinsockPacketEditor;
@@ -104,6 +106,9 @@ namespace WPEHybrid
                 using (SaveFileDialog sfd = new SaveFileDialog())
                 {
                     ApplyPick(sfd, Pick);
+                    //所有导出共用这一处。用户仍可在保存框里改名；这里只统一初始建议名。
+                    //Windows 文件名不能有冒号，故“2026-9-29 16:01”采用等价的 2026-9-29 16-01。
+                    sfd.FileName = ExportDefaultName(Pick);
                     return sfd.ShowDialog(this.owner) == DialogResult.OK ? sfd.FileName : null;
                 }
             }));
@@ -122,6 +127,24 @@ namespace WPEHybrid
             if (!string.IsNullOrEmpty(Pick.Filter)) { Dialog.Filter = Pick.Filter; }
             if (!string.IsNullOrEmpty(Pick.FileName)) { Dialog.FileName = Pick.FileName; }
             if (!string.IsNullOrEmpty(Pick.InitialDir)) { Dialog.InitialDirectory = Pick.InitialDir; }
+        }
+
+        /// <summary>所有导出的统一默认文件名；尽量从调用方名字或筛选器保留原有扩展名。</summary>
+        private static string ExportDefaultName(FilePick Pick)
+        {
+            string ext = Path.GetExtension(Pick == null ? string.Empty : Pick.FileName ?? string.Empty);
+            if (string.IsNullOrEmpty(ext) && Pick != null)
+            {
+                string filter = Pick.Filter ?? string.Empty;
+                int start = filter.IndexOf("*.", StringComparison.Ordinal);
+                if (start >= 0)
+                {
+                    int end = start + 2;
+                    while (end < filter.Length && char.IsLetterOrDigit(filter[end])) { end++; }
+                    if (end > start + 2) { ext = filter.Substring(start + 1, end - start - 1); }
+                }
+            }
+            return DateTime.Now.ToString("yyyy-M-d HH-mm", CultureInfo.InvariantCulture) + ext;
         }
 
         /// <summary>切回外壳的 UI 线程执行；出错返回 null。</summary>
@@ -155,6 +178,14 @@ namespace WPEHybrid
         /// <summary>
         /// 工作体在 C# 侧的后台线程跑，前端只负责显示/收起遮罩。
         /// Work 不得访问 UI、不得等 UI 线程。
+        ///
+        /// ⚠️ <b>Work 抛出的异常原样抛给调用方</b>（与 <see cref="UI.Busy"/> 未 Attach 时那条
+        /// TaskCompletionSource 分支同一口径）：调用方就是靠它判「这次成没成」。
+        ///
+        /// 以前这里 catch 住、只记一条日志再 <c>return default(T)</c>，于是 ShellForm 的
+        /// <c>AttachTarget</c> 里那个 <c>try/catch</c> 永远进不去 —— 注入失败被当成成功，
+        /// 装了条从头到尾没连上的管道，日志还写「已注入目标」，用户再点一下就撞上
+        /// 「管道尚未连接」。要「失败也要回一个值」的调用方（导出 CSV 那种）自己在 Work 里 catch。
         /// </summary>
         public async Task<T> BusyAsync<T>(string Text, Func<T> Work)
         {
@@ -168,11 +199,6 @@ namespace WPEHybrid
             try
             {
                 return await Task.Run(Work);
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(BusyAsync), ex);
-                return default(T);
             }
             finally
             {

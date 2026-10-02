@@ -236,6 +236,21 @@ namespace WinsockPacketEditor
             }
         }
 
+        //取值器赋值：命中后把封包里的字节抓进变量。
+        //动态替换已并入修改行的取值器替换格（见 VariableReplacePosition）。
+        public bool IsVariableAction { get; set; }
+        public bool CaptureVariable { get; set; }
+        public Guid VariableExtractorId { get; set; }
+        public Guid VariableId { get; set; }
+
+        /*
+            取值器替换格：修改行上被标成替换格的列。
+            与 ProgressionPosition / RandomPosition 同一种形状（逗号分隔的位置串），
+            每项是 "索引|取值器GUID|变量GUID|格式"（格式可为空；索引在「指定位置」下可为负）。
+            运行时按列升序写入，后写覆盖先写；GUID 定位，不随改名失效。
+        */
+        public string VariableReplacePosition { get; set; }
+
         #endregion        
 
         #region//是否执行

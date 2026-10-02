@@ -196,8 +196,9 @@ namespace WinsockPacketEditor
         private readonly object frameGate = new object();
         private bool draining = false;
 
-        /// <summary>转发阶段拆包用的残片（Enable_UnPack 时 ProcessForwardData 往里存半个包）。</summary>
-        public byte[] ForwardBuffer = Array.Empty<byte>();
+        /// <summary>两个方向各自固定首个命中的拆包规则；同一 TCP 流不得在规则间跳转。</summary>
+        internal readonly Operate.ProxyConfig.Proxy.UnpackStreamState ForwardUnpack = new Operate.ProxyConfig.Proxy.UnpackStreamState();
+        internal readonly Operate.ProxyConfig.Proxy.UnpackStreamState ResponseUnpack = new Operate.ProxyConfig.Proxy.UnpackStreamState();
 
         /// <summary>HTTP 映射等待完整请求头的短暂缓存；仅在启用 HTTP 映射时使用。</summary>
         public byte[] HttpMappingBuffer = Array.Empty<byte>();
@@ -289,7 +290,7 @@ namespace WinsockPacketEditor
             //命令那一步失败（连不上目标）时会话已经在关了，后面排着的数据帧直接丢
             if (this.ProxyStep != Operate.ProxyConfig.Proxy.ProxyStep.ForwardData || !this.Connected) { return; }
             if (this.HttpsMitm != null) { this.HttpsMitm.Feed(body); return; }
-            Operate.ProxyConfig.Proxy.ProcessForwardData(this, body, ref this.ForwardBuffer);
+            Operate.ProxyConfig.Proxy.ProcessForwardData(this, body, this.ForwardUnpack);
         }
 
         #endregion
@@ -454,6 +455,7 @@ namespace WinsockPacketEditor
 
                     if (!Operate.ProxyConfig.Proxy.HookTCP_Resp)
                     {
+                        this.ResponseUnpack.Reset();
                         byte[] bData = this.bBuffer.AsSpan(0, bytesRead).ToArray();
                         this.SendToClient(bData, 0, bData.Length);
                         this.StartReceivingFromTarget();
@@ -463,7 +465,7 @@ namespace WinsockPacketEditor
                     if (Operate.ProxyConfig.Proxy.Enable_UnPack)
                     {
                         byte[] bData = this.bBuffer.AsSpan(0, bytesRead).ToArray();
-                        byte[][] packets = Operate.ProxyConfig.Proxy.ProcessResponseData(bData);
+                        byte[][] packets = Operate.ProxyConfig.Proxy.ProcessResponseData(bData, this.ResponseUnpack);
                         foreach (byte[] packet in packets)
                         {
                             if (packet.Length > 0)
@@ -475,6 +477,8 @@ namespace WinsockPacketEditor
                     }
                     else
                     {
+                        //运行中关闭拆包时，不能把旧配置留下的半包带到下次重新开启。
+                        this.ResponseUnpack.Reset();
                         /*
                             直接把接收缓冲这一段交给滤镜：DoFilter_SOCKS_TCP 自己会为「原始字节」拷一份，
                             这里再拷一份纯属多余。缓冲在 StartReceivingFromTarget 重新挂接收前不会被复用，

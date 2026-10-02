@@ -95,7 +95,7 @@ async function save(): Promise<void> {
 </script>
 
 <template>
-  <SettingsModal :open="props.target !== null" :title="t('dec.edit')" subtitle="Decoder" :busy="busy" :error="error"
+  <SettingsModal :open="props.target !== null" :title="t('dec.edit')" subtitle="Controls/DecoderEdit" :busy="busy" :error="error"
                  :width="680" @update:open="emit('close')" @save="save">
     <div class="setf de">
       <section class="sec">
@@ -140,7 +140,16 @@ async function save(): Promise<void> {
 
 <style scoped>
 .de { padding-bottom: 8px; }
-.de .row { height: auto; }
+/*
+  值列里带说明文字时（密钥 / IV / 固定头部 / 起始偏移），行会被说明撑成两行；
+  .setf .row 默认 align-items: center 会把标签居中到整块上，于是「密钥」掉到
+  选择框与说明之间，对不齐控件。改成顶对齐 + 标签行高按控件高度（.inp / .cs-btn 都是 28px）
+  撑满，标签文字就落在第一行控件的同一条基线上。
+*/
+.de .row { height: auto; align-items: start; }
+.de .row > .k { line-height: 28px; }
+/* 说明文字在值列里，左缘要跟上面的选择框 / 输入框齐平（.setf .sec .hint 自带 14px 内边距，去掉） */
+.de .v > .hint { padding: 0; }
 .de .inline { display: flex; gap: 8px; align-items: center; width: 100%; min-width: 0; }
 .de .full { display: flex; width: 100%; }
 .de .fmt { flex: none; width: 120px; }

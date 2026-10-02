@@ -17,6 +17,7 @@ import { useList } from '../../stores/lists'
 import { injectFeed, rows } from '../../stores/packets'
 import { filterLogs, proxyLogs, sysLogs } from '../../stores/logs'
 import { decRows } from '../../stores/decoder'
+import { ensurePacketExtractors, extractorRows } from '../../stores/extractor'
 import { t } from '../../i18n'
 import type { PageGroup, PageKey } from './pages'
 import { GROUPS } from './pages'
@@ -58,9 +59,11 @@ function sample(): void {
 onMounted(() => {
   sample()
   countTimer = window.setInterval(sample, 500)
+  //取值器与滤镜等配置列表共用响应式副本；只在侧栏首次挂载时加载一次。
+  void ensurePacketExtractors().catch(() => {})
 })
 
-onBeforeUnmount(() => window.clearInterval(countTimer))
+onBeforeUnmount(() => { window.clearInterval(countTimer) })
 
 /*
   侧栏右侧的计数。
@@ -80,6 +83,7 @@ const counts = computed<Partial<Record<PageKey, number>>>(() => ({
   robot: useList(FeedList.Robot).value.length,
   warehouse: useList(FeedList.WareHouse).value.length,
   decoders: decRows.value.length,
+  extractors: extractorRows.value.length,
   wpc: useList(FeedList.Server).value.length,
   log: logCount.value,
 }))

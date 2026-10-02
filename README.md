@@ -20,7 +20,7 @@
 
 ## 🟢 中文
 
-一款 Windows 上的**网络封包拦截与编辑工具**。它能把某个程序收发的每一条网络封包实时列出来，让你**看清里面的内容、改写它、再发一遍**——协议调试、接口审计、协议学习、模拟器与手游分析都用得上。界面是深色赛博风格，支持**七种语言**与**深 / 浅主题**。
+一款 Windows 上的**网络封包拦截与编辑工具**。它能把某个程序收发的每一条网络封包实时列出来，让你**看清里面的内容、改写它、再发一遍**——协议调试、接口审计、协议学习、模拟器与手游分析都用得上。界面是深色赛博风格，支持**七种语言**、**深 / 浅主题**，以及可保存的全局字号与灰阶文字颜色偏好。
 
 <div align="center">
 <img src="docs/screenshots/wpe-proxy-data.png" width="860" alt="实时抓包主界面"><br>
@@ -31,7 +31,7 @@
 
 ### ✨ 它能做什么
 
-- 📡 **实时抓包**：把目标程序收发的封包一条条列出来，随时暂停、搜索、导出；切换页面后列表会稳定恢复显示。
+- 📡 **实时抓包**：把目标程序收发的封包一条条列出来，随时暂停、搜索、导出；切换页面后列表会稳定恢复显示，列显隐会按注入 / 代理模式分别记住。
 - ✏️ **改写封包**：十六进制并排编辑，改完可以立即再发一遍。
 - 🎨 **规则自动改**：设好「滤镜」，符合条件的封包自动替换 / 拦截 / 改长度，命中的行按颜色标出来。
 - 🤖 **自动化**：用「机器人」把一串动作（发包、延迟、循环、模拟键鼠）排成流程自动跑。
@@ -67,7 +67,7 @@
 </td>
 <td width="50%" valign="top">
 <img src="docs/screenshots/wpe-appset.png" alt="软件设置"><br>
-<sub><b>七种语言 + 深 / 浅主题</b>：随时切换，可跟随系统。</sub>
+<sub><b>七种语言 + 深 / 浅主题 + 显示偏好</b>：可随时切换或跟随系统；全局字号、主文字颜色和扫描线可调整，扫描线的说明集中在「显示」分组。</sub>
 </td>
 </tr>
 </table>
@@ -101,7 +101,7 @@
 
 ## 🟢 English
 
-A **network packet capture-and-edit tool** for Windows. It lists every packet a program sends and receives in real time, so you can **see what's inside, change it, and send it again** — handy for protocol debugging, interface auditing, learning an undocumented protocol, and analyzing emulators and mobile games. The interface is a dark, cyber-styled UI available in **seven languages** with **dark / light themes**.
+A **network packet capture-and-edit tool** for Windows. It lists every packet a program sends and receives in real time, so you can **see what's inside, change it, and send it again** — handy for protocol debugging, interface auditing, learning an undocumented protocol, and analyzing emulators and mobile games. The interface is a dark, cyber-styled UI available in **seven languages**, with **dark / light themes** and saved preferences for global text size and gray-tone text color.
 
 <div align="center">
 <img src="docs/screenshots/wpe-proxy-data-en.png" width="860" alt="Live capture"><br>
@@ -112,7 +112,7 @@ A **network packet capture-and-edit tool** for Windows. It lists every packet a 
 
 ### ✨ What it does
 
-- 📡 **Live capture** — list every packet the target sends and receives; pause, search and export any time, with the list restoring reliably after switching pages.
+- 📡 **Live capture** — list every packet the target sends and receives; pause, search and export any time, with the list restoring reliably after switching pages; visible columns are remembered separately for injection and proxy modes.
 - ✏️ **Edit packets** — a side-by-side hex editor; replay a packet the moment you're done.
 - 🎨 **Rewrite by rule** — set up a *filter* and matching packets are replaced / blocked / resized automatically, with matched rows color-coded.
 - 🤖 **Automation** — a *robot* runs a sequence of steps (send, delay, loop, simulate keyboard and mouse) for you.
@@ -148,7 +148,7 @@ A **network packet capture-and-edit tool** for Windows. It lists every packet a 
 </td>
 <td width="50%" valign="top">
 <img src="docs/screenshots/wpe-appset-en.png" alt="Preferences"><br>
-<sub><b>Seven languages + dark / light themes</b> — switch any time, or follow the system.</sub>
+<sub><b>Seven languages + dark / light themes + display preferences</b> — switch any time or follow the system; adjust global text size, main text color, and scan line, with the scan-line description grouped under Display.</sub>
 </td>
 </tr>
 </table>

@@ -1,6 +1,6 @@
 // WPE x64 数据文件图标（wpe-data.ico）的生成器 —— 以 wpe.ico 为底图，画「一页带折角的纸 + 右下角那顶帽子」
 //
-// 资源管理器里 .sb / .fp / .sp … 这 14 种 WPE 自己的导出文件用它（注册见 ClassObject/FileAssociation.cs）。
+// 资源管理器里 .sb / .fp / .sp … 这 16 种 WPE 自己的导出文件用它（注册见 ClassObject/FileAssociation.cs）。
 // 2026-09-11 定稿的是「B · 纸内徽章」：纸上几行灰色数据行表明「这是一份数据」，帽子当右下角的徽章。
 //
 // ⚠️ 这是派生产物：换了 WinsockPacketEditor\wpe.ico 就重跑一次（与管理台那份 Web\wpe.ico 子集同一个道理）。

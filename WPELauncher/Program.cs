@@ -224,7 +224,7 @@ namespace WPELauncher
 
         private static void Error(string title, string message)
         {
-            MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            LauncherDialog.ShowError(title, message);
         }
     }
 }

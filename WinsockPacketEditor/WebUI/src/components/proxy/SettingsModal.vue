@@ -115,6 +115,12 @@ const { covered } = useModal(() => props.open)
           {{ props.hint }}
         </span>
         <span class="grow" />
+        <!--
+          页脚插槽：个别屏幕要把自己的动作按钮摆在「取消 / 保存」左边
+          （备份设置的导入 / 导出就是这样）。插槽内容出现在 .grow 之后、
+          取消之前，所以它天然贴着右边那两颗按钮。
+        -->
+        <slot name="footer" />
         <button class="btn" :class="{ primary: props.readonly }" :disabled="props.busy" @click="close">
           {{ props.cancelText || (props.readonly ? t('dlg.close') : t('dlg.cancel')) }}
         </button>

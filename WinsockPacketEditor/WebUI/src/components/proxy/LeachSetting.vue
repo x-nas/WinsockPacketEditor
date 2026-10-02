@@ -146,6 +146,7 @@ async function save(): Promise<void> {
     subtitle="Capture Filter"
     :busy="busy"
     :error="error"
+    :hint="anyOn ? undefined : t('set.leach.none')"
     @update:open="emit('update:open', $event)"
     @save="save"
   >    <div class="setf" style="--setf-k: 132px">
@@ -167,8 +168,6 @@ async function save(): Promise<void> {
 
     <section class="sec">
     <div class="grp">{{ t('set.leach.conds') }}</div>
-
-    <p v-if="!anyOn" class="warn">{{ t('set.leach.none') }}</p>
 
     <div v-for="c in CONDS" :key="c.on" class="row">
       <button class="chk k" :class="{ on: f[c.on] }" @click="(f[c.on] as boolean) = !f[c.on]">
@@ -209,15 +208,6 @@ async function save(): Promise<void> {
 
 <style scoped>
 .lead { margin: 12px 20px 0; font-size: var(--fs-body); color: var(--muted); line-height: 1.6; }
-
-.warn {
-  margin: 0 20px 8px;
-  padding: 7px 11px;
-  border: 1px solid rgb(var(--amber-rgb) / 32%);
-  background: rgb(var(--amber-rgb) / 7%);
-  font-size: var(--fs-small);
-  color: var(--amber);
-}
 
 .modes { display: flex; gap: 22px; padding: 0 20px 4px; }
 

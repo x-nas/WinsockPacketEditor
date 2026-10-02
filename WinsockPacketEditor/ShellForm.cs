@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -1419,6 +1420,8 @@ namespace WPEHybrid
                     isDark = p.IsDark,
                     themeMode = ThemeMode(),
                     scanLine = p.ScanLine,
+                    fontScale = p.FontScale,
+                    mainTextColor = p.MainTextColor,
                     language = p.Language,
                     systemColor = p.SystemColor.Hex,
                     //滤镜标记色：封包列表按 FilterAction 给行上色，与 WinForms 一致
@@ -1507,9 +1510,26 @@ namespace WPEHybrid
                         UI.Prefs.ScanLine = (bool)args["scan"];
                     }
 
+                    if (args["fontScale"] != null)
+                    {
+                        int scale;
+                        if (int.TryParse(args["fontScale"].ToString(), out scale))
+                        {
+                            UI.Prefs.FontScale = Math.Min(150, Math.Max(90, ((scale + 2) / 5) * 5));
+                        }
+                    }
+
+                    if (args["mainTextColor"] != null)
+                    {
+                        string color = ((string)args["mainTextColor"] ?? string.Empty).Trim();
+                        UI.Prefs.MainTextColor = color.Length == 0 || System.Text.RegularExpressions.Regex.IsMatch(color, "^#[0-9A-Fa-f]{6}$")
+                            ? color
+                            : string.Empty;
+                    }
+
                     Operate.SystemConfig.SaveSystemConfig_ToDB();
 
-                    return new { ok = true, isDark = UI.Prefs.IsDark, mode = ThemeMode(), scan = UI.Prefs.ScanLine };
+                    return new { ok = true, isDark = UI.Prefs.IsDark, mode = ThemeMode(), scan = UI.Prefs.ScanLine, fontScale = UI.Prefs.FontScale, mainTextColor = UI.Prefs.MainTextColor };
                 }
                 catch (Exception ex)
                 {
@@ -1859,7 +1879,8 @@ namespace WPEHybrid
 
             this.bridge.Register("injectStartHook", async args =>
             {
-                var link = this.injectLink;
+                //用 AttachedLink()：链路已断开时回「还没有附加到目标」，而不是让 Write 抛「管道尚未连接」
+                var link = this.AttachedLink();
                 if (link == null) { return new { ok = false, error = UI.T("Inject.NotAttached", "还没有附加到目标") }; }
 
                 try
@@ -1884,7 +1905,8 @@ namespace WPEHybrid
 
             this.bridge.Register("injectStopHook", async args =>
             {
-                var link = this.injectLink;
+                //用 AttachedLink()：链路已断开时回「还没有附加到目标」，而不是让 Write 抛「管道尚未连接」
+                var link = this.AttachedLink();
                 if (link == null) { return new { ok = false, error = UI.T("Inject.NotAttached", "还没有附加到目标") }; }
 
                 try { await System.Threading.Tasks.Task.Run(() => link.StopHook()); }
@@ -1973,15 +1995,13 @@ namespace WPEHybrid
                     UI.T("Loading", "正在加载..."),
                     () => Operate.ProxyConfig.Proxy.StartProxy());
 
-                string socks5Addr, httpAddr;
-                ProxyAddresses(out socks5Addr, out httpAddr);
+                var socks5Addr = ProxyAddress();
 
                 return new
                 {
                     ok = ok,
                     running = Operate.ProxyConfig.Proxy.IsRunning,
                     socks5Addr = socks5Addr,
-                    httpAddr = httpAddr,
                 };
             });
 
@@ -2111,8 +2131,9 @@ namespace WPEHybrid
             /*
                 保存代理设置。
 
-                校验放在 C# 而不是前端：这两条规则（必须启用 SOCKS5、两个端口不能相同）
-                是服务能不能起来的前提，属于业务约束。前端另做一份就会有两套真相。
+                校验放在 C# 而不是前端：这条规则（必须启用 SOCKS5）是服务能不能起来的前提，
+                属于业务约束。前端另做一份就会有两套真相。
+                （「两个端口不能相同」那条随 HTTP 代理在 2.4 移除了 —— 现在只有 SOCKS5 一个端口。）
 
                 <b>比 WinForms 多一步落库</b>：那边靠关窗时统一 SaveProxyMode_ToDB，
                 外壳没有那个时机，不落库的话改完端口重启就白改了。
@@ -2135,10 +2156,9 @@ namespace WPEHybrid
 
                     UI.Toast(UiIcon.Success, UI.T("ProxySettingsForm.Success", "代理设置保存成功"));
 
-                    string socks5Addr, httpAddr;
-                    ProxyAddresses(out socks5Addr, out httpAddr);
+                    var socks5Addr = ProxyAddress();
 
-                    return new { ok = true, socks5Addr = socks5Addr, httpAddr = httpAddr };
+                    return new { ok = true, socks5Addr = socks5Addr };
                 }
                 catch (Exception ex)
                 {
@@ -2627,6 +2647,7 @@ namespace WPEHybrid
                 unpack = ProxyCfg.Enable_UnPack,
                 unpackHead = ProxyCfg.UnPack_Head,
                 unpackLength = ProxyCfg.UnPack_Length,
+                unpackRules = ProxyCfg.UnpackRules.Select(r => new { r.Id, r.Name, r.IsEnable, r.Direction, r.Header, r.Length }).ToArray(),
             });
 
             this.bridge.Register("saveHookSetting", args =>
@@ -2692,6 +2713,7 @@ namespace WPEHybrid
                     bool unpack = Flag("unpack");
                     string head = (args["unpackHead"] == null ? string.Empty : (string)args["unpackHead"]).Trim();
                     string len = (args["unpackLength"] == null ? string.Empty : (string)args["unpackLength"]).Trim();
+                    var unpackRules = args["unpackRules"] == null ? new List<ProxyCfg.UnpackRule>() : args["unpackRules"].ToObject<List<ProxyCfg.UnpackRule>>();
 
                     /*
                         勾了拆包就得两个都填对。
@@ -2703,36 +2725,20 @@ namespace WPEHybrid
                     */
                     if (unpack)
                     {
-                        //包头：空格 / 逗号 / 分号分隔，每段恰好两位十六进制（照 ParseHeaderBytes）
-                        string[] parts = head.Split(new[] { ' ', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
-                        bool headOk = parts.Length > 0;
-
-                        foreach (string p in parts)
+                        if (unpackRules.Count > 64)
                         {
-                            byte b;
-
-                            if (p.Length != 2 || !byte.TryParse(p, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out b))
+                            return new { ok = false, error = UI.T("HookSettingsForm.UnPack.Max", "拆包规则数量不能超过 64 条") };
+                        }
+                        foreach (var rule in unpackRules)
+                        {
+                            string unpackError = string.Empty;
+                            if (rule == null || !ProxyCfg.ValidateUnpackSettings(rule.Header, rule.Length, out unpackError))
                             {
-                                headOk = false;
-                                break;
+                                return new { ok = false, error = UI.T("HookSettingsForm.UnPack.Error", "拆包设置不正确") + "：" + unpackError };
                             }
-                        }
-
-                        if (!headOk)
-                        {
-                            return new { ok = false, error = UI.T("HookSettingsForm.UnPack.Error", "拆包设置不正确") };
-                        }
-
-                        //长度：start-end，两个整数，start >= 0 且 end >= start（照 ParseLengthPositions）
-                        string[] lp = len.Split('-');
-                        int s, e2;
-
-                        if (lp.Length != 2
-                            || !int.TryParse(lp[0], out s)
-                            || !int.TryParse(lp[1], out e2)
-                            || s < 0 || e2 < s)
-                        {
-                            return new { ok = false, error = UI.T("HookSettingsForm.UnPack.Error", "拆包设置不正确") };
+                            rule.Id = string.IsNullOrWhiteSpace(rule.Id) ? Guid.NewGuid().ToString("N") : rule.Id;
+                            rule.Name = string.IsNullOrWhiteSpace(rule.Name) ? UI.T("HookSettingsForm.UnPack.RuleName", "拆包规则") : rule.Name.Trim();
+                            if (rule.Direction < 0 || rule.Direction > 2) { rule.Direction = 0; }
                         }
                     }
 
@@ -2742,8 +2748,9 @@ namespace WPEHybrid
                     ProxyCfg.HookUDP_Resp = Flag("udpResp");
 
                     ProxyCfg.Enable_UnPack = unpack;
-                    ProxyCfg.UnPack_Head = head;
-                    ProxyCfg.UnPack_Length = len;
+                    ProxyCfg.UnpackRules = unpackRules;
+                    ProxyCfg.UnPack_Head = unpackRules.Count > 0 ? unpackRules[0].Header : head;
+                    ProxyCfg.UnPack_Length = unpackRules.Count > 0 ? unpackRules[0].Length : len;
 
                     //这七个字段都在 ProxyMode 表
                     Operate.SystemConfig.SaveProxyMode_ToDB();
@@ -2756,6 +2763,51 @@ namespace WPEHybrid
                     Operate.DoLog("saveHookSetting", ex);
                     return new { ok = false, error = ex.Message };
                 }
+            });
+
+            //拆包规则工具栏：和映射列表一样在当前设置草稿上导入 / 导出 / 清空；真正落库仍由下面的「保存」统一完成。
+            this.bridge.Register("unpackRulesCommand", async args =>
+            {
+                int action = args["action"] == null ? -1 : (int)args["action"];
+                var rules = args["rules"] == null
+                    ? new List<ProxyCfg.UnpackRule>()
+                    : args["rules"].ToObject<List<ProxyCfg.UnpackRule>>() ?? new List<ProxyCfg.UnpackRule>();
+
+                if (action == 5)
+                {
+                    if (rules.Count == 0) { return new { rules = rules.ToArray() }; }
+                    string path = await UI.PickSave(new FilePick { Filter = UI.T("UnpackRuleFile", "拆包规则文件") + "（*.upr）|*.upr", FileName = UI.T("HookSettingsForm.UnPack.FileName", "拆包规则") });
+                    if (!string.IsNullOrEmpty(path))
+                    {
+                        File.WriteAllText(path, Newtonsoft.Json.JsonConvert.SerializeObject(rules, Newtonsoft.Json.Formatting.Indented));
+                        UI.Notify(UiIcon.Success, UI.T("HookSettingsForm.UnPack.ExportOk", "导出拆包规则成功"), path);
+                    }
+                }
+                else if (action == 8)
+                {
+                    string path = await UI.PickOpen(new FilePick { Filter = UI.T("UnpackRuleFile", "拆包规则文件") + "（*.upr）|*.upr" });
+                    if (!string.IsNullOrEmpty(path))
+                    {
+                        var loaded = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ProxyCfg.UnpackRule>>(File.ReadAllText(path));
+                        if (loaded == null) { throw new InvalidDataException(UI.T("HookSettingsForm.UnPack.BadFile", "拆包规则文件格式无效")); }
+                        foreach (var rule in loaded.Where(x => x != null))
+                        {
+                            string error;
+                            if (!ProxyCfg.ValidateUnpackSettings(rule.Header, rule.Length, out error)) { throw new InvalidDataException(UI.T("HookSettingsForm.UnPack.BadRule", "拆包规则格式无效") + "：" + error); }
+                            rule.Id = Guid.NewGuid().ToString("N");
+                            rule.Name = string.IsNullOrWhiteSpace(rule.Name) ? UI.T("HookSettingsForm.UnPack.RuleName", "拆包规则") : rule.Name.Trim();
+                            if (rule.Direction < 0 || rule.Direction > 2) { rule.Direction = 0; }
+                        }
+                        rules.AddRange(loaded.Where(x => x != null));
+                        if (rules.Count > 64) { throw new InvalidDataException(UI.T("HookSettingsForm.UnPack.Max", "拆包规则数量不能超过 64 条")); }
+                        UI.Notify(UiIcon.Success, UI.T("HookSettingsForm.UnPack.ImportOk", "导入拆包规则成功"), path);
+                    }
+                }
+                else if (action == 7)
+                {
+                    if (rules.Count > 0 && await UI.Confirm(UI.T("HookSettingsForm.UnPack.ClearTitle", "拆包规则"), UI.T("HookSettingsForm.UnPack.ClearConfirm", "确定删除全部拆包规则吗？"))) { rules.Clear(); }
+                }
+                return new { rules = rules.ToArray() };
             });
 
             #endregion
@@ -3944,6 +3996,73 @@ namespace WPEHybrid
 
             #region//解码器（跨模式共用）
 
+            // 取值器与滤镜同属两模式共用的规则。列表规模小，按请求拉取，运行值不落库。
+            this.bridge.Register("getPacketExtractors", args => new { rows = PacketExtractorConfig.GetRows() });
+            this.bridge.Register("addPacketExtractor", args => new { id = PacketExtractorConfig.Add() });
+            this.bridge.Register("savePacketExtractor", args =>
+            {
+                PacketExtractorInfo item = null;
+                try
+                {
+                    var source = args["extractor"] as Newtonsoft.Json.Linq.JObject;
+                    if (source != null)
+                    {
+                        // 兼容早期前端已打开的编辑窗：新变量曾以空字符串表示未分配的 Guid，
+                        // Newtonsoft 无法将其反序列化为 Guid。归一成 Empty 后由配置层生成正式 ID。
+                        foreach (Newtonsoft.Json.Linq.JToken token in source.DescendantsAndSelf())
+                        {
+                            var obj = token as Newtonsoft.Json.Linq.JObject;
+                            var id = obj == null ? null : obj["Id"];
+                            if (id != null && id.Type == Newtonsoft.Json.Linq.JTokenType.String && string.IsNullOrWhiteSpace((string)id)) obj["Id"] = Guid.Empty.ToString("D");
+                        }
+                        item = source.ToObject<PacketExtractorInfo>();
+                    }
+                }
+                catch (Exception ex) { Operate.DoLog("savePacketExtractor", ex); }
+                string error; bool ok = PacketExtractorConfig.SaveOne(item, out error);
+                var attached = AttachedLink();
+                if (ok && attached != null) { attached.TryPush(attached.PushPacketExtractors); attached.TryPush(attached.PushFilters); }
+                return new { ok = ok, error = error };
+            });
+            this.bridge.Register("deletePacketExtractors", args =>
+            {
+                var ids = new List<Guid>();
+                try { foreach (string id in args["ids"].ToObject<List<string>>()) { Guid g; if (Guid.TryParse(id, out g)) ids.Add(g); } }
+                catch (Exception ex) { Operate.DoLog("deletePacketExtractors", ex); }
+                int count = PacketExtractorConfig.Delete(ids); var attached = AttachedLink(); if (attached != null) attached.TryPush(attached.PushPacketExtractors);
+                return new { ok = true, count = count };
+            });
+            this.bridge.Register("setAllPacketExtractorEnable", args =>
+            {
+                bool enable = args["enable"] != null && (bool)args["enable"];
+                PacketExtractorConfig.SetAllEnable(enable); var attached = AttachedLink(); if (attached != null) attached.TryPush(attached.PushPacketExtractors);
+                return new { ok = true };
+            });
+            this.bridge.Register("packetExtractorListAction", async args =>
+            {
+                int action = args["action"] == null ? -1 : (int)args["action"];
+                var ids = new List<Guid>();
+                try { foreach (string id in args["ids"].ToObject<List<string>>()) { Guid g; if (Guid.TryParse(id, out g)) ids.Add(g); } }
+                catch (Exception ex) { Operate.DoLog("packetExtractorListAction", ex); }
+                int changed = await PacketExtractorConfig.ApplyListAction((Operate.SystemConfig.ListAction)action, ids);
+                var attached = AttachedLink(); if (attached != null) attached.TryPush(attached.PushPacketExtractors);
+                return new { ok = true, changed = changed };
+            });
+            this.bridge.Register("importPacketExtractors", async args =>
+            {
+                await PacketExtractorConfig.ImportDialog(); var attached = AttachedLink(); if (attached != null) attached.TryPush(attached.PushPacketExtractors);
+                return new { ok = true };
+            });
+            this.bridge.Register("exportPacketExtractors", async args =>
+            {
+                await PacketExtractorConfig.ExportDialog(); return new { ok = true };
+            });
+            this.bridge.Register("clearPacketExtractors", async args =>
+            {
+                await PacketExtractorConfig.ClearDialog(); var attached = AttachedLink(); if (attached != null) attached.TryPush(attached.PushPacketExtractors);
+                return new { ok = true };
+            });
+
             /*
                 解码器：列表 / 增删改 / 启停 / 测试台 / 按 Id 解码。
 
@@ -4716,6 +4835,7 @@ namespace WPEHybrid
                         WareHouse = f("wareHouse"),
                         AutoStores = f("autoStores"),
                         DecoderList = f("decoderList"),
+                        PacketExtractorList = f("packetExtractorList"),
                         WpcServer = f("wpcServer"),
                         WpcNotice = f("wpcNotice"),
                     });
@@ -4757,6 +4877,8 @@ namespace WPEHybrid
                     isDark = UI.Prefs.IsDark,
                     themeMode = ThemeMode(),
                     scanLine = UI.Prefs.ScanLine,
+                    fontScale = UI.Prefs.FontScale,
+                    mainTextColor = UI.Prefs.MainTextColor,
                 };
             });
 
@@ -5445,8 +5567,7 @@ namespace WPEHybrid
 
                     Operate.DoLog("saveInstance", "已切换数据库 : " + CurrentDbFull());
 
-                    string socks5Addr, httpAddr;
-                    ProxyAddresses(out socks5Addr, out httpAddr);
+                    var socks5Addr = ProxyAddress();
 
                     return new
                     {
@@ -5459,7 +5580,6 @@ namespace WPEHybrid
                         language = UI.Prefs.Language ?? "zh-CN",
                         socks5Port = Operate.ProxyConfig.Proxy.SOCKS5_Port,
                         socks5Addr = socks5Addr,
-                        httpAddr = httpAddr,
                     };
                 }
                 catch (Exception ex)
@@ -5532,8 +5652,7 @@ namespace WPEHybrid
                 string dbDir = Operate.DataBase.dbPath ?? string.Empty;
                 string dbFile = Operate.DataBase.dbName ?? string.Empty;
 
-                string socks5Addr, httpAddr;
-                ProxyAddresses(out socks5Addr, out httpAddr);
+                var socks5Addr = ProxyAddress();
 
                 return new
                 {
@@ -5593,11 +5712,12 @@ namespace WPEHybrid
                     themeMode = ThemeMode(),
                     isDark = UI.Prefs.IsDark,
                     scanLine = UI.Prefs.ScanLine,
+                    fontScale = UI.Prefs.FontScale,
+                    mainTextColor = UI.Prefs.MainTextColor,
                     lastInjection = Operate.SystemConfig.LastInjection ?? string.Empty,
                     lastInject = this.LastInjectInfo(),
                     socks5Port = Operate.ProxyConfig.Proxy.SOCKS5_Port,
                     socks5Addr = socks5Addr,
-                    httpAddr = httpAddr,
                     //内置 mihomo 内核状态（2026-09-23）：RunBar 的 TUN 灯读这两个
                     tunReady = MihomoKernel.IsReady,
                     kernelRunning = MihomoKernel.IsRunning,
@@ -5812,35 +5932,20 @@ namespace WPEHybrid
         }
 
         /// <summary>
-        /// SOCKS5 与 HTTP 两个监听地址，<b>一次算出来</b>。
-        ///
-        /// ⚠️ 两者共用同一个 <c>GetLocalIPAddress()</c>，而它实测 <b>70ms</b>（枚举网卡）——
-        /// 各写一个方法各算一遍，等于在启动自检那条路上白付两遍。
-        /// 这也是它只能待在一次性路径上的原因，见 CLAUDE.md「拖窗口时每半秒卡一下」。
-        ///
-        /// HTTP 那个在<b>没启用时返回空串</b>，界面据此显示「未启用」而不是一个连不上的地址。
+        /// SOCKS5 监听地址。网卡枚举较慢，只能待在一次性启动/保存路径上。
         /// </summary>
-        private static void ProxyAddresses(out string socks5, out string http)
+        private static string ProxyAddress()
         {
-            socks5 = string.Empty;
-            http = string.Empty;
-
             try
             {
                 var ips = Operate.SystemConfig.GetLocalIPAddress();
                 string ip = ips != null && ips.Length > 0 ? ips[0].ToString() : "0.0.0.0";
-
-                socks5 = ip + ":" + Operate.ProxyConfig.Proxy.SOCKS5_Port;
-
-                //与 InitHttpProxy 那条日志同一个口径（那边打的是 ProxyUDP_IP，起来之后就等于这个 ip）
-                if (Operate.ProxyConfig.Proxy.Enable_HTTP)
-                {
-                    http = ip + ":" + Operate.ProxyConfig.Proxy.HTTP_Port;
-                }
+                return ip + ":" + Operate.ProxyConfig.Proxy.SOCKS5_Port;
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(ProxyAddresses), ex);
+                Operate.DoLog(nameof(ProxyAddress), ex);
+                return string.Empty;
             }
         }
 
@@ -6108,6 +6213,13 @@ namespace WPEHybrid
                 owners = s.Owners,
                 iconMissing = s.IconMissing,
                 total = FileAssociation.Types.Length,
+                rows = System.Linq.Enumerable.Select(s.Rows, r => new
+                {
+                    ext = r.Ext,
+                    name = r.Name,
+                    ok = r.Ok,
+                    owner = r.Owner,
+                }).ToArray(),
                 icon = withIcon ? FileAssociation.PreviewPng() : null,
             };
         }
@@ -6604,7 +6716,7 @@ namespace WPEHybrid
                 var all = (bool?)parts["all"] ?? false;
                 Func<string, bool> on = key => all || (bool?)parts[key] == true;
                 var fileName = ((string)args["fileName"] ?? (string)parts["name"] ?? Operate.SystemConfig.AssemblyVersion).Trim();
-                var path = await Operate.SystemConfig.ExportSystemBackUp_Dialog(fileName, new Operate.SystemConfig.BackupParts { SystemConfig = on("systemConfig"), ProxySet = on("proxySet"), ProxyAccount = on("proxyAccount"), WhiteList = on("whiteList"), BlackList = on("blackList"), ProxyMapping = on("proxyMapping"), InjectSet = on("injectSet"), FilterList = on("filterList"), SendList = on("sendList"), RobotList = on("robotList"), WareHouse = on("wareHouse"), AutoStores = on("autoStores"), WpcServer = on("wpcServer"), WpcNotice = on("wpcNotice"), DecoderList = on("decoderList") });
+                var path = await Operate.SystemConfig.ExportSystemBackUp_Dialog(fileName, new Operate.SystemConfig.BackupParts { SystemConfig = on("systemConfig"), ProxySet = on("proxySet"), ProxyAccount = on("proxyAccount"), WhiteList = on("whiteList"), BlackList = on("blackList"), ProxyMapping = on("proxyMapping"), InjectSet = on("injectSet"), FilterList = on("filterList"), SendList = on("sendList"), RobotList = on("robotList"), WareHouse = on("wareHouse"), AutoStores = on("autoStores"), WpcServer = on("wpcServer"), WpcNotice = on("wpcNotice"), DecoderList = on("decoderList"), PacketExtractorList = on("packetExtractorList") });
                 return new Newtonsoft.Json.Linq.JObject { ["saved"] = !string.IsNullOrEmpty(path), ["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path };
             }
             if (action == "backup.import")
@@ -6670,7 +6782,7 @@ namespace WPEHybrid
                     if (parts == null) throw new InvalidOperationException("backupParts is required when kind is backup.");
                     var all = (bool?)parts["all"] ?? false;
                     Func<string, bool> on = key => all || (bool?)parts[key] == true;
-                    var path = await Operate.SystemConfig.ExportSystemBackUp_Dialog(string.IsNullOrEmpty(fileName) ? ((string)parts["name"] ?? Operate.SystemConfig.AssemblyVersion) : fileName, new Operate.SystemConfig.BackupParts { SystemConfig = on("systemConfig"), ProxySet = on("proxySet"), ProxyAccount = on("proxyAccount"), WhiteList = on("whiteList"), BlackList = on("blackList"), ProxyMapping = on("proxyMapping"), InjectSet = on("injectSet"), FilterList = on("filterList"), SendList = on("sendList"), RobotList = on("robotList"), WareHouse = on("wareHouse"), AutoStores = on("autoStores"), WpcServer = on("wpcServer"), WpcNotice = on("wpcNotice"), DecoderList = on("decoderList") });
+                    var path = await Operate.SystemConfig.ExportSystemBackUp_Dialog(string.IsNullOrEmpty(fileName) ? ((string)parts["name"] ?? Operate.SystemConfig.AssemblyVersion) : fileName, new Operate.SystemConfig.BackupParts { SystemConfig = on("systemConfig"), ProxySet = on("proxySet"), ProxyAccount = on("proxyAccount"), WhiteList = on("whiteList"), BlackList = on("blackList"), ProxyMapping = on("proxyMapping"), InjectSet = on("injectSet"), FilterList = on("filterList"), SendList = on("sendList"), RobotList = on("robotList"), WareHouse = on("wareHouse"), AutoStores = on("autoStores"), WpcServer = on("wpcServer"), WpcNotice = on("wpcNotice"), DecoderList = on("decoderList"), PacketExtractorList = on("packetExtractorList") });
                     result["saved"] = !string.IsNullOrEmpty(path);
                     result["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path;
                     return result;
@@ -6693,6 +6805,16 @@ namespace WPEHybrid
                     result["count"] = Operate.FilterConfig.List.lstFilterInfo.Count; result["saved"] = !string.IsNullOrEmpty(path); result["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path;
                     return result;
                 }
+                if (kind == "decoders")
+                {
+                    var path = await Operate.DecoderConfig.SaveAllDecoders_Dialog(fileName);
+                    result["count"] = Operate.DecoderConfig.List.lstDecoderInfo.Count; result["saved"] = !string.IsNullOrEmpty(path); result["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path;
+                    return result;
+                }
+                if (kind == "packetextractors")
+                {
+                    await PacketExtractorConfig.ExportDialog(); result["count"] = PacketExtractorConfig.Items.Count; result["dialogCompleted"] = true; return result;
+                }
                 if (kind == "certificate")
                 {
                     var type = (int?)args["certificateType"] ?? 0;
@@ -6705,6 +6827,15 @@ namespace WPEHybrid
                 else if (kind == "firewallblacklist") await Operate.ProxyConfig.Proxy.SaveBlackList_Dialog(fileName, Operate.ProxyConfig.Proxy.lstBlackList);
                 else if (kind == "maplocal") await Operate.ProxyConfig.Mapping.SaveMapLocal_Dialog(fileName, Operate.ProxyConfig.Mapping.lstMapLocal);
                 else if (kind == "mapremote") await Operate.ProxyConfig.Mapping.SaveMapRemote_Dialog(fileName, Operate.ProxyConfig.Mapping.lstMapRemote);
+                else if (kind == "unpackrules")
+                {
+                    var path = await UI.PickSave(new FilePick { Filter = UI.T("UnpackRuleFile", "拆包规则文件") + "（*.upr）|*.upr", FileName = string.IsNullOrEmpty(fileName) ? UI.T("HookSettingsForm.UnPack.FileName", "拆包规则") : fileName });
+                    if (!string.IsNullOrEmpty(path)) File.WriteAllText(path, Newtonsoft.Json.JsonConvert.SerializeObject(Operate.ProxyConfig.Proxy.UnpackRules, Newtonsoft.Json.Formatting.Indented));
+                    result["count"] = Operate.ProxyConfig.Proxy.UnpackRules.Count;
+                    result["saved"] = !string.IsNullOrEmpty(path);
+                    result["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path;
+                    return result;
+                }
                 else if (kind == "sends") await Operate.SendConfig.List.SaveSendList_Dialog(fileName, null);
                 else if (kind == "robots") await Operate.RobotConfig.List.SaveRobotList_Dialog(fileName, null);
                 else if (kind == "sendcollection")
@@ -6773,11 +6904,49 @@ namespace WPEHybrid
                     result["count"] = Operate.FilterConfig.List.lstFilterInfo.Count; result["imported"] = !string.IsNullOrEmpty(path); result["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path;
                     return result;
                 }
+                if (kind == "decoders")
+                {
+                    var path = await Operate.DecoderConfig.LoadDecoderList_Dialog_Shell(fileName);
+                    result["count"] = Operate.DecoderConfig.List.lstDecoderInfo.Count; result["imported"] = !string.IsNullOrEmpty(path); result["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path;
+                    return result;
+                }
+                if (kind == "packetextractors")
+                {
+                    await PacketExtractorConfig.ImportDialog(); result["count"] = PacketExtractorConfig.Items.Count; result["dialogCompleted"] = true; return result;
+                }
                 if (kind == "accounts") await Operate.ProxyConfig.Account.LoadAccountList_Dialog(fileName);
                 else if (kind == "firewallwhitelist") await Operate.ProxyConfig.Proxy.LoadWhiteList_Dialog(fileName);
                 else if (kind == "firewallblacklist") await Operate.ProxyConfig.Proxy.LoadBlackList_Dialog(fileName);
                 else if (kind == "maplocal") await Operate.ProxyConfig.Mapping.LoadMapLocal_Dialog(fileName);
                 else if (kind == "mapremote") await Operate.ProxyConfig.Mapping.LoadMapRemote_Dialog(fileName);
+                else if (kind == "unpackrules")
+                {
+                    var path = await UI.PickOpen(new FilePick { Filter = UI.T("UnpackRuleFile", "拆包规则文件") + "（*.upr）|*.upr", FileName = fileName });
+                    if (!string.IsNullOrEmpty(path))
+                    {
+                        var loaded = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Operate.ProxyConfig.Proxy.UnpackRule>>(File.ReadAllText(path));
+                        if (loaded == null) throw new InvalidDataException(UI.T("HookSettingsForm.UnPack.BadFile", "拆包规则文件格式无效"));
+                        var rules = Operate.ProxyConfig.Proxy.UnpackRules.Where(x => x != null).ToList();
+                        foreach (var rule in loaded.Where(x => x != null))
+                        {
+                            string error;
+                            if (!Operate.ProxyConfig.Proxy.ValidateUnpackSettings(rule.Header, rule.Length, out error)) throw new InvalidDataException(UI.T("HookSettingsForm.UnPack.BadRule", "拆包规则格式无效") + "：" + error);
+                            rule.Id = Guid.NewGuid().ToString("N");
+                            rule.Name = string.IsNullOrWhiteSpace(rule.Name) ? UI.T("HookSettingsForm.UnPack.RuleName", "拆包规则") : rule.Name.Trim();
+                            if (rule.Direction < 0 || rule.Direction > 2) rule.Direction = 0;
+                            rules.Add(rule);
+                        }
+                        if (rules.Count > 64) throw new InvalidDataException(UI.T("HookSettingsForm.UnPack.Max", "拆包规则数量不能超过 64 条"));
+                        Operate.ProxyConfig.Proxy.UnpackRules = rules;
+                        Operate.ProxyConfig.Proxy.UnPack_Head = rules.Count == 0 ? string.Empty : rules[0].Header;
+                        Operate.ProxyConfig.Proxy.UnPack_Length = rules.Count == 0 ? string.Empty : rules[0].Length;
+                        Operate.SystemConfig.SaveProxyMode_ToDB();
+                    }
+                    result["count"] = Operate.ProxyConfig.Proxy.UnpackRules.Count;
+                    result["imported"] = !string.IsNullOrEmpty(path);
+                    result["path"] = path == null ? (Newtonsoft.Json.Linq.JToken)Newtonsoft.Json.Linq.JValue.CreateNull() : path;
+                    return result;
+                }
                 else if (kind == "sends") await Operate.SendConfig.List.LoadSendList_Dialog_Shell(fileName);
                 else if (kind == "robots") await Operate.RobotConfig.List.LoadRobotList_Dialog_Shell(fileName);
                 else if (kind == "sendcollection")

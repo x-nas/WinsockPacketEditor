@@ -10,7 +10,7 @@ using System.Security.Cryptography;
 namespace WinsockPacketEditor
 {
     /// <summary>
-    /// 让资源管理器给 WPE 自己导出的 14 种数据文件（.sb / .fp / .sp …）显示 WPE 的数据文件图标。
+    /// 让资源管理器给 WPE 自己导出的 16 种数据文件（.sb / .fp / .sp …）显示 WPE 的数据文件图标。
     ///
     /// 【为什么只能靠注册表】Windows 显示文件图标只看文件关联（后缀 → ProgID → DefaultIcon），
     /// 没注册的后缀一律画成空白文档。这里只注册<b>图标与类型名</b>，<b>不注册打开方式</b> ——
@@ -34,7 +34,7 @@ namespace WinsockPacketEditor
     /// </summary>
     public static class FileAssociation
     {
-        #region//14 种文件
+        #region//16 种文件
 
         public sealed class FileType
         {
@@ -60,6 +60,8 @@ namespace WinsockPacketEditor
             new FileType(".sb",  "WPE64.Backup",         () => UI.T("BackupFile", "备份文件")),
             new FileType(".fp",  "WPE64.FilterList",     () => UI.T("FilterListFile", "滤镜列表文件")),
             new FileType(".dec", "WPE64.DecoderList",    () => UI.T("DecoderListFile", "解码器列表文件")),
+            new FileType(".pex", "WPE64.PacketExtractorList", () => UI.T("PacketExtractorListFile", "取值器列表文件")),
+            new FileType(".upr", "WPE64.UnpackRuleList", () => UI.T("UnpackRuleFile", "拆包规则文件")),
             new FileType(".sp",  "WPE64.SendList",       () => UI.T("SendListFile", "发送列表文件")),
             new FileType(".sc",  "WPE64.SendCollection", () => UI.T("SendList.SendCollectionFile", "发送集文件")),
             new FileType(".rp",  "WPE64.RobotList",      () => UI.T("RobotListFile", "机器人列表文件")),
@@ -89,6 +91,16 @@ namespace WinsockPacketEditor
             public string[] Foreign = new string[0];      //已被别的程序占用、没动的后缀
             public string[] Owners = new string[0];       //与 Foreign 一一对应：占用它的 ProgID
             public bool IconMissing;                      //程序目录里没有 wpe-data.ico（开发机没构建全时会这样）
+            public TypeRow[] Rows = new TypeRow[0];       //逐种文件类型：类型名 + 后缀 + 是否注册成功
+        }
+
+        /// <summary>设置页那张「文件类型 ↔ 后缀」表里的一行。</summary>
+        public sealed class TypeRow
+        {
+            public string Ext;      //".sb"
+            public string Name;     //当前界面语言下的类型名
+            public bool Ok;         //注册成功（这个后缀现在归 WPE，资源管理器会显示 WPE 数据文件图标）
+            public string Owner;    //失败时归谁（空 = 失败但不是被别人占着）
         }
 
         private static readonly object gate = new object();
@@ -196,17 +208,22 @@ namespace WinsockPacketEditor
         {
             Status s = new Status { Enabled = IsEnabled(), IconMissing = !File.Exists(SourceIcon) };
             List<string> claimed = new List<string>(), foreign = new List<string>(), owners = new List<string>();
+            List<TypeRow> rows = new List<TypeRow>();
 
             foreach (FileType t in Types)
             {
                 string owner = MergedOwner(t.Ext);
-                if (string.Equals(owner, t.ProgId, StringComparison.OrdinalIgnoreCase)) { claimed.Add(t.Ext); }
+                bool mine = string.Equals(owner, t.ProgId, StringComparison.OrdinalIgnoreCase);
+                if (mine) { claimed.Add(t.Ext); }
                 else if (!string.IsNullOrEmpty(owner)) { foreign.Add(t.Ext); owners.Add(owner); }
+
+                rows.Add(new TypeRow { Ext = t.Ext, Name = t.Name(), Ok = mine, Owner = mine ? null : owner });
             }
 
             s.Claimed = claimed.ToArray();
             s.Foreign = foreign.ToArray();
             s.Owners = owners.ToArray();
+            s.Rows = rows.ToArray();
             return s;
         }
 

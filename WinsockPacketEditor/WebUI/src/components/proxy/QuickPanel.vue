@@ -10,7 +10,7 @@
 */
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { call, on } from '../../bridge'
-import { FeedList, ListAction, type FilterRow, type RobotRow, type SendRow, type WareHouseRow } from '../../bridge/types'
+import { FeedList, ListAction, type DecoderRow, type FilterRow, type RobotRow, type SendRow, type WareHouseRow } from '../../bridge/types'
 import { t, type Key } from '../../i18n'
 import { useList } from '../../stores/lists'
 import { hotkeyCount, hotkeyType, refreshHotkey } from '../../stores/runtime'
@@ -21,8 +21,13 @@ import FilterEdit from './FilterEdit.vue'
 import SendEdit from './SendEdit.vue'
 import WareHouseEdit from './WareHouseEdit.vue'
 import RobotEdit from './RobotEdit.vue'
+import DecoderEdit from '../decoder/DecoderEdit.vue'
+import PacketExtractorEdit from '../extractor/PacketExtractorEdit.vue'
+import { decRows } from '../../stores/decoder'
+import { ensureDecoders } from '../decoder/actions'
+import { ensurePacketExtractors, extractorRows, type Extractor } from '../../stores/extractor'
 
-type TabKey = 'filter' | 'send' | 'robot' | 'warehouse'
+type TabKey = 'filter' | 'send' | 'robot' | 'warehouse' | 'decoder' | 'extractor'
 
 //注入模式下滤镜编辑的「作用于哪些封包」要出 8 个 WinSock 函数类别而非代理的 4 个，见 FilterEdit
 const props = withDefaults(defineProps<{ mode?: 'proxy' | 'inject' }>(), { mode: 'proxy' })
@@ -33,12 +38,16 @@ const filters = useList<FilterRow>(FeedList.Filter)
 const sends = useList<SendRow>(FeedList.Send)
 const robots = useList<RobotRow>(FeedList.Robot)
 const houses = useList<WareHouseRow>(FeedList.WareHouse)
+const decoders = decRows
+const extractors = extractorRows
 
-const TABS: Array<{ key: TabKey; label: 'quick.tab.filter' | 'quick.tab.send' | 'quick.tab.robot' | 'quick.tab.warehouse' }> = [
+const TABS: Array<{ key: TabKey; label: 'quick.tab.filter' | 'quick.tab.send' | 'quick.tab.robot' | 'quick.tab.warehouse' | 'quick.tab.decoder' | 'quick.tab.extractor' }> = [
   { key: 'filter', label: 'quick.tab.filter' },
   { key: 'send', label: 'quick.tab.send' },
   { key: 'robot', label: 'quick.tab.robot' },
   { key: 'warehouse', label: 'quick.tab.warehouse' },
+  { key: 'decoder', label: 'quick.tab.decoder' },
+  { key: 'extractor', label: 'quick.tab.extractor' },
 ]
 
 /** 四份表统一成「勾选 + 名称 + 右侧标记」三段，面板才不用为每种类型各写一套。 */
@@ -75,13 +84,16 @@ const items = computed<Item[]>(() => {
     }))
   }
 
+  if (tab.value === 'decoder') return decoders.value.map((r) => ({ id: r.Id, on: r.IsEnable, name: r.Name, badge: r.Description || '—', tone: 'n' }))
+  if (tab.value === 'extractor') return extractors.value.map((r) => ({ id: r.Id, on: r.IsEnable, name: r.Name, badge: String(r.Variables.length), tone: 'n' }))
+
   return houses.value.map((r) => ({
     id: r.Id, on: true, name: r.Name,
     badge: String(r.DataCount ?? 0), tone: 'n',
   }))
 })
 
-const listOf: Record<TabKey, FeedList> = {
+const listOf: Record<'filter' | 'send' | 'robot' | 'warehouse', FeedList> = {
   filter: FeedList.Filter,
   send: FeedList.Send,
   robot: FeedList.Robot,
@@ -93,6 +105,8 @@ async function toggle(it: Item): Promise<void> {
   if (tab.value === 'warehouse') return
 
   try {
+    if (tab.value === 'decoder') { await call('setDecoderEnable', { id: it.id, enable: !it.on }); await ensureDecoders(true); return }
+    if (tab.value === 'extractor') { const row = extractors.value.find((x) => x.Id === it.id); if (row) await call('savePacketExtractor', { extractor: { ...row, IsEnable: !row.IsEnable } }); await ensurePacketExtractors(); return }
     await call('setListEnable', { list: listOf[tab.value], id: it.id, enable: !it.on })
   } catch (e) {
     console.error('[quick] 切换启用状态失败', e)
@@ -112,6 +126,8 @@ const editing = ref<string | null>(null)
 const editingSend = ref<string | null>(null)
 const editingHouse = ref<string | null>(null)
 const editingRobot = ref<string | null>(null)
+const editingDecoder = ref<DecoderRow | null>(null)
+const editingExtractor = ref<Extractor | null>(null)
 
 function onRowDblClick(e: MouseEvent, it: Item): void {
   //落在勾选框上的双击不算：那是切两次（等于没切）却还开了弹窗
@@ -122,6 +138,8 @@ function onRowDblClick(e: MouseEvent, it: Item): void {
     case 'send': editingSend.value = it.id; return
     case 'warehouse': editingHouse.value = it.id; return
     case 'robot': editingRobot.value = it.id; return
+    case 'decoder': editingDecoder.value = decoders.value.find((x) => x.Id === it.id) || null; return
+    case 'extractor': editingExtractor.value = extractors.value.find((x) => x.Id === it.id) || null; return
   }
 }
 
@@ -131,9 +149,9 @@ function onRowDblClick(e: MouseEvent, it: Item): void {
   对应 WinForms 的 QuickList：那边每个页签上方有一排图标按钮（新增 / 全部启用 / 全部禁用 /
   重置计数 / 清空，发送与机器人再加执行 / 停止），表格上还有一份 GetCMS_List 的右键菜单。
 
-  【这里只做右键，不加按钮排】面板固定 320px 宽、又只占下半屏的一小块，
+  【这里只做右键，不加按钮排】面板是下半屏左侧固定 340px 的一列、又只占一小块，
   再压一行工具条要么把标签挤到换行（整条标签栏高一倍），要么吃掉两行本来能看见的规则。
-  所以两组动作合进同一个右键菜单：上半是<b>这一行</b>的（移动 / 复制 / 导出 / 删除），
+  所以两组动作合进同一个右键菜单：上半是<b>这一行</b>的（移动 / 复制 / 删除），
   下半是<b>整份列表</b>的（新增 / 全部启停 / 重置计数 / 执行停止）。
 
   【作用于右键点中的那一行，不是选中集】这块面板没有多选 —— 与自动入库、映射设置那两张
@@ -153,6 +171,8 @@ onMounted(() => {
   offSend = on('send:running', (v: boolean) => { sendRunning.value = !!v })
   offRobot = on('robot:running', (v: boolean) => { robotRunning.value = !!v })
   void refreshHotkey()
+  void ensureDecoders(true)
+  void ensurePacketExtractors()
 })
 
 /*
@@ -200,6 +220,8 @@ const TAB_API: Record<TabKey, {
     resetCount: 'resetRobotCount', resetLabel: 'rb.resetCount',
     start: 'startRobotList', stop: 'stopRobotList', startLabel: 'rb.start', stopLabel: 'rb.stop',
   },
+  decoder: { action: 'decoderListAction', add: 'addDecoder', addLabel: 'dec.add', enableAll: 'setAllDecoderEnable', enableLabel: 'dec.enableAll', disableLabel: 'dec.disableAll' },
+  extractor: { action: 'packetExtractorListAction', add: 'addPacketExtractor', addLabel: 'pex.add', enableAll: 'setAllPacketExtractorEnable', enableLabel: 'pex.enableAll', disableLabel: 'pex.disableAll' },
   //仓库没有启停、没有执行次数，只有新增与行动作
   warehouse: { action: 'wareHouseListAction', add: 'addWareHouse', addLabel: 'wh.add' },
 }
@@ -227,7 +249,6 @@ const menuItems = computed<MenuItem[]>(() => {
       { divider: true },
       { id: 'bottom', label: t('lst.bottom'), icon: ICON.bottom, disabled: last },
       { divider: true },
-      { id: 'export', label: t('lst.export'), icon: ICON.save },
       { id: 'copy', label: t('lst.copy'), icon: ICON.copy },
       { divider: true },
       { id: 'delete', label: t('lst.delete'), icon: ICON.del, danger: true },
@@ -242,8 +263,16 @@ const menuItems = computed<MenuItem[]>(() => {
     out.push(
       { id: 'enableAll', label: t(api.enableLabel as Key), icon: ICON.check },
       { id: 'disableAll', label: t(api.disableLabel as Key), icon: ICON.uncheck },
-      { id: 'resetCount', label: t(api.resetLabel as Key), icon: ICON.undo },
     )
+
+    /*
+      解码器 / 取值器没有「执行次数」这回事（TAB_API 里没给 resetCount / resetLabel），
+      不能无条件推这一项 —— 否则会多出一个没有名字（t(undefined) 回空串）、
+      点了也没反应的菜单项。只有这份列表真的有计数时才补上。
+    */
+    if (api.resetCount) {
+      out.push({ id: 'resetCount', label: t(api.resetLabel as Key), icon: ICON.undo })
+    }
   }
 
   if (api.start) {
@@ -264,7 +293,6 @@ const ACTION_OF: Record<string, ListAction> = {
   down: ListAction.Down,
   bottom: ListAction.Bottom,
   copy: ListAction.Copy,
-  export: ListAction.Export,
   delete: ListAction.Delete,
 }
 
@@ -277,13 +305,22 @@ async function onMenuPick(id: string): Promise<void> {
     if (id in ACTION_OF) {
       if (!row) { pushToast('warning', t('lst.needPick')); return }
       await call(api.action, { action: ACTION_OF[id], ids: [row.id] })
+
+      /*
+        解码器 / 取值器不在 Feed 推送流里（走 getDecoders / getPacketExtractors 拉取），
+        改完必须自己重新拉一次 —— 否则复制 / 移动 / 删除之后面板还显示旧的一份，
+        看起来就像「复制没生效」。滤镜 / 发送 / 机器人 / 仓库走 FeedPump 推送，不需要。
+      */
+      if (tab.value === 'decoder') await ensureDecoders(true)
+      else if (tab.value === 'extractor') await ensurePacketExtractors()
+
       return
     }
 
     //② 整份列表
-    if (id === 'add') { await call(api.add); return }
-    if (id === 'enableAll' && api.enableAll) { await call(api.enableAll, { enable: true }); return }
-    if (id === 'disableAll' && api.enableAll) { await call(api.enableAll, { enable: false }); return }
+    if (id === 'add') { await call(api.add); if (tab.value === 'decoder') await ensureDecoders(true); else if (tab.value === 'extractor') await ensurePacketExtractors(); return }
+    if (id === 'enableAll' && api.enableAll) { await call(api.enableAll, { enable: true }); if (tab.value === 'decoder') await ensureDecoders(true); if (tab.value === 'extractor') await ensurePacketExtractors(); return }
+    if (id === 'disableAll' && api.enableAll) { await call(api.enableAll, { enable: false }); if (tab.value === 'decoder') await ensureDecoders(true); if (tab.value === 'extractor') await ensurePacketExtractors(); return }
     if (id === 'resetCount' && api.resetCount) { await call(api.resetCount); return }
     if (id === 'start' && api.start) { await call(api.start); return }
     if (id === 'stop' && api.stop) { await call(api.stop) }
@@ -355,6 +392,8 @@ async function onMenuPick(id: string): Promise<void> {
     <SendEdit :id="editingSend" @close="editingSend = null" />
     <WareHouseEdit :id="editingHouse" @close="editingHouse = null" />
     <RobotEdit :id="editingRobot" @close="editingRobot = null" />
+    <DecoderEdit :target="editingDecoder" @close="editingDecoder = null" @saved="ensureDecoders(true)" />
+    <PacketExtractorEdit :target="editingExtractor" @close="editingExtractor = null" @saved="ensurePacketExtractors" />
   </div>
 </template>
 
@@ -364,12 +403,11 @@ async function onMenuPick(id: string): Promise<void> {
 .ptabs { flex: none; display: flex; border-bottom: 1px solid var(--border); background: var(--panel); }
 
 /*
-  四个标签必须排成一行（面板固定 320px）。三道保险：
+  六个标签必须排成一行（面板宽固定 340px）。三道保险：
   左右内边距收到 11px 给长标签留余量；nowrap 让它不折行 ——
   折行会把整条标签栏撑高一倍，把下面的列表挤掉两行；
   再加 flex-shrink + 省略号，超宽时是<b>一起收窄</b>而不是把最后一个切掉半截
-  （俄语的「Фильтр / Отправка / Робот / Хранилище」比 320px 多出 8px，
-   不给收缩余量的话「Хранилище」正好被面板边缘裁掉）。
+  （宽语言的标签比这一列还宽时，不给收缩余量的话最后一个会被面板边缘裁掉）。
 */
 .ptab {
   height: var(--th-h);

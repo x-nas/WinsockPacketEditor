@@ -45,6 +45,7 @@ const emit = defineEmits<{
 }>()
 
 const props = withDefaults(defineProps<{ busy: boolean; visible?: boolean }>(), { visible: true })
+const focusList = ref(false)
 
 const prefs = ref<Prefs | null>(null)
 
@@ -774,11 +775,13 @@ defineExpose({ onCleared })
 </script>
 
 <template>
-  <div class="datapage">
+  <div class="datapage" :class="{ 'focus-list': focusList }">
     <InjectBar
       :busy="props.busy"
+      :focus-list="focusList"
       @toggle-hook="emit('toggleHook')"
       @clear="emit('clear')"
+      @toggle-focus-list="focusList = !focusList"
       @open-setting="emit('openSetting', $event)"
     />
 

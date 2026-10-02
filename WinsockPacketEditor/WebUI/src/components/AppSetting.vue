@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /*
-  软件设置 —— 界面语言 + 深浅色。
+  软件设置 —— 界面语言、外观与显示。
 
   【为什么单独一屏，而不是并进「系统设置」】那 12 个设置弹窗管的都是<b>抓包行为</b>
   （端口 / 拦截 / 过滤 / 防火墙…），只在进了模式之后才有意义，而且各自只属于一种模式。
@@ -17,7 +17,7 @@
   早先是点一下立刻生效并落库（与「系统代理」那个滑动开关同一条口径），
   <b>2026-09-07 按要求改成了保存制</b>，与其余 12 个设置弹窗一致。
 
-  所以下面两个 draft* 是<b>草稿</b>，不是真值：点卡片 / 选下拉只改草稿，
+  所以下面各个 draft* 是<b>草稿</b>，不是真值：点卡片 / 选下拉只改草稿，
   onSave 才把改动推给 setLang / setTheme（它们自己会落库并同步到 C#）。
   取消、按 Esc、点遮罩关掉 —— 都不应用，草稿在下次打开时按当前真值重置。
 
@@ -28,7 +28,7 @@
 import { computed, ref, watch } from 'vue'
 import { call } from '../bridge'
 import { LANGS, defOf, lang, setLang, t, type Lang } from '../i18n'
-import { scanLine, setScan, setTheme, systemIsDark, theme, type Theme } from '../stores/theme'
+import { defaultMainTextColor, fontScale, mainTextColor, scanLine, setDisplayPreferences, setScan, setTheme, systemIsDark, theme, type Theme } from '../stores/theme'
 import { pushToast } from '../stores/toast'
 import CyberSelect from './CyberSelect.vue'
 import SettingsModal from './proxy/SettingsModal.vue'
@@ -66,12 +66,18 @@ const THEMES: ThemeCard[] = [
 const draftLang = ref<Lang>(lang.value)
 const draftTheme = ref<Theme>(theme.value)
 const draftScan = ref(scanLine.value)
+const draftFontScale = ref(fontScale.value)
+const draftMainTextColor = ref(defaultMainTextColor())
+const draftCustomTextColor = ref(mainTextColor.value !== null)
 
 watch(() => props.open, (on) => {
   if (!on) return
   draftLang.value = lang.value
   draftTheme.value = theme.value
   draftScan.value = scanLine.value
+  draftFontScale.value = fontScale.value
+  draftMainTextColor.value = mainTextColor.value || defaultMainTextColor()
+  draftCustomTextColor.value = mainTextColor.value !== null
   void loadAssoc()
 })
 
@@ -82,6 +88,13 @@ watch(() => props.open, (on) => {
   「取消」也撤不回来。所以按钮单独走 setFileAssoc，不进 onSave；提示语里写明了这一点。
   清除之后 C# 会记一个标记，启动时不再自动注册，直到这里点「重新关联」。
 */
+interface AssocRow {
+  ext: string
+  name: string
+  ok: boolean
+  owner: string | null
+}
+
 interface AssocStatus {
   ok: boolean
   enabled: boolean
@@ -90,6 +103,7 @@ interface AssocStatus {
   owners: string[]
   iconMissing: boolean
   total: number
+  rows: AssocRow[]
   icon: string | null
   error?: string
 }
@@ -128,19 +142,6 @@ async function toggleAssoc(): Promise<void> {
   }
 }
 
-//「.sc、.pas 已被其他程序占用」；悬停看是谁占的（ProgID）
-const assocForeignText = computed(() => {
-  const a = assoc.value
-  if (!a || !a.enabled || !a.foreign.length) return ''
-  return t('set.app.assocForeign').replace('{0}', a.foreign.join(' '))
-})
-
-const assocForeignTip = computed(() => {
-  const a = assoc.value
-  if (!a) return ''
-  return a.foreign.map((e, i) => e + ' → ' + (a.owners[i] || '?')).join('\n')
-})
-
 const busy = ref(false)
 
 const cur = computed(() => defOf(draftLang.value))
@@ -167,6 +168,12 @@ function pickTheme(k: Theme): void {
   draftTheme.value = k
 }
 
+function resetDisplayDraft(): void {
+  draftFontScale.value = 100
+  draftMainTextColor.value = defaultMainTextColor()
+  draftCustomTextColor.value = false
+}
+
 /**
  * 保存。
  *
@@ -181,6 +188,7 @@ async function onSave(): Promise<void> {
     if (draftLang.value !== lang.value) { await setLang(draftLang.value) }
     if (draftTheme.value !== theme.value) { await setTheme(draftTheme.value) }
     if (draftScan.value !== scanLine.value) { await setScan(draftScan.value) }
+    await setDisplayPreferences(draftFontScale.value, draftCustomTextColor.value ? draftMainTextColor.value : null)
 
     emit('update:open', false)
   } finally {
@@ -199,12 +207,18 @@ async function onSave(): Promise<void> {
     @save="onSave"
   >
     <div class="setf">
+      <!--
+        2026-10-02：四类设置各做成一张 <b>.sec 分区卡</b>（01 / 02 / 03 / 04），
+        与其它 11 个设置屏同一套外观：左沿色轨 + 带编号的抬头 + 卡身。
+        卡身里的行走 .setf .row（标签列 + 控件列），说明走 .hint。
+      -->
+      <section class="sec">
       <div class="grp">{{ t('set.app.lang') }}</div>
 
       <!--
-        不套 .setf .row：那是「标签列 + 控件」的两栏格，而组标题已经写着「界面语言」，
-        行标签再写一遍就是重复。这一组只有一个控件，直接与下面「外观」那组同构 ——
-        组标题 → 控件 → 提示，三行到底。
+        不套 .setf .row：那是「标签列 + 控件」的两栏格，而卡抬头已经写着「界面语言」，
+        行标签再写一遍就是重复。这一组只有一个控件，直接与下面几张卡同构 ——
+        抬头 → 控件 → 提示，三行到底。
       -->
       <div class="one">
         <CyberSelect
@@ -216,8 +230,10 @@ async function onSave(): Promise<void> {
         <!-- 文化名：下拉里只有语言的自称，出问题时要看的是它到底切成了哪个 culture -->
         <i class="cult">{{ cur.culture }}</i>
       </div>
-      <p class="tip">{{ t('set.app.langHint') }}</p>
+      <p class="hint">{{ t('set.app.langHint') }}</p>
+      </section>
 
+      <section class="sec">
       <div class="grp">{{ t('set.app.theme') }}</div>
 
       <div class="opts theme">
@@ -244,30 +260,45 @@ async function onSave(): Promise<void> {
         ⚠️ 读的是 systemIsDark 而不是 effective：后者是「现在实际生效的主题」，
         而这里草稿刚选上跟随系统、还没按保存，effective 仍停在旧主题上，
         拿它显示就是错的。这一句说的是系统那边的事，与应用了没有无关。
-
-        原先这句在下面单独一组「当前」里，连同「当前语言」一行；
-        语言换成下拉之后那一行就是重复，整组去掉了。
       -->
-      <p class="tip">
+      <p class="hint">
         {{ t('set.app.themeHint') }}
         <b v-if="draftTheme === 'system'" class="now">
           {{ t('set.app.now') }} · {{ t(systemIsDark ? 'set.app.dark' : 'set.app.light') }}
         </b>
       </p>
+      </section>
 
-      <div class="grp">{{ t('set.app.ambience') }}</div>
-
+      <section class="sec">
+      <div class="grp">{{ t('set.app.display') }}</div>
       <!--
-        游走亮带的开关。放在主题下面单成一组 —— 它不是「深还是浅」的一部分，
-        是「这套皮肤的动效要不要」，与主题正交（浅色下同样有这条带子）。
+        两行合成一张 grid：标签列宽取两行里最长的那条（max-content），
+        各语言用自己的宽度，互不压盖，两行的控件列也对齐。
+        以前两行各自 flex + 定宽 74px，英文 “Main text color” 就会溢出压住色块。
       -->
-      <div class="one">
-        <button class="chk" :class="{ on: draftScan }" @click="draftScan = !draftScan">
-          <i />{{ t('set.app.scan') }}
-        </button>
+      <div class="display-grid">
+        <label class="display-label" for="font-scale">{{ t('set.app.fontScale') }}</label>
+        <div class="display-ctl">
+          <input id="font-scale" class="scale" v-model.number="draftFontScale" type="range" min="90" max="150" step="5">
+          <output class="scale-value">{{ draftFontScale }}%</output>
+        </div>
+        <label class="display-label" for="main-text-color">{{ t('set.app.textColor') }}</label>
+        <div class="display-ctl">
+          <input id="main-text-color" class="color" v-model="draftMainTextColor" type="color" @input="draftCustomTextColor = true">
+          <code>{{ draftMainTextColor.toUpperCase() }}</code>
+          <button class="mini" type="button" @click="resetDisplayDraft">{{ t('set.app.displayReset') }}</button>
+        </div>
+        <span class="display-label">{{ t('set.app.scan') }}</span>
+        <div class="display-ctl">
+          <button class="chk" :class="{ on: draftScan }" @click="draftScan = !draftScan">
+            <i />{{ t('set.app.scan') }}
+          </button>
+        </div>
       </div>
-      <p class="tip">{{ t('set.app.scanHint') }}</p>
+      <p class="hint">{{ t('set.app.scanHint') }}</p>
+      </section>
 
+      <section class="sec">
       <div class="grp">{{ t('set.app.assoc') }}</div>
 
       <!--
@@ -294,21 +325,42 @@ async function onSave(): Promise<void> {
           {{ t(assoc.enabled ? 'set.app.assocClear' : 'set.app.assocRedo') }}
         </button>
       </div>
-      <p class="tip">
-        {{ t('set.app.assocHint') }}
-        <b v-if="assocForeignText" class="fa-fx" :title="assocForeignTip">{{ assocForeignText }}</b>
-      </p>
+
+      <!--
+        文件类型 ↔ 后缀名对照表（2026-10-02）：每行一个后缀：类型名（当前界面语言）、
+        后缀、注册结果灯。绿灯 = 这个后缀现在归 WPE，黄灯 = 没注册上（悬停看占用它的程序）。
+        ⚠️ 表体<b>不自己滚</b>：16 行全摊开，滚的是整个软件设置弹窗 —— 一张小节里的表
+        再套一条内滚动条，两把滚动条会互相打架。
+      -->
+      <div v-if="assoc && !assoc.iconMissing" class="fa-tbl">
+        <div class="fa-head">
+          <span>{{ t('set.app.assocColType') }}</span>
+          <span>{{ t('set.app.assocColExt') }}</span>
+          <span>{{ t('set.app.assocColOk') }}</span>
+        </div>
+        <div class="fa-row" v-for="r in assoc.rows" :key="r.ext" :title="r.owner || ''">
+          <span class="fa-name">{{ r.name }}</span>
+          <span class="fa-ext">{{ r.ext }}</span>
+          <span class="fa-ok">
+            <i class="lamp" :class="{ on: r.ok }" />
+          </span>
+        </div>
+      </div>
+      </section>
     </div>
   </SettingsModal>
 </template>
 
 <style scoped>
-/* 主题三张卡排三列 —— 每张要放得下色带预览 */
-.opts { display: grid; gap: 8px; padding: 2px 20px 4px; }
+/*
+  卡身里的各块现在长在 .sec 里，内边距跟着卡内的规矩走（14px，见 style.css 的
+  「卡内：行与说明各收 6px 内边距」那段），不再是外边那圈 20px。
+*/
+.opts { display: grid; gap: 8px; padding: 8px 14px 2px; }
 .opts.theme { grid-template-columns: repeat(3, 1fr); }
 
-/* 单控件那一行：与 .opts 用同一份内边距，控件左沿才和下面的主题卡对齐 */
-.one { display: flex; align-items: center; gap: 10px; padding: 2px 20px 4px; }
+/* 单控件那一行：同样用卡内的 14px，控件左沿才和卡里的其它内容对齐 */
+.one { display: flex; align-items: center; gap: 10px; padding: 8px 14px 2px; }
 
 /*
   语言下拉。定宽 190 —— 最长的是「Tiếng Việt」加两字母前缀，
@@ -367,9 +419,67 @@ async function onSave(): Promise<void> {
 .fa-st { flex: 1; min-width: 0; font-size: var(--fs-body); color: var(--gray); }
 .fa-st.off { color: var(--dim2); }
 .fa-st.bad { color: var(--danger); }
-/* 被别的程序占用的后缀：接在提示语后面，琥珀色 —— 不是错误，只是没动它们 */
-.fa-fx { display: block; margin-top: 2px; color: var(--amber); font-weight: 400; }
+
+/*
+  文件类型 ↔ 后缀名对照表。参考映射设置里那几张 .tbl 的骨架：
+  表头一行 + 16 行数据（行高 30，与防火墙名单一致）。
+  只读，所以没有工具条、没有右键，也不跟总开关联动。
+
+  ⚠️ <b>表体不设 max-height / overflow</b>：整张表全摊开，滚动交给弹窗外壳
+  （.bd 那条）—— 小节里再套一条内滚动条会与外层那两条互相打架。
+
+  表长在 04 卡片里，左右 / 下边框让掉、卡片底内边距归零，表直接铺满卡片
+  （与防火墙名单、映射表同一条口径）。
+*/
+.fa-tbl { margin: 8px 0 0; border-left: 0; border-right: 0; border-bottom: 0; background: rgb(var(--inset-rgb) / 20%); }
+/*
+  ⚠️ scoped 样式里的 :has() 会被 Vue 编译成 `section.sec:has(> .fa-tbl)` 这种带
+  作用域属性的形式，而 .fa-tbl 是本组件的元素、属性对得上，所以这条能生效。
+*/
+section.sec:has(> .fa-tbl) { padding-bottom: 0; }
+.fa-head, .fa-row { display: grid; grid-template-columns: minmax(0, 1fr) 92px 56px; align-items: center; gap: 8px; padding: 0 10px; }
+.fa-head {
+  height: var(--th-h);
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--share);
+  font-size: var(--th-size);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--th-fg);
+  white-space: nowrap;
+  /*
+    表头与数据格共用同一套「后两列居中」的规则（下面那条按 nth-child 给的），
+    否则「后缀名 / 注册」两列的表头会靠左、数据却居中，看着像没对齐。
+  */
+}
+.fa-row { height: 30px; font-size: var(--fs-body); color: var(--soft); }
+.fa-row:hover { background: rgb(var(--tint-rgb) / 4%); }
+.fa-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fa-ext, .fa-ok { text-align: center; }
+.fa-ext { font-family: var(--mono); color: var(--cyan); }
+.fa-ok { display: flex; align-items: center; justify-content: center; }
+/*
+  ⚠️ .fa-ok 是 flex，text-align 对它无效 —— 表头那一格也是 .fa-ok（下面按位置选中），
+  所以表头与内容的居中由同一条 justify-content 负责，两边必然一致。
+*/
+.fa-head > span:nth-child(2), .fa-head > span:nth-child(3) { text-align: center; }
+
+/*
+  指示灯：绿 = 注册成功（这个后缀现在归 WPE），黄 = 没注册上。
+  与其它屏的「绿表示在跑」同一条视觉语言；不发光的那颗压暗成灰边，避免看着像「故障」。
+*/
+.lamp { width: 10px; height: 10px; border-radius: 50%; background: rgb(var(--amber-rgb) / 85%); box-shadow: 0 0 5px rgb(var(--amber-rgb) / 45%); }
+.lamp.on { background: var(--green); box-shadow: 0 0 5px rgb(var(--green-rgb) / 55%); }
 
 /* 说明是整句，截断了就没意义 —— 与列表设置那几处同一条口径 */
 .tip { margin: 0; padding: 0 20px 10px; font-size: var(--fs-small); line-height: 1.6; color: var(--dim2); }
+
+.display-grid { display: grid; grid-template-columns: max-content minmax(0, 1fr); align-items: center; gap: 6px 10px; padding: 2px 20px; }
+.display-label { color: var(--muted); font-size: var(--fs-body); white-space: nowrap; }
+.display-ctl { display: flex; align-items: center; gap: 10px; min-height: 32px; min-width: 0; }
+.scale { width: 180px; accent-color: var(--cyan); }
+.scale-value { width: 42px; color: var(--cyan); font-family: var(--mono); font-size: var(--fs-body); }
+.color { width: 28px; height: 24px; padding: 1px; border: 1px solid var(--border2); background: var(--panel); cursor: pointer; }
+.display-ctl code { color: var(--soft); font-family: var(--mono); font-size: var(--fs-small); }
 </style>

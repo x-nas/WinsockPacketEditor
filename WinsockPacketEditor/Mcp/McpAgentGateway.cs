@@ -192,12 +192,19 @@ namespace WinsockPacketEditor.Mcp
             if (operation == "proxy.runtime.get") return ReadOnUi(GetProxyRuntime);
             if (operation == "remoteManagement.get") return ReadOnUi(GetRemoteManagement);
             if (operation == "settings.get") return ReadOnUi(() => GetSetting(arguments));
+            if (operation == "unpack.rules.get") return ReadOnUi(GetUnpackRules);
             if (operation == "wpc.servers.list") return ReadOnUi(ListWpcServers);
             if (operation == "wpc.server.rules.list") return ReadOnUi(() => ListWpcServerRules(arguments));
             if (operation == "connections.summary.get") return ReadOnUi(GetConnectionsSummary);
             if (operation == "bytes.transcode") return BytesTranscode(arguments);
             if (operation == "bytes.compare") return BytesCompare(arguments);
             if (operation == "bytes.extract") return BytesExtract(arguments);
+            if (operation == "decoders.list") return ReadOnUi(() => ListDecoders(arguments));
+            if (operation == "decoders.get") return ReadOnUi(() => GetDecoder(arguments));
+            if (operation == "decoders.test") return ReadOnUi(() => TestDecoder(arguments));
+            if (operation == "decoders.decodeCapture") return ReadOnUi(() => DecodeCapture(arguments));
+            if (operation == "packetExtractors.list") return ReadOnUi(() => ListPacketExtractors(arguments));
+            if (operation == "packetExtractors.get") return ReadOnUi(() => GetPacketExtractor(arguments));
             if (operation == "sends.list") return ReadOnUi(() => ListSends(arguments));
             if (operation == "sends.get") return ReadOnUi(() => GetSend(arguments));
             if (operation == "sends.collection.list") return ReadOnUi(() => ListSendCollection(arguments));
@@ -215,6 +222,16 @@ namespace WinsockPacketEditor.Mcp
             if (operation == "capture.search") return SearchPacketsAsync(arguments);
             if (operation == "capture.get") return GetPacketAsync(arguments);
             if (operation == "filters.setEnabled") return SetFilterEnabledAsync(arguments);
+            if (operation == "decoders.create" || operation == "decoders.update") return SaveDecoderAsync(operation, arguments);
+            if (operation == "decoders.setEnabled") return SetDecoderEnabledAsync(arguments);
+            if (operation == "decoders.setAllEnabled") return SetAllDecodersEnabledAsync(arguments);
+            if (operation == "decoders.action") return DecoderActionAsync(arguments);
+            if (operation == "decoders.clearAll") return ClearDecodersAsync(arguments);
+            if (operation == "packetExtractors.create" || operation == "packetExtractors.update") return SavePacketExtractorAsync(operation, arguments);
+            if (operation == "packetExtractors.setEnabled") return SetPacketExtractorEnabledAsync(arguments);
+            if (operation == "packetExtractors.setAllEnabled") return SetAllPacketExtractorsEnabledAsync(arguments);
+            if (operation == "packetExtractors.action") return PacketExtractorActionAsync(arguments);
+            if (operation == "packetExtractors.clearAll") return ClearPacketExtractorsAsync(arguments);
             if (operation == "filters.setAllEnabled") return SetAllFiltersEnabledAsync(arguments);
             if (operation == "filters.counts.reset") return ResetFilterCountsAsync(arguments);
             if (operation == "filters.move") return MoveFiltersAsync(arguments);
@@ -241,6 +258,7 @@ namespace WinsockPacketEditor.Mcp
             if (operation == "settings.save") return SaveSettingAsync(arguments);
             if (operation == "map.local.save") return SaveMapLocalAsync(arguments);
             if (operation == "map.remote.save") return SaveMapRemoteAsync(arguments);
+            if (operation == "unpack.rules.save") return SaveUnpackRulesAsync(arguments);
             if (operation == "backup.export") return ShellActionAsync("backup.export", arguments, "导出选定的 WPE 备份内容；WPE 会显示本地保存对话框。", "backup.export");
             if (operation == "backup.import") return ShellActionAsync("backup.import", arguments, "导入 WPE 备份；WPE 会显示本地选择文件对话框并替换所含配置。", "backup.import");
             if (operation == "wpc.server.save") return SaveWpcServerAsync(arguments);
@@ -1924,6 +1942,58 @@ namespace WinsockPacketEditor.Mcp
             })).ConfigureAwait(false);
         }
 
+        /// <summary>拆包规则是有序整体；不能按单条动作零散修改，否则 MCP 调用间会暴露错误的匹配优先级。</summary>
+        private static JObject GetUnpackRules()
+        {
+            return new JObject
+            {
+                ["enabled"] = Operate.ProxyConfig.Proxy.Enable_UnPack,
+                ["rules"] = JArray.FromObject(Operate.ProxyConfig.Proxy.UnpackRules.Select(r => new
+                {
+                    id = r.Id,
+                    name = r.Name,
+                    enabled = r.IsEnable,
+                    direction = r.Direction,
+                    header = r.Header,
+                    length = r.Length,
+                }))
+            };
+        }
+
+        private static async Task<JToken> SaveUnpackRulesAsync(JObject a)
+        {
+            var enabledToken = a?["enabled"];
+            var rulesToken = a?["rules"] as JArray;
+            if (enabledToken == null || enabledToken.Type != JTokenType.Boolean) throw new InvalidOperationException("enabled must be a boolean.");
+            if (rulesToken == null) throw new InvalidOperationException("rules must be an array.");
+
+            var enabled = enabledToken.Value<bool>();
+            var rules = rulesToken.ToObject<List<Operate.ProxyConfig.Proxy.UnpackRule>>() ?? new List<Operate.ProxyConfig.Proxy.UnpackRule>();
+            if (rules.Count > 64) throw new InvalidOperationException("No more than 64 unpacking rules are allowed.");
+            foreach (var rule in rules)
+            {
+                string error = null;
+                if (rule == null || !Operate.ProxyConfig.Proxy.ValidateUnpackSettings(rule.Header, rule.Length, out error)) throw new InvalidOperationException("Invalid unpacking rule: " + error);
+                rule.Id = string.IsNullOrWhiteSpace(rule.Id) ? Guid.NewGuid().ToString("N") : rule.Id.Trim();
+                rule.Name = string.IsNullOrWhiteSpace(rule.Name) ? UI.T("HookSettingsForm.UnPack.RuleName", "拆包规则") : rule.Name.Trim();
+                if (rule.Direction < 0 || rule.Direction > 2) rule.Direction = 0;
+            }
+
+            var key = (string)a?["idempotencyKey"];
+            JObject prior;
+            if (McpWriteGuard.TryGetCompleted("unpack.rules.save", key, a, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync(
+                "unpack.rules.save", key, a, "保存 TCP 拆包开关和完整有序规则列表。", () =>
+                {
+                    Operate.ProxyConfig.Proxy.Enable_UnPack = enabled;
+                    Operate.ProxyConfig.Proxy.UnpackRules = rules;
+                    Operate.ProxyConfig.Proxy.UnPack_Head = rules.Count == 0 ? string.Empty : rules[0].Header;
+                    Operate.ProxyConfig.Proxy.UnPack_Length = rules.Count == 0 ? string.Empty : rules[0].Length;
+                    Operate.SystemConfig.SaveProxyMode_ToDB();
+                    return GetUnpackRules();
+                })).ConfigureAwait(false);
+        }
+
         private static async Task<JToken> SaveSettingAsync(JObject arguments)
         {
             var page = ((string)arguments?["page"] ?? string.Empty).Trim().ToLowerInvariant();
@@ -1970,7 +2040,9 @@ namespace WinsockPacketEditor.Mcp
                 else if (page == "hook")
                 {
                     Operate.PacketConfig.Packet.HookWS1_Send = Bool("ws1Send"); Operate.PacketConfig.Packet.HookWS1_SendTo = Bool("ws1SendTo"); Operate.PacketConfig.Packet.HookWS1_Recv = Bool("ws1Recv"); Operate.PacketConfig.Packet.HookWS1_RecvFrom = Bool("ws1RecvFrom"); Operate.PacketConfig.Packet.HookWS2_Send = Bool("ws2Send"); Operate.PacketConfig.Packet.HookWS2_SendTo = Bool("ws2SendTo"); Operate.PacketConfig.Packet.HookWS2_Recv = Bool("ws2Recv"); Operate.PacketConfig.Packet.HookWS2_RecvFrom = Bool("ws2RecvFrom"); Operate.PacketConfig.Packet.HookWSA_Send = Bool("wsaSend"); Operate.PacketConfig.Packet.HookWSA_SendTo = Bool("wsaSendTo"); Operate.PacketConfig.Packet.HookWSA_Recv = Bool("wsaRecv"); Operate.PacketConfig.Packet.HookWSA_RecvFrom = Bool("wsaRecvFrom");
-                    Operate.ProxyConfig.Proxy.HookTCP_Req = Bool("tcpReq"); Operate.ProxyConfig.Proxy.HookTCP_Resp = Bool("tcpResp"); Operate.ProxyConfig.Proxy.HookUDP_Req = Bool("udpReq"); Operate.ProxyConfig.Proxy.HookUDP_Resp = Bool("udpResp"); Operate.ProxyConfig.Proxy.Enable_UnPack = Bool("unpack"); Operate.ProxyConfig.Proxy.UnPack_Head = Text("unpackHead"); Operate.ProxyConfig.Proxy.UnPack_Length = Text("unpackLength"); Operate.SystemConfig.SaveInjectMode_ToDB(); Operate.SystemConfig.SaveProxyMode_ToDB();
+                    var unpack = Bool("unpack"); var unpackHead = Text("unpackHead"); var unpackLength = Text("unpackLength");
+                    if (unpack) { string unpackError; if (!Operate.ProxyConfig.Proxy.ValidateUnpackSettings(unpackHead, unpackLength, out unpackError)) throw new InvalidOperationException(unpackError); }
+                    Operate.ProxyConfig.Proxy.HookTCP_Req = Bool("tcpReq"); Operate.ProxyConfig.Proxy.HookTCP_Resp = Bool("tcpResp"); Operate.ProxyConfig.Proxy.HookUDP_Req = Bool("udpReq"); Operate.ProxyConfig.Proxy.HookUDP_Resp = Bool("udpResp"); Operate.ProxyConfig.Proxy.Enable_UnPack = unpack; Operate.ProxyConfig.Proxy.UnPack_Head = unpackHead; Operate.ProxyConfig.Proxy.UnPack_Length = unpackLength; Operate.SystemConfig.SaveInjectMode_ToDB(); Operate.SystemConfig.SaveProxyMode_ToDB();
                 }
                 else if (page == "leach")
                 {
@@ -2225,6 +2297,124 @@ namespace WinsockPacketEditor.Mcp
             if (list == "black") return Operate.ProxyConfig.Proxy.IsExistsInBlackList(address);
             return Operate.ProxyConfig.Proxy.IsExistsInWhiteList(address);
         }
+
+        private static JObject ListDecoders(JObject a)
+        {
+            var offset = ReadOffset(a); var limit = PageLimit(a); var all = Operate.DecoderConfig.GetRows(); var rows = new JArray();
+            for (var i = offset; i < all.Count && rows.Count < limit; i++) rows.Add(JObject.FromObject(all[i]));
+            return Page(rows, all.Count, offset);
+        }
+        private static JObject GetDecoder(JObject a)
+        {
+            Guid id; if (!Guid.TryParse((string)a?["id"], out id)) throw new InvalidOperationException("Decoder id must be a GUID.");
+            var decoder = Operate.DecoderConfig.GetDecoder_ById(id); if (decoder == null) throw new InvalidOperationException("The decoder does not exist.");
+            return JObject.FromObject(Operate.DecoderConfig.ToRow(decoder));
+        }
+        private static DecoderInfo ReadDecoderConfig(JObject a)
+        {
+            var config = a?["config"] as JObject; if (config == null) throw new InvalidOperationException("config is required.");
+            var row = config.ToObject<DecoderRow>(); var value = Operate.DecoderConfig.FromRow(row); string error;
+            if (!Operate.DecoderConfig.Normalize(value, out error)) throw new InvalidOperationException(error); return value;
+        }
+        private static JObject TestDecoder(JObject a)
+        {
+            var data = ReadPacketBytes(new JObject { ["payloadBase64"] = a?["contentBase64"] }); var decoder = ReadDecoderConfig(a);
+            var result = CodecEngine.Process(data, decoder, (bool?)a?["encode"] ?? false, (bool?)a?["applyFrame"] ?? true);
+            return JObject.FromObject(result);
+        }
+        private static JObject DecodeCapture(JObject a)
+        {
+            Guid id; if (!Guid.TryParse((string)a?["decoderId"], out id)) throw new InvalidOperationException("decoderId must be a GUID.");
+            var decoder = Operate.DecoderConfig.GetDecoder_ById(id); if (decoder == null) throw new InvalidOperationException("The decoder does not exist.");
+            var packetId = (long?)a?["packetId"]; if (!packetId.HasValue || packetId.Value < 1) throw new InvalidOperationException("packetId must be positive.");
+            var mode = ReadCaptureMode(new JObject { ["mode"] = a?["mode"] }, "proxy"); byte[] data; Operate.PacketConfig.Packet.PacketType type;
+            if (mode == "proxy") { var p = Operate.ProxyConfig.List.GetProxyById(packetId.Value); if (p == null) throw new InvalidOperationException("The captured packet does not exist."); data = (byte[])(p.PacketBuffer ?? new byte[0]).Clone(); type = p.PacketType; }
+            else { var p = Operate.PacketConfig.List.GetPacketById(packetId.Value); if (p == null) throw new InvalidOperationException("The captured packet does not exist."); data = (byte[])(p.PacketBuffer ?? new byte[0]).Clone(); type = p.PacketType; }
+            return JObject.FromObject(CodecEngine.Run(data, decoder.Clone(), type, (bool?)a?["applyFrame"] ?? true));
+        }
+        private static JObject ListPacketExtractors(JObject a)
+        {
+            var offset = ReadOffset(a); var limit = PageLimit(a); var include = (bool?)a?["includeCurrentValues"] ?? false; var all = PacketExtractorConfig.GetRows(); var rows = new JArray();
+            for (var i = offset; i < all.Count && rows.Count < limit; i++) { var row = JObject.FromObject(all[i]); if (!include) foreach (var v in row["Variables"] as JArray ?? new JArray()) ((JObject)v).Remove("CurrentValue"); rows.Add(row); }
+            return Page(rows, all.Count, offset);
+        }
+        private static JObject GetPacketExtractor(JObject a)
+        {
+            Guid id; if (!Guid.TryParse((string)a?["id"], out id)) throw new InvalidOperationException("Packet extractor id must be a GUID."); var include = (bool?)a?["includeCurrentValues"] ?? false;
+            var row = PacketExtractorConfig.GetRows().FirstOrDefault(x => x.Id == id); if (row == null) throw new InvalidOperationException("The packet extractor does not exist."); var result = JObject.FromObject(row);
+            if (!include) foreach (var v in result["Variables"] as JArray ?? new JArray()) ((JObject)v).Remove("CurrentValue"); return result;
+        }
+        private static async Task<JToken> SaveDecoderAsync(string operation, JObject a)
+        {
+            var key = (string)a?["idempotencyKey"]; JObject prior; if (McpWriteGuard.TryGetCompleted(operation, key, a, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync(operation, key, a, "保存解码器配置；不会处理或发送任何封包。", () =>
+            {
+                var value = ReadDecoderConfig(a); var supplied = (string)a?["id"];
+                if (operation == "decoders.create") value.GUID = Guid.NewGuid(); else { if (!Guid.TryParse(supplied, out var id) || Operate.DecoderConfig.GetDecoder_ById(id) == null) throw new InvalidOperationException("The decoder does not exist."); value.GUID = id; }
+                string error; if (!Operate.DecoderConfig.SaveDecoder(value, out error)) throw new InvalidOperationException(error);
+                return new JObject { ["id"] = value.GUID.ToString().ToUpperInvariant(), ["changed"] = true };
+            })).ConfigureAwait(false);
+        }
+        private static async Task<JToken> SetDecoderEnabledAsync(JObject a)
+        {
+            Guid id; if (!Guid.TryParse((string)a?["id"], out id)) throw new InvalidOperationException("Decoder id must be a GUID."); var enabled = (bool?)a?["enabled"]; if (!enabled.HasValue) throw new InvalidOperationException("enabled is required."); var key = (string)a?["idempotencyKey"]; JObject prior; if (McpWriteGuard.TryGetCompleted("decoders.setEnabled", key, a, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("decoders.setEnabled", key, a, "切换解码器启用状态。", () => { if (!Operate.DecoderConfig.SetDecoderEnable_ById(id.ToString(), enabled.Value)) throw new InvalidOperationException("The decoder does not exist."); return new JObject { ["id"] = id.ToString().ToUpperInvariant(), ["enabled"] = enabled.Value, ["changed"] = true }; })).ConfigureAwait(false);
+        }
+        private static async Task<JToken> SetAllDecodersEnabledAsync(JObject a)
+        {
+            var enabled = (bool?)a?["enabled"]; if (!enabled.HasValue) throw new InvalidOperationException("enabled is required."); var key = (string)a?["idempotencyKey"]; JObject prior; if (McpWriteGuard.TryGetCompleted("decoders.setAllEnabled", key, a, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("decoders.setAllEnabled", key, a, "切换全部解码器启用状态。", () => { foreach (var d in Operate.DecoderConfig.List.lstDecoderInfo) d.IsEnable = enabled.Value; Operate.DecoderConfig.SaveDecoderList_ToDB(); return new JObject { ["enabled"] = enabled.Value, ["count"] = Operate.DecoderConfig.List.lstDecoderInfo.Count, ["changed"] = true }; })).ConfigureAwait(false);
+        }
+        private static async Task<JToken> SavePacketExtractorAsync(string operation, JObject a)
+        {
+            var key = (string)a?["idempotencyKey"]; JObject prior; if (McpWriteGuard.TryGetCompleted(operation, key, a, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync(operation, key, a, "保存取值器及其变量；不会直接写入运行时变量。", () =>
+            {
+                var source = a?["extractor"] as JObject; if (source == null) throw new InvalidOperationException("extractor is required."); var value = source.ToObject<PacketExtractorInfo>(); if (value == null) throw new InvalidOperationException("extractor is invalid.");
+                if (operation == "packetExtractors.create") value.Id = Guid.NewGuid(); else { Guid id; if (!Guid.TryParse((string)a?["id"], out id) || !PacketExtractorConfig.TryGetVariable(id, Guid.Empty, out _, out _ ) && !PacketExtractorConfig.Items.Any(x => x.Id == id)) throw new InvalidOperationException("The packet extractor does not exist."); value.Id = id; }
+                foreach (var v in value.Variables ?? new List<PacketVariableInfo>()) if (v.Id == Guid.Empty) v.Id = Guid.NewGuid(); string error; if (!PacketExtractorConfig.SaveOne(value, out error)) throw new InvalidOperationException(error);
+                return new JObject { ["id"] = value.Id.ToString().ToUpperInvariant(), ["variables"] = JArray.FromObject(value.Variables.Select(x => new { id = x.Id.ToString().ToUpperInvariant(), name = x.Name })), ["changed"] = true };
+            })).ConfigureAwait(false);
+        }
+        private static async Task<JToken> SetPacketExtractorEnabledAsync(JObject a)
+        {
+            Guid id; if (!Guid.TryParse((string)a?["id"], out id)) throw new InvalidOperationException("Packet extractor id must be a GUID."); var enabled = (bool?)a?["enabled"]; if (!enabled.HasValue) throw new InvalidOperationException("enabled is required."); var key = (string)a?["idempotencyKey"]; JObject prior; if (McpWriteGuard.TryGetCompleted("packetExtractors.setEnabled", key, a, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("packetExtractors.setEnabled", key, a, "切换取值器启用状态。", () => { var item = PacketExtractorConfig.Items.FirstOrDefault(x => x.Id == id); if (item == null) throw new InvalidOperationException("The packet extractor does not exist."); item.IsEnable = enabled.Value; PacketExtractorConfig.Save(); return new JObject { ["id"] = id.ToString().ToUpperInvariant(), ["enabled"] = enabled.Value, ["changed"] = true }; })).ConfigureAwait(false);
+        }
+        private static async Task<JToken> SetAllPacketExtractorsEnabledAsync(JObject a)
+        { var enabled = (bool?)a?["enabled"]; if (!enabled.HasValue) throw new InvalidOperationException("enabled is required."); var key = (string)a?["idempotencyKey"]; JObject prior; if (McpWriteGuard.TryGetCompleted("packetExtractors.setAllEnabled", key, a, out prior)) return prior; return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("packetExtractors.setAllEnabled", key, a, "切换全部取值器启用状态。", () => { PacketExtractorConfig.SetAllEnable(enabled.Value); return new JObject { ["enabled"] = enabled.Value, ["count"] = PacketExtractorConfig.Items.Count, ["changed"] = true }; })).ConfigureAwait(false); }
+
+        private static List<Guid> ReadEntityGuids(JObject a)
+        {
+            var array = a?["ids"] as JArray; if (array == null || array.Count == 0 || array.Count > 200) throw new InvalidOperationException("ids must contain between 1 and 200 GUIDs.");
+            var result = new List<Guid>(); foreach (var x in array) { Guid id; if (!Guid.TryParse((string)x, out id)) throw new InvalidOperationException("Every id must be a GUID."); if (!result.Contains(id)) result.Add(id); } return result;
+        }
+        private static int ReadSimpleAction(string value)
+        {
+            switch ((value ?? string.Empty).Trim().ToLowerInvariant()) { case "top": return 0; case "up": return 1; case "down": return 2; case "bottom": return 3; case "copy": return 4; case "delete": return 6; default: throw new InvalidOperationException("direction must be top, up, down, bottom, copy, or delete."); }
+        }
+        private static async Task<JToken> DecoderActionAsync(JObject a)
+        {
+            var ids = ReadEntityGuids(a); var action = ReadSimpleAction((string)a?["direction"]); var key = (string)a?["idempotencyKey"]; JObject prior; if (McpWriteGuard.TryGetCompleted("decoders.action", key, a, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("decoders.action", key, a, "调整、复制或删除解码器配置。", () =>
+            { var list = Operate.DecoderConfig.List.lstDecoderInfo; var selected = list.Where(x => ids.Contains(x.GUID)).ToList(); if (selected.Count != ids.Count) throw new InvalidOperationException("One or more decoders do not exist.");
+              if (action == 0) { foreach (var x in selected) list.Remove(x); for (var i = selected.Count - 1; i >= 0; i--) list.Insert(0, selected[i]); }
+              else if (action == 1) { var set = new HashSet<DecoderInfo>(selected); for (var i = 1; i < list.Count; i++) if (set.Contains(list[i]) && !set.Contains(list[i - 1])) { var t = list[i - 1]; list[i - 1] = list[i]; list[i] = t; } }
+              else if (action == 2) { var set = new HashSet<DecoderInfo>(selected); for (var i = list.Count - 2; i >= 0; i--) if (set.Contains(list[i]) && !set.Contains(list[i + 1])) { var t = list[i + 1]; list[i + 1] = list[i]; list[i] = t; } }
+              else if (action == 3) { foreach (var x in selected) list.Remove(x); foreach (var x in selected) list.Add(x); }
+              else if (action == 4) foreach (var x in selected) { var copy = x.Clone(); copy.GUID = Guid.NewGuid(); copy.Name = x.Name + " 副本"; Operate.DecoderConfig.AddDecoder(copy); }
+              else foreach (var x in selected) list.Remove(x);
+              Operate.DecoderConfig.SaveDecoderList_ToDB(); return new JObject { ["count"] = list.Count, ["changed"] = true }; })).ConfigureAwait(false);
+        }
+        private static async Task<JToken> ClearDecodersAsync(JObject a)
+        { var key = (string)a?["idempotencyKey"]; JObject prior; if (McpWriteGuard.TryGetCompleted("decoders.clearAll", key, a, out prior)) return prior; return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("decoders.clearAll", key, a, "清空全部解码器配置。", () => { var count = Operate.DecoderConfig.List.lstDecoderInfo.Count; Operate.DecoderConfig.List.lstDecoderInfo.Clear(); Operate.DecoderConfig.SaveDecoderList_ToDB(); return new JObject { ["removed"] = count, ["changed"] = count > 0 }; })).ConfigureAwait(false); }
+        private static async Task<JToken> PacketExtractorActionAsync(JObject a)
+        {
+            var ids = ReadEntityGuids(a); var action = ReadSimpleAction((string)a?["direction"]); var key = (string)a?["idempotencyKey"]; JObject prior; if (McpWriteGuard.TryGetCompleted("packetExtractors.action", key, a, out prior)) return prior;
+            return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("packetExtractors.action", key, a, "调整、复制或删除取值器配置。", async () => { var delta = await PacketExtractorConfig.ApplyListAction((Operate.SystemConfig.ListAction)action, ids); return new JObject { ["delta"] = delta, ["count"] = PacketExtractorConfig.Items.Count, ["changed"] = true }; })).ConfigureAwait(false);
+        }
+        private static async Task<JToken> ClearPacketExtractorsAsync(JObject a)
+        { var key = (string)a?["idempotencyKey"]; JObject prior; if (McpWriteGuard.TryGetCompleted("packetExtractors.clearAll", key, a, out prior)) return prior; return await InvokeOnUiAsync(() => McpWriteGuard.ApproveAndApplyAsync("packetExtractors.clearAll", key, a, "清空全部取值器配置。", () => { var count = PacketExtractorConfig.Items.Count; PacketExtractorConfig.Items.Clear(); PacketExtractorConfig.Save(); return new JObject { ["removed"] = count, ["changed"] = count > 0 }; })).ConfigureAwait(false); }
 
         private static JObject BytesTranscode(JObject arguments)
         {

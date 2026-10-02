@@ -40,7 +40,7 @@ MCP tool call (operation + idempotencyKey)
 | `wpe_account_set_enabled` | reversible-config | Existing account only; changes its enabled state. |
 | `wpe_proxy_auth_set_enabled` | reversible-config | Boolean-only authentication setting; rejects `Only_WPC_Client=true` with auth disabled. |
 | `wpe_proxy_max_connections_set` | reversible-config | Integer-only limit; validates against the live memory-based cap before applying. |
-| `wpe_proxy_socks5_port_set` | reversible-config | Integer-only port; validates range and conflict with the enabled HTTP port before applying. |
+| `wpe_proxy_socks5_port_set` | reversible-config | Integer-only port; validates the range before applying. |
 | `wpe_firewall_set_enabled` | reversible-config | Boolean-only firewall switch; reversible and persisted after local confirmation. |
 | `wpe_proxy_only_wpc_set_enabled` | reversible-config | Boolean-only Only-WPC setting; enabling requires authentication to remain enabled. |
 | `wpe_proxy_bind_ip_set` | reversible-config | Auto or explicit IPv4/IPv6 listening address; invalid explicit addresses are rejected before confirmation. |

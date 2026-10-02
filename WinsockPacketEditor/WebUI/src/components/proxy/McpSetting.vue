@@ -1,27 +1,30 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { call } from '../../bridge'
-import { lang } from '../../i18n'
+import { lang, t, type Key } from '../../i18n'
 import { mcpTools as tools, type McpTool } from '../../mcpTools'
 import SettingsModal from './SettingsModal.vue'
 
 // 清单从 MCP Server 的注册特性生成（见 src/mcpTools.ts，启动页的计数用的是同一份）。
 
-interface ToolGroup { title: string; tools: McpTool[] }
+interface ToolGroup { title: Key; tools: McpTool[] }
 
 // Keep the human-facing list in the same scopes an operator uses in WPE. A
 // cross-scope "add to …" operation belongs to its destination: adding a
 // captured packet to a send task is a Send tool, while adding it to a warehouse
 // is a Warehouse tool. The predicates are otherwise mutually exclusive.
-const toolScopes: Array<{ title: string; matches: (name: string) => boolean }> = [
-  { title: '代理', matches: (name) => /^wpe_(?:proxy_(?:auth|http|max|socks5|bind|external|only|settings|config|runtime|start|stop)|external_proxy|accounts?(?:_|$)|account_|firewall|connections?(?:_|$)|executors_)/.test(name) },
-  { title: '注入', matches: (name) => /^wpe_(?:inject|driver|process_proxy)/.test(name) },
-  { title: '封包', matches: (name) => /^wpe_(?:capture(?!_add_to_(?:send|warehouse)$)|proxy_capture(?!_add_to_(?:send|warehouse)$)|packet(?!_edit_(?:send|add_to_send)$)|bytes|import$|export$)/.test(name) },
-  { title: '滤镜', matches: (name) => /^wpe_filters?(?:_|$)/.test(name) },
-  { title: '发送', matches: (name) => /^wpe_(?:sends?(?:_|$)|send_collection|packet_edit_(?:send|add_to_send)|(?:capture|proxy_capture)_add_to_send)/.test(name) },
-  { title: '机器人', matches: (name) => /^wpe_robots?(?:_|$)/.test(name) },
-  { title: '仓库', matches: (name) => /^wpe_(?:warehouses?(?:_|$)|auto_stores|(?:capture|proxy_capture)_add_to_warehouse)/.test(name) },
-  { title: '设置', matches: (name) => /^wpe_(?:remote_management|setting|map_local|map_remote|wpc_server|start_mode)/.test(name) },
+const toolScopes: Array<{ title: Key; matches: (name: string) => boolean }> = [
+  { title: 'mcp.scope.proxy', matches: (name) => /^wpe_(?:proxy_(?:auth|http|max|socks5|bind|external|only|settings|config|runtime|start|stop)|external_proxy|firewall|connections?(?:_|$)|executors_)/.test(name) },
+  { title: 'mcp.scope.inject', matches: (name) => /^wpe_(?:inject|driver|process_proxy)/.test(name) },
+  { title: 'mcp.scope.packet', matches: (name) => /^wpe_(?:capture(?!_add_to_(?:send|warehouse)$)|proxy_capture(?!_add_to_(?:send|warehouse)$)|packet(?!_(?:edit_(?:send|add_to_send)$|extractors?(?:_|$)))|unpack_rules|bytes|import$|export$)/.test(name) },
+  { title: 'mcp.scope.account', matches: (name) => /^wpe_accounts?(?:_|$)/.test(name) },
+  { title: 'mcp.scope.filter', matches: (name) => /^wpe_filters?(?:_|$)/.test(name) },
+  { title: 'mcp.scope.send', matches: (name) => /^wpe_(?:sends?(?:_|$)|send_collection|packet_edit_(?:send|add_to_send)|(?:capture|proxy_capture)_add_to_send)/.test(name) },
+  { title: 'mcp.scope.robot', matches: (name) => /^wpe_robots?(?:_|$)/.test(name) },
+  { title: 'mcp.scope.warehouse', matches: (name) => /^wpe_(?:warehouses?(?:_|$)|auto_stores|(?:capture|proxy_capture)_add_to_warehouse)/.test(name) },
+  { title: 'mcp.scope.decoder', matches: (name) => /^wpe_decoders?(?:_|$)/.test(name) },
+  { title: 'mcp.scope.extractor', matches: (name) => /^wpe_packet_extractors?(?:_|$)/.test(name) },
+  { title: 'mcp.scope.settings', matches: (name) => /^wpe_(?:remote_management|setting|map_local|map_remote|wpc_server|start_mode)/.test(name) },
 ]
 
 const toolGroups: ToolGroup[] = [
@@ -29,8 +32,16 @@ const toolGroups: ToolGroup[] = [
     title: scope.title,
     tools: tools.filter((tool) => scope.matches(tool.name) && !toolScopes.slice(0, index).some((earlier) => earlier.matches(tool.name))),
   })),
-  { title: '其它', tools: tools.filter((tool) => !toolScopes.some((scope) => scope.matches(tool.name))) },
+  { title: 'mcp.scope.other' as Key, tools: tools.filter((tool) => !toolScopes.some((scope) => scope.matches(tool.name))) },
 ].filter((group) => group.tools.length > 0)
+
+// MCP 工具很多；每次打开设置均从紧凑目录开始，由操作者按需展开。
+const expandedGroups = ref<Set<string>>(new Set())
+function toggleGroup(title: string): void {
+  const next = new Set(expandedGroups.value)
+  if (next.has(title)) next.delete(title); else next.add(title)
+  expandedGroups.value = next
+}
 
 function isWriteTool(name: string): boolean {
   return /(?:_set(?:_|$)|_create$|_update$|_delete$|_clear(?:_|$)|_move$|_copy$|_add(?:_|$)|_save$|_start$|_stop$|_action$|_command$|_reset$|_select$)/.test(name)
@@ -43,8 +54,10 @@ function zhDescription(name: string): string {
     [/^wpe_account/, '代理账号'], [/^wpe_proxy_(auth|http|bind|external|only|max|socks5|runtime|settings|config|start|stop)/, '代理服务设置'],
     [/^wpe_firewall/, '防火墙规则与设置'], [/^wpe_connection/, '当前代理连接'], [/^wpe_executor/, '发送器与机器人执行器'],
     [/^wpe_bytes/, '调用方提供的字节数据'], [/^wpe_send_collection/, '发送任务中的封包集合'], [/^wpe_send/, '发送任务'],
+    [/^wpe_unpack_rules/, 'TCP 拆包规则'],
     [/^wpe_robot_instruction/, '机器人指令'], [/^wpe_robot/, '机器人任务'], [/^wpe_auto_stores/, '自动入库规则'],
     [/^wpe_warehouse_stores/, '仓库中的封包'], [/^wpe_warehouse/, '封包仓库'], [/^wpe_tasks?/, '发送、机器人或仓库任务'],
+    [/^wpe_decoders?/, '解码器配置'], [/^wpe_packet_extractors?/, '取值器配置'],
     [/^wpe_start_mode/, ' WPE 启动模式'],
   ]
   const target = area.find(([pattern]) => pattern.test(name))?.[1] || ' WPE 数据'
@@ -98,6 +111,7 @@ const error = ref('')
 watch(() => props.open, async (open) => {
   if (!open) return
   error.value = ''
+  expandedGroups.value = new Set()
   try {
     const value = await call<{ enabled: boolean; requiresConfirmation: boolean }>('getMcpSettings')
     enabled.value = value.enabled
@@ -116,38 +130,42 @@ async function save(): Promise<void> {
 </script>
 
 <template>
-  <SettingsModal :open="props.open" title="MCP 设置" subtitle="本机 AI 自动化权限" :busy="busy" :error="error" @update:open="emit('update:open', $event)" @save="save">
+  <SettingsModal :open="props.open" :title="t('start.mcp')" :subtitle="t('mcp.modalSubtitle')" :busy="busy" :error="error" @update:open="emit('update:open', $event)" @save="save">
     <div class="setf mcp-set">
     <div class="swb">
       <div class="row">
         <label class="chk" :class="{ on: enabled }">
           <i />
           <input v-model="enabled" type="checkbox" hidden />
-          <span>启用 MCP 服务</span>
+          <span>{{ t('mcp.enabled') }}</span>
         </label>
       </div>
-      <p class="hint">关闭后，本机 AI 无法发现或调用 WPE 的 MCP 服务。</p>
+      <p class="hint">{{ t('mcp.enabledHint') }}</p>
     </div>
     <div class="swb">
       <div class="row">
         <label class="chk" :class="{ on: requiresConfirmation }">
           <i />
           <input v-model="requiresConfirmation" type="checkbox" hidden />
-          <span>MCP 操作需要人工确认</span>
+          <span>{{ t('mcp.confirm') }}</span>
         </label>
       </div>
-      <p class="hint">{{ requiresConfirmation ? '所有风险等级的 MCP 操作都需要 WPE 本地确认。' : '关闭确认后，MCP 操作将直接执行，请确保 AI 客户端和本机环境可信。' }}</p>
+      <p class="hint">{{ requiresConfirmation ? t('mcp.confirmOnHint') : t('mcp.confirmOffHint') }}</p>
     </div>
     <section class="sec tools-sec">
-      <div class="grp"><span>MCP 工具列表</span><b>{{ tools.length }}</b></div>
-      <p class="hint">以下为当前 MCP Server 实际注册的全部工具。{{ requiresConfirmation ? '写入工具会请求 WPE 本地确认。' : '已关闭人工确认，写入工具将自动确认并直接执行。' }}</p>
+      <div class="grp"><span>{{ t('mcp.tools') }}</span><b>{{ tools.length }}</b></div>
+      <p class="hint">{{ requiresConfirmation ? t('mcp.toolsHintOn') : t('mcp.toolsHintOff') }}</p>
       <div class="mcp-tools">
-        <section v-for="group in toolGroups" :key="group.title" class="mcp-scope">
-          <h3>{{ group.title }} <b>{{ group.tools.length }}</b></h3>
-          <article v-for="tool in group.tools" :key="tool.name" class="mcp-tool">
-            <code>{{ tool.name }}</code>
-            <p>{{ localizedDescription(tool) }}</p>
-          </article>
+        <section v-for="group in toolGroups" :key="group.title" class="mcp-scope" :class="{ expanded: expandedGroups.has(group.title) }">
+          <button class="mcp-scope-head" type="button" :aria-expanded="expandedGroups.has(group.title)" @click="toggleGroup(group.title)">
+            <span class="chev" aria-hidden="true">›</span><span>{{ t(group.title) }}</span><b>{{ group.tools.length }}</b>
+          </button>
+          <div v-if="expandedGroups.has(group.title)" class="mcp-scope-body">
+            <article v-for="tool in group.tools" :key="tool.name" class="mcp-tool">
+              <code>{{ tool.name }}</code>
+              <p>{{ localizedDescription(tool) }}</p>
+            </article>
+          </div>
         </section>
       </div>
     </section>
@@ -173,8 +191,11 @@ async function save(): Promise<void> {
 .mcp-set .tools-sec .grp b { padding: 2px 6px; border: 1px solid rgb(var(--cyan-rgb) / 45%); color: var(--cyan); font-family: var(--share); font-size: var(--fs-caption); line-height: 1; }
 .mcp-tools { border-top: 1px solid rgb(var(--border-rgb) / 60%); background: rgb(var(--inset-rgb) / 16%); }
 .mcp-scope + .mcp-scope { border-top: 1px solid rgb(var(--cyan-rgb) / 30%); }
-.mcp-scope h3 { display: flex; align-items: center; gap: 7px; margin: 0; padding: 8px 14px; color: var(--soft); background: rgb(var(--inset-rgb) / 45%); font-size: var(--fs-small); font-weight: 600; }
-.mcp-scope h3 b { padding: 1px 5px; border: 1px solid rgb(var(--cyan-rgb) / 35%); color: var(--cyan); font-family: var(--mono); font-size: var(--fs-caption); font-weight: 400; }
+.mcp-scope-head { display:flex; align-items:center; width:100%; gap:7px; margin:0; padding:8px 14px; border:0; color:var(--soft); background:rgb(var(--inset-rgb) / 45%); font:600 var(--fs-small) inherit; text-align:left; cursor:pointer; }
+.mcp-scope-head:hover { color:var(--cyan); background:rgb(var(--inset-rgb) / 65%); }
+.mcp-scope-head .chev { width:10px; color:var(--cyan); font:18px/12px var(--mono); transform:rotate(0deg); transition:transform .12s ease; }
+.mcp-scope.expanded .mcp-scope-head .chev { transform:rotate(90deg); }
+.mcp-scope-head b { margin-left:auto; padding:1px 5px; border:1px solid rgb(var(--cyan-rgb) / 35%); color:var(--cyan); font-family:var(--mono); font-size:var(--fs-caption); font-weight:400; }
 .mcp-tool { padding: 9px 14px 8px; border-bottom: 1px solid rgb(var(--border-rgb) / 45%); }
 .mcp-scope:last-child .mcp-tool:last-child { border-bottom: 0; }
 .mcp-tool code { color: var(--cyan); font-family: var(--mono); font-size: var(--fs-small); }

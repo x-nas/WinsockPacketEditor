@@ -51,6 +51,7 @@ import ActionColor from './ActionColor.vue'
 import type { SettingKey } from './settings'
 
 const props = withDefaults(defineProps<{ visible?: boolean }>(), { visible: true })
+const focusList = ref(false)
 
 const prefs = ref<Prefs | null>(null)
 const stats = ref<Stats | null>(null)
@@ -816,9 +817,9 @@ const cells = computed(() => {
     { k: 'TCP Resp', z: t('proxy.st.tcpResp'), v: n(s.tcpResp), tone: 'g' },
     { k: 'UDP Req', z: t('proxy.st.udpReq'), v: n(s.udpReq), tone: 'g' },
     { k: 'UDP Resp', z: t('proxy.st.udpResp'), v: n(s.udpResp), tone: 'g' },
-    //这两格含 HTTPS（HTTP_Req/Resp 计数器把 HTTP / HTTPS 并在一起；WebSocket 已无产出者）
-    { k: 'HTTP(S) Req', z: t('proxy.st.httpReq'), v: n(s.httpReq), tone: 'g' },
-    { k: 'HTTP(S) Resp', z: t('proxy.st.httpResp'), v: n(s.httpResp), tone: 'g' },
+    //这两格只统计明文 HTTP（80/8080 上成功组包的请求 / 响应）；HTTPS 是密文、WebSocket 已无产出者，都不计
+    { k: 'HTTP Req', z: t('proxy.st.httpReq'), v: n(s.httpReq), tone: 'g' },
+    { k: 'HTTP Resp', z: t('proxy.st.httpResp'), v: n(s.httpResp), tone: 'g' },
     /*
       实时网速。与总流量那格同一种排法（大字给合计、小字给拆分），
       两格分别落在两行的末尾，视觉上成对。
@@ -836,8 +837,8 @@ const cells = computed(() => {
 </script>
 
 <template>
-  <div class="datapage">
-    <RunBar @clear="clearAll" @open-setting="setting = $event" />
+  <div class="datapage" :class="{ 'focus-list': focusList }">
+    <RunBar :focus-list="focusList" @clear="clearAll" @toggle-focus-list="focusList = !focusList" @open-setting="setting = $event" />
 
     <ProxySetting
       :open="setting === 'proxy'"
